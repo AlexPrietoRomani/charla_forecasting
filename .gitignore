@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+*.swp
+*.swo
+*~
+.vscode/*
+!.vscode/extensions.json
+
+# Astro / Node (si se migra el deck a Astro como Data_Wizard)
+dist/
+.astro/
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+
+# --- PDFs y papers (no versionar, solo .md + refs.bib) ---
+*.pdf
+articles/*.pdf
+articles/*.md
+!articles/README.md
+
+# --- Modelos y pesos (no versionar) ---
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+*.h5
+*.hdf5
+*.ckpt
+*.safetensors
+*.bin
+models/*
+!models/.gitkeep
+
+# --- Datos pesados / crudos ---
+data/raw/
+data/*.parquet
+data/*.nc
+data/*.grib
+data/*.grib2
+data/*.hdf5
+*.csv.gz
+
+# --- Imagenes generadas / pesadas (mantener solo las del deck) ---
+images/raw/
+
+# project-suite (archivos de trabajo — locales, no se versionan)
+docs/task/
+docs/plan/
+docs/logs/
+AGENTS.md
+.project-suite/
+.playwright-mcp/
