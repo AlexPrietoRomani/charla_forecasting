@@ -31,7 +31,10 @@ garua --station <COD> --mode range --from 2019 --to 2025   # crudo → data/raw/
 ```
 Fallback si Turnstile bloquea: `senamhi-scraper` o descarga manual mes-a-mes al mismo `data/raw/`.
 Limpieza: normalizar `S/D`→NaN, `T`→0.0, dedup fechas, resample diario, report huecos (% NaN por variable).
-**Estación por defecto:** Jaén (Cajamarca, café). Alternativas: Pichanaki (Junín), Quillabamba (Cusco). Decidir en T1.
+**Estación decidida:** Iquitos (Loreto, selva baja ~100 msnm) para práctica clima.
+⚠️ Iquitos NO es zona café (café requiere 800-2000 msnm): la práctica café usará proxy declarado
+(serie pública café Colombia/Brasil o adaptación [@niedbala2022]) + Sentinel-2 sobre zona cafetalera
+referencial (Jaén por defecto). En slides se declara: clima = Iquitos real, café = proxy.
 
 **Modelos (mismo split temporal, mismo target T°máx o lluvia 7 días):**
 | Nivel | Modelo | Paquete |

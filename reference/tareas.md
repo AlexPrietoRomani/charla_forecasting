@@ -3,8 +3,9 @@
 `[ ]` pendiente · `[/]` en progreso · `[X]` hecho. Detalle largo en `plan_maestro.md`.
 
 ## F1 Datos
-- [ ] T1.1 Elegir estación SENAMHI (defecto Jaén; alt Pichanaki/Quillabamba) + polígono finca café
-  - AC: código estación + coords + periodo 2019-2025 anotados en `data/README.md`
+- [X] T1.1 Elegir estación SENAMHI (decidido: Iquitos; café con proxy declarado)
+  - AC: código estación Iquitos + coords + periodo 2019-2025 anotados en `data/README.md`
+  - Siguiente: `garua --search "Iquitos"` para fijar COD
 - [ ] T1.2 Descargar SENAMHI con garua → `data/raw/` + limpieza (S/D, T, dedup, diario)
   - AC: `% huecos` reportado; diario sin duplicados
   - Test: notebook corre `garua --doctor` + lee 1 CSV crudo
