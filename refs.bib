@@ -1,0 +1,224 @@
+% refs.bib — Charla forecasting (consolidado investigación 2026-09-25)
+% Bloque 1: ML tabular
+@article{breiman2001,
+  author = {Leo Breiman}, title = {Random Forests},
+  journal = {Machine Learning}, volume = {45}, number = {1}, pages = {5--32}, year = {2001},
+  doi = {10.1023/A:1010933404324}
+}
+@article{geurts2006,
+  author = {Pierre Geurts and Damien Ernst and Louis Wehenkel}, title = {Extremely randomized trees},
+  journal = {Machine Learning}, volume = {63}, number = {1}, pages = {3--42}, year = {2006},
+  doi = {10.1007/s10994-006-6226-1}
+}
+@inproceedings{chen2016,
+  author = {Tianqi Chen and Carlos Guestrin}, title = {{XGBoost}: A Scalable Tree Boosting System},
+  booktitle = {Proc. 22nd ACM SIGKDD}, pages = {785--794}, year = {2016},
+  doi = {10.1145/2939672.2939785}
+}
+@inproceedings{ke2017,
+  author = {Guolin Ke and Qi Meng and Thomas Finley and Taifeng Wang and Wei Chen and Weidong Ma and Qiwei Ye and Tie-Yan Liu},
+  title = {{LightGBM}: A Highly Efficient Gradient Boosting Decision Tree},
+  booktitle = {Advances in Neural Information Processing Systems 30}, year = {2017}
+}
+@inproceedings{prokhorenkova2018,
+  author = {Liudmila Prokhorenkova and Gleb Gusev and Aleksandr Vorobev and Anna Veronika Dorogush and Andrey Gulin},
+  title = {{CatBoost}: unbiased boosting with categorical features},
+  booktitle = {Advances in Neural Information Processing Systems 31}, year = {2018},
+  eprint = {1706.09516}, archiveprefix = {arXiv}
+}
+@article{bentejac2021,
+  author = {Candice Bent{\'e}jac and Anna Cs{\"o}rg{\H o} and Gonzalo Mart{\'i}nez-Mu{\~n}oz},
+  title = {A comparative analysis of gradient boosting algorithms},
+  journal = {Artificial Intelligence Review}, volume = {54}, number = {3}, pages = {1937--1967}, year = {2021},
+  doi = {10.1007/s10462-020-09896-5}
+}
+@inproceedings{grinsztajn2022,
+  author = {L{\'e}o Grinsztajn and Edouard Oyallon and Ga{\"e}l Varoquaux},
+  title = {Why Do Tree-Based Models Still Outperform Deep Learning on Typical Tabular Data?},
+  booktitle = {Advances in Neural Information Processing Systems 35}, year = {2022},
+  eprint = {2207.08815}, archiveprefix = {arXiv}, doi = {10.52202/068431-0037}
+}
+% Bloque 2: series temporales
+@book{boxjenkins2015,
+  title = {Time Series Analysis: Forecasting and Control, 5th Edition},
+  author = {Box, George E. P. and Jenkins, Gwilym M. and Reinsel, Gregory C. and Ljung, Greta M.},
+  year = {2015}, publisher = {Wiley}, isbn = {978-1-118-67502-1}
+}
+@article{hyndman2002,
+  title = {A state space framework for automatic forecasting using exponential smoothing methods},
+  author = {Hyndman, Rob J. and Koehler, Anne B. and Snyder, Ralph D. and Grose, Simone D.},
+  journal = {International Journal of Forecasting}, volume = {18}, number = {3}, pages = {439--454}, year = {2002},
+  doi = {10.1016/S0169-2070(01)00110-8}
+}
+@article{taylor2017,
+  title = {Forecasting at Scale}, author = {Taylor, Sean J. and Letham, Benjamin},
+  journal = {The American Statistician}, volume = {72}, number = {1}, pages = {37--45}, year = {2018},
+  doi = {10.1080/00031305.2017.1380080}
+}
+@article{hochreiter1997,
+  title = {Long Short-Term Memory}, author = {Hochreiter, Sepp and Schmidhuber, J{\"u}rgen},
+  journal = {Neural Computation}, volume = {9}, number = {8}, pages = {1735--1780}, year = {1997},
+  doi = {10.1162/neco.1997.9.8.1735}
+}
+@article{salinas2020,
+  title = {DeepAR: Probabilistic forecasting with autoregressive recurrent networks},
+  author = {Salinas, David and Flunkert, Valentin and Gasthaus, Jan and Januschowski, Tim},
+  journal = {International Journal of Forecasting}, volume = {36}, number = {3}, pages = {1181--1191}, year = {2020},
+  doi = {10.1016/j.ijforecast.2019.07.001}
+}
+@inproceedings{oreshkin2020,
+  title = {N-BEATS: Neural basis expansion analysis for interpretable time series forecasting},
+  author = {Oreshkin, Boris N. and Carpov, Dmitri and Chapados, Nicolas and Bengio, Yoshua},
+  booktitle = {ICLR}, year = {2020}, eprint = {1905.10437}, archivePrefix = {arXiv}
+}
+@article{lim2021,
+  title = {Temporal Fusion Transformers for interpretable multi-horizon time series forecasting},
+  author = {Lim, Bryan and Ar{\i}k, Sercan {\"O}. and Loeff, Nicolas and Pfister, Tomas},
+  journal = {International Journal of Forecasting}, volume = {37}, number = {4}, pages = {1748--1764}, year = {2021},
+  doi = {10.1016/j.ijforecast.2021.03.012}
+}
+@inproceedings{challu2023,
+  title = {NHITS: Neural Hierarchical Interpolation for Time Series Forecasting},
+  author = {Challu, Cristian and Olivares, Kin G. and Oreshkin, Boris N. and Garza, Federico and Mergenthaler-Canseco, Max and Dubrawski, Artur},
+  booktitle = {AAAI}, year = {2023}, doi = {10.1609/aaai.v37i6.25854}
+}
+@misc{nie2023,
+  title = {A Time Series is Worth 64 Words: Long-term Forecasting with Transformers},
+  author = {Nie, Yuqi and Nguyen, Nam H. and Sinthong, Phanwadee and Kalagnanam, Jayant},
+  year = {2023}, eprint = {2211.14730}, archivePrefix = {arXiv}
+}
+@misc{das2024,
+  title = {A decoder-only foundation model for time-series forecasting},
+  author = {Das, Abhimanyu and Kong, Weihao and Sen, Rajat and Zhou, Yichen},
+  year = {2024}, eprint = {2310.10688}, archivePrefix = {arXiv}
+}
+@misc{ansari2024,
+  title = {Chronos: Learning the Language of Time Series},
+  author = {Ansari, Abdul Fatir and Stella, Lorenzo and Turkmen, Caner and Zhang, Xiyuan and Mercado, Pedro and Shen, Huibin and Shchur, Oleksandr and Rangapuram, Syama Sundar and others},
+  year = {2024}, eprint = {2403.07815}, archivePrefix = {arXiv}
+}
+@misc{rasul2024,
+  title = {Lag-Llama: Towards Foundation Models for Probabilistic Time Series Forecasting},
+  author = {Rasul, Kashif and Ashok, Arjun and Williams, Andrew Robert and Ghonia, Hena and others},
+  year = {2024}, eprint = {2310.08278}, archivePrefix = {arXiv}
+}
+@misc{woo2024,
+  title = {Unified Training of Universal Time Series Forecasting Transformers},
+  author = {Woo, Gerald and Liu, Chenghao and Kumar, Akshat and Xiong, Caiming and Savarese, Silvio and Hoi, Steven},
+  year = {2024}, eprint = {2402.02592}, archivePrefix = {arXiv}
+}
+@misc{garza2023,
+  title = {TimeGPT-1}, author = {Garza, Azul and Challu, Cristian and Mergenthaler-Canseco, Max},
+  year = {2023}, eprint = {2310.03589}, archivePrefix = {arXiv}
+}
+@article{makridakis2018,
+  title = {Statistical and Machine Learning forecasting methods: Concerns and ways forward},
+  author = {Makridakis, Spyros and Spiliotis, Evangelos and Assimakopoulos, Vassilios},
+  journal = {PLoS ONE}, volume = {13}, number = {3}, pages = {e0194889}, year = {2018},
+  doi = {10.1371/journal.pone.0194889}
+}
+% Bloque 3: vision
+@inproceedings{he2016deepresidual,
+  author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  title = {Deep Residual Learning for Image Recognition}, booktitle = {Proc. IEEE CVPR}, year = {2016},
+  doi = {10.1109/CVPR.2016.90}, eprint = {1512.03385}, archiveprefix = {arXiv}
+}
+@misc{tan2019efficientnet,
+  author = {Tan, Mingxing and Le, Quoc V.},
+  title = {EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks},
+  year = {2019}, eprint = {1905.11946}, archiveprefix = {arXiv}
+}
+@misc{dosovitskiy2020vit,
+  author = {Dosovitskiy, Alexey and Beyer, Lucas and Kolesnikov, Alexander and others},
+  title = {An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale},
+  year = {2020}, eprint = {2010.11929}, archiveprefix = {arXiv}
+}
+@inproceedings{liu2021swin,
+  author = {Liu, Ze and Lin, Yutong and Cao, Yue and Hu, Han and Wei, Yixuan and Zhang, Zheng and Lin, Stephen and Guo, Baining},
+  title = {Swin Transformer: Hierarchical Vision Transformer using Shifted Windows},
+  booktitle = {Proc. IEEE/CVF ICCV}, year = {2021}, doi = {10.1109/ICCV48922.2021.00986}, eprint = {2103.14030}, archiveprefix = {arXiv}
+}
+@inproceedings{redmon2016yolo,
+  author = {Redmon, Joseph and Divvala, Santosh and Girshick, Ross and Farhadi, Ali},
+  title = {You Only Look Once: Unified, Real-Time Object Detection},
+  booktitle = {Proc. IEEE CVPR}, year = {2016}, doi = {10.1109/CVPR.2016.91}, eprint = {1506.02640}, archiveprefix = {arXiv}
+}
+@inproceedings{ronneberger2015unet,
+  author = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+  title = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
+  booktitle = {Proc. MICCAI, LNCS 9351}, year = {2015}, doi = {10.1007/978-3-319-24574-4_28}, eprint = {1505.04597}, archiveprefix = {arXiv}
+}
+@article{kamilaris2018survey,
+  author = {Kamilaris, Andreas and Prenafeta-Bold{\'u}, Francesc X.},
+  title = {Deep learning in agriculture: A survey}, journal = {Comput. Electron. Agric.}, year = {2018},
+  doi = {10.1016/j.compag.2018.02.016}
+}
+@article{vanklompenburg2020,
+  author = {van Klompenburg, Thomas and Kassahun, Ayalew and Catal, Cagatay},
+  title = {Crop yield prediction using machine learning: A systematic literature review},
+  journal = {Comput. Electron. Agric.}, volume = {176}, pages = {105709}, year = {2020},
+  doi = {10.1016/j.compag.2020.105709}
+}
+@article{muruganantham2022yieldrs,
+  author = {Muruganantham, Priyanga and Wibowo, Santoso and Grandhi, Srimannarayana and Samrat, Nahidul Hoque and Islam, Nahina},
+  title = {A Systematic Literature Review on Crop Yield Prediction with Deep Learning and Remote Sensing},
+  journal = {Remote Sens.}, year = {2022}, doi = {10.3390/rs14091990}
+}
+% Bloque 4: casos temperatura + NDVI-fruta
+@article{talsma2023,
+  author = {Talsma, Carl James and Solander, Kurt C. and Mudunuru, Maruti Kumar and Crawford, Brandon L. and Powell, Michelle},
+  title = {Frost prediction using machine learning and deep neural network models},
+  journal = {Frontiers in Artificial Intelligence}, volume = {5}, pages = {963781}, year = {2023},
+  doi = {10.3389/frai.2022.963781}
+}
+@article{noh2021,
+  author = {Noh, Ilseok and Doh, Hae-Won and Kim, Soo-Ock and Kim, Suhyun and Shin, Seoleun and Lee, Seung-Jae},
+  title = {Machine Learning-Based Hourly Frost-Prediction System Optimized for Orchards Using Automatic Weather Station and Digital Camera Image Data},
+  journal = {Atmosphere}, volume = {12}, number = {7}, pages = {846}, year = {2021},
+  doi = {10.3390/atmos12070846}
+}
+@article{bhakare2025,
+  author = {Bhakare, Sudheer and Matiu, Michael and Crespi, Alice and Zardi, Dino},
+  title = {Spatial Downscaling of Daily Temperature Minima Using Machine Learning Methods and Application to Frost Forecasting in Two Alpine Valleys},
+  journal = {Atmosphere}, volume = {16}, number = {1}, pages = {38}, year = {2025},
+  doi = {10.3390/atmos16010038}
+}
+@article{lam2023,
+  author = {Lam, R{\'e}mi and S{\'a}nchez-Gonz{\'a}lez, {\'A}lvaro and Willson, Matthew and others},
+  title = {Learning skillful medium-range global weather forecasting},
+  journal = {Science}, year = {2023}, doi = {10.1126/science.adi2336}
+}
+@article{arab2021,
+  author = {Arab, Sara Tokhi and Noguchi, Ryozo and Matsushita, Shusuke and Ahamed, Tofael},
+  title = {Prediction of grape yields from time-series vegetation indices using satellite remote sensing and a machine-learning approach},
+  journal = {Remote Sensing Applications: Society and Environment}, volume = {22}, pages = {100485}, year = {2021},
+  doi = {10.1016/j.rsase.2021.100485}
+}
+@misc{chaudhary2021,
+  author = {Chaudhary, Mohita and Gastli, Mohamed Sadok and Nassar, Lobna and Karray, Fakhri},
+  title = {Deep Learning Approaches for Forecasting Strawberry Yields and Prices Using Satellite Images and Station-Based Soil Parameters},
+  year = {2021}, eprint = {2102.09024}, archivePrefix = {arXiv}
+}
+@article{chen2019,
+  author = {Chen, Yang and Lee, Won Suk and Gan, Hao and Peres, Nat{\'a}lia A. and Fraisse, Clyde William and Zhang, Yanchao},
+  title = {Strawberry Yield Prediction Based on a Deep Neural Network Using High-Resolution Aerial Orthoimages},
+  journal = {Remote Sensing}, volume = {11}, number = {13}, pages = {1584}, year = {2019},
+  doi = {10.3390/rs11131584}
+}
+@article{niedbala2022,
+  author = {Niedba{\l}a, Gniewko and Kurek, Jaros{\l}aw and {\'S}widerski, Bartosz and Wojciechowski, Tomasz and Antoniuk, Izabella and Bobran, Krzysztof},
+  title = {Prediction of Blueberry (Vaccinium corymbosum L.) Yield Based on Artificial Intelligence Methods},
+  journal = {Agriculture}, volume = {12}, number = {12}, pages = {2089}, year = {2022},
+  doi = {10.3390/agriculture12122089}
+}
+@article{bai2021,
+  author = {Bai, Xueyuan and Li, Zhenhai and Li, Wei and Zhao, Yu and Li, Meixuan and Chen, Hongyan and Wei, Zheng and Jiang, Jian and Fang, Shenghui},
+  title = {Comparison of Machine-Learning and CASA Models for Predicting Apple Fruit Yields from Time-Series Planet Imageries},
+  journal = {Remote Sensing}, volume = {13}, number = {16}, pages = {3073}, year = {2021},
+  doi = {10.3390/rs13163073}
+}
+@article{li2025,
+  author = {Li, Meixuan and Zhu, Xicun and Yu, Xinyang and Li, Cheng and Xu, Dongyun and Wang, Ling},
+  title = {Precise Apple Yield Prediction Utilizing Differential Fusion of UAV and Satellite Multispectral Images},
+  journal = {IEEE JSTARS}, year = {2025}, doi = {10.1109/JSTARS.2025.3595373}
+}
