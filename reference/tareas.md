@@ -27,10 +27,14 @@
 - [X] T3.3 Export `data/cafe_ndvi_rendimiento.csv` + papers en `refs.bib` + notebook `02_cafe_ndvi.ipynb`
 
 ## F4 Deck
-- [X] T4.1 Esqueleto adaptado a `presentacion.html` con las 16 slides y diseño minimalista
-- [X] T4.2 Gráficos interactivos Chart.js cableados a `senamhi_forecast_7d.csv` y `cafe_ndvi_rendimiento.csv` + fallbacks embebidos
-- [X] T4.3 QA offline (doble clic sin servidor), teclado (←/→/F/Home/End) y switch tema claro/oscuro
+- [X] T4.1 Esqueleto adaptado a `presentacion.html` expandido a 25 slides con layout full-bleed borde a borde
+- [X] T4.2 Diagramas animados SVG interactivos estilo HyperFrames (curvas paramétricas, lags deslizantes, LSTM gates vs PatchTST, absorción espectral)
+- [X] T4.3 Comparativa multi-agencia global (NOAA GFS vs ECMWF vs DWD ICON) con endpoint Open-Meteo y chart interactivo en Slide 14
+- [X] T4.4 Mapas interactivos Leaflet con visor dinámico de capas/heatmaps (Satélite RGB, NDVI saturado, EVI biomasa, NDRE nitrógeno)
+- [X] T4.5 Gráficos interactivos Chart.js cableados a `senamhi_forecast_7d.csv`, `noaa_ecmwf_forecast.csv` y `cafe_ndvi_rendimiento.csv` + fallbacks embebidos
+- [X] T4.6 QA offline (doble clic sin servidor), teclado (←/→/F/Home/End) y switch tema claro/oscuro
 
 ## F5 Cierre
 - [X] T5.1 Verificación de DoD global, datasets limpios (<200KB) y notebooks reproducibles
+- [X] T5.2 Validación de los 4 paradigmas conceptuales y casos de estudio reales para Perú
 

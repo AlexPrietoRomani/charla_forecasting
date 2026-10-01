@@ -1,23 +1,24 @@
 # Plan Maestro — ¿Puede la IA predecir el futuro? (SENAMHI + café NDVI)
 
-## 1. Qué vamos a presentar (narrativa, 22 slides avanzadas estilo Data_Wizard + HyperFrames)
+## 1. Qué vamos a presentar (narrativa, 25 slides avanzadas estilo Data_Wizard + HyperFrames)
 
 Hilo: **predecir = cuantificar incertidumbre para decidir**. Dos casos reales Perú:
-- **Caso A (clima):** pronóstico T°/lluvia estación SENAMHI con 5 niveles de modelo + mapa satelital.
+- **Caso A (clima):** pronóstico T°/lluvia estación SENAMHI con 5 niveles de modelo + comparativa multi-agencia (NOAA GFS vs ECMWF vs DWD ICON) + mapa satelital.
 - **Caso B (café):** rendimiento qq/ha desde Sentinel-2 (EVI/NDRE vs saturación de NDVI) + clima + visor interactivo de capas y heatmaps.
 
 Outline (detalle ampliado en `reference/estructura_presentacion.md`):
-- **Bloque 1:** 1 Portada + gancho · 2 Gran mapa de las 4 familias + zero-shot.
-- **Bloque 2 (Teoría & Mecanismos):** 3 ML tabular mecanismo (lags SVG) · 4 ML tabular fortalezas y patología de no-extrapolación · 5 Series clásicas mecanismo · 6 Series clásicas pros/contras · 7 DL secuencial (LSTM vs PatchTST SVG) · 8 DL pros/contras y trampa de la serie única · 9 Zero-shot (Chronos tokenización SVG) · 10 CV agrícola (YOLOv12, SAM 2.1, DINOv2) · 11 Biofísica satelital (curva de saturación NDVI vs EVI/NDRE) · 12 Fusión multimodal (3 ventanas fenológicas).
-- **Bloque 3 (Casos Reales & Demos):** 13 Caso A mapa satelital Iquitos (Leaflet) · 14 Caso A benchmark multi-modelo · 15 Caso A DEMO clima 7d en vivo · 16 Caso B mapa satelital Jaén con Visor de Capas/Heatmaps (RGB, NDVI saturado, EVI, NDRE) · 17 Caso B prueba de las 6 campañas · 18 Caso B DEMO café en vivo (LOYO).
-- **Bloque 4 (Cierre):** 19 Lecciones desde las trincheras · 20 Árbol de decisiones técnico · 21 Cierre (la IA no predice, cuantifica) · 22 Gracias + referencias BibTeX (`refs.bib`).
+- **Bloque 1 (Fundamentos):** 1 Portada + gancho · 2 Anatomía de una serie desde cero (tendencia, ciclo, estacionalidad, ruido) · 3 El gran mapa de los 4 paradigmas.
+- **Bloque 2 (Teoría & Mecanismos):** 4 Paradigma 1: Curvas paramétricas (exponencial, logística, Holt-Winters) · 5 Paradigma 1: Descomposición estadística (ARIMA, SARIMAX, Prophet) · 6 Paradigma 2: ML tabular mecanismo (lags SVG) · 7 Paradigma 2: Patología de no-extrapolación en árboles · 8 Paradigma 2: DL secuencial (LSTM vs PatchTST SVG) · 9 Paradigma 2: Cuándo usar DL (mito de la serie única) · 10 Paradigma 3: Visión agrícola (YOLOv12, SAM 2.1, DINOv2) · 11 Paradigma 3: Biofísica y saturación espectral (NDVI vs EVI/NDRE) · 12 Paradigma 3: Fusión multimodal fenológica · 13 Paradigma 4: Modelos globales (NOAA GFS, ECMWF IFS, DWD ICON) · 14 Paradigma 4: La disparidad en vivo para Iquitos · 15 Paradigma 4: GraphCast (DeepMind) y Zero-Shot (TimesFM, Chronos).
+- **Bloque 3 (Casos Reales & Demos):** 16 Caso A mapa satelital Iquitos (Leaflet) · 17 Caso A benchmark 7 años · 18 Caso A DEMO clima 7d en vivo · 19 Caso B mapa satelital Jaén con Visor de Capas/Heatmaps (RGB, NDVI saturado, EVI, NDRE) · 20 Caso B prueba de las 6 campañas · 21 Caso B DEMO café en vivo (LOYO).
+- **Bloque 4 (Cierre):** 22 Lecciones desde las trincheras · 23 Árbol de decisiones técnico · 24 Cierre (la IA no predice, cuantifica) · 25 Gracias + referencias BibTeX (`refs.bib`).
 
 ## 2. Cómo construir las dispos (igual que Data_Wizard, sin inventar stack)
 
 - Single-file `presentacion.html`: Chart.js + PapaParse + Leaflet satelital vía CDN, CSS vars claro/oscuro, navegación `←/→/F/Inicio/Fin`, fallback embebido si no hay servidor.
-- Datos del deck = **CSVs pequeños** en `data/`: `senamhi_diario.csv`, `senamhi_forecast_7d.csv`, `cafe_ndvi_rendimiento.csv` (<100 KB c/u).
-- Servir local: `python -m http.server 8000` → `.../presentacion.html`. Doble-clic funciona 100% offline con fallback.
-- DoD deck: abre offline, 22 slides, mapas satelitales Leaflet interactivos, visor de heatmaps, gráficos leen CSV en vivo, teclado OK.
+- Layout full-bleed (`width: calc(100vw - 56px)`, `height: 100vh`) con split-panel grids para visualización panorámica sin restricciones de ancho.
+- Datos del deck = **CSVs pequeños** en `data/`: `senamhi_diario.csv`, `senamhi_forecast_7d.csv`, `cafe_ndvi_rendimiento.csv`, `noaa_ecmwf_forecast.csv` (<100 KB c/u).
+- Servir local: `python -m http.server 8000` → `.../presentacion.html`. Doble-clic funciona 100% offline con fallback embebido.
+- DoD deck: abre offline, 25 slides, mapas satelitales Leaflet interactivos, visor de heatmaps, gráficos leen CSV en vivo, teclado OK.
 
 ## 3. Práctica A — Clima SENAMHI multi-modelo (1 estación cafetalera)
 
