@@ -37,6 +37,11 @@
   controles Narrar Replay/Paso 1-3 + teclas 1/2/3/R en 11 slides animadas,
   safety-timer progress(1) anti-stall, fallback sin-GSAP con todo visible.
   Auditoría 1600×900: 25/25 sin desborde vertical, stepping verificado.
+- [X] T4.8 Fix charts 18/21 (columnas JS alineadas a CSV reales: tmax_observada/
+  pred_random_forest/pred_xgboost/pred_lstm/ci_* y campania/rendimiento_obs_qq_ha/
+  pred_modelo_fusion; check PASS 7pts+6campañas) + 6 diagramas SVG nivel distill.pub
+  con sub-pasos data-hf-step (LSTM cinta+compuertas, PatchTST tokens+atención,
+  ventana 2 filas, meseta+lineal+gap Δ4°C, hoja biofísica, saturación+crisis 2024).
 
 ## F5 Cierre
 - [X] T5.1 Verificación de DoD global, datasets limpios (<200KB) y notebooks reproducibles

@@ -1076,49 +1076,57 @@ def build_mega_deck():
           </div>
           <div class="panel-content">
             <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 480 200" preserveAspectRatio="xMidYMid meet">
-                <!-- Línea de tiempo horizontal -->
-                <line x1="30" y1="60" x2="450" y2="60" stroke="currentColor" stroke-opacity="0.3" stroke-width="2" />
-                
-                <!-- Puntos de tiempo -->
-                <circle cx="60" cy="60" r="5" fill="var(--text-light-faint)" />
-                <text x="60" y="45" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">t-14</text>
-                
-                <circle cx="150" cy="60" r="5" fill="var(--text-light-faint)" />
-                <text x="150" y="45" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">t-7</text>
-                
-                <circle cx="240" cy="60" r="5" fill="var(--text-light-faint)" />
-                <text x="240" y="45" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">t-1</text>
+              <svg class="svg-canvas" viewBox="0 0 480 210" preserveAspectRatio="xMidYMid meet">
+                <!-- Eje temporal con onda (base) -->
+                <path d="M 30,52 q 20,-18 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5" />
+                <circle cx="330" cy="52" r="6" fill="var(--accent-blue)" />
+                <text x="330" y="36" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">t (hoy)</text>
+                <circle cx="410" cy="52" r="6" fill="var(--accent-emerald)" />
+                <text x="410" y="36" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">t+1 ★</text>
 
-                <circle cx="340" cy="60" r="6" fill="var(--accent-blue)" />
-                <text x="340" y="45" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">t (Hoy)</text>
+                <!-- PASO 1: ventana que congela el pasado en una fila -->
+                <g data-hf-step="1">
+                  <rect x="150" y="20" width="180" height="66" fill="rgba(37,99,235,0.07)" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="5,3" />
+                  <text x="240" y="78" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">ventana W = 14 días</text>
+                  <circle cx="142" cy="30" r="9" fill="var(--bg-light-panel)" stroke="var(--accent-blue)" stroke-width="2" />
+                  <text x="142" y="26" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">1</text>
+                  <g transform="translate(70, 108)">
+                    <text x="-8" y="20" font-size="9" font-family="IBM Plex Mono" text-anchor="end">fila t</text>
+                    <rect x="0" y="0" width="62" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
+                    <text x="31" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">lag_14</text>
+                    <rect x="66" y="0" width="62" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
+                    <text x="97" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">lag_7</text>
+                    <rect x="132" y="0" width="62" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
+                    <text x="163" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">lag_1</text>
+                    <rect x="198" y="0" width="72" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
+                    <text x="234" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">media_7</text>
+                    <rect x="274" y="0" width="66" height="30" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.5" />
+                    <text x="307" y="19" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">Y&#8348;</text>
+                  </g>
+                </g>
 
-                <circle cx="420" cy="60" r="6" fill="var(--accent-emerald)" />
-                <text x="420" y="45" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">t+1 (Target)</text>
-
-                <!-- Marco de Ventana Deslizante animado -->
-                <rect x="45" y="25" width="220" height="70" fill="rgba(37,99,235,0.08)" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="4,4" />
-                <text x="155" y="110" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">Ventana Histórica de Lags (Input X)</text>
-
-                <!-- Flecha de proyección a Target -->
-                <path d="M 270,60 L 405,60" fill="none" stroke="var(--accent-emerald)" stroke-width="2" marker-end="url(#arrow)" />
-                
-                <!-- Fila de la tabla supervisada generada -->
-                <g transform="translate(30, 130)">
-                  <rect x="0" y="0" width="80" height="35" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="40" y="22" font-size="11" font-family="IBM Plex Mono" text-anchor="middle">lag_14</text>
-
-                  <rect x="85" y="0" width="80" height="35" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="125" y="22" font-size="11" font-family="IBM Plex Mono" text-anchor="middle">lag_7</text>
-
-                  <rect x="170" y="0" width="80" height="35" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="210" y="22" font-size="11" font-family="IBM Plex Mono" text-anchor="middle">lag_1</text>
-
-                  <rect x="255" y="0" width="85" height="35" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="297" y="22" font-size="11" font-family="IBM Plex Mono" text-anchor="middle">roll_mean7</text>
-
-                  <rect x="345" y="0" width="80" height="35" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.5" />
-                  <text x="385" y="22" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">Y_target</text>
+                <!-- PASO 2: la ventana se desliza +1 y nace la fila t+1 -->
+                <g data-hf-step="2">
+                  <rect x="190" y="20" width="180" height="66" fill="none" stroke="var(--accent-amber)" stroke-width="1.5" stroke-dasharray="2,3" />
+                  <path d="M 165,96 L 200,96" stroke="var(--accent-amber)" stroke-width="2" />
+                  <polygon points="200,91 210,96 200,101" fill="var(--accent-amber)" />
+                  <text x="182" y="90" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-amber)" text-anchor="middle">+1 día</text>
+                  <circle cx="378" cy="30" r="9" fill="var(--bg-light-panel)" stroke="var(--accent-emerald)" stroke-width="2" />
+                  <text x="378" y="26" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">2</text>
+                  <g transform="translate(70, 148)">
+                    <text x="-8" y="20" font-size="9" font-family="IBM Plex Mono" text-anchor="end">fila t+1</text>
+                    <rect x="0" y="0" width="62" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" stroke-dasharray="2,2" />
+                    <text x="31" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">lag_14</text>
+                    <rect x="66" y="0" width="62" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" stroke-dasharray="2,2" />
+                    <text x="97" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">lag_7</text>
+                    <rect x="132" y="0" width="62" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" stroke-dasharray="2,2" />
+                    <text x="163" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">lag_1</text>
+                    <rect x="198" y="0" width="72" height="30" fill="var(--bg-light-sub)" stroke="var(--line-light)" stroke-dasharray="2,2" />
+                    <text x="234" y="19" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">media_7</text>
+                    <rect x="274" y="0" width="66" height="30" fill="none" stroke="var(--accent-emerald)" stroke-width="1.5" stroke-dasharray="2,2" />
+                    <text x="307" y="19" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">?</text>
+                  </g>
+                  <text x="240" y="202" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">cada día = una fila · el árbol nunca ve el calendario</text>
                 </g>
               </svg>
             </div>
@@ -1223,24 +1231,36 @@ def build_mega_deck():
                 <line x1="40" y1="190" x2="450" y2="190" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
                 <line x1="40" y1="20" x2="40" y2="190" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
 
-                <!-- Zona de Entrenamiento (Sombreado azul) -->
-                <rect x="40" y="20" width="200" height="170" fill="rgba(37,99,235,0.06)" />
-                <text x="140" y="35" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">Rango de Entrenamiento (T &le; 35 °C)</text>
+                <!-- PASO 1: lo conocido (zona train + historia + techo) -->
+                <g data-hf-step="1">
+                  <rect x="40" y="20" width="200" height="170" fill="rgba(37,99,235,0.06)" />
+                  <text x="140" y="35" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">① train: T ≤ 35 °C</text>
+                  <path d="M 40,160 Q 100,120 160,130 T 240,92" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" />
+                  <line x1="40" y1="90" x2="450" y2="90" stroke="var(--accent-red)" stroke-dasharray="3,3" stroke-width="1.5" />
+                  <text x="440" y="82" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="end">techo visto: 35 °C</text>
+                </g>
 
-                <!-- Límite histórico máximo 35°C -->
-                <line x1="40" y1="90" x2="450" y2="90" stroke="var(--accent-red)" stroke-dasharray="3,3" stroke-width="1.5" />
-                <text x="440" y="82" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="end">Máximo Histórico (35 °C)</text>
+                <!-- PASO 2: el futuro rompe el récord + la lineal lo sigue -->
+                <g data-hf-step="2">
+                  <path d="M 240,92 Q 320,50 440,35" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="3,3" />
+                  <text x="440" y="25" font-size="10" font-family="IBM Plex Mono" fill="currentColor" text-anchor="end">② realidad: ola de 39 °C</text>
+                  <line x1="240" y1="92" x2="440" y2="48" stroke="var(--accent-emerald)" stroke-width="2.5" />
+                  <text x="440" y="62" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" text-anchor="end">lineal: y = mx+b (extrapola)</text>
+                </g>
 
-                <!-- Serie histórica -->
-                <path d="M 40,160 Q 100,120 160,130 T 240,92" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" />
-
-                <!-- Tendencia real de ola de calor futura (sube a 39°C) -->
-                <path d="M 240,92 Q 320,50 440,35" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="3,3" />
-                <text x="440" y="25" font-size="10" font-family="IBM Plex Mono" fill="currentColor" text-anchor="end">Realidad Futura: Ola de Calor 39 °C</text>
-
-                <!-- Predicción del Random Forest: MESETA PLANA HORIZONTAL -->
-                <line x1="240" y1="92" x2="440" y2="92" stroke="var(--accent-red)" stroke-width="3.5" />
-                <text x="340" y="112" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">Predicción Árbol: MESETA PLANA (35.0 °C)</text>
+                <!-- PASO 3: el árbol se estrella contra su techo + gap -->
+                <g data-hf-step="3">
+                  <line x1="240" y1="92" x2="440" y2="92" stroke="var(--accent-red)" stroke-width="3.5" />
+                  <rect x="270" y="86" width="12" height="12" fill="rgba(220,38,38,0.25)" stroke="var(--accent-red)" />
+                  <rect x="310" y="86" width="12" height="12" fill="rgba(220,38,38,0.25)" stroke="var(--accent-red)" />
+                  <rect x="350" y="86" width="12" height="12" fill="rgba(220,38,38,0.25)" stroke="var(--accent-red)" />
+                  <rect x="390" y="86" width="12" height="12" fill="rgba(220,38,38,0.25)" stroke="var(--accent-red)" />
+                  <text x="340" y="114" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">③ árbol: MESETA 35.0 °C (hoja terminal)</text>
+                  <line x1="452" y1="35" x2="452" y2="92" stroke="var(--accent-amber)" stroke-width="2" />
+                  <polygon points="447,35 457,35 452,43" fill="var(--accent-amber)" />
+                  <polygon points="447,92 457,92 452,84" fill="var(--accent-amber)" />
+                  <text x="468" y="66" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-amber)" font-weight="700" text-anchor="middle" transform="rotate(-90, 468, 66)">Δ = 4.0 °C</text>
+                </g>
               </svg>
             </div>
             <div class="callout alert">
@@ -1303,28 +1323,48 @@ def build_mega_deck():
           </div>
           <div class="panel-content">
             <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
-                <!-- Marco Celda -->
-                <rect x="40" y="20" width="340" height="140" rx="8" fill="var(--bg-light-sub)" stroke="var(--line-light)" stroke-width="1.5" />
-                
-                <!-- Estado Celda C_{t-1} a C_t -->
-                <line x1="10" y1="45" x2="410" y2="45" stroke="var(--accent-purple)" stroke-width="3" />
-                <text x="50" y="38" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-purple)">Estado Celda C_t</text>
+              <svg class="svg-canvas" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid meet">
+                <!-- Cinta de memoria C: la autopista horizontal (base siempre visible) -->
+                <line x1="10" y1="46" x2="396" y2="46" stroke="var(--accent-purple)" stroke-width="3" />
+                <polygon points="396,40 408,46 396,52" fill="var(--accent-purple)" />
+                <text x="12" y="34" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700">C&#8348;&#8331;&#8321; entra</text>
+                <text x="394" y="34" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700" text-anchor="end">C&#8348; sale</text>
+                <text x="210" y="20" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light-faint)" text-anchor="middle">cinta de memoria: fluye casi intacta</text>
+                <!-- Entradas h,y desde abajo (base) -->
+                <line x1="70" y1="196" x2="70" y2="150" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5" />
+                <text x="70" y="192" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">h&#8348;&#8331;&#8321;</text>
+                <line x1="150" y1="196" x2="150" y2="150" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5" />
+                <text x="150" y="192" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">x&#8348;</text>
+                <text x="110" y="168" font-size="8.5" font-family="IBM Plex Mono" fill="var(--text-light-faint)" text-anchor="middle">se concatenan [h, x]</text>
 
-                <!-- Compuerta Olvido f_t -->
-                <circle cx="110" cy="95" r="18" fill="rgba(220,38,38,0.15)" stroke="var(--accent-red)" stroke-width="1.5" />
-                <text x="110" y="99" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">&sigma;</text>
-                <text x="110" y="128" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Olvido (f_t)</text>
+                <!-- PASO 1: compuerta de olvido f -->
+                <g data-hf-step="1">
+                  <rect x="48" y="108" width="150" height="34" fill="rgba(220,38,38,0.08)" stroke="var(--accent-red)" stroke-width="1.5" />
+                  <text x="123" y="122" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">f&#8348; = &#963;(W&#183;[h,x]+b)</text>
+                  <text x="123" y="134" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">olvida: 0=borra · 1=conserva</text>
+                  <circle cx="42" cy="100" r="9" fill="var(--bg-light-panel)" stroke="var(--accent-red)" stroke-width="2" />
+                  <text x="42" y="96" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">1</text>
+                  <line x1="123" y1="108" x2="123" y2="60" stroke="var(--accent-red)" stroke-width="1.5" stroke-dasharray="3,2" />
+                  <circle cx="123" cy="46" r="10" fill="var(--bg-light-panel)" stroke="var(--accent-purple)" stroke-width="2" />
+                  <text x="123" y="50" font-size="12" text-anchor="middle">&#215;</text>
+                  <text x="140" y="72" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-red)">filtra C&#8348;&#8331;&#8321;</text>
+                </g>
 
-                <!-- Compuerta Entrada i_t -->
-                <circle cx="210" cy="95" r="18" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.5" />
-                <text x="210" y="99" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">&sigma;</text>
-                <text x="210" y="128" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Entrada (i_t)</text>
-
-                <!-- Compuerta Salida o_t -->
-                <circle cx="310" cy="95" r="18" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" stroke-width="1.5" />
-                <text x="310" y="99" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">&sigma;</text>
-                <text x="310" y="128" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Salida (o_t)</text>
+                <!-- PASO 2: compuerta de entrada i + salida o -->
+                <g data-hf-step="2">
+                  <rect x="222" y="108" width="150" height="34" fill="rgba(5,150,105,0.08)" stroke="var(--accent-emerald)" stroke-width="1.5" />
+                  <text x="297" y="122" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">i&#8348; = &#963;(·) · tanh(C&#771;)</text>
+                  <text x="297" y="134" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">escribe lo nuevo</text>
+                  <circle cx="216" cy="100" r="9" fill="var(--bg-light-panel)" stroke="var(--accent-emerald)" stroke-width="2" />
+                  <text x="216" y="96" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">2</text>
+                  <line x1="272" y1="108" x2="272" y2="60" stroke="var(--accent-emerald)" stroke-width="1.5" stroke-dasharray="3,2" />
+                  <circle cx="272" cy="46" r="10" fill="var(--bg-light-panel)" stroke="var(--accent-purple)" stroke-width="2" />
+                  <text x="272" y="50" font-size="12" text-anchor="middle">&#215;</text>
+                  <circle cx="340" cy="46" r="10" fill="var(--bg-light-panel)" stroke="var(--accent-purple)" stroke-width="2" />
+                  <text x="340" y="50" font-size="12" text-anchor="middle">+</text>
+                  <text x="340" y="72" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-purple)" text-anchor="middle">suma C&#8348;</text>
+                  <text x="297" y="158" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">h&#8348; = o&#8348; · tanh(C&#8348;) → salida</text>
+                </g>
               </svg>
             </div>
             <div class="callout">
@@ -1340,26 +1380,53 @@ def build_mega_deck():
           </div>
           <div class="panel-content">
             <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
-                <!-- Serie cortada en parches -->
-                <g transform="translate(20, 30)">
-                  <rect x="0" y="0" width="80" height="40" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" stroke-width="1.5" />
-                  <text x="40" y="24" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Parche 1 (16d)</text>
+              <svg class="svg-canvas" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid meet">
+                <!-- Serie cruda (base): onda diaria ruidosa -->
+                <path d="M 10,34 q 12,-14 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0 t 24,0" fill="none" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <text x="10" y="14" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light-faint)">serie diaria (N = 336 puntos)</text>
+                <!-- Tijeras de corte (base) -->
+                <line x1="112" y1="8" x2="112" y2="48" stroke="var(--accent-amber)" stroke-width="1.5" stroke-dasharray="3,2" />
+                <line x1="214" y1="8" x2="214" y2="48" stroke="var(--accent-amber)" stroke-width="1.5" stroke-dasharray="3,2" />
+                <line x1="316" y1="8" x2="316" y2="48" stroke="var(--accent-amber)" stroke-width="1.5" stroke-dasharray="3,2" />
 
-                  <rect x="95" y="0" width="80" height="40" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.5" />
-                  <text x="135" y="24" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Parche 2 (16d)</text>
-
-                  <rect x="190" y="0" width="80" height="40" fill="rgba(217,119,6,0.15)" stroke="var(--accent-amber)" stroke-width="1.5" />
-                  <text x="230" y="24" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Parche 3 (16d)</text>
-
-                  <rect x="285" y="0" width="80" height="40" fill="rgba(124,58,237,0.15)" stroke="var(--accent-purple)" stroke-width="1.5" />
-                  <text x="325" y="24" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Parche 4 (16d)</text>
+                <!-- PASO 1: parches = tokens con embedding -->
+                <g data-hf-step="1">
+                  <rect x="12" y="62" width="92" height="52" fill="rgba(37,99,235,0.10)" stroke="var(--accent-blue)" stroke-width="1.5" />
+                  <rect x="112" y="62" width="92" height="52" fill="rgba(5,150,105,0.10)" stroke="var(--accent-emerald)" stroke-width="1.5" />
+                  <rect x="212" y="62" width="92" height="52" fill="rgba(217,119,6,0.10)" stroke="var(--accent-amber)" stroke-width="1.5" />
+                  <rect x="312" y="62" width="92" height="52" fill="rgba(124,58,237,0.10)" stroke="var(--accent-purple)" stroke-width="1.5" />
+                  <text x="58" y="80" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">P1</text>
+                  <text x="158" y="80" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">P2</text>
+                  <text x="258" y="80" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-amber)" font-weight="700" text-anchor="middle">P3</text>
+                  <text x="358" y="80" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700" text-anchor="middle">P4</text>
+                  <!-- barras de embedding -->
+                  <line x1="34" y1="106" x2="34" y2="92" stroke="var(--accent-blue)" stroke-width="4" />
+                  <line x1="46" y1="106" x2="46" y2="98" stroke="var(--accent-blue)" stroke-width="4" />
+                  <line x1="58" y1="106" x2="58" y2="88" stroke="var(--accent-blue)" stroke-width="4" />
+                  <line x1="70" y1="106" x2="70" y2="96" stroke="var(--accent-blue)" stroke-width="4" />
+                  <line x1="134" y1="106" x2="134" y2="94" stroke="var(--accent-emerald)" stroke-width="4" />
+                  <line x1="146" y1="106" x2="146" y2="86" stroke="var(--accent-emerald)" stroke-width="4" />
+                  <line x1="158" y1="106" x2="158" y2="98" stroke="var(--accent-emerald)" stroke-width="4" />
+                  <line x1="170" y1="106" x2="170" y2="90" stroke="var(--accent-emerald)" stroke-width="4" />
+                  <line x1="234" y1="106" x2="234" y2="96" stroke="var(--accent-amber)" stroke-width="4" />
+                  <line x1="246" y1="106" x2="246" y2="90" stroke="var(--accent-amber)" stroke-width="4" />
+                  <line x1="258" y1="106" x2="258" y2="100" stroke="var(--accent-amber)" stroke-width="4" />
+                  <line x1="270" y1="106" x2="270" y2="94" stroke="var(--accent-amber)" stroke-width="4" />
+                  <line x1="334" y1="106" x2="334" y2="88" stroke="var(--accent-purple)" stroke-width="4" />
+                  <line x1="346" y1="106" x2="346" y2="96" stroke="var(--accent-purple)" stroke-width="4" />
+                  <line x1="358" y1="106" x2="358" y2="92" stroke="var(--accent-purple)" stroke-width="4" />
+                  <line x1="370" y1="106" x2="370" y2="100" stroke="var(--accent-purple)" stroke-width="4" />
+                  <text x="210" y="128" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">4 tokens × 16 días (proyección lineal del parche)</text>
                 </g>
 
-                <!-- Arcos de Auto-Atención Multi-Cabeza -->
-                <path d="M 60,75 C 60,130 345,130 345,75" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="3,3" />
-                <path d="M 155,75 C 155,115 250,115 250,75" fill="none" stroke="var(--accent-emerald)" stroke-width="2" />
-                <text x="200" y="150" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">Atención Cruzada O(P^2) con P &lt;&lt; N</text>
+                <!-- PASO 2: atención cruzada entre parches -->
+                <g data-hf-step="2">
+                  <path d="M 58,132 C 58,178 358,178 358,132" fill="none" stroke="var(--accent-blue)" stroke-width="2" />
+                  <polygon points="352,124 364,132 352,140" fill="var(--accent-blue)" />
+                  <path d="M 158,132 C 158,158 258,158 258,132" fill="none" stroke="var(--accent-emerald)" stroke-width="2" />
+                  <polygon points="252,124 264,132 252,140" fill="var(--accent-emerald)" />
+                  <text x="210" y="192" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">softmax(QK&#7488;/&#8730;d): P1 atiende a P4 · O(P&#178;), P&#8810;N</text>
+                </g>
               </svg>
             </div>
             <div class="callout success">
@@ -1555,23 +1622,40 @@ def build_mega_deck():
           </div>
           <div class="panel-content">
             <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
-                <!-- Corte de hoja -->
-                <rect x="40" y="80" width="340" height="70" rx="4" fill="rgba(5,150,105,0.2)" stroke="var(--accent-emerald)" stroke-width="2" />
-                <text x="210" y="120" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">Mesófilo Esponjoso &amp; Cloroplastos</text>
+              <svg class="svg-canvas" viewBox="0 0 420 190" preserveAspectRatio="xMidYMid meet">
+                <!-- Sol + rayos (base) -->
+                <circle cx="34" cy="26" r="13" fill="rgba(217,119,6,0.20)" stroke="var(--accent-amber)" stroke-width="2" />
+                <line x1="52" y1="14" x2="64" y2="8" stroke="var(--accent-amber)" stroke-width="2" />
+                <line x1="54" y1="30" x2="68" y2="30" stroke="var(--accent-amber)" stroke-width="2" />
+                <text x="34" y="52" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-amber)" text-anchor="middle">sol</text>
+                <!-- Corte de hoja con capas (base) -->
+                <rect x="100" y="92" width="280" height="62" fill="rgba(5,150,105,0.07)" stroke="var(--accent-emerald)" stroke-width="2" />
+                <line x1="100" y1="106" x2="380" y2="106" stroke="var(--accent-emerald)" stroke-opacity="0.5" stroke-dasharray="4,3" />
+                <line x1="100" y1="140" x2="380" y2="140" stroke="var(--accent-emerald)" stroke-opacity="0.5" stroke-dasharray="4,3" />
+                <text x="112" y="102" font-size="8" font-family="IBM Plex Mono" fill="var(--text-light-faint)">cutícula</text>
+                <text x="240" y="128" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">mesófilo esponjoso + cloroplastos</text>
+                <text x="112" y="150" font-size="8" font-family="IBM Plex Mono" fill="var(--text-light-faint)">envés</text>
 
-                <!-- Rayo Rojo B04: Entra y es absorbido -->
-                <line x1="120" y1="20" x2="120" y2="105" stroke="var(--accent-red)" stroke-width="3" />
-                <polygon points="116,105 124,105 120,113" fill="var(--accent-red)" />
-                <text x="120" y="15" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle">Rojo B04 (665 nm)</text>
-                <text x="120" y="140" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle">95% Absorbido</text>
+                <!-- PASO 1: rojo B04 absorbido (fotosíntesis) -->
+                <g data-hf-step="1">
+                  <line x1="180" y1="30" x2="180" y2="112" stroke="var(--accent-red)" stroke-width="3" />
+                  <polygon points="175,112 185,112 180,121" fill="var(--accent-red)" />
+                  <circle cx="172" cy="128" r="2.5" fill="var(--accent-red)" />
+                  <circle cx="188" cy="132" r="2.5" fill="var(--accent-red)" />
+                  <circle cx="180" cy="136" r="2.5" fill="var(--accent-red)" />
+                  <text x="180" y="22" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">① Rojo B04 · 665 nm</text>
+                  <text x="180" y="170" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle">95% absorbido → clorofila</text>
+                </g>
 
-                <!-- Rayo NIR B08: Entra y rebota con fuerza -->
-                <line x1="280" y1="20" x2="280" y2="90" stroke="var(--accent-purple)" stroke-width="3" />
-                <line x1="280" y1="90" x2="350" y2="30" stroke="var(--accent-purple)" stroke-width="3" />
-                <polygon points="346,30 354,26 352,35" fill="var(--accent-purple)" />
-                <text x="310" y="15" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-purple)" text-anchor="middle">NIR B08 (842 nm)</text>
-                <text x="310" y="45" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-purple)" text-anchor="middle">85% Dispersado</text>
+                <!-- PASO 2: NIR B08 dispersado (refrigeración) -->
+                <g data-hf-step="2">
+                  <line x1="300" y1="30" x2="300" y2="98" stroke="var(--accent-purple)" stroke-width="3" />
+                  <line x1="300" y1="98" x2="368" y2="40" stroke="var(--accent-purple)" stroke-width="3" />
+                  <polygon points="360,42 372,36 366,48" fill="var(--accent-purple)" />
+                  <line x1="300" y1="98" x2="252" y2="62" stroke="var(--accent-purple)" stroke-width="1.5" stroke-dasharray="3,2" stroke-opacity="0.6" />
+                  <text x="330" y="22" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700" text-anchor="middle">② NIR B08 · 842 nm</text>
+                  <text x="330" y="170" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-purple)" text-anchor="middle">85% rebotado → no se hierve</text>
+                </g>
               </svg>
             </div>
             <div class="callout">
@@ -1587,23 +1671,39 @@ def build_mega_deck():
           </div>
           <div class="panel-content">
             <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
-                <!-- Ejes -->
-                <line x1="40" y1="150" x2="390" y2="150" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <line x1="40" y1="20" x2="40" y2="150" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <text x="380" y="165" font-size="9" font-family="IBM Plex Mono" text-anchor="end">Índice Área Foliar (LAI)</text>
-                
-                <!-- Umbral de Saturación LAI = 3 -->
-                <line x1="180" y1="20" x2="180" y2="150" stroke="var(--accent-amber)" stroke-dasharray="3,3" />
-                <text x="185" y="30" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-amber)">LAI &gt; 3 (Saturación)</text>
+              <svg class="svg-canvas" viewBox="0 0 420 190" preserveAspectRatio="xMidYMid meet">
+                <!-- Ejes con ticks LAI (base) -->
+                <line x1="44" y1="156" x2="396" y2="156" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
+                <line x1="44" y1="16" x2="44" y2="156" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
+                <text x="44" y="172" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">0</text>
+                <text x="161" y="172" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">2</text>
+                <text x="278" y="172" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">4</text>
+                <text x="395" y="172" font-size="8.5" font-family="IBM Plex Mono" text-anchor="end">6 · LAI</text>
+                <text x="16" y="60" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">1.0</text>
+                <text x="16" y="110" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">0.5</text>
 
-                <!-- Curva NDVI (Saturada en 0.80) -->
-                <path d="M 40,140 Q 120,40 390,40" fill="none" stroke="var(--accent-red)" stroke-width="2.5" />
-                <text x="390" y="35" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="end">NDVI Saturado (~0.80)</text>
+                <!-- PASO 1: NDVI que se rinde + techo físico -->
+                <g data-hf-step="1">
+                  <line x1="44" y1="52" x2="396" y2="52" stroke="var(--accent-amber)" stroke-width="1.5" stroke-dasharray="5,3" />
+                  <text x="392" y="44" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-amber)" text-anchor="end">techo físico ≈ 0.85</text>
+                  <path d="M 44,150 C 100,60 160,56 396,54" fill="none" stroke="var(--accent-red)" stroke-width="2.5" />
+                  <text x="392" y="72" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="end">① NDVI: se aplana en ~0.80</text>
+                  <line x1="219" y1="16" x2="219" y2="156" stroke="var(--accent-amber)" stroke-opacity="0.6" stroke-dasharray="3,3" />
+                  <text x="219" y="28" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-amber)" text-anchor="middle">LAI = 3</text>
+                </g>
 
-                <!-- Curva EVI (Lineal y Sensible) -->
-                <path d="M 40,145 L 390,55" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" />
-                <text x="390" y="70" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" text-anchor="end">EVI Dinámico (Sigue creciendo)</text>
+                <!-- PASO 2: EVI que sí ve + la crisis 2024 que el NDVI no vio -->
+                <g data-hf-step="2">
+                  <path d="M 44,152 L 396,66" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" />
+                  <text x="392" y="84" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="end">② EVI: sigue subiendo</text>
+                  <circle cx="278" cy="57" r="5" fill="var(--accent-red)" />
+                  <text x="278" y="46" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle">NDVI 0.79</text>
+                  <circle cx="278" cy="111" r="5" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" />
+                  <text x="278" y="128" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" text-anchor="middle">EVI cae</text>
+                  <line x1="278" y1="62" x2="278" y2="106" stroke="var(--accent-amber)" stroke-width="2" stroke-dasharray="3,2" />
+                  <text x="290" y="90" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-amber)">2024: misma hoja,</text>
+                  <text x="290" y="100" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-amber)">distinta historia</text>
+                </g>
               </svg>
             </div>
             <div class="callout alert">
@@ -2147,9 +2247,9 @@ def build_mega_deck():
             <span class="panel-title">Curvas de Pronóstico y Bandas de Confianza</span>
             <div class="btn-group" id="casoABtns">
               <button class="pill-btn active" onclick="toggleDatasetCasoA('observed')">Observado</button>
-              <button class="pill-btn active" onclick="toggleDatasetCasoA('extratrees')">ExtraTrees</button>
+              <button class="pill-btn active" onclick="toggleDatasetCasoA('rf')">Random Forest</button>
+              <button class="pill-btn" onclick="toggleDatasetCasoA('xgb')">XGBoost</button>
               <button class="pill-btn" onclick="toggleDatasetCasoA('lstm')">LSTM</button>
-              <button class="pill-btn" onclick="toggleDatasetCasoA('arima')">ARIMA</button>
             </div>
           </div>
           <div class="panel-content">
@@ -3092,12 +3192,12 @@ function initChartCasoA() {
   const rows = parsed.data;
 
   const labels = rows.map(r => r.fecha);
-  const obs = rows.map(r => r.tmax_obs);
-  const et = rows.map(r => r.tmax_extratrees);
-  const lstm = rows.map(r => r.tmax_lstm);
-  const arima = rows.map(r => r.tmax_arima);
-  const upper = rows.map(r => r.ic90_upper);
-  const lower = rows.map(r => r.ic90_lower);
+  const obs = rows.map(r => r.tmax_observada);
+  const rf = rows.map(r => r.pred_random_forest);
+  const xgb = rows.map(r => r.pred_xgboost);
+  const lstm = rows.map(r => r.pred_lstm);
+  const upper = rows.map(r => r.ci_upper_90);
+  const lower = rows.map(r => r.ci_lower_90);
 
   chartCasoAInstance = new Chart(ctx, {
     type: 'line',
@@ -3114,8 +3214,8 @@ function initChartCasoA() {
           pointBackgroundColor: '#0F172A'
         },
         {
-          label: 'ExtraTrees Regressor',
-          data: et,
+          label: 'Random Forest (lags 1-14)',
+          data: rf,
           borderColor: '#059669',
           backgroundColor: '#059669',
           borderWidth: 2.5,
@@ -3132,12 +3232,13 @@ function initChartCasoA() {
           hidden: true
         },
         {
-          label: 'ARIMA(2,1,1)',
-          data: arima,
-          borderColor: '#7C3AED',
-          backgroundColor: '#7C3AED',
+          label: 'XGBoost (lags 1-14)',
+          data: xgb,
+          borderColor: '#D97706',
+          backgroundColor: '#D97706',
           borderWidth: 2,
-          borderDash: [4, 4],
+          tension: 0.2,
+          pointRadius: 4,
           hidden: true
         },
         {
@@ -3183,11 +3284,11 @@ function toggleDatasetCasoA(type) {
   const ds = chartCasoAInstance.data.datasets;
   if (type === 'observed') {
     ds[0].hidden = !ds[0].hidden;
-  } else if (type === 'extratrees') {
+  } else if (type === 'rf') {
     ds[1].hidden = !ds[1].hidden;
   } else if (type === 'lstm') {
     ds[2].hidden = !ds[2].hidden;
-  } else if (type === 'arima') {
+  } else if (type === 'xgb') {
     ds[3].hidden = !ds[3].hidden;
   }
   chartCasoAInstance.update();
@@ -3204,9 +3305,9 @@ function initChartCasoB() {
   const parsed = Papa.parse(rawCsv, { header: true, dynamicTyping: true });
   const rows = parsed.data;
 
-  const labels = rows.map(r => `Campaña ${r.campana}`);
-  const obs = rows.map(r => r.rendimiento_real_qq_ha);
-  const fusion = rows.map(r => r.pred_fusion_evi_clima);
+  const labels = rows.map(r => `Campaña ${r.campania}`);
+  const obs = rows.map(r => r.rendimiento_obs_qq_ha);
+  const fusion = rows.map(r => r.pred_modelo_fusion);
   const soloNdvi = rows.map(r => r.pred_solo_ndvi);
 
   chartCasoBInstance = new Chart(ctx, {
@@ -3287,7 +3388,7 @@ function toggleDatasetCasoB(type) {
 // t=2 panel der, t=3 KPIs/callouts). El presentador controla el ritmo con
 // Replay / Paso 1-3 (botones) o teclas 1/2/3 (R = replay). Sin GSAP (CDN
 // bloqueado/offline) hay fallback a visibilidad inmediata: nada queda oculto.
-const HF_STEPS = {0:3, 1:4, 3:2, 5:2, 6:3, 7:2, 9:2, 10:3, 11:3, 14:2, 23:2};
+const HF_STEPS = {0:3, 1:4, 3:2, 5:3, 6:3, 7:3, 9:2, 10:3, 11:3, 14:2, 23:2};
 let hfTimeline = null;
 let hfSafety = null; // garantiza contenido visible aunque rAF vaya lento
 
@@ -3329,16 +3430,27 @@ function hfEnsureControls(idx) {
 
 function hfRender(idx, upto) {
   // upto: nº de grupos visibles (0 = solo header visible tras entrar).
+  const slide = slides[idx];
   const groups = hfGroups(idx);
-  if (!groups.length) return;
+  if (!slide || !groups.length) return;
   if (hfTimeline) { hfTimeline.kill(); hfTimeline = null; }
   const total = Math.max(1, Math.min(upto, groups.length));
+  // Sub-pasos internos de diagramas SVG (estilo distill.pub): cada <g>
+  // con data-hf-step="k" se revela cuando el paso k queda a la vista.
+  const svgSteps = slide.querySelectorAll("[data-hf-step]");
   if (window.gsap) {
     gsap.set(groups, {opacity: 0, y: 16});
     hfTimeline = gsap.timeline();
     groups.slice(0, total).forEach((g, i) => {
       hfTimeline.to(g, {opacity: 1, y: 0, duration: 0.45, ease: "power2.out"}, i * 0.35);
     });
+    if (svgSteps.length) {
+      gsap.set(svgSteps, {opacity: 0});
+      svgSteps.forEach(g => {
+        const st = parseInt(g.getAttribute("data-hf-step"), 10) || 1;
+        if (st <= upto) hfTimeline.to(g, {opacity: 1, duration: 0.4, ease: "power1.out"}, 0.3 + (st - 1) * 0.9);
+      });
+    }
     clearTimeout(hfSafety);
     if (total >= groups.length) {
       // autoplay/replay: nunca dejar contenido invisible si rAF va lento
@@ -3349,8 +3461,11 @@ function hfRender(idx, upto) {
       g.style.opacity = i < total ? "1" : "0";
       g.style.transform = i < total ? "none" : "translateY(16px)";
     });
+    svgSteps.forEach(g => {
+      const st = parseInt(g.getAttribute("data-hf-step"), 10) || 1;
+      g.style.opacity = st <= upto ? "1" : "0";
+    });
   }
-  const slide = slides[idx];
   slide.querySelectorAll(".hf-controls [data-hf]").forEach(b => {
     const k = parseInt(b.getAttribute("data-hf"), 10);
     b.classList.toggle("active", k === upto || (k === 0 && upto >= groups.length));
