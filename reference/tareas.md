@@ -33,6 +33,10 @@
 - [X] T4.4 Mapas interactivos Leaflet con visor dinámico de capas/heatmaps (Satélite RGB, NDVI saturado, EVI biomasa, NDRE nitrógeno)
 - [X] T4.5 Gráficos interactivos Chart.js cableados a `senamhi_forecast_7d.csv`, `noaa_ecmwf_forecast.csv` y `cafe_ndvi_rendimiento.csv` + fallbacks embebidos
 - [X] T4.6 QA offline (doble clic sin servidor), teclado (←/→/F/Home/End) y switch tema claro/oscuro
+- [X] T4.7 Motor HyperFrames GSAP (CDN 3.12.5): timelines secuenciados header→paneles,
+  controles Narrar Replay/Paso 1-3 + teclas 1/2/3/R en 11 slides animadas,
+  safety-timer progress(1) anti-stall, fallback sin-GSAP con todo visible.
+  Auditoría 1600×900: 25/25 sin desborde vertical, stepping verificado.
 
 ## F5 Cierre
 - [X] T5.1 Verificación de DoD global, datasets limpios (<200KB) y notebooks reproducibles

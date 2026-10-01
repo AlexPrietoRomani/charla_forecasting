@@ -46,3 +46,14 @@ Deck interactivo en un solo archivo `presentacion.html` (Chart.js + PapaParse + 
 23. **Árbol de Decisión Práctico:** Matriz de selección de modelos para entornos de producción según volumen de datos, latencia y tolerancia al riesgo.
 24. **Cierre Filosófico:** La IA no predice el futuro: cuantifica incertidumbre para habilitar decisiones estratégicas.
 25. **Gracias & Referencias:** Repositorio de código abierto, notebooks reproducibles y bibliografía BibTeX (`refs.bib`).
+
+---
+
+### Motor HyperFrames (GSAP 3.12.5, implementado en `scripts/build_deck.py`)
+Slides animadas (11): 01, 02, 04, 06, 07, 08, 10, 11, 12, 15, 24.
+Coreografía por defecto: header (t=0) → panel izq (t≈1s) → panel der (t≈2s) → KPIs/callouts.
+Controles de presentador por slide: `Narrar: Replay | Paso 1-3` + teclas `1/2/3` (pasos), `R` (replay).
+Robustez: safety-timer fuerza `timeline.progress(1)` a los 2.6s (anti-stall si rAF va lento);
+sin GSAP (CDN bloqueado) todo queda visible (fallback). Slides estáticas justificadas:
+mapas Leaflet y charts Chart.js en vivo requieren pausa cognitiva + interacción (zoom,
+toggle de series, heatmap switcher), superior a una animación pasiva.
