@@ -1,25 +1,23 @@
 # Plan Maestro — ¿Puede la IA predecir el futuro? (SENAMHI + café NDVI)
 
-## 1. Qué vamos a presentar (narrativa, 16 slides clon Data_Wizard)
+## 1. Qué vamos a presentar (narrativa, 22 slides avanzadas estilo Data_Wizard + HyperFrames)
 
 Hilo: **predecir = cuantificar incertidumbre para decidir**. Dos casos reales Perú:
-- **Caso A (clima):** pronóstico T°/lluvia estación SENAMHI con 5 niveles de modelo.
-- **Caso B (café):** rendimiento qq/ha desde NDVI Sentinel-2 + clima.
+- **Caso A (clima):** pronóstico T°/lluvia estación SENAMHI con 5 niveles de modelo + mapa satelital.
+- **Caso B (café):** rendimiento qq/ha desde Sentinel-2 (EVI/NDRE vs saturación de NDVI) + clima + visor interactivo de capas y heatmaps.
 
-Outline (detalle en `reference/estructura_presentacion.md`, adaptar slides 9-12 a SENAMHI/café):
-1 Portada + gancho · 2 Mapa 4 familias + zero-shot · 3 ML tabular (RF→XGB/LGBM/CatBoost)
-4 Series clásicas (ARIMA/ETS/Prophet) · 5 DL (LSTM/DeepAR/N-BEATS/TFT/PatchTST)
-6 Zero-shot (TimesFM/Chronos/Lag-Llama/Moirai) · 7 CV (YOLO conteo vs U-Net máscara vs ViT)
-8 Fusión NDVI+clima · **9-10 DEMO clima SENAMHI en vivo** · **11-12 DEMO café NDVI en vivo**
-13 Lecciones (validación temporal, costo del error, NDVI se satura)
-14 Receta ¿qué modelo cuándo? · 15 Cierre · 16 Gracias+refs.
+Outline (detalle ampliado en `reference/estructura_presentacion.md`):
+- **Bloque 1:** 1 Portada + gancho · 2 Gran mapa de las 4 familias + zero-shot.
+- **Bloque 2 (Teoría & Mecanismos):** 3 ML tabular mecanismo (lags SVG) · 4 ML tabular fortalezas y patología de no-extrapolación · 5 Series clásicas mecanismo · 6 Series clásicas pros/contras · 7 DL secuencial (LSTM vs PatchTST SVG) · 8 DL pros/contras y trampa de la serie única · 9 Zero-shot (Chronos tokenización SVG) · 10 CV agrícola (YOLOv12, SAM 2.1, DINOv2) · 11 Biofísica satelital (curva de saturación NDVI vs EVI/NDRE) · 12 Fusión multimodal (3 ventanas fenológicas).
+- **Bloque 3 (Casos Reales & Demos):** 13 Caso A mapa satelital Iquitos (Leaflet) · 14 Caso A benchmark multi-modelo · 15 Caso A DEMO clima 7d en vivo · 16 Caso B mapa satelital Jaén con Visor de Capas/Heatmaps (RGB, NDVI saturado, EVI, NDRE) · 17 Caso B prueba de las 6 campañas · 18 Caso B DEMO café en vivo (LOYO).
+- **Bloque 4 (Cierre):** 19 Lecciones desde las trincheras · 20 Árbol de decisiones técnico · 21 Cierre (la IA no predice, cuantifica) · 22 Gracias + referencias BibTeX (`refs.bib`).
 
 ## 2. Cómo construir las dispos (igual que Data_Wizard, sin inventar stack)
 
-- Single-file `presentacion.html`: Chart.js + PapaParse + Leaflet vía CDN, CSS vars claro/oscuro, navegación `←/→/F/Inicio/Fin`, fallback embebido si no hay servidor.
-- Datos del deck = **CSVs pequeños** en `data/`: `senamhi_diario.csv`, `senamhi_forecast_7d.csv`, `cafe_ndvi_rendimiento.csv` (<200 KB c/u). Lo pesado (SENAMHI crudo, GeoTIFF) **no** entra al deck ni al git.
-- Servir local: `python -m http.server 8000` → `.../presentacion.html`. Doble-clic funciona con fallback.
-- DoD deck: abre offline, 16 slides, gráficos leen CSV en vivo, teclado OK.
+- Single-file `presentacion.html`: Chart.js + PapaParse + Leaflet satelital vía CDN, CSS vars claro/oscuro, navegación `←/→/F/Inicio/Fin`, fallback embebido si no hay servidor.
+- Datos del deck = **CSVs pequeños** en `data/`: `senamhi_diario.csv`, `senamhi_forecast_7d.csv`, `cafe_ndvi_rendimiento.csv` (<100 KB c/u).
+- Servir local: `python -m http.server 8000` → `.../presentacion.html`. Doble-clic funciona 100% offline con fallback.
+- DoD deck: abre offline, 22 slides, mapas satelitales Leaflet interactivos, visor de heatmaps, gráficos leen CSV en vivo, teclado OK.
 
 ## 3. Práctica A — Clima SENAMHI multi-modelo (1 estación cafetalera)
 

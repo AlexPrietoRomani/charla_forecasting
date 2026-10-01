@@ -1,24 +1,41 @@
-# Estructura propuesta — ¿Puede la IA predecir el futuro? (16 slides, estilo Data_Wizard)
+# Estructura Expandida — ¿Puede la IA predecir el futuro? (22 slides, estilo Data_Wizard + HyperFrames)
 
-Clon visual de `Data_Wizard/presentacion.html`: single-file, Chart.js + PapaParse + Leaflet, modo claro/oscuro, navegación teclado.
+Deck interactivo en un solo archivo `presentacion.html` (Chart.js + PapaParse + Leaflet satelital + diagramas SVG interactivos, modo claro/oscuro, soporte offline).
 
-1. Portada + pregunta gancho (¿predecir o anticipar con incertidumbre?)
-2. Mapa mental: 4 familias (ML tabular, series temporales, DL secuencial, CV + fusión) + foundation zero-shot
-3. ML tabular: RF → ExtraTrees → XGBoost → LightGBM → CatBoost (tabla: categóricas, velocidad, tuning) [@breiman2001; @chen2016; @ke2017; @prokhorenkova2018; @grinsztajn2022]
-4. Series clásicas: ARIMA/SARIMA, ETS, Prophet — 1 serie, horizonte corto, interpretable [@boxjenkins2015; @hyndman2002; @taylor2017; @makridakis2018]
-5. DL secuencial: LSTM → DeepAR → N-BEATS/N-HiTS → TFT → PatchTST (panel grande + GPU) [@hochreiter1997; @salinas2020; @oreshkin2020; @lim2021; @challu2023; @nie2023]
-6. Foundation zero-shot: TimesFM / Chronos / Lag-Llama / Moirai / TimeGPT-1 — cold-start sin reentrenar [@das2024; @ansari2024; @rasul2024; @woo2024; @garza2023]
-7. CV para predecir: clasificación (ResNet/EfficientNet/ViT) vs detección (YOLO conteo) vs segmentación (U-Net/DeepLab/SAM) [@he2016deepresidual; @redmon2016yolo; @ronneberger2015unet; @dosovitskiy2020vit]
-8. Fusión: NDVI/EVI + clima + suelo → CNN+LSTM supera NDVI aislado [@muruganantham2022yieldrs; @vanklompenburg2020]
-9. DEMO 1 — Temperatura/heladas: Open-Meteo + RF/DNN 6–48h, RMSE ~1.5 °C, supera HRRR [@talsma2023; @noh2021; @bhakare2025] + GraphCast contexto global [@lam2023]
-10. DEMO 1 en vivo: CSV `data/clima_valle_elqui.csv` + Chart.js (umbral daño, costo noche — reutiliza lógica Data_Wizard)
-11. DEMO 2 — Fruta + NDVI: uva Landsat R~0.95 [@arab2021], fresa CNN-LSTM 5 sem [@chaudhary2021], arándano Sentinel-2+XGBoost MAPE 12% [@niedbala2022], manzana ∑NDVI+RF [@bai2021] → fusión UAV+satélite [@li2025]
-12. DEMO 2 en vivo: CSV `data/ndvi_fruta.csv` (NDVI acumulado vs rendimiento, slider fenología)
-13. Lecciones mundo real: 1) más datos ≠ mejor (ventana fenológica), 2) baseline RF/XGB antes que DL, 3) validación temporal, 4) costo del error (falso negativo helada), 5) NDVI se satura
-14. Receta práctica: ¿qué modelo cuándo? (árbol decisión: pocos datos→ETS/Prophet/RF; exógenas→LGBM/CatBoost; panel grande→TFT/N-HiTS; cold-start→Chronos/TimesFM; imágenes→YOLO/U-Net)
-15. Cierre: la IA no predice el futuro, cuantifica incertidumbre — decidir bajo incertidumbre
-16. Gracias + refs + repo/QR (refs.bib + articles/)
+---
 
-Demos mínimas siguientes:
-- `notebooks/01_temp_openmeteo_rf.ipynb` (base [@talsma2023])
-- `notebooks/02_ndvi_sentinel_xgb.ipynb` (base [@niedbala2022], portable a Elqui)
+### Bloque 1: Introducción y Taxonomía Global
+1. **Portada & Gancho:** ¿Puede la IA predecir el futuro? Lecciones de forecasting, teledetección multiespectral y cuantificación de incertidumbre.
+2. **El Gran Mapa de Métodos:** Las 4 familias (ML Tabular, Series Clásicas, DL Secuencial, Visión + Fusión) + Foundation Zero-Shot y el eje de trade-offs.
+
+---
+
+### Bloque 2: Explicación Profunda de Familias de Modelos
+3. **ML Tabular (Mecanismo):** ¿Cómo convierte un árbol el tiempo en tabla? Diagrama animado de ventana deslizante (*lags* 1-14, medias móviles, calendario cíclico) y partición ortogonal del espacio.
+4. **ML Tabular (Análisis Crítico):** Fortalezas (invarianza a escalas, captura de no linealidades) vs Patología fatal (incapacidad matemática de extrapolar tendencias crecientes fuera de rango histórico).
+5. **Series Clásicas (Mecanismo):** Descomposición física del proceso generativo: Tendencia ($T$), Ciclo ($C$), Estacionalidad ($S$) y Choque autorregresivo ($\epsilon_t$) en ARIMA, ETS y Prophet.
+6. **Series Clásicas (Análisis Crítico):** Cuándo son imbatibles (horizontes 1-3 días con pocos datos) vs colapso ante intermitencia y múltiples variables exógenas no lineales.
+7. **Deep Learning Secuencial (Mecanismo):** De celdas recurrentes LSTM (compuertas de olvido y estado de celda) a parches de auto-atención en PatchTST (Nie et al., ICLR 2023).
+8. **Deep Learning (Análisis Crítico):** El mito del deep learning en una sola serie (sobreajuste y costo 100x innecesario) vs su verdadero poder en transferencia cruzada masiva (TFT / DeepAR).
+9. **Foundation Models Zero-Shot:** Chronos (Amazon, 2024) y TimesFM (Google, 2024). Tokenización por cuantización numérica y pronóstico en frío (*cold-start*) sin calibración previa.
+10. **Visión por Computador en el Agro:** Del píxel a la cosecha: YOLOv12 (atención por área A2 y conteo en 1.6 ms), SAM 2.1 (segmentación automática de copa) y DINOv2 (representación autosupervisada).
+11. **Biofísica Satelital & Índices:** La curva espectral de la hoja (absorción en Rojo B04 vs dispersión en NIR B08). Fórmulas de AgroVisión (NDVI, EVI, NDRE, NDWI) y la curva física de saturación del NDVI cuando LAI > 3.
+12. **Fusión Multimodal:** Acoplamiento biofísico: Espectro + Balance Hídrico (Open-Meteo) segmentado por las 3 ventanas fenológicas del café (Floración, Llenado, Cosecha).
+
+---
+
+### Bloque 3: Casos Reales en Perú con Mapas y Demos en Vivo
+13. **Caso A (SENAMHI Iquitos - Ubicación):** Mapa satelital interactivo Leaflet (Esri World Imagery) de la estación Punchana (`103015`, Loreto, 91 msnm) y zona de influencia térmica.
+14. **Caso A (Benchmark Multi-modelo):** Tabla comparativa de métricas reales sobre 7 años de datos (2019–2025) y holdout estricto de 90 días: LSTM (2.097 °C) y ExtraTrees (2.166 °C) baten al Naive (2.315 °C).
+15. **Caso A (DEMO 1 EN VIVO):** Gráfico interactivo Chart.js leyendo `data/senamhi_forecast_7d.csv`: curvas multi-modelo y bandas de incertidumbre al 90% (±1.645 $\sigma$).
+16. **Caso B (Café & Sentinel-2 Jaén - Ubicación):** Mapa satelital interactivo Leaflet de la finca cafetalera en Jaén (-5.6766°, -78.7742°, 1,100 msnm) con **Visor Interactivo de Capas (Heatmap Switcher)**: Satélite RGB, Heatmap NDVI (saturado), Heatmap EVI (biomasa real) y Heatmap NDRE (nitrógeno).
+17. **Caso B (La Evidencia de Campo):** La prueba de las 6 campañas (2020–2025): cómo el NDVI anual plano en 0.788 no detecta el golpe de calor de 2024, mientras que la fusión fenológica acierta con solo 0.26 qq/ha de error.
+18. **Caso B (DEMO 2 EN VIVO):** Gráfico interactivo Chart.js leyendo `data/cafe_ndvi_rendimiento.csv`: rendimiento real observado ($qq/ha$) vs modelo de fusión vs modelo estancado de solo NDVI (LOYO cross-validation).
+
+---
+
+### Bloque 4: Síntesis Operativa, Decisiones y Cierre
+19. **5 Lecciones desde las Trincheras:** 1) Validación temporal obligatoria, 2) Árboles antes que redes neuronales, 3) El costo del error no es simétrico, 4) Respetar la física del sensor satelital, 5) Interpretabilidad operativa.
+20. **Árbol de Decisión Práctico:** Matriz de selección de modelos para entornos de producción según volumen de datos, latencia y tolerancia al riesgo.
+21. **Cierre Filosófico:** La IA no predice el futuro: cuantifica incertidumbre para habilitar decisiones estratégicas.
+22. **Gracias & Referencias:** Repositorio de código abierto, notebooks reproducibles y bibliografía BibTeX (`refs.bib`).
