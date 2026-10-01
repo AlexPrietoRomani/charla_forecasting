@@ -18,6 +18,7 @@ charla_forecasting/
 
 ## Estado
 - [x] Repo init + estructura
-- [ ] Investigación (ML/DL/series/CV + temperatura + NDVI-fruta)
-- [ ] Demos mínimas (temperatura, NDVI)
-- [ ] Deck `presentacion.html`
+- [x] Investigación (ML/DL/series/CV + SENAMHI Iquitos + Café NDVI/EVI AgroVisión)
+- [x] Demos mínimas y notebooks (`notebooks/01_clima_senamhi.ipynb`, `notebooks/02_cafe_ndvi.ipynb`)
+- [x] Datasets procesados y exportados (<100KB en `data/`)
+- [x] Deck interactivo single-file `presentacion.html` (16 slides, Chart.js, modo claro/oscuro, soporte offline)
