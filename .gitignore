@@ -65,3 +65,5 @@ AGENTS.md
 .project-suite/
 .playwright-mcp/
 screenshots/
+slide_*.png
+docs/audit_layout/

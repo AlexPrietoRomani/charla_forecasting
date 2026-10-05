@@ -1,4019 +1,830 @@
-"""
-Generador del deck interactivo exhaustivo presentacion.html (25 diapositivas)
-Animaciones cíclicas infinitas estilo HyperFrames, narrativa acoplada directamente a cada figura,
-inspección bibliográfica rigurosa (refs.bib), badges de tipo de contenido (Teoría vs Práctica vs Demo)
-y layout full-bleed sin huecos vacíos.
-"""
-
-from pathlib import Path
+import os
+import json
 import pandas as pd
+from deck_styles import get_deck_css
+from deck_slides_p1 import get_slides_part1
+from deck_slides_p2 import get_slides_part2
+from deck_notes import get_speaker_notes
 
-def build_mega_deck():
-    senamhi_7d_csv = Path("data/senamhi_forecast_7d.csv").read_text(encoding="utf-8").strip()
-    cafe_csv = Path("data/cafe_ndvi_rendimiento.csv").read_text(encoding="utf-8").strip()
-    df_senamhi = pd.read_csv("data/senamhi_diario.csv")
-    senamhi_diario_sub = df_senamhi.tail(180).to_csv(index=False).strip()
-    noaa_ecmwf_csv = Path("data/noaa_ecmwf_forecast.csv").read_text(encoding="utf-8").strip()
+def clean_nans(obj):
+    if isinstance(obj, float) and (pd.isna(obj) or obj != obj):
+        return None
+    elif isinstance(obj, dict):
+        return {k: clean_nans(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [clean_nans(v) for v in obj]
+    return obj
 
-    html = """<!DOCTYPE html>
+def build_deck():
+    # Cargar datos reales auditados
+    bench_df = pd.read_csv("data/benchmark_punchana.csv")
+    forecast_7d_df = pd.read_csv("data/senamhi_forecast_7d.csv")
+    extrap_df = pd.read_csv("data/experimento_extrapolacion.csv")
+    cafe_camp_df = pd.read_csv("data/cafe_jaen_campanias.csv")
+    cafe_res_df = pd.read_csv("data/cafe_jaen_resultados.csv")
+    noaa_ecmwf_df = pd.read_csv("data/noaa_ecmwf_forecast.csv")
+    
+    with open("data/cafe_jaen_hipotesis.json", "r", encoding="utf-8") as f:
+        hipotesis_cafe = json.load(f)
+
+    senamhi_diario_df = pd.read_csv("data/senamhi_diario.csv")
+    senamhi_sub = senamhi_diario_df.tail(180).to_dict(orient="records")
+
+    raw_payload = {
+        "benchmark": bench_df.to_dict(orient="records"),
+        "forecast_7d": forecast_7d_df.to_dict(orient="records"),
+        "extrapolacion": extrap_df.to_dict(orient="records"),
+        "cafe_campanias": cafe_camp_df.to_dict(orient="records"),
+        "cafe_resultados": cafe_res_df.to_dict(orient="records"),
+        "hipotesis_cafe": hipotesis_cafe,
+        "noaa_ecmwf": noaa_ecmwf_df.to_dict(orient="records"),
+        "senamhi_reciente": senamhi_sub
+    }
+    data_payload = clean_nans(raw_payload)
+    data_json = json.dumps(data_payload, ensure_ascii=False)
+    notes_json = json.dumps(get_speaker_notes(), ensure_ascii=False)
+
+    css_content = get_deck_css()
+    slides_p1 = get_slides_part1()
+    slides_p2 = get_slides_part2()
+
+    html_content = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>¿Puede la IA predecir el futuro? Lecciones de forecasting desde el mundo real</title>
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg-light: #F8FAFC;
-    --bg-light-panel: #FFFFFF;
-    --bg-light-sub: #F1F5F9;
-    --text-light-main: #0F172A;
-    --text-light-mute: #334155;
-    --text-light-faint: #64748B;
-    --line-light: #CBD5E1;
-    --line-light-faint: #E2E8F0;
-
-    --bg-dark: #07090E;
-    --bg-dark-panel: #0D121F;
-    --bg-dark-sub: #141C2E;
-    --text-dark-main: #F8FAFC;
-    --text-dark-mute: #94A3B8;
-    --text-dark-faint: #475569;
-    --line-dark: #334155;
-    --line-dark-faint: #1E293B;
-
-    --accent-blue: #2563EB;
-    --accent-emerald: #059669;
-    --accent-amber: #D97706;
-    --accent-red: #DC2626;
-    --accent-purple: #7C3AED;
-    --accent-cyan: #0891B2;
-
-    --sidebar-w: 56px;
-    --footer-h: 46px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; width: 100%; }
-
-  body {
-    background: var(--bg-light);
-    color: var(--text-light-main);
-    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-    overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-    transition: background 0.25s ease, color 0.25s ease;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-size: 32px 32px;
-    background-image: 
-      linear-gradient(to right, rgba(15,23,42,0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(15,23,42,0.03) 1px, transparent 1px);
-  }
-
-  body.dark-active {
-    background: var(--bg-dark);
-    color: var(--text-dark-main);
-  }
-  body.dark-active::before {
-    background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
-  }
-
-  .mono { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
-  .display { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.02em; }
-
-  /* SIDEBAR NAVEGACION */
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    width: var(--sidebar-w);
-    background: var(--bg-light-panel);
-    border-right: 1px solid var(--line-light-faint);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0;
-  }
-  body.dark-active .sidebar {
-    background: var(--bg-dark-panel);
-    border-color: var(--line-dark-faint);
-  }
-
-  .nav-icon-btn, .theme-btn {
-    width: 38px; height: 38px;
-    border: 1px solid var(--line-light);
-    background: transparent;
-    color: var(--text-light-mute);
-    cursor: pointer;
-    font-size: 13px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  body.dark-active .nav-icon-btn, body.dark-active .theme-btn {
-    border-color: var(--line-dark);
-    color: var(--text-dark-mute);
-  }
-  .nav-icon-btn:hover, .theme-btn:hover {
-    background: var(--accent-blue);
-    color: #FFF;
-    border-color: var(--accent-blue);
-  }
-
-  /* FOOTER */
-  .slide-footer {
-    position: fixed;
-    bottom: 0; left: var(--sidebar-w); right: 0;
-    height: var(--footer-h);
-    background: var(--bg-light-panel);
-    border-top: 1px solid var(--line-light-faint);
-    z-index: 90;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 24px;
-    gap: 12px;
-  }
-  body.dark-active .slide-footer {
-    background: var(--bg-dark-panel);
-    border-color: var(--line-dark-faint);
-  }
-
-  .slide-counter {
-    font-size: 13px;
-    color: var(--text-light-faint);
-    font-weight: 500;
-    margin-right: 12px;
-  }
-  body.dark-active .slide-counter { color: var(--text-dark-faint); }
-
-  .nav-btn {
-    background: transparent;
-    border: 1px solid var(--line-light);
-    color: var(--text-light-main);
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: "IBM Plex Mono", monospace;
-  }
-  body.dark-active .nav-btn {
-    border-color: var(--line-dark);
-    color: var(--text-dark-main);
-  }
-  .nav-btn:hover {
-    background: var(--accent-blue);
-    color: #FFF;
-    border-color: var(--accent-blue);
-  }
-
-  /* FULL-BLEED DECK LAYOUT */
-  .deck {
-    position: fixed;
-    top: 0; left: var(--sidebar-w); right: 0; bottom: var(--footer-h);
-    z-index: 10;
-  }
-
-  .slide {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 32px 14px 32px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(4px);
-    transition: opacity .25s ease, transform .25s ease, visibility .25s;
-    overflow-y: auto;
-  }
-  .slide.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  /* HEADERS & BADGES */
-  .slide-header {
-    margin-bottom: 12px;
-    flex-shrink: 0;
-  }
-  .header-top-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 4px;
-  }
-  .category-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 2px 8px;
-    background: rgba(37, 99, 235, 0.1);
-    color: var(--accent-blue);
-    border: 1px solid rgba(37, 99, 235, 0.25);
-  }
-  .category-pill.theory { background: rgba(124, 58, 237, 0.1); color: var(--accent-purple); border-color: rgba(124, 58, 237, 0.25); }
-  .category-pill.mechanism { background: rgba(8, 145, 178, 0.1); color: var(--accent-cyan); border-color: rgba(8, 145, 178, 0.25); }
-  .category-pill.practice { background: rgba(5, 150, 105, 0.1); color: var(--accent-emerald); border-color: rgba(5, 150, 105, 0.25); }
-  .category-pill.demo { background: rgba(220, 38, 38, 0.1); color: var(--accent-red); border-color: rgba(220, 38, 38, 0.25); }
-  .category-pill.decision { background: rgba(217, 119, 6, 0.1); color: var(--accent-amber); border-color: rgba(217, 119, 6, 0.25); }
-
-  .tag-sub {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-light-faint);
-  }
-  body.dark-active .tag-sub { color: var(--text-dark-faint); }
-
-  .slide-title {
-    font-size: clamp(22px, 2.2vw, 28px);
-    line-height: 1.15;
-    color: var(--text-light-main);
-    margin-bottom: 2px;
-  }
-  body.dark-active .slide-title { color: var(--text-dark-main); }
-  .slide-subtitle {
-    font-size: clamp(12.5px, 0.95vw, 14px);
-    color: var(--text-light-mute);
-    line-height: 1.35;
-  }
-  body.dark-active .slide-subtitle { color: var(--text-dark-mute); }
-
-  /* CONTENIDO PRINCIPAL */
-  .slide-body {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .split-50 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    flex: 1;
-    min-height: 0;
-  }
-  .split-55 {
-    display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 18px;
-    flex: 1;
-    min-height: 0;
-  }
-  .split-60 {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 18px;
-    flex: 1;
-    min-height: 0;
-  }
-  .grid-2x2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 14px;
-    flex: 1;
-    min-height: 0;
-  }
-
-  /* PANELES */
-  .panel {
-    background: var(--bg-light-panel);
-    border: 1px solid var(--line-light-faint);
-    padding: 16px 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    min-height: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  body.dark-active .panel {
-    background: var(--bg-dark-panel);
-    border-color: var(--line-dark-faint);
-  }
-
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--line-light-faint);
-    flex-shrink: 0;
-  }
-  body.dark-active .panel-header { border-color: var(--line-dark-faint); }
-  .panel-title {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-light-main);
-  }
-  body.dark-active .panel-title { color: var(--text-dark-main); }
-  .panel-badge {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    padding: 2px 6px;
-    background: var(--bg-light-sub);
-    color: var(--text-light-mute);
-    border: 1px solid var(--line-light-faint);
-  }
-  body.dark-active .panel-badge {
-    background: var(--bg-dark-sub);
-    color: var(--text-dark-mute);
-    border-color: var(--line-dark-faint);
-  }
-
-  .panel-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
-    min-height: 0;
-  }
-
-  /* ANIMATION NARRATIVE BOX (Acoplada a cada animación) */
-  .anim-narrative-box {
-    background: var(--bg-light-sub);
-    border: 1px solid var(--line-light-faint);
-    border-left: 3px solid var(--accent-emerald);
-    padding: 8px 12px;
-    font-size: 11.5px;
-    line-height: 1.4;
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
-  body.dark-active .anim-narrative-box {
-    background: var(--bg-dark-sub);
-    border-color: var(--line-dark-faint);
-    border-left-color: var(--accent-emerald);
-  }
-  .anim-narrative-title {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--accent-emerald);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 3px;
-  }
-  .bib-cite {
-    display: inline-block;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    color: var(--accent-blue);
-    margin-top: 3px;
-  }
-  body.dark-active .bib-cite { color: var(--accent-cyan); }
-
-  /* KPI BOXES */
-  .kpi-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
-    gap: 8px;
-    margin: 4px 0;
-  }
-  .kpi-box {
-    background: var(--bg-light-sub);
-    border: 1px solid var(--line-light-faint);
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  body.dark-active .kpi-box {
-    background: var(--bg-dark-sub);
-    border-color: var(--line-dark-faint);
-  }
-  .kpi-val {
-    font-size: clamp(16px, 1.6vw, 22px);
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--text-light-main);
-  }
-  body.dark-active .kpi-val { color: var(--text-dark-main); }
-  .kpi-lbl {
-    font-size: 10px;
-    color: var(--text-light-faint);
-    margin-top: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-  body.dark-active .kpi-lbl { color: var(--text-dark-faint); }
-
-  /* CALLOUT / INSIGHT BOXES */
-  .callout {
-    padding: 10px 12px;
-    border-left: 3px solid var(--accent-blue);
-    background: rgba(37, 99, 235, 0.04);
-    font-size: 12px;
-    line-height: 1.4;
-    color: var(--text-light-mute);
-  }
-  body.dark-active .callout {
-    background: rgba(37, 99, 235, 0.08);
-    color: var(--text-dark-mute);
-  }
-  .callout.alert {
-    border-color: var(--accent-red);
-    background: rgba(220, 38, 38, 0.05);
-  }
-  body.dark-active .callout.alert { background: rgba(220, 38, 38, 0.1); }
-  .callout.success {
-    border-color: var(--accent-emerald);
-    background: rgba(5, 150, 105, 0.05);
-  }
-  body.dark-active .callout.success { background: rgba(5, 150, 105, 0.1); }
-
-  /* LISTAS */
-  .feature-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 12px;
-    line-height: 1.35;
-  }
-  .feature-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .feature-bullet {
-    width: 6px; height: 6px;
-    background: var(--accent-blue);
-    margin-top: 5px;
-    flex-shrink: 0;
-  }
-
-  /* TABLAS */
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 11.5px;
-  }
-  .data-table th, .data-table td {
-    padding: 6px 8px;
-    text-align: left;
-    border-bottom: 1px solid var(--line-light-faint);
-  }
-  body.dark-active .data-table th, body.dark-active .data-table td { border-color: var(--line-dark-faint); }
-  .data-table th {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    color: var(--text-light-faint);
-    background: var(--bg-light-sub);
-    letter-spacing: 0.04em;
-  }
-  body.dark-active .data-table th { background: var(--bg-dark-sub); color: var(--text-dark-faint); }
-
-  /* CANVAS Y CONTENEDORES */
-  .chart-container {
-    position: relative;
-    flex: 1;
-    width: 100%;
-    min-height: 0;
-  }
-  .map-container {
-    width: 100%;
-    height: 100%;
-    min-height: 250px;
-    border: 1px solid var(--line-light-faint);
-  }
-  body.dark-active .map-container { border-color: var(--line-dark-faint); }
-
-  /* PILL SWITCHERS */
-  .btn-group {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 6px;
-    flex-wrap: wrap;
-  }
-  .pill-btn {
-    border: 1px solid var(--line-light);
-    background: transparent;
-    padding: 4px 9px;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    color: var(--text-light-mute);
-    font-family: "IBM Plex Mono", monospace;
-    transition: all 0.15s;
-  }
-  body.dark-active .pill-btn { border-color: var(--line-dark); color: var(--text-dark-mute); }
-  .pill-btn.active, .pill-btn:hover {
-    background: var(--accent-blue);
-    color: #FFF;
-    border-color: var(--accent-blue);
-  }
-
-  .svg-canvas {
-    width: 100%;
-    height: 100%;
-    min-height: 170px;
-  }
-
-  /* ========================================================
-     ANIMACIONES CÍCLICAS INFINITAS (HyperFrames Paradigm)
-     ======================================================== */
-  @keyframes scanRadarCycle {
-    0% { transform: translateX(0); opacity: 0.1; }
-    20% { opacity: 1; }
-    70% { opacity: 1; }
-    100% { transform: translateX(360px); opacity: 0.1; }
-  }
-  .anim-radar-scan {
-    animation: scanRadarCycle 3.5s ease-in-out infinite;
-  }
-
-  @keyframes sineFlowCycle {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-40px); }
-  }
-  .anim-sine-flow {
-    animation: sineFlowCycle 2s linear infinite;
-  }
-
-  @keyframes dotClimbCycle {
-    0% { cx: 40px; cy: 185px; opacity: 0; }
-    15% { opacity: 1; }
-    85% { cx: 420px; cy: 68px; opacity: 1; }
-    100% { cx: 430px; cy: 68px; opacity: 0; }
-  }
-  .anim-dot-logistic {
-    animation: dotClimbCycle 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  }
-
-  @keyframes dotExpoCycle {
-    0% { cx: 40px; cy: 185px; opacity: 0; }
-    15% { opacity: 1; }
-    75% { cx: 330px; cy: 40px; opacity: 1; }
-    100% { cx: 345px; cy: 20px; opacity: 0; }
-  }
-  .anim-dot-expo {
-    animation: dotExpoCycle 4s cubic-bezier(0.7, 0, 0.84, 0) infinite;
-  }
-
-  @keyframes slideWindowInfinite {
-    0% { transform: translateX(0); }
-    40% { transform: translateX(120px); }
-    70% { transform: translateX(180px); }
-    100% { transform: translateX(0); }
-  }
-  .anim-sliding-window {
-    animation: slideWindowInfinite 5s ease-in-out infinite;
-  }
-
-  @keyframes plateauBlink {
-    0%, 100% { opacity: 0.9; stroke-width: 3.5; }
-    50% { opacity: 0.35; stroke-width: 2; }
-  }
-  .anim-plateau {
-    animation: plateauBlink 1.8s ease-in-out infinite;
-  }
-
-  @keyframes lstmPulseCycle {
-    0% { transform: translateX(0); opacity: 0; }
-    20% { opacity: 1; }
-    50% { transform: translateX(140px); opacity: 1; }
-    80% { transform: translateX(280px); opacity: 1; }
-    100% { transform: translateX(340px); opacity: 0; }
-  }
-  .anim-lstm-pulse {
-    animation: lstmPulseCycle 3s linear infinite;
-  }
-
-  @keyframes patchAttentionPulse {
-    0%, 100% { stroke-dashoffset: 0; opacity: 0.4; }
-    50% { stroke-dashoffset: 20; opacity: 1; stroke-width: 2.5; }
-  }
-  .anim-patch-attn {
-    animation: patchAttentionPulse 2.5s ease-in-out infinite;
-  }
-
-  @keyframes droneScanCycle {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(380px); }
-  }
-  .anim-drone-scan {
-    animation: droneScanCycle 4s ease-in-out infinite;
-  }
-
-  @keyframes photonRedCycle {
-    0% { cy: 20px; opacity: 0; }
-    30% { opacity: 1; }
-    80% { cy: 110px; opacity: 0.9; }
-    100% { cy: 120px; opacity: 0; }
-  }
-  .anim-photon-red {
-    animation: photonRedCycle 1.8s ease-in infinite;
-  }
-
-  @keyframes photonNIRCycle {
-    0% { cx: 280px; cy: 20px; opacity: 0; }
-    30% { opacity: 1; }
-    50% { cx: 280px; cy: 90px; }
-    80% { cx: 350px; cy: 30px; opacity: 0.9; }
-    100% { cx: 365px; cy: 18px; opacity: 0; }
-  }
-  .anim-photon-nir {
-    animation: photonNIRCycle 1.8s ease-out infinite;
-  }
-
-  @keyframes phenoSweepCycle {
-    0% { transform: translateX(0); opacity: 0.2; }
-    33% { transform: translateX(140px); opacity: 0.8; }
-    66% { transform: translateX(300px); opacity: 0.8; }
-    100% { transform: translateX(430px); opacity: 0.2; }
-  }
-  .anim-pheno-sweep {
-    animation: phenoSweepCycle 6s linear infinite;
-  }
-
-  @keyframes fluidConvectionCycle {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0); }
-  }
-  .anim-fluid-convect {
-    animation: fluidConvectionCycle 2.5s ease-in-out infinite;
-  }
-
-  @keyframes graphcastRingCycle {
-    0% { r: 50px; opacity: 0.8; }
-    50% { r: 75px; opacity: 0.3; }
-    100% { r: 50px; opacity: 0.8; }
-  }
-  .anim-graphcast-ring {
-    animation: graphcastRingCycle 3s ease-in-out infinite;
-  }
-
-  @keyframes decisionBeamCycle {
-    0% { opacity: 0.3; transform: scaleX(0.85); }
-    50% { opacity: 0.9; transform: scaleX(1); }
-    100% { opacity: 0.3; transform: scaleX(0.85); }
-  }
-  .anim-decision-beam {
-    animation: decisionBeamCycle 3s ease-in-out infinite;
-  }
-
-  @keyframes decisionTracerCycle {
-    0% { transform: translateY(0); opacity: 0; }
-    25% { opacity: 1; }
-    75% { opacity: 1; }
-    100% { transform: translateY(85px); opacity: 0; }
-  }
-  .anim-decision-tracer {
-    animation: decisionTracerCycle 2.4s ease-in-out infinite;
-  }
-
-  @keyframes logisticTangentPulse {
-    0%, 100% { opacity: 0.3; stroke-width: 1.5; }
-    50% { opacity: 1; stroke-width: 3; }
-  }
-  .anim-logistic-tangent {
-    animation: logisticTangentPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes hwDecayPulse {
-    0%, 100% { opacity: 0.5; transform: scaleY(0.95); }
-    50% { opacity: 1; transform: scaleY(1.05); }
-  }
-  .anim-hw-decay {
-    animation: hwDecayPulse 2.2s ease-in-out infinite;
-    transform-origin: bottom;
-  }
-
-  @keyframes stlMultiScanCycle {
-    0% { transform: translateX(0); }
-    50% { transform: translateX(360px); }
-    100% { transform: translateX(0); }
-  }
-  .anim-stl-multi-scan {
-    animation: stlMultiScanCycle 5s ease-in-out infinite;
-  }
-
-  @keyframes matrixDropCycle {
-    0% { transform: translateY(-20px); opacity: 0; }
-    30% { opacity: 1; }
-    70% { transform: translateY(45px); opacity: 1; }
-    100% { transform: translateY(65px); opacity: 0; }
-  }
-  .anim-matrix-drop {
-    animation: matrixDropCycle 2.5s ease-in-out infinite;
-  }
-
-  @keyframes treeOutOfBoundsPulse {
-    0% { cx: 240px; cy: 110px; opacity: 0.2; }
-    30% { cx: 280px; cy: 80px; opacity: 1; }
-    60% { cx: 330px; cy: 40px; opacity: 1; }
-    85% { cx: 370px; cy: 40px; opacity: 1; }
-    100% { cx: 390px; cy: 40px; opacity: 0; }
-  }
-  .anim-tree-out-of-bounds {
-    animation: treeOutOfBoundsPulse 3.2s linear infinite;
-  }
-
-  @keyframes lstmCellBeltCycle {
-    0% { stroke-dashoffset: 40; }
-    100% { stroke-dashoffset: 0; }
-  }
-  .anim-lstm-cell-belt {
-    stroke-dasharray: 6,4;
-    animation: lstmCellBeltCycle 1.5s linear infinite;
-  }
-
-  @keyframes hudPulseCycle {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.04); }
-  }
-  .anim-hud-pulse {
-    animation: hudPulseCycle 2s ease-in-out infinite;
-    transform-origin: center;
-  }
-
-  @keyframes redEdgeScanCycle {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; stroke-width: 3; }
-  }
-  .anim-red-edge-scan {
-    animation: redEdgeScanCycle 2.4s ease-in-out infinite;
-  }
-
-  @keyframes droughtAlertPulse {
-    0%, 100% { opacity: 0.2; fill: var(--accent-red); }
-    50% { opacity: 0.8; fill: var(--accent-red); }
-  }
-  .anim-drought-alert {
-    animation: droughtAlertPulse 1.6s ease-in-out infinite;
-  }
-
-  @keyframes fourDVarPulse {
-    0% { r: 10px; opacity: 0.9; }
-    100% { r: 45px; opacity: 0; }
-  }
-  .anim-4dvar-pulse {
-    animation: fourDVarPulse 2s ease-out infinite;
-  }
-
-  @keyframes timesfmStreamCycle {
-    0% { transform: translateX(0); opacity: 0.2; }
-    50% { opacity: 1; }
-    100% { transform: translateX(180px); opacity: 0.2; }
-  }
-  .anim-timesfm-stream {
-    animation: timesfmStreamCycle 3s linear infinite;
-  }
-
-  @keyframes sectorPulseCycle {
-    0%, 100% { stroke-width: 1.5; opacity: 0.5; }
-    50% { stroke-width: 3.5; opacity: 1; }
-  }
-  .anim-sector-pulse {
-    animation: sectorPulseCycle 2.2s ease-in-out infinite;
-  }
+{css_content}
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="sidebar-top">
-    <button class="nav-icon-btn mono" id="tocBtn" title="Portada (Home)">01</button>
+<!-- BARRA DE PROGRESO SUPERIOR -->
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<!-- CONTENEDOR PRINCIPAL DE DIAPOSITIVAS -->
+<main class="deck-container">
+{slides_p1}
+{slides_p2}
+</main>
+
+<!-- BARRA INFERIOR DE ESTADO Y CONTROL -->
+<footer class="deck-footer">
+  <div style="display:flex; align-items:center; gap:16px;">
+    <div style="font-weight:700; font-size:13px;" class="mono" id="slideIndicator">01 / 20</div>
+    <div style="font-size:12px; color:var(--text-light-faint);" class="mono" id="actIndicator">Acto 1 · La Pregunta</div>
   </div>
-  <div class="sidebar-bottom">
-    <button class="theme-btn" id="themeToggle" title="Cambiar Tema (Claro / Oscuro)">🌓</button>
-    <button class="theme-btn mono" id="fsBtn" title="Pantalla Completa (F)">⛶</button>
+
+  <div style="display:flex; align-items:center; gap:8px;">
+    <button class="nav-btn" onclick="toggleSpeakerNotes()" title="Ver notas y guion del orador (N)">[N] Notas</button>
+    <button class="nav-btn" onclick="toggleDarkMode()" title="Alternar modo oscuro/claro (D)">[D] Modo</button>
+    <button class="nav-btn" onclick="prevSlide()" title="Diapositiva anterior (&larr; / PageUp)">&larr; Prev</button>
+    <button class="nav-btn" onclick="nextSlide()" title="Siguiente diapositiva (&rarr; / Espacio)">Next &rarr;</button>
   </div>
+</footer>
+
+<!-- DRAWER DE NOTAS DEL ORADOR (ACCESIBLE CON 'N') -->
+<aside class="speaker-drawer" id="speakerDrawer">
+  <div class="speaker-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="font-weight:700; font-size:12px;" class="mono">🎙️ NOTAS DEL ORADOR & GUION CONVERSACIONAL</span>
+      <span id="speakerTimer" style="font-size:11.5px; color:#60A5FA;" class="mono">⏱️ 1.5 min</span>
+    </div>
+    <button class="nav-btn" style="padding:2px 8px;" onclick="toggleSpeakerNotes()">Cerrar [N]</button>
+  </div>
+  <div class="speaker-body" id="speakerNotesText">
+    Notas cargando...
+  </div>
+</aside>
+
+<!-- MODAL LIGHTBOX PARA AMPLIAR INFOGRAFÍAS NOTEBOOKLM -->
+<div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+  <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="Infografía Ampliada" onclick="event.stopPropagation()">
 </div>
 
-<!-- FOOTER -->
-<div class="slide-footer">
-  <span class="slide-counter mono" id="slideNum">01 / 25</span>
-  <button class="nav-btn" id="prevBtn">&larr; PREV</button>
-  <button class="nav-btn" id="nextBtn">NEXT &rarr;</button>
-</div>
-
-<!-- DECK CONTAINER -->
-<div class="deck">
-
-  <!-- SLIDE 1: PORTADA -->
-  <section class="slide active" data-title="Portada">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">🎓 INTRODUCCIÓN &amp; TESIS CENTRAL</span>
-        <span class="tag-sub">Charla Magistral · Forecasting, Teledetección &amp; Modelos Globales</span>
-      </div>
-      <h1 class="display slide-title">¿Puede la IA predecir el futuro?</h1>
-      <p class="slide-subtitle">Lecciones de forecasting, teledetección multiespectral y cuantificación de incertidumbre en el mundo real.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Tesis Central de la Conferencia</span>
-            <span class="panel-badge">FILOSOFÍA APLICADA</span>
-          </div>
-          <div class="panel-content">
-            <p style="font-size: 14px; line-height: 1.5; color: var(--text-light-mute);">
-              La Inteligencia Artificial <strong>no es una bola de cristal mágica</strong>. Predecir no es adivinar con certeza absoluta, sino <strong>cuantificar matemáticamente la incertidumbre</strong> para habilitar decisiones estratégicas bajo riesgo controlado.
-            </p>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">2,557</span>
-                <span class="kpi-lbl">Días SENAMHI Punchana</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">6</span>
-                <span class="kpi-lbl">Campañas Café Jaén</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">&plusmn;1.65&sigma;</span>
-                <span class="kpi-lbl">Cono de Confianza (90%)</span>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Dos Casos Reales en Perú:</strong> 1) Pronóstico térmico en Iquitos con 5 niveles de modelo vs agencias globales (NOAA/ECMWF), y 2) Rendimiento cafetalero con Sentinel-2 y el fenómeno de saturación del NDVI.
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Dinámica Cíclica: El Cono de Incertidumbre</span>
-            <span class="panel-badge">ANIMACIÓN CÍCLICA</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 450 200" preserveAspectRatio="xMidYMid meet">
-                <!-- Ejes -->
-                <line x1="40" y1="170" x2="420" y2="170" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <line x1="40" y1="20" x2="40" y2="170" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                
-                <!-- Línea presente t=0 -->
-                <line x1="200" y1="20" x2="200" y2="170" stroke="var(--accent-amber)" stroke-width="1.5" stroke-dasharray="4,4" />
-                <text x="200" y="15" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-amber)" text-anchor="middle">PRESENTE (t=0)</text>
-                
-                <!-- Histórico observado -->
-                <path d="M 40,120 Q 80,80 120,110 T 200,95" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" />
-                <circle cx="200" cy="95" r="4" fill="var(--accent-blue)" />
-
-                <!-- Cono de incertidumbre futuro -->
-                <polygon points="200,95 400,30 400,160" fill="rgba(37,99,235,0.12)" />
-                <line x1="200" y1="95" x2="400" y2="30" stroke="var(--accent-blue)" stroke-width="1" stroke-dasharray="3,3" />
-                <line x1="200" y1="95" x2="400" y2="160" stroke="var(--accent-blue)" stroke-width="1" stroke-dasharray="3,3" />
-                
-                <!-- Trayectoria esperada y simuladas -->
-                <path d="M 200,95 Q 280,65 400,85" fill="none" stroke="var(--accent-emerald)" stroke-width="2" />
-                <path d="M 200,95 Q 300,115 400,135" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="2,2" />
-                <path d="M 200,95 Q 290,50 400,55" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <!-- Láser / Escáner cíclico infinito -->
-                <line class="anim-radar-scan" x1="40" y1="20" x2="40" y2="170" stroke="var(--accent-emerald)" stroke-width="2" />
-
-                <text x="320" y="70" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)">Valor Esperado &mu;(t)</text>
-                <text x="395" y="25" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light-faint)" text-anchor="end">+1.645&sigma; (P95)</text>
-                <text x="395" y="170" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light-faint)" text-anchor="end">-1.645&sigma; (P5)</text>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta esta animación cíclica?</div>
-              <span><strong>Ciclo temporal continuo:</strong> El haz escaneador verde recorre la serie pasada fija y, al cruzar el presente ($t=0$), el cono sombreado se expande hacia el horizonte futuro, demostrando que la varianza del error &sigma; crece con el tiempo de proyección.</span>
-              <div class="bib-cite">Ref: Box, Jenkins et al. (2015) &middot; Wiley Series in Probability and Statistics</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 2: ANATOMIA DESDE CERO -->
-  <section class="slide" data-title="Anatomía de una Serie">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">🎓 TEORÍA: ANATOMÍA DE SERIES</span>
-        <span class="tag-sub">Fundamento Físico &amp; Descomposición Ontológica</span>
-      </div>
-      <h2 class="display slide-title">La Anatomía de una Serie Temporal</h2>
-      <p class="slide-subtitle">Toda serie temporal Y(t) es el resultado de 4 componentes superpuestos. Antes de aplicar IA, debemos entender la física de su señal.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Suma Constructiva de la Señal</span>
-            <span class="panel-badge">MECANISMO PASO A PASO</span>
-          </div>
-          <div class="panel-content">
-            <div class="btn-group" id="decompBtns">
-              <button class="pill-btn active" onclick="setDecompLayer('all')">Ver Señal Completa</button>
-              <button class="pill-btn" onclick="setDecompLayer('trend')">1. Tendencia T(t)</button>
-              <button class="pill-btn" onclick="setDecompLayer('season')">2. Estacionalidad S(t)</button>
-              <button class="pill-btn" onclick="setDecompLayer('cycle')">3. Ciclo C(t)</button>
-              <button class="pill-btn" onclick="setDecompLayer('noise')">4. Ruido &epsilon;(t)</button>
-            </div>
-            <div class="chart-container">
-              <svg id="decompSvg" class="svg-canvas" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet">
-                <!-- Ejes -->
-                <line x1="30" y1="185" x2="470" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <line x1="30" y1="15" x2="30" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                
-                <!-- Capa 1: Tendencia (Azul) -->
-                <path id="layerTrend" d="M 30,150 Q 250,120 470,60" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" />
-                
-                <!-- Capa 2: Estacionalidad (Esmeralda) -->
-                <path id="layerSeason" d="M 30,150 C 60,100 80,200 110,145 C 140,95 160,195 190,140 C 220,90 240,190 270,130 C 300,80 320,170 350,115 C 380,65 400,155 430,100 C 450,60 460,110 470,60" fill="none" stroke="var(--accent-emerald)" stroke-width="2" stroke-dasharray="3,3" />
-
-                <!-- Capa 3: Ciclo (Púrpura) -->
-                <path id="layerCycle" d="M 30,150 Q 150,80 270,140 T 470,60" fill="none" stroke="var(--accent-purple)" stroke-width="2" stroke-opacity="0.7" />
-
-                <!-- Capa 4: Señal con Ruido (Caos Real) -->
-                <path id="layerNoise" d="M 30,155 L 50,120 L 70,140 L 90,105 L 110,160 L 130,110 L 150,150 L 170,95 L 190,145 L 210,100 L 230,130 L 250,85 L 270,140 L 290,90 L 310,125 L 330,75 L 350,110 L 370,60 L 390,100 L 410,55 L 430,90 L 450,45 L 470,55" fill="none" stroke="var(--accent-amber)" stroke-width="1.8" />
-              </svg>
-            </div>
-
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta esta interacción y figura?</div>
-              <span><strong>Descomposición clásica:</strong> <span class="mono">Y(t) = T(t) + S(t) + C(t) + &epsilon;(t)</span>. Alterna los botones para aislar cada componente: el modelo aprende patrones deterministas ($T, S, C$) y debe rechazar el ruido aleatorio (&epsilon;).</span>
-              <div class="bib-cite">Ref: Cleveland et al. (1990) STL &middot; Hyndman &amp; Athanasopoulos (2021)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Los 4 Componentes en el Mundo Real</span>
-            <span class="panel-badge">CASOS DE USO</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>Tendencia T(t) &mdash; Inercia de Largo Plazo:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Calentamiento global (+0.2 °C/década), envejecimiento y merma biológica de un cafetal de 10 años, o expansión demográfica urbana.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>Estacionalidad S(t) &mdash; Ciclos Calendario Rígidos:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">El ciclo circadiano día/noche (24h), la oscilación verano/invierno (365d), y la floración del café en Jaén (agosto a octubre).</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-purple);"></span>
-                <div>
-                  <strong>Ciclo C(t) &mdash; Oscilaciones Plurianuales Aperiódicas:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">El Fenómeno El Niño / La Niña (ENSO, recurrencia cada 3 a 7 años), ciclos macroeconómicos de tasas de interés y precios de commodities.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-amber);"></span>
-                <div>
-                  <strong>Ruido &epsilon;(t) &mdash; Innovaciones Estocásticas:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Turbulencia convectiva amazónica local, un aguacero repentino de 20 minutos, o fallas en el sensor óptico del satélite.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout alert">
-              <strong>Error Fatal Típico:</strong> Sobrecargar una red neuronal con 50 capas para que memorize el ruido &epsilon;(t). El resultado es un sobreajuste masivo que colapsa en producción.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 3: EL GRAN MAPA 4 PARADIGMAS -->
-  <section class="slide" data-title="Mapa de 4 Paradigmas">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">🗺️ TAXONOMÍA: 4 PARADIGMAS</span>
-        <span class="tag-sub">Taxonomía Completa · Espacio de Soluciones</span>
-      </div>
-      <h2 class="display slide-title">El Gran Mapa de los 4 Paradigmas</h2>
-      <p class="slide-subtitle">No existe una única "IA para el tiempo". Hay cuatro escuelas metodológicas con supuestos, costos y límites distintos.</p>
-    </div>
-    <div class="slide-body">
-      <div class="grid-2x2">
-        <!-- P1 -->
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">1. Curvas &amp; Descomposición Clásica</span>
-            <span class="panel-badge">PARSIMONIA</span>
-          </div>
-          <div class="panel-content">
-            <p style="font-size: 12px; color: var(--text-light-mute);">
-              Estructura analítica explícita: modelos autorregresivos, suavizado de Holt-Winters, ARIMA, SARIMAX y GAM bayesiano (Prophet).
-            </p>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">1 - 7 Días</span>
-                <span class="kpi-lbl">Horizonte Óptimo</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">0.05 s</span>
-                <span class="kpi-lbl">Entrenamiento</span>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>Poder:</strong> Imbatibles con pocos datos (N &lt; 500) y alta estacionalidad.
-            </div>
-          </div>
-        </div>
-
-        <!-- P2 -->
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">2. ML Tabular &amp; Deep Learning</span>
-            <span class="panel-badge">NO-LINEALIDAD</span>
-          </div>
-          <div class="panel-content">
-            <p style="font-size: 12px; color: var(--text-light-mute);">
-              El puente temporal: lags 1-14 en Random Forest / ExtraTrees / LightGBM, y redes secuenciales (LSTM, TFT, PatchTST).
-            </p>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">Tabular ML</span>
-                <span class="kpi-lbl">Rey Industrial</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">Patología</span>
-                <span class="kpi-lbl">No Extrapola</span>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Atención:</strong> Un árbol jamás predecirá un récord que no estuvo en el set de datos.
-            </div>
-          </div>
-        </div>
-
-        <!-- P3 -->
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">3. Biofísica Satelital &amp; Visión Agro</span>
-            <span class="panel-badge">TELEDETECCIÓN</span>
-          </div>
-          <div class="panel-content">
-            <p style="font-size: 12px; color: var(--text-light-mute);">
-              Fusión del espectro electromagnético (Sentinel-2 L2A: NDVI, EVI, NDRE) con ventanas fenológicas y visión local (YOLOv12, SAM 2.1).
-            </p>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">786 km</span>
-                <span class="kpi-lbl">Órbita Espacial</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">Fenología</span>
-                <span class="kpi-lbl">3 Fases Café</span>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>Descubrimiento:</strong> El NDVI se satura en dosel denso (LAI > 3); EVI y NDRE rescatan la señal.
-            </div>
-          </div>
-        </div>
-
-        <!-- P4 -->
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">4. Modelos Físicos Globales &amp; Zero-Shot</span>
-            <span class="panel-badge">FRONTERA 2024-2026</span>
-          </div>
-          <div class="panel-content">
-            <p style="font-size: 12px; color: var(--text-light-mute);">
-              Supercómputo numérico Navier-Stokes (NOAA GFS, ECMWF IFS) junto a la disrupción de GraphCast (DeepMind) y TimesFM / Chronos.
-            </p>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">&Delta; 7.6 &deg;C</span>
-                <span class="kpi-lbl">Discrepancia Iquitos</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="font-size: 15px;">60 s</span>
-                <span class="kpi-lbl">GraphCast GPU</span>
-              </div>
-            </div>
-            <div class="callout alert">
-              <strong>Realidad:</strong> Incluso los supercomputadores mundiales discrepan 8 °C entre sí.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="anim-narrative-box" style="margin-top: 8px;">
-        <div class="anim-narrative-title">🗺️ Mapa de Paradigmas y Literatura Científica</div>
-        <span><strong>Complementariedad metodológica:</strong> Ningún paradigma sustituye a los demás; se seleccionan por datos disponibles, latencia de inferencia y física del dominio. En las siguientes diapositivas desglosamos las matemáticas y el código de cada uno.</span>
-        <div class="bib-cite">Ref: Cleveland et al. (1990) &middot; Breiman (2001) &middot; Huete et al. (2002) &middot; Bauer et al. (2015) &middot; Lam et al. (2023)</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 4: PARADIGMA 1 - CURVAS PARAMETRICAS -->
-  <section class="slide" data-title="P1: Curvas Paramétricas">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill mechanism">🔬 MECANISMO: CURVAS PARAMÉTRICAS &amp; DECAIMIENTO</span>
-        <span class="tag-sub">Paradigma 1 · Crecimiento Físico, Límites Biológicos &amp; Inercia</span>
-      </div>
-      <h2 class="display slide-title">Curvas Paramétricas y Suavizado Exponencial</h2>
-      <p class="slide-subtitle">Cuando los recursos son finitos, la física y la biología imponen techos asintóticos. La memoria geométrica de Holt-Winters.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Dinámica Biológica: Exponencial vs Logística</span>
-            <span class="panel-badge">SATURACIÓN ASINTÓTICA</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 460 195" preserveAspectRatio="xMidYMid meet">
-                <!-- Ejes -->
-                <line x1="40" y1="175" x2="435" y2="175" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <line x1="40" y1="15" x2="40" y2="175" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <text x="430" y="190" font-size="9" font-family="IBM Plex Mono" text-anchor="end">Tiempo t (Días / Semanas)</text>
-                <text x="45" y="25" font-size="9" font-family="IBM Plex Mono">Biomasa / Casos y(t)</text>
-                
-                <!-- Techo Asintótico Capacidad L -->
-                <line x1="40" y1="58" x2="435" y2="58" stroke="var(--accent-red)" stroke-dasharray="4,4" stroke-width="1.5" />
-                <text x="430" y="50" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="end" font-weight="700">Capacidad de Carga L (Techo Ecológico / UCI)</text>
-
-                <!-- Curva Lineal (Gris) -->
-                <line x1="40" y1="170" x2="420" y2="105" stroke="var(--text-light-faint)" stroke-width="1.5" />
-                <text x="420" y="120" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light-faint)" text-anchor="end">Lineal (y = mx + b)</text>
-
-                <!-- Curva Exponencial (Rojo punteado) -->
-                <path d="M 40,175 Q 250,170 330,20" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-dasharray="4,2" />
-                <text x="270" y="32" font-size="10.5" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700">Exponencial (e^rt)</text>
-
-                <!-- Curva Logística (Esmeralda) -->
-                <path d="M 40,175 C 150,175 190,62 420,62" fill="none" stroke="var(--accent-emerald)" stroke-width="3" />
-                <text x="320" y="78" font-size="10.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700">Logística Sigmoide</text>
-                
-                <!-- Tangente de Pendiente Máxima en Inflexión -->
-                <line class="anim-logistic-tangent" x1="120" y1="160" x2="240" y2="76" stroke="var(--accent-amber)" stroke-width="2" stroke-dasharray="3,3" />
-                <circle cx="180" cy="118" r="4.5" fill="var(--accent-amber)" />
-                <text x="190" y="132" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-amber)" font-weight="700">Inflexión t0 (dy/dt Máx = rL/4)</text>
-
-                <!-- Trazadores animados cíclicos -->
-                <circle class="anim-dot-logistic" cx="40" cy="175" r="5" fill="var(--accent-emerald)" />
-                <circle class="anim-dot-expo" cx="40" cy="175" r="5" fill="var(--accent-red)" />
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta esta animación de saturación?</div>
-              <span><strong>Mecanismo biológico y físico:</strong> La esfera roja se precipita al infinito (<i>y<sub>t</sub></i> = <i>y</i><sub>0</sub><i>e<sup>rt</sup></i>). La verde acelera hasta el punto de inflexión <i>t</i><sub>0</sub> y luego desacelera conforme agota el sustrato disponible hasta tocar la asíntota <i>L</i> = 100% [<i>y<sub>t</sub></i> = <i>L</i> / (1 + <i>e</i><sup>&minus;<i>k</i>(<i>t</i>&minus;<i>t</i><sub>0</sub>)</sup>)].</span>
-              <div class="bib-cite"><strong>Caso Real:</strong> Brote de Dengue Loreto (INS/MINSA Perú) &middot; Verhulst (1838) &middot; Murray (Mathematical Biology 2002)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Holt-Winters: Memoria con Decaimiento</span>
-            <span class="panel-badge">INERCIA TEMPORAL</span>
-          </div>
-          <div class="panel-content">
-            <!-- Gráfico animado de ponderación decreciente de lags -->
-            <div class="chart-container" style="height: 110px; min-height: 110px; margin-bottom: 6px;">
-              <svg class="svg-canvas" viewBox="0 0 420 100" preserveAspectRatio="xMidYMid meet">
-                <text x="10" y="15" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700">Ponderación w_k = &alpha;(1&minus;&alpha;)^(k&minus;1) [&alpha; = 0.35]</text>
-                <!-- Barras de decaimiento exponencial animadas -->
-                <g class="anim-hw-decay">
-                  <!-- Lag 1 -->
-                  <rect x="20" y="25" width="22" height="65" fill="var(--accent-blue)" rx="2" />
-                  <text x="31" y="20" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">35%</text>
-                  <text x="31" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-1</text>
-
-                  <!-- Lag 2 -->
-                  <rect x="52" y="44" width="22" height="46" fill="var(--accent-blue)" opacity="0.85" rx="2" />
-                  <text x="63" y="40" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">23%</text>
-                  <text x="63" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-2</text>
-
-                  <!-- Lag 3 -->
-                  <rect x="84" y="58" width="22" height="32" fill="var(--accent-blue)" opacity="0.7" rx="2" />
-                  <text x="95" y="54" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">15%</text>
-                  <text x="95" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-3</text>
-
-                  <!-- Lag 4 -->
-                  <rect x="116" y="68" width="22" height="22" fill="var(--accent-blue)" opacity="0.55" rx="2" />
-                  <text x="127" y="64" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">10%</text>
-                  <text x="127" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-4</text>
-
-                  <!-- Lag 5 -->
-                  <rect x="148" y="75" width="22" height="15" fill="var(--accent-blue)" opacity="0.4" rx="2" />
-                  <text x="159" y="72" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">6%</text>
-                  <text x="159" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-5</text>
-
-                  <!-- Lag 6..14 cola residual -->
-                  <rect x="180" y="81" width="22" height="9" fill="var(--accent-blue)" opacity="0.3" rx="2" />
-                  <text x="191" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-6</text>
-
-                  <rect x="212" y="85" width="22" height="5" fill="var(--accent-blue)" opacity="0.2" rx="2" />
-                  <text x="223" y="97" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-7</text>
-
-                  <line x1="245" y1="88" x2="330" y2="88" stroke="var(--accent-blue)" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.3" />
-                  <text x="350" y="90" font-size="8" font-family="IBM Plex Mono" fill="var(--text-light-mute)">t-14 (0.2%)</text>
-                </g>
-              </svg>
-            </div>
-
-            <div class="feature-list" style="gap: 5px;">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>Nivel (&alpha;):</strong> <span class="mono">L<sub>t</sub> = &alpha;&middot;y<sub>t</sub> + (1 &minus; &alpha;)&middot;(L<sub>t-1</sub> + b<sub>t-1</sub>)</span>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>Tendencia (&beta;):</strong> <span class="mono">b<sub>t</sub> = &beta;&middot;(L<sub>t</sub> &minus; L<sub>t-1</sub>) + (1 &minus; &beta;)&middot;b<sub>t-1</sub>)</span>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-purple);"></span>
-                <div>
-                  <strong>Estacionalidad (&gamma;):</strong> <span class="mono">s<sub>t</sub> = &gamma;&middot;(y<sub>t</sub> &minus; L<sub>t</sub>) + (1 &minus; &gamma;)&middot;s<sub>t-m</sub></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="anim-narrative-box" style="margin-top: 6px;">
-              <div class="anim-narrative-title">🛒 Caso Real: Retail &amp; Cadenas de Suministro</div>
-              <span><strong>Escala industrial sin latencia:</strong> Walmart y Supermercados Peruanos usan Holt-Winters para reabastecer 50,000 SKUs en 2 segundos en CPU. La memoria exponencial descarta automáticamente cambios obsoletos de hace un mes.</span>
-              <div class="bib-cite">Ref: Hyndman et al. (Int. J. Forecast. 2002) &middot; Box-Jenkins (2015)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 5: PARADIGMA 1 - DESCOMPOSICION ESTADISTICA Y ARIMA -->
-  <section class="slide" data-title="P1: Descomposición Estadística">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill mechanism">🔬 MECANISMO: FILTRADO LOESS &amp; AUTORREGRESIÓN</span>
-        <span class="tag-sub">Paradigma 1 · Descomposición Aditiva, ARIMA &amp; Prophet</span>
-      </div>
-      <h2 class="display slide-title">Descomposición Estadística (STL) y Modelos Estocásticos</h2>
-      <p class="slide-subtitle">Aislar la tendencia interanual, el armónico estacional y los residuos para operar sobre señales purificadas.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Descomposición Loess Multiescala en 4 Capas</span>
-            <span class="panel-badge">FILTRADO DINÁMICO</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="height: 195px; min-height: 195px;">
-              <svg class="svg-canvas" viewBox="0 0 460 190" preserveAspectRatio="xMidYMid meet">
-                <!-- Capa 1: Y_t Original -->
-                <text x="10" y="24" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light)" font-weight="700">Y_t (Original)</text>
-                <path d="M 100,22 Q 130,10 160,25 T 220,18 T 280,26 T 340,14 T 400,24 T 450,20" fill="none" stroke="var(--text-light)" stroke-width="1.8" />
-
-                <!-- Capa 2: T_t Tendencia Loess -->
-                <text x="10" y="68" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700">T_t (Tendencia)</text>
-                <path d="M 100,74 C 180,74 240,62 450,56" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" />
-
-                <!-- Capa 3: S_t Estacionalidad Periódica -->
-                <text x="10" y="112" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700">S_t (Estacional 7d)</text>
-                <path d="M 100,110 Q 120,95 140,110 T 180,110 T 220,110 T 260,110 T 300,110 T 340,110 T 380,110 T 420,110 T 450,110" fill="none" stroke="var(--accent-emerald)" stroke-width="2" />
-
-                <!-- Capa 4: R_t Residuo Estocástico + Outliers -->
-                <text x="10" y="156" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700">R_t (Residuos &gt; 2&sigma;)</text>
-                <line x1="100" y1="156" x2="450" y2="156" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" />
-                <path d="M 100,156 L 150,156 L 160,152 L 180,158 L 220,155 L 240,135 L 250,156 L 310,156 L 330,165 L 350,156 L 450,156" fill="none" stroke="var(--accent-red)" stroke-width="1.5" />
-                <!-- Outlier pulsante -->
-                <circle cx="240" cy="135" r="4.5" fill="var(--accent-red)" />
-                <text x="245" y="130" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700">+3.1&sigma; (Anomalía Térmica)</text>
-
-                <!-- Barra de barrido vertical sincronizada -->
-                <line class="anim-stl-multi-scan" x1="100" y1="10" x2="100" y2="175" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="3,2" stroke-opacity="0.8" />
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta esta descomposición STL Loess?</div>
-              <span><strong>Aditividad armónica sincronizada:</strong> El cursor vertical barre las 4 señales en paralelo. La serie original <i>Y<sub>t</sub></i> se descompone en baja frecuencia (<i>T<sub>t</sub></i>), ciclo estacional fijo (<i>S<sub>t</sub></i>) y residuo estocástico (<i>R<sub>t</sub></i>). Cuando el residuo supera &plusmn;2.5&sigma;, revela anomalías físicas reales (olas de calor o fallas de red).</span>
-              <div class="bib-cite"><strong>Caso Real:</strong> Despacho eléctrico en COES (Perú) y RTE (Francia) &middot; Cleveland et al. (1990) STL &middot; Box-Jenkins (2015)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">ARIMA vs Prophet (Meta): ¿Cuál Usar?</span>
-            <span class="panel-badge">CRITERIO COMPARATIVO</span>
-          </div>
-          <div class="panel-content">
-            <div style="background: var(--bg-light-sub); padding: 8px 12px; border: 1px solid var(--line-light-faint); font-family: 'IBM Plex Mono'; font-size: 11px; line-height: 1.4;">
-              <strong>ARIMA:</strong> (1 - &phi; B) (1 - B)^d Y_t = c + (1 + &theta; B) &epsilon;_t<br>
-              <strong>Prophet:</strong> Y(t) = g(t) [Tendencia] + s(t) [Fourier] + h(t) [Feriados] + &epsilon;_t
-            </div>
-            <table class="data-table" style="margin-top: 6px;">
-              <thead>
-                <tr>
-                  <th>Dimensión</th>
-                  <th>ARIMA / SARIMAX</th>
-                  <th>Prophet (Meta)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Tolerancia a Huecos</strong></td>
-                  <td>Cero (requiere imputar)</td>
-                  <td>Alta (ignora NaNs)</td>
-                </tr>
-                <tr>
-                  <td><strong>Estacionariedad</strong></td>
-                  <td>Obligatoria (Dickey-Fuller)</td>
-                  <td>No requerida (GAM Curvas)</td>
-                </tr>
-                <tr>
-                  <td><strong>Horizonte Eficaz</strong></td>
-                  <td>1 a 3 días (rápido colapso)</td>
-                  <td>14 a 90 días con calendario</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="callout success" style="margin-top: 6px;">
-              <strong>Benchmark Punchana (SENAMHI):</strong> ARIMA(2,1,1) alcanzó RMSE de 2.121 °C en holdout de 90 días, superando a Random Forest estándar gracias a su parsimonia estocástica.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 6: PARADIGMA 2 - PUENTE TABULAR -->
-  <section class="slide" data-title="P2: El Puente Tabular">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">🛠️ INGENIERÍA: EL PUENTE TABULAR &amp; LAGS</span>
-        <span class="tag-sub">Paradigma 2 · Machine Learning Tabular</span>
-      </div>
-      <h2 class="display slide-title">El Puente Tabular: ¿Cómo meter tiempo en un Bosque?</h2>
-      <p class="slide-subtitle">Los árboles de decisión no tienen noción de secuencia temporal. Creamos una matriz supervisada respetando la flecha del tiempo.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Mecanismo Cíclico: Ventana Deslizante (Sliding Window)</span>
-            <span class="panel-badge">FEATURE ENGINEERING</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 480 195" preserveAspectRatio="xMidYMid meet">
-                <!-- Línea de tiempo horizontal con onda de datos -->
-                <path d="M 30,45 Q 70,25 110,45 T 190,45 T 270,45 T 350,45 T 430,45" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5" />
-                
-                <!-- Puntos de tiempo observados -->
-                <circle cx="50" cy="45" r="4.5" fill="var(--text-light-mute)" />
-                <text x="50" y="30" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">y(t-4)</text>
-
-                <circle cx="110" cy="45" r="4.5" fill="var(--text-light-mute)" />
-                <text x="110" y="30" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">y(t-3)</text>
-
-                <circle cx="170" cy="45" r="4.5" fill="var(--text-light-mute)" />
-                <text x="170" y="30" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">y(t-2)</text>
-
-                <circle cx="230" cy="45" r="5" fill="var(--accent-blue)" />
-                <text x="230" y="30" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">y(t-1)</text>
-
-                <circle cx="290" cy="45" r="6" fill="var(--accent-emerald)" />
-                <text x="290" y="30" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">y(t) [Target]</text>
-
-                <!-- Marco de Ventana Deslizante animado cíclico -->
-                <g class="anim-sliding-window">
-                  <rect x="35" y="15" width="210" height="52" fill="rgba(37,99,235,0.08)" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="4,3" rx="3" />
-                  <text x="140" y="62" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">Ventana de Rezagos X [1..14]</text>
-                </g>
-
-                <!-- Proyección de caída de features animada -->
-                <g class="anim-matrix-drop" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5" stroke-dasharray="2,2">
-                  <line x1="50" y1="67" x2="65" y2="105" />
-                  <line x1="110" y1="67" x2="145" y2="105" />
-                  <line x1="170" y1="67" x2="225" y2="105" />
-                  <line x1="230" y1="67" x2="305" y2="105" />
-                  <line x1="290" y1="67" x2="395" y2="105" stroke="var(--accent-emerald)" />
-                </g>
-
-                <!-- Tabla Supervisada Generada en Tiempo Real -->
-                <g transform="translate(25, 105)">
-                  <!-- Encabezado Tabla -->
-                  <rect x="0" y="0" width="80" height="24" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="40" y="16" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Lag_4</text>
-
-                  <rect x="80" y="0" width="80" height="24" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="120" y="16" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Lag_3</text>
-
-                  <rect x="160" y="0" width="80" height="24" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="200" y="16" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Lag_2</text>
-
-                  <rect x="240" y="0" width="80" height="24" fill="var(--bg-light-sub)" stroke="var(--line-light)" />
-                  <text x="280" y="16" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Lag_1</text>
-
-                  <rect x="320" y="0" width="110" height="24" fill="rgba(5,150,105,0.18)" stroke="var(--accent-emerald)" stroke-width="1.5" />
-                  <text x="375" y="16" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">Target Y (t)</text>
-
-                  <!-- Fila 1 de datos simulados -->
-                  <rect x="0" y="24" width="80" height="22" fill="var(--bg-light)" stroke="var(--line-light)" />
-                  <text x="40" y="39" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">31.2 °C</text>
-
-                  <rect x="80" y="24" width="80" height="22" fill="var(--bg-light)" stroke="var(--line-light)" />
-                  <text x="120" y="39" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">32.0 °C</text>
-
-                  <rect x="160" y="24" width="80" height="22" fill="var(--bg-light)" stroke="var(--line-light)" />
-                  <text x="200" y="39" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">32.8 °C</text>
-
-                  <rect x="240" y="24" width="80" height="22" fill="var(--bg-light)" stroke="var(--line-light)" />
-                  <text x="280" y="39" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">33.5 °C</text>
-
-                  <rect x="320" y="24" width="110" height="22" fill="rgba(5,150,105,0.08)" stroke="var(--accent-emerald)" />
-                  <text x="375" y="39" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">34.1 °C</text>
-                </g>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta este mecanismo del Puente Tabular?</div>
-              <span><strong>Destrucción de la secuencia temporal:</strong> La ventana deslizante extrae los estados pasados y los proyecta verticalmente en columnas independientes. El árbol de decisión no sabe qué es "ayer"; solo evalúa particiones ortogonales del tipo <code>if Lag_1 &gt; 33.5 then ...</code></span>
-              <div class="bib-cite"><strong>Caso Real:</strong> Walmart M5 Forecasting Competition (30,490 SKUs) &middot; Makridakis et al. (2022) &middot; Ke et al. LightGBM (2017)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Ingeniería de Características Crítica</span>
-            <span class="panel-badge">MATRIZ DE FEATURES</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Lags Puros (t-1, t-2, t-7, t-14):</strong> Capturan la autocorrelación inmediata y el ciclo semanal.
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Estadísticas Rodantes (Rolling Mean/Std):</strong> Señal suavizada que reduce el ruido térmico diario.
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Codificación Cíclica (Seno / Coseno):</strong>
-                  <div class="mono" style="font-size: 11px; margin-top: 3px;">sin_d = sin(2&pi;&middot;dia/365) &nbsp;|&nbsp; cos_d = cos(2&pi;&middot;dia/365)</div>
-                  <p style="font-size: 11px; color: var(--text-light-faint); margin-top: 2px;">Enseña al árbol que el 31 de diciembre está pegado al 1 de enero.</p>
-                </div>
-              </div>
-            </div>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">14</span>
-                <span class="kpi-lbl">Lags Históricos</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">365 d</span>
-                <span class="kpi-lbl">Ciclo Anual Causal</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">0.25 s</span>
-                <span class="kpi-lbl">Tiempo Entrenamiento</span>
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Algoritmo</th>
-                  <th>Mecanismo Split</th>
-                  <th>RMSE Holdout Iquitos</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>ExtraTrees</strong></td>
-                  <td>Umbrales aleatorios</td>
-                  <td><strong>2.166 &deg;C</strong> (Filtra ruido)</td>
-                </tr>
-                <tr>
-                  <td><strong>Random Forest</strong></td>
-                  <td>Mejor corte estocástico</td>
-                  <td>2.247 &deg;C</td>
-                </tr>
-                <tr>
-                  <td><strong>XGBoost</strong></td>
-                  <td>Gradiente en residuos</td>
-                  <td>2.215 &deg;C</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 7: PARADIGMA 2 - PATOLOGIA NO EXTRAPOLACION -->
-  <section class="slide" data-title="P2: Patología de los Árboles">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill decision">⚠️ PATOLOGÍA: NO-EXTRAPOLACIÓN EN ÁRBOLES</span>
-        <span class="tag-sub">Paradigma 2 · Limitación Fatal del ML Tabular</span>
-      </div>
-      <h2 class="display slide-title">La Patología de No-Extrapolación</h2>
-      <p class="slide-subtitle">Un árbol de decisión no puede predecir un valor fuera del rango histórico con el que fue entrenado.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Demostración Cíclica: El Colapso en Meseta</span>
-            <span class="panel-badge">FALLA ESTRUCTURAL</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 480 205" preserveAspectRatio="xMidYMid meet">
-                <!-- Ejes -->
-                <line x1="40" y1="185" x2="455" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <line x1="40" y1="20" x2="40" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <text x="450" y="198" font-size="9" font-family="IBM Plex Mono" text-anchor="end">Tiempo Futuro t</text>
-                <text x="45" y="30" font-size="9" font-family="IBM Plex Mono">Temperatura / Demanda MW</text>
-
-                <!-- Zona de Entrenamiento Acotada (Sombreado azul) -->
-                <rect x="40" y="75" width="200" height="110" fill="rgba(37,99,235,0.06)" stroke="var(--accent-blue)" stroke-width="1" stroke-dasharray="3,3" />
-                <text x="140" y="92" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">Caja de Entrenamiento [T &le; 35 °C]</text>
-
-                <!-- Límite histórico máximo 35°C -->
-                <line x1="40" y1="75" x2="455" y2="75" stroke="var(--accent-red)" stroke-dasharray="4,3" stroke-width="1.5" />
-                <text x="450" y="68" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="end" font-weight="700">Techo Histórico en Entrenamiento (35 °C / 65 GW)</text>
-
-                <!-- Serie histórica observada (curva suave) -->
-                <path d="M 40,165 Q 100,120 160,135 T 240,78" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" />
-
-                <!-- Realidad futura no vista: Ola de calor / Frío récord (curva punteada subiendo a 39°C) -->
-                <path d="M 240,78 Q 320,40 440,25" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="3,3" />
-                <text x="445" y="25" font-size="9.5" font-family="IBM Plex Mono" fill="var(--text-light)" text-anchor="end">Realidad Futura: Récord 39 °C (85 GW)</text>
-
-                <!-- Predicción del Árbol: MESETA PLANA HORIZONTAL CÍCLICA -->
-                <line class="anim-plateau" x1="240" y1="78" x2="445" y2="78" stroke="var(--accent-red)" stroke-width="3.5" />
-                <text x="340" y="94" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">Predicción Árbol: MESETA PLANA (35.0 °C / Ceguera)</text>
-
-                <!-- Trazador animado de salida de rango -->
-                <circle class="anim-tree-out-of-bounds" cx="240" cy="110" r="5" fill="var(--accent-red)" />
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Por qué ocurre esta patología matemática?</div>
-              <span><strong>Partición ortogonal constante en hojas:</strong> Un árbol divide el espacio en hipercubos y predice el promedio de las muestras históricas de cada hoja (<i>ŷ</i> = <i>ȳ</i><sub>hoja</sub>). Si la realidad supera el máximo histórico, el dato cae en la hoja exterior y el modelo predice una meseta plana fija.</span>
-              <div class="bib-cite"><strong>Caso Real:</strong> Crisis Texas ERCOT 2021 (-18 °C récord causó subestimación de 20 GW y colapso eléctrico) &middot; Grinsztajn et al. (NeurIPS 2022)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Consecuencias Operativas &amp; Soluciones</span>
-            <span class="panel-badge">INGENIERÍA ROBUSTA</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-red);"></span>
-                <div>
-                  <strong>Casos Fatales en Producción:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Olas de calor por cambio climático, hiperinflación económica, o el despegue de ventas de una startup. El árbol predecirá estancamiento total.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>Solución 1 &mdash; Diferenciar la Serie (&Delta;Y):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Entrenar el árbol para predecir el cambio diario: <span class="mono">&Delta;Y_t = Y_t - Y_{t-1}</span>. La tendencia se acumula por sumas sucesivas.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>Solución 2 &mdash; Ensamble Híbrido:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Usar una regresión lineal o spline para la tendencia de fondo y el Random Forest para modular los residuos no lineales estacionales.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Regla de Oro:</strong> Nunca uses Gradient Boosting puro sobre series con tendencia determinista sin antes desestacionalizar o diferenciar.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 8: PARADIGMA 2 - DEEP LEARNING LSTM VS PATCHTST -->
-  <section class="slide" data-title="P2: Deep Learning Secuencial">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill mechanism">🔬 MECANISMO: DEEP LEARNING</span>
-        <span class="tag-sub">Paradigma 2 · Redes Recurrentes &amp; Transformers</span>
-      </div>
-      <h2 class="display slide-title">Deep Learning Secuencial: LSTM vs PatchTST</h2>
-      <p class="slide-subtitle">De compuertas de olvido recurrentes punto a punto (1997) a parches de auto-atención en paralelo (Nie et al., ICLR 2023).</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Celda Recurrente LSTM &mdash; Memoria Secuencial</span>
-            <span class="panel-badge">RECURRENCIA O(N)</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="height: 180px; min-height: 180px;">
-              <svg class="svg-canvas" viewBox="0 0 420 175" preserveAspectRatio="xMidYMid meet">
-                <!-- Marco Celda -->
-                <rect x="35" y="15" width="350" height="145" rx="8" fill="var(--bg-light-sub)" stroke="var(--line-light)" stroke-width="1.5" />
-                
-                <!-- Autopista de Estado de Celda C_{t-1} a C_t con cinta animada -->
-                <line class="anim-lstm-cell-belt" x1="20" y1="42" x2="400" y2="42" stroke="var(--accent-purple)" stroke-width="3" />
-                <text x="45" y="34" font-size="9.5" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700">Autopista C(t-1) &rarr; C(t) (Gradiente Constante)</text>
-
-                <!-- Compuerta Olvido f_t -->
-                <circle cx="105" cy="95" r="16" fill="rgba(220,38,38,0.15)" stroke="var(--accent-red)" stroke-width="1.8" />
-                <text x="105" y="99" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">&sigma;</text>
-                <text x="105" y="125" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">Olvido f_t</text>
-                <line x1="105" y1="79" x2="105" y2="45" stroke="var(--accent-red)" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <!-- Compuerta Entrada i_t * C_tilde -->
-                <circle cx="210" cy="95" r="16" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.8" />
-                <text x="210" y="99" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">&sigma;</text>
-                <text x="210" y="125" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">Entrada i_t</text>
-                <line x1="210" y1="79" x2="210" y2="45" stroke="var(--accent-emerald)" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <!-- Compuerta Salida o_t -->
-                <circle cx="315" cy="95" r="16" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" stroke-width="1.8" />
-                <text x="315" y="99" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">&sigma;</text>
-                <text x="315" y="125" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">Salida o_t &rarr; h_t</text>
-                <line x1="315" y1="79" x2="315" y2="45" stroke="var(--accent-blue)" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <!-- Pulso de información viajando cíclicamente -->
-                <circle class="anim-lstm-pulse" cx="40" cy="42" r="5" fill="var(--accent-amber)" />
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Por qué la LSTM es lenta en series largas?</div>
-              <span><strong>Cuello de botella secuencial:</strong> Para calcular el instante <i>t</i> = 100, la GPU debe computar obligatoriamente los 99 pasos previos en serie (<i>O</i>(<i>N</i>)). La cinta superior protege la memoria del desvanecimiento del gradiente, pero impide la paralelización masiva.</span>
-              <div class="bib-cite">Ref: Hochreiter &amp; Schmidhuber (1997) Neural Computation &middot; PyTorch LSTM Benchmark</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">PatchTST &mdash; Parches &amp; Auto-Atención</span>
-            <span class="panel-badge">ESTADO DEL ARTE (ICLR 2023)</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="height: 180px; min-height: 180px;">
-              <svg class="svg-canvas" viewBox="0 0 420 175" preserveAspectRatio="xMidYMid meet">
-                <!-- Serie cortada en parches independientes -->
-                <g transform="translate(15, 20)">
-                  <rect x="0" y="0" width="85" height="36" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" stroke-width="1.5" rx="3" />
-                  <text x="42" y="18" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Parche 1 (16d)</text>
-                  <text x="42" y="30" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-64 .. t-48</text>
-
-                  <rect x="100" y="0" width="85" height="36" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.5" rx="3" />
-                  <text x="142" y="18" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Parche 2 (16d)</text>
-                  <text x="142" y="30" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-48 .. t-32</text>
-
-                  <rect x="200" y="0" width="85" height="36" fill="rgba(217,119,6,0.15)" stroke="var(--accent-amber)" stroke-width="1.5" rx="3" />
-                  <text x="242" y="18" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Parche 3 (16d)</text>
-                  <text x="242" y="30" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-32 .. t-16</text>
-
-                  <rect x="300" y="0" width="85" height="36" fill="rgba(124,58,237,0.15)" stroke="var(--accent-purple)" stroke-width="1.5" rx="3" />
-                  <text x="342" y="18" font-size="9" font-family="IBM Plex Mono" text-anchor="middle" font-weight="700">Parche 4 (16d)</text>
-                  <text x="342" y="30" font-size="8" font-family="IBM Plex Mono" text-anchor="middle" fill="var(--text-light-mute)">t-16 .. t_hoy</text>
-                </g>
-
-                <!-- Arcos de Auto-Atención Multi-Cabeza Cíclicos -->
-                <path class="anim-patch-attn" d="M 57,60 C 57,130 357,130 357,60" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-dasharray="4,4" />
-                <path class="anim-patch-attn" d="M 157,60 C 157,110 257,110 257,60" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" stroke-dasharray="4,4" />
-                <text x="207" y="148" font-size="10" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">Self-Attention Paralelo O(P^2) &middot; Channel-Independent</text>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">⚡ Caso Real: Energía Renovable &amp; Parques Eólicos</div>
-              <span><strong>Revolución de Transformers temporales:</strong> CAISO (California) y Enel Green Power procesan 1,000 turbinas eólicas con PatchTST. Al agrupar el tiempo en parches de 16 pasos, reduce la longitud de cómputo en 16x y la GPU atiende todas las series a la vez sin retrasos recursivos.</span>
-              <div class="bib-cite">Ref: Nie et al. (ICLR 2023) PatchTST &middot; Lim et al. (2021) Temporal Fusion Transformers</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 9: PARADIGMA 2 - CUANDO USAR DL -->
-  <section class="slide" data-title="P2: Mito de la Serie Única">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill decision">⚖️ ANÁLISIS CRÍTICO: MITO DE LA SERIE ÚNICA</span>
-        <span class="tag-sub">Paradigma 2 · Análisis Crítico de Costo / Beneficio</span>
-      </div>
-      <h2 class="display slide-title">El Mito del Deep Learning en una Sola Serie</h2>
-      <p class="slide-subtitle">Entrenar una red neuronal gigante sobre una sola estación meteorológica suele ser un desperdicio injustificado de cómputo.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Trade-off Empírico: Datos vs Arquitectura</span>
-            <span class="panel-badge">AUDITORÍA</span>
-          </div>
-          <div class="panel-content">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Modelo</th>
-                  <th>Tiempo CPU</th>
-                  <th>RMSE Holdout</th>
-                  <th>Complejidad Operativa</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Naive Estacional</strong></td>
-                  <td>0.001 s</td>
-                  <td>2.315 &deg;C</td>
-                  <td>Línea base cero costo</td>
-                </tr>
-                <tr>
-                  <td><strong>ARIMA(2,1,1)</strong></td>
-                  <td>0.12 s</td>
-                  <td>2.121 &deg;C</td>
-                  <td>Estadística pura</td>
-                </tr>
-                <tr>
-                  <td><strong>ExtraTrees (Lags 1-14)</strong></td>
-                  <td>0.25 s</td>
-                  <td>2.166 &deg;C</td>
-                  <td>Recomendado Producción</td>
-                </tr>
-                <tr>
-                  <td><strong>LSTM PyTorch (1 Capa)</strong></td>
-                  <td>14.80 s</td>
-                  <td>2.097 &deg;C</td>
-                  <td>Costo 60x para ganar 0.07 °C</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="callout alert">
-              <strong>Veredicto:</strong> La LSTM mejoró apenas 0.069 °C respecto a ExtraTrees, requiriendo 60 veces más tiempo de cómputo y calibración de pesos.
-            </div>
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">⚖️ Evidencia Empírica de Complejidad vs Rendimiento</div>
-              <span><strong>La falacia de la red profunda aislada:</strong> En series univariadas individuales, los modelos de árboles con lags igualan o superan a Deep Learning con un tiempo de cómputo decenas de veces menor. El Deep Learning justifica su costo cuando explota regularidades compartidas en miles de series simultáneas.</span>
-              <div class="bib-cite">Ref: Makridakis et al. (2018) PLOS ONE &middot; Zeng et al. (2023) AAAI &middot; Lim et al. (2021) TFT</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">¿Cuándo SÍ gana Deep Learning?</span>
-            <span class="panel-badge">TRANSFERENCIA MASIVA</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>Transferencia Cruzada Masiva (Cross-Learning):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Modelos como DeepAR o TFT entrenados sobre 100,000 productos de retail simultáneos. Aprenden patrones globales compartidos que ningún árbol individual puede ver.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>Múltiples Horizontes con Cuantiles (Direct Multi-Horizon):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Pronosticar simultáneamente t+1, t+2, ..., t+30 sin error recursivo acumulativo, generando cuantiles P10, P50, P90 en una sola pasada de inferencia.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>Regla de Decisión Práctica:</strong> Si tienes una sola estación o menos de 10,000 puntos: usa ExtraTrees o ARIMA. Si tienes más de 100,000 series heterogéneas: usa TFT o PatchTST.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 10: PARADIGMA 3 - DEL PIXEL AL RENDIMIENTO -->
-  <section class="slide" data-title="P3: Visión por Computador">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">🌱 APLICACIÓN: VISIÓN COMPUTACIONAL EN AGRO</span>
-        <span class="tag-sub">Paradigma 3 · Visión Artificial &amp; Monitoreo Agrícola</span>
-      </div>
-      <h2 class="display slide-title">Del Píxel a la Cosecha: Visión Local</h2>
-      <p class="slide-subtitle">Cómo drones y cámaras en campo extraen biomarcadores antes de consultar el satélite orbital.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Inferencia en Tiempo Real en Cafetales</span>
-            <span class="panel-badge">DRONES &amp; ROBÓTICA</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 460 205" preserveAspectRatio="xMidYMid meet">
-                <!-- Visor HUD de Cámara Dron Agrícola (Fondo oscuro transparente) -->
-                <rect x="15" y="10" width="430" height="185" fill="rgba(15,23,42,0.6)" stroke="var(--accent-blue)" stroke-width="1.5" rx="4" />
-                
-                <!-- Telemetría Superior HUD -->
-                <g font-family="IBM Plex Mono" font-size="8.5" fill="var(--accent-cyan)">
-                  <text x="25" y="24">ALT: 14.8m</text>
-                  <text x="95" y="24">SPD: 2.1m/s</text>
-                  <text x="175" y="24">BAT: 84%</text>
-                  <text x="240" y="24">GPS: -5.6766°, -78.7742° (JAÉN)</text>
-                  <text x="435" y="24" text-anchor="end" fill="var(--accent-red)" font-weight="700">&bull; REC [4K-60FPS]</text>
-                </g>
-                <line x1="20" y1="28" x2="440" y2="28" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" />
-
-                <!-- Arbustos de café con dosel segmentado por SAM 2.1 -->
-                <polygon points="60,110 90,80 150,75 190,110 170,165 80,160" fill="rgba(5,150,105,0.25)" stroke="var(--accent-emerald)" stroke-width="2" />
-                <text x="125" y="125" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">SAM 2.1: Copa 94.2%</text>
-
-                <polygon points="230,105 270,70 340,75 380,115 360,165 250,160" fill="rgba(5,150,105,0.25)" stroke="var(--accent-emerald)" stroke-width="2" />
-                <text x="305" y="125" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">SAM 2.1: Copa 91.8%</text>
-
-                <!-- Detección YOLOv12 Bounding Boxes (Cerezas Maduras vs Verdes vs Roya) -->
-                <!-- Caja 1: Cereza Madura -->
-                <rect x="95" y="88" width="26" height="26" fill="rgba(220,38,38,0.2)" stroke="var(--accent-red)" stroke-width="1.8" />
-                <rect x="95" y="78" width="55" height="11" fill="var(--accent-red)" />
-                <text x="97" y="86" font-size="7.5" font-family="IBM Plex Mono" fill="#fff" font-weight="700">Ripe 97.4%</text>
-
-                <!-- Caja 2: Cereza Verde -->
-                <rect x="140" y="120" width="24" height="24" fill="rgba(217,119,6,0.2)" stroke="var(--accent-amber)" stroke-width="1.8" />
-                <rect x="140" y="110" width="60" height="11" fill="var(--accent-amber)" />
-                <text x="142" y="118" font-size="7.5" font-family="IBM Plex Mono" fill="#fff" font-weight="700">Unripe 89.1%</text>
-
-                <!-- Caja 3: Alerta Fitosanitaria Roya -->
-                <rect x="250" y="85" width="30" height="30" fill="rgba(124,58,237,0.2)" stroke="var(--accent-purple)" stroke-width="1.8" stroke-dasharray="2,2" />
-                <rect x="250" y="74" width="75" height="11" fill="var(--accent-purple)" />
-                <text x="252" y="82" font-size="7.5" font-family="IBM Plex Mono" fill="#fff" font-weight="700">Roya Fol 14.2%</text>
-
-                <!-- Retícula Central de Puntería HUD animada -->
-                <g class="anim-hud-pulse">
-                  <circle cx="230" cy="115" r="28" fill="none" stroke="var(--accent-cyan)" stroke-width="1.2" stroke-dasharray="6,4" />
-                  <line x1="230" y1="80" x2="230" y2="150" stroke="var(--accent-cyan)" stroke-width="1" />
-                  <line x1="195" y1="115" x2="265" y2="115" stroke="var(--accent-cyan)" stroke-width="1" />
-                </g>
-
-                <!-- Escáner láser vertical del dron continuo -->
-                <line class="anim-drone-scan" x1="20" y1="30" x2="20" y2="190" stroke="var(--accent-cyan)" stroke-width="2" stroke-opacity="0.85" />
-
-                <!-- Telemetría Inferior HUD -->
-                <g font-family="IBM Plex Mono" font-size="9" fill="var(--text-light)">
-                  <text x="25" y="185">CARGA: <tspan fill="var(--accent-red)" font-weight="700">1,420 frutos/planta</tspan></text>
-                  <text x="220" y="185">EST. COSECHA: <tspan fill="var(--accent-emerald)" font-weight="700">24.3 qq/ha (&plusmn;1.2)</tspan></text>
-                </g>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta este HUD de visión computacional?</div>
-              <span><strong>Del píxel crudo a la biomasa contable:</strong> El dron barre el lote a 15 m de altura. YOLOv12 detecta y clasifica cerezas maduras vs verdes en 1.6 ms por cuadro, mientras SAM 2.1 segmenta el dosel foliar. Esto convierte fotos aéreas en variables numéricas directas (frutos/m² y % cobertura) para el modelo de forecasting.</span>
-              <div class="bib-cite"><strong>Caso Real:</strong> Cooperativa CENFROCAFE (Jaén) &middot; ECOM Agroindustrial &middot; Kirillov et al. (SAM 2, 2024) &middot; Ramos et al. (2020)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Modelos de Visión en Agricultura</span>
-            <span class="panel-badge">ARQUITECTURAS</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-red);"></span>
-                <div>
-                  <strong>YOLOv12 (2025):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Atención por área (Area Attention, A2) con latencia de 1.6 ms en borde. Conteo masivo de cerezas de café en distintas etapas de maduración.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>SAM 2.1 (Meta, 2024):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Segmentación zero-shot de copa de cafetos aislándolos de sombras, malezas y suelo desnudo sin requerir reentrenamiento.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-purple);"></span>
-                <div>
-                  <strong>DINOv2 (Representación Autosupervisada):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Detección temprana de roya y deficiencias nutricionales mediante embeddings visuales densos.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>De la Imagen al Número:</strong> Densidad de carga (granos/m²) + Cobertura de dosel (%) alimentan directamente la matriz supervisada.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 11: PARADIGMA 3 - BIOFISICA Y SATURACION -->
-  <section class="slide" data-title="P3: Biofísica Satelital">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">🛰️ BIOFÍSICA: SATURACIÓN ESPECTRAL SENTINEL-2</span>
-        <span class="tag-sub">Paradigma 3 · Teledetección Espacial &amp; Fisiología Vegetal</span>
-      </div>
-      <h2 class="display slide-title">Biofísica Satelital y la Trampa de Saturación</h2>
-      <p class="slide-subtitle">La física óptica de la hoja: absorción en Rojo vs dispersión en NIR, y por qué el NDVI se estanca cuando la planta es frondosa.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Física Óptica Foliar: Absorción vs Dispersión</span>
-            <span class="panel-badge">FOTONES 665nm vs 842nm</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="height: 180px; min-height: 180px;">
-              <svg class="svg-canvas" viewBox="0 0 420 175" preserveAspectRatio="xMidYMid meet">
-                <!-- Capas Histológicas de la Hoja -->
-                <!-- Cutícula superior -->
-                <rect x="30" y="65" width="360" height="8" fill="rgba(255,255,255,0.15)" stroke="var(--line-light)" />
-                <text x="350" y="72" font-size="8" font-family="IBM Plex Mono" fill="var(--text-light-mute)">Cutícula</text>
-
-                <!-- Parénquima en Empalizada (Cloroplastos absorben Rojo) -->
-                <rect x="30" y="73" width="360" height="35" fill="rgba(5,150,105,0.22)" stroke="var(--accent-emerald)" stroke-width="1.2" />
-                <!-- Células de empalizada con cloroplastos -->
-                <g fill="var(--accent-emerald)" opacity="0.6">
-                  <circle cx="60" cy="85" r="4" /><circle cx="75" cy="95" r="4" /><circle cx="95" cy="85" r="4" />
-                  <circle cx="130" cy="90" r="4" /><circle cx="150" cy="82" r="4" /><circle cx="170" cy="95" r="4" />
-                  <circle cx="210" cy="88" r="4" /><circle cx="230" cy="92" r="4" /><circle cx="250" cy="84" r="4" />
-                  <circle cx="290" cy="90" r="4" /><circle cx="310" cy="84" r="4" /><circle cx="330" cy="95" r="4" />
-                </g>
-                <text x="210" y="94" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">Empalizada: Clorofila a &amp; b</text>
-
-                <!-- Mesófilo Esponjoso (Cavidades de aire dispersan NIR) -->
-                <rect x="30" y="108" width="360" height="42" fill="rgba(124,58,237,0.15)" stroke="var(--accent-purple)" stroke-width="1.2" />
-                <g fill="none" stroke="var(--accent-purple)" stroke-width="1" opacity="0.5">
-                  <ellipse cx="80" cy="128" rx="14" ry="9" />
-                  <ellipse cx="160" cy="130" rx="18" ry="11" />
-                  <ellipse cx="240" cy="126" rx="16" ry="10" />
-                  <ellipse cx="320" cy="132" rx="15" ry="9" />
-                </g>
-                <text x="210" y="132" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700" text-anchor="middle">Mesófilo Esponjoso: Cavidades de Aire</text>
-
-                <!-- Rayo Rojo B04 (665 nm) - Absorción 95% -->
-                <line x1="110" y1="15" x2="110" y2="88" stroke="var(--accent-red)" stroke-width="2.5" />
-                <polygon points="107,85 113,85 110,92" fill="var(--accent-red)" />
-                <text x="110" y="12" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle" font-weight="700">Rojo B04 (665nm) &rarr; 95% Absorción</text>
-                <circle class="anim-photon-red" cx="110" cy="20" r="4" fill="var(--accent-red)" />
-
-                <!-- Rayo NIR B08 (842 nm) - Dispersión / Rebote 85% -->
-                <line x1="280" y1="15" x2="280" y2="120" stroke="var(--accent-purple)" stroke-width="2.5" />
-                <line x1="280" y1="120" x2="350" y2="35" stroke="var(--accent-purple)" stroke-width="2.5" />
-                <polygon points="345,35 352,33 350,42" fill="var(--accent-purple)" />
-                <text x="315" y="12" font-size="9" font-family="IBM Plex Mono" fill="var(--accent-purple)" text-anchor="middle" font-weight="700">NIR B08 (842nm) &rarr; 85% Dispersión</text>
-                <circle class="anim-photon-nir" cx="280" cy="20" r="4" fill="var(--accent-purple)" />
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Por qué la planta absorbe rojo y rebota infrarrojo?</div>
-              <span><strong>Mecanismo biofísico de supervivencia:</strong> Si la planta absorbiera NIR, la radiación térmica la cocinaría vivo; por eso las cavidades de aire del mesófilo refractan el 85% del infrarrojo al espacio. El rojo en cambio es absorbido para fotosíntesis. La brecha entre ambos crea el NDVI.</span>
-              <div class="bib-cite">Ref: Gates et al. (1965) Science &middot; Knipling (1970) Remote Sens. Environ.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">El Acantilado del Red Edge &amp; Saturación</span>
-            <span class="panel-badge">ESPECTRO 400 - 2500 nm</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="height: 180px; min-height: 180px;">
-              <svg class="svg-canvas" viewBox="0 0 420 175" preserveAspectRatio="xMidYMid meet">
-                <!-- Ejes Espectro -->
-                <line x1="40" y1="145" x2="400" y2="145" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <line x1="40" y1="15" x2="40" y2="145" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-                <text x="395" y="168" font-size="8" font-family="IBM Plex Mono" text-anchor="end">Longitud de Onda &lambda; (nm)</text>
-                <text x="45" y="24" font-size="8.5" font-family="IBM Plex Mono">Reflectancia %</text>
-                
-                <!-- Marcas de bandas Sentinel-2 -->
-                <text x="80" y="156" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-blue)">Azul B02</text>
-                <text x="140" y="156" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-red)">Rojo B04</text>
-                <text x="210" y="156" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700">Red Edge B05</text>
-                <text x="300" y="156" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-emerald)">NIR B08</text>
-
-                <!-- Zona de Red Edge animada (690-730 nm) -->
-                <rect class="anim-red-edge-scan" x="180" y="20" width="45" height="125" fill="rgba(124,58,237,0.12)" stroke="var(--accent-purple)" stroke-dasharray="2,2" />
-                <text x="202" y="32" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-purple)" text-anchor="middle" font-weight="700">RED EDGE</text>
-
-                <!-- Firma Espectral Vegetal Completa -->
-                <!-- Valle Azul/Verde -> Valle Rojo -> Salto Red Edge -> Meseta NIR -->
-                <path d="M 40,135 Q 70,138 100,120 T 150,136 C 175,136 195,45 235,45 L 340,45 Q 365,85 390,95" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" />
-                
-                <!-- Línea de Saturación NDVI en LAI > 3 -->
-                <line x1="235" y1="52" x2="390" y2="52" stroke="var(--accent-red)" stroke-width="2" stroke-dasharray="3,3" />
-                <text x="390" y="65" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="end" font-weight="700">NDVI Saturo (~0.80) en LAI &gt; 3</text>
-                
-                <!-- Curva EVI / NDRE Sensible -->
-                <path d="M 235,52 L 390,26" fill="none" stroke="var(--accent-cyan)" stroke-width="2" />
-                <text x="390" y="22" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-cyan)" text-anchor="end" font-weight="700">NDRE / EVI Dinámico (Lineal)</text>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🌾 Caso Real: Agroindustria de Caña y Café</div>
-              <span><strong>La trampa del dosel denso:</strong> En cafetales de Jaén o cañaverales de Copersucar/Raízen, cuando el follaje cubre el suelo (LAI &gt; 3), el NDVI se satura en 0.79 y queda ciego ante deficiencias de nitrógeno o estrés hídrico. Solo el NDRE (Banda 5 a 705 nm) y el EVI preservan la sensibilidad analítica.</span>
-              <div class="bib-cite">Ref: Huete et al. (2002) MODIS EVI &middot; Barnes et al. (2000) NDRE &middot; AgroVisión Perú</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 12: PARADIGMA 3 - FUSION MULTIMODAL -->
-  <section class="slide" data-title="P3: Fusión Multimodal">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">🌱 APLICACIÓN: FUSIÓN MULTIMODAL FENOLÓGICA</span>
-        <span class="tag-sub">Paradigma 3 · Integración Satélite &amp; Fenología</span>
-      </div>
-      <h2 class="display slide-title">Fusión Multimodal: El Reloj Botánico</h2>
-      <p class="slide-subtitle">Un índice satelital ciego no predice cosechas. Debe integrarse con las 3 fases críticas del café y el balance hídrico.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Las 3 Ventanas Fenológicas del Café en Jaén</span>
-            <span class="panel-badge">CALENDARIO BOTÁNICO</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 460 205" preserveAspectRatio="xMidYMid meet">
-                <!-- 3 Ventanas Fenológicas Superiores -->
-                <g transform="translate(15, 15)">
-                  <!-- Ventana 1 Floración -->
-                  <rect x="0" y="0" width="135" height="42" fill="rgba(217,119,6,0.15)" stroke="var(--accent-amber)" stroke-width="1.5" rx="3" />
-                  <text x="67" y="18" font-size="10.5" font-family="IBM Plex Mono" fill="var(--accent-amber)" font-weight="700" text-anchor="middle">1. Floración (Crítica)</text>
-                  <text x="67" y="32" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">Ago - Oct &middot; Cuajado</text>
-
-                  <!-- Ventana 2 Llenado -->
-                  <rect x="145" y="0" width="150" height="42" fill="rgba(5,150,105,0.15)" stroke="var(--accent-emerald)" stroke-width="1.5" rx="3" />
-                  <text x="220" y="18" font-size="10.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">2. Llenado Grano</text>
-                  <text x="220" y="32" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">Nov - Feb &middot; Expansión</text>
-
-                  <!-- Ventana 3 Cosecha -->
-                  <rect x="305" y="0" width="125" height="42" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" stroke-width="1.5" rx="3" />
-                  <text x="367" y="18" font-size="10.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">3. Cosecha</text>
-                  <text x="367" y="32" font-size="8.5" font-family="IBM Plex Mono" text-anchor="middle">Mar - Jul &middot; Corte</text>
-                </g>
-
-                <!-- Eje de tiempo anual -->
-                <line x1="20" y1="180" x2="445" y2="180" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
-
-                <!-- Curva de Lluvia Histórica vs Sequía 2024 -->
-                <!-- Lluvia normal (azul claro punteado) -->
-                <path d="M 25,140 Q 80,85 150,130 T 290,95 T 440,150" fill="none" stroke="var(--accent-blue)" stroke-width="1.8" stroke-dasharray="3,3" opacity="0.6" />
-                <text x="440" y="145" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="end">Lluvia Normal (290 mm)</text>
-
-                <!-- Lluvia 2024 Sequía en Floración (cae a 140 mm) -->
-                <path d="M 25,160 Q 80,172 150,165 T 290,105 T 440,150" fill="none" stroke="var(--accent-red)" stroke-width="2.2" />
-                <text x="25" y="152" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700">Sequía 2024 (140 mm)</text>
-
-                <!-- Alerta Animada de Aborto Floral Irreversible -->
-                <g class="anim-drought-alert" transform="translate(65, 95)">
-                  <rect x="0" y="0" width="105" height="24" rx="3" fill="var(--accent-red)" fill-opacity="0.2" stroke="var(--accent-red)" stroke-width="1.5" />
-                  <text x="52" y="16" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">&bull; ABORTO FLORAL 50%</text>
-                </g>
-
-                <!-- Curva EVI que se recupera falsamente en enero -->
-                <path d="M 25,130 Q 150,90 270,105 T 440,115" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" />
-                <text x="440" y="110" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" text-anchor="end" font-weight="700">EVI Verde Engañoso (0.79)</text>
-
-                <!-- Indicador cíclico de barrido anual -->
-                <rect class="anim-pheno-sweep" x="15" y="15" width="22" height="42" fill="var(--accent-amber)" fill-opacity="0.35" stroke="var(--accent-amber)" />
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Por qué la sequía en floración desacopla el satélite?</div>
-              <span><strong>El reloj botánico irreversible:</strong> Si el agua falta entre agosto y octubre (floración), el cafeto aborta sus flores para protegerse. Aunque en enero lluevan 300 mm y las hojas luzcan frondosas (EVI alto), ya no hay cerezas físicas en las ramas. El modelo satelital ciego falla; la fusión fenológica acierta.</span>
-              <div class="bib-cite"><strong>Caso Real:</strong> Campaña 2024 Jaén, Cajamarca (Cosecha cayó de 24 a 18.2 qq/ha) &middot; Ramos et al. (2020) &middot; Barbosa et al. (2021)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Vector de Características Multimodal</span>
-            <span class="panel-badge">9 VARIABLES BIOFÍSICAS</span>
-          </div>
-          <div class="panel-content">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Ventana Fenológica</th>
-                  <th>Índices Espectrales</th>
-                  <th>Variables Agroclimáticas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Floración (Ago-Oct)</strong></td>
-                  <td>&sum;EVI, max NDRE</td>
-                  <td>Precipitación acumulada (mm)</td>
-                </tr>
-                <tr>
-                  <td><strong>Llenado (Nov-Feb)</strong></td>
-                  <td>EVI medio, &Delta;NDWI</td>
-                  <td>Horas de sol &amp; T° media</td>
-                </tr>
-                <tr>
-                  <td><strong>Cosecha (Mar-Jul)</strong></td>
-                  <td>Integral EVI madurez</td>
-                  <td>Déficit de presión de vapor</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">4.4%</span>
-                <span class="kpi-lbl">MAPE Fusión Multimodal</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">5.4%</span>
-                <span class="kpi-lbl">MAPE Solo NDVI Anual</span>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Resultado AgroVisión:</strong> La fusión reduce el error de pronóstico y acierta en campañas críticas con anomalías climáticas extremas.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 13: PARADIGMA 4 - MODELOS GLOBALES Y AGENCIAS -->
-  <section class="slide" data-title="P4: Modelos Físicos Globales">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">🌐 FÍSICA GLOBAL: MODELOS NWP &amp; SUPERCÓMPUTO</span>
-        <span class="tag-sub">Paradigma 4 · Física Atmosférica &amp; Supercómputo</span>
-      </div>
-      <h2 class="display slide-title">Modelos Físicos Globales y Supercómputo</h2>
-      <p class="slide-subtitle">Cómo pronostican el clima las grandes agencias mundiales: Ecuaciones de Navier-Stokes y asimilación 4D-Var.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Malla Barométrica 3D y Ciclo de Asimilación 4D-Var</span>
-            <span class="panel-badge">NAVIER-STOKES + 4D-VAR</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 440 210" preserveAspectRatio="xMidYMid meet">
-                <!-- MITAD SUPERIOR: COLUMNA ATMOSFÉRICA 4 NIVELES BAROMÉTRICOS -->
-                <!-- 250 hPa: Jet Stream (~10.5 km) -->
-                <rect x="15" y="10" width="280" height="22" rx="3" fill="rgba(37,99,235,0.12)" stroke="var(--accent-blue)" stroke-width="1.2" />
-                <text x="25" y="24" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700">250 hPa · JET STREAM (~10.5 km)</text>
-                <text x="285" y="24" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-cyan)" font-weight="700" text-anchor="end">u &gt; 180 km/h &rarr;</text>
-
-                <!-- 500 hPa: Vorticidad & Geostrofismo (~5.5 km) -->
-                <rect x="15" y="38" width="280" height="22" rx="3" fill="rgba(8,145,178,0.08)" stroke="var(--accent-cyan)" stroke-width="1" />
-                <text x="25" y="52" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-cyan)">500 hPa · Balance Geostrófico (&nabla;&times;v)</text>
-
-                <!-- 850 hPa: Capa Límite & Advección Humedad (~1.5 km) -->
-                <rect x="15" y="66" width="280" height="22" rx="3" fill="rgba(5,150,105,0.08)" stroke="var(--accent-emerald)" stroke-width="1" />
-                <text x="25" y="80" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)">850 hPa · Transporte de Humedad (q)</text>
-
-                <!-- 1000 hPa: Superficie continental / oceánica -->
-                <rect x="15" y="94" width="280" height="22" rx="3" fill="rgba(217,119,6,0.12)" stroke="var(--accent-amber)" stroke-width="1.2" />
-                <text x="25" y="108" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-amber)" font-weight="700">1000 hPa · Fricción Superficial (T_sup)</text>
-
-                <!-- Convección vertical Navier-Stokes al lateral derecho -->
-                <rect x="315" y="10" width="110" height="106" rx="4" fill="rgba(220,38,38,0.06)" stroke="var(--accent-red)" stroke-width="1" stroke-dasharray="2,2" />
-                <text x="370" y="58" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-red)" font-weight="700" text-anchor="middle">CONVECCIÓN</text>
-                <text x="370" y="70" font-size="7.5" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle">w &uarr; Updraft</text>
-                <text x="370" y="82" font-size="7" font-family="IBM Plex Mono" fill="var(--accent-red)" text-anchor="middle">&Delta;T térmico</text>
-                <!-- Flecha animada verticalmente -->
-                <g class="anim-fluid-convect">
-                  <path d="M 370,100 L 370,30" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-linecap="round" />
-                  <polygon points="365,34 375,34 370,22" fill="var(--accent-red)" />
-                </g>
-
-                <!-- MITAD INFERIOR: VENTANA 4D-VAR Y ASIMILACIÓN CONTINUA -->
-                <line x1="15" y1="126" x2="425" y2="126" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" />
-                
-                <!-- Ventana de asimilación t-6h a t0 -->
-                <rect x="15" y="132" width="200" height="68" fill="rgba(37,99,235,0.06)" stroke="var(--accent-blue)" stroke-width="1" stroke-dasharray="2,2" rx="2" />
-                <text x="22" y="145" font-size="7.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700">VENTANA 4D-VAR [t-6h &rarr; t_0]</text>
-                <text x="230" y="145" font-size="7.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700">INTEGRACIÓN DETERMINÍSTICA [+10 DÍAS]</text>
-
-                <!-- Trayectoria background previa x_b -->
-                <path d="M 22,185 Q 110,175 210,165" fill="none" stroke="var(--text-light-faint)" stroke-width="1.5" stroke-dasharray="3,3" />
-                <text x="25" y="195" font-size="7.5" font-family="IBM Plex Mono" fill="var(--text-light-faint)">x_b (Background)</text>
-
-                <!-- Pulsos de observación satelital 4D-Var -->
-                <g class="anim-4dvar-pulse">
-                  <circle cx="85" cy="162" r="10" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5" />
-                  <circle cx="155" cy="156" r="10" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5" />
-                </g>
-                <polygon points="85,158 89,162 85,166 81,162" fill="var(--accent-cyan)" />
-                <polygon points="155,152 159,156 155,160 151,156" fill="var(--accent-cyan)" />
-                <text x="95" y="170" font-size="7.5" font-family="IBM Plex Mono" fill="var(--accent-cyan)">y_sat (MetOp/GOES)</text>
-
-                <!-- Trayectoria análisis óptimo x_a y pronóstico futuro -->
-                <path d="M 22,185 Q 100,165 210,158 Q 300,150 420,165" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5" />
-                <circle cx="210" cy="158" r="4" fill="var(--accent-emerald)" />
-                <text x="215" y="170" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700">x_a (Análisis)</text>
-                <text x="320" y="185" font-size="7.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)">Navier-Stokes Operativo</text>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 Dinámica Navier-Stokes &amp; Asimilación Continua 4D-Var</div>
-              <span><strong>Física de fluidos en supercomputador:</strong> La atmósfera se discretiza en 137 niveles verticales y mallas de 9 km (ECMWF IFS). Cada 6 horas, el algoritmo 4D-Var minimiza la distancia cuadrática entre la trayectoria del modelo físico (<i>x<sub>b</sub></i>) y más de 40 millones de observaciones satelitales diarias (NOAA, MetOp, GOES) integrando las ecuaciones adjuntas.</span>
-              <div style="margin-top: 5px; font-size: 11px; color: var(--accent-emerald);"><strong>Caso Real Sectorial (Maersk &amp; Air France):</strong> En transporte marítimo y aviación transatlántica, la predicción del Jet Stream a 250 hPa (&gt;180 km/h) y oleaje superficial optimiza el ruteo ahorrando 4%–7% de combustible fósil (&gt;$120M USD anuales en búnker fuel) y evitando zonas críticas de turbulencia en aire claro (CAT).</div>
-              <div class="bib-cite">Refs: Bauer, Thorpe &amp; Brunet (Nature 2015) &middot; Rabier (QJRMS 2005) &middot; ECMWF IFS Cy48r1</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Las 3 Grandes Agencias Mundiales</span>
-            <span class="panel-badge">INFRAESTRUCTURA GLOBAL</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row" style="margin-bottom: 8px;">
-              <div class="kpi-box">
-                <span class="kpi-val mono">9 km</span>
-                <span class="kpi-lbl">Resolución ECMWF IFS</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">137</span>
-                <span class="kpi-lbl">Niveles Verticales</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">40M+</span>
-                <span class="kpi-lbl">Obs. Satelitales / Día</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>NOAA GFS (Estados Unidos · Supercómputo Cray Shasta):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Resolución de 13 km, 127 niveles verticales. Acceso 100% público. Tiende a sobreestimar temperaturas máximas en selva continental por parametrización convectiva seca.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>ECMWF IFS (Europa · Supercómputo Atos BullSequana ~100 PFLOPS):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Resolución de 9 km, 137 niveles. Asimilación 4D-Var de ventana continua. Estándar de oro mundial en transporte de humedad e integración de dinámicas baroclínicas.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-amber);"></span>
-                <div>
-                  <strong>DWD ICON (Alemania · Malla Triangular Icosaédrica):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Malla no-hidrostática sin singularidad polar. Destaca en la parametrización de microfísica de nubes y balance radiativo solar.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout success" style="margin-top: 6px;">
-              <strong>Acceso Abierto vía API:</strong> Vía Open-Meteo, podemos consultar estos modelos en paralelo para cualquier coordenada de Perú sin costo de infraestructura ni descarga de terabytes en formato GRIB2.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 14: PARADIGMA 4 - DISPARIDAD EN VIVO -->
-  <section class="slide" data-title="P4: Disparidad de Agencias">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">📊 EVIDENCIA REAL: DISPARIDAD NOAA vs ECMWF (IQUITOS)</span>
-        <span class="tag-sub">Paradigma 4 · Evidencia Real para Iquitos (Open-Meteo)</span>
-      </div>
-      <h2 class="display slide-title">La Disparidad de las Agencias: ¿Cuánto Discrepan?</h2>
-      <p class="slide-subtitle">Incluso los supercomputadores más avanzados del planeta muestran desacuerdos de hasta 7.6 °C para un mismo punto geográfico.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-60">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Pronóstico a 7 Días para Iquitos (-3.6903°, -73.2556°)</span>
-            <span class="panel-badge">EN VIVO VÍA OPEN-METEO</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="min-height: 240px;">
-              <canvas id="chartNoaaEcmwf"></canvas>
-            </div>
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">📊 Auditoría de Modelos Meteorológicos</div>
-              <span><strong>Discrepancia empírica:</strong> Para el mismo día exacto, NOAA GFS pronostica 36.9 °C (ola de calor asfixiante) mientras ECMWF pronostica 29.3 °C (amortiguación por lluvia y nubes). Una brecha de 7.6 °C entre supercomputadores de primer orden mundial.</span>
-              <div class="bib-cite">Fuente: Open-Meteo API &middot; CoordenadasPunchana (-3.6903°, -73.2556°)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Diagnóstico Meteorológico</span>
-            <span class="panel-badge">ANÁLISIS DE CAUSA</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="color: var(--accent-red);">&Delta; 7.6 &deg;C</span>
-                <span class="kpi-lbl">Discrepancia Máxima</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">36.9 &deg;C</span>
-                <span class="kpi-lbl">Pico NOAA GFS</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">29.3 &deg;C</span>
-                <span class="kpi-lbl">Pico ECMWF IFS</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-amber);"></span>
-                <div>
-                  <strong>¿Por qué discrepan tanto en Iquitos?</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">La selva amazónica es dominada por convección húmeda rápida. NOAA prevé sol pleno con calentamiento radiativo; ECMWF modela cobertura nubosa densa que amortigua la radiación.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>Lección para Tomadores de Decisión:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Nunca construyas un plan operativo agrícola o de distribución eléctrica sobre un solo proveedor climático. El valor real está en el ensamble multimodelo.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout alert">
-              <strong>Riesgo Operativo:</strong> Si eres una empresa cervecera o agrícola y crees ciegamente en NOAA, sobredimensionarás inventario; si crees en ECMWF, podrías quedarte corto.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 15: PARADIGMA 4 - GRAPHCAST Y ZERO SHOT -->
-  <section class="slide" data-title="P4: GraphCast y Zero-Shot">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">🚀 FRONTERA 2024-2026: GRAPHCAST &amp; ZERO-SHOT</span>
-        <span class="tag-sub">Paradigma 4 · La Revolución AI Weather &amp; Foundation Models</span>
-      </div>
-      <h2 class="display slide-title">GraphCast y Modelos Fundacionales Zero-Shot</h2>
-      <p class="slide-subtitle">El quiebre de 2023–2026: de horas en supercomputadores a 60 segundos en GPU, y pronósticos en frío con TimesFM y Chronos.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">GraphCast: GNN Icosaédrica Multiescala</span>
-            <span class="panel-badge">GOOGLE DEEPMIND (SCIENCE 2023)</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 440 185" preserveAspectRatio="xMidYMid meet">
-                <!-- Tierra y Malla Icosaédrica -->
-                <circle cx="120" cy="90" r="68" fill="rgba(37,99,235,0.06)" stroke="var(--accent-blue)" stroke-width="1.5" />
-                
-                <!-- Ondas concéntricas de message passing (anim-graphcast-ring) -->
-                <circle class="anim-graphcast-ring" cx="120" cy="90" r="50" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-dasharray="4,3" />
-
-                <!-- Red de Nodos Icosaédricos Multiescala M0 a M6 -->
-                <g stroke="var(--accent-blue)" stroke-width="1" opacity="0.65">
-                  <line x1="120" y1="24" x2="68" y2="62" />
-                  <line x1="120" y1="24" x2="172" y2="62" />
-                  <line x1="68" y1="62" x2="88" y2="128" />
-                  <line x1="172" y1="62" x2="152" y2="128" />
-                  <line x1="88" y1="128" x2="120" y2="156" />
-                  <line x1="152" y1="128" x2="120" y2="156" />
-                  <line x1="68" y1="62" x2="172" y2="62" />
-                  <line x1="88" y1="128" x2="172" y2="62" />
-                  <line x1="68" y1="62" x2="152" y2="128" />
-                </g>
-
-                <!-- Vértices del grafo con etiquetas -->
-                <circle cx="120" cy="24" r="4.5" fill="var(--accent-cyan)" />
-                <circle cx="68" cy="62" r="4" fill="var(--accent-blue)" />
-                <circle cx="172" cy="62" r="4" fill="var(--accent-blue)" />
-                <circle cx="88" cy="128" r="4" fill="var(--accent-blue)" />
-                <circle cx="152" cy="128" r="4" fill="var(--accent-blue)" />
-                <circle cx="120" cy="156" r="4.5" fill="var(--accent-cyan)" />
-
-                <!-- Texto central de rendimiento -->
-                <rect x="75" y="76" width="90" height="28" fill="var(--bg-light)" stroke="var(--accent-blue)" stroke-width="1" rx="3" />
-                <text x="120" y="89" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">60 SEGUNDOS</text>
-                <text x="120" y="99" font-size="7.5" font-family="IBM Plex Mono" fill="var(--accent-cyan)" text-anchor="middle">1 TPU Cloud v4</text>
-
-                <!-- FLUJO ARQUITECTÓNICO: ENCODER -> PROCESSOR -> DECODER -->
-                <!-- Bloque Encoder -->
-                <rect x="215" y="20" width="210" height="44" fill="var(--bg-light-sub)" stroke="var(--line-light)" rx="2" />
-                <text x="225" y="36" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700">1. Grid-to-Mesh Encoder</text>
-                <text x="225" y="52" font-size="7.5" font-family="IBM Plex Sans" fill="var(--text-light-mute)">0.25&deg; lat-lon (1,036,800 celdas) &rarr; Malla M_6</text>
-
-                <!-- Bloque Multi-Mesh Processor -->
-                <rect x="215" y="72" width="210" height="44" fill="rgba(8,145,178,0.06)" stroke="var(--accent-cyan)" stroke-width="1.2" rx="2" />
-                <text x="225" y="88" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-cyan)" font-weight="700">2. Multi-Mesh GNN (16 capas)</text>
-                <text x="225" y="104" font-size="7.5" font-family="IBM Plex Sans" fill="var(--text-light-mute)">Message passing jerárquico M_0 (12) a M_6 (40k)</text>
-
-                <!-- Bloque Decoder -->
-                <rect x="215" y="124" width="210" height="44" fill="var(--bg-light-sub)" stroke="var(--line-light)" rx="2" />
-                <text x="225" y="140" font-size="8.5" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700">3. Mesh-to-Grid Decoder</text>
-                <text x="225" y="156" font-size="7.5" font-family="IBM Plex Sans" fill="var(--text-light-mute)">Pronóstico 37 niveles barométricos a 10 días</text>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 Grafo Icosaédrico Multiescala &amp; Inferencia en 60 Segundos</div>
-              <span><strong>Revolución de la IA meteorológica:</strong> GraphCast proyecta la cuadrícula global de $0.25^\circ$ en una jerarquía de 6 icosaedros anidados ($M_0 \dots M_6$). Una GNN ejecuta 16 rondas de paso de mensajes sobre 37 niveles barométricos, resolviendo el pronóstico global a 10 días en 60 segundos en 1 TPU Cloud y superando a ECMWF IFS en el 90% de variables.</span>
-              <div style="margin-top: 5px; font-size: 11px; color: var(--accent-cyan);"><strong>Caso Real Sectorial (Huracán Otis 2023 &amp; Google Flood Hub):</strong> GraphCast anticipó la intensificación explosiva de Otis en Acapulco (cat 1 a cat 5 en &lt;24h) mientras modelos físicos clásicos fallaron por rezago en la convección. En hidrología, Google Flood Hub previene desastres fluviales protegiendo a 460M+ personas en 80 países con 7 días de antelación.</div>
-              <div class="bib-cite">Refs: Lam et al. (Science 2023) &middot; Google DeepMind &middot; Flood Hub Early Warning</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Modelos Fundacionales Zero-Shot (2024-2026)</span>
-            <span class="panel-badge">TIMESFM, CHRONOS &amp; MOIRAI</span>
-          </div>
-          <div class="panel-content">
-            <!-- Diagrama SVG de Tokenización de Parches Zero-Shot con anim-timesfm-stream -->
-            <div style="margin-bottom: 8px;">
-              <svg class="svg-canvas" viewBox="0 0 420 65" preserveAspectRatio="xMidYMid meet" style="min-height: 65px;">
-                <!-- Flujo continuo de serie temporal -->
-                <path d="M 15,32 Q 35,12 55,32 T 95,32 T 135,32 T 175,32" fill="none" stroke="var(--accent-blue)" stroke-width="2" />
-                <text x="15" y="54" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-blue)">Serie x(1:T)</text>
-
-                <!-- Divisores de Parches -->
-                <line x1="55" y1="16" x2="55" y2="48" stroke="var(--accent-cyan)" stroke-dasharray="2,2" />
-                <line x1="95" y1="16" x2="95" y2="48" stroke="var(--accent-cyan)" stroke-dasharray="2,2" />
-                <line x1="135" y1="16" x2="135" y2="48" stroke="var(--accent-cyan)" stroke-dasharray="2,2" />
-
-                <!-- Flecha de proyección a parches -->
-                <line x1="185" y1="32" x2="215" y2="32" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" />
-                <polygon points="215,29 222,32 215,35" fill="currentColor" opacity="0.7" />
-
-                <!-- Tokens de Parches en Transformer Decoder -->
-                <rect x="226" y="17" width="28" height="28" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" />
-                <text x="240" y="34" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">P_1</text>
-
-                <rect x="260" y="17" width="28" height="28" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" />
-                <text x="274" y="34" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">P_2</text>
-
-                <rect x="294" y="17" width="28" height="28" fill="rgba(37,99,235,0.15)" stroke="var(--accent-blue)" />
-                <text x="308" y="34" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-blue)" text-anchor="middle">P_k</text>
-
-                <!-- Flecha de predicción futura con anim-timesfm-stream -->
-                <line class="anim-timesfm-stream" x1="330" y1="32" x2="375" y2="32" stroke="var(--accent-purple)" stroke-width="2.5" />
-                <polygon points="375,28 385,32 375,36" fill="var(--accent-purple)" />
-                <text x="355" y="52" font-size="8" font-family="IBM Plex Mono" fill="var(--accent-purple)" font-weight="700">Zero-Shot &rarr;</text>
-              </svg>
-            </div>
-
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>TimesFM 2.0 (Google Research, 2024 · 200M Parámetros):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Preentrenado con 100 mil millones de puntos de datos temporales. Usa parches continuos de longitud fija; pronostica en frío sin fine-tuning para cualquier frecuencia horaria, diaria o semanal.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-amber);"></span>
-                <div>
-                  <strong>Chronos-Bolt (Amazon AWS, 2024 · Modelo Basado en T5):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Cuantiza valores continuos en un vocabulario discreto de 4,096 tokens, tratando la serie temporal exactamente como texto NLP. Inmune a escalado o ceros intermitentes.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-purple);"></span>
-                <div>
-                  <strong>MOIRAI (Salesforce Research, 2024 · Universal Any-Variate):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Atención multivariada universal con tamaño de parche dinámico. Permite incorporar co-variables exógenas arbitrarias sin reentrenar la arquitectura base.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout success" style="margin-top: 6px;">
-              <strong>Uso Industrial Real:</strong> Ideal para catálogos masivos con productos nuevos (problema de <em>cold start</em> sin historial) y como baseline de benchmark instantáneo sin costo de ingeniería de características.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 16: CASO A - MAPA IQUITOS -->
-  <section class="slide" data-title="Caso A: Ubicación Iquitos">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">📍 CASO A (SENAMHI): ESTACIÓN PUNCHANA IQUITOS</span>
-        <span class="tag-sub">Caso A · Meteorología Amazónica en Perú</span>
-      </div>
-      <h2 class="display slide-title">Estación Punchana &mdash; SENAMHI Iquitos</h2>
-      <p class="slide-subtitle">Ubicación geográfica, microclima amazónico de selva baja y descarga de 7 años de datos reales vía Garúa.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-60">
-        <div class="panel" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-          <div id="mapIquitos" class="map-container" style="flex: 1; min-height: 230px;"></div>
-          <div class="anim-narrative-box" style="margin: 8px;">
-            <div class="anim-narrative-title">📍 Punto de Muestreo Amazónico &amp; Cobertura</div>
-            <span><strong>Microclima de confluencia:</strong> La estación Punchana (-3.6903°, -73.2556°) registra la interacción directa entre los ríos Amazonas y Nanay a 91 msnm. El radio marcado de 5 km delimita el área de validez de las correlaciones con satélites y reanálisis.</span>
-            <div class="bib-cite">Fuente: SENAMHI Perú (Estación 103015) &middot; Lavado-Casimiro et al. (2012) Hydrol. Earth Syst. Sci.</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Ficha Técnica de la Estación</span>
-            <span class="panel-badge mono">COD: 103015</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">91 msnm</span>
-                <span class="kpi-lbl">Elevación</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">2,557</span>
-                <span class="kpi-lbl">Días Descargados</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">0.0%</span>
-                <span class="kpi-lbl">Huecos Post-Limpieza</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Coordenadas:</strong> Latitud -3.6903°, Longitud -73.2556° (Punchana, Maynas, Loreto).
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Entorno Hidroclimático:</strong> Confluencia de los ríos Nanay y Amazonas. Clima tropical hiperhúmedo con rápida convección vespertina.
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Período Auditado:</strong> 01-Ene-2019 al 31-Dic-2025. Limpieza rigurosa con tratamiento de trazas ('T' &rarr; 0.0 mm) y valores sin dato ('S/D' &rarr; NaN).
-                </div>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>Dataset Abierto:</strong> Disponible en <span class="mono">data/senamhi_diario.csv</span> (92.9 KB), listo para reproducción en el notebook 01.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 17: CASO A - BENCHMARK 7 AÑOS -->
-  <section class="slide" data-title="Caso A: Benchmark 7 Años">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">📊 CASO A: BENCHMARK EMPÍRICO 7 AÑOS</span>
-        <span class="tag-sub">Caso A · Evaluación Rigurosa sobre Holdout Ciego de 90 Días</span>
-      </div>
-      <h2 class="display slide-title">Benchmark Empírico: 5 Niveles de Modelo</h2>
-      <p class="slide-subtitle">Resultados reales compitiendo en igualdad de condiciones sobre la estación Punchana (2019–2025).</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Tabla Forense de Resultados</span>
-            <span class="panel-badge">HOLDOUT 90 DÍAS</span>
-          </div>
-          <div class="panel-content">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Nivel</th>
-                  <th>Modelo</th>
-                  <th>RMSE (&deg;C)</th>
-                  <th>MAE (&deg;C)</th>
-                  <th>Tiempo CPU</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Baseline</td>
-                  <td><strong>Naive Estacional</strong></td>
-                  <td class="mono">2.315</td>
-                  <td class="mono">1.758</td>
-                  <td class="mono">&lt; 0.001 s</td>
-                </tr>
-                <tr>
-                  <td>Clásico</td>
-                  <td><strong>ARIMA(2,1,1)</strong></td>
-                  <td class="mono">2.121</td>
-                  <td class="mono">1.614</td>
-                  <td class="mono">0.12 s</td>
-                </tr>
-                <tr>
-                  <td>ML Tabular</td>
-                  <td><strong>Random Forest</strong></td>
-                  <td class="mono">2.247</td>
-                  <td class="mono">1.701</td>
-                  <td class="mono">0.45 s</td>
-                </tr>
-                <tr>
-                  <td>ML Tabular</td>
-                  <td><strong>ExtraTrees Regressor</strong></td>
-                  <td class="mono" style="color: var(--accent-emerald); font-weight: 700;">2.166</td>
-                  <td class="mono">1.632</td>
-                  <td class="mono">0.25 s</td>
-                </tr>
-                <tr>
-                  <td>Deep Learning</td>
-                  <td><strong>LSTM (1 Capa, PyTorch)</strong></td>
-                  <td class="mono" style="color: var(--accent-blue); font-weight: 700;">2.097</td>
-                  <td class="mono">1.590</td>
-                  <td class="mono">14.80 s</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="callout success">
-              <strong>Conclusión Estadística:</strong> ExtraTrees y LSTM superan al modelo ingenuo (Naive) por un 6.4% y 9.4% de reducción de error respectivamente.
-            </div>
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">📊 Auditoría de Desempeño en 90 Días Ciegos</div>
-              <span><strong>Causalidad y parsimonia:</strong> Evaluación temporal estricta (sin mezclar futuro). ExtraTrees alcanza RMSE 2.166 °C en 0.25 s, superando al modelo naive (2.315 °C). La LSTM logra 2.097 °C pero a un costo de entrenamiento 60 veces superior.</span>
-              <div class="bib-cite">Dataset: data/senamhi_diario.csv &middot; Validación TimeSeriesSplit 2019-2025</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Análisis de Desempeño &amp; Parsimonia</span>
-            <span class="panel-badge">CRITERIO INGENIERIL</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">2.097 &deg;C</span>
-                <span class="kpi-lbl">Mejor RMSE (LSTM)</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">0.25 s</span>
-                <span class="kpi-lbl">Tiempo ExtraTrees</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>Por qué ExtraTrees vence a Random Forest:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Al elegir umbrales de partición 100% aleatorios, ExtraTrees reduce drásticamente la varianza y suaviza el ruido turbulento amazónico.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>El Costo de la Precisión:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Para ganar 0.069 °C de mejora, la LSTM requiere entrenar pesos en PyTorch durante 15 segundos. En producción masiva, ExtraTrees es la solución óptima.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Validación Estricta:</strong> Nunca se mezclaron datos al azar (*no shuffle*). Toda la prueba se hizo en los últimos 90 días respetando la causalidad temporal.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 18: CASO A - DEMO EN VIVO -->
-  <section class="slide" data-title="Caso A: Demo 1 en Vivo">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill demo">⚡ DEMO EN VIVO: PRONÓSTICO 7 DÍAS CON INCERTIDUMBRE</span>
-        <span class="tag-sub">Caso A · Demostración Interactiva con Incertidumbre</span>
-      </div>
-      <h2 class="display slide-title">DEMO 1: Pronóstico 7 Días &mdash; Iquitos</h2>
-      <p class="slide-subtitle">Explora los modelos compitiendo en tiempo real contra los valores reales observados, con intervalos de confianza al 90% (&plusmn;1.645&sigma;).</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-60">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Curvas de Pronóstico y Bandas de Confianza</span>
-            <div class="btn-group" id="casoABtns">
-              <button class="pill-btn active" onclick="toggleDatasetCasoA('observed')">Observado</button>
-              <button class="pill-btn active" onclick="toggleDatasetCasoA('extratrees')">ExtraTrees</button>
-              <button class="pill-btn" onclick="toggleDatasetCasoA('lstm')">LSTM</button>
-              <button class="pill-btn" onclick="toggleDatasetCasoA('arima')">ARIMA</button>
-            </div>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="min-height: 240px;">
-              <canvas id="chartCasoA"></canvas>
-            </div>
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">📊 Visualización con Bandas de Incertidumbre</div>
-              <span><strong>Cono probabilístico real:</strong> La franja verde sombreada cubre el 90% de probabilidad estadística (&plusmn;1.645&sigma;). Observa cómo se ensancha con el tiempo proyectado. Puedes prender y apagar modelos con los botones superiores.</span>
-              <div class="bib-cite">Dataset: data/senamhi_forecast_7d.csv &middot; Punchana 2019-2025</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Telemetría Operativa en Vivo</span>
-            <span class="panel-badge mono">HORIZONTE 7d</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">33.4 &deg;C</span>
-                <span class="kpi-lbl">Media Prevista t+48h</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">&plusmn;1.8 &deg;C</span>
-                <span class="kpi-lbl">Margen de Error (90%)</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>Probabilidad de Superar 34 °C:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Estimada en <strong>78.4%</strong> para el día 4. Activa protocolos de alerta de estrés térmico para fauna y redes de distribución eléctrica.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>Consistencia Multimodelo:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Tanto ARIMA como ExtraTrees coinciden en una tendencia de enfriamiento hacia el día 6 por entrada de un frente húmedo.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>Exportación Lista:</strong> Datos servidos directamente desde <span class="mono">data/senamhi_forecast_7d.csv</span> con fallback embebido offline.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 19: CASO B - MAPA JAEN & HEATMAPS -->
-  <section class="slide" data-title="Caso B: Mapa Jaén & Heatmaps">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">📍 CASO B (CAFÉ): FINCA JAÉN &amp; VISOR DE HEATMAPS</span>
-        <span class="tag-sub">Caso B · Agricultura de Precisión en Jaén, Cajamarca</span>
-      </div>
-      <h2 class="display slide-title">Finca Cafetalera &amp; Visor de Capas Multiespectral</h2>
-      <p class="slide-subtitle">Explora la parcela cafetalera (1,100 msnm) y alterna en tiempo real entre capas satelitales Sentinel-2 (AgroVisión).</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-60">
-        <div class="panel" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-          <div id="mapJaen" class="map-container" style="flex: 1; min-height: 230px;"></div>
-          <div class="anim-narrative-box" style="margin: 8px;">
-            <div class="anim-narrative-title">🔄 Análisis Multiespectral Sentinel-2 &amp; Zonificación</div>
-            <span><strong>Deconstrucción del falso verdor:</strong> Al alternar las capas, el NDVI luce homogéneo en 0.79 mientras EVI y NDRE revelan la heterogeneidad interna del dosel y áreas con estrés hídrico o deficiencia de nitrógeno.</span>
-            <div class="bib-cite">Datos: Sentinel-2 L2A ESA &middot; Parcela Cafetalera Jaén (-5.6766°, -78.7742°, 1,100 msnm)</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Visor de Capas / Heatmap Switcher</span>
-            <span class="panel-badge">SENTINEL-2 L2A</span>
-          </div>
-          <div class="panel-content">
-            <div class="btn-group">
-              <button class="pill-btn active" id="btnLayerRgb" onclick="switchJaenLayer('rgb')">🛰️ Satélite RGB</button>
-              <button class="pill-btn" id="btnLayerNdvi" onclick="switchJaenLayer('ndvi')">🔴 Heatmap NDVI (Saturado)</button>
-              <button class="pill-btn" id="btnLayerEvi" onclick="switchJaenLayer('evi')">🟢 Heatmap EVI (Biomasa)</button>
-              <button class="pill-btn" id="btnLayerNdre" onclick="switchJaenLayer('ndre')">🟣 Heatmap NDRE (Nitrógeno)</button>
-            </div>
-            
-            <div id="jaenLegendBox" style="background: var(--bg-light-sub); padding: 10px; border: 1px solid var(--line-light-faint);">
-              <strong id="jaenLayerTitle" style="font-size: 12.5px;">🛰️ Imagen Satelital RGB Natural</strong>
-              <p id="jaenLayerDesc" style="font-size: 11.5px; color: var(--text-light-mute); margin-top: 3px;">
-                Vista óptica en color real de la finca cafetalera en Jaén (-5.6766°, -78.7742°, 1,100 msnm).
-              </p>
-            </div>
-
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">12 ha</span>
-                <span class="kpi-lbl">Área Parcela</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">1,100 m</span>
-                <span class="kpi-lbl">Altitud Media</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">10 m</span>
-                <span class="kpi-lbl">Resolución Sentinel-2</span>
-              </div>
-            </div>
-            <div class="callout alert">
-              <strong>Observa la diferencia:</strong> Mientras el NDVI luce plano y uniforme en 0.79, las capas EVI y NDRE revelan variabilidad interna de vigor y clorofila.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 20: CASO B - EVIDENCIA DE CAMPO -->
-  <section class="slide" data-title="Caso B: La Evidencia de Campo">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill practice">📊 CASO B: LA EVIDENCIA DE CAMPO (6 CAMPAÑAS)</span>
-        <span class="tag-sub">Caso B · Auditoría de 6 Campañas Reales (2020–2025)</span>
-      </div>
-      <h2 class="display slide-title">La Prueba de Campo: La Trampa de la Campaña 2024</h2>
-      <p class="slide-subtitle">Cómo el NDVI plano no detectó la sequía en floración, mientras que la fusión multiespectral acertó con precisión milimétrica.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-55">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Tabla Histórica de 6 Campañas de Café</span>
-            <span class="panel-badge">JAÉN, CAJAMARCA</span>
-          </div>
-          <div class="panel-content">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Campaña</th>
-                  <th>NDVI Anual</th>
-                  <th>Lluvia Floración</th>
-                  <th>Rendimiento Real</th>
-                  <th>Solo NDVI</th>
-                  <th>Fusión EVI+Clima</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>2020</strong></td>
-                  <td class="mono">0.785</td>
-                  <td class="mono">280 mm</td>
-                  <td class="mono"><strong>22.5 qq/ha</strong></td>
-                  <td class="mono">23.1</td>
-                  <td class="mono" style="color: var(--accent-emerald);">22.3</td>
-                </tr>
-                <tr>
-                  <td><strong>2021</strong></td>
-                  <td class="mono">0.792</td>
-                  <td class="mono">310 mm</td>
-                  <td class="mono"><strong>25.0 qq/ha</strong></td>
-                  <td class="mono">24.2</td>
-                  <td class="mono" style="color: var(--accent-emerald);">24.8</td>
-                </tr>
-                <tr>
-                  <td><strong>2022</strong></td>
-                  <td class="mono">0.780</td>
-                  <td class="mono">245 mm</td>
-                  <td class="mono"><strong>21.0 qq/ha</strong></td>
-                  <td class="mono">22.4</td>
-                  <td class="mono" style="color: var(--accent-emerald);">21.2</td>
-                </tr>
-                <tr>
-                  <td><strong>2023</strong></td>
-                  <td class="mono">0.789</td>
-                  <td class="mono">295 mm</td>
-                  <td class="mono"><strong>24.0 qq/ha</strong></td>
-                  <td class="mono">23.8</td>
-                  <td class="mono" style="color: var(--accent-emerald);">23.9</td>
-                </tr>
-                <tr style="background: rgba(220,38,38,0.08);">
-                  <td><strong>2024 (Crisis)</strong></td>
-                  <td class="mono" style="color: var(--accent-red); font-weight: 700;">0.788 (Plano)</td>
-                  <td class="mono" style="color: var(--accent-red); font-weight: 700;">140 mm (Sequía)</td>
-                  <td class="mono"><strong>18.2 qq/ha</strong></td>
-                  <td class="mono" style="color: var(--accent-red);">24.0 (FALLÓ)</td>
-                  <td class="mono" style="color: var(--accent-emerald); font-weight: 700;">18.46 (ACERTÓ)</td>
-                </tr>
-                <tr>
-                  <td><strong>2025</strong></td>
-                  <td class="mono">0.794</td>
-                  <td class="mono">325 mm</td>
-                  <td class="mono"><strong>26.0 qq/ha</strong></td>
-                  <td class="mono">24.5</td>
-                  <td class="mono" style="color: var(--accent-emerald);">25.7</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="callout alert">
-              <strong>Autopsia Campaña 2024:</strong> El NDVI anual marcó 0.788 (idéntico al 0.789 de 2023). El modelo simple predijo 24 qq/ha. La cosecha real se derrumbó a 18.2 qq/ha.
-            </div>
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">📊 Autopsia de la Crisis 2024</div>
-              <span><strong>Desconexión biofísica:</strong> En 2024 el NDVI anual marcó 0.788 (plano) prediciendo 24 qq/ha. Pero la sequía en floración (140 mm) provocó una caída real a 18.2 qq/ha. El modelo de Fusión fenológica detectó la anomalía y acertó con 18.46 qq/ha (error de solo 0.26 qq/ha).</span>
-              <div class="bib-cite">Dataset: data/cafe_ndvi_rendimiento.csv &middot; Ramos et al. (2020) &middot; Huete et al. (2002)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Por qué la Fusión Fenológica Salvó el Pronóstico</span>
-            <span class="panel-badge">BIOFÍSICA DEL CAFÉ</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="color: var(--accent-emerald);">0.26 qq/ha</span>
-                <span class="kpi-lbl">Error Fusión 2024</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="color: var(--accent-red);">5.80 qq/ha</span>
-                <span class="kpi-lbl">Error Solo NDVI 2024</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-red);"></span>
-                <div>
-                  <strong>La Trampa del Dosel Verde:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Las hojas adultas del cafeto retienen clorofila y rebotan NIR incluso cuando el árbol aborta el 50% de sus flores por falta de agua.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>El Rescate Fenológico:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">El modelo de fusión leyó los 140 mm en la ventana de Floración (agosto-octubre) y la caída en el índice hídrico NDWI, recortando la predicción a 18.46 qq/ha.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>Lección Práctica:</strong> En cultivos densos, nunca tomes un índice satelital aislado sin su contexto meteorológico y fenológico.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 21: CASO B - DEMO EN VIVO -->
-  <section class="slide" data-title="Caso B: Demo 2 en Vivo">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill demo">⚡ DEMO EN VIVO: RENDIMIENTO CAFÉ &amp; VALIDACIÓN LOYO</span>
-        <span class="tag-sub">Caso B · Validación Cruzada Leave-One-Year-Out (LOYO)</span>
-      </div>
-      <h2 class="display slide-title">DEMO 2: Rendimiento Cosecha Café &mdash; Jaén</h2>
-      <p class="slide-subtitle">Comparativa gráfica entre rendimiento real observado vs Fusión EVI+Clima vs modelo estancado de solo NDVI.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-60">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Cosecha Observada vs Predicciones (2020–2025)</span>
-            <div class="btn-group" id="casoBBtns">
-              <button class="pill-btn active" onclick="toggleDatasetCasoB('observed')">Real Observado</button>
-              <button class="pill-btn active" onclick="toggleDatasetCasoB('fusion')">Fusión EVI + Clima</button>
-              <button class="pill-btn" onclick="toggleDatasetCasoB('solo_ndvi')">Solo NDVI</button>
-            </div>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container" style="min-height: 240px;">
-              <canvas id="chartCasoB"></canvas>
-            </div>
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">📊 Validación Cruzada LOYO</div>
-              <span><strong>Fidelidad a las crisis:</strong> Cada año se pronosticó tras entrenar únicamente con los otros 5 años (Leave-One-Year-Out). La barra verde de Fusión rastrea la caída de 2024, mientras la línea roja de Solo NDVI flota desconectada en la abundancia ficticia.</span>
-              <div class="bib-cite">Dataset: data/cafe_ndvi_rendimiento.csv &middot; LOYO MAPE 4.4%</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Métricas de Validación &amp; Impacto Financiero</span>
-            <span class="panel-badge">COOPERATIVAS CAFÉ</span>
-          </div>
-          <div class="panel-content">
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono" style="color: var(--accent-emerald);">4.4%</span>
-                <span class="kpi-lbl">MAPE Fusión</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">1.74</span>
-                <span class="kpi-lbl">RMSE (qq/ha)</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">$15,000</span>
-                <span class="kpi-lbl">Riesgo Evitado / Contenedor</span>
-              </div>
-            </div>
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Valor de la Validación LOYO:</strong> Cada año se predice habiendo entrenado únicamente con los 5 años restantes. Cero filtración temporal.
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div>
-                  <strong>Impacto en Exportación:</strong> Sobrestimar la cosecha en 5.8 qq/ha lleva a la cooperativa a comprometer contratos a futuro que no podrá entregar, incurriendo en penalidades internacionales millonarias.
-                </div>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Dataset Abierto:</strong> Disponible en <span class="mono">data/cafe_ndvi_rendimiento.csv</span> para auditar en el notebook 02.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 22: LECCIONES DESDE LAS TRINCHERAS -->
-  <section class="slide" data-title="Lecciones de las Trincheras">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill decision">💼 DECISIÓN: 5 LECCIONES DESDE LAS TRINCHERAS</span>
-        <span class="tag-sub">Síntesis Operativa · Principios Innegociables</span>
-      </div>
-      <h2 class="display slide-title">5 Lecciones desde las Trincheras</h2>
-      <p class="slide-subtitle">Lo que aprendimos tras procesar millones de datos meteorológicos y satelitales en proyectos reales.</p>
-    </div>
-    <div class="slide-body">
-      <div class="feature-list" style="gap: 10px; height: 100%; justify-content: space-around;">
-        <div class="panel" style="padding: 10px 16px; flex: 1;">
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <span class="mono" style="font-size: 22px; font-weight: 700; color: var(--accent-blue);">01</span>
-            <div>
-              <strong style="font-size: 13.5px;">Validación Temporal Estricta (No Shuffle Obligatorio)</strong>
-              <p style="font-size: 11.5px; color: var(--text-light-mute); margin-top: 2px;">
-                Mezclar aleatoriamente el pasado y el futuro (*random k-fold*) es el autoengaño más común de los científicos de datos. Usa siempre TimeSeriesSplit o holdout en bloque.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" style="padding: 10px 16px; flex: 1;">
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <span class="mono" style="font-size: 22px; font-weight: 700; color: var(--accent-emerald);">02</span>
-            <div>
-              <strong style="font-size: 13.5px;">Árboles antes que Redes Neuronales</strong>
-              <p style="font-size: 11.5px; color: var(--text-light-mute); margin-top: 2px;">
-                Arranca siempre con ExtraTrees o LightGBM con lags 1-14. Es un baseline que entrena en 0.2 segundos y bate al 90% de las arquitecturas de Deep Learning en series individuales.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" style="padding: 10px 16px; flex: 1;">
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <span class="mono" style="font-size: 22px; font-weight: 700; color: var(--accent-amber);">03</span>
-            <div>
-              <strong style="font-size: 13.5px;">El Costo del Error No es Simétrico</strong>
-              <p style="font-size: 11.5px; color: var(--text-light-mute); margin-top: 2px;">
-                El RMSE penaliza por igual hacia arriba y hacia abajo. Pero en la vida real, que sobre café en el almacén cuesta almacenamiento; que falte para cumplir un contrato cuesta la quiebra.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" style="padding: 10px 16px; flex: 1;">
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <span class="mono" style="font-size: 22px; font-weight: 700; color: var(--accent-purple);">04</span>
-            <div>
-              <strong style="font-size: 13.5px;">Respeta la Física del Sensor</strong>
-              <p style="font-size: 11.5px; color: var(--text-light-mute); margin-top: 2px;">
-                Ningún modelo matemático arregla un dato físicamente saturado. Si el NDVI se aplana en 0.79 por dosel frondoso, migra a EVI o NDRE antes de intentar afinar hiperparámetros.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" style="padding: 10px 16px; flex: 1;">
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <span class="mono" style="font-size: 22px; font-weight: 700; color: var(--accent-red);">05</span>
-            <div>
-              <strong style="font-size: 13.5px;">Interpretabilidad Operativa sobre Complejidad</strong>
-              <p style="font-size: 11.5px; color: var(--text-light-mute); margin-top: 2px;">
-                Un pronóstico con un cono de confianza que los agrónomos o ingenieros de planta entienden será adoptado; una caja negra opaca con 0.05 °C menos de error será rechazada.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="anim-narrative-box" style="margin-top: 8px;">
-        <div class="anim-narrative-title">💼 Síntesis Operativa y Rigor Científico</div>
-        <span><strong>Ingeniería en producción:</strong> Priorizar modelos parsimoniosos e interpretables sobre arquitecturas complejas opacas. La física del sensor, el costo asimétrico del error y la validación temporal estricta garantizan adopción y valor real en campo.</span>
-        <div class="bib-cite">Ref: Makridakis et al. (2020) Int. J. Forecast. &middot; Hyndman (2021) Forecasting Principles</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 23: ARBOL DE DECISION -->
-  <section class="slide" data-title="Árbol de Decisión">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill decision">💼 DECISIÓN: ÁRBOL DE DECISIÓN DE MODELADO</span>
-        <span class="tag-sub">Guía de Decisión · De la Pregunta al Algoritmo</span>
-      </div>
-      <h2 class="display slide-title">Árbol de Decisión Práctico de Modelado por Sector</h2>
-      <p class="slide-subtitle">¿Qué modelo elegir según la física del proceso, el volumen de datos y el costo asimétrico de negocio?</p>
-    </div>
-    <div class="slide-body">
-      <div class="panel" style="display: flex; flex-direction: column; gap: 8px;">
-        <!-- Cabecera de Decisión -->
-        <div style="display: flex; align-items: center; justify-content: center; padding: 2px 0;">
-          <div style="padding: 5px 18px; background: var(--bg-light-sub); border: 2px solid var(--line-light); font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 11px; letter-spacing: 0.04em;">
-            ¿CUÁL ES EL CONTEXTO SECTORIAL Y LA DINÁMICA DEL SISTEMA?
-          </div>
-        </div>
-
-        <!-- Grid de los 4 Sectores Industriales -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex: 1;">
-          <!-- PISTA 1: ENERGÍA -->
-          <div style="border: 1.5px solid var(--accent-blue); background: rgba(37,99,235,0.03); display: flex; flex-direction: column; padding: 8px 10px; border-radius: 4px;">
-            <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 11px; color: var(--accent-blue); margin-bottom: 2px;">
-              ⚡ ENERGÍA &amp; UTILITIES
-            </div>
-            <div style="font-family: 'IBM Plex Mono'; font-size: 9px; color: var(--text-light-faint); margin-bottom: 6px;">
-              CAISO · COES (Perú) · RTE
-            </div>
-            <div style="font-size: 10.5px; color: var(--text-light-mute); line-height: 1.35; margin-bottom: 6px; flex: 1;">
-              <div><strong>Frecuencia:</strong> 15-min / Horaria</div>
-              <div><strong>Dinámica:</strong> Flujo continuo estricto</div>
-              <div style="margin: 6px 0; padding: 6px 8px; background: var(--bg-light); border: 1px solid var(--line-light-faint);">
-                <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 9px; color: var(--accent-blue);">MODELO RECOMENDADO:</div>
-                <div style="font-size: 9px;">&bull; LightGBM (Lags 1-14 + Rolling)</div>
-                <div style="font-size: 9px;">&bull; PatchTST (Transformers)</div>
-              </div>
-              <div><strong>Exógenas:</strong> GHI Solar, T°, Viento</div>
-              <div><strong>Inferencia:</strong> &lt; 0.2s en producción</div>
-            </div>
-            <div style="padding: 4px 6px; background: rgba(37,99,235,0.08); border-left: 2px solid var(--accent-blue); font-size: 9.5px;">
-              <strong>Costo Asimétrico:</strong> Subestimar pico cuesta $100k/h en centrales peakers térmicas.
-            </div>
-          </div>
-
-          <!-- PISTA 2: RETAIL -->
-          <div style="border: 1.5px solid var(--accent-amber); background: rgba(217,119,6,0.03); display: flex; flex-direction: column; padding: 8px 10px; border-radius: 4px;">
-            <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 11px; color: var(--accent-amber); margin-bottom: 2px;">
-              🛒 RETAIL &amp; SUPPLY CHAIN
-            </div>
-            <div style="font-family: 'IBM Plex Mono'; font-size: 9px; color: var(--text-light-faint); margin-bottom: 6px;">
-              Walmart M5 · Amazon · Retail
-            </div>
-            <div style="font-size: 10.5px; color: var(--text-light-mute); line-height: 1.35; margin-bottom: 6px; flex: 1;">
-              <div><strong>Frecuencia:</strong> Diaria / Semanal</div>
-              <div><strong>Dinámica:</strong> 50k+ SKUs, intermitencia</div>
-              <div style="margin: 6px 0; padding: 6px 8px; background: var(--bg-light); border: 1px solid var(--line-light-faint);">
-                <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 9px; color: var(--accent-amber);">MODELO RECOMENDADO:</div>
-                <div style="font-size: 9px;">&bull; Holt-Winters / Croston (lentos)</div>
-                <div style="font-size: 9px;">&bull; Chronos / TimesFM (Zero-shot)</div>
-              </div>
-              <div><strong>Exógenas:</strong> Promos, feriados, stock</div>
-              <div><strong>Inferencia:</strong> Batch masivo distribuido</div>
-            </div>
-            <div style="padding: 4px 6px; background: rgba(217,119,6,0.08); border-left: 2px solid var(--accent-amber); font-size: 9.5px;">
-              <strong>Costo Asimétrico:</strong> Quiebre de stock destruye lealtad; costo de almacén es lineal.
-            </div>
-          </div>
-
-          <!-- PISTA 3: AGRO -->
-          <div style="border: 1.5px solid var(--accent-emerald); background: rgba(5,150,105,0.03); display: flex; flex-direction: column; padding: 8px 10px; border-radius: 4px;">
-            <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 11px; color: var(--accent-emerald); margin-bottom: 2px;">
-              🌱 AGRO &amp; BIOMASA
-            </div>
-            <div style="font-family: 'IBM Plex Mono'; font-size: 9px; color: var(--text-light-faint); margin-bottom: 6px;">
-              AgroVisión · Copersucar · CENFRO
-            </div>
-            <div style="font-size: 10.5px; color: var(--text-light-mute); line-height: 1.35; margin-bottom: 6px; flex: 1;">
-              <div><strong>Frecuencia:</strong> Fenológica (6-12 meses)</div>
-              <div><strong>Dinámica:</strong> Saturación biofísica dosel</div>
-              <div style="margin: 6px 0; padding: 6px 8px; background: var(--bg-light); border: 1px solid var(--line-light-faint);">
-                <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 9px; color: var(--accent-emerald);">MODELO RECOMENDADO:</div>
-                <div style="font-size: 9px;">&bull; Curva Logística (Biomasa)</div>
-                <div style="font-size: 9px;">&bull; Fusión EVI/NDRE + GDD + Dron</div>
-              </div>
-              <div><strong>Exógenas:</strong> Sentinel-2, CHIRPS, GDD</div>
-              <div><strong>Inferencia:</strong> Lote semanal / mensual</div>
-            </div>
-            <div style="padding: 4px 6px; background: rgba(5,150,105,0.08); border-left: 2px solid var(--accent-emerald); font-size: 9.5px;">
-              <strong>Costo Asimétrico:</strong> Pronóstico a 90 días fija reserva de contenedores navieros reefer.
-            </div>
-          </div>
-
-          <!-- PISTA 4: SALUD -->
-          <div style="border: 1.5px solid var(--accent-red); background: rgba(220,38,38,0.03); display: flex; flex-direction: column; padding: 8px 10px; border-radius: 4px;">
-            <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 11px; color: var(--accent-red); margin-bottom: 2px;">
-              🏥 SALUD &amp; EPIDEMIOLOGÍA
-            </div>
-            <div style="font-family: 'IBM Plex Mono'; font-size: 9px; color: var(--text-light-faint); margin-bottom: 6px;">
-              INS / MINSA Loreto · OPS/OMS
-            </div>
-            <div style="font-size: 10.5px; color: var(--text-light-mute); line-height: 1.35; margin-bottom: 6px; flex: 1;">
-              <div><strong>Frecuencia:</strong> Semanal epidemiológica</div>
-              <div><strong>Dinámica:</strong> Transmisión vectorial no lineal</div>
-              <div style="margin: 6px 0; padding: 6px 8px; background: var(--bg-light); border: 1px solid var(--line-light-faint);">
-                <div style="font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 9px; color: var(--accent-red);">MODELO RECOMENDADO:</div>
-                <div style="font-size: 9px;">&bull; Curva Sigmoide (Fase exp.)</div>
-                <div style="font-size: 9px;">&bull; SARIMAX climático (t-3s)</div>
-              </div>
-              <div><strong>Exógenas:</strong> Lluvia previa, calor 28-32°C</div>
-              <div><strong>Inferencia:</strong> Cono de riesgo asimétrico</div>
-            </div>
-            <div style="padding: 4px 6px; background: rgba(220,38,38,0.08); border-left: 2px solid var(--accent-red); font-size: 9.5px;">
-              <strong>Costo Asimétrico:</strong> Falso negativo colapsa camas UCI; falso positivo solo adelanta fumigación.
-            </div>
-          </div>
-        </div>
-
-        <div class="anim-narrative-box" style="margin-top: 2px;">
-          <div class="anim-narrative-title">🔄 Matriz Estratégica de Decisión de Modelos por Sector Industrial</div>
-          <span><strong>Rigor de ingeniería en producción:</strong> La elección del algoritmo nunca depende de modas académicas, sino de tres variables de frontera: (1) La física del sistema (balance continuo de electrones vs saturación biológica celular), (2) La latencia y costo computacional de inferencia (0.2s en ML tabular vs clusters de GPU), y (3) La asimetría del costo del error económico o vital (quiebre de inventario, penalizaciones eléctricas o saturación hospitalaria).</span>
-          <div class="bib-cite">Refs: Makridakis et al. (M5 Competition, Int. J. Forecast 2022) &middot; Hyndman (2021) Forecasting Principles &middot; Salinas et al. (DeepAR 2020)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 24: CIERRE Y FILOSOFIA -->
-  <section class="slide" data-title="Cierre y Filosofía">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">💡 FILOSOFÍA: LA IA CUANTIFICA INCERTIDUMBRE</span>
-        <span class="tag-sub">Conclusión Conceptual · La Respuesta Final</span>
-      </div>
-      <h2 class="display slide-title">La IA no predice el futuro: cuantifica la incertidumbre</h2>
-      <p class="slide-subtitle">El porvenir no está escrito en ningún archivo CSV; las decisiones estratégicas nacen de navegar el riesgo informado.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">El Mensaje Clave</span>
-            <span class="panel-badge">SÍNTESIS</span>
-          </div>
-          <div class="panel-content">
-            <blockquote style="font-size: clamp(15px, 1.5vw, 19px); font-family: 'Space Grotesk', sans-serif; font-weight: 600; line-height: 1.4; color: var(--accent-blue); margin: 6px 0;">
-              &ldquo;Predecir no es eliminar la duda; es cartografiar la niebla para saber qué sendero tomar con menor probabilidad de naufragio.&rdquo;
-            </blockquote>
-            <p style="font-size: 12.5px; color: var(--text-light-mute); line-height: 1.45;">
-              La verdadera inteligencia aplicada no consiste en prometer una cifra mágica a 30 días, sino en construir sistemas robustos que admitan cuando no saben, revelen sus intervalos de confianza y permitan a los seres humanos tomar decisiones de inversión, cosecha y energía con los ojos abiertos.
-            </p>
-            <div class="kpi-row">
-              <div class="kpi-box">
-                <span class="kpi-val mono">&plusmn;1.65&sigma;</span>
-                <span class="kpi-lbl">Rango de Confianza</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-val mono">100%</span>
-                <span class="kpi-lbl">Reproducible</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">El Haz de Probabilidades y la Decisión Cíclica</span>
-            <span class="panel-badge">VISUAL EN MOVIMIENTO</span>
-          </div>
-          <div class="panel-content">
-            <div class="chart-container">
-              <svg class="svg-canvas" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
-                <!-- Presente -->
-                <circle cx="50" cy="90" r="7" fill="var(--accent-blue)" />
-                <text x="50" y="115" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-blue)" font-weight="700" text-anchor="middle">PRESENTE</text>
-
-                <!-- Haz de luz de probabilidades divergentes animado cíclico -->
-                <polygon class="anim-decision-beam" points="50,90 320,25 320,155" fill="rgba(37,99,235,0.08)" />
-                
-                <path d="M 50,90 Q 180,35 320,40" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="3,3" />
-                <path d="M 50,90 Q 180,65 320,70" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="3,3" />
-                <path d="M 50,90 Q 180,90 320,90" fill="none" stroke="var(--accent-emerald)" stroke-width="3" />
-                <path d="M 50,90 Q 180,115 320,110" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="3,3" />
-                <path d="M 50,90 Q 180,145 320,140" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="3,3" />
-
-                <!-- Nodo de Decisión Informada -->
-                <circle cx="320" cy="90" r="9" fill="var(--accent-emerald)" />
-                <text x="320" y="115" font-size="11" font-family="IBM Plex Mono" fill="var(--accent-emerald)" font-weight="700" text-anchor="middle">DECISIÓN</text>
-                <text x="320" y="130" font-size="9" font-family="IBM Plex Mono" fill="var(--text-light-faint)" text-anchor="middle">INFORMADA</text>
-              </svg>
-            </div>
-            
-            <div class="anim-narrative-box">
-              <div class="anim-narrative-title">🔄 ¿Qué cuenta esta animación cíclica?</div>
-              <span><strong>Del cono de duda a la acción:</strong> El haz de probabilidades pulsa continuamente expandiéndose hacia el futuro. La IA no elimina las ramas del azar; ilumina la trayectoria óptima para que el humano ejecute una decisión informada.</span>
-              <div class="bib-cite">Epílogo: Taleb (2007) The Black Swan &middot; Pearl (2018) The Book of Why</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 25: REFERENCIAS Y RECURSOS -->
-  <section class="slide" data-title="Referencias y Recursos">
-    <div class="slide-header">
-      <div class="header-top-row">
-        <span class="category-pill theory">📚 RECURSOS &amp; BIBLIOGRAFÍA CIENTÍFICA</span>
-        <span class="tag-sub">Ecosistema Abierto · Código &amp; Literatura Científica</span>
-      </div>
-      <h2 class="display slide-title">Referencias, Código Abierto y Cuadernos</h2>
-      <p class="slide-subtitle">Todo el material presentado hoy es 100% reproducible y está disponible en nuestro repositorio abierto.</p>
-    </div>
-    <div class="slide-body">
-      <div class="split-50">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Cuadernos Reproducibles &amp; Datos</span>
-            <span class="panel-badge">GITHUB OPEN SOURCE</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list">
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-blue);"></span>
-                <div>
-                  <strong>notebooks/01_clima_senamhi.ipynb:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Descarga de Punchana vía Garúa, limpieza, baseline naive, ARIMA, ExtraTrees, PyTorch LSTM y exportación con bandas.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-emerald);"></span>
-                <div>
-                  <strong>notebooks/02_cafe_ndvi.ipynb:</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);">Pipeline satelital Sentinel-2 (AgroVisión), fenología de 3 ventanas, validación LOYO y demostración de saturación de NDVI.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet" style="background: var(--accent-purple);"></span>
-                <div>
-                  <strong>data/ (CSVs optimizados &lt; 100 KB):</strong>
-                  <p style="font-size: 11.5px; color: var(--text-light-mute);"><span class="mono">senamhi_diario.csv, senamhi_forecast_7d.csv, cafe_ndvi_rendimiento.csv, noaa_ecmwf_forecast.csv</span>.</p>
-                </div>
-              </div>
-            </div>
-            <div class="callout">
-              <strong>Clonar y Correr:</strong> <span class="mono">git clone https://github.com/alex/charla_forecasting</span>. Sin dependencias pesadas, corre en cualquier CPU.
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Bibliografía Científica Fundamental</span>
-            <span class="panel-badge mono">REFS.BIB</span>
-          </div>
-          <div class="panel-content">
-            <div class="feature-list" style="font-size: 11px; line-height: 1.4;">
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div><strong>Huete et al. (2002):</strong> Overview of the radiometric and biophysical performance of the MODIS vegetation indices (EVI). <em>Remote Sens. Environ.</em></div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div><strong>Ramos et al. (2020):</strong> Coffee yield estimation based on Sentinel-2 and climate features. <em>Computers and Electronics in Agriculture</em>.</div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div><strong>Nie et al. (ICLR 2023):</strong> A Time Series is Worth 64 Words: Long-term Forecasting with Transformers (PatchTST).</div>
-              </div>
-              <div class="feature-item">
-                <span class="feature-bullet"></span>
-                <div><strong>Lam et al. (DeepMind, Science 2023):</strong> Learning skillful medium-range global weather forecasting (GraphCast).</div>
-              </div>
-            </div>
-            <div class="callout success">
-              <strong>¡Muchas Gracias por su Atención!</strong> Preguntas y debate abiertos.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</div>
-
-<!-- DATASETS EMBEBIDOS OFFLINE -->
-<script type="text/csv" id="embeddedSenamhi7d">""" + senamhi_7d_csv + """</script>
-<script type="text/csv" id="embeddedCafe">""" + cafe_csv + """</script>
-<script type="text/csv" id="embeddedSenamhiDiario">""" + senamhi_diario_sub + """</script>
-<script type="text/csv" id="embeddedNoaaEcmwf">""" + noaa_ecmwf_csv + """</script>
-
+<!-- INYECCIÓN DE DATOS REALES -->
 <script>
-// ESTADO GLOBAL
-let currentSlide = 0;
-const slides = document.querySelectorAll(".slide");
-const totalSlides = slides.length;
-const slideNumEl = document.getElementById("slideNum");
-const themeToggle = document.getElementById("themeToggle");
-const fsBtn = document.getElementById("fsBtn");
-const tocBtn = document.getElementById("tocBtn");
+  window.DECK_DATA = {data_json};
+</script>
 
-let chartNoaaInstance = null;
-let chartCasoAInstance = null;
-let chartCasoBInstance = null;
-let mapIquitosInstance = null;
-let mapJaenInstance = null;
+<!-- SCRIPTS DE NAVEGACIÓN Y VISUALES -->
+<script>
+  let currentSlide = 1;
+  const totalSlides = 20;
 
-let currentJaenLayer = 'rgb';
-let jaenPolygon = null;
+  const notesBySlide = {notes_json};
 
-// TEMA CLARO / OSCURO
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-active");
-  const isDark = document.body.classList.contains("dark-active");
-  localStorage.setItem("deck_theme", isDark ? "dark" : "light");
-  themeToggle.textContent = isDark ? "☀️" : "🌓";
-  
-  if (chartNoaaInstance) chartNoaaInstance.update();
-  if (chartCasoAInstance) chartCasoAInstance.update();
-  if (chartCasoBInstance) chartCasoBInstance.update();
-});
+  function updateSlide(index) {{
+    if (index < 1) index = 1;
+    if (index > totalSlides) index = totalSlides;
 
-if (localStorage.getItem("deck_theme") === "dark") {
-  document.body.classList.add("dark-active");
-  themeToggle.textContent = "☀️";
-}
+    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+    const target = document.querySelector(`.slide[data-index="${{index}}"]`);
+    if (target) {{
+      target.classList.add("active");
+      currentSlide = index;
+      document.getElementById("slideIndicator").textContent = `${{String(index).padStart(2, '0')}} / ${{totalSlides}}`;
+      document.getElementById("actIndicator").textContent = target.getAttribute("data-act");
+      document.getElementById("progressBar").style.width = `${{(index / totalSlides) * 100}}%`;
+      
+      document.getElementById("speakerTimer").textContent = `⏱️ ${{target.getAttribute("data-time")}}`;
+      document.getElementById("speakerNotesText").innerHTML = notesBySlide[index] || "Notas en preparación.";
 
-// PANTALLA COMPLETA
-fsBtn.addEventListener("click", () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(err => console.log(err));
-  } else {
-    document.exitFullscreen();
-  }
-});
+      initSlideVisuals(index);
+    }}
+  }}
 
-// NAVEGACION
-function updateSlide(idx) {
-  if (idx < 0) idx = 0;
-  if (idx >= totalSlides) idx = totalSlides - 1;
-  currentSlide = idx;
+  function nextSlide() {{ updateSlide(currentSlide + 1); }}
+  function prevSlide() {{ updateSlide(currentSlide - 1); }}
 
-  slides.forEach((s, i) => {
-    s.classList.toggle("active", i === currentSlide);
-  });
+  function toggleSpeakerNotes() {{
+    document.getElementById("speakerDrawer").classList.toggle("open");
+  }}
 
-  slideNumEl.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${totalSlides}`;
-  tocBtn.textContent = String(currentSlide + 1).padStart(2, '0');
+  function toggleDarkMode() {{
+    document.body.classList.toggle("dark-mode");
+  }}
 
-  // Inicializar componentes dinámicos bajo demanda
-  if (currentSlide === 13) initChartNoaa();
-  if (currentSlide === 15) initMapIquitos();
-  if (currentSlide === 17) initChartCasoA();
-  if (currentSlide === 18) initMapJaen();
-  if (currentSlide === 20) initChartCasoB();
-}
+  function openLightbox(src) {{
+    const modal = document.getElementById("lightboxModal");
+    const img = document.getElementById("lightboxImg");
+    if (modal && img) {{
+      img.src = src;
+      modal.classList.add("active");
+    }}
+  }}
 
-document.getElementById("prevBtn").addEventListener("click", () => updateSlide(currentSlide - 1));
-document.getElementById("nextBtn").addEventListener("click", () => updateSlide(currentSlide + 1));
-tocBtn.addEventListener("click", () => updateSlide(0));
+  function closeLightbox() {{
+    const modal = document.getElementById("lightboxModal");
+    if (modal) {{
+      modal.classList.remove("active");
+    }}
+  }}
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight" || e.key === " ") {
-    e.preventDefault();
-    updateSlide(currentSlide + 1);
-  } else if (e.key === "ArrowLeft") {
-    e.preventDefault();
-    updateSlide(currentSlide - 1);
-  } else if (e.key === "Home") {
-    e.preventDefault();
-    updateSlide(0);
-  } else if (e.key === "End") {
-    e.preventDefault();
-    updateSlide(totalSlides - 1);
-  } else if (e.key.toLowerCase() === "f") {
-    fsBtn.click();
-  }
-});
+  window.addEventListener("keydown", (e) => {{
+    if (e.key === "Escape") {{
+      closeLightbox();
+      return;
+    }}
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {{
+      e.preventDefault();
+      nextSlide();
+    }} else if (e.key === "ArrowLeft" || e.key === "PageUp") {{
+      e.preventDefault();
+      prevSlide();
+    }} else if (e.key === "Home") {{
+      e.preventDefault();
+      updateSlide(1);
+    }} else if (e.key === "End") {{
+      e.preventDefault();
+      updateSlide(totalSlides);
+    }} else if (e.key.toLowerCase() === "n") {{
+      e.preventDefault();
+      toggleSpeakerNotes();
+    }} else if (e.key.toLowerCase() === "d") {{
+      e.preventDefault();
+      toggleDarkMode();
+    }} else if (e.key.toLowerCase() === "f") {{
+      if (!document.fullscreenElement) {{
+        document.documentElement.requestFullscreen();
+      }} else {{
+        document.exitFullscreen();
+      }}
+    }}
+  }});
 
-// DESCOMPOSICION INTERACTIVA (Slide 2)
-function setDecompLayer(layer) {
-  const btns = document.querySelectorAll("#decompBtns .pill-btn");
-  btns.forEach(b => b.classList.remove("active"));
-  
-  const lTrend = document.getElementById("layerTrend");
-  const lSeason = document.getElementById("layerSeason");
-  const lCycle = document.getElementById("layerCycle");
-  const lNoise = document.getElementById("layerNoise");
+  function updateAlpha(val) {{
+    document.getElementById("alphaVal").textContent = parseFloat(val).toFixed(2);
+    renderAlphaBars(parseFloat(val));
+  }}
 
-  if (layer === 'all') {
-    event.target.classList.add("active");
-    lTrend.style.display = "block";
-    lSeason.style.display = "block";
-    lCycle.style.display = "block";
-    lNoise.style.display = "block";
-  } else if (layer === 'trend') {
-    event.target.classList.add("active");
-    lTrend.style.display = "block";
-    lSeason.style.display = "none";
-    lCycle.style.display = "none";
-    lNoise.style.display = "none";
-  } else if (layer === 'season') {
-    event.target.classList.add("active");
-    lTrend.style.display = "block";
-    lSeason.style.display = "block";
-    lCycle.style.display = "none";
-    lNoise.style.display = "none";
-  } else if (layer === 'cycle') {
-    event.target.classList.add("active");
-    lTrend.style.display = "block";
-    lSeason.style.display = "block";
-    lCycle.style.display = "block";
-    lNoise.style.display = "none";
-  } else if (layer === 'noise') {
-    event.target.classList.add("active");
-    lTrend.style.display = "none";
-    lSeason.style.display = "none";
-    lCycle.style.display = "none";
-    lNoise.style.display = "block";
-  }
-}
+  function renderAlphaBars(alpha) {{
+    const container = document.getElementById("alphaBars");
+    if (!container) return;
+    container.innerHTML = "";
+    for (let k = 0; k < 5; k++) {{
+      const weight = alpha * Math.pow(1 - alpha, k);
+      const pct = (weight * 100).toFixed(1);
+      const bar = document.createElement("div");
+      bar.style.flex = "1";
+      bar.style.height = `${{weight * 200}}px`;
+      bar.style.background = k === 0 ? "#2563EB" : "#94A3B8";
+      bar.style.borderRadius = "4px 4px 0 0";
+      bar.style.display = "flex";
+      bar.style.alignItems = "flex-start";
+      bar.style.justifyContent = "center";
+      bar.style.paddingTop = "4px";
+      bar.style.color = "#FFF";
+      bar.style.fontSize = "10px";
+      bar.style.fontFamily = "IBM Plex Mono";
+      bar.textContent = `${{pct}}%`;
+      container.appendChild(bar);
+    }}
+  }}
 
-// GRAFICO MULTI-AGENCIA (Slide 14)
-function initChartNoaa() {
-  if (chartNoaaInstance) return;
-  const ctx = document.getElementById("chartNoaaEcmwf");
-  if (!ctx) return;
+  // Procedural Ontological Signal Simulator (Slide 02)
+  const signalLayers = {{ T: true, S: true, C: true, E: true }};
+  let waveAnimId = null;
+  let wavePhase = 0;
 
-  const rawCsv = document.getElementById("embeddedNoaaEcmwf").textContent.trim();
-  const parsed = Papa.parse(rawCsv, { header: true, dynamicTyping: true });
-  const rows = parsed.data;
+  function toggleSignalLayer(layer) {{
+    signalLayers[layer] = !signalLayers[layer];
+    const btn = document.getElementById("btnToggle" + layer);
+    if (btn) {{
+      if (signalLayers[layer]) {{
+        btn.classList.add("active");
+        btn.textContent = btn.textContent.replace("✗", "✓");
+      }} else {{
+        btn.classList.remove("active");
+        btn.textContent = btn.textContent.replace("✓", "✗");
+      }}
+    }}
+    const count = Object.values(signalLayers).filter(Boolean).length;
+    const status = document.getElementById("simLayerStatus");
+    if (status) {{
+      status.textContent = `${{count}} / 4 Capas Físicas`;
+    }}
+  }}
 
-  const labels = rows.map(r => r.fecha);
-  const noaaData = rows.map(r => r.tmax_noaa_gfs);
-  const ecmwfData = rows.map(r => r.tmax_ecmwf);
-  const iconData = rows.map(r => r.tmax_dwd_icon);
+  function startOntologicalWaveSimulation() {{
+    const canvas = document.getElementById("ontologicalWaveCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
 
-  chartNoaaInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'NOAA GFS (EE. UU.) - T° Máx (°C)',
-          data: noaaData,
-          borderColor: '#2563EB',
-          backgroundColor: '#2563EB',
-          borderWidth: 3,
-          tension: 0.25,
-          pointRadius: 5
-        },
-        {
-          label: 'ECMWF IFS (Europa) - T° Máx (°C)',
-          data: ecmwfData,
-          borderColor: '#059669',
-          backgroundColor: '#059669',
-          borderWidth: 3,
-          tension: 0.25,
-          pointRadius: 5
-        },
-        {
-          label: 'DWD ICON (Alemania) - T° Máx (°C)',
-          data: iconData,
-          borderColor: '#D97706',
-          backgroundColor: '#D97706',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          tension: 0.25,
-          pointRadius: 4
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: {
-          labels: {
-            font: { family: 'IBM Plex Mono', size: 11 }
-          }
-        },
-        tooltip: {
-          callbacks: {
-            footer: (items) => {
-              const vals = items.map(i => i.parsed.y);
-              const max = Math.max(...vals);
-              const min = Math.min(...vals);
-              return `Discrepancia entre agencias: ${(max - min).toFixed(1)} °C`;
-            }
-          }
-        }
-      },
-      scales: {
-        y: {
-          min: 25,
-          max: 40,
-          title: { display: true, text: 'Temperatura Máxima (°C)', font: { family: 'IBM Plex Mono' } },
-          grid: { color: 'rgba(150,150,150,0.1)' }
-        },
-        x: {
-          grid: { color: 'rgba(150,150,150,0.1)' }
-        }
-      }
-    }
-  });
-}
+    function resize() {{
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {{
+        canvas.width = rect.width * (window.devicePixelRatio || 1);
+        canvas.height = rect.height * (window.devicePixelRatio || 1);
+      }}
+    }}
+    resize();
 
-// MAPA IQUITOS (Slide 16)
-function initMapIquitos() {
-  if (mapIquitosInstance) return;
-  const el = document.getElementById("mapIquitos");
-  if (!el) return;
+    function draw() {{
+      if (currentSlide !== 2) {{
+        if (waveAnimId) cancelAnimationFrame(waveAnimId);
+        return;
+      }}
+      wavePhase += 0.025;
+      const w = canvas.width;
+      const h = canvas.height;
+      if (w === 0 || h === 0) {{
+        resize();
+      }}
+      ctx.clearRect(0, 0, w, h);
 
-  const lat = -3.6903;
-  const lon = -73.2556;
+      const isDark = document.body.classList.contains("dark-mode");
+      const gridColor = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)";
+      const axisColor = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.15)";
+      
+      // Grid lines
+      ctx.strokeStyle = gridColor;
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 40) {{
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }}
+      for (let y = 0; y < h; y += 28) {{
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }}
 
-  mapIquitosInstance = L.map('mapIquitos', {
-    zoomControl: true,
-    attributionControl: false
-  }).setView([lat, lon], 12);
+      // Zero axis
+      const midY = h * 0.52;
+      ctx.strokeStyle = axisColor;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, midY);
+      ctx.lineTo(w, midY);
+      ctx.stroke();
+      ctx.setLineDash([]);
 
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 18
-  }).addTo(mapIquitosInstance);
+      const numPts = 260;
+      const points = [];
+      for (let i = 0; i < numPts; i++) {{
+        const t = (i / numPts) * 10;
+        let val = 0;
+        if (signalLayers.T) val += (t - 5) * 3.8;
+        if (signalLayers.S) val += Math.sin(t * 3.6 + wavePhase) * 22;
+        if (signalLayers.C) val += Math.sin(t * 0.85 + wavePhase * 0.35) * 14;
+        if (signalLayers.E) {{
+          const pseudoNoise = Math.sin(i * 123.4 + Math.floor(wavePhase * 3)) * Math.cos(i * 56.7);
+          val += pseudoNoise * 6.5;
+          if (i === 160) val -= 32; // Friaje spike
+          if (i === 65) val += 24;  // Heat wave spike
+        }}
+        const px = (i / (numPts - 1)) * w;
+        const py = midY - val * (h / 120);
+        points.push({{ x: px, y: py }});
+      }}
 
-  L.circle([lat, lon], {
-    color: '#0891B2',
-    fillColor: '#0891B2',
-    fillOpacity: 0.25,
-    radius: 5000,
-    weight: 2
-  }).addTo(mapIquitosInstance);
+      // Gradient fill
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, "rgba(37, 99, 235, 0.22)");
+      grad.addColorStop(1, "rgba(37, 99, 235, 0.0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {{
+        ctx.lineTo(points[i].x, points[i].y);
+      }}
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      ctx.fill();
 
-  L.marker([lat, lon]).addTo(mapIquitosInstance)
-    .bindPopup(`<b>Estación Punchana (SENAMHI)</b><br>COD: 103015<br>Elevación: 91 msnm<br>Iquitos, Loreto`)
-    .openPopup();
-}
+      // Signal line
+      ctx.strokeStyle = isDark ? "#60A5FA" : "#2563EB";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {{
+        ctx.lineTo(points[i].x, points[i].y);
+      }}
+      ctx.stroke();
 
-// MAPA JAEN & HEATMAP SWITCHER (Slide 19)
-function initMapJaen() {
-  if (mapJaenInstance) return;
-  const el = document.getElementById("mapJaen");
-  if (!el) return;
+      // Highlight Friaje extreme spike if noise enabled
+      if (signalLayers.E && points[160]) {{
+        const fp = points[160];
+        ctx.fillStyle = "#DC2626";
+        ctx.beginPath();
+        ctx.arc(fp.x, fp.y, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = isDark ? "#FCA5A5" : "#DC2626";
+        ctx.font = "9.5px 'IBM Plex Mono'";
+        ctx.fillText("Anomalía Friaje > 2.5σ (-19.2°C)", fp.x - 70, fp.y + 16);
+      }}
 
-  const lat = -5.6766;
-  const lon = -78.7742;
+      waveAnimId = requestAnimationFrame(draw);
+    }}
 
-  mapJaenInstance = L.map('mapJaen', {
-    zoomControl: true,
-    attributionControl: false
-  }).setView([lat, lon], 14);
+    if (waveAnimId) cancelAnimationFrame(waveAnimId);
+    draw();
+  }}
 
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 18
-  }).addTo(mapJaenInstance);
+  let charts = {{}};
 
-  // Polígono Parcela Cafetalera
-  const coords = [
-    [-5.6720, -78.7790],
-    [-5.6725, -78.7690],
-    [-5.6810, -78.7700],
-    [-5.6800, -78.7800]
-  ];
+  function initSlideVisuals(idx) {{
+    try {{
+      if (idx === 2) {{
+        startOntologicalWaveSimulation();
+      }}
 
-  jaenPolygon = L.polygon(coords, {
-    color: '#FFFFFF',
-    fillColor: 'transparent',
-    fillOpacity: 0.1,
-    weight: 2
-  }).addTo(mapJaenInstance);
+      if (idx === 4) {{
+        renderAlphaBars(0.35);
+      }}
 
-  L.marker([lat, lon]).addTo(mapJaenInstance)
-    .bindPopup(`<b>Finca Cafetalera Jaén</b><br>Altitud: 1,100 msnm<br>Área: 12 ha<br>Cajamarca, Perú`)
-    .openPopup();
-}
+      // Slide 05: Experimento Extrapolación
+      if (idx === 5 && !charts["extrap"]) {{
+        const canvas = document.getElementById("chartExtrapolacion");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.extrapolacion;
+          charts["extrap"] = new Chart(ctx, {{
+            type: "line",
+            data: {{
+              labels: d.map(r => r.fecha.slice(5)),
+              datasets: [
+                {{
+                  label: "Temperatura Real Observada (°C)",
+                  data: d.map(r => r.tmax_real),
+                  borderColor: "#0F172A",
+                  borderWidth: 2.8,
+                  pointRadius: 3
+                }},
+                {{
+                  label: "Random Forest Directo (Meseta 31.5°C)",
+                  data: d.map(r => r.pred_arbol_niveles),
+                  borderColor: "#DC2626",
+                  borderWidth: 2.5,
+                  borderDash: [5, 4],
+                  pointRadius: 2.5
+                }},
+                {{
+                  label: "Modelo sobre Diferencias Δy (Sube a 35.45°C)",
+                  data: d.map(r => r.pred_arbol_diferencias),
+                  borderColor: "#059669",
+                  borderWidth: 2.5,
+                  pointRadius: 2.5
+                }},
+                {{
+                  label: "Tope Entrenamiento (34.0°C)",
+                  data: d.map(r => r.tope_entrenamiento),
+                  borderColor: "#94A3B8",
+                  borderWidth: 1.5,
+                  borderDash: [3, 3],
+                  pointRadius: 0
+                }}
+              ]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
+              }},
+              scales: {{
+                y: {{ min: 28, max: 39, title: {{ display: true, text: "Tmax (°C)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-function switchJaenLayer(layer) {
-  currentJaenLayer = layer;
-  const btns = ['btnLayerRgb', 'btnLayerNdvi', 'btnLayerEvi', 'btnLayerNdre'];
-  btns.forEach(b => {
-    const el = document.getElementById(b);
-    if (el) el.classList.remove("active");
-  });
+      // Slide 10: Discrepancia NOAA vs ECMWF
+      if (idx === 10 && !charts["noaaEcmwf"]) {{
+        const canvas = document.getElementById("chartNoaaEcmwf");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.noaa_ecmwf;
+          charts["noaaEcmwf"] = new Chart(ctx, {{
+            type: "bar",
+            data: {{
+              labels: d.map(r => r.fecha.slice(5)),
+              datasets: [
+                {{
+                  label: "NOAA GFS Tmax (°C)",
+                  data: d.map(r => r.tmax_noaa_gfs),
+                  backgroundColor: "rgba(37, 99, 235, 0.75)"
+                }},
+                {{
+                  label: "ECMWF IFS Tmax (°C)",
+                  data: d.map(r => r.tmax_ecmwf),
+                  backgroundColor: "rgba(217, 119, 6, 0.75)"
+                }}
+              ]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 11 }} }} }}
+              }},
+              scales: {{
+                y: {{ min: 24, max: 38, title: {{ display: true, text: "Tmax (°C)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-  const tEl = document.getElementById("jaenLayerTitle");
-  const dEl = document.getElementById("jaenLayerDesc");
+      // Slide 12: Serie histórica reciente SENAMHI
+      if (idx === 12 && !charts["senamhiReciente"]) {{
+        const canvas = document.getElementById("chartSenamhiReciente");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.senamhi_reciente;
+          charts["senamhiReciente"] = new Chart(ctx, {{
+            type: "line",
+            data: {{
+              labels: d.map(r => r.fecha.slice(5)),
+              datasets: [
+                {{
+                  label: "Tmax Punchana (°C)",
+                  data: d.map(r => r.tmax),
+                  borderColor: "#2563EB",
+                  borderWidth: 2,
+                  pointRadius: 0
+                }},
+                {{
+                  label: "Tmin Punchana (°C)",
+                  data: d.map(r => r.tmin),
+                  borderColor: "#0891B2",
+                  borderDash: [2, 2],
+                  borderWidth: 1.5,
+                  pointRadius: 0
+                }}
+              ]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
+              }},
+              scales: {{
+                y: {{ min: 18, max: 38, title: {{ display: true, text: "Temperatura (°C)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-  if (!jaenPolygon) return;
+      // Slide 13: Benchmark Punchana
+      if (idx === 13 && !charts["benchmark"]) {{
+        const canvas = document.getElementById("chartBenchmark");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.benchmark;
+          charts["benchmark"] = new Chart(ctx, {{
+            type: "bar",
+            data: {{
+              labels: d.map(r => r.modelo),
+              datasets: [{{
+                label: "RMSE (°C) en Holdout de 90 Días",
+                data: d.map(r => r.rmse_1d),
+                backgroundColor: d.map(r => {{
+                  if (r.modelo.includes("ExtraTrees")) return "#059669";
+                  if (r.p_valor_vs_mejor > 0.05) return "#2563EB";
+                  return "#DC2626";
+                }})
+              }}]
+            }},
+            options: {{
+              indexAxis: "y",
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ display: false }}
+              }},
+              scales: {{
+                x: {{ min: 1.6, max: 3.0, title: {{ display: true, text: "RMSE (°C) en Holdout de 90 Días — Menor es mejor" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-  if (layer === 'rgb') {
-    document.getElementById("btnLayerRgb").classList.add("active");
-    tEl.textContent = "🛰️ Imagen Satelital RGB Natural";
-    dEl.textContent = "Vista óptica en color real de la finca cafetalera en Jaén (-5.6766°, -78.7742°, 1,100 msnm).";
-    jaenPolygon.setStyle({ color: '#FFFFFF', fillColor: 'transparent', fillOpacity: 0.1, weight: 2 });
-  } else if (layer === 'ndvi') {
-    document.getElementById("btnLayerNdvi").classList.add("active");
-    tEl.textContent = "🔴 Heatmap NDVI (Saturado en ~0.79)";
-    dEl.textContent = "Muestra la parcela en un verde plano homogéneo saturado. Es incapaz de revelar el estrés hídrico interno de las plantas.";
-    jaenPolygon.setStyle({ color: '#DC2626', fillColor: '#059669', fillOpacity: 0.7, weight: 3 });
-  } else if (layer === 'evi') {
-    document.getElementById("btnLayerEvi").classList.add("active");
-    tEl.textContent = "🟢 Heatmap EVI (Biomasa Dinámica Foliar)";
-    dEl.textContent = "Revela gradientes reales de vigor vegetal (0.35 a 0.58) eliminando la influencia del suelo y sin saturarse.";
-    jaenPolygon.setStyle({ color: '#059669', fillColor: '#10B981', fillOpacity: 0.6, weight: 3 });
-  } else if (layer === 'ndre') {
-    document.getElementById("btnLayerNdre").classList.add("active");
-    tEl.textContent = "🟣 Heatmap NDRE (Borde Rojo / Clorofila & Nitrógeno)";
-    dEl.textContent = "Penetra la canopia profunda utilizando la banda B05 (705 nm). Diagnostica deficiencias de fertilización nitrogenada.";
-    jaenPolygon.setStyle({ color: '#7C3AED', fillColor: '#8B5CF6', fillOpacity: 0.6, weight: 3 });
-  }
-}
+      // Slide 14: Demo Pronóstico 7 Días con Bandas
+      if (idx === 14 && !charts["demo7d"]) {{
+        const canvas = document.getElementById("chartDemo7d");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.forecast_7d;
+          charts["demo7d"] = new Chart(ctx, {{
+            type: "line",
+            data: {{
+              labels: d.map(r => r.fecha.slice(5)),
+              datasets: [
+                {{
+                  label: "Observado SENAMHI",
+                  data: d.map(r => r.tmax_observada),
+                  borderColor: "#0F172A",
+                  borderWidth: 3,
+                  pointRadius: 4,
+                  fill: false
+                }},
+                {{
+                  label: "ExtraTrees (Ganador)",
+                  data: d.map(r => r.pred_extratrees),
+                  borderColor: "#059669",
+                  borderWidth: 2.5,
+                  pointRadius: 3,
+                  fill: false
+                }},
+                {{
+                  label: "P90 Incertidumbre",
+                  data: d.map(r => r.ci_upper_p90),
+                  borderColor: "rgba(5, 150, 105, 0.4)",
+                  borderDash: [3, 3],
+                  borderWidth: 1.5,
+                  pointRadius: 0,
+                  fill: false
+                }},
+                {{
+                  label: "P10 Incertidumbre",
+                  data: d.map(r => r.ci_lower_p10),
+                  borderColor: "rgba(5, 150, 105, 0.4)",
+                  borderDash: [3, 3],
+                  borderWidth: 1.5,
+                  pointRadius: 0,
+                  fill: "-1",
+                  backgroundColor: "rgba(5, 150, 105, 0.1)"
+                }},
+                {{
+                  label: "TimesFM 200M Zero-Shot",
+                  data: d.map(r => r.pred_timesfm),
+                  borderColor: "#7C3AED",
+                  borderWidth: 2,
+                  pointRadius: 2.5,
+                  hidden: false
+                }},
+                {{
+                  label: "Chronos T5 Zero-Shot",
+                  data: d.map(r => r.pred_chronos),
+                  borderColor: "#D97706",
+                  borderWidth: 2,
+                  borderDash: [4, 4],
+                  pointRadius: 2.5,
+                  hidden: true
+                }},
+                {{
+                  label: "ARIMA (2,0,1)",
+                  data: d.map(r => r.pred_arima),
+                  borderColor: "#0284C7",
+                  borderWidth: 1.8,
+                  borderDash: [2, 2],
+                  pointRadius: 2,
+                  hidden: true
+                }}
+              ]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
+              }},
+              scales: {{
+                y: {{ min: 28, max: 37, title: {{ display: true, text: "Tmax (°C)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-// GRAFICO CASO A (Slide 18)
-function initChartCasoA() {
-  if (chartCasoAInstance) return;
-  const ctx = document.getElementById("chartCasoA");
-  if (!ctx) return;
+      // Slide 15: Jaén Histórico
+      if (idx === 15 && !charts["jaenHist"]) {{
+        const canvas = document.getElementById("chartJaenHistorico");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.cafe_campanias;
+          const valid = d.filter(r => r.rendimiento_qq_ha !== null);
+          charts["jaenHist"] = new Chart(ctx, {{
+            type: "line",
+            data: {{
+              labels: valid.map(r => r.campania),
+              datasets: [{{
+                label: "Rendimiento Oficial SIEA (qq/ha)",
+                data: valid.map(r => r.rendimiento_qq_ha),
+                borderColor: "#059669",
+                backgroundColor: "rgba(5, 150, 105, 0.08)",
+                fill: true,
+                borderWidth: 2.5,
+                pointRadius: 5,
+                pointBackgroundColor: valid.map(r => (r.campania === 2013 || r.campania === 2014) ? "#DC2626" : "#059669")
+              }}]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ display: false }},
+                tooltip: {{
+                  callbacks: {{
+                    afterLabel: (ctx) => ctx.label === "2014" ? "⚠️ CRISIS DE LA ROYA AMARILLA (-56%)" : ""
+                  }}
+                }}
+              }},
+              scales: {{
+                y: {{ min: 8, max: 38, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-  const rawCsv = document.getElementById("embeddedSenamhi7d").textContent.trim();
-  const parsed = Papa.parse(rawCsv, { header: true, dynamicTyping: true });
-  const rows = parsed.data;
+      // Slide 16: Scatter NDVI vs Rendimiento
+      if (idx === 16 && !charts["scatterNdvi"]) {{
+        const canvas = document.getElementById("chartScatterNdvi");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.cafe_campanias;
+          const valid = d.filter(r => r.rendimiento_qq_ha !== null);
+          charts["scatterNdvi"] = new Chart(ctx, {{
+            type: "scatter",
+            data: {{
+              datasets: [
+                {{
+                  label: "Campañas Auditadas (2010-2024)",
+                  data: valid.map(r => ({{ x: r.ndvi_anual, y: r.rendimiento_qq_ha, anio: r.campania }})),
+                  backgroundColor: valid.map(r => r.campania === 2014 ? "#DC2626" : "#2563EB"),
+                  pointRadius: valid.map(r => r.campania === 2014 ? 8 : 5)
+                }},
+                {{
+                  type: "line",
+                  label: "Tendencia Lineal (r = 0.154, p = 0.600 — Pendiente Nula)",
+                  data: [{{ x: 0.69, y: 19.8 }}, {{ x: 0.78, y: 21.6 }}],
+                  borderColor: "#94A3B8",
+                  borderDash: [4, 4],
+                  borderWidth: 1.8,
+                  pointRadius: 0,
+                  fill: false
+                }}
+              ]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10 }} }} }},
+                tooltip: {{
+                  callbacks: {{
+                    label: (ctx) => ctx.raw.anio ? `Campaña ${{ctx.raw.anio}}: NDVI ${{ctx.raw.x.toFixed(3)}}, Rend: ${{ctx.raw.y}} qq/ha` : "Línea de regresión plana"
+                  }}
+                }}
+              }},
+              scales: {{
+                x: {{ min: 0.68, max: 0.79, title: {{ display: true, text: "NDVI MODIS Anual (r = 0.154, p = 0.600)" }} }} ,
+                y: {{ min: 8, max: 38, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
 
-  const labels = rows.map(r => r.fecha);
-  const obs = rows.map(r => r.tmax_obs);
-  const et = rows.map(r => r.tmax_extratrees);
-  const lstm = rows.map(r => r.tmax_lstm);
-  const arima = rows.map(r => r.tmax_arima);
-  const upper = rows.map(r => r.ic90_upper);
-  const lower = rows.map(r => r.ic90_lower);
+      // Slide 17: Demo 2 Validación expansiva
+      if (idx === 17 && !charts["demoJaen"]) {{
+        const canvas = document.getElementById("chartDemoJaen");
+        if (canvas) {{
+          const ctx = canvas.getContext("2d");
+          const d = window.DECK_DATA.cafe_resultados;
+          charts["demoJaen"] = new Chart(ctx, {{
+            type: "line",
+            data: {{
+              labels: d.map(r => r.campania),
+              datasets: [
+                {{
+                  label: "Rendimiento Real Observado (qq/ha)",
+                  data: d.map(r => r.rendimiento_obs),
+                  borderColor: "#0F172A",
+                  borderWidth: 3,
+                  pointRadius: 4
+                }},
+                {{
+                  label: "Fusión Clima + Tendencia (MAE 4.51)",
+                  data: d.map(r => r.pred_m4_fusion),
+                  borderColor: "#059669",
+                  borderWidth: 2.5,
+                  pointRadius: 3
+                }},
+                {{
+                  label: "Solo Satélite NDVI (MAE 5.32 — Empeora)",
+                  data: d.map(r => r.pred_m2_satelite),
+                  borderColor: "#DC2626",
+                  borderWidth: 2,
+                  borderDash: [5, 4],
+                  pointRadius: 2.5
+                }},
+                {{
+                  label: "Solo Clima Floración (MAE 4.60)",
+                  data: d.map(r => r.pred_m3_clima),
+                  borderColor: "#2563EB",
+                  borderWidth: 1.8,
+                  borderDash: [3, 3],
+                  pointRadius: 2
+                }},
+                {{
+                  label: "Tendencia Pura (MAE 4.79)",
+                  data: d.map(r => r.pred_m1_tendencia),
+                  borderColor: "#94A3B8",
+                  borderDash: [2, 2],
+                  borderWidth: 1.5,
+                  pointRadius: 0
+                }}
+              ]
+            }},
+            options: {{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {{
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
+              }},
+              scales: {{
+                y: {{ min: 14, max: 28, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
+              }}
+            }}
+          }});
+        }}
+      }}
+    }} catch (err) {{
+      console.warn("Visual initialization notice on slide", idx, err);
+    }}
+  }}
 
-  chartCasoAInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Observado Real',
-          data: obs,
-          borderColor: '#0F172A',
-          backgroundColor: '#0F172A',
-          borderWidth: 3,
-          pointRadius: 6,
-          pointBackgroundColor: '#0F172A'
-        },
-        {
-          label: 'ExtraTrees Regressor',
-          data: et,
-          borderColor: '#059669',
-          backgroundColor: '#059669',
-          borderWidth: 2.5,
-          tension: 0.2,
-          pointRadius: 4
-        },
-        {
-          label: 'LSTM PyTorch',
-          data: lstm,
-          borderColor: '#2563EB',
-          backgroundColor: '#2563EB',
-          borderWidth: 2,
-          tension: 0.2,
-          hidden: true
-        },
-        {
-          label: 'ARIMA(2,1,1)',
-          data: arima,
-          borderColor: '#7C3AED',
-          backgroundColor: '#7C3AED',
-          borderWidth: 2,
-          borderDash: [4, 4],
-          hidden: true
-        },
-        {
-          label: 'Banda Superior 90% (+1.645σ)',
-          data: upper,
-          borderColor: 'transparent',
-          backgroundColor: 'rgba(5, 150, 105, 0.12)',
-          fill: '+1',
-          pointRadius: 0
-        },
-        {
-          label: 'Banda Inferior 90% (-1.645σ)',
-          data: lower,
-          borderColor: 'transparent',
-          fill: false,
-          pointRadius: 0
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          title: { display: true, text: 'Temperatura Máxima (°C)', font: { family: 'IBM Plex Mono' } },
-          grid: { color: 'rgba(150,150,150,0.1)' }
-        },
-        x: {
-          grid: { color: 'rgba(150,150,150,0.1)' }
-        }
-      },
-      plugins: {
-        legend: {
-          labels: { font: { family: 'IBM Plex Mono', size: 11 } }
-        }
-      }
-    }
-  });
-}
+  function toggleDataset(dsIndex) {{
+    if (!charts["demo7d"]) return;
+    const isHidden = charts["demo7d"].isDatasetVisible(dsIndex);
+    charts["demo7d"].setDatasetVisibility(dsIndex, !isHidden);
+    charts["demo7d"].update();
+  }}
 
-function toggleDatasetCasoA(type) {
-  if (!chartCasoAInstance) return;
-  const ds = chartCasoAInstance.data.datasets;
-  if (type === 'observed') {
-    ds[0].hidden = !ds[0].hidden;
-  } else if (type === 'extratrees') {
-    ds[1].hidden = !ds[1].hidden;
-  } else if (type === 'lstm') {
-    ds[2].hidden = !ds[2].hidden;
-  } else if (type === 'arima') {
-    ds[3].hidden = !ds[3].hidden;
-  }
-  chartCasoAInstance.update();
-  event.target.classList.toggle("active");
-}
-
-// GRAFICO CASO B (Slide 21)
-function initChartCasoB() {
-  if (chartCasoBInstance) return;
-  const ctx = document.getElementById("chartCasoB");
-  if (!ctx) return;
-
-  const rawCsv = document.getElementById("embeddedCafe").textContent.trim();
-  const parsed = Papa.parse(rawCsv, { header: true, dynamicTyping: true });
-  const rows = parsed.data;
-
-  const labels = rows.map(r => `Campaña ${r.campana}`);
-  const obs = rows.map(r => r.rendimiento_real_qq_ha);
-  const fusion = rows.map(r => r.pred_fusion_evi_clima);
-  const soloNdvi = rows.map(r => r.pred_solo_ndvi);
-
-  chartCasoBInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Rendimiento Real Observado (qq/ha)',
-          data: obs,
-          backgroundColor: '#0F172A',
-          borderRadius: 2,
-          order: 2
-        },
-        {
-          label: 'Fusión EVI + Clima (AgroVisión)',
-          data: fusion,
-          type: 'line',
-          borderColor: '#059669',
-          backgroundColor: '#059669',
-          borderWidth: 3,
-          tension: 0.1,
-          pointRadius: 6,
-          order: 1
-        },
-        {
-          label: 'Modelo Solo NDVI (Saturado)',
-          data: soloNdvi,
-          type: 'line',
-          borderColor: '#DC2626',
-          backgroundColor: '#DC2626',
-          borderWidth: 2.5,
-          borderDash: [5, 5],
-          pointRadius: 5,
-          order: 1
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          min: 15,
-          max: 28,
-          title: { display: true, text: 'Rendimiento Cosecha (qq/ha)', font: { family: 'IBM Plex Mono' } },
-          grid: { color: 'rgba(150,150,150,0.1)' }
-        },
-        x: {
-          grid: { color: 'rgba(150,150,150,0.1)' }
-        }
-      },
-      plugins: {
-        legend: {
-          labels: { font: { family: 'IBM Plex Mono', size: 11 } }
-        }
-      }
-    }
-  });
-}
-
-function toggleDatasetCasoB(type) {
-  if (!chartCasoBInstance) return;
-  const ds = chartCasoBInstance.data.datasets;
-  if (type === 'observed') {
-    ds[0].hidden = !ds[0].hidden;
-  } else if (type === 'fusion') {
-    ds[1].hidden = !ds[1].hidden;
-  } else if (type === 'solo_ndvi') {
-    ds[2].hidden = !ds[2].hidden;
-  }
-  chartCasoBInstance.update();
-  event.target.classList.toggle("active");
-}
-
-// INICIALIZACION
-updateSlide(0);
+  window.addEventListener("DOMContentLoaded", () => {{
+    updateSlide(1);
+  }});
 </script>
 </body>
 </html>
 """
 
-    out_path = Path("presentacion.html")
-    out_path.write_text(html, encoding="utf-8")
-    print(f"Deck avanzado de 25 diapositivas generado en: {out_path} ({out_path.stat().st_size / 1024:.1f} KB)")
+    output_path = os.path.abspath("presentacion.html")
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+
+    print(f"Deck interactivo de 20 diapositivas generado con éxito en: {output_path} ({len(html_content)} bytes)")
 
 if __name__ == "__main__":
-    build_mega_deck()
+    build_deck()
