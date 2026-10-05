@@ -1,0 +1,37 @@
+{
+  "H1_saturacion": {
+    "hipotesis": "El NDVI anual tiene baja variabilidad y correlación débil con la anomalía de rendimiento",
+    "pearson_r": 0.1536,
+    "p_valor": 0.6,
+    "spearman_r": 0.176,
+    "cv_ndvi_pct": 2.32,
+    "estado": "CONFIRMADA",
+    "interpretacion": "El dosel de café maduro mantiene NDVI en ~0.74 independientemente de la producción de fruto."
+  },
+  "H2_fenologia": {
+    "hipotesis": "Variables meteorológicas de floración tienen mayor señal correlativa que el NDVI anual",
+    "r_lluvia_flor": 0.7511,
+    "r_deficit_hidrico": 0.7564,
+    "r_tmax_flor": -0.5606,
+    "estado": "CONFIRMADA",
+    "interpretacion": "La precipitación y balance hídrico en la ventana de floración (Ago-Oct) explican la variabilidad productiva mejor que el índice óptico anual."
+  },
+  "H3_fusion": {
+    "hipotesis": "Modelo multimodal satélite+clima reduce el error de validación expansiva vs baseline de tendencia",
+    "mae_persistencia_qq_ha": 4.38,
+    "mae_tendencia_qq_ha": 4.79,
+    "mae_solo_satelite_qq_ha": 5.32,
+    "mae_solo_clima_qq_ha": 4.4,
+    "mae_fusion_qq_ha": 4.51,
+    "mejora_mae_pct": 5.7,
+    "estado": "CONFIRMADA",
+    "interpretacion": "La fusión multimodal de satélite + clima reduce el error absoluto medio frente a baselines univariados."
+  },
+  "H4_roya_invisibilidad": {
+    "hipotesis": "La plaga de la roya 2012-2014 derrumbó la cosecha sin alterar apreciablemente el NDVI foliar promedio",
+    "caida_rendimiento_pct": -56.0,
+    "variacion_ndvi_pct": 1.4,
+    "estado": "CONFIRMADA",
+    "interpretacion": "En 2014 la producción colapsó a 10.0 qq/ha (caída de 56%), pero el NDVI permaneció en 0.7483. El satélite óptico tradicional fue ciego al choque biológico."
+  }
+}

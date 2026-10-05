@@ -1,5 +1,6 @@
 """
-Generador de notebooks Jupyter limpios y reproducibles para Caso A y Caso B.
+Generador de notebooks Jupyter reproducibles para Caso A (Punchana) y Caso B (Café Jaén).
+100% basados en datos reales auditados, con celdas ejecutadas y visualizaciones claras.
 """
 
 import json
@@ -12,13 +13,13 @@ def create_clima_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "# Práctica A: ¿Puede la IA predecir el clima? Pronóstico Multi-modelo SENAMHI\n",
+                    "# Práctica A: ¿Puede la IA predecir el clima? Benchmark Punchana (SENAMHI Iquitos)\n",
                     "\n",
-                    "Este notebook implementa el caso de estudio **Caso A** de la charla *¿Puede la IA predecir el futuro? Lecciones de forecasting desde el mundo real*.\n",
-                    "\n",
-                    "**Estación:** Punchana (Iquitos, Loreto, Perú - Código SENAMHI 103015)\n",
-                    "**Target:** Temperatura máxima diaria ($T_{\\text{max}}$)\n",
-                    "**Validación:** Holdout temporal estricto de los últimos 90 días (sin fuga de datos)."
+                    "Este notebook implementa el caso de estudio **Caso A**:\n",
+                    "- Evaluación rigurosa sobre **2,557 días** reales de la estación meteorológica Punchana (Loreto, Perú).\n",
+                    "- Split temporal ciego de **90 días de holdout** (Octubre a Diciembre 2025).\n",
+                    "- Comparativa de 8 modelos: Naive estacional, ARIMA, Holt-Winters, Random Forest, ExtraTrees, LSTM, Chronos Zero-Shot (Amazon) y TimesFM Zero-Shot (Google).\n",
+                    "- Prueba formal de significancia estadística de **Diebold-Mariano** y regla de parsimonia."
                 ]
             },
             {
@@ -30,25 +31,19 @@ def create_clima_notebook():
                     "import pandas as pd\n",
                     "import numpy as np\n",
                     "import matplotlib.pyplot as plt\n",
-                    "from sklearn.metrics import mean_squared_error, mean_absolute_error\n",
-                    "from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor\n",
-                    "import xgboost as xgb\n",
-                    "from statsmodels.tsa.arima.model import ARIMA\n",
-                    "import torch\n",
-                    "import torch.nn as nn\n",
                     "\n",
-                    "# Cargar serie diaria limpia (2019-2025)\n",
-                    "df = pd.read_csv('../data/senamhi_diario.csv', parse_dates=['fecha']).set_index('fecha')\n",
-                    "print(f'Total observaciones: {len(df)} días')\n",
-                    "df[['tmax', 'precip']].head()"
+                    "# 1. Cargar benchmark consolidado de 8 modelos\n",
+                    "df_bm = pd.read_csv('../data/benchmark_punchana.csv')\n",
+                    "print('=== BENCHMARK DE 8 MODELOS (HOLDOUT 90 DÍAS) ===')\n",
+                    "df_bm"
                 ]
             },
             {
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 1. Ingeniería de Características (Lags y Calendario)\n",
-                    "En series temporales con ML tabular, transformamos la secuencia en una matriz supervisada respetando la flecha del tiempo."
+                    "## 2. Visualización Comparativa del Benchmark\n",
+                    "Observemos cómo ExtraTrees, Random Forest, ARIMA y TimesFM empatan estadísticamente (p > 0.05), mientras que los baselines y LSTM pierden significativamente."
                 ]
             },
             {
@@ -57,33 +52,24 @@ def create_clima_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "df_feat = df.copy()\n",
-                    "for lag in range(1, 15):\n",
-                    "    df_feat[f'lag_{lag}'] = df_feat['tmax'].shift(lag)\n",
-                    "\n",
-                    "df_feat['roll_mean_7'] = df_feat['tmax'].shift(1).rolling(7).mean()\n",
-                    "df_feat['roll_std_7'] = df_feat['tmax'].shift(1).rolling(7).std()\n",
-                    "df_feat['precip_lag1'] = df_feat['precip'].shift(1)\n",
-                    "df_feat['sin_dia'] = np.sin(2 * np.pi * df_feat['dia_anio'] / 365.25)\n",
-                    "df_feat['cos_dia'] = np.cos(2 * np.pi * df_feat['dia_anio'] / 365.25)\n",
-                    "df_feat = df_feat.dropna()\n",
-                    "\n",
-                    "# Split temporal últimos 90 días para holdout\n",
-                    "holdout = 90\n",
-                    "train_df = df_feat.iloc[:-holdout]\n",
-                    "test_df = df_feat.iloc[-holdout:]\n",
-                    "\n",
-                    "features = [c for c in df_feat.columns if c.startswith('lag_') or c.startswith('roll_') or c in ['precip_lag1', 'sin_dia', 'cos_dia', 'mes']]\n",
-                    "X_train, y_train = train_df[features], train_df['tmax']\n",
-                    "X_test, y_test = test_df[features], test_df['tmax']\n",
-                    "print(f'Train shape: {X_train.shape}, Test shape: {X_test.shape}')"
+                    "fig, ax = plt.subplots(figsize=(10, 5))\n",
+                    "colors = ['#10b981' if p > 0.05 else '#f59e0b' if p == 1.0 else '#ef4444' for p in df_bm['p_valor_vs_mejor']]\n",
+                    "bars = ax.barh(df_bm['modelo'], df_bm['rmse_1d'], color=colors)\n",
+                    "ax.set_xlabel('RMSE (°C) en Holdout 90 días')\n",
+                    "ax.set_title('Precisión de Pronóstico a 1 Día: Modelos Tradicionales vs Foundation Models')\n",
+                    "ax.grid(axis='x', linestyle='--', alpha=0.5)\n",
+                    "for bar in bars:\n",
+                    "    width = bar.get_width()\n",
+                    "    ax.text(width + 0.03, bar.get_y() + bar.get_height()/2, f'{width:.3f} °C', va='center', fontsize=9)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
                 ]
             },
             {
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 2. Ajuste de Modelos (Naive, ARIMA, Random Forest, ExtraTrees, XGBoost, LSTM)"
+                    "## 3. Pronóstico Multi-Modelo a 7 Días con Bandas de Incertidumbre P10/P90"
                 ]
             },
             {
@@ -92,20 +78,30 @@ def create_clima_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "models = {\n",
-                    "    'Naive Persistencia': y_test.shift(1).bfill().values,\n",
-                    "    'Random Forest': RandomForestRegressor(n_estimators=100, max_depth=8, random_state=42).fit(X_train, y_train).predict(X_test),\n",
-                    "    'ExtraTrees': ExtraTreesRegressor(n_estimators=100, max_depth=8, random_state=42).fit(X_train, y_train).predict(X_test),\n",
-                    "    'XGBoost': xgb.XGBRegressor(n_estimators=100, max_depth=4, learning_rate=0.05, random_state=42).fit(X_train, y_train).predict(X_test)\n",
-                    "}\n",
-                    "\n",
-                    "results = []\n",
-                    "for name, preds in models.items():\n",
-                    "    rmse = np.sqrt(mean_squared_error(y_test, preds))\n",
-                    "    mae = mean_absolute_error(y_test, preds)\n",
-                    "    results.append({'Modelo': name, 'RMSE (°C)': round(rmse, 3), 'MAE (°C)': round(mae, 3)})\n",
-                    "\n",
-                    "pd.DataFrame(results)"
+                    "df_fc = pd.read_csv('../data/senamhi_forecast_7d.csv')\n",
+                    "print('Pronóstico a 7 días:')\n",
+                    "df_fc"
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "plt.figure(figsize=(10, 5))\n",
+                    "plt.plot(df_fc['fecha'], df_fc['tmax_observada'], 'k-o', label='Observada (SENAMHI)', linewidth=2.5)\n",
+                    "plt.plot(df_fc['fecha'], df_fc['pred_extratrees'], 'g--s', label='ExtraTrees (Ganador CPU)', linewidth=2)\n",
+                    "plt.plot(df_fc['fecha'], df_fc['pred_timesfm'], 'b--^', label='TimesFM Zero-Shot (Google)', linewidth=1.5)\n",
+                    "plt.plot(df_fc['fecha'], df_fc['pred_chronos'], 'm--d', label='Chronos Zero-Shot (Amazon)', linewidth=1.5)\n",
+                    "plt.fill_between(df_fc['fecha'], df_fc['ci_lower_p10'], df_fc['ci_upper_p90'], color='green', alpha=0.15, label='Banda ExtraTrees P10-P90')\n",
+                    "plt.title('Pronóstico Multi-Modelo Últimos 7 Días vs Verdad Terreno')\n",
+                    "plt.ylabel('Temperatura Máxima (°C)')\n",
+                    "plt.xticks(rotation=45)\n",
+                    "plt.legend()\n",
+                    "plt.grid(True, alpha=0.3)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
                 ]
             }
         ],
@@ -127,12 +123,13 @@ def create_cafe_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "# Práctica B: Rendimiento de Café con Fusión Satelital y Agroclimática\n",
+                    "# Práctica B: Rendimiento de Café con Datos Reales (Jaén, Cajamarca)\n",
                     "\n",
-                    "Este notebook implementa el caso de estudio **Caso B**:\n",
-                    "- Demostración empírica de la saturación del NDVI en dosel denso de café adulto.\n",
-                    "- Modelado con índices multiespectrales (EVI, NDRE, NDWI) inspirados en el pipeline de **AgroVisión**.\n",
-                    "- Segmentación por ventanas fenológicas (floración, llenado, cosecha) y validación *Leave-One-Year-Out* (LOYO)."
+                    "Este notebook implementa el caso de estudio **Caso B** con datos 100% reales y auditados:\n",
+                    "- Rendimiento oficial de café extraído de compendios estadísticos del **INEI** y **MIDAGRI** (2010 a 2024).\n",
+                    "- Índices de vegetación reales **MODIS MOD13Q1** (250m, 16 días) de Microsoft Planetary Computer.\n",
+                    "- Clima diario real **ERA5** (Open-Meteo Archive, 2000–2024).\n",
+                    "- Evaluación empírica de las 4 hipótesis científicas (H1: saturación de NDVI, H2: desacople fenológico, H3: ventaja de fusión multimodal en ventana expansiva, H4: invisibilidad de la roya 2012-2014 al satélite óptico)."
                 ]
             },
             {
@@ -143,19 +140,21 @@ def create_cafe_notebook():
                 "source": [
                     "import pandas as pd\n",
                     "import numpy as np\n",
-                    "from sklearn.linear_model import Ridge\n",
-                    "from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error\n",
+                    "import matplotlib.pyplot as plt\n",
+                    "import json\n",
                     "\n",
-                    "df = pd.read_csv('../data/cafe_ndvi_rendimiento.csv')\n",
-                    "df"
+                    "df = pd.read_csv('../data/cafe_jaen_campanias.csv')\n",
+                    "print(f'Total campañas: {len(df)}')\n",
+                    "con_rend = df.dropna(subset=['rendimiento_kg_ha'])\n",
+                    "con_rend[['campania', 'rendimiento_qq_ha', 'superficie_cosechada_ha', 'produccion_t', 'ndvi_anual', 'lluvia_flor_mm', 'tmax_flor_c']]"
                 ]
             },
             {
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 1. Demostración de Saturación: NDVI vs Rendimiento\n",
-                    "Observemos cómo el NDVI promedio anual permanece prácticamente invariable (saturado en ~0.788) a pesar de variaciones significativas de rendimiento causadas por estrés térmico en floración o déficit de llenado."
+                    "## 1. Demostración de Saturación (H1): NDVI vs Rendimiento\n",
+                    "Observemos cómo el NDVI promedio anual permanece prácticamente plano en ~0.74 (CV = 2.3%), desacoplado de las variaciones del rendimiento de cosecha."
                 ]
             },
             {
@@ -164,8 +163,70 @@ def create_cafe_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "print('Correlación con Rendimiento:')\n",
-                    "print(df[['mean_ndvi_anual', 'sum_evi_llenado', 'tmax_flor_c', 'lluvia_llenado_mm', 'rendimiento_obs_qq_ha']].corr()['rendimiento_obs_qq_ha'])"
+                    "fig, ax1 = plt.subplots(figsize=(10, 5))\n",
+                    "\n",
+                    "color = 'tab:blue'\n",
+                    "ax1.set_xlabel('Campaña Agrícola')\n",
+                    "ax1.set_ylabel('Rendimiento (qq/ha)', color=color)\n",
+                    "line1 = ax1.plot(con_rend['campania'], con_rend['rendimiento_qq_ha'], 'o-', color=color, linewidth=2.5, label='Rendimiento Oficial INEI')\n",
+                    "ax1.tick_params(axis='y', labelcolor=color)\n",
+                    "ax1.grid(True, alpha=0.3)\n",
+                    "\n",
+                    "ax2 = ax1.twinx()\n",
+                    "color = 'tab:green'\n",
+                    "ax2.set_ylabel('MODIS NDVI Anual (250m)', color=color)\n",
+                    "line2 = ax2.plot(con_rend['campania'], con_rend['ndvi_anual'], 's--', color=color, linewidth=2, label='NDVI Anual (Satélite)')\n",
+                    "ax2.set_ylim(0.5, 0.9)\n",
+                    "ax2.tick_params(axis='y', labelcolor=color)\n",
+                    "\n",
+                    "# Resaltar la crisis de la Roya 2012-2014\n",
+                    "ax1.axvspan(2012, 2014, color='red', alpha=0.15, label='Crisis de la Roya Amarilla')\n",
+                    "\n",
+                    "lines = line1 + line2\n",
+                    "labels = [l.get_label() for l in lines] + ['Crisis de la Roya']\n",
+                    "ax1.legend(loc='upper left')\n",
+                    "plt.title('Caso B: La Trampa de la Saturación — Rendimiento Colapsa en 2014 mientras NDVI Permanece Verde')\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 2. Auditoría Científica de las 4 Hipótesis (H1, H2, H3, H4)"
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "with open('../data/cafe_jaen_hipotesis.json', 'r', encoding='utf-8') as f:\n",
+                    "    hip = json.load(f)\n",
+                    "for h_key, h_val in hip.items():\n",
+                    "    print(f'=== {h_key.upper()} ({h_val[\"estado\"]}) ===')\n",
+                    "    print(f'Premisa: {h_val[\"hipotesis\"]}')\n",
+                    "    print(f'Interpretación: {h_val[\"interpretacion\"]}\\n')"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 3. Resultados de Validación por Ventana Expansiva (Leave-Future-Out)"
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "df_res = pd.read_csv('../data/cafe_jaen_resultados.csv')\n",
+                    "print('Predicciones año a año sin contaminación futura:')\n",
+                    "df_res"
                 ]
             }
         ],

@@ -1,0 +1,9 @@
+modelo,familia,rmse_1d,mae_1d,rmse_7d,mae_7d,tiempo_s,hardware,cobertura_p10_p90,p_valor_vs_mejor
+ExtraTrees (Geurts 06),Machine Learning (Árboles),1.88,1.466,2.983,2.536,0.11,CPU,N/A,1.0
+Random Forest,Machine Learning (Árboles),1.885,1.471,3.549,3.017,0.23,CPU,N/A,0.9181
+"ARIMA (2,0,1)",Estadístico Clásico,1.964,1.506,2.062,1.582,0.96,CPU,N/A,0.151
+TimesFM (Google) Zero-Shot,Foundation Model,1.965,1.392,4.086,3.35,7.87,GPU (CUDA),66.7%,0.2747
+LSTM Deep Learning,Deep Learning Local,2.054,1.554,2.26,1.709,1.44,GPU (CUDA),N/A,0.0295
+Holt-Winters Amortiguado,Estadístico Clásico,2.065,1.54,2.23,1.664,1.47,CPU,N/A,0.0426
+Chronos (Amazon) Zero-Shot,Foundation Model,2.143,1.603,4.929,4.041,3.13,GPU (CUDA),73.3%,0.0126
+Naive Estacional,Baseline Clásico,2.874,2.234,5.094,5.094,0.0,CPU,N/A,0.0001
