@@ -1,77 +1,100 @@
-# Plan Maestro — ¿Puede la IA predecir el futuro? (SENAMHI + café NDVI)
+# Plan Maestro — ¿Puede la IA predecir el futuro? (v2 Datos Reales)
 
-## 1. Qué vamos a presentar (narrativa, 25 slides avanzadas estilo Data_Wizard + HyperFrames)
+> **Documento Rector del Proyecto**  
+> **Alineado con:** [plan_detallado_diapositivas.md](plan_detallado_diapositivas.md) y [tareas.md](tareas.md)  
+> **Público:** Universitario (estadística básica). **Duración:** 30–40 min. **Diapositivas:** 20.
 
-Hilo: **predecir = cuantificar incertidumbre para decidir**. Dos casos reales Perú:
-- **Caso A (clima):** pronóstico T°/lluvia estación SENAMHI con 5 niveles de modelo + comparativa multi-agencia (NOAA GFS vs ECMWF vs DWD ICON) + mapa satelital.
-- **Caso B (café):** rendimiento qq/ha desde Sentinel-2 (EVI/NDRE vs saturación de NDVI) + clima + visor interactivo de capas y heatmaps.
+---
 
-Outline (detalle ampliado en `reference/estructura_presentacion.md`):
-- **Bloque 1 (Fundamentos):** 1 Portada + gancho · 2 Anatomía de una serie desde cero (tendencia, ciclo, estacionalidad, ruido) · 3 El gran mapa de los 4 paradigmas.
-- **Bloque 2 (Teoría & Mecanismos):** 4 Paradigma 1: Curvas paramétricas (exponencial, logística, Holt-Winters) · 5 Paradigma 1: Descomposición estadística (ARIMA, SARIMAX, Prophet) · 6 Paradigma 2: ML tabular mecanismo (lags SVG) · 7 Paradigma 2: Patología de no-extrapolación en árboles · 8 Paradigma 2: DL secuencial (LSTM vs PatchTST SVG) · 9 Paradigma 2: Cuándo usar DL (mito de la serie única) · 10 Paradigma 3: Visión agrícola (YOLOv12, SAM 2.1, DINOv2) · 11 Paradigma 3: Biofísica y saturación espectral (NDVI vs EVI/NDRE) · 12 Paradigma 3: Fusión multimodal fenológica · 13 Paradigma 4: Modelos globales (NOAA GFS, ECMWF IFS, DWD ICON) · 14 Paradigma 4: La disparidad en vivo para Iquitos · 15 Paradigma 4: GraphCast (DeepMind) y Zero-Shot (TimesFM, Chronos).
-- **Bloque 3 (Casos Reales & Demos):** 16 Caso A mapa satelital Iquitos (Leaflet) · 17 Caso A benchmark 7 años · 18 Caso A DEMO clima 7d en vivo · 19 Caso B mapa satelital Jaén con Visor de Capas/Heatmaps (RGB, NDVI saturado, EVI, NDRE) · 20 Caso B prueba de las 6 campañas · 21 Caso B DEMO café en vivo (LOYO).
-- **Bloque 4 (Cierre):** 22 Lecciones desde las trincheras · 23 Árbol de decisiones técnico · 24 Cierre (la IA no predice, cuantifica) · 25 Gracias + referencias BibTeX (`refs.bib`).
+## 1. Trama Narrativa y Pregunta Conductora
 
-## 2. Cómo construir las dispos (igual que Data_Wizard, sin inventar stack)
+Pregunta conductora: ***"¿Cuándo vale la pena un modelo complejo?"***  
+Se plantea en la diapositiva 01 y se responde en la 19 mediante evidencia empírica.
 
-- Single-file `presentacion.html`: Chart.js + PapaParse + Leaflet satelital vía CDN, CSS vars claro/oscuro, navegación `←/→/F/Inicio/Fin`, fallback embebido si no hay servidor.
-- Layout full-bleed (`width: calc(100vw - 56px)`, `height: 100vh`) con split-panel grids para visualización panorámica sin restricciones de ancho.
-- Datos del deck = **CSVs pequeños** en `data/`: `senamhi_diario.csv`, `senamhi_forecast_7d.csv`, `cafe_ndvi_rendimiento.csv`, `noaa_ecmwf_forecast.csv` (<100 KB c/u).
-- Servir local: `python -m http.server 8000` → `.../presentacion.html`. Doble-clic funciona 100% offline con fallback embebido.
-- DoD deck: abre offline, 25 slides, mapas satelitales Leaflet interactivos, visor de heatmaps, gráficos leen CSV en vivo, teclado OK.
+### Estructura en 5 Actos (20 Diapositivas)
 
-## 3. Práctica A — Clima SENAMHI multi-modelo (1 estación cafetalera)
-
-**Dato:** SENAMHI Perú solo permite descarga mes-a-mes con cuenta + Cloudflare. Usar `garua` (PyPI, MIT):
-```bash
-pip install garua
-garua --search "Jaen"            # o Pichanaki / Quillabamba
-garua --station <COD> --mode range --from 2019 --to 2025   # crudo → data/raw/ (ignorado)
 ```
-Fallback si Turnstile bloquea: `senamhi-scraper` o descarga manual mes-a-mes al mismo `data/raw/`.
-Limpieza: normalizar `S/D`→NaN, `T`→0.0, dedup fechas, resample diario, report huecos (% NaN por variable).
-**Estación decidida:** Iquitos (Loreto, selva baja ~100 msnm) para práctica clima.
-⚠️ Iquitos NO es zona café (café requiere 800-2000 msnm): la práctica café usará proxy declarado
-(serie pública café Colombia/Brasil o adaptación [@niedbala2022]) + Sentinel-2 sobre zona cafetalera
-referencial (Jaén por defecto). En slides se declara: clima = Iquitos real, café = proxy.
+ACTO 1: LA PREGUNTA (Diapos 01–03, ~5 min)
+  ├─ 01 [TEORÍA] ¿Puede la IA predecir el futuro? → No adivina: cuantifica incertidumbre
+  ├─ 02 [TEORÍA] La anatomía de una serie → Señal = Tendencia + Estacionalidad + Ruido
+  └─ 03 [TEORÍA] El gran mapa de las 4 familias → Ningún modelo gana siempre
 
-**Modelos (mismo split temporal, mismo target T°máx o lluvia 7 días):**
-| Nivel | Modelo | Paquete |
-|---|---|---|
-| baseline | Naive estacional + ETS/ARIMA | statsmodels |
-| clásico | Prophet | prophet |
-| ML tabular | RF + XGBoost/LightGBM con lags 1-14 + dummies mes | scikit-learn, xgboost/lightgbm |
-| DL | LSTM 1 capa | pytorch o keras |
-| zero-shot | Chronos o TimesFM sin entrenar | `chronos-forecasting` / `timesfm` |
+ACTO 2: LAS HERRAMIENTAS (Diapos 04–11, ~13 min)
+  ├─ 04 [MECANISMO] Clásicos: Suavizado, logística y STL → Pocos parámetros, mucha física
+  ├─ 05 [MECANISMO] Árboles: El puente tabular y su límite → Ganan en tabular, no extrapolan (Experimento Propio)
+  ├─ 06 [MECANISMO] Deep Learning: De LSTM a PatchTST → Atención en parches escala con muchas series
+  ├─ 07 [MECANISMO] Foundation Models Zero-Shot → TimesFM, Chronos y Moirai sin entrenar
+  ├─ 08 [MECANISMO] Satélites y la trampa del NDVI → Cuando el dosel es denso, el sensor se satura
+  ├─ 09 [MECANISMO] El reloj botánico → Ventanas fenológicas críticas en agricultura
+  ├─ 10 [EVIDENCIA] Física global y discrepancia entre agencias → NOAA GFS vs ECMWF IFS en Iquitos
+  └─ 11 [EVIDENCIA] GraphCast y la frontera 2024–2026 → Redes en grafos vs supercómputo
 
-Validación: **TimeSeriesSplit 5 folds + holdout últimos 90 días** (nunca shuffle). Métricas: MAE/RMSE + cobertura intervalo. Export demo: `data/senamhi_diario.csv` (últimos 180 días obs) + `senamhi_forecast_7d.csv` (obs + 5 columnas pronóstico).
-Notebook: `notebooks/01_clima_senamhi.ipynb`. Golden: RMSE RF < naive en holdout; CSVs existen y cargan en deck.
+ACTO 3: CASO A — CLIMA EN LA SELVA (Diapos 12–14, ~6 min)
+  ├─ 12 [CASO REAL] Estación Punchana (SENAMHI Iquitos) → 7 años de datos reales, 91 msnm
+  ├─ 13 [EVIDENCIA] Benchmark de 8 modelos → Holdout 90 días, test Diebold-Mariano y parsimonia
+  └─ 14 [DEMO] Pronóstico a 7 días en vivo → Incertidumbre probabilística y cono de duda
 
-## 4. Práctica B — Café + NDVI (rendimiento qq/ha)
+ACTO 4: CASO B — CAFÉ EN JAÉN (Diapos 15–17, ~6 min)
+  ├─ 15 [CASO REAL] Rendimiento oficial y satélite real → MIDAGRI/SIEA + MODIS/Sentinel-2
+  ├─ 16 [EVIDENCIA] ¿Ve el satélite lo que pasó en el campo? → Evaluación empírica de saturación
+  └─ 17 [DEMO] Validación temporal honesta → Ventana expansiva y reporte de fallos reales
 
-**Dato:** Sentinel-2 L2A vía Google Earth Engine (abierto) + clima SENAMHI estación elegida + rendimiento (ideal: serie anual del productor/coop; fallback: proxy o dataset paper arándano/uva [@niedbala2022] adaptado y declarado como tal).
-Ventana fenológica café Perú: floración (ago-oct) → llenado (nov-feb) → cosecha (mar-jul). Features: **∑NDVI / max NDVI / EVI medio en ventana** + lluvia acumulada + T° media (misma ventana). Target: qq/ha por campaña.
-```python
-# ponytail: GEE punto/buffer finca, mediana mensual, mascara nubes SCL
-import ee
-ee.Initialize()
-s2 = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
-  .filterBounds(finca).filterDate('2019-01-01','2025-12-31')
-  .map(lambda i: i.updateMask(i.select('SCL').neq(3).And(i.select('SCL').neq(9))))
-ndvi = s2.median().normalizedDifference(['B8','B4'])
+ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
+  ├─ 18 [TEORÍA] 5 Lecciones desde las trincheras → Principios de ingeniería innegociables
+  ├─ 19 [TEORÍA] ¿Qué modelo uso? (Árbol de decisión) → Respuesta final a la pregunta conductora
+  └─ 20 [TEORÍA] Cierre y recursos reproducibles → Código abierto, 49 referencias y NotebookLM
 ```
-Modelos: RF + XGBoost (pocos datos = no DL). Validación: **leave-one-year-out**. Métrica: MAPE + R². Export demo: `data/cafe_ndvi_rendimiento.csv` (campaña, ndvi_acum, lluvia, temp, rendimiento_obs, pred_rf).
-Notebook: `notebooks/02_cafe_ndvi.ipynb`. Golden: MAPE < 25% o declarado + CSV carga en deck con slider fenología.
-Riesgo honesto para la slide 13: NDVI se satura en dosel denso y falla sin ventana fenológica — mostrarlo con 2 campañas.
 
-## 5. Fases y orden
+---
 
-- F0 Setup (hecho repo + falta: `pip install garua pandas scikit-learn statsmodels prophet xgboost lightgbm torch chronos-forecasting earthengine-api`) 
-- F1 Datos: elegir estación + descargar SENAMHI + definir polígono café + pulls S2
-- F2 Práctica A notebook + CSVs demo clima
-- F3 Práctica B notebook + CSV demo café (+ 2-3 papers café-NDVI a refs.bib)
-- F4 Deck `presentacion.html` clonando Data_Wizard (copiar esqueleto, adaptar 16 slides, cablear CSVs)
-- F5 Ensayo: offline OK, tiempos, fallback.
+## 2. Arquitectura del Deck Interactivo (`presentacion.html`)
 
-## Apéndice A — DoD global por tarea
-Notebook corre top-to-bottom limpio + CSVs demo <200KB + validación temporal sin leakage + deck lee CSV en vivo + commit sin PDFs/pesos/datos crudos.
+- **Single-file autocontenido:** Chart.js + PapaParse + Leaflet vía CDN, con paleta semántica claro/oscuro (CSS variables).
+- **Layout Split-Screen 40/60:**
+  - Panel izquierdo (40%): Título, insignia semántica fija, tesis en 1 frase, máximo 3 viñetas breves, y Frase-clave destacada.
+  - Panel derecho (60%): Visual interactivo y animado a altura completa sin márgenes vacíos ("Zero-White-Space").
+- **Drawer de Speaker Notes:** Se activa con tecla `N`. Contiene el guion narrado y el cronómetro de la diapositiva sin sobrecargar la pantalla principal.
+- **5 Insignias Normalizadas:** `TEORÍA` (Violeta), `MECANISMO` (Cian), `EVIDENCIA` (Ámbar), `CASO REAL` (Esmeralda), `DEMO` (Rojo).
+- **Cero cifras cableadas a mano:** Todos los valores se inyectan o parsean desde los CSVs de `data/`.
+
+---
+
+## 3. Práctica A — Benchmark de Clima en Iquitos (Punchana, SENAMHI)
+
+- **Datos:** Estación 103015 / 150208, 91 msnm, 2,557 días (2019-01-01 a 2025-12-31).
+- **Holdout:** 90 días finales ciegos con split temporal estricto (origen móvil).
+- **8 Modelos en Competencia:**
+  1. Naive estacional (persistencia 7d).
+  2. ARIMA / SARIMAX calibrado por AIC.
+  3. Suavizado Holt-Winters.
+  4. Random Forest con lags 1–14.
+  5. ExtraTrees / LightGBM con lags y rolling statistics.
+  6. Red LSTM profunda (PyTorch, promedio 5 semillas).
+  7. Chronos-Bolt Zero-Shot (Amazon).
+  8. TimesFM 200M Zero-Shot (Google).
+- **Regla de Conclusión:** Gana el de menor RMSE. En caso de empate estadístico según la prueba de Diebold-Mariano ($p > 0.05$), gana el modelo más simple y parsimonioso.
+- **Entregable:** `data/benchmark_punchana.csv` y `notebooks/01_clima_senamhi.ipynb`.
+
+---
+
+## 4. Práctica B — Rendimiento de Café con Datos Reales (Jaén, Cajamarca)
+
+- **Protocolo Anti-Invención (Opción A):**
+  - **Rendimiento Objetivo:** Serie histórica oficial de café para la provincia de Jaén reportada por MIDAGRI / SIEA (meta: 2000–2024).
+  - **Predictores Satelitales Reales:** MODIS MOD13Q1 (250m, 16d, 2000–2024) y Sentinel-2 L2A (10–20m, 2017–2024) vía Planetary Computer, filtrando píxeles por máscara de calidad QA dentro de la zona cafetalera.
+  - **Predictores Climáticos Reales:** Reanálisis ERA5 vía Open-Meteo Archive para las coordenadas de Jaén.
+  - **Ventana Fenológica:** Floración (Ago–Oct), Llenado (Nov–Feb), Cosecha (Mar–Jul).
+- **Modelos:** Tendencia (M1), Solo NDVI (M2), Solo Clima (M3), Fusión Satélite + Clima (M4).
+- **Validación Principal:** Ventana temporal expansiva (entrenar con $\le t-1$, predecir $t$).
+- **Entregables:** `data/cafe_jaen_campanias.csv`, `data/cafe_jaen_resultados.csv` y `notebooks/02_cafe_ndvi.ipynb`.
+
+---
+
+## 5. Fases de Ejecución del Proyecto
+
+1. **F1: Depuración y Setup** (`reference/fases/fase_1_depuracion_setup.md`) — Aislar material sintético a `data/deprecated/`, crear `SOURCES.md`, instalar dependencias.
+2. **F2: Caso B con Datos Reales** (`reference/fases/fase_2_cafe_datos_reales.md`) — Descargar SIEA/MIDAGRI, extraer MODIS/S2 y ERA5, evaluar hipótesis H1–H4.
+3. **F3: Caso A Benchmark Iquitos** (`reference/fases/fase_3_benchmark_iquitos_fm.md`) — Ejecutar 8 modelos, test Diebold-Mariano, exportar CSVs de benchmark.
+4. **F4: Experimentos y Citas** (`reference/fases/fase_4_experimentos_narrativa.md`) — Experimento propio de no-extrapolación, redactar Frases-clave ⏳ y validar con el usuario.
+5. **F5: Refactorización del Deck** (`reference/fases/fase_5_deck_20_slides.md`) — Generar `presentacion.html` de 20 diapositivas conectadas a CSVs reales.
+6. **F6: QA, Ensayo y Bitácora** (`reference/fases/fase_6_qa_ensayo.md`) — Auditoría 1920x1080 / 1366x768, ensayo 35 min, bitácora `docs/logs/log.md`.
