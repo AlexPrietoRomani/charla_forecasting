@@ -14,10 +14,17 @@ def get_deck_css():
     --bg-light-sub: #F1F5F9;
     --bg-visual-light: #F8FAFC;
     
-    --bg-dark: #090D16;
-    --bg-dark-panel: #0F172A;
-    --bg-dark-sub: #1E293B;
-    --bg-visual-dark: #090D16;
+    --bg-dark: #03050F;
+    --bg-dark-panel: #0B132B;
+    --bg-dark-sub: #111D42;
+    --bg-visual-dark: #03050F;
+    
+    --fest-cyan: #12C8FC;
+    --fest-blue: #1E7BFF;
+    --fest-purple: #9B5CFF;
+    --fest-magenta: #E040FB;
+    --fest-amber: #FFC857;
+    --fest-emerald: #2EE6A6;
     
     --text-light-main: #0F172A;
     --text-light-mute: #334155;
@@ -78,7 +85,9 @@ def get_deck_css():
   }
   
   body.dark-mode {
-    background: var(--bg-dark);
+    background-color: var(--bg-dark);
+    background-image: radial-gradient(rgba(18, 200, 252, 0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
     color: var(--text-dark-main);
   }
 

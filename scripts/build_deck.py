@@ -5,6 +5,7 @@ from deck_styles import get_deck_css
 from deck_slides_p1 import get_slides_part1
 from deck_slides_p2 import get_slides_part2
 from deck_notes import get_speaker_notes
+from deck_branding import get_branding
 
 def clean_nans(obj):
     if isinstance(obj, float) and (pd.isna(obj) or obj != obj):
@@ -45,8 +46,19 @@ def build_deck():
     notes_json = json.dumps(get_speaker_notes(), ensure_ascii=False)
 
     css_content = get_deck_css()
+    branding = get_branding()
+    b64_header_logo = branding["b64_header"]
+    b64_dw_logo = branding["b64_dw"]
+    qr_svg = branding["qr_svg"]
+
+    # Inyección de Chart.js local offline como fallback si CDN no responde
+    chartjs_local_code = ""
+    if os.path.exists("scripts/assets/chart.umd.min.js"):
+        with open("scripts/assets/chart.umd.min.js", "r", encoding="utf-8") as f:
+            chartjs_local_code = f.read()
+
     slides_p1 = get_slides_part1()
-    slides_p2 = get_slides_part2()
+    slides_p2 = get_slides_part2(branding=branding)
 
     html_content = f"""<!DOCTYPE html>
 <html lang="es">
@@ -59,6 +71,11 @@ def build_deck():
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+  if (typeof Chart === 'undefined') {{
+    {chartjs_local_code}
+  }}
+</script>
 <style>
 {css_content}
 </style>
@@ -76,9 +93,17 @@ def build_deck():
 {slides_p2}
 </main>
 
-<!-- BARRA INFERIOR DE ESTADO Y CONTROL -->
+<!-- BARRA INFERIOR DE ESTADO Y CONTROL CON BRANDING IQUITOS DATA FEST 2026 -->
 <footer class="deck-footer">
   <div style="display:flex; align-items:center; gap:16px;">
+    <!-- LOGOS INSTITUCIONALES DEL EVENTO -->
+    <div style="display:flex; align-items:center; gap:12px;">
+      <img src="data:image/png;base64,{b64_header_logo}" alt="UNAP · Neo Kernel · Grupo de Datos & IA" style="height:26px; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4)); opacity:0.95;">
+      <span style="font-size:11px; font-weight:700; color:var(--text-light-faint); letter-spacing:0.04em;" class="mono hidden-mobile">
+        IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span> · 30 de octubre · Aula Magna UNAP
+      </span>
+    </div>
+    <div style="width:1px; height:18px; background:var(--line-light-faint); margin:0 4px;"></div>
     <div style="font-weight:700; font-size:13px;" class="mono" id="slideIndicator">01 / 20</div>
     <div style="font-size:12px; color:var(--text-light-faint);" class="mono" id="actIndicator">Acto 1 · La Pregunta</div>
   </div>

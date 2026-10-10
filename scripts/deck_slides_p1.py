@@ -7,9 +7,14 @@ def get_slides_part1():
   <!-- DIAPO 01 -->
   <section class="slide active" data-index="1" data-act="Acto 1 · La Pregunta" data-time="1.5 min">
     <div class="panel-narrative">
-      <span class="slide-meta mono">01 / 20 · ACTO 1: LA PREGUNTA</span>
-      <div class="badge badge-teoria">TEORÍA</div>
-      <h1 class="slide-title display">La ilusión de la certeza</h1>
+      <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:4px;">
+        <span class="slide-meta mono">01 / 20 · IQUITOS DATA FEST 2026</span>
+        <span class="badge badge-teoria">TEORÍA</span>
+      </div>
+      <h1 class="slide-title display">¿Puede la IA predecir el futuro?</h1>
+      <p style="font-size:12.5px; font-weight:600; color:var(--accent-blue-light); margin-bottom:4px;" class="mono">
+        Alex Prieto Romani · Data Scientist & Machine Learning Engineer
+      </p>
       <p class="slide-thesis">La IA predice con aplomo absoluto, pero el futuro no es un punto determinista: es un cono estocástico que se ensancha inevitablemente con el tiempo.</p>
       
       <div class="metric-chips">

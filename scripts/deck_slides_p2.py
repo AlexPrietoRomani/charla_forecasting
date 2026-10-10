@@ -1,5 +1,9 @@
-def get_slides_part2():
-    return """
+def get_slides_part2(branding=None):
+    if branding is None:
+        branding = {}
+    qr_svg = branding.get("qr_svg", "")
+    b64_dw = branding.get("b64_dw", "")
+    return f"""
   <!-- ========================================== -->
   <!-- ACTO 2 · LAS HERRAMIENTAS (Diapo 11)       -->
   <!-- ========================================== -->
@@ -1007,66 +1011,47 @@ def get_slides_part2():
         </div>
 
         <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:14px; height:100%; min-height:0;">
-          <!-- Tarjeta 1: QR y Repo -->
-          <div style="background:var(--bg-light-sub); padding:16px 20px; border-radius:10px; border-left:5px solid #2563EB; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; align-items:center; gap:18px;">
-            <svg viewBox="0 0 100 100" style="width:85px; height:85px; flex-shrink:0; background:white; padding:4px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.08);">
-              <rect x="0" y="0" width="100" height="100" fill="white" />
-              <!-- Marker top-left -->
-              <rect x="8" y="8" width="28" height="28" fill="#0F172A" />
-              <rect x="14" y="14" width="16" height="16" fill="white" />
-              <rect x="18" y="18" width="8" height="8" fill="#0F172A" />
-              <!-- Marker top-right -->
-              <rect x="64" y="8" width="28" height="28" fill="#0F172A" />
-              <rect x="70" y="14" width="16" height="16" fill="white" />
-              <rect x="74" y="18" width="8" height="8" fill="#0F172A" />
-              <!-- Marker bottom-left -->
-              <rect x="8" y="64" width="28" height="28" fill="#0F172A" />
-              <rect x="14" y="70" width="16" height="16" fill="white" />
-              <rect x="18" y="74" width="8" height="8" fill="#0F172A" />
-              <!-- QR Data Modules -->
-              <rect x="42" y="10" width="6" height="6" fill="#0F172A" />
-              <rect x="52" y="16" width="6" height="6" fill="#0F172A" />
-              <rect x="42" y="24" width="6" height="12" fill="#0F172A" />
-              <rect x="10" y="44" width="12" height="6" fill="#0F172A" />
-              <rect x="28" y="44" width="6" height="12" fill="#0F172A" />
-              <rect x="42" y="42" width="16" height="16" fill="#2563EB" />
-              <rect x="64" y="44" width="8" height="6" fill="#0F172A" />
-              <rect x="80" y="44" width="10" height="6" fill="#0F172A" />
-              <rect x="44" y="66" width="6" height="12" fill="#0F172A" />
-              <rect x="56" y="64" width="8" height="6" fill="#0F172A" />
-              <rect x="70" y="66" width="12" height="6" fill="#0F172A" />
-              <rect x="64" y="78" width="6" height="12" fill="#0F172A" />
-              <rect x="78" y="78" width="14" height="14" fill="#0F172A" />
-            </svg>
+          <!-- Tarjeta 1: QR Real Dinámico y Repositorio -->
+          <div style="background:var(--bg-light-sub); padding:14px 18px; border-radius:10px; border-left:5px solid #12C8FC; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; align-items:center; gap:16px;">
+            <div style="width:82px; height:82px; flex-shrink:0; background:white; padding:4px; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center;">
+              {qr_svg}
+            </div>
             <div>
-              <div style="font-size:11px; font-weight:700; color:#2563EB;" class="mono">CÓDIGO & REPOSITORIO GITHUB</div>
-              <div style="font-size:14px; font-weight:700; margin:3px 0; color:var(--text-light-main);"><a href="https://github.com/AlexPrietoRomani/charla_forecasting" target="_blank" style="color:inherit; text-decoration:none;">github.com/AlexPrietoRomani/charla_forecasting</a></div>
+              <div style="font-size:10.5px; font-weight:700; color:#12C8FC;" class="mono">ACCESO INMEDIATO AL DECK & REPO</div>
+              <div style="font-size:13.5px; font-weight:700; margin:2px 0; color:var(--text-light-main);"><a href="https://alexprietoromani.github.io/charla_forecasting/" target="_blank" style="color:inherit; text-decoration:none;">alexprietoromani.github.io/charla_forecasting</a></div>
               <div style="font-size:11.5px; color:var(--text-light-mute); line-height:1.4;">
-                • <code class="mono">01_clima_senamhi.ipynb</code><br>
-                • <code class="mono">02_cafe_ndvi.ipynb</code>
+                • Escanea el código para seguir el deck en vivo<br>
+                • GitHub: <a href="https://github.com/AlexPrietoRomani/charla_forecasting" target="_blank" style="color:#1E7BFF;">AlexPrietoRomani/charla_forecasting</a>
               </div>
             </div>
           </div>
 
-          <!-- Tarjeta 2: 49 Referencias -->
-          <div style="background:var(--bg-light-sub); padding:16px 20px; border-radius:10px; border-left:5px solid #059669; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-size:11px; font-weight:700; color:#059669;" class="mono">49 REFERENCIAS ACADÉMICAS</div>
-            <div style="font-size:14px; font-weight:700; margin:3px 0; color:var(--text-light-main);">Evidencia Científica Auditada</div>
-            <p style="font-size:11.5px; color:var(--text-light-mute); line-height:1.4;">Nature (GraphCast 2023) · NeurIPS (TimesFM 2024) · ICML (Chronos 2024) · ICLR (PatchTST 2023) · Compendios Oficiales INEI/MIDAGRI (2000–2024).</p>
+          <!-- Tarjeta 2: Ponente & Contacto Oficial Data Fest -->
+          <div style="background:var(--bg-light-sub); padding:14px 18px; border-radius:10px; border-left:5px solid #1E7BFF; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:10.5px; font-weight:700; color:#1E7BFF;" class="mono">PONENTE · CONTACTO DIRECTO</div>
+            <div style="font-size:14px; font-weight:700; margin:2px 0; color:var(--text-light-main);">Alex Prieto Romani</div>
+            <div style="font-size:11.5px; color:var(--text-light-mute); line-height:1.45;">
+              ✉️ <a href="mailto:alexprieto1997@gmail.com" style="color:inherit; text-decoration:none;">alexprieto1997@gmail.com</a><br>
+              🔗 <a href="https://linkedin.com/in/tu-usuario" target="_blank" style="color:inherit; text-decoration:none;">linkedin.com/in/alex-prieto-romani</a><br>
+              🐙 <a href="https://github.com/AlexPrietoRomani" target="_blank" style="color:inherit; text-decoration:none;">github.com/AlexPrietoRomani</a>
+            </div>
           </div>
 
-          <!-- Tarjeta 3: Datos 100% Reales -->
-          <div style="background:var(--bg-light-sub); padding:16px 20px; border-radius:10px; border-left:5px solid #D97706; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-size:11px; font-weight:700; color:#D97706;" class="mono">GARANTÍA DE REPRODUCIBILIDAD</div>
-            <div style="font-size:14px; font-weight:700; margin:3px 0; color:var(--text-light-main);">100% Datos Públicos Reales</div>
-            <p style="font-size:11.5px; color:var(--text-light-mute); line-height:1.4;">2,557 días SENAMHI Punchana · 24 campañas auditadas SIEA Jaén · 576 compuestos NASA MODIS Terra · Reanálisis ERA5 ECMWF (0 datos inventados).</p>
+          <!-- Tarjeta 3: Datos 100% Reales y Metodología -->
+          <div style="background:var(--bg-light-sub); padding:14px 18px; border-radius:10px; border-left:5px solid #2EE6A6; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:10.5px; font-weight:700; color:#2EE6A6;" class="mono">EVIDENCIA & CIENCIA REPRODUCIBLE</div>
+            <div style="font-size:13.5px; font-weight:700; margin:2px 0; color:var(--text-light-main);">SENAMHI · MIDAGRI · NASA MODIS</div>
+            <p style="font-size:11.5px; color:var(--text-light-mute); line-height:1.4;">2,557 días Punchana (Iquitos) + 24 campañas auditadas Jaén. Cero datos sintéticos; modelos evaluados bajo holdout ciego y Diebold-Mariano.</p>
           </div>
 
-          <!-- Tarjeta 4: Preguntas y Debate -->
-          <div style="background:var(--bg-light-sub); padding:16px 20px; border-radius:10px; border-left:5px solid #7C3AED; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-size:11px; font-weight:700; color:#7C3AED;" class="mono">DISCUSIÓN ABIERTA</div>
-            <div style="font-size:14px; font-weight:700; margin:3px 0; color:var(--text-light-main);">Preguntas & Debate Académico</div>
-            <p style="font-size:11.5px; color:var(--text-light-mute); line-height:1.4;">¡Muchas gracias por su atención! Espacio abierto para resolver dudas metodológicas, técnicas de modelado y experimentación.</p>
+          <!-- Tarjeta 4: En Colaboración Con Data Wizard -->
+          <div style="background:var(--bg-light-sub); padding:14px 18px; border-radius:10px; border-left:5px solid #9B5CFF; border-top:1px solid var(--line-light-faint); border-right:1px solid var(--line-light-faint); border-bottom:1px solid var(--line-light-faint); display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div style="flex:1;">
+              <div style="font-size:10.5px; font-weight:700; color:#9B5CFF;" class="mono">¡GRACIAS! · PREGUNTAS Y DEBATE</div>
+              <div style="font-size:14px; font-weight:700; margin:2px 0; color:var(--text-light-main);">Iquitos Data Fest 2026</div>
+              <p style="font-size:11.5px; color:var(--text-light-mute); line-height:1.35;">Aula Magna UNAP · 30 de octubre. Abierto el espacio para discusión metodológica.</p>
+            </div>
+            <img src="data:image/png;base64,{b64_dw}" alt="En colaboración con Data Wizard" style="height:38px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
           </div>
         </div>
       </div>
