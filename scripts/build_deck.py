@@ -45,11 +45,12 @@ def build_deck():
     data_json = json.dumps(data_payload, ensure_ascii=False)
     notes_json = json.dumps(get_speaker_notes(), ensure_ascii=False)
 
-    css_content = get_deck_css()
     branding = get_branding()
     b64_header_logo = branding["b64_header"]
     b64_dw_logo = branding["b64_dw"]
     qr_svg = branding["qr_svg"]
+
+    css_content = get_deck_css(branding=branding)
 
     # Inyección de Chart.js local offline como fallback si CDN no responde
     chartjs_local_code = ""
@@ -57,7 +58,7 @@ def build_deck():
         with open("scripts/assets/chart.umd.min.js", "r", encoding="utf-8") as f:
             chartjs_local_code = f.read()
 
-    slides_p1 = get_slides_part1()
+    slides_p1 = get_slides_part1(branding=branding)
     slides_p2 = get_slides_part2(branding=branding)
 
     html_content = f"""<!DOCTYPE html>
@@ -74,6 +75,11 @@ def build_deck():
 <script>
   if (typeof Chart === 'undefined') {{
     {chartjs_local_code}
+  }}
+  if (typeof Chart !== 'undefined') {{
+    Chart.defaults.color = '#CBD5E1';
+    Chart.defaults.borderColor = 'rgba(169, 184, 218, 0.15)';
+    Chart.defaults.font.family = '"IBM Plex Sans", sans-serif';
   }}
 </script>
 <style>
@@ -98,19 +104,18 @@ def build_deck():
   <div style="display:flex; align-items:center; gap:16px;">
     <!-- LOGOS INSTITUCIONALES DEL EVENTO -->
     <div style="display:flex; align-items:center; gap:12px;">
-      <img src="data:image/png;base64,{b64_header_logo}" alt="UNAP · Neo Kernel · Grupo de Datos & IA" style="height:26px; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4)); opacity:0.95;">
-      <span style="font-size:11px; font-weight:700; color:var(--text-light-faint); letter-spacing:0.04em;" class="mono hidden-mobile">
+      <img src="data:image/png;base64,{b64_header_logo}" alt="UNAP · Neo Kernel · Grupo de Datos & IA" style="height:26px; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.6)); opacity:0.95;">
+      <span style="font-size:11px; font-weight:700; color:var(--text-faint); letter-spacing:0.04em;" class="mono hidden-mobile">
         IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span> · 30 de octubre · Aula Magna UNAP
       </span>
     </div>
-    <div style="width:1px; height:18px; background:var(--line-light-faint); margin:0 4px;"></div>
-    <div style="font-weight:700; font-size:13px;" class="mono" id="slideIndicator">01 / 20</div>
-    <div style="font-size:12px; color:var(--text-light-faint);" class="mono" id="actIndicator">Acto 1 · La Pregunta</div>
+    <div style="width:1px; height:18px; background:rgba(18, 200, 252, 0.25); margin:0 4px;"></div>
+    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 20</div>
+    <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Acto 1 · La Pregunta</div>
   </div>
 
   <div style="display:flex; align-items:center; gap:8px;">
     <button class="nav-btn" onclick="toggleSpeakerNotes()" title="Ver notas y guion del orador (N)">[N] Notas</button>
-    <button class="nav-btn" onclick="toggleDarkMode()" title="Alternar modo oscuro/claro (D)">[D] Modo</button>
     <button class="nav-btn" onclick="prevSlide()" title="Diapositiva anterior (&larr; / PageUp)">&larr; Prev</button>
     <button class="nav-btn" onclick="nextSlide()" title="Siguiente diapositiva (&rarr; / Espacio)">Next &rarr;</button>
   </div>
@@ -426,7 +431,7 @@ def build_deck():
                 {{
                   label: "Temperatura Real Observada (°C)",
                   data: d.map(r => r.tmax_real),
-                  borderColor: "#0F172A",
+                  borderColor: "#FFFFFF",
                   borderWidth: 2.8,
                   pointRadius: 3
                 }},
@@ -597,7 +602,7 @@ def build_deck():
                 {{
                   label: "Observado SENAMHI",
                   data: d.map(r => r.tmax_observada),
-                  borderColor: "#0F172A",
+                  borderColor: "#FFFFFF",
                   borderWidth: 3,
                   pointRadius: 4,
                   fill: false
@@ -775,7 +780,7 @@ def build_deck():
                 {{
                   label: "Rendimiento Real Observado (qq/ha)",
                   data: d.map(r => r.rendimiento_obs),
-                  borderColor: "#0F172A",
+                  borderColor: "#FFFFFF",
                   borderWidth: 3,
                   pointRadius: 4
                 }},

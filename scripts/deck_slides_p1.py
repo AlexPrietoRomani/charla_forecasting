@@ -1,5 +1,8 @@
-def get_slides_part1():
-    return """
+def get_slides_part1(branding=None):
+    if branding is None:
+        branding = {}
+    b64_header = branding.get("b64_header", "")
+    slides = """
   <!-- ========================================== -->
   <!-- ACTO 1: LA PREGUNTA (Diapos 01 - 03)       -->
   <!-- ========================================== -->
@@ -7,15 +10,28 @@ def get_slides_part1():
   <!-- DIAPO 01 -->
   <section class="slide active" data-index="1" data-act="Acto 1 · La Pregunta" data-time="1.5 min">
     <div class="panel-narrative">
-      <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:4px;">
-        <span class="slide-meta mono">01 / 20 · IQUITOS DATA FEST 2026</span>
-        <span class="badge badge-teoria">TEORÍA</span>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+        <img src="data:image/png;base64,__HEADER_LOGO__" alt="UNAP · Neo Kernel · Grupo de Datos & IA" style="height:26px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6)); opacity:0.95;">
+        <span class="badge badge-teoria">PORTADA</span>
       </div>
-      <h1 class="slide-title display">¿Puede la IA predecir el futuro?</h1>
-      <p style="font-size:12.5px; font-weight:600; color:var(--accent-blue-light); margin-bottom:4px;" class="mono">
-        Alex Prieto Romani · Data Scientist & Machine Learning Engineer
+      <div style="color:var(--fest-cyan); font-size:12px; font-weight:700; letter-spacing:0.1em;" class="mono">
+        IQUITOS DATA FEST 2026
+      </div>
+      <h1 class="slide-title display" style="font-size:clamp(22px, 2.2vw, 30px); margin-top:2px;">¿Puede la IA predecir el futuro?</h1>
+      <p class="slide-thesis" style="color:var(--text-faint); font-size:clamp(13px, 0.95vw, 15px);">
+        Lecciones de forecasting desde el mundo real con datos meteorológicos de SENAMHI y series agrícolas de Jaén.
       </p>
-      <p class="slide-thesis">La IA predice con aplomo absoluto, pero el futuro no es un punto determinista: es un cono estocástico que se ensancha inevitablemente con el tiempo.</p>
+
+      <!-- TARJETA DEL PONENTE (ESTILO EXACTO PLANTILLA PPTX SLIDE 1) -->
+      <div style="background:rgba(11, 22, 56, 0.9); border:1.5px solid var(--fest-cyan); border-radius:12px; padding:11px 15px; box-shadow:0 6px 20px rgba(0,0,0,0.4); margin:2px 0;">
+        <div style="font-size:15px; font-weight:700; color:#FFFFFF;">Alex Prieto Romani</div>
+        <div style="font-size:12px; font-weight:600; color:var(--fest-cyan); margin:2px 0 5px 0;" class="mono">Data Scientist &amp; Machine Learning Engineer</div>
+        <div style="font-size:10.5px; color:var(--text-sub); display:flex; flex-wrap:wrap; gap:8px;" class="mono">
+          <span>🏛️ Aula Magna UNAP</span>
+          <span>📅 30 de octubre</span>
+          <span>⚡ Iquitos, Loreto</span>
+        </div>
+      </div>
       
       <div class="metric-chips">
         <span class="metric-chip">2,557 Días SENAMHI</span>
@@ -37,11 +53,13 @@ def get_slides_part1():
           <div><strong>Pregunta conductora:</strong> ¿Puede la IA predecir el futuro o solo reproduce correlaciones del pasado?</div>
         </li>
       </ul>
-            <div class="card-insight">
+
+      <div class="card-insight">
         <span class="insight-label">💡 REGLA DE INGENIERÍA</span>
         <p class="insight-text">En horizontes h > 7 días, la entropía atmosférica domina la señal predictiva. Toda decisión logística debe fundamentarse en bandas de cuantil (P10–P90), jamás en un escalar.</p>
       </div>
-<div class="card-frase-clave">
+
+      <div class="card-frase-clave">
         <span class="frase-label">FRASE-CLAVE</span>
         <p class="frase-text">"La IA no sabe lo que no sabe: responde con la misma seguridad cuando acierta que cuando inventa."</p>
       </div>
@@ -1201,5 +1219,6 @@ def get_slides_part1():
         </div>
       </div>
     </div>
-  </section>
 """
+    return slides.replace("__HEADER_LOGO__", b64_header)
+
