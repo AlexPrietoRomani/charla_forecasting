@@ -13,22 +13,21 @@ def get_base64_img(rel_path):
     return ""
 
 def get_branding():
-    b64_header = get_base64_img("images/logos/header_logos.png")
-    b64_dw = get_base64_img("images/logos/banner_dw.png")
-    b64_bg_portada = get_base64_img("images/bg_portada_iquitos.jpg")
-    b64_bg_slide = get_base64_img("images/bg_slide_iquitos.jpg")
-    
-    qr_svg_path = Path("images/qr_charla_forecasting.svg")
-    qr_svg = ""
-    if qr_svg_path.exists():
-        with open(qr_svg_path, "r", encoding="utf-8") as f:
-            qr_svg = f.read()
-            qr_svg = qr_svg.replace('width="41mm" height="41mm"', 'viewBox="0 0 41 41" style="width:100%; height:100%; display:block;"')
+    b64_header = get_base64_img("images/logos/official_logos_strip.png")
+    b64_dw = get_base64_img("images/logos/data_wizard_badge.png")
+    b64_bg_portada = get_base64_img("images/bg_cover_official.png")
+    b64_bg_slide = get_base64_img("images/bg_content_official.png")
+    b64_bg_closing = get_base64_img("images/bg_closing_official.png")
+    b64_profile = get_base64_img("images/profile_alex.jpg")
+    b64_qr = get_base64_img("images/qr_alex_website.png")
 
     return {
         "b64_header": b64_header,
         "b64_dw": b64_dw,
         "b64_bg_portada": b64_bg_portada,
         "b64_bg_slide": b64_bg_slide,
-        "qr_svg": qr_svg
+        "b64_bg_closing": b64_bg_closing,
+        "b64_profile": b64_profile,
+        "b64_qr": b64_qr,
+        "qr_svg": ""
     }

@@ -169,6 +169,12 @@ def build_deck():
       document.getElementById("speakerTimer").textContent = `⏱️ ${{target.getAttribute("data-time")}}`;
       document.getElementById("speakerNotesText").innerHTML = notesBySlide[index] || "Notas en preparación.";
 
+      try {{
+        if (window.location.hash !== "#" + index) {{
+          history.replaceState(null, "", "#" + index);
+        }}
+      }} catch (e) {{}}
+
       initSlideVisuals(index);
     }}
   }}
@@ -417,9 +423,9 @@ def build_deck():
         renderAlphaBars(0.35);
       }}
 
-      // Slide 05: Experimento Extrapolación
-      if (idx === 5 && !charts["extrap"]) {{
-        const canvas = document.getElementById("chartExtrapolacion");
+      // Slide 10: Experimento Extrapolación
+      if (idx === 10 && !charts["extrap"]) {{
+        const canvas = document.getElementById("chartExtrap") || document.getElementById("chartExtrapolacion");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
           const d = window.DECK_DATA.extrapolacion;
@@ -553,8 +559,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 13: Benchmark Punchana
-      if (idx === 13 && !charts["benchmark"]) {{
+      // Slide 11: Benchmark Punchana
+      if (idx === 11 && !charts["benchmark"]) {{
         const canvas = document.getElementById("chartBenchmark");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -588,8 +594,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 14: Demo Pronóstico 7 Días con Bandas
-      if (idx === 14 && !charts["demo7d"]) {{
+      // Slide 12: Demo Pronóstico 7 Días con Bandas
+      if (idx === 12 && !charts["demo7d"]) {{
         const canvas = document.getElementById("chartDemo7d");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -766,8 +772,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 17: Demo 2 Validación expansiva
-      if (idx === 17 && !charts["demoJaen"]) {{
+      // Slide 18: Demo 2 Validación expansiva Jaén
+      if (idx === 18 && !charts["demoJaen"]) {{
         const canvas = document.getElementById("chartDemoJaen");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -842,8 +848,21 @@ def build_deck():
     charts["demo7d"].update();
   }}
 
+  function getSlideFromHash() {{
+    const hash = window.location.hash.replace("#", "");
+    const num = parseInt(hash, 10);
+    return (!isNaN(num) && num >= 1 && num <= totalSlides) ? num : 1;
+  }}
+
   window.addEventListener("DOMContentLoaded", () => {{
-    updateSlide(1);
+    updateSlide(getSlideFromHash());
+  }});
+
+  window.addEventListener("hashchange", () => {{
+    const s = getSlideFromHash();
+    if (s !== currentSlide) {{
+      updateSlide(s);
+    }}
   }});
 </script>
 </body>

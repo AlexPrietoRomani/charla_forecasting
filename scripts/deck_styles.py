@@ -3,9 +3,12 @@ def get_deck_css(branding=None):
         branding = {}
     b64_bg_slide = branding.get("b64_bg_slide", "")
     b64_bg_portada = branding.get("b64_bg_portada", "")
+    b64_bg_closing = branding.get("b64_bg_closing", "")
 
-    bg_slide_css = f"url('data:image/jpeg;base64,{b64_bg_slide}')" if b64_bg_slide else "radial-gradient(rgba(18, 200, 252, 0.12) 1px, transparent 1px)"
-    bg_portada_css = f"linear-gradient(135deg, rgba(3, 5, 15, 0.92) 0%, rgba(3, 5, 15, 0.78) 55%, rgba(3, 5, 15, 0.65) 100%), url('data:image/jpeg;base64,{b64_bg_portada}')" if b64_bg_portada else "linear-gradient(135deg, #03050F 0%, #0B132B 100%)"
+    bg_slide_css = f"url('data:image/png;base64,{b64_bg_slide}')" if b64_bg_slide else "#03050F"
+    bg_portada_css = f"url('data:image/png;base64,{b64_bg_portada}')" if b64_bg_portada else "#03050F"
+    bg_closing_css = f"url('data:image/png;base64,{b64_bg_closing}')" if b64_bg_closing else bg_portada_css
+    bg_section_css = bg_portada_css
 
     return f"""
   :root {{
@@ -29,7 +32,7 @@ def get_deck_css(branding=None):
     --line-border: rgba(18, 200, 252, 0.28);
     --line-faint: rgba(169, 184, 218, 0.16);
 
-    /* ALIASES PARA COMPATIBILIDAD CON SLIDES EXISTENTES */
+    /* ALIASES PARA COMPATIBILIDAD */
     --bg-light: #03050F;
     --bg-light-panel: rgba(11, 22, 56, 0.85);
     --bg-light-sub: rgba(17, 29, 66, 0.75);
@@ -65,9 +68,8 @@ def get_deck_css(branding=None):
     --footer-h: 56px;
 
     /* LAYOUT Y PROPORCIONES */
-    --deck-pad-x: clamp(20px, 2.2vw, 36px);
-    --deck-pad-y: clamp(14px, 1.8vh, 24px);
-    --deck-gap: clamp(16px, 1.6vw, 24px);
+    --deck-pad-x: clamp(24px, 3.2vw, 56px);
+    --deck-pad-y: clamp(18px, 2.2vh, 32px);
     --card-radius: 16px;
     --card-sub-radius: 10px;
   }}
@@ -93,7 +95,7 @@ def get_deck_css(branding=None):
   .mono {{ font-family: "IBM Plex Mono", monospace; }}
   .display {{ font-family: "Space Grotesk", "Arial Black", sans-serif; }}
 
-  /* TOP PROGRESS BAR CON GRADIENTE CIAN-AZUL-MORADO */
+  /* TOP PROGRESS BAR */
   .progress-container {{
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -126,8 +128,7 @@ def get_deck_css(branding=None):
     opacity: 0;
     pointer-events: none;
     display: flex;
-    flex-direction: row;
-    gap: var(--deck-gap);
+    flex-direction: column;
     transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }}
 
@@ -137,328 +138,679 @@ def get_deck_css(branding=None):
     z-index: 10;
   }}
 
-  /* DIAPOSITIVA 1: ESTILO PORTADA OFICIAL IQUITOS DATA FEST */
-  .slide[data-index="1"] {{
+  /* TÍTULO ESTÁNDAR SUPERIOR */
+  .slide-main-title {{
+    font-size: clamp(26px, 2.5vw, 36px);
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+    margin-bottom: clamp(14px, 1.8vh, 22px);
+    flex-shrink: 0;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 1: PORTADA OFICIAL (page-01.png)              */
+  /* ======================================================== */
+  .slide-archetype-cover {{
     background-image: {bg_portada_css};
     background-size: cover;
     background-position: center;
-    border-radius: var(--card-radius);
-    padding: clamp(24px, 2.5vw, 40px);
-    border: 1.5px solid rgba(18, 200, 252, 0.35);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 100px rgba(3, 5, 15, 0.85);
-  }}
-
-  /* PANEL NARRATIVE (38%) */
-  .panel-narrative {{
-    flex: 0 0 38%;
-    max-width: 38%;
-    height: 100%;
-    padding: clamp(18px, 1.8vw, 28px);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(10px, 1.2vh, 15px);
-    border-radius: var(--card-radius);
-    background: var(--bg-dark-panel);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1.5px solid var(--line-border);
-    box-shadow: 0 12px 36px -5px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(18, 200, 252, 0.15);
-    overflow-y: auto;
-    z-index: 2;
-  }}
-
-  /* PANEL VISUAL (62%) */
-  .panel-visual {{
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-  }}
-
-  .visual-card {{
-    width: 100%;
-    height: 100%;
-    background: var(--bg-dark-panel);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1.5px solid var(--line-border);
-    border-radius: var(--card-radius);
-    display: flex;
-    flex-direction: column;
-    padding: clamp(16px, 1.6vw, 24px);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 36px -5px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(18, 200, 252, 0.15);
-  }}
-
-  .visual-header {{
-    display: flex;
+    padding: clamp(36px, 4vw, 64px) clamp(48px, 5.5vw, 90px);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--line-faint);
-    flex-shrink: 0;
   }}
-
-  .visual-title {{
-    font-size: clamp(14px, 1.1vw, 17px);
-    font-weight: 700;
-    color: var(--text-main);
+  .cover-header-logos {{
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
+    margin-bottom: clamp(24px, 3vh, 36px);
   }}
-
-  .visual-tag {{
-    font-size: 11px;
+  .cover-header-logos img {{
+    height: clamp(64px, 5.8vw, 82px);
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.7));
+  }}
+  .cover-tag {{
+    font-size: clamp(16px, 1.25vw, 19px);
     font-weight: 700;
-    color: var(--fest-cyan);
-    letter-spacing: 0.06em;
-    font-family: "IBM Plex Mono", monospace;
-  }}
-
-  .chart-wrapper {{
-    flex: 1;
-    min-height: 0;
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }}
-
-  /* BADGES & CHIPS */
-  .badge {{
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 9999px;
+    color: var(--text-main);
+    margin-bottom: clamp(16px, 2vh, 24px);
+  }}
+  .cover-tag span {{
+    color: var(--fest-cyan);
+  }}
+  .cover-title {{
+    font-size: clamp(38px, 3.8vw, 54px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-main);
+    max-width: 820px;
+    margin-bottom: clamp(16px, 2vh, 24px);
+  }}
+  .cover-subtitle {{
+    font-size: clamp(17px, 1.4vw, 21px);
+    color: #94A3B8;
+    max-width: 720px;
+    line-height: 1.4;
+    margin-bottom: clamp(28px, 3.5vh, 44px);
+  }}
+  .cover-speaker-card {{
+    background: rgba(11, 22, 56, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid var(--fest-cyan);
+    border-radius: 16px;
+    padding: 18px 28px;
     width: fit-content;
-    font-family: "IBM Plex Mono", monospace;
+    min-width: 380px;
+    max-width: 480px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }}
-  .badge-teoria {{ color: var(--badge-teoria); background: var(--badge-teoria-bg); border: 1px solid var(--badge-teoria-border); }}
-  .badge-mecanismo {{ color: var(--badge-mecanismo); background: var(--badge-mecanismo-bg); border: 1px solid var(--badge-mecanismo-border); }}
-  .badge-evidencia {{ color: var(--badge-evidencia); background: var(--badge-evidencia-bg); border: 1px solid var(--badge-evidencia-border); }}
-  .badge-caso_real {{ color: var(--badge-caso_real); background: var(--badge-caso_real-bg); border: 1px solid var(--badge-caso_real-border); }}
-  .badge-demo {{ color: var(--badge-demo); background: var(--badge-demo-bg); border: 1px solid var(--badge-demo-border); }}
-
-  .slide-meta {{
-    font-size: 11px;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-  }}
-
-  .slide-title {{
-    font-size: clamp(22px, 2.2vw, 30px);
-    line-height: 1.16;
+  .cover-speaker-name {{
+    font-size: 21px;
     font-weight: 700;
-    letter-spacing: -0.025em;
     color: var(--text-main);
   }}
-
-  .slide-thesis {{
-    font-size: clamp(13.5px, 1.0vw, 15.5px);
-    line-height: 1.48;
-    color: var(--text-sub);
-    font-weight: 400;
-  }}
-
-  .metric-chips {{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }}
-  .metric-chip {{
-    font-size: 11px;
-    font-family: "IBM Plex Mono", monospace;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: var(--bg-dark-sub);
+  .cover-speaker-role {{
+    font-size: 15px;
     color: var(--fest-cyan);
-    border: 1px solid rgba(18, 200, 252, 0.25);
-  }}
-
-  /* VIÑETAS ESTILO PLANTILLA DATA FEST */
-  .bullets-list {{
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    margin: 3px 0;
-  }}
-  .bullet-item {{
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: clamp(12.8px, 0.92vw, 14.2px);
-    line-height: 1.46;
-    color: var(--text-sub);
-    padding: 11px 14px;
-    background: var(--bg-dark-sub);
-    border-radius: var(--card-sub-radius);
-    border: 1px solid rgba(18, 200, 252, 0.16);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }}
-  .bullet-item:hover {{
-    transform: translateX(4px);
-    border-color: rgba(18, 200, 252, 0.45);
-  }}
-  .bullet-item strong {{
-    color: #FFFFFF;
-  }}
-  .bullet-icon {{
-    flex-shrink: 0;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-top: 6px;
-    background: var(--fest-cyan);
-    box-shadow: 0 0 8px rgba(18, 200, 252, 0.85);
-  }}
-
-  /* CARD "IDEA CLAVE" (RÉPLICA EXACTA SLIDE 5 DEL PPTX) */
-  .card-insight {{
-    background: rgba(255, 200, 87, 0.08);
-    border: 1.5px solid var(--fest-amber);
-    border-radius: var(--card-sub-radius);
-    padding: 13px 16px;
-    margin: 3px 0;
-    box-shadow: 0 0 18px rgba(255, 200, 87, 0.14);
-    transition: transform 0.2s ease;
-  }}
-  .card-insight:hover {{
-    transform: translateY(-2px);
-  }}
-  .insight-label {{
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--fest-amber);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: "IBM Plex Mono", monospace;
-  }}
-  .insight-text {{
-    font-size: clamp(12.5px, 0.88vw, 13.8px);
-    line-height: 1.45;
-    color: #FEF3C7;
-  }}
-
-  /* CARD FRASE-CLAVE ANCLADA */
-  .card-frase-clave {{
-    border-left: 5px solid var(--fest-magenta);
-    background: linear-gradient(135deg, rgba(224, 64, 251, 0.12) 0%, rgba(155, 92, 255, 0.03) 100%);
-    padding: 13px 18px;
-    border-radius: 0 var(--card-sub-radius) var(--card-sub-radius) 0;
-    margin-top: auto;
-    border-top: 1px solid rgba(224, 64, 251, 0.22);
-    border-right: 1px solid rgba(224, 64, 251, 0.22);
-    border-bottom: 1px solid rgba(224, 64, 251, 0.22);
-    box-shadow: 0 4px 14px rgba(224, 64, 251, 0.08);
-    transition: transform 0.2s ease;
-  }}
-  .card-frase-clave:hover {{
-    transform: translateY(-2px);
-  }}
-  .frase-label {{
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--fest-magenta);
-    margin-bottom: 3px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: "IBM Plex Mono", monospace;
-  }}
-  .frase-text {{
-    font-size: clamp(13px, 0.92vw, 14.8px);
-    font-weight: 600;
-    line-height: 1.42;
-    color: #FFFFFF;
-    font-style: italic;
-  }}
-
-  /* STRIP DE KPIS (RÉPLICA SLIDE 7 DEL PPTX) */
-  .kpi-strip {{
-    display: flex;
-    gap: 10px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-    width: 100%;
-  }}
-  .kpi-strip-item {{
-    background: var(--bg-dark-sub);
-    border: 1px solid rgba(18, 200, 252, 0.22);
-    border-radius: 10px;
-    padding: 8px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    flex: 1;
-    min-width: 125px;
-  }}
-  .kpi-strip-val {{
-    font-size: clamp(15px, 1.15vw, 19px);
-    font-weight: 700;
-    font-family: "Space Grotesk", sans-serif;
-    color: var(--fest-cyan);
-    text-shadow: 0 0 10px rgba(18, 200, 252, 0.25);
-  }}
-  .kpi-strip-lbl {{
-    font-size: 10.5px;
-    color: var(--text-faint);
-    font-family: "IBM Plex Mono", monospace;
+    margin-top: 5px;
+    font-family: var(--font-mono);
     font-weight: 500;
   }}
 
-  /* GLOSARIO TOOLTIPS */
-  .glossary {{
-    text-decoration: underline dotted var(--fest-cyan);
-    text-underline-offset: 3px;
-    cursor: help;
-    position: relative;
-    font-weight: 600;
-    color: var(--fest-cyan);
+  /* ======================================================== */
+  /* ARQUETIPO 2: SOBRE EL PONENTE (page-02.png)             */
+  /* ======================================================== */
+  .speaker-layout {{
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(24px, 3.5vw, 60px);
+    align-items: center;
+    flex: 1;
   }}
-  .glossary:hover::after {{
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #03050F;
-    color: #FFFFFF;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-family: "IBM Plex Sans", sans-serif;
-    font-weight: 400;
-    white-space: normal;
-    width: 250px;
-    z-index: 500;
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.8);
-    line-height: 1.35;
-    pointer-events: none;
-    border: 1px solid rgba(18, 200, 252, 0.35);
+  .speaker-avatar-wrap {{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }}
+  .speaker-avatar {{
+    width: clamp(220px, 20vw, 290px);
+    height: clamp(220px, 20vw, 290px);
+    border-radius: 50%;
+    padding: 8px;
+    border: 3.5px solid var(--fest-cyan);
+    box-shadow: 0 0 35px rgba(18, 200, 252, 0.4), inset 0 0 20px rgba(18, 200, 252, 0.25);
+    background: rgba(11, 22, 56, 0.9);
+  }}
+  .speaker-avatar img {{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }}
+  .speaker-info {{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }}
+  .speaker-name {{
+    font-size: clamp(26px, 2.5vw, 36px);
+    font-weight: 700;
+    color: var(--text-main);
+  }}
+  .speaker-role {{
+    font-size: clamp(14px, 1.1vw, 16.5px);
+    color: var(--fest-cyan);
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-family: "IBM Plex Mono", monospace;
+  }}
+  .speaker-bullets {{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }}
+  .speaker-bullet-item {{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: clamp(13.5px, 0.95vw, 15px);
+    line-height: 1.45;
+    color: var(--text-sub);
+  }}
+  .speaker-bullet-dot {{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--fest-cyan);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }}
+  .speaker-socials {{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+  }}
+  .speaker-social-link {{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--fest-cyan);
+    text-decoration: none;
+    font-family: "IBM Plex Mono", monospace;
+    transition: opacity 0.15s;
+  }}
+  .speaker-social-link:hover {{
+    opacity: 0.8;
   }}
 
-  /* FOOTER OFICIAL CON BRANDING IQUITOS DATA FEST */
+  /* ======================================================== */
+  /* ARQUETIPO 3: AGENDA (page-03.png)                       */
+  /* ======================================================== */
+  .agenda-grid {{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: clamp(18px, 2vw, 28px);
+    flex: 1;
+  }}
+  .agenda-card {{
+    background: rgba(11, 22, 56, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--card-radius);
+    padding: clamp(20px, 2.2vw, 32px);
+    display: flex;
+    align-items: center;
+    gap: clamp(18px, 2.2vw, 32px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }}
+  .agenda-card:hover {{
+    transform: translateY(-3px);
+  }}
+  .agenda-card.item-1 {{ border: 1.5px solid var(--fest-cyan); box-shadow: 0 8px 25px rgba(18, 200, 252, 0.12); }}
+  .agenda-card.item-2 {{ border: 1.5px solid var(--fest-blue); box-shadow: 0 8px 25px rgba(30, 123, 255, 0.12); }}
+  .agenda-card.item-3 {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 25px rgba(155, 92, 255, 0.12); }}
+  .agenda-card.item-4 {{ border: 1.5px solid var(--fest-magenta); box-shadow: 0 8px 25px rgba(224, 64, 251, 0.12); }}
+
+  .agenda-num {{
+    font-size: clamp(40px, 3.8vw, 56px);
+    font-weight: 700;
+    line-height: 1;
+    font-family: "Space Grotesk", sans-serif;
+  }}
+  .agenda-card.item-1 .agenda-num {{ color: var(--fest-cyan); }}
+  .agenda-card.item-2 .agenda-num {{ color: var(--fest-blue); }}
+  .agenda-card.item-3 .agenda-num {{ color: var(--fest-purple); }}
+  .agenda-card.item-4 .agenda-num {{ color: var(--fest-magenta); }}
+
+  .agenda-text-wrap {{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }}
+  .agenda-card-title {{
+    font-size: clamp(16px, 1.25vw, 19px);
+    font-weight: 700;
+    color: var(--text-main);
+  }}
+  .agenda-card-desc {{
+    font-size: clamp(12.5px, 0.95vw, 14px);
+    color: var(--text-faint);
+    line-height: 1.4;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 4: SEPARADOR DE SECCIÓN (page-04.png)         */
+  /* ======================================================== */
+  .slide-archetype-section {{
+    background-image: {bg_section_css};
+    background-size: cover;
+    background-position: center;
+    padding: clamp(36px, 4vw, 64px) clamp(48px, 5.5vw, 90px);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    justify-content: center;
+  }}
+  .section-huge-num {{
+    font-size: clamp(64px, 6.5vw, 96px);
+    font-weight: 700;
+    color: var(--fest-cyan);
+    line-height: 1;
+    margin-bottom: 14px;
+    font-family: "Space Grotesk", sans-serif;
+    text-shadow: 0 0 30px rgba(18, 200, 252, 0.4);
+  }}
+  .section-title {{
+    font-size: clamp(28px, 2.8vw, 42px);
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.2;
+    margin-bottom: 18px;
+    max-width: 750px;
+  }}
+  .section-desc {{
+    font-size: clamp(15px, 1.2vw, 18px);
+    color: var(--text-faint);
+    line-height: 1.5;
+    max-width: 650px;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 5: CONTENIDO + IDEA CLAVE (page-05.png)       */
+  /* ======================================================== */
+  .content-insight-layout {{
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(24px, 3vw, 48px);
+    align-items: stretch;
+    flex: 1;
+  }}
+  .content-bullets-col {{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }}
+  .standard-bullet-list {{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }}
+  .standard-bullet-item {{
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: clamp(14px, 1.05vw, 16px);
+    line-height: 1.5;
+    color: var(--text-sub);
+  }}
+  .standard-bullet-dot {{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--fest-cyan);
+    box-shadow: 0 0 8px rgba(18, 200, 252, 0.8);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }}
+  .standard-bullet-item strong {{
+    color: var(--text-main);
+  }}
+
+  .archetype-idea-card {{
+    background: rgba(11, 22, 56, 0.85);
+    backdrop-filter: blur(14px);
+    border: 1.5px solid var(--fest-amber);
+    border-radius: var(--card-radius);
+    padding: clamp(24px, 2.5vw, 36px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    box-shadow: 0 0 25px rgba(255, 200, 87, 0.15), inset 0 0 15px rgba(255, 200, 87, 0.05);
+  }}
+  .archetype-idea-icon {{
+    font-size: 38px;
+    color: var(--fest-amber);
+    line-height: 1;
+  }}
+  .archetype-idea-label {{
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--fest-amber);
+    font-family: "IBM Plex Mono", monospace;
+  }}
+  .archetype-idea-text {{
+    font-size: clamp(16px, 1.25vw, 20px);
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text-main);
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 6: TÍTULO CON GRÁFICO (page-06.png)           */
+  /* ======================================================== */
+  .graphic-layout {{
+    display: grid;
+    grid-template-columns: 0.38fr 0.62fr;
+    gap: clamp(18px, 2vw, 28px);
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+  }}
+  .graphic-info-col {{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6px 0;
+  }}
+  .graphic-card-col {{
+    background: rgba(11, 22, 56, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid var(--line-border);
+    border-radius: var(--card-radius);
+    padding: clamp(16px, 1.6vw, 24px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 36px -5px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(18, 200, 252, 0.15);
+  }}
+  .graphic-source {{
+    font-size: 11.5px;
+    color: var(--text-faint);
+    font-family: "IBM Plex Mono", monospace;
+    padding-top: 8px;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 7: DATOS QUE IMPORTAN / 3 KPIS (page-07.png)   */
+  /* ======================================================== */
+  .kpis-subtitle {{
+    font-size: clamp(14px, 1.1vw, 16px);
+    color: var(--text-faint);
+    margin-top: -16px;
+    margin-bottom: clamp(18px, 2.2vh, 28px);
+  }}
+  .kpis-3col-grid {{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(18px, 2vw, 28px);
+    flex: 1;
+    align-items: stretch;
+  }}
+  .kpi-large-card {{
+    background: rgba(11, 22, 56, 0.85);
+    backdrop-filter: blur(14px);
+    border-radius: var(--card-radius);
+    padding: clamp(24px, 2.5vw, 36px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+    transition: transform 0.2s ease;
+  }}
+  .kpi-large-card:hover {{
+    transform: translateY(-3px);
+  }}
+  .kpi-large-card.card-cyan {{ border: 1.5px solid var(--fest-cyan); box-shadow: 0 8px 30px rgba(18, 200, 252, 0.15); }}
+  .kpi-large-card.card-blue {{ border: 1.5px solid var(--fest-blue); box-shadow: 0 8px 30px rgba(30, 123, 255, 0.15); }}
+  .kpi-large-card.card-purple {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 30px rgba(155, 92, 255, 0.15); }}
+
+  .kpi-huge-number {{
+    font-size: clamp(48px, 4.5vw, 72px);
+    font-weight: 700;
+    line-height: 1;
+    font-family: "Space Grotesk", sans-serif;
+  }}
+  .kpi-large-card.card-cyan .kpi-huge-number {{ color: var(--fest-cyan); text-shadow: 0 0 20px rgba(18, 200, 252, 0.3); }}
+  .kpi-large-card.card-blue .kpi-huge-number {{ color: var(--fest-blue); text-shadow: 0 0 20px rgba(30, 123, 255, 0.3); }}
+  .kpi-large-card.card-purple .kpi-huge-number {{ color: var(--fest-purple); text-shadow: 0 0 20px rgba(155, 92, 255, 0.3); }}
+
+  .kpi-card-desc {{
+    font-size: clamp(13px, 1.0vw, 15px);
+    color: var(--text-sub);
+    line-height: 1.45;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 8: DEMO / CÓDIGO (page-08.png)                 */
+  /* ======================================================== */
+  .code-layout {{
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(24px, 3vw, 44px);
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+  }}
+  .code-editor-box {{
+    background: #03050F;
+    border: 1.5px solid var(--fest-purple);
+    border-radius: var(--card-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+  }}
+  .code-editor-header {{
+    height: 38px;
+    background: rgba(11, 22, 56, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    border-bottom: 1px solid rgba(155, 92, 255, 0.2);
+  }}
+  .code-traffic-lights {{
+    display: flex;
+    gap: 7px;
+  }}
+  .code-dot {{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }}
+  .code-dot.red {{ background: #EF4444; }}
+  .code-dot.yellow {{ background: #F59E0B; }}
+  .code-dot.green {{ background: #10B981; }}
+  .code-editor-title {{
+    font-size: 12px;
+    color: var(--text-faint);
+    font-family: "IBM Plex Mono", monospace;
+  }}
+  .code-editor-body {{
+    flex: 1;
+    padding: clamp(16px, 1.8vw, 24px);
+    overflow: auto;
+    font-family: "IBM Plex Mono", "Courier New", monospace;
+    font-size: clamp(12px, 0.95vw, 13.5px);
+    line-height: 1.6;
+    color: #CBD5E1;
+    white-space: pre-wrap;
+  }}
+  .code-steps-col {{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(16px, 2vh, 24px);
+  }}
+  .code-step-item {{
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }}
+  .code-step-badge {{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--fest-purple);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(155, 92, 255, 0.5);
+  }}
+  .code-step-title {{
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 3px;
+  }}
+  .code-step-desc {{
+    font-size: 13px;
+    color: var(--text-faint);
+    line-height: 1.4;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 9: CONCLUSIONES (page-09.png)                  */
+  /* ======================================================== */
+  .conclusions-3col-grid {{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(18px, 2vw, 28px);
+    flex: 1;
+    align-items: stretch;
+  }}
+  .conclusion-card {{
+    background: rgba(11, 22, 56, 0.85);
+    backdrop-filter: blur(14px);
+    border-radius: var(--card-radius);
+    padding: clamp(24px, 2.5vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+  }}
+  .conclusion-card.card-1 {{ border: 1.5px solid var(--fest-cyan); box-shadow: 0 8px 30px rgba(18, 200, 252, 0.12); }}
+  .conclusion-card.card-2 {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 30px rgba(155, 92, 255, 0.12); }}
+  .conclusion-card.card-3 {{ border: 1.5px solid var(--fest-magenta); box-shadow: 0 8px 30px rgba(224, 64, 251, 0.12); }}
+
+  .conclusion-icon-box {{
+    width: 48px;
+    height: 48px;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }}
+  .conclusion-card.card-1 .conclusion-icon-box {{ color: var(--fest-cyan); }}
+  .conclusion-card.card-2 .conclusion-icon-box {{ color: var(--fest-purple); }}
+  .conclusion-card.card-3 .conclusion-icon-box {{ color: var(--fest-magenta); }}
+
+  .conclusion-title {{
+    font-size: clamp(17px, 1.3vw, 20px);
+    font-weight: 700;
+    color: var(--text-main);
+  }}
+  .conclusion-desc {{
+    font-size: clamp(13px, 1.0vw, 15px);
+    color: var(--text-sub);
+    line-height: 1.5;
+  }}
+
+  /* ======================================================== */
+  /* ARQUETIPO 10: CIERRE Y PREGUNTAS (page-10.png)           */
+  /* ======================================================== */
+  .slide-archetype-closing {{
+    background-image: {bg_closing_css};
+    background-size: cover;
+    background-position: center;
+    padding: clamp(36px, 4vw, 64px) clamp(48px, 5.5vw, 90px);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    justify-content: space-between;
+  }}
+  .closing-title {{
+    font-size: clamp(52px, 6vw, 84px);
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }}
+  .closing-subtitle {{
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 700;
+    color: var(--fest-cyan);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }}
+  .closing-cards-wrap {{
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    max-width: 720px;
+  }}
+  .closing-contact-card {{
+    background: rgba(11, 22, 56, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid var(--fest-cyan);
+    border-radius: 16px;
+    padding: 20px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }}
+  .closing-qr-card {{
+    background: rgba(11, 22, 56, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px dashed var(--fest-cyan);
+    border-radius: 16px;
+    padding: 16px 20px;
+    width: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }}
+  .closing-qr-box {{
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }}
+  .closing-qr-box img {{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }}
+  .closing-bottom-logos {{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 16px;
+  }}
+  .closing-bottom-logos img:first-child {{
+    height: clamp(52px, 4.8vw, 64px);
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+  }}
+  .closing-bottom-logos img:last-child {{
+    height: clamp(44px, 4.0vw, 54px);
+    width: auto;
+    object-fit: contain;
+    border-radius: 6px;
+  }}
+
+  /* ======================================================== */
+  /* FOOTER Y CONTROLES                                       */
+  /* ======================================================== */
   .deck-footer {{
     height: var(--footer-h);
     background: rgba(3, 5, 15, 0.95);
@@ -472,7 +824,6 @@ def get_deck_css(branding=None):
     z-index: 50;
     flex-shrink: 0;
   }}
-
   .nav-btn {{
     background: rgba(11, 22, 56, 0.85);
     border: 1px solid rgba(18, 200, 252, 0.35);
@@ -534,120 +885,56 @@ def get_deck_css(branding=None):
     color: #CBD5E1;
   }}
 
-  /* PROCEDURAL ANIMATIONS */
-  @keyframes glow {{
-    0%, 100% {{ transform: scale(1); opacity: 0.9; }}
-    50% {{ transform: scale(1.3); opacity: 0.4; }}
-  }}
-  .anim-glow {{
-    transform-origin: center;
-    animation: glow 2s ease-in-out infinite;
-  }}
-
-  @keyframes springSlideIn {{
-    0% {{ opacity: 0; transform: translateY(12px) scale(0.99); }}
-    100% {{ opacity: 1; transform: translateY(0) scale(1); }}
-  }}
-  @keyframes springFadeUp {{
-    0% {{ opacity: 0; transform: translateY(8px); }}
-    100% {{ opacity: 1; transform: translateY(0); }}
-  }}
-
-  .slide.active .panel-narrative > * {{
-    animation: springFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }}
-  .slide.active .panel-narrative > *:nth-child(1) {{ animation-delay: 0.02s; }}
-  .slide.active .panel-narrative > *:nth-child(2) {{ animation-delay: 0.05s; }}
-  .slide.active .panel-narrative > *:nth-child(3) {{ animation-delay: 0.08s; }}
-  .slide.active .panel-narrative > *:nth-child(4) {{ animation-delay: 0.12s; }}
-  .slide.active .panel-narrative > *:nth-child(5) {{ animation-delay: 0.16s; }}
-  .slide.active .panel-narrative > *:nth-child(6) {{ animation-delay: 0.20s; }}
-  .slide.active .panel-narrative > *:nth-child(7) {{ animation-delay: 0.24s; }}
-
-  .slide.active .visual-card {{
-    animation: springSlideIn 0.48s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
-  }}
-
-  /* INFOGRAFÍAS Y SIMULACIONES */
-  .infographic-wrapper {{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    overflow: hidden;
-  }}
-  .infographic-img {{
-    width: 100%;
-    height: auto;
-    max-height: 48%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 8px;
-    border: 1px solid var(--line-border);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }}
-  .infographic-img:hover {{
-    transform: scale(1.01);
-  }}
-
-  .sim-controls {{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: var(--bg-dark-sub);
-    border-radius: 8px;
-    border: 1px solid var(--line-border);
-    flex-shrink: 0;
-  }}
-  .sim-btn {{
-    background: rgba(11, 22, 56, 0.85);
-    border: 1px solid rgba(18, 200, 252, 0.3);
-    color: var(--text-sub);
-    font-size: 11px;
-    font-family: "IBM Plex Mono", monospace;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 6px;
-    cursor: pointer;
+  /* UTILITY CHIPS & BADGES */
+  .badge {{
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.18s ease;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    width: fit-content;
+    font-family: "IBM Plex Mono", monospace;
   }}
-  .sim-btn.active {{
-    background: var(--fest-cyan);
-    color: #03050F;
-    border-color: var(--fest-cyan);
-    box-shadow: 0 2px 8px rgba(18, 200, 252, 0.4);
+  .badge-teoria {{ color: var(--badge-teoria); background: var(--badge-teoria-bg); border: 1px solid var(--badge-teoria-border); }}
+  .badge-mecanismo {{ color: var(--badge-mecanismo); background: var(--badge-mecanismo-bg); border: 1px solid var(--badge-mecanismo-border); }}
+  .badge-evidencia {{ color: var(--badge-evidencia); background: var(--badge-evidencia-bg); border: 1px solid var(--badge-evidencia-border); }}
+  .badge-caso_real {{ color: var(--badge-caso_real); background: var(--badge-caso_real-bg); border: 1px solid var(--badge-caso_real-border); }}
+  .badge-demo {{ color: var(--badge-demo); background: var(--badge-demo-bg); border: 1px solid var(--badge-demo-border); }}
+
+  .chart-wrapper {{
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    width: 100%;
+    height: 100%;
   }}
 
   /* LIGHTBOX MODAL */
   .lightbox-modal {{
+    display: none;
     position: fixed;
     inset: 0;
     background: rgba(3, 5, 15, 0.95);
     backdrop-filter: blur(12px);
-    z-index: 1000;
-    display: none;
-    align-items: center;
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
     justify-content: center;
+    align-items: center;
     padding: 30px;
-    cursor: zoom-out;
   }}
-  .lightbox-modal.active {{ display: flex; }}
-  .lightbox-img {{
+  .lightbox-modal.active {{
+    display: flex;
+  }}
+  .lightbox-modal-content {{
     max-width: 92vw;
-    max-height: 90vh;
+    max-height: 88vh;
     border-radius: 12px;
-    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
-    border: 1.5px solid rgba(18, 200, 252, 0.35);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
     object-fit: contain;
-    background: #03050F;
   }}
   .lightbox-close {{
     position: absolute;
@@ -655,16 +942,14 @@ def get_deck_css(branding=None):
     right: 32px;
     color: #FFFFFF;
     font-size: 32px;
-    font-weight: 700;
     cursor: pointer;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
+    background: rgba(18, 200, 252, 0.2);
     width: 44px;
     height: 44px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s;
+    border: 1px solid var(--fest-cyan);
   }}
-  .lightbox-close:hover {{ background: rgba(18, 200, 252, 0.4); }}
 """
