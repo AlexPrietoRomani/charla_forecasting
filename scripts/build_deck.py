@@ -110,8 +110,8 @@ def build_deck():
       </span>
     </div>
     <div style="width:1px; height:18px; background:rgba(18, 200, 252, 0.25); margin:0 4px;"></div>
-    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 20</div>
-    <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Acto 1 · La Pregunta</div>
+    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 23</div>
+    <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Apertura · Portada</div>
   </div>
 
   <div style="display:flex; align-items:center; gap:8px;">
@@ -149,7 +149,7 @@ def build_deck():
 <!-- SCRIPTS DE NAVEGACIÓN Y VISUALES -->
 <script>
   let currentSlide = 1;
-  const totalSlides = 20;
+  const totalSlides = 23;
 
   const notesBySlide = {notes_json};
 
@@ -723,8 +723,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 16: Scatter NDVI vs Rendimiento
-      if (idx === 16 && !charts["scatterNdvi"]) {{
+      // Slide 19: Scatter NDVI vs Rendimiento
+      if ((idx === 19 || idx === 16) && !charts["scatterNdvi"]) {{
         const canvas = document.getElementById("chartScatterNdvi");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -772,8 +772,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 18: Demo 2 Validación expansiva Jaén
-      if (idx === 18 && !charts["demoJaen"]) {{
+      // Slide 20: Demo 2 Validación expansiva Jaén
+      if ((idx === 20 || idx === 18) && !charts["demoJaen"]) {{
         const canvas = document.getElementById("chartDemoJaen");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -873,7 +873,7 @@ def build_deck():
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print(f"Deck interactivo de 20 diapositivas generado con éxito en: {output_path} ({len(html_content)} bytes)")
+    print(f"Deck interactivo de 23 diapositivas generado con éxito en: {output_path} ({len(html_content)} bytes)")
 
 if __name__ == "__main__":
     build_deck()

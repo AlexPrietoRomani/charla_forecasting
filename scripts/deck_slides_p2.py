@@ -137,20 +137,20 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 14: SECCIÓN 03: AGRO & CASO 2: CAFÉ JAÉN (page-04.png)  -->
+  <!-- DIAPO 14: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO (page-04.png) -->
   <!-- ============================================================= -->
   <section class="slide slide-archetype-section" data-index="14" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
     <div class="section-huge-num">03</div>
-    <h2 class="section-title display">Series temporales en el agro &amp; Caso 2: Café Jaén</h2>
+    <h2 class="section-title display">Cómo se aplican las series temporales en el agro</h2>
     <p class="section-desc">
-      Cómo la biología agrícola y la fenología imponen reglas únicas al forecasting. Auditoría de 24 campañas agrícolas de café en Jaén (Cajamarca), satélites ópticos MODIS NDVI y por qué el algoritmo debe respetar la fisiología de la planta.
+      Por qué la biología vegetal y la fenología imponen leyes únicas al forecasting. Dinámicas de ultrabaja frecuencia, retrasos de meses entre el estímulo y la respuesta, y por qué el sobreajuste es letal sin comprender la fisiología del cultivo.
     </p>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 15: CÓMO SE APLICAN LAS SERIES EN AGRO (page-05.png)    -->
+  <!-- DIAPO 15: FÍSICA BIOLÓGICA Y RETOS DEL AGRO (page-05.png)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="15" data-act="Acto 3 · Fundamentos Agro" data-time="2.0 min">
+  <section class="slide" data-index="15" data-act="Acto 3 · Física Biológica del Agro" data-time="2.0 min">
     <h2 class="slide-main-title display">Series temporales en el agro: física biológica</h2>
     <div class="content-insight-layout">
       <div class="content-bullets-col">
@@ -165,7 +165,7 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Series de Baja Frecuencia:</strong> A diferencia de los miles de datos por segundo en finanzas o clima, en agricultura solo existe 1 dato de rendimiento al año (24 datos en 24 años).</div>
+            <div><strong>Series de Ultrabaja Frecuencia:</strong> A diferencia de millones de ticks financieros o datos diarios de clima, en agricultura solo existe 1 dato de cosecha por año (24 datos en 24 años).</div>
           </li>
         </ul>
       </div>
@@ -181,9 +181,100 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 16: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
+  <!-- DIAPO 16: EL RELOJ FENOLÓGICO Y CALENDARIO VEGETAL (page-06.png)-->
   <!-- ============================================================= -->
-  <section class="slide" data-index="16" data-act="Acto 3 · Trampa del NDVI" data-time="2.0 min">
+  <section class="slide" data-index="16" data-act="Acto 3 · Reloj Fenológico" data-time="2.0 min">
+    <h2 class="slide-main-title display">El reloj fenológico: la física del calendario vegetal</h2>
+    <div class="graphic-layout">
+      <div class="graphic-info-col">
+        <ul class="standard-bullet-list">
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>Floración Crítica (Ago–Oct):</strong> Temperaturas máximas &gt; 32 °C provocan esterilidad de polen y aborto floral masivo. La sequía en esta ventana destruye el rendimiento 8 meses antes de cosechar.</div>
+          </li>
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>Llenado de Fruto (Nov–Feb):</strong> Demanda hídrica elevada; el déficit hídrico detiene el crecimiento del fruto y reduce drásticamente el peso del grano pergamino.</div>
+          </li>
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>Cosecha y Secado (Mar–Jul):</strong> Las lluvias torrenciales retrasan la recolección, inducen hongos y pudrición; el clima seco favorece el beneficio y la calidad de taza.</div>
+          </li>
+        </ul>
+        <div class="graphic-source">Fisiología del Café Arábica · Cenicafé / MIDAGRI · Barbosa et al. (2021)</div>
+      </div>
+
+      <div class="graphic-card-col">
+        <div style="display:flex; flex-direction:column; gap:12px; height:100%; justify-content:center;">
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-magenta); display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--fest-magenta); font-weight:700; font-size:11px;" class="mono">VENTANA 1 · AGOSTO - OCTUBRE</span>
+              <span style="font-size:11px; background:rgba(224,64,251,0.15); color:#E040FB; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">MÁXIMA SENSIBILIDAD</span>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin:4px 0;">Floración &amp; Cuajado de Fruto</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Un déficit hídrico de 2 semanas causa aborto floral severo. La anomalía de lluvia en esta ventana explica el 56% de la varianza de cosecha final (r = 0.751).</p>
+          </div>
+
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-blue); display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--fest-blue); font-weight:700; font-size:11px;" class="mono">VENTANA 2 · NOVIEMBRE - FEBRERO</span>
+              <span style="font-size:11px; background:rgba(30,123,255,0.15); color:#1E7BFF; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">ACUMULACIÓN BIOMASA</span>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin:4px 0;">Llenado de Grano &amp; Expansión Celular</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Se determina el peso volumétrico y calibre. La fotosíntesis activa demanda transpiración sin estrés de presión de vapor (VPD).</p>
+          </div>
+
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-cyan); display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--fest-cyan); font-weight:700; font-size:11px;" class="mono">VENTANA 3 · MARZO - JULIO</span>
+              <span style="font-size:11px; background:rgba(18,200,252,0.15); color:#12C8FC; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">COSECHA Y BENEFICIO</span>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin:4px 0;">Maduración, Recolección &amp; Secado</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">El calor seco acelera la maduración y facilita el secado al sol. Las lluvias excesivas pudren cerezas y causan caída de frutos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 17: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
+  <!-- ============================================================= -->
+  <section class="slide slide-archetype-section" data-index="17" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
+    <div class="section-huge-num">04</div>
+    <h2 class="section-title display">Caso 2: Predicción de rendimiento usando NDVI</h2>
+    <p class="section-desc">
+      Auditoría de 24 campañas cafetaleras en Jaén (Cajamarca), 576 compuestos satelitales MODIS NDVI y reanálisis climático ERA5. La trampa de la saturación espectral y por qué el satélite óptico fue ciego a la mayor epidemia de roya amarilla.
+    </p>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 18: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="18" data-act="Acto 4 · Datos Jaén" data-time="1.5 min">
+    <h2 class="slide-main-title display">Datos que importan: 24 Campañas de Café en Jaén</h2>
+    <p class="kpis-subtitle">Cifras del sistema agroalimentario en la cuenca cafetalera de Jaén (2000–2024).</p>
+    <div class="kpis-3col-grid">
+      <div class="kpi-large-card card-cyan">
+        <div class="kpi-huge-number">24</div>
+        <div class="kpi-card-desc">Campañas agrícolas completas auditadas de café arábica en Jaén (SIEA/MIDAGRI).</div>
+      </div>
+      <div class="kpi-large-card card-blue">
+        <div class="kpi-huge-number">-56%</div>
+        <div class="kpi-card-desc">Colapso histórico de rendimiento en 2013 por la epidemia de roya amarilla (Hemileia vastatrix).</div>
+      </div>
+      <div class="kpi-large-card card-purple">
+        <div class="kpi-huge-number">4.51</div>
+        <div class="kpi-card-desc">MAE mínimo alcanzado (qq/ha) por el modelo de Fusión Fenológica Clima + Tendencia.</div>
+      </div>
+    </div>
+    <div class="graphic-source" style="margin-top:16px;">Fuente: Sistema Integrado de Estadísticas Agrarias (SIEA - MIDAGRI) · Jaén, Cajamarca (2000–2024)</div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 19: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="19" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min">
     <h2 class="slide-main-title display">La trampa del satélite: NDVI vs estrés hídrico</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -213,32 +304,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 17: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
+  <!-- DIAPO 20: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="17" data-act="Acto 3 · Datos Jaén" data-time="1.5 min">
-    <h2 class="slide-main-title display">Datos que importan: 24 Campañas de Café en Jaén</h2>
-    <p class="kpis-subtitle">Cifras del sistema agroalimentario en la cuenca cafetalera de Jaén (2000–2024).</p>
-    <div class="kpis-3col-grid">
-      <div class="kpi-large-card card-cyan">
-        <div class="kpi-huge-number">24</div>
-        <div class="kpi-card-desc">Campañas agrícolas completas auditadas de café arábica en Jaén (SIEA/MIDAGRI).</div>
-      </div>
-      <div class="kpi-large-card card-blue">
-        <div class="kpi-huge-number">-56%</div>
-        <div class="kpi-card-desc">Colapso histórico de rendimiento en 2013 por la epidemia de roya amarilla (Hemileia vastatrix).</div>
-      </div>
-      <div class="kpi-large-card card-purple">
-        <div class="kpi-huge-number">4.51</div>
-        <div class="kpi-card-desc">MAE mínimo alcanzado (qq/ha) por el modelo de Fusión Fenológica Clima + Tendencia.</div>
-      </div>
-    </div>
-    <div class="graphic-source" style="margin-top:16px;">Fuente: Sistema Integrado de Estadísticas Agrarias (SIEA - MIDAGRI) · Jaén, Cajamarca (2000–2024)</div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- DIAPO 18: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
-  <!-- ============================================================= -->
-  <section class="slide" data-index="18" data-act="Acto 3 · Validación Jaén" data-time="2.0 min">
+  <section class="slide" data-index="20" data-act="Acto 4 · Validación Jaén" data-time="2.0 min">
     <h2 class="slide-main-title display">Demostración: validación Walk-Forward expansiva</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -268,9 +336,20 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 19: CONCLUSIONES (page-09.png)                         -->
+  <!-- DIAPO 21: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="19" data-act="Cierre · Conclusiones" data-time="2.0 min">
+  <section class="slide slide-archetype-section" data-index="21" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
+    <div class="section-huge-num">05</div>
+    <h2 class="section-title display">Conclusiones y lecciones aprendidas</h2>
+    <p class="section-desc">
+      Principios metodológicos innegociables destilados de 2,557 días de meteorología amazónica y 24 campañas cafetaleras reales. Por qué la disciplina metodológica y la física del dominio valen más que cualquier arquitectura neuronal profunda.
+    </p>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 22: CONCLUSIONES (page-09.png)                         -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="22" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
     <h2 class="slide-main-title display">Conclusiones</h2>
     <div class="conclusions-3col-grid">
       <div class="conclusion-card card-1">
@@ -300,9 +379,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 20: CIERRE Y PREGUNTAS (page-10.png)                   -->
+  <!-- DIAPO 23: CIERRE Y PREGUNTAS (page-10.png)                   -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-closing" data-index="20" data-act="Cierre · Preguntas &amp; QR" data-time="1.5 min">
+  <section class="slide slide-archetype-closing" data-index="23" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
     <div>
       <div class="cover-tag mono">
         IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span>

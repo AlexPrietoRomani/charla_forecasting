@@ -344,9 +344,28 @@ def get_deck_css(branding=None):
   .agenda-card.item-2 {{ border: 1.5px solid var(--fest-blue); box-shadow: 0 8px 25px rgba(30, 123, 255, 0.12); }}
   .agenda-card.item-3 {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 25px rgba(155, 92, 255, 0.12); }}
   .agenda-card.item-4 {{ border: 1.5px solid var(--fest-magenta); box-shadow: 0 8px 25px rgba(224, 64, 251, 0.12); }}
+  .agenda-card.item-5 {{ border: 1.5px solid #2EE6A6; box-shadow: 0 8px 25px rgba(46, 230, 166, 0.12); }}
+
+  .agenda-grid-5 {{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: clamp(14px, 1.6vw, 22px);
+    flex: 1;
+    min-height: 0;
+  }}
+  .agenda-grid-5 .agenda-card {{
+    padding: clamp(14px, 1.4vw, 20px) clamp(16px, 1.8vw, 26px);
+    gap: clamp(14px, 1.6vw, 24px);
+  }}
+  .agenda-grid-5 .agenda-card.item-1 {{ grid-column: span 2; }}
+  .agenda-grid-5 .agenda-card.item-2 {{ grid-column: span 2; }}
+  .agenda-grid-5 .agenda-card.item-3 {{ grid-column: span 2; }}
+  .agenda-grid-5 .agenda-card.item-4 {{ grid-column: 1 / span 3; }}
+  .agenda-grid-5 .agenda-card.item-5 {{ grid-column: 4 / span 3; }}
 
   .agenda-num {{
-    font-size: clamp(40px, 3.8vw, 56px);
+    font-size: clamp(38px, 3.4vw, 52px);
     font-weight: 700;
     line-height: 1;
     font-family: "Space Grotesk", sans-serif;
@@ -355,6 +374,7 @@ def get_deck_css(branding=None):
   .agenda-card.item-2 .agenda-num {{ color: var(--fest-blue); }}
   .agenda-card.item-3 .agenda-num {{ color: var(--fest-purple); }}
   .agenda-card.item-4 .agenda-num {{ color: var(--fest-magenta); }}
+  .agenda-card.item-5 .agenda-num {{ color: #2EE6A6; }}
 
   .agenda-text-wrap {{
     display: flex;

@@ -73,36 +73,44 @@ def get_slides_part1(branding=None):
   <!-- ========================================== -->
   <section class="slide" data-index="3" data-act="Apertura · Agenda" data-time="1.0 min">
     <h2 class="slide-main-title display">Agenda</h2>
-    <div class="agenda-grid">
+    <div class="agenda-grid-5">
       <div class="agenda-card item-1">
         <div class="agenda-num">01</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Historia de los modelos de series temporales</div>
-          <div class="agenda-card-desc">De la descomposición clásica y ARIMA al Deep Learning moderno y modelos de grafos.</div>
+          <div class="agenda-card-title display">Historia de los modelos</div>
+          <div class="agenda-card-desc">De la descomposición canónica y ARIMA a PatchTST y Foundation Models.</div>
         </div>
       </div>
 
       <div class="agenda-card item-2">
         <div class="agenda-num">02</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Caso 1: Predicción de temperatura en Iquitos</div>
-          <div class="agenda-card-desc">2,557 días de SENAMHI Punchana, la trampa de los árboles y la entropía a 7 días.</div>
+          <div class="agenda-card-title display">Caso 1: Clima en Iquitos</div>
+          <div class="agenda-card-desc">2,557 días en SENAMHI Punchana, la trampa de los árboles y el cono a 7 días.</div>
         </div>
       </div>
 
       <div class="agenda-card item-3">
         <div class="agenda-num">03</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Series temporales en el agro &amp; Caso 2</div>
-          <div class="agenda-card-desc">Predicción de rendimiento de café en Jaén: la trampa del NDVI y modelos fenológicos.</div>
+          <div class="agenda-card-title display">Series temporales en el agro</div>
+          <div class="agenda-card-desc">Física biológica, retrasos fenológicos de meses y series de ultrabaja frecuencia.</div>
         </div>
       </div>
 
       <div class="agenda-card item-4">
         <div class="agenda-num">04</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Conclusiones y próximos pasos</div>
-          <div class="agenda-card-desc">Lecciones del mundo real, la navaja de Ockham y buenas prácticas en producción.</div>
+          <div class="agenda-card-title display">Caso 2: Predicción de rendimiento con NDVI</div>
+          <div class="agenda-card-desc">24 campañas de café en Jaén: la ceguera de la roya (-56%), saturación de copas y fusión fenológica.</div>
+        </div>
+      </div>
+
+      <div class="agenda-card item-5">
+        <div class="agenda-num">05</div>
+        <div class="agenda-text-wrap">
+          <div class="agenda-card-title display">Conclusiones &amp; Lecciones</div>
+          <div class="agenda-card-desc">Causalidad temporal sin trampas, valor en las bandas P10–P90 y física antes que hiperparámetros.</div>
         </div>
       </div>
     </div>

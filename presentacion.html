@@ -354,9 +354,28 @@
   .agenda-card.item-2 { border: 1.5px solid var(--fest-blue); box-shadow: 0 8px 25px rgba(30, 123, 255, 0.12); }
   .agenda-card.item-3 { border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 25px rgba(155, 92, 255, 0.12); }
   .agenda-card.item-4 { border: 1.5px solid var(--fest-magenta); box-shadow: 0 8px 25px rgba(224, 64, 251, 0.12); }
+  .agenda-card.item-5 { border: 1.5px solid #2EE6A6; box-shadow: 0 8px 25px rgba(46, 230, 166, 0.12); }
+
+  .agenda-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: clamp(14px, 1.6vw, 22px);
+    flex: 1;
+    min-height: 0;
+  }
+  .agenda-grid-5 .agenda-card {
+    padding: clamp(14px, 1.4vw, 20px) clamp(16px, 1.8vw, 26px);
+    gap: clamp(14px, 1.6vw, 24px);
+  }
+  .agenda-grid-5 .agenda-card.item-1 { grid-column: span 2; }
+  .agenda-grid-5 .agenda-card.item-2 { grid-column: span 2; }
+  .agenda-grid-5 .agenda-card.item-3 { grid-column: span 2; }
+  .agenda-grid-5 .agenda-card.item-4 { grid-column: 1 / span 3; }
+  .agenda-grid-5 .agenda-card.item-5 { grid-column: 4 / span 3; }
 
   .agenda-num {
-    font-size: clamp(40px, 3.8vw, 56px);
+    font-size: clamp(38px, 3.4vw, 52px);
     font-weight: 700;
     line-height: 1;
     font-family: "Space Grotesk", sans-serif;
@@ -365,6 +384,7 @@
   .agenda-card.item-2 .agenda-num { color: var(--fest-blue); }
   .agenda-card.item-3 .agenda-num { color: var(--fest-purple); }
   .agenda-card.item-4 .agenda-num { color: var(--fest-magenta); }
+  .agenda-card.item-5 .agenda-num { color: #2EE6A6; }
 
   .agenda-text-wrap {
     display: flex;
@@ -1043,36 +1063,44 @@
   <!-- ========================================== -->
   <section class="slide" data-index="3" data-act="Apertura · Agenda" data-time="1.0 min">
     <h2 class="slide-main-title display">Agenda</h2>
-    <div class="agenda-grid">
+    <div class="agenda-grid-5">
       <div class="agenda-card item-1">
         <div class="agenda-num">01</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Historia de los modelos de series temporales</div>
-          <div class="agenda-card-desc">De la descomposición clásica y ARIMA al Deep Learning moderno y modelos de grafos.</div>
+          <div class="agenda-card-title display">Historia de los modelos</div>
+          <div class="agenda-card-desc">De la descomposición canónica y ARIMA a PatchTST y Foundation Models.</div>
         </div>
       </div>
 
       <div class="agenda-card item-2">
         <div class="agenda-num">02</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Caso 1: Predicción de temperatura en Iquitos</div>
-          <div class="agenda-card-desc">2,557 días de SENAMHI Punchana, la trampa de los árboles y la entropía a 7 días.</div>
+          <div class="agenda-card-title display">Caso 1: Clima en Iquitos</div>
+          <div class="agenda-card-desc">2,557 días en SENAMHI Punchana, la trampa de los árboles y el cono a 7 días.</div>
         </div>
       </div>
 
       <div class="agenda-card item-3">
         <div class="agenda-num">03</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Series temporales en el agro &amp; Caso 2</div>
-          <div class="agenda-card-desc">Predicción de rendimiento de café en Jaén: la trampa del NDVI y modelos fenológicos.</div>
+          <div class="agenda-card-title display">Series temporales en el agro</div>
+          <div class="agenda-card-desc">Física biológica, retrasos fenológicos de meses y series de ultrabaja frecuencia.</div>
         </div>
       </div>
 
       <div class="agenda-card item-4">
         <div class="agenda-num">04</div>
         <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Conclusiones y próximos pasos</div>
-          <div class="agenda-card-desc">Lecciones del mundo real, la navaja de Ockham y buenas prácticas en producción.</div>
+          <div class="agenda-card-title display">Caso 2: Predicción de rendimiento con NDVI</div>
+          <div class="agenda-card-desc">24 campañas de café en Jaén: la ceguera de la roya (-56%), saturación de copas y fusión fenológica.</div>
+        </div>
+      </div>
+
+      <div class="agenda-card item-5">
+        <div class="agenda-num">05</div>
+        <div class="agenda-text-wrap">
+          <div class="agenda-card-title display">Conclusiones &amp; Lecciones</div>
+          <div class="agenda-card-desc">Causalidad temporal sin trampas, valor en las bandas P10–P90 y física antes que hiperparámetros.</div>
         </div>
       </div>
     </div>
@@ -1462,20 +1490,20 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 14: SECCIÓN 03: AGRO & CASO 2: CAFÉ JAÉN (page-04.png)  -->
+  <!-- DIAPO 14: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO (page-04.png) -->
   <!-- ============================================================= -->
   <section class="slide slide-archetype-section" data-index="14" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
     <div class="section-huge-num">03</div>
-    <h2 class="section-title display">Series temporales en el agro &amp; Caso 2: Café Jaén</h2>
+    <h2 class="section-title display">Cómo se aplican las series temporales en el agro</h2>
     <p class="section-desc">
-      Cómo la biología agrícola y la fenología imponen reglas únicas al forecasting. Auditoría de 24 campañas agrícolas de café en Jaén (Cajamarca), satélites ópticos MODIS NDVI y por qué el algoritmo debe respetar la fisiología de la planta.
+      Por qué la biología vegetal y la fenología imponen leyes únicas al forecasting. Dinámicas de ultrabaja frecuencia, retrasos de meses entre el estímulo y la respuesta, y por qué el sobreajuste es letal sin comprender la fisiología del cultivo.
     </p>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 15: CÓMO SE APLICAN LAS SERIES EN AGRO (page-05.png)    -->
+  <!-- DIAPO 15: FÍSICA BIOLÓGICA Y RETOS DEL AGRO (page-05.png)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="15" data-act="Acto 3 · Fundamentos Agro" data-time="2.0 min">
+  <section class="slide" data-index="15" data-act="Acto 3 · Física Biológica del Agro" data-time="2.0 min">
     <h2 class="slide-main-title display">Series temporales en el agro: física biológica</h2>
     <div class="content-insight-layout">
       <div class="content-bullets-col">
@@ -1490,7 +1518,7 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Series de Baja Frecuencia:</strong> A diferencia de los miles de datos por segundo en finanzas o clima, en agricultura solo existe 1 dato de rendimiento al año (24 datos en 24 años).</div>
+            <div><strong>Series de Ultrabaja Frecuencia:</strong> A diferencia de millones de ticks financieros o datos diarios de clima, en agricultura solo existe 1 dato de cosecha por año (24 datos en 24 años).</div>
           </li>
         </ul>
       </div>
@@ -1506,9 +1534,100 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 16: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
+  <!-- DIAPO 16: EL RELOJ FENOLÓGICO Y CALENDARIO VEGETAL (page-06.png)-->
   <!-- ============================================================= -->
-  <section class="slide" data-index="16" data-act="Acto 3 · Trampa del NDVI" data-time="2.0 min">
+  <section class="slide" data-index="16" data-act="Acto 3 · Reloj Fenológico" data-time="2.0 min">
+    <h2 class="slide-main-title display">El reloj fenológico: la física del calendario vegetal</h2>
+    <div class="graphic-layout">
+      <div class="graphic-info-col">
+        <ul class="standard-bullet-list">
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>Floración Crítica (Ago–Oct):</strong> Temperaturas máximas &gt; 32 °C provocan esterilidad de polen y aborto floral masivo. La sequía en esta ventana destruye el rendimiento 8 meses antes de cosechar.</div>
+          </li>
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>Llenado de Fruto (Nov–Feb):</strong> Demanda hídrica elevada; el déficit hídrico detiene el crecimiento del fruto y reduce drásticamente el peso del grano pergamino.</div>
+          </li>
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>Cosecha y Secado (Mar–Jul):</strong> Las lluvias torrenciales retrasan la recolección, inducen hongos y pudrición; el clima seco favorece el beneficio y la calidad de taza.</div>
+          </li>
+        </ul>
+        <div class="graphic-source">Fisiología del Café Arábica · Cenicafé / MIDAGRI · Barbosa et al. (2021)</div>
+      </div>
+
+      <div class="graphic-card-col">
+        <div style="display:flex; flex-direction:column; gap:12px; height:100%; justify-content:center;">
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-magenta); display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--fest-magenta); font-weight:700; font-size:11px;" class="mono">VENTANA 1 · AGOSTO - OCTUBRE</span>
+              <span style="font-size:11px; background:rgba(224,64,251,0.15); color:#E040FB; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">MÁXIMA SENSIBILIDAD</span>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin:4px 0;">Floración &amp; Cuajado de Fruto</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Un déficit hídrico de 2 semanas causa aborto floral severo. La anomalía de lluvia en esta ventana explica el 56% de la varianza de cosecha final (r = 0.751).</p>
+          </div>
+
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-blue); display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--fest-blue); font-weight:700; font-size:11px;" class="mono">VENTANA 2 · NOVIEMBRE - FEBRERO</span>
+              <span style="font-size:11px; background:rgba(30,123,255,0.15); color:#1E7BFF; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">ACUMULACIÓN BIOMASA</span>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin:4px 0;">Llenado de Grano &amp; Expansión Celular</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Se determina el peso volumétrico y calibre. La fotosíntesis activa demanda transpiración sin estrés de presión de vapor (VPD).</p>
+          </div>
+
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-cyan); display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--fest-cyan); font-weight:700; font-size:11px;" class="mono">VENTANA 3 · MARZO - JULIO</span>
+              <span style="font-size:11px; background:rgba(18,200,252,0.15); color:#12C8FC; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">COSECHA Y BENEFICIO</span>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin:4px 0;">Maduración, Recolección &amp; Secado</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">El calor seco acelera la maduración y facilita el secado al sol. Las lluvias excesivas pudren cerezas y causan caída de frutos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 17: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
+  <!-- ============================================================= -->
+  <section class="slide slide-archetype-section" data-index="17" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
+    <div class="section-huge-num">04</div>
+    <h2 class="section-title display">Caso 2: Predicción de rendimiento usando NDVI</h2>
+    <p class="section-desc">
+      Auditoría de 24 campañas cafetaleras en Jaén (Cajamarca), 576 compuestos satelitales MODIS NDVI y reanálisis climático ERA5. La trampa de la saturación espectral y por qué el satélite óptico fue ciego a la mayor epidemia de roya amarilla.
+    </p>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 18: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="18" data-act="Acto 4 · Datos Jaén" data-time="1.5 min">
+    <h2 class="slide-main-title display">Datos que importan: 24 Campañas de Café en Jaén</h2>
+    <p class="kpis-subtitle">Cifras del sistema agroalimentario en la cuenca cafetalera de Jaén (2000–2024).</p>
+    <div class="kpis-3col-grid">
+      <div class="kpi-large-card card-cyan">
+        <div class="kpi-huge-number">24</div>
+        <div class="kpi-card-desc">Campañas agrícolas completas auditadas de café arábica en Jaén (SIEA/MIDAGRI).</div>
+      </div>
+      <div class="kpi-large-card card-blue">
+        <div class="kpi-huge-number">-56%</div>
+        <div class="kpi-card-desc">Colapso histórico de rendimiento en 2013 por la epidemia de roya amarilla (Hemileia vastatrix).</div>
+      </div>
+      <div class="kpi-large-card card-purple">
+        <div class="kpi-huge-number">4.51</div>
+        <div class="kpi-card-desc">MAE mínimo alcanzado (qq/ha) por el modelo de Fusión Fenológica Clima + Tendencia.</div>
+      </div>
+    </div>
+    <div class="graphic-source" style="margin-top:16px;">Fuente: Sistema Integrado de Estadísticas Agrarias (SIEA - MIDAGRI) · Jaén, Cajamarca (2000–2024)</div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 19: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="19" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min">
     <h2 class="slide-main-title display">La trampa del satélite: NDVI vs estrés hídrico</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -1538,32 +1657,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 17: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
+  <!-- DIAPO 20: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="17" data-act="Acto 3 · Datos Jaén" data-time="1.5 min">
-    <h2 class="slide-main-title display">Datos que importan: 24 Campañas de Café en Jaén</h2>
-    <p class="kpis-subtitle">Cifras del sistema agroalimentario en la cuenca cafetalera de Jaén (2000–2024).</p>
-    <div class="kpis-3col-grid">
-      <div class="kpi-large-card card-cyan">
-        <div class="kpi-huge-number">24</div>
-        <div class="kpi-card-desc">Campañas agrícolas completas auditadas de café arábica en Jaén (SIEA/MIDAGRI).</div>
-      </div>
-      <div class="kpi-large-card card-blue">
-        <div class="kpi-huge-number">-56%</div>
-        <div class="kpi-card-desc">Colapso histórico de rendimiento en 2013 por la epidemia de roya amarilla (Hemileia vastatrix).</div>
-      </div>
-      <div class="kpi-large-card card-purple">
-        <div class="kpi-huge-number">4.51</div>
-        <div class="kpi-card-desc">MAE mínimo alcanzado (qq/ha) por el modelo de Fusión Fenológica Clima + Tendencia.</div>
-      </div>
-    </div>
-    <div class="graphic-source" style="margin-top:16px;">Fuente: Sistema Integrado de Estadísticas Agrarias (SIEA - MIDAGRI) · Jaén, Cajamarca (2000–2024)</div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- DIAPO 18: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
-  <!-- ============================================================= -->
-  <section class="slide" data-index="18" data-act="Acto 3 · Validación Jaén" data-time="2.0 min">
+  <section class="slide" data-index="20" data-act="Acto 4 · Validación Jaén" data-time="2.0 min">
     <h2 class="slide-main-title display">Demostración: validación Walk-Forward expansiva</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -1593,9 +1689,20 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 19: CONCLUSIONES (page-09.png)                         -->
+  <!-- DIAPO 21: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="19" data-act="Cierre · Conclusiones" data-time="2.0 min">
+  <section class="slide slide-archetype-section" data-index="21" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
+    <div class="section-huge-num">05</div>
+    <h2 class="section-title display">Conclusiones y lecciones aprendidas</h2>
+    <p class="section-desc">
+      Principios metodológicos innegociables destilados de 2,557 días de meteorología amazónica y 24 campañas cafetaleras reales. Por qué la disciplina metodológica y la física del dominio valen más que cualquier arquitectura neuronal profunda.
+    </p>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 22: CONCLUSIONES (page-09.png)                         -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="22" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
     <h2 class="slide-main-title display">Conclusiones</h2>
     <div class="conclusions-3col-grid">
       <div class="conclusion-card card-1">
@@ -1625,9 +1732,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 20: CIERRE Y PREGUNTAS (page-10.png)                   -->
+  <!-- DIAPO 23: CIERRE Y PREGUNTAS (page-10.png)                   -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-closing" data-index="20" data-act="Cierre · Preguntas &amp; QR" data-time="1.5 min">
+  <section class="slide slide-archetype-closing" data-index="23" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
     <div>
       <div class="cover-tag mono">
         IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span>
@@ -1684,8 +1791,8 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
       </span>
     </div>
     <div style="width:1px; height:18px; background:rgba(18, 200, 252, 0.25); margin:0 4px;"></div>
-    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 20</div>
-    <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Acto 1 · La Pregunta</div>
+    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 23</div>
+    <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Apertura · Portada</div>
   </div>
 
   <div style="display:flex; align-items:center; gap:8px;">
@@ -1723,9 +1830,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
 <!-- SCRIPTS DE NAVEGACIÓN Y VISUALES -->
 <script>
   let currentSlide = 1;
-  const totalSlides = 20;
+  const totalSlides = 23;
 
-  const notesBySlide = {"1": "<strong>Objetivo:</strong> Apertura de alto impacto y presentación del tema oficial en el Aula Magna UNAP.<br><br>\n          <strong>Guion sugerido:</strong> \"Buenas tardes con todos. Es un honor estar en el Iquitos Data Fest 2026. Cuando abren cualquier app meteorológica y les promete lluvia puntual a las 3:00 PM con 28 °C, les están mintiendo piadosamente. El futuro no es un punto determinista; es un cono estocástico que se ensancha inevitablemente con el tiempo. Hoy responderemos con datos reales de la Amazonía y rigor científico si la IA puede predecir el futuro o si solo estamos reproduciendo correlaciones del pasado.\" ", "2": "<strong>Objetivo:</strong> Presentación personal y conexión con la audiencia (Ingeniero Agrónomo & Data Scientist).<br><br>\n          <strong>Guion sugerido:</strong> \"Para quienes no me conocen, soy Alex Prieto Romani, Ingeniero Agrónomo y Agriculture Data Scientist con maestría en Big Data & Data Science. Mi trabajo se centra en la intersección entre la física biológica del campo y la analítica avanzada: agricultura de precisión, teledetección satelital, visión artificial y modelos predictivos aplicados a series temporales complejas como el clima y el rendimiento agrícola.\" ", "3": "<strong>Objetivo:</strong> Exponer la hoja de ruta clara de la sesión con los 4 bloques temáticos.<br><br>\n          <strong>Guion sugerido:</strong> \"Esta tarde abordaremos cuatro actos fundamentales: primero, la historia y fundamentos matemáticos de las series temporales; segundo, el Caso 1 en Iquitos con 2,557 días de SENAMHI y la trampa de los árboles; tercero, cómo se aplican las series en el agro y el Caso 2 con 24 campañas de café en Jaén; y cuarto, las conclusiones y reglas empíricas para llevar modelos a producción.\" ", "4": "<strong>Objetivo:</strong> Introducir el Acto 1 y ubicar el marco conceptual de la evolución histórica.<br><br>\n          <strong>Guion sugerido:</strong> \"Iniciamos el viaje preguntándonos cómo la ciencia ha intentado modelar el tiempo. No se trata de una historia donde lo nuevo reemplaza a lo viejo, sino de cuatro escuelas metodológicas que conviven hoy y resuelven problemas a escalas muy diferentes: desde un agricultor en Jaén hasta el operador del sistema eléctrico interconectado nacional.\" ", "5": "<strong>Objetivo:</strong> Explicar la descomposición ontológica de cualquier señal física real.<br><br>\n          <strong>Guion sugerido:</strong> \"Miren esta ecuación fundamental: Y(t) = T(t) + S(t) + C(t) + ε(t). Toda serie temporal física combina cuatro dinámicas superpuestas: la tendencia secular, los ciclos astronómicos rígidos de 365 días del sol, macrociclos como El Niño y el ruido térmico residual. Quédense con esta regla: si no desestacionalizan su señal, su red neuronal más profunda no habrá aprendido ninguna relación causal: solo habrá memorizado qué mes del año es.\" ", "6": "<strong>Objetivo:</strong> Recorrer las cuatro eras metodológicas del forecasting y sus casos de industria.<br><br>\n          <strong>Guion sugerido:</strong> \"La evolución del forecasting pasó por cuatro grandes saltos conceptuales. Primero, las fórmulas matemáticas cerradas de Verhulst y Holt-Winters: pocos parámetros, convergencia en microsegundos y mucha física. En los 2010s rompimos la flecha del tiempo para meter rezagos en Random Forest y LightGBM; dominaron Walmart M5 con 30 mil productos, pero tienen una patología: particionan el espacio en hiperrectángulos y jamás pueden extrapolar un récord histórico fuera de rango. Luego vinieron las LSTMs y PatchTST, que entendieron que el tiempo se procesa mejor en bloques o parches como palabras en un texto, reduciendo el cómputo 8 veces. Y hoy estamos en la era de los Foundation Models: modelos como TimesFM y Chronos que aprendieron patrones sobre cientos de miles de millones de puntos y hacen pronóstico Zero-Shot instantáneo sin reentrenar gradientes locales.\" ", "7": "<strong>Objetivo:</strong> Demostrar la dispersión temporal y la inevitabilidad del cono de incertidumbre.<br><br>\n          <strong>Guion sugerido:</strong> \"Cuando le pedimos a ChatGPT o a una red neuronal un número para mañana, responde con aplomo instantáneo. Pero el futuro no es un punto determinista; es un cono estocástico que se ensancha inevitablemente. En la atmósfera amazónica o en el mercado de café, la entropía se acumula rápidamente: σ_h ∝ √h. La IA no sabe lo que no sabe. En horizontes más allá de 7 días, un pronóstico puntual oculta el riesgo operacional: debemos tomar decisiones sobre bandas empíricas P10–P90, nunca sobre un escalar aislado.\" ", "8": "<strong>Objetivo:</strong> Introducir el Caso 1 con datos climatológicos reales de Iquitos.<br><br>\n          <strong>Guion sugerido:</strong> \"Pasamos a nuestro primer caso real: la predicción de temperatura máxima en la estación SENAMHI Punchana, aquí en Iquitos. 2,557 días continuos de mediciones en pleno régimen ecuatorial hiperhúmedo. Vamos a poner a prueba los algoritmos ante el clima tropical real.\" ", "9": "<strong>Objetivo:</strong> Destacar las 3 métricas críticas del dataset de Punchana.<br><br>\n          <strong>Guion sugerido:</strong> \"Tres cifras definen este desafío: 2,557 días de registro ininterrumpido; una media tropical constante de 31.8 °C; y un horizonte de 7 días donde el error del modelo iguala a la varianza histórica del clima, marcando la frontera de predictibilidad meteorológica.\" ", "10": "<strong>Objetivo:</strong> Demostrar el fallo de los árboles de decisión ante olas de calor récord.<br><br>\n          <strong>Guion sugerido:</strong> \"Aquí está una de las trampas más peligrosas en la práctica: Random Forest particiona el espacio en cajas ortogonales. Si en Iquitos ocurre una ola de calor histórica de 37.4 °C y el modelo se entrenó con un tope de 34.0 °C, el árbol colapsa en una meseta constante de 31.5 °C. La solución no es una red más grande, sino modelar primeras diferencias (Δy).\" ", "11": "<strong>Objetivo:</strong> Revelar los resultados del benchmark ciego entre 6 familias de modelos.<br><br>\n          <strong>Guion sugerido:</strong> \"Evaluamos 6 modelos sobre un conjunto de prueba ciego de 365 días en Punchana. El ganador indiscutible fue ExtraTrees con un MAE de 1.15 °C entrenando en 0.11 segundos en CPU. Empató con redes profundas consumiendo 70 veces menos recursos. La navaja de Ockham demostrada empíricamente.\" ", "12": "<strong>Objetivo:</strong> Mostrar la ejecución en vivo del pronóstico multi-step con intervalos.<br><br>\n          <strong>Guion sugerido:</strong> \"Aquí observan la proyección operativa a 7 días. Noten cómo las bandas P10–P90 capturan 6 de los 7 días reales (85.7% de cobertura empírica). El séptimo día la incertidumbre se ensancha, alertando a los tomadores de decisiones sobre el riesgo físico real.\" ", "13": "<strong>Objetivo:</strong> Explicar el código de ingeniería que hace posible el modelo parsimonioso.<br><br>\n          <strong>Guion sugerido:</strong> \"En apenas 15 líneas de código resolvemos el problema: transformamos a diferencias finitas, inyectamos retardos temporales de 1, 2, 3, 7 y 14 días para capturar la memoria inercial de la atmósfera, y reconstruimos el nivel estocástico de forma acumulativa en milisegundos.\" ", "14": "<strong>Objetivo:</strong> Introducir el Bloque 3: Series temporales en la agricultura y el Caso 2 en Jaén.<br><br>\n          <strong>Guion sugerido:</strong> \"Entramos al tercer bloque: la agricultura. Predecir cultivos no es predecir acciones de bolsa ni tráfico web. En el agro la biología impone retardos fenológicos de meses. Vamos a auditar 24 campañas oficiales de café en Jaén y poner a prueba los satélites de la NASA.\" ", "15": "<strong>Objetivo:</strong> Explicar los fundamentos biológicos que rigen las series agrícolas.<br><br>\n          <strong>Guion sugerido:</strong> \"En agricultura tropical, lo que ocurre en la cosecha de junio se definió en la floración de octubre del año anterior. Además, en series agrícolas no tenemos millones de filas: tenemos apenas 24 datos en 24 años. Si aplican redes neuronales masivas sin respetar la fenología, el sobreajuste destruirá cualquier predicción.\" ", "16": "<strong>Objetivo:</strong> Demostrar con evidencia forense la saturación óptica del satélite NDVI.<br><br>\n          <strong>Guion sugerido:</strong> \"Este gráfico es contundente: el satélite MODIS NDVI mostró un R² de apenas 0.08 frente al rendimiento real. En la crisis de la roya amarilla de 2013, el rendimiento cayó un 56%, pero el satélite decía que el campo estaba verde porque el dosel arbóreo satura. En cambio, el estrés hídrico en floración explicó el 56% de la varianza real.\" ", "17": "<strong>Objetivo:</strong> Resaltar los 3 datos clave de las 24 campañas de café en Jaén.<br><br>\n          <strong>Guion sugerido:</strong> \"24 campañas continuas del MIDAGRI; una caída del 56% por plaga biológica que el satélite no vio; y un MAE mínimo de 4.51 quintales por hectárea alcanzado únicamente cuando combinamos la física climática con la tendencia agronómica.\" ", "18": "<strong>Objetivo:</strong> Demostrar la validación Walk-Forward expansiva y la superioridad del modelo de fusión.<br><br>\n          <strong>Guion sugerido:</strong> \"Evaluamos año por año con validación Walk-Forward sin fuga temporal. El modelo que solo usó satélite falló con MAE de 6.18 qq/ha. Pero nuestro modelo de Fusión Fenológica (clima en floración + tendencia) logró el menor error del benchmark (4.51 qq/ha). La biología rescató al algoritmo.\" ", "19": "<strong>Objetivo:</strong> Sintetizar las 3 conclusiones maestras de la conferencia.<br><br>\n          <strong>Guion sugerido:</strong> \"Llévense tres verdades innegociables: 1. Respeten la causalidad del tiempo: jamás usen cross-validation aleatorio; 2. El valor está en la banda de incertidumbre, no en la predicción puntual; y 3. Entiendan el dominio físico antes de elegir el algoritmo. La física manda sobre el código.\" ", "20": "<strong>Objetivo:</strong> Cierre memorable, agradecimientos y apertura del debate con QR.<br><br>\n          <strong>Guion sugerido:</strong> \"Volvemos a la pregunta inicial: ¿puede la IA predecir el futuro? La respuesta rigurosa es no: el futuro tiene entropía irreductible. Pero lo que la IA sí puede hacer es darnos las herramientas para tomar decisiones óptimas sin conocer el futuro. Todo el código, notebooks de Google Colab y datos de SENAMHI están disponibles escaneando este código QR. ¡Muchas gracias, Iquitos!\" "};
+  const notesBySlide = {"1": "<strong>Objetivo:</strong> Apertura de alto impacto y presentación del tema oficial en el Aula Magna UNAP.<br><br>\n          <strong>Guion sugerido:</strong> \"Buenas tardes con todos. Es un honor estar en el Iquitos Data Fest 2026. Cuando abren cualquier app meteorológica y les promete lluvia puntual a las 3:00 PM con 28 °C, les están mintiendo piadosamente. El futuro no es un punto determinista; es un cono estocástico que se ensancha inevitablemente con el tiempo. Hoy responderemos con datos reales de la Amazonía y rigor científico si la IA puede predecir el futuro o si solo estamos reproduciendo correlaciones del pasado.\" ", "2": "<strong>Objetivo:</strong> Presentación personal y conexión con la audiencia (Ingeniero Agrónomo & Data Scientist).<br><br>\n          <strong>Guion sugerido:</strong> \"Para quienes no me conocen, soy Alex Prieto Romani, Ingeniero Agrónomo y Agriculture Data Scientist con maestría en Big Data & Data Science. Mi trabajo se centra en la intersección entre la física biológica del campo y la analítica avanzada: agricultura de precisión, teledetección satelital, visión artificial y modelos predictivos aplicados a series temporales complejas como el clima y el rendimiento agrícola.\" ", "3": "<strong>Objetivo:</strong> Exponer la hoja de ruta clara de la sesión con los 5 bloques temáticos.<br><br>\n          <strong>Guion sugerido:</strong> \"Esta tarde estructuramos nuestra conferencia en cinco secciones fundamentales: primero, la historia y fundamentos matemáticos de los modelos de series temporales; segundo, el Caso 1 en Iquitos con 2,557 días de SENAMHI y la trampa de los árboles; tercero, cómo se aplican las series temporales en el agro desde la biología y la fenología; cuarto, el Caso 2 con la predicción de rendimiento de café en Jaén y la trampa del NDVI; y quinto, nuestras conclusiones y reglas empíricas innegociables para llevar modelos a producción.\" ", "4": "<strong>Objetivo:</strong> Introducir la Sección 01 y ubicar el marco conceptual de la evolución histórica.<br><br>\n          <strong>Guion sugerido:</strong> \"Iniciamos el viaje preguntándonos cómo la ciencia ha intentado modelar el tiempo. No se trata de una historia donde lo nuevo reemplaza a lo viejo, sino de cuatro escuelas metodológicas que conviven hoy y resuelven problemas a escalas muy diferentes: desde un agricultor en Jaén hasta el operador del sistema eléctrico interconectado nacional.\" ", "5": "<strong>Objetivo:</strong> Explicar la descomposición ontológica de cualquier señal física real.<br><br>\n          <strong>Guion sugerido:</strong> \"Miren esta ecuación fundamental: Y(t) = T(t) + S(t) + C(t) + ε(t). Toda serie temporal física combina cuatro dinámicas superpuestas: la tendencia secular, los ciclos astronómicos rígidos de 365 días del sol, macrociclos como El Niño y el ruido térmico residual. Quédense con esta regla: si no desestacionalizan su señal, su red neuronal más profunda no habrá aprendido ninguna relación causal: solo habrá memorizado qué mes del año es.\" ", "6": "<strong>Objetivo:</strong> Recorrer las cuatro eras metodológicas del forecasting y sus casos de industria.<br><br>\n          <strong>Guion sugerido:</strong> \"La evolución del forecasting pasó por cuatro grandes saltos conceptuales. Primero, las fórmulas matemáticas cerradas de Verhulst y Holt-Winters: pocos parámetros, convergencia en microsegundos y mucha física. En los 2010s rompimos la flecha del tiempo para meter rezagos en Random Forest y LightGBM; dominaron Walmart M5 con 30 mil productos, pero tienen una patología: particionan el espacio en hiperrectángulos y jamás pueden extrapolar un récord histórico fuera de rango. Luego vinieron las LSTMs y PatchTST, que entendieron que el tiempo se procesa mejor en bloques o parches como palabras en un texto, reduciendo el cómputo 8 veces. Y hoy estamos en la era de los Foundation Models: modelos como TimesFM y Chronos que aprendieron patrones sobre cientos de miles de millones de puntos y hacen pronóstico Zero-Shot instantáneo sin reentrenar gradientes locales.\" ", "7": "<strong>Objetivo:</strong> Demostrar la dispersión temporal y la inevitabilidad del cono de incertidumbre.<br><br>\n          <strong>Guion sugerido:</strong> \"Cuando le pedimos a ChatGPT o a una red neuronal un número para mañana, responde con aplomo instantáneo. Pero el futuro no es un punto determinista; es un cono estocástico que se ensancha inevitablemente. En la atmósfera amazónica o en el mercado de café, la entropía se acumula rápidamente: σ_h ∝ √h. La IA no sabe lo que no sabe. En horizontes más allá de 7 días, un pronóstico puntual oculta el riesgo operacional: debemos tomar decisiones sobre bandas empíricas P10–P90, nunca sobre un escalar aislado.\" ", "8": "<strong>Objetivo:</strong> Introducir la Sección 02 con datos climatológicos reales de Iquitos.<br><br>\n          <strong>Guion sugerido:</strong> \"Pasamos a la Sección 2: la predicción de temperatura máxima en la estación SENAMHI Punchana, aquí en Iquitos. 2,557 días continuos de mediciones en pleno régimen ecuatorial hiperhúmedo. Vamos a poner a prueba los algoritmos ante el clima tropical real.\" ", "9": "<strong>Objetivo:</strong> Destacar las 3 métricas críticas del dataset de Punchana.<br><br>\n          <strong>Guion sugerido:</strong> \"Tres cifras definen este desafío: 2,557 días de registro ininterrumpido; una media tropical constante de 31.8 °C; y un horizonte de 7 días donde el error del modelo iguala a la varianza histórica del clima, marcando la frontera de predictibilidad meteorológica.\" ", "10": "<strong>Objetivo:</strong> Demostrar el fallo de los árboles de decisión ante olas de calor récord.<br><br>\n          <strong>Guion sugerido:</strong> \"Aquí está una de las trampas más peligrosas en la práctica: Random Forest particiona el espacio en cajas ortogonales. Si en Iquitos ocurre una ola de calor histórica de 37.4 °C y el modelo se entrenó con un tope de 34.0 °C, el árbol colapsa en una meseta constante de 31.5 °C. La solución no es una red más grande, sino modelar primeras diferencias (Δy).\" ", "11": "<strong>Objetivo:</strong> Revelar los resultados del benchmark ciego entre 6 familias de modelos.<br><br>\n          <strong>Guion sugerido:</strong> \"Evaluamos 6 modelos sobre un conjunto de prueba ciego de 365 días en Punchana. El ganador indiscutible fue ExtraTrees con un MAE de 1.15 °C entrenando en 0.11 segundos en CPU. Empató con redes profundas consumiendo 70 veces menos recursos. La navaja de Ockham demostrada empíricamente.\" ", "12": "<strong>Objetivo:</strong> Mostrar la ejecución en vivo del pronóstico multi-step con intervalos.<br><br>\n          <strong>Guion sugerido:</strong> \"Aquí observan la proyección operativa a 7 días. Noten cómo las bandas P10–P90 capturan 6 de los 7 días reales (85.7% de cobertura empírica). El séptimo día la incertidumbre se ensancha, alertando a los tomadores de decisiones sobre el riesgo físico real.\" ", "13": "<strong>Objetivo:</strong> Explicar el código de ingeniería que hace posible el modelo parsimonioso.<br><br>\n          <strong>Guion sugerido:</strong> \"En apenas 15 líneas de código resolvemos el problema: transformamos a diferencias finitas, inyectamos retardos temporales de 1, 2, 3, 7 y 14 días para capturar la memoria inercial de la atmósfera, y reconstruimos el nivel estocástico de forma acumulativa en milisegundos.\" ", "14": "<strong>Objetivo:</strong> Introducir la Sección 03: Cómo se aplican las series temporales en el agro.<br><br>\n          <strong>Guion sugerido:</strong> \"Entramos a la Sección 3: el mundo agrícola. Predecir cultivos no es predecir cotizaciones de bolsa ni clics en una web. En el agro la biología vegetal impone leyes implacables: dinámicas de ultrabaja frecuencia, retardos fenológicos de meses entre el estímulo y la cosecha, y efectos umbral fisiológicos donde un grado de calor más puede esterilizar una flor.\" ", "15": "<strong>Objetivo:</strong> Explicar los tres retos biológicos fundamentales que rigen las series agrícolas.<br><br>\n          <strong>Guion sugerido:</strong> \"Tres leyes gobiernan las series agronómicas: primero, los retrasos fenológicos biológicos: la cosecha de hoy se determinó en la floración de hace 6 a 8 meses; segundo, los efectos umbral no lineales de grados día (GDD) y déficit de vapor (VPD); y tercero, las series de ultrabaja frecuencia: en agricultura solo tenemos 1 dato al año (24 datos en 24 años). En regímenes de tan pocos datos, el sobreajuste es letal: la física del dominio vale más que cualquier arquitectura profunda.\" ", "16": "<strong>Objetivo:</strong> Detallar las 3 ventanas fenológicas críticas del cultivo y su asimetría física.<br><br>\n          <strong>Guion sugerido:</strong> \"Miren este calendario fenológico: en el café de Jaén, la campaña se juega en tres ventanas. La floración entre agosto y octubre es hipercrítica: si hay estrés hídrico de solo dos semanas, la flor aborta y el rendimiento colapsa. El llenado entre noviembre y febrero define el calibre del grano. Y la cosecha entre marzo y julio exige calor seco para recolectar y secar. La misma temperatura de 34 °C que ayuda al secado en cosecha, destruye la producción completa si ocurre en plena floración. El tiempo biológico no es lineal.\" ", "17": "<strong>Objetivo:</strong> Introducir la Sección 04: Caso 2: Predicción de rendimiento usando NDVI.<br><br>\n          <strong>Guion sugerido:</strong> \"Con ese marco biológico claro, pasamos a la Sección 4: el Caso 2. Auditamos 24 campañas oficiales de café en Jaén (Cajamarca), cruzadas con 576 compuestos satelitales MODIS de la NASA y reanálisis climático ERA5. Vamos a descubrir por qué el satélite óptico más popular de la agricultura falló catastróficamente ante una plaga real.\" ", "18": "<strong>Objetivo:</strong> Resaltar los 3 datos auditados clave de las 24 campañas en Jaén.<br><br>\n          <strong>Guion sugerido:</strong> \"Tres métricas resumen este caso: 24 campañas agrícolas continuas del Ministerio de Agricultura (SIEA/MIDAGRI); una caída histórica de -56% en el rendimiento durante la epidemia de roya amarilla en 2013; y un MAE mínimo de 4.51 quintales por hectárea alcanzado por nuestro modelo de fusión fenológica.\" ", "19": "<strong>Objetivo:</strong> Demostrar con evidencia forense la trampa de saturación del satélite NDVI.<br><br>\n          <strong>Guion sugerido:</strong> \"Este es el hallazgo más contundente de nuestra investigación: el satélite MODIS NDVI tuvo una correlación prácticamente nula con el rendimiento real (r = 0.154, p = 0.600). En la epidemia de roya de 2013, el rendimiento oficial cayó -56%, pero el NDVI subió +1.4% porque las malezas y la sombra mantuvieron verde el dosel superior. El satélite fue ciego a la pérdida de S/. 228 millones. En cambio, el estrés hídrico en floración explicó el 56% de la varianza real (r = 0.751).\" ", "20": "<strong>Objetivo:</strong> Demostrar la validación Walk-Forward expansiva y la superioridad del modelo de fusión.<br><br>\n          <strong>Guion sugerido:</strong> \"Evaluamos año por año con validación Walk-Forward sin fuga temporal, entrenando solo con campañas del pasado. El modelo alimentado únicamente con satélite NDVI (M3) tuvo un error de 6.18 qq/ha, siendo peor que una tendencia simple (4.79 qq/ha). Pero cuando fusionamos la anomalía de lluvia en floración con la tendencia agronómica, el error se redujo a 4.51 qq/ha. La biología rescató al algoritmo.\" ", "21": "<strong>Objetivo:</strong> Introducir la Sección 05: Conclusiones y lecciones aprendidas.<br><br>\n          <strong>Guion sugerido:</strong> \"Llegamos a la Sección 5: el momento de destilar los aprendizajes de estos dos casos empíricos. Lo que hemos visto en la meteorología de Iquitos y en los cafetales de Jaén nos deja tres principios metodológicos innegociables para cualquiera que aplique IA a datos del mundo real.\" ", "22": "<strong>Objetivo:</strong> Sintetizar los 3 pilares maestros de la conferencia.<br><br>\n          <strong>Guion sugerido:</strong> \"Llévense tres verdades a sus proyectos y tesis: 1. Respeten la causalidad del tiempo: jamás usen cross-validation aleatorio en series temporales; entrenen en el pasado y evalúen en el futuro. 2. El valor está en la banda, no en el punto: un escalar aislado oculta el riesgo operacional; comuniquen siempre conos P10–P90 calibrados. Y 3. La física y el dominio mandan antes que el algoritmo: conozcan los límites de sus sensores y la fisiología antes de optimizar hiperparámetros.\" ", "23": "<strong>Objetivo:</strong> Cierre memorable, agradecimientos y apertura del debate con QR.<br><br>\n          <strong>Guion sugerido:</strong> \"Volvemos a la pregunta que dio título a esta charla: ¿puede la IA predecir el futuro? La respuesta honesta y científica es no: el futuro contiene entropía física irreductible. Pero lo que la IA y el modelado probabilístico sí pueden hacer es darnos las herramientas para tomar mejores decisiones en un mundo incierto. Todo el código, los datasets auditados y las diapositivas interactivas están disponibles escaneando este código QR que los lleva directo a mi sitio web. ¡Muchas gracias, Iquitos!\" "};
 
   function updateSlide(index) {
     if (index < 1) index = 1;
@@ -2297,8 +2404,8 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
         }
       }
 
-      // Slide 16: Scatter NDVI vs Rendimiento
-      if (idx === 16 && !charts["scatterNdvi"]) {
+      // Slide 19: Scatter NDVI vs Rendimiento
+      if ((idx === 19 || idx === 16) && !charts["scatterNdvi"]) {
         const canvas = document.getElementById("chartScatterNdvi");
         if (canvas) {
           const ctx = canvas.getContext("2d");
@@ -2346,8 +2453,8 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
         }
       }
 
-      // Slide 18: Demo 2 Validación expansiva Jaén
-      if (idx === 18 && !charts["demoJaen"]) {
+      // Slide 20: Demo 2 Validación expansiva Jaén
+      if ((idx === 20 || idx === 18) && !charts["demoJaen"]) {
         const canvas = document.getElementById("chartDemoJaen");
         if (canvas) {
           const ctx = canvas.getContext("2d");
