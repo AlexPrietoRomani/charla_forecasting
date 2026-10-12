@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-OUTPUT_DIR = Path("images/caso_1")
+OUTPUT_DIR = Path("docs/images/caso_1")
 DATA_DIR = Path("data/caso_1")
 
 def plot_serie_punchana():

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-OUTPUT_DIR = Path("images/caso_2")
+OUTPUT_DIR = Path("docs/images/caso_2")
 DATA_DIR = Path("data/caso_2")
 
 def plot_rendimiento_historico():
