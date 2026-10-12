@@ -931,6 +931,43 @@ def get_deck_css(branding=None):
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+  }}
+
+  /* CONTROLES INTERACTIVOS DE GRÁFICOS (CHIPS/TABS) */
+  .chart-toolbar {{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    z-index: 5;
+  }}
+  .chart-filter-btn {{
+    background: rgba(11, 22, 56, 0.7);
+    border: 1px solid rgba(18, 200, 252, 0.25);
+    color: #CBD5E1;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace;
+    transition: all 0.15s ease;
+  }}
+  .chart-filter-btn:hover {{
+    background: rgba(18, 200, 252, 0.18);
+    color: #12C8FC;
+    border-color: #12C8FC;
+  }}
+  .chart-filter-btn.active {{
+    background: #12C8FC;
+    color: #03050F;
+    border-color: #12C8FC;
+    box-shadow: 0 0 10px rgba(18, 200, 252, 0.4);
+    font-weight: 700;
   }}
 
   /* LIGHTBOX MODAL */

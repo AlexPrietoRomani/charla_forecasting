@@ -33,7 +33,16 @@ def get_slides_part2(branding=None):
 
       <div class="graphic-card-col">
         <div class="chart-wrapper">
-          <canvas id="chartBenchmark"></canvas>
+          <div class="chart-toolbar">
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">FILTRAR:</span>
+            <button class="chart-filter-btn active" id="btnBmAll" onclick="filterBenchmarkPunchana('all')">Todos (14)</button>
+            <button class="chart-filter-btn" id="btnBmLeaders" onclick="filterBenchmarkPunchana('leaders')">Líderes (p &gt; 0.05)</button>
+            <button class="chart-filter-btn" id="btnBmNwp" onclick="filterBenchmarkPunchana('nwp')">Física Global (ECMWF/NOAA)</button>
+            <button class="chart-filter-btn" id="btnBmLocal" onclick="filterBenchmarkPunchana('local')">ML Local / Árboles</button>
+          </div>
+          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
+            <canvas id="chartBenchmark"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +74,15 @@ def get_slides_part2(branding=None):
 
       <div class="graphic-card-col">
         <div class="chart-wrapper">
-          <canvas id="chartDemo7d"></canvas>
+          <div class="chart-toolbar">
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">VISTA:</span>
+            <button class="chart-filter-btn active" id="btnDemoAll" onclick="filterDemo7dView('all')">Multimodelo Completo</button>
+            <button class="chart-filter-btn" id="btnDemoNwp" onclick="filterDemo7dView('nwp')">Confrontar NWP vs SENAMHI</button>
+            <button class="chart-filter-btn" id="btnDemoWinner" onclick="filterDemo7dView('winner')">Líder ExtraTrees + Cono P10/P90</button>
+          </div>
+          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
+            <canvas id="chartDemo7d"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -297,7 +314,15 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
 
       <div class="graphic-card-col">
         <div class="chart-wrapper">
-          <canvas id="chartScatterNdvi"></canvas>
+          <div class="chart-toolbar">
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">VARIABLE EJE X:</span>
+            <button class="chart-filter-btn active" id="btnScatterNdvi" onclick="switchScatterVariable('ndvi')">MODIS NDVI Anual (r=0.154, p=0.60)</button>
+            <button class="chart-filter-btn" id="btnScatterDef" onclick="switchScatterVariable('deficit')">Déficit Hídrico Floración (r=0.756, p=0.002)</button>
+            <button class="chart-filter-btn" id="btnScatterLluvia" onclick="switchScatterVariable('lluvia')">Lluvia en Floración (r=0.751, p=0.002)</button>
+          </div>
+          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
+            <canvas id="chartScatterNdvi"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -329,7 +354,14 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
 
       <div class="graphic-card-col">
         <div class="chart-wrapper">
-          <canvas id="chartDemoJaen"></canvas>
+          <div class="chart-toolbar">
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">MODO:</span>
+            <button class="chart-filter-btn active" id="btnJaenTraj" onclick="switchJaenViewMode('trajectory')">Trayectorias Walk-Forward (2016–2024)</button>
+            <button class="chart-filter-btn" id="btnJaenBench" onclick="switchJaenViewMode('benchmark')">Benchmark de 16 Modelos (MAE)</button>
+          </div>
+          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
+            <canvas id="chartDemoJaen"></canvas>
+          </div>
         </div>
       </div>
     </div>

@@ -587,10 +587,11 @@ def build_deck():
               datasets: [{{
                 label: "RMSE (°C) en Holdout de 90 Días",
                 data: d.map(r => r.rmse_1d),
+                extraData: d,
                 backgroundColor: d.map(r => {{
                   if (r.modelo && r.modelo.includes("ExtraTrees")) return "#059669";
                   if (r.familia && r.familia.includes("Física Global")) return "#8B5CF6";
-                  if (r.p_valor_vs_mejor > 0.05) return "#10B981";
+                  if (r.p_valor_vs_mejor >= 0.05) return "#10B981";
                   if (r.familia && r.familia.includes("Baseline")) return "#EF4444";
                   return "#F59E0B";
                 }})
@@ -601,7 +602,21 @@ def build_deck():
               responsive: true,
               maintainAspectRatio: false,
               plugins: {{
-                legend: {{ display: false }}
+                legend: {{ display: false }},
+                tooltip: {{
+                  callbacks: {{
+                    label: (context) => {{
+                      const row = context.dataset.extraData ? context.dataset.extraData[context.dataIndex] : null;
+                      if (!row) return `${{context.dataset.label}}: ${{context.raw}} °C`;
+                      return [
+                        `RMSE (1D): ${{row.rmse_1d}} °C | MAE (1D): ${{row.mae_1d}} °C`,
+                        `RMSE (7D): ${{row.rmse_7d}} °C | MAE (7D): ${{row.mae_7d}} °C`,
+                        `Hardware: ${{row.hardware}} | Tiempo: ${{row.tiempo_s}}s`,
+                        `p-valor vs ExtraTrees: ${{row.p_valor_vs_mejor >= 0.05 ? row.p_valor_vs_mejor + ' (Empate estadístico)' : row.p_valor_vs_mejor + ' (Diferencia significativa)'}}`
+                      ];
+                    }}
+                  }}
+                }}
               }},
               scales: {{
                 x: {{ min: 1.6, max: 3.1, title: {{ display: true, text: "RMSE (°C) en Holdout de 90 Días — Menor es mejor" }} }}
@@ -707,7 +722,20 @@ def build_deck():
               responsive: true,
               maintainAspectRatio: false,
               plugins: {{
-                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
+                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }},
+                tooltip: {{
+                  callbacks: {{
+                    label: (ctx) => {{
+                      const obs = d[ctx.dataIndex].tmax_observada;
+                      if (ctx.datasetIndex === 0) {{
+                        return `SENAMHI Observado: ${{ctx.raw.toFixed(2)}} °C`;
+                      }}
+                      const diff = (ctx.raw - obs).toFixed(2);
+                      const sign = diff > 0 ? "+" : "";
+                      return `${{ctx.dataset.label}}: ${{ctx.raw.toFixed(2)}} °C (Error: ${{sign}}${{diff}} °C)`;
+                    }}
+                  }}
+                }}
               }},
               scales: {{
                 y: {{ min: 22, max: 38, title: {{ display: true, text: "Tmax (°C)" }} }}
@@ -759,7 +787,7 @@ def build_deck():
       }}
 
       // Slide 19: Scatter NDVI vs Rendimiento
-      if ((idx === 19 || idx === 16) && !charts["scatterNdvi"]) {{
+      if (idx === 19 && !charts["scatterNdvi"]) {{
         const canvas = document.getElementById("chartScatterNdvi");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -770,15 +798,15 @@ def build_deck():
             data: {{
               datasets: [
                 {{
-                  label: "Campañas Auditadas (2010-2024)",
-                  data: valid.map(r => ({{ x: r.ndvi_anual, y: r.rendimiento_qq_ha, anio: r.campania }})),
+                  label: "Campañas Auditadas (MODIS NDVI Anual)",
+                  data: valid.map(r => ({{ x: r.ndvi_anual, y: r.rendimiento_qq_ha, anio: r.campania, val: r.ndvi_anual, unidad: "NDVI" }})),
                   backgroundColor: valid.map(r => r.campania === 2014 ? "#DC2626" : "#2563EB"),
                   pointRadius: valid.map(r => r.campania === 2014 ? 8 : 5)
                 }},
                 {{
                   type: "line",
-                  label: "Tendencia Lineal (r = 0.154, p = 0.600 — Pendiente Nula)",
-                  data: [{{ x: 0.69, y: 19.8 }}, {{ x: 0.78, y: 21.6 }}],
+                  label: "Tendencia Lineal NDVI (r = 0.154, p = 0.600 — Pendiente Nula)",
+                  data: [{{ x: 0.69, y: 19.96 }}, {{ x: 0.78, y: 22.17 }}],
                   borderColor: "#94A3B8",
                   borderDash: [4, 4],
                   borderWidth: 1.8,
@@ -794,12 +822,18 @@ def build_deck():
                 legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10 }} }} }},
                 tooltip: {{
                   callbacks: {{
-                    label: (ctx) => ctx.raw.anio ? `Campaña ${{ctx.raw.anio}}: NDVI ${{ctx.raw.x.toFixed(3)}}, Rend: ${{ctx.raw.y}} qq/ha` : "Línea de regresión plana"
+                    label: (ctx) => {{
+                      if (ctx.raw.anio) {{
+                        const notaRoya = ctx.raw.anio === 2014 ? " [⚠️ CRISIS DE LA ROYA AMARILLA -56%]" : "";
+                        return `Campaña ${{ctx.raw.anio}}: ${{ctx.raw.val !== undefined ? ctx.raw.val.toFixed(2) : ctx.raw.x}} ${{ctx.raw.unidad || ''}} -> Rend: ${{ctx.raw.y.toFixed(2)}} qq/ha${{notaRoya}}`;
+                      }}
+                      return ctx.dataset.label;
+                    }}
                   }}
                 }}
               }},
               scales: {{
-                x: {{ min: 0.68, max: 0.79, title: {{ display: true, text: "NDVI MODIS Anual (r = 0.154, p = 0.600)" }} }} ,
+                x: {{ min: 0.68, max: 0.80, title: {{ display: true, text: "NDVI MODIS Anual (r = 0.154, p = 0.600 — Señal Saturada)" }} }},
                 y: {{ min: 8, max: 38, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
               }}
             }}
@@ -808,71 +842,245 @@ def build_deck():
       }}
 
       // Slide 20: Demo 2 Validación expansiva Jaén
-      if ((idx === 20 || idx === 18) && !charts["demoJaen"]) {{
-        const canvas = document.getElementById("chartDemoJaen");
-        if (canvas) {{
-          const ctx = canvas.getContext("2d");
-          const d = window.DECK_DATA.cafe_predicciones || window.DECK_DATA.cafe_resultados;
-          charts["demoJaen"] = new Chart(ctx, {{
-            type: "line",
-            data: {{
-              labels: d.map(r => r.campania),
-              datasets: [
-                {{
-                  label: "Observado Oficial SIEA (qq/ha)",
-                  data: d.map(r => r.rendimiento_real !== undefined ? r.rendimiento_real : r.rendimiento_obs),
-                  borderColor: "#FFFFFF",
-                  borderWidth: 3.2,
-                  pointRadius: 4.5
-                }},
-                {{
-                  label: "M12: Random Forest (Líder MAE 3.72)",
-                  data: d.map(r => r["M12: Random Forest Parsimonioso (d=2)"] !== undefined ? r["M12: Random Forest Parsimonioso (d=2)"] : r.pred_m4_fusion),
-                  borderColor: "#059669",
-                  borderWidth: 2.5,
-                  pointRadius: 3.5
-                }},
-                {{
-                  label: "M08: Solo Déficit Hídrico (MAE 3.90)",
-                  data: d.map(r => r["M08: Solo Déficit Hídrico Floración"] !== undefined ? r["M08: Solo Déficit Hídrico Floración"] : r.pred_m3_clima),
-                  borderColor: "#0284C7",
-                  borderWidth: 2.0,
-                  borderDash: [4, 3],
-                  pointRadius: 3
-                }},
-                {{
-                  label: "M11: ElasticNet Multimodal (MAE 4.33)",
-                  data: d.map(r => r["M11: ElasticNet Multimodal (L1+L2)"] !== undefined ? r["M11: ElasticNet Multimodal (L1+L2)"] : r.pred_m4_fusion),
-                  borderColor: "#8B5CF6",
-                  borderWidth: 2.0,
-                  borderDash: [3, 2],
-                  pointRadius: 2.5
-                }},
-                {{
-                  label: "M05: Solo NDVI Anual (Trampa MAE 5.45)",
-                  data: d.map(r => r["M05: Solo NDVI Anual (Saturado)"] !== undefined ? r["M05: Solo NDVI Anual (Saturado)"] : r.pred_m2_satelite),
-                  borderColor: "#DC2626",
-                  borderWidth: 2.2,
-                  borderDash: [5, 4],
-                  pointRadius: 3
-                }}
-              ]
-            }},
-            options: {{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {{
-                legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
-              }},
-              scales: {{
-                y: {{ min: 12, max: 38, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
-              }}
-            }}
-          }});
-        }}
+      if (idx === 20 && !charts["demoJaen"]) {{
+        switchJaenViewMode("trajectory");
       }}
     }} catch (err) {{
       console.warn("Visual initialization notice on slide", idx, err);
+    }}
+  }}
+
+  function filterBenchmarkPunchana(filterType) {{
+    const chart = charts["benchmark"];
+    if (!chart) return;
+    const allData = window.DECK_DATA.benchmark;
+    let filtered = allData;
+    if (filterType === "leaders") {{
+      filtered = allData.filter(r => r.p_valor_vs_mejor >= 0.05);
+    }} else if (filterType === "nwp") {{
+      filtered = allData.filter(r => (r.familia && r.familia.includes("Física Global")) || (r.modelo && r.modelo.includes("ExtraTrees")));
+    }} else if (filterType === "local") {{
+      filtered = allData.filter(r => !(r.familia && r.familia.includes("Física Global")));
+    }}
+
+    ["btnBmAll", "btnBmLeaders", "btnBmNwp", "btnBmLocal"].forEach(id => {{
+      const b = document.getElementById(id);
+      if (b) b.classList.remove("active");
+    }});
+    if (filterType === "all") document.getElementById("btnBmAll")?.classList.add("active");
+    if (filterType === "leaders") document.getElementById("btnBmLeaders")?.classList.add("active");
+    if (filterType === "nwp") document.getElementById("btnBmNwp")?.classList.add("active");
+    if (filterType === "local") document.getElementById("btnBmLocal")?.classList.add("active");
+
+    chart.data.labels = filtered.map(r => r.modelo);
+    chart.data.datasets[0].data = filtered.map(r => r.rmse_1d);
+    chart.data.datasets[0].extraData = filtered;
+    chart.data.datasets[0].backgroundColor = filtered.map(r => {{
+      if (r.modelo && r.modelo.includes("ExtraTrees")) return "#059669";
+      if (r.familia && r.familia.includes("Física Global")) return "#8B5CF6";
+      if (r.p_valor_vs_mejor >= 0.05) return "#10B981";
+      if (r.familia && r.familia.includes("Baseline")) return "#EF4444";
+      return "#F59E0B";
+    }});
+    chart.update();
+  }}
+
+  function filterDemo7dView(viewType) {{
+    const chart = charts["demo7d"];
+    if (!chart) return;
+    ["btnDemoAll", "btnDemoNwp", "btnDemoWinner"].forEach(id => {{
+      const b = document.getElementById(id);
+      if (b) b.classList.remove("active");
+    }});
+    if (viewType === "all") document.getElementById("btnDemoAll")?.classList.add("active");
+    if (viewType === "nwp") document.getElementById("btnDemoNwp")?.classList.add("active");
+    if (viewType === "winner") document.getElementById("btnDemoWinner")?.classList.add("active");
+
+    if (viewType === "all") {{
+      [0, 1, 2, 3, 4, 5, 6].forEach(i => chart.setDatasetVisibility(i, true));
+      [7, 8].forEach(i => chart.setDatasetVisibility(i, false));
+    }} else if (viewType === "nwp") {{
+      [0, 1, 5, 6].forEach(i => chart.setDatasetVisibility(i, true));
+      [2, 3, 4, 7, 8].forEach(i => chart.setDatasetVisibility(i, false));
+    }} else if (viewType === "winner") {{
+      [0, 1, 2, 3].forEach(i => chart.setDatasetVisibility(i, true));
+      [4, 5, 6, 7, 8].forEach(i => chart.setDatasetVisibility(i, false));
+    }}
+    chart.update();
+  }}
+
+  function switchScatterVariable(varType) {{
+    const chart = charts["scatterNdvi"];
+    if (!chart) return;
+    const d = window.DECK_DATA.cafe_campanias;
+    const valid = d.filter(r => r.rendimiento_qq_ha !== null);
+
+    ["btnScatterNdvi", "btnScatterDef", "btnScatterLluvia"].forEach(id => {{
+      const b = document.getElementById(id);
+      if (b) b.classList.remove("active");
+    }});
+
+    if (varType === "ndvi") {{
+      document.getElementById("btnScatterNdvi")?.classList.add("active");
+      chart.data.datasets[0].label = "Campañas Auditadas (MODIS NDVI Anual)";
+      chart.data.datasets[0].data = valid.map(r => ({{ x: r.ndvi_anual, y: r.rendimiento_qq_ha, anio: r.campania, val: r.ndvi_anual, unidad: "NDVI" }}));
+      chart.data.datasets[1].label = "Tendencia Lineal NDVI (r = 0.154, p = 0.600 — Pendiente Nula)";
+      chart.data.datasets[1].data = [{{ x: 0.69, y: 19.96 }}, {{ x: 0.78, y: 22.17 }}];
+      chart.options.scales.x.min = 0.68;
+      chart.options.scales.x.max = 0.80;
+      chart.options.scales.x.title.text = "NDVI MODIS Anual (r = 0.154, p = 0.600 — Señal Saturada)";
+    }} else if (varType === "deficit") {{
+      document.getElementById("btnScatterDef")?.classList.add("active");
+      chart.data.datasets[0].label = "Campañas Auditadas (Déficit Hídrico Floración)";
+      chart.data.datasets[0].data = valid.map(r => ({{ x: r.def_hidrico_flor_mm, y: r.rendimiento_qq_ha, anio: r.campania, val: r.def_hidrico_flor_mm, unidad: "mm" }}));
+      chart.data.datasets[1].label = "Tendencia Lineal Déficit (r = 0.756, p = 0.002 — Fuerte Causalidad)";
+      chart.data.datasets[1].data = [{{ x: -280, y: 16.67 }}, {{ x: 480, y: 27.63 }}];
+      chart.options.scales.x.min = -300;
+      chart.options.scales.x.max = 500;
+      chart.options.scales.x.title.text = "Balance Hídrico Floración P - PET (mm) · ERA5 (r = 0.756, p = 0.002)";
+    }} else if (varType === "lluvia") {{
+      document.getElementById("btnScatterLluvia")?.classList.add("active");
+      chart.data.datasets[0].label = "Campañas Auditadas (Lluvia en Floración)";
+      chart.data.datasets[0].data = valid.map(r => ({{ x: r.lluvia_flor_mm, y: r.rendimiento_qq_ha, anio: r.campania, val: r.lluvia_flor_mm, unidad: "mm" }}));
+      chart.data.datasets[1].label = "Tendencia Lineal Lluvia (r = 0.751, p = 0.002 — Señal Crítica)";
+      chart.data.datasets[1].data = [{{ x: 50, y: 16.48 }}, {{ x: 800, y: 27.52 }}];
+      chart.options.scales.x.min = 50;
+      chart.options.scales.x.max = 820;
+      chart.options.scales.x.title.text = "Precipitación Acumulada Floración Ago-Oct (mm) · ERA5 (r = 0.751, p = 0.002)";
+    }}
+    chart.update();
+  }}
+
+  function switchJaenViewMode(mode) {{
+    const canvas = document.getElementById("chartDemoJaen");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    ["btnJaenTraj", "btnJaenBench"].forEach(id => {{
+      const b = document.getElementById(id);
+      if (b) b.classList.remove("active");
+    }});
+
+    if (mode === "benchmark") {{
+      document.getElementById("btnJaenBench")?.classList.add("active");
+      if (charts["demoJaen"]) {{
+        charts["demoJaen"].destroy();
+      }}
+      const bm = window.DECK_DATA.cafe_benchmark || [];
+      charts["demoJaen"] = new Chart(ctx, {{
+        type: "bar",
+        data: {{
+          labels: bm.map(r => r.modelo),
+          datasets: [{{
+            label: "MAE Walk-Forward (qq/ha)",
+            data: bm.map(r => r.mae_walkforward),
+            extraData: bm,
+            backgroundColor: bm.map(r => {{
+              if (r.modelo && r.modelo.includes("Random Forest")) return "#059669";
+              if (r.modelo && r.modelo.includes("Déficit Hídrico")) return "#0284C7";
+              if (r.modelo && r.modelo.includes("NDVI Anual")) return "#DC2626";
+              if (r.familia && r.familia.includes("Baseline")) return "#94A3B8";
+              if (r.p_valor_vs_mejor >= 0.05) return "#10B981";
+              return "#8B5CF6";
+            }})
+          }}]
+        }},
+        options: {{
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {{
+            legend: {{ display: false }},
+            tooltip: {{
+              callbacks: {{
+                label: (ctx) => {{
+                  const row = ctx.dataset.extraData ? ctx.dataset.extraData[ctx.dataIndex] : null;
+                  if (!row) return `MAE: ${{ctx.raw}} qq/ha`;
+                  return [
+                    `MAE Walk-Forward: ${{row.mae_walkforward}} qq/ha | RMSE: ${{row.rmse_walkforward}} qq/ha`,
+                    `MAPE: ${{row.mape_walkforward}}% | Error en Récord 2020: ${{row.error_abs_2020}} qq/ha`,
+                    `Familia: ${{row.familia}} | Hardware: ${{row.hardware}} (${{row.tiempo_ms}} ms)`,
+                    `p-valor vs RF: ${{row.p_valor_vs_mejor >= 0.05 ? row.p_valor_vs_mejor + ' (Sin dif. sig.)' : row.p_valor_vs_mejor + ' (Inferior)'}}`
+                  ];
+                }}
+              }}
+            }}
+          }},
+          scales: {{
+            x: {{ min: 3.0, max: 9.0, title: {{ display: true, text: "MAE Walk-Forward (qq/ha) — Menor es mejor" }} }}
+          }}
+        }}
+      }});
+    }} else {{
+      document.getElementById("btnJaenTraj")?.classList.add("active");
+      if (charts["demoJaen"]) {{
+        charts["demoJaen"].destroy();
+      }}
+      const d = window.DECK_DATA.cafe_predicciones || window.DECK_DATA.cafe_resultados;
+      charts["demoJaen"] = new Chart(ctx, {{
+        type: "line",
+        data: {{
+          labels: d.map(r => r.campania),
+          datasets: [
+            {{
+              label: "Observado Oficial SIEA (qq/ha)",
+              data: d.map(r => r.rendimiento_real !== undefined ? r.rendimiento_real : r.rendimiento_obs),
+              borderColor: "#FFFFFF",
+              borderWidth: 3.2,
+              pointRadius: 4.5
+            }},
+            {{
+              label: "M12: Random Forest (Líder MAE 3.72)",
+              data: d.map(r => r["M12: Random Forest Parsimonioso (d=2)"] !== undefined ? r["M12: Random Forest Parsimonioso (d=2)"] : r.pred_m4_fusion),
+              borderColor: "#059669",
+              borderWidth: 2.5,
+              pointRadius: 3.5
+            }},
+            {{
+              label: "M08: Solo Déficit Hídrico (MAE 3.90)",
+              data: d.map(r => r["M08: Solo Déficit Hídrico Floración"] !== undefined ? r["M08: Solo Déficit Hídrico Floración"] : r.pred_m3_clima),
+              borderColor: "#0284C7",
+              borderWidth: 2.0,
+              borderDash: [4, 3],
+              pointRadius: 3
+            }},
+            {{
+              label: "M11: ElasticNet Multimodal (MAE 4.33)",
+              data: d.map(r => r["M11: ElasticNet Multimodal (L1+L2)"] !== undefined ? r["M11: ElasticNet Multimodal (L1+L2)"] : r.pred_m4_fusion),
+              borderColor: "#8B5CF6",
+              borderWidth: 2.0,
+              borderDash: [3, 2],
+              pointRadius: 2.5
+            }},
+            {{
+              label: "M05: Solo NDVI Anual (Trampa MAE 5.45)",
+              data: d.map(r => r["M05: Solo NDVI Anual (Saturado)"] !== undefined ? r["M05: Solo NDVI Anual (Saturado)"] : r.pred_m2_satelite),
+              borderColor: "#DC2626",
+              borderWidth: 2.2,
+              borderDash: [5, 4],
+              pointRadius: 3
+            }}
+          ]
+        }},
+        options: {{
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {{
+            legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }},
+            tooltip: {{
+              callbacks: {{
+                afterLabel: (ctx) => {{
+                  if (ctx.label === "2020") return "⚠️ AÑO RÉCORD NACIONAL (42.5 qq/ha) — Desafío de extrapolación";
+                  return "";
+                }}
+              }}
+            }}
+          }},
+          scales: {{
+            y: {{ min: 12, max: 46, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
+          }}
+        }}
+      }});
     }}
   }}
 
