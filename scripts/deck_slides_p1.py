@@ -115,7 +115,7 @@ def get_slides_part1(branding=None):
     <div class="section-huge-num">01</div>
     <h2 class="section-title display">Historia de los modelos de series temporales</h2>
     <p class="section-desc">
-      Cómo evolucionó la ciencia de predecir el futuro: desde las ecuaciones estadísticas clásicas de Box-Jenkins hasta las arquitecturas de grafos y transformers masivos, explorando qué cambia y qué límites físicos permanecen inalterables.
+      De las ecuaciones cerradas de Verhulst y Box-Jenkins al Machine Learning tabular, Transformers y Foundation Models Zero-Shot: qué cambia en cada era y qué límites físicos permanecen inmutables.
     </p>
   </section>
 
@@ -126,22 +126,25 @@ def get_slides_part1(branding=None):
     <h2 class="slide-main-title display">Anatomía ontológica: física vs ruido</h2>
     <div class="content-insight-layout">
       <div class="content-bullets-col">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:#12C8FC; margin-bottom:12px;" class="mono">
+          Y(t) = T(t) + S(t) + C(t) + ε(t)
+        </div>
         <ul class="standard-bullet-list">
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Tendencia Secular T(t):</strong> Deriva física de fondo gobernada por el calentamiento regional (+0.20 °C/década) o envejecimiento del sensor.</div>
+            <div><strong>Tendencia Secular T(t):</strong> Deriva física de fondo (calentamiento regional a +0.20 °C/década, envejecimiento instrumental o cambio de uso de suelo).</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Estacionalidad Solar S(t):</strong> Ciclo astronómico invariable de 365 días por la oblicuidad y traslación orbital de la Tierra.</div>
+            <div><strong>Estacionalidad Solar S(t):</strong> Armónicos rígidos de 365 días impuestos por la mecánica orbital de la Tierra y los ciclos solares.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Macro-ciclo Acoplado C(t):</strong> Oscilación océano-atmósfera cuasi-periódica (ENSO: El Niño / La Niña cada 3 a 7 años).</div>
+            <div><strong>Macro-ciclo Acoplado C(t):</strong> Oscilaciones aperiódicas océano-atmósfera (como El Niño-Oscilación del Sur cada 3 a 7 años).</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Ruido Estocástico ε(t):</strong> Turbulencia de microescala convectiva local inalcanzable determinísticamente (atractor caótico).</div>
+            <div><strong>Ruido Estocástico ε(t):</strong> Turbulencia convectiva irreducible. Forzar a una red neuronal profunda a memorizar el ruido residual ε(t) garantiza sobreajuste catastrófico en producción.</div>
           </li>
         </ul>
       </div>
@@ -150,7 +153,7 @@ def get_slides_part1(branding=None):
         <div class="archetype-idea-icon">💡</div>
         <div class="archetype-idea-label">IDEA CLAVE</div>
         <p class="archetype-idea-text">
-          Una serie física no es una secuencia arbitraria: es la superposición de leyes termodinámicas, ciclos astronómicos y ruido residual. Ningún algoritmo puede superar el límite impuesto por su ratio señal/ruido intrínseco.
+          Si no separas la estacionalidad, tu modelo más complejo solo estará memorizando qué mes del año es. La IA no puede conjurar física donde solo hay ruido estocástico.
         </p>
       </div>
     </div>
@@ -166,41 +169,45 @@ def get_slides_part1(branding=None):
         <ul class="standard-bullet-list">
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Era 1 (1970–1990):</strong> Métodos lineales parsimoniosos (ARIMA, Holt-Winters). Exigen estacionariedad e hipótesis analíticas.</div>
+            <div><strong>1. Clásicos Analíticos (1838–1970s):</strong> Verhulst (techo biológico L) y Holt-Winters / ARIMA (memoria geométrica α(1-α)ᵏ). Inferencia en microsegundos sobre CPU sin GPUs.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Era 2 (2000–2015):</strong> ML tabular sobre retardos temporales (Random Forest, GBDT). Capturan no-linealidad pero sufren con tendencias.</div>
+            <div><strong>2. El Puente Tabular (2000s–2010s):</strong> Convertir tiempo en rezagos (lags 1..14). Random Forest y LightGBM dominaron Walmart M5 (30,490 series). Patología: no pueden extrapolar fuera de rango.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Era 3 &amp; 4 (2018–2026):</strong> Deep Learning (LSTM, TFT) y Foundation Models Zero-Shot (Chronos, TimesFM, GraphCast).</div>
+            <div><strong>3. Deep Learning Secuencial (2018–2023):</strong> De LSTM (cuello de botella recurrente) a PatchTST (agrupar 16 pasos como palabras, reduciendo memoria y cómputo 8×).</div>
+          </li>
+          <li class="standard-bullet-item">
+            <span class="standard-bullet-dot"></span>
+            <div><strong>4. Foundation Models &amp; Grafos (2024–2026):</strong> Chronos (Amazon) y TimesFM (Google 200M) para Zero-Shot masivo; GraphCast (DeepMind) predice el clima global en 60s en TPU.</div>
           </li>
         </ul>
-        <div class="graphic-source">Fuente: Hyndman &amp; Athanasopoulos (2021) · Makridakis Competitions (M3, M4, M5)</div>
+        <div class="graphic-source">Makridakis Competitions (M3, M4, M5) · Hyndman &amp; Athanasopoulos (2021) · Google &amp; Amazon Research (2024)</div>
       </div>
 
       <div class="graphic-card-col">
         <div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:12px; height:100%;">
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:10px; border-left:4px solid var(--fest-cyan); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-cyan); font-weight:700; font-size:11px;" class="mono">ERA 1 · ESTADÍSTICA (1970s)</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">ARIMA / Holt-Winters</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Parsimonia extrema, supuestos gaussianos y convergencia analítica garantizada.</p>
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-cyan); display:flex; flex-direction:column; justify-content:center;">
+            <div style="color:var(--fest-cyan); font-weight:700; font-size:11px;" class="mono">ERA 1 · CLÁSICOS ANALÍTICOS</div>
+            <div style="font-weight:700; font-size:15px; margin:3px 0;">ARIMA &amp; Holt-Winters</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Parsimonia extrema, memoria geométrica, techos asintóticos e inferencia instantánea.</p>
           </div>
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:10px; border-left:4px solid var(--fest-blue); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-blue); font-weight:700; font-size:11px;" class="mono">ERA 2 · MACHINE LEARNING (2000s)</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">Random Forest / XGBoost</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Ventanas rezagadas (lags), no linealidad tabular robusta, incapacidad de extrapolar.</p>
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-blue); display:flex; flex-direction:column; justify-content:center;">
+            <div style="color:var(--fest-blue); font-weight:700; font-size:11px;" class="mono">ERA 2 · TABULAR &amp; ÁRBOLES</div>
+            <div style="font-weight:700; font-size:15px; margin:3px 0;">LightGBM &amp; Random Forest</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Rezagos temporales (lags 1..14). Ganadores de M5, pero colapsan en mesetas ante récords.</p>
           </div>
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:10px; border-left:4px solid var(--fest-purple); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-purple); font-weight:700; font-size:11px;" class="mono">ERA 3 · DEEP LEARNING (2018+)</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">LSTM / N-BEATS / TFT</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Mecanismos de atención temporal y descomposición profunda de tendencias.</p>
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-purple); display:flex; flex-direction:column; justify-content:center;">
+            <div style="color:var(--fest-purple); font-weight:700; font-size:11px;" class="mono">ERA 3 · DEEP LEARNING</div>
+            <div style="font-weight:700; font-size:15px; margin:3px 0;">LSTM &amp; PatchTST</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Atención en parches temporales: trata el tiempo como palabras reduciendo costo 8×.</p>
           </div>
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:10px; border-left:4px solid var(--fest-magenta); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-magenta); font-weight:700; font-size:11px;" class="mono">ERA 4 · FOUNDATION MODELS (2024+)</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">Chronos / GraphCast</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Zero-shot preentrenado masivo y redes sobre grafos físicos icosaédricos.</p>
+          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-magenta); display:flex; flex-direction:column; justify-content:center;">
+            <div style="color:var(--fest-magenta); font-weight:700; font-size:11px;" class="mono">ERA 4 · FOUNDATION &amp; GRAFOS</div>
+            <div style="font-weight:700; font-size:15px; margin:3px 0;">TimesFM, Chronos &amp; GraphCast</div>
+            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Zero-Shot sin reentrenamiento local y grafos icosaédricos para dinámica de fluidos.</p>
           </div>
         </div>
       </div>
@@ -211,24 +218,24 @@ def get_slides_part1(branding=None):
   <!-- DIAPO 07: CONO DE INCERTIDUMBRE (page-06.png)                 -->
   <!-- ============================================================= -->
   <section class="slide" data-index="7" data-act="Acto 1 · Cono de Incertidumbre" data-time="2.0 min">
-    <h2 class="slide-main-title display">Cono de incertidumbre y dispersión temporal</h2>
+    <h2 class="slide-main-title display">La ilusión de la certeza: cono de incertidumbre</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
         <ul class="standard-bullet-list">
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>El sesgo puntual:</strong> Exigir una predicción única oculta el riesgo operacional en clima y agricultura.</div>
+            <div><strong>El sesgo puntual:</strong> Exigir a un modelo un escalar único (ŷ_t+h) es una ficción matemática que oculta el verdadero riesgo operacional.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Entropía acumulada:</strong> Todo sistema caótico pierde predictibilidad; la dispersión estocástica crece con σ_h ∝ √h.</div>
+            <div><strong>Divergencia de Lyapunov:</strong> En sistemas caóticos y atmosféricos, los errores microscópicos se amplifican; la dispersión estocástica crece con σ_h ∝ √h.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Decisión estocástica:</strong> En horizontes h &gt; 7 días, toda decisión logística debe fundamentarse en bandas P10–P90.</div>
+            <div><strong>Decisión estocástica:</strong> En horizontes h &gt; 7 días, toda decisión logística debe fundamentarse en abanicos Monte Carlo y bandas P10–P90, nunca en un valor escalar.</div>
           </li>
         </ul>
-        <div class="graphic-source">Simulación Estocástica Monte Carlo · Teorema de Lorenz (1963)</div>
+        <div class="graphic-source">Simulación Estocástica Monte Carlo · Teorema del Atractor de Lorenz (1963)</div>
       </div>
 
       <div class="graphic-card-col">
