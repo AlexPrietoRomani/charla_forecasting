@@ -184,13 +184,15 @@ def create_cafe_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "# Práctica B: Rendimiento de Café con Datos Reales (Jaén, Cajamarca)\n",
+                    "# Práctica B: ¿Puede la IA predecir la cosecha de café? Jaén (Cajamarca)\n",
                     "\n",
-                    "Este notebook implementa el caso de estudio **Caso B** con datos 100% reales y auditados:\n",
-                    "- Rendimiento oficial de café extraído de compendios estadísticos del **INEI** y **MIDAGRI** (2010 a 2024).\n",
-                    "- Índices de vegetación reales **MODIS MOD13Q1** (250m, 16 días) de Microsoft Planetary Computer.\n",
-                    "- Clima diario real **ERA5** (Open-Meteo Archive, 2000–2024).\n",
-                    "- Evaluación empírica de las 4 hipótesis científicas (H1: saturación de NDVI, H2: desacople fenológico, H3: ventaja de fusión multimodal en ventana expansiva, H4: invisibilidad de la roya 2012-2014 al satélite óptico)."
+                    "Este notebook implementa el **Caso 2** de la investigación con datos 100% auditados y reproducibles:\n",
+                    "- **24 campañas agrícolas continuas (2001–2024)** en la cuenca cafetalera de Jaén (Cajamarca, Perú).\n",
+                    "- **Rendimiento oficial de café** extraído de compendios estadísticos del **INEI** y **MIDAGRI-SIEA** (2010 a 2024).\n",
+                    "- **Sensoramiento Remoto MODIS MOD13Q1 (250m, 16 días)**: NDVI y EVI anual y en ventanas fenológicas (Floración: Ago-Oct; Llenado: Nov-Feb).\n",
+                    "- **Clima diario ERA5-Land**: Precipitación, balance hídrico y temperaturas extremas.\n",
+                    "- **Benchmark riguroso de 16 modelos** evaluados bajo **Walk-Forward expansivo (Leave-Future-Out)** de 2016 a 2024.\n",
+                    "- Auditoría de las 4 hipótesis científicas (H1: saturación de NDVI, H2: desacople fenológico, H3: ventaja multimodal, H4: ceguera espectral de la roya 2012-2014)."
                 ]
             },
             {
@@ -205,17 +207,17 @@ def create_cafe_notebook():
                     "import json\n",
                     "\n",
                     "df = pd.read_csv('../data/caso_2/cafe_jaen_campanias.csv')\n",
-                    "print(f'Total campañas: {len(df)}')\n",
-                    "con_rend = df.dropna(subset=['rendimiento_kg_ha'])\n",
-                    "con_rend[['campania', 'rendimiento_qq_ha', 'superficie_cosechada_ha', 'produccion_t', 'ndvi_anual', 'lluvia_flor_mm', 'tmax_flor_c']]"
+                    "print(f'Total campañas históricas: {len(df)}')\n",
+                    "con_rend = df.dropna(subset=['rendimiento_qq_ha']).reset_index(drop=True)\n",
+                    "display(con_rend[['campania', 'rendimiento_qq_ha', 'superficie_cosechada_ha', 'produccion_t', 'ndvi_anual', 'evi_flor', 'lluvia_flor_mm', 'def_hidrico_flor_mm']])"
                 ]
             },
             {
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 1. Demostración de Saturación (H1): NDVI vs Rendimiento\n",
-                    "Observemos cómo el NDVI promedio anual permanece prácticamente plano en ~0.74 (CV = 2.3%), desacoplado de las variaciones del rendimiento de cosecha."
+                    "## 1. La Trampa de la Saturación (H1 y H4): Rendimiento vs Satélite Óptico\n",
+                    "Obsérvese cómo el NDVI promedio anual permanece prácticamente plano en ~0.74 (CV = 2.3%). Durante la epidemia de la roya amarilla (2011–2014), el rendimiento oficial colapsó un **-56.0%** (de 22.7 a 10.0 qq/ha), pero el satélite óptico aumentó **+1.4%** debido al dosel de árboles de sombra y malezas de sotobosque."
                 ]
             },
             {
@@ -224,29 +226,29 @@ def create_cafe_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "fig, ax1 = plt.subplots(figsize=(10, 5))\n",
-                    "\n",
-                    "color = 'tab:blue'\n",
-                    "ax1.set_xlabel('Campaña Agrícola')\n",
-                    "ax1.set_ylabel('Rendimiento (qq/ha)', color=color)\n",
+                    "fig, ax1 = plt.subplots(figsize=(11, 5))\n",
+                    "color = '#0d9488'\n",
+                    "ax1.set_xlabel('Campaña Agrícola', fontweight='bold')\n",
+                    "ax1.set_ylabel('Rendimiento (qq pergamino / ha)', color=color, fontweight='bold')\n",
                     "line1 = ax1.plot(con_rend['campania'], con_rend['rendimiento_qq_ha'], 'o-', color=color, linewidth=2.5, label='Rendimiento Oficial INEI')\n",
                     "ax1.tick_params(axis='y', labelcolor=color)\n",
-                    "ax1.grid(True, alpha=0.3)\n",
+                    "ax1.grid(True, linestyle='--', alpha=0.5)\n",
                     "\n",
                     "ax2 = ax1.twinx()\n",
-                    "color = 'tab:green'\n",
-                    "ax2.set_ylabel('MODIS NDVI Anual (250m)', color=color)\n",
-                    "line2 = ax2.plot(con_rend['campania'], con_rend['ndvi_anual'], 's--', color=color, linewidth=2, label='NDVI Anual (Satélite)')\n",
+                    "color_sat = '#16a34a'\n",
+                    "ax2.set_ylabel('MODIS NDVI Anual (250m)', color=color_sat, fontweight='bold')\n",
+                    "line2 = ax2.plot(con_rend['campania'], con_rend['ndvi_anual'], 's--', color=color_sat, linewidth=2, label='NDVI Anual (Satélite)')\n",
                     "ax2.set_ylim(0.5, 0.9)\n",
-                    "ax2.tick_params(axis='y', labelcolor=color)\n",
+                    "ax2.tick_params(axis='y', labelcolor=color_sat)\n",
+                    "ax2.grid(False)\n",
                     "\n",
-                    "# Resaltar la crisis de la Roya 2012-2014\n",
-                    "ax1.axvspan(2012, 2014, color='red', alpha=0.15, label='Crisis de la Roya Amarilla')\n",
+                    "# Marcador de la Crisis de la Roya\n",
+                    "ax1.axvspan(2012, 2014, color='#ef4444', alpha=0.15, label='Crisis de la Roya Amarilla (2012-2014)')\n",
                     "\n",
                     "lines = line1 + line2\n",
                     "labels = [l.get_label() for l in lines] + ['Crisis de la Roya']\n",
-                    "ax1.legend(loc='upper left')\n",
-                    "plt.title('Caso B: La Trampa de la Saturación — Rendimiento Colapsa en 2014 mientras NDVI Permanece Verde')\n",
+                    "ax1.legend(lines, labels, loc='upper left')\n",
+                    "plt.title('Caso 2: Quiebre Estructural y Ceguera Espectral del Satélite Óptico', fontweight='bold', pad=12)\n",
                     "plt.tight_layout()\n",
                     "plt.show()"
                 ]
@@ -255,7 +257,69 @@ def create_cafe_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 2. Auditoría Científica de las 4 Hipótesis (H1, H2, H3, H4)"
+                    "## 2. Benchmark de 16 Modelos en Validación Walk-Forward (Leave-Future-Out)\n",
+                    "Comparamos 16 modelos entrenados sin fuga temporal (8 campañas de test ciego: 2016, 2018–2024). Notemos cómo los modelos de clima fenológico y árboles parsimoniosos superan por más de 30% al modelo de visión satelital pura (Solo NDVI)."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "df_bm = pd.read_csv('../data/caso_2/benchmark_cafe.csv')\n",
+                    "print('=== BENCHMARK DE 16 MODELOS EN CAFÉ JAÉN ===')\n",
+                    "display(df_bm[['modelo', 'familia', 'mae_walkforward', 'rmse_walkforward', 'mape_walkforward', 'error_abs_2020', 'p_valor_vs_mejor']])\n",
+                    "\n",
+                    "fig, ax = plt.subplots(figsize=(11, 7))\n",
+                    "df_sorted = df_bm.sort_values('mae_walkforward', ascending=False).reset_index(drop=True)\n",
+                    "colors = ['#059669' if p == 1.0 else '#ef4444' if 'Sensoramiento' in fam else '#0284c7' if 'Clima' in fam else '#10b981' for p, fam in zip(df_sorted['p_valor_vs_mejor'], df_sorted['familia'])]\n",
+                    "bars = ax.barh(df_sorted['modelo'], df_sorted['mae_walkforward'], color=colors, height=0.65, edgecolor='#1e293b')\n",
+                    "ax.set_xlabel('MAE en Validación Walk-Forward (qq/ha) — Menor es mejor', fontweight='bold')\n",
+                    "ax.set_title('Benchmark de 16 Modelos en Café Jaén: Clima Fenológico vs Satélite Óptico', fontweight='bold', pad=12)\n",
+                    "for bar in bars:\n",
+                    "    w = bar.get_width()\n",
+                    "    ax.text(w + 0.05, bar.get_y() + bar.get_height()/2, f'{w:.2f} qq/ha', va='center', fontsize=8.5, fontweight='bold')\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 3. Trayectorias de Pronóstico Walk-Forward Año por Año (2016–2024)\n",
+                    "Comparamos la respuesta de los modelos ante el récord histórico de 2020 (35.38 qq/ha) y la estabilidad en campañas normales."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "df_preds = pd.read_csv('../data/caso_2/cafe_jaen_predicciones_modelos.csv')\n",
+                    "plt.figure(figsize=(11, 5.5))\n",
+                    "plt.plot(df_preds['campania'], df_preds['rendimiento_real'], 'k*-', linewidth=3, markersize=10, label='Observado Oficial (INEI)')\n",
+                    "plt.plot(df_preds['campania'], df_preds['M12: Random Forest Parsimonioso (d=2)'], 'g-o', linewidth=2.2, label='M12: Random Forest (Ganador MAE 3.72)')\n",
+                    "plt.plot(df_preds['campania'], df_preds['M08: Solo Déficit Hídrico Floración'], 'b--s', linewidth=2.0, label='M08: Solo Déficit Hídrico (MAE 3.90)')\n",
+                    "plt.plot(df_preds['campania'], df_preds['M11: ElasticNet Multimodal (L1+L2)'], 'm-.^', linewidth=1.8, label='M11: ElasticNet (MAE 4.33)')\n",
+                    "plt.plot(df_preds['campania'], df_preds['M05: Solo NDVI Anual (Saturado)'], 'r:d', linewidth=2.2, label='M05: Solo NDVI Anual (Falla MAE 5.45)')\n",
+                    "plt.title('Validación Walk-Forward en Jaén (2016–2024): Trayectorias de Pronóstico Out-of-Sample', fontweight='bold')\n",
+                    "plt.xlabel('Campaña Agrícola', fontweight='bold')\n",
+                    "plt.ylabel('Rendimiento (qq/ha)', fontweight='bold')\n",
+                    "plt.xticks(df_preds['campania'])\n",
+                    "plt.legend(ncol=2)\n",
+                    "plt.grid(True, linestyle='--', alpha=0.5)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 4. Auditoría Científica de las 4 Hipótesis (H1, H2, H3, H4)"
                 ]
             },
             {
@@ -270,24 +334,6 @@ def create_cafe_notebook():
                     "    print(f'=== {h_key.upper()} ({h_val[\"estado\"]}) ===')\n",
                     "    print(f'Premisa: {h_val[\"hipotesis\"]}')\n",
                     "    print(f'Interpretación: {h_val[\"interpretacion\"]}\\n')"
-                ]
-            },
-            {
-                "cell_type": "markdown",
-                "metadata": {},
-                "source": [
-                    "## 3. Resultados de Validación por Ventana Expansiva (Leave-Future-Out)"
-                ]
-            },
-            {
-                "cell_type": "code",
-                "execution_count": None,
-                "metadata": {},
-                "outputs": [],
-                "source": [
-                    "df_res = pd.read_csv('../data/caso_2/cafe_jaen_resultados.csv')\n",
-                    "print('Predicciones año a año sin contaminación futura:')\n",
-                    "df_res"
                 ]
             }
         ],

@@ -34,6 +34,8 @@ def build_deck():
     extrap_df = pd.read_csv(BASE_DIR / "data/caso_1/experimento_extrapolacion.csv")
     cafe_camp_df = pd.read_csv(BASE_DIR / "data/caso_2/cafe_jaen_campanias.csv")
     cafe_res_df = pd.read_csv(BASE_DIR / "data/caso_2/cafe_jaen_resultados.csv")
+    cafe_bm_df = pd.read_csv(BASE_DIR / "data/caso_2/benchmark_cafe.csv")
+    cafe_preds_df = pd.read_csv(BASE_DIR / "data/caso_2/cafe_jaen_predicciones_modelos.csv")
     noaa_ecmwf_df = pd.read_csv(BASE_DIR / "data/caso_1/noaa_ecmwf_forecast.csv")
     
     with open(BASE_DIR / "data/caso_2/cafe_jaen_hipotesis.json", "r", encoding="utf-8") as f:
@@ -48,6 +50,8 @@ def build_deck():
         "extrapolacion": extrap_df.to_dict(orient="records"),
         "cafe_campanias": cafe_camp_df.to_dict(orient="records"),
         "cafe_resultados": cafe_res_df.to_dict(orient="records"),
+        "cafe_benchmark": cafe_bm_df.to_dict(orient="records"),
+        "cafe_predicciones": cafe_preds_df.to_dict(orient="records"),
         "hipotesis_cafe": hipotesis_cafe,
         "noaa_ecmwf": noaa_ecmwf_df.to_dict(orient="records"),
         "senamhi_reciente": senamhi_sub
@@ -808,49 +812,49 @@ def build_deck():
         const canvas = document.getElementById("chartDemoJaen");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
-          const d = window.DECK_DATA.cafe_resultados;
+          const d = window.DECK_DATA.cafe_predicciones || window.DECK_DATA.cafe_resultados;
           charts["demoJaen"] = new Chart(ctx, {{
             type: "line",
             data: {{
               labels: d.map(r => r.campania),
               datasets: [
                 {{
-                  label: "Rendimiento Real Observado (qq/ha)",
-                  data: d.map(r => r.rendimiento_obs),
+                  label: "Observado Oficial SIEA (qq/ha)",
+                  data: d.map(r => r.rendimiento_real !== undefined ? r.rendimiento_real : r.rendimiento_obs),
                   borderColor: "#FFFFFF",
-                  borderWidth: 3,
-                  pointRadius: 4
+                  borderWidth: 3.2,
+                  pointRadius: 4.5
                 }},
                 {{
-                  label: "Fusión Clima + Tendencia (MAE 4.51)",
-                  data: d.map(r => r.pred_m4_fusion),
+                  label: "M12: Random Forest (Líder MAE 3.72)",
+                  data: d.map(r => r["M12: Random Forest Parsimonioso (d=2)"] !== undefined ? r["M12: Random Forest Parsimonioso (d=2)"] : r.pred_m4_fusion),
                   borderColor: "#059669",
                   borderWidth: 2.5,
+                  pointRadius: 3.5
+                }},
+                {{
+                  label: "M08: Solo Déficit Hídrico (MAE 3.90)",
+                  data: d.map(r => r["M08: Solo Déficit Hídrico Floración"] !== undefined ? r["M08: Solo Déficit Hídrico Floración"] : r.pred_m3_clima),
+                  borderColor: "#0284C7",
+                  borderWidth: 2.0,
+                  borderDash: [4, 3],
                   pointRadius: 3
                 }},
                 {{
-                  label: "Solo Satélite NDVI (MAE 5.32 — Empeora)",
-                  data: d.map(r => r.pred_m2_satelite),
-                  borderColor: "#DC2626",
-                  borderWidth: 2,
-                  borderDash: [5, 4],
+                  label: "M11: ElasticNet Multimodal (MAE 4.33)",
+                  data: d.map(r => r["M11: ElasticNet Multimodal (L1+L2)"] !== undefined ? r["M11: ElasticNet Multimodal (L1+L2)"] : r.pred_m4_fusion),
+                  borderColor: "#8B5CF6",
+                  borderWidth: 2.0,
+                  borderDash: [3, 2],
                   pointRadius: 2.5
                 }},
                 {{
-                  label: "Solo Clima Floración (MAE 4.60)",
-                  data: d.map(r => r.pred_m3_clima),
-                  borderColor: "#2563EB",
-                  borderWidth: 1.8,
-                  borderDash: [3, 3],
-                  pointRadius: 2
-                }},
-                {{
-                  label: "Tendencia Pura (MAE 4.79)",
-                  data: d.map(r => r.pred_m1_tendencia),
-                  borderColor: "#94A3B8",
-                  borderDash: [2, 2],
-                  borderWidth: 1.5,
-                  pointRadius: 0
+                  label: "M05: Solo NDVI Anual (Trampa MAE 5.45)",
+                  data: d.map(r => r["M05: Solo NDVI Anual (Saturado)"] !== undefined ? r["M05: Solo NDVI Anual (Saturado)"] : r.pred_m2_satelite),
+                  borderColor: "#DC2626",
+                  borderWidth: 2.2,
+                  borderDash: [5, 4],
+                  pointRadius: 3
                 }}
               ]
             }},
@@ -861,7 +865,7 @@ def build_deck():
                 legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
               }},
               scales: {{
-                y: {{ min: 14, max: 28, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
+                y: {{ min: 12, max: 38, title: {{ display: true, text: "Rendimiento (qq/ha)" }} }}
               }}
             }}
           }});

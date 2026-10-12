@@ -307,24 +307,24 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   <!-- DIAPO 20: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
   <!-- ============================================================= -->
   <section class="slide" data-index="20" data-act="Acto 4 · Validación Jaén" data-time="2.0 min">
-    <h2 class="slide-main-title display">Demostración: validación Walk-Forward expansiva</h2>
+    <h2 class="slide-main-title display">Demostración: validación Walk-Forward en Jaén</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
         <ul class="standard-bullet-list">
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Sin fuga temporal:</strong> Validación expansiva año por año entrenando únicamente con datos del pasado histórico.</div>
+            <div><strong>Sin fuga temporal:</strong> Validación expansiva año a año (2016, 2018–2024) entrenando únicamente con la historia previa de cosechas.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Modelo M4 (Fusión):</strong> Combina la tendencia agronómica secular con la anomalía de lluvia en floración, logrando el menor error (MAE 4.51).</div>
+            <div><strong>Liderazgo de fenología y árboles:</strong> Random Forest parsimonioso (MAE 3.72 qq/ha) y Solo Déficit Hídrico de floración (MAE 3.90 qq/ha) logran los menores errores out-of-sample.</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Fallo del Satélite:</strong> El modelo alimentado solo con NDVI (M3) tuvo un error de 6.18 qq/ha, siendo peor que la media histórica.</div>
+            <div><strong>Fallo del Satélite Óptico:</strong> El modelo alimentado solo con NDVI anual (MAE 5.45 qq/ha) es un 31.7% peor, colapsando ante el récord de 2020 con un error de 18.25 qq/ha.</div>
           </li>
         </ul>
-        <div class="graphic-source">Evaluación Walk-Forward ciego sobre 9 campañas de test (2016–2024)</div>
+        <div class="graphic-source">Evaluación Walk-Forward ciego sobre 8 campañas de test (2016, 2018–2024)</div>
       </div>
 
       <div class="graphic-card-col">

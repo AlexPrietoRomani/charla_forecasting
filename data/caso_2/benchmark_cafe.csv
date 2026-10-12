@@ -1,0 +1,17 @@
+modelo,familia,mae_walkforward,rmse_walkforward,mape_walkforward,r2_walkforward,error_abs_2020,tiempo_ms,hardware,p_valor_vs_mejor
+M12: Random Forest Parsimonioso (d=2),Machine Learning (Árboles),3.723,5.41,13.74,-0.116,13.14,45.16,CPU,1.0
+M08: Solo Déficit Hídrico Floración,Clima Fenológico Puro,3.903,4.925,15.27,0.075,10.01,3.44,CPU,0.7127
+M16: Zero-Shot Heurístico (Inercia+Fenología),Foundation / Zero-Shot Adaptado,4.116,5.662,17.53,-0.222,7.94,0.25,CPU / GPU,0.9173
+M07: Solo Lluvia en Floración (Ago-Oct),Clima Fenológico Puro,4.317,5.163,17.56,-0.017,9.19,3.59,CPU,0.8748
+M11: ElasticNet Multimodal (L1+L2),Machine Learning Multimodal,4.332,5.268,17.59,-0.059,8.58,3.76,CPU,0.9357
+M01: Persistencia Naive (yt-1),Baseline Clásico,4.381,6.252,17.06,-0.491,11.69,0.0,CPU,0.6442
+M06: Solo EVI Fenológico (Floración),Sensoramiento Remoto Puro,4.47,6.654,16.14,-0.688,16.65,3.61,CPU,0.3144
+M10: Lasso Multimodal L1 (Sparse),Machine Learning Multimodal,4.563,5.684,19.09,-0.232,6.84,3.86,CPU,0.902
+M13: ExtraTrees Parsimonioso (d=2),Machine Learning (Árboles),4.728,5.898,18.19,-0.326,11.91,30.87,CPU,0.5748
+M15: Gaussian Process Regressor (GPR),Bayesiano / Procesos Gaussianos,4.785,6.713,17.82,-0.719,16.78,8.13,CPU,0.3064
+M04: Holt Lineal Amortiguado,Estadístico Clásico,4.785,6.713,17.82,-0.719,16.78,0.09,CPU,0.3064
+M02: Media Histórica Acumulada,Baseline Clásico,4.785,6.713,17.82,-0.719,16.78,0.01,CPU,0.3064
+M09: Ridge Multimodal L2 (AgroVisión),Machine Learning Multimodal,4.892,6.013,20.49,-0.379,7.07,3.79,CPU,0.7841
+M05: Solo NDVI Anual (Saturado),Sensoramiento Remoto Puro,5.448,7.429,20.73,-1.105,18.25,5.42,CPU,0.2486
+M03: Tendencia Secular OLS,Baseline Clásico,5.691,7.848,23.08,-1.349,17.62,0.61,CPU,0.1217
+M14: Regresión Bayesiana Ridge,Bayesiano / Regularización L2,6.516,7.908,25.95,-1.385,15.95,4.41,CPU,0.059
