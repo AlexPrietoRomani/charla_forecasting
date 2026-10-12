@@ -15,11 +15,17 @@ def create_clima_notebook():
                 "source": [
                     "# Práctica A: ¿Puede la IA predecir el clima? Benchmark Punchana (SENAMHI Iquitos)\n",
                     "\n",
-                    "Este notebook implementa el caso de estudio **Caso A**:\n",
-                    "- Evaluación rigurosa sobre **2,557 días** reales de la estación meteorológica Punchana (Loreto, Perú).\n",
+                    "Este notebook implementa el **Caso 1** de la investigación:\n",
+                    "- Evaluación rigurosa sobre **2,557 días** reales de la estación meteorológica Punchana (Loreto, Perú, 91 msnm).\n",
                     "- Split temporal ciego de **90 días de holdout** (Octubre a Diciembre 2025).\n",
-                    "- Comparativa de 8 modelos: Naive estacional, ARIMA, Holt-Winters, Random Forest, ExtraTrees, LSTM, Chronos Zero-Shot (Amazon) y TimesFM Zero-Shot (Google).\n",
-                    "- Prueba formal de significancia estadística de **Diebold-Mariano** y regla de parsimonia."
+                    "- **Benchmark ampliado de 14 modelos** abarcando todas las familias teóricas:\n",
+                    "  1. Baselines (`Naive 1d`, `Naive 7d`)\n",
+                    "  2. Econométricos (`ARIMA`, `SARIMA`, `Holt-Winters` amortiguado)\n",
+                    "  3. Machine Learning Tabular (`Ridge`, `Random Forest`, `ExtraTrees`, `LightGBM`)\n",
+                    "  4. Deep Learning Local (`PyTorch LSTM` con ensamble de 5 semillas aleatorias)\n",
+                    "  5. Foundation Models Zero-Shot (`Chronos-Bolt` Amazon, `TimesFM 2.5` Google)\n",
+                    "  6. **Física Global de Supercómputo** (`ECMWF IFS` ~9 km de Europa y `NOAA GFS` ~28 km de EE.UU.)\n",
+                    "- Evaluación con **Prueba de Diebold-Mariano (HLN 1997)**, cobertura de incertidumbre empírica P10–P90 y regla de parsimonia."
                 ]
             },
             {
@@ -32,18 +38,18 @@ def create_clima_notebook():
                     "import numpy as np\n",
                     "import matplotlib.pyplot as plt\n",
                     "\n",
-                    "# 1. Cargar benchmark consolidado de 8 modelos\n",
+                    "# 1. Cargar benchmark consolidado de los 14 modelos\n",
                     "df_bm = pd.read_csv('../data/caso_1/benchmark_punchana.csv')\n",
-                    "print('=== BENCHMARK DE 8 MODELOS (HOLDOUT 90 DÍAS) ===')\n",
-                    "df_bm"
+                    "print('=== BENCHMARK DE 14 MODELOS (HOLDOUT CIEGO 90 DÍAS) ===')\n",
+                    "display(df_bm[['modelo', 'familia', 'rmse_1d', 'mae_1d', 'rmse_7d', 'tiempo_s', 'hardware', 'p_valor_vs_mejor']])"
                 ]
             },
             {
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 2. Visualización Comparativa del Benchmark\n",
-                    "Observemos cómo ExtraTrees, Random Forest, ARIMA y TimesFM empatan estadísticamente (p > 0.05), mientras que los baselines y LSTM pierden significativamente."
+                    "## 2. Visualización Comparativa del Benchmark (14 Modelos)\n",
+                    "Comparamos el error RMSE a 1 día. Notemos cómo los modelos locales de ML (`ExtraTrees`, `Random Forest`) y los foundation models (`TimesFM`, `Chronos`) superan a la física global de supercómputo (`ECMWF IFS` y `NOAA GFS`), y cómo `ARIMA (2,0,1)` empata estadísticamente en precisión con los modelos más pesados."
                 ]
             },
             {
@@ -52,15 +58,28 @@ def create_clima_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "fig, ax = plt.subplots(figsize=(10, 5))\n",
-                    "colors = ['#10b981' if p > 0.05 else '#f59e0b' if p == 1.0 else '#ef4444' for p in df_bm['p_valor_vs_mejor']]\n",
-                    "bars = ax.barh(df_bm['modelo'], df_bm['rmse_1d'], color=colors)\n",
-                    "ax.set_xlabel('RMSE (°C) en Holdout 90 días')\n",
-                    "ax.set_title('Precisión de Pronóstico a 1 Día: Modelos Tradicionales vs Foundation Models')\n",
+                    "df_sorted = df_bm.sort_values('rmse_1d', ascending=False).reset_index(drop=True)\n",
+                    "fig, ax = plt.subplots(figsize=(11, 7))\n",
+                    "colors = []\n",
+                    "for _, row in df_sorted.iterrows():\n",
+                    "    if 'Física Global' in row['familia']:\n",
+                    "        colors.append('#8b5cf6')\n",
+                    "    elif row['p_valor_vs_mejor'] == 1.0:\n",
+                    "        colors.append('#059669')\n",
+                    "    elif row['p_valor_vs_mejor'] > 0.05:\n",
+                    "        colors.append('#10b981')\n",
+                    "    elif 'Baseline' in row['familia']:\n",
+                    "        colors.append('#ef4444')\n",
+                    "    else:\n",
+                    "        colors.append('#f59e0b')\n",
+                    "\n",
+                    "bars = ax.barh(df_sorted['modelo'], df_sorted['rmse_1d'], color=colors, height=0.65, edgecolor='#334155')\n",
+                    "ax.set_xlabel('RMSE a 1 Día (°C) en Holdout 90 días (Menor es mejor)', fontweight='bold')\n",
+                    "ax.set_title('Benchmark de 14 Modelos: Física Global vs ML Local vs Foundation Models', fontweight='bold', pad=12)\n",
                     "ax.grid(axis='x', linestyle='--', alpha=0.5)\n",
                     "for bar in bars:\n",
                     "    width = bar.get_width()\n",
-                    "    ax.text(width + 0.03, bar.get_y() + bar.get_height()/2, f'{width:.3f} °C', va='center', fontsize=9)\n",
+                    "    ax.text(width + 0.03, bar.get_y() + bar.get_height()/2, f'{width:.2f} °C', va='center', fontsize=9, fontweight='bold')\n",
                     "plt.tight_layout()\n",
                     "plt.show()"
                 ]
@@ -69,7 +88,47 @@ def create_clima_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 3. Pronóstico Multi-Modelo a 7 Días con Bandas de Incertidumbre P10/P90"
+                    "## 3. Confrontación: Física Global de Supercómputo vs Estación de Superficie SENAMHI\n",
+                    "Evaluamos el comportamiento de los modelos globales numéricos (NWP) de la **NOAA (GFS, malla de ~28 km)** y del **ECMWF (IFS, malla de ~9 km)** comparados directamente contra los termómetros en tierra de SENAMHI Punchana."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "df_g = pd.read_csv('../data/caso_1/noaa_ecmwf_forecast.csv', parse_dates=['fecha'])\n",
+                    "df_s = pd.read_csv('../data/caso_1/senamhi_diario.csv', parse_dates=['fecha'])\n",
+                    "df_merged = pd.merge(df_g, df_s[['fecha', 'tmax']], on='fecha', how='inner').rename(columns={'tmax': 'tmax_senamhi'})\n",
+                    "\n",
+                    "mae_ecmwf = (df_merged['tmax_ecmwf'] - df_merged['tmax_senamhi']).abs().mean()\n",
+                    "mae_gfs = (df_merged['tmax_noaa_gfs'] - df_merged['tmax_senamhi']).abs().mean()\n",
+                    "rmse_ecmwf = np.sqrt(((df_merged['tmax_ecmwf'] - df_merged['tmax_senamhi'])**2).mean())\n",
+                    "rmse_gfs = np.sqrt(((df_merged['tmax_noaa_gfs'] - df_merged['tmax_senamhi'])**2).mean())\n",
+                    "dif_inter = (df_merged['tmax_noaa_gfs'] - df_merged['tmax_ecmwf']).abs().mean()\n",
+                    "\n",
+                    "print(f'ECMWF IFS: MAE = {mae_ecmwf:.2f} °C | RMSE = {rmse_ecmwf:.2f} °C')\n",
+                    "print(f'NOAA GFS:  MAE = {mae_gfs:.2f} °C | RMSE = {rmse_gfs:.2f} °C')\n",
+                    "print(f'Discrepancia promedio entre NOAA y ECMWF: {dif_inter:.2f} °C')\n",
+                    "\n",
+                    "fig, ax = plt.subplots(figsize=(11, 4.5))\n",
+                    "ax.plot(df_merged['fecha'], df_merged['tmax_senamhi'], 'k-', label='SENAMHI (Observado en Tierra)', linewidth=1.8)\n",
+                    "ax.plot(df_merged['fecha'], df_merged['tmax_ecmwf'], color='#8b5cf6', linestyle='--', label=f'ECMWF IFS (RMSE={rmse_ecmwf:.2f}°C)', linewidth=1.4)\n",
+                    "ax.plot(df_merged['fecha'], df_merged['tmax_noaa_gfs'], color='#f97316', linestyle=':', label=f'NOAA GFS (RMSE={rmse_gfs:.2f}°C)', linewidth=1.4)\n",
+                    "ax.set_ylabel('Temperatura Máxima (°C)', fontweight='bold')\n",
+                    "ax.set_title('Supercómputo Global vs Observación en Tierra en Punchana (Iquitos)', fontweight='bold')\n",
+                    "ax.legend()\n",
+                    "ax.grid(True, linestyle='--', alpha=0.5)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 4. Pronóstico Multi-Modelo Operativo a 7 Días y Cono de Incertidumbre P10/P90"
                 ]
             },
             {
@@ -80,7 +139,7 @@ def create_clima_notebook():
                 "source": [
                     "df_fc = pd.read_csv('../data/caso_1/senamhi_forecast_7d.csv')\n",
                     "print('Pronóstico a 7 días:')\n",
-                    "df_fc"
+                    "display(df_fc)"
                 ]
             },
             {
@@ -89,16 +148,18 @@ def create_clima_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "plt.figure(figsize=(10, 5))\n",
-                    "plt.plot(df_fc['fecha'], df_fc['tmax_observada'], 'k-o', label='Observada (SENAMHI)', linewidth=2.5)\n",
+                    "plt.figure(figsize=(11, 5.5))\n",
+                    "x = range(len(df_fc))\n",
+                    "plt.plot(df_fc['fecha'], df_fc['tmax_observada'], 'k-o', label='Observado Real (SENAMHI)', linewidth=2.5)\n",
                     "plt.plot(df_fc['fecha'], df_fc['pred_extratrees'], 'g--s', label='ExtraTrees (Ganador CPU)', linewidth=2)\n",
-                    "plt.plot(df_fc['fecha'], df_fc['pred_timesfm'], 'b--^', label='TimesFM Zero-Shot (Google)', linewidth=1.5)\n",
-                    "plt.plot(df_fc['fecha'], df_fc['pred_chronos'], 'm--d', label='Chronos Zero-Shot (Amazon)', linewidth=1.5)\n",
+                    "plt.plot(df_fc['fecha'], df_fc['pred_timesfm'], 'b--^', label='TimesFM 2.5 Zero-Shot (Google)', linewidth=1.8)\n",
+                    "plt.plot(df_fc['fecha'], df_fc['pred_ecmwf'], color='#8b5cf6', linestyle='-.', label='ECMWF IFS (Europa 9km)', linewidth=1.5)\n",
+                    "plt.plot(df_fc['fecha'], df_fc['pred_noaa_gfs'], color='#f97316', linestyle=':', label='NOAA GFS (EE.UU. 28km)', linewidth=1.5)\n",
                     "plt.fill_between(df_fc['fecha'], df_fc['ci_lower_p10'], df_fc['ci_upper_p90'], color='green', alpha=0.15, label='Banda ExtraTrees P10-P90')\n",
-                    "plt.title('Pronóstico Multi-Modelo Últimos 7 Días vs Verdad Terreno')\n",
-                    "plt.ylabel('Temperatura Máxima (°C)')\n",
+                    "plt.title('Pronóstico Multi-Modelo Últimos 7 Días vs Física Global y Verdad Terreno', fontweight='bold')\n",
+                    "plt.ylabel('Temperatura Máxima (°C)', fontweight='bold')\n",
                     "plt.xticks(rotation=45)\n",
-                    "plt.legend()\n",
+                    "plt.legend(ncol=2)\n",
                     "plt.grid(True, alpha=0.3)\n",
                     "plt.tight_layout()\n",
                     "plt.show()"

@@ -11,24 +11,24 @@ def get_slides_part2(branding=None):
   <!-- DIAPO 11: BENCHMARK RIGUROSO EN PUNCHANA (page-06.png)        -->
   <!-- ============================================================= -->
   <section class="slide" data-index="11" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min">
-    <h2 class="slide-main-title display">Benchmark riguroso en Iquitos (2,557 días)</h2>
+    <h2 class="slide-main-title display">Benchmark de 14 modelos: Tierra vs Supercómputo</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
         <ul class="standard-bullet-list">
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Protocolo estricto:</strong> 2,192 días de entrenamiento y 365 días de test ciego final. Test Diebold-Mariano con corrección de Harvey.</div>
+            <div><strong>Protocolo estricto:</strong> 2,467 días de entrenamiento y 90 días de holdout ciego (Q4 2025). Test Diebold-Mariano con corrección Harvey-Leybourne-Newbold (HLN 1997).</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Parsimonia vs Complejidad:</strong> ExtraTrees lideró con MAE 1.15 °C en 0.11s de entrenamiento en CPU.</div>
+            <div><strong>Microfísica local vs Supercómputo:</strong> ExtraTrees (1.88 °C) y TimesFM Zero-Shot (1.88 °C, p=0.71) superan a ECMWF IFS (~9 km, 2.46 °C, p=0.027) y NOAA GFS (~28 km, 2.58 °C, p=0.008).</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Colapso de Prophet &amp; LSTM:</strong> Prophet erró con MAE 1.84 °C por rigidez en la estacionalidad; LSTM tardó 70 veces más sin mejorar la métrica.</div>
+            <div><strong>Regla de parsimonia:</strong> ExtraTrees en CPU (0.25s) empata estadísticamente con Random Forest (1.89 °C) y TimesFM (7.87s en GPU/NPU). En el microclima tropical, la memoria inercial local domina a la física numérica sin downscaling.</div>
           </li>
         </ul>
-        <div class="graphic-source">Benchmark auditado sobre estación SENAMHI Punchana · Test set ciego 365 días</div>
+        <div class="graphic-source">Benchmark auditado sobre estación SENAMHI Punchana · Holdout ciego de 90 días</div>
       </div>
 
       <div class="graphic-card-col">

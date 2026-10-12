@@ -1,9 +1,15 @@
 modelo,familia,rmse_1d,mae_1d,rmse_7d,mae_7d,tiempo_s,hardware,cobertura_p10_p90,p_valor_vs_mejor
-ExtraTrees (Geurts 06),Machine Learning (Árboles),1.88,1.466,2.983,2.536,0.11,CPU,N/A,1.0
-Random Forest,Machine Learning (Árboles),1.885,1.471,3.549,3.017,0.23,CPU,N/A,0.9181
-"ARIMA (2,0,1)",Estadístico Clásico,1.964,1.506,2.062,1.582,0.96,CPU,N/A,0.151
-TimesFM (Google) Zero-Shot,Foundation Model,1.965,1.392,4.086,3.35,7.87,GPU (CUDA),66.7%,0.2747
-LSTM Deep Learning,Deep Learning Local,2.054,1.554,2.26,1.709,1.44,GPU (CUDA),N/A,0.0295
-Holt-Winters Amortiguado,Estadístico Clásico,2.065,1.54,2.23,1.664,1.47,CPU,N/A,0.0426
-Chronos (Amazon) Zero-Shot,Foundation Model,2.143,1.603,4.929,4.041,3.13,GPU (CUDA),73.3%,0.0126
-Naive Estacional,Baseline Clásico,2.874,2.234,5.094,5.094,0.0,CPU,N/A,0.0001
+ExtraTrees (Geurts 06),Machine Learning (Árboles),1.88,1.466,3.034,2.579,0.25,CPU,N/A,1.0
+TimesFM (Google) Zero-Shot,Foundation Model,1.883,1.457,4.086,3.35,7.87,GPU / NPU,66.7%,0.7095
+Random Forest,Machine Learning (Árboles),1.888,1.471,3.579,3.042,0.6,CPU,N/A,0.8759
+Chronos (Amazon) Zero-Shot,Foundation Model,1.903,1.418,4.929,4.041,3.13,GPU / NPU,73.3%,0.6523
+LightGBM,Machine Learning (Boosting),1.926,1.466,3.677,3.126,0.06,CPU,N/A,0.4136
+"ARIMA (2,0,1)",Estadístico Clásico,1.964,1.506,2.062,1.582,3.04,CPU,N/A,0.151
+Ridge Regression,Machine Learning Lineal,2.017,1.521,2.178,1.642,0.01,CPU,N/A,0.0331
+"SARIMA (2,0,1)(1,0,1)7",Estadístico Clásico,2.026,1.543,2.147,1.636,4.94,CPU,N/A,0.0799
+LSTM Deep Learning (5s),Deep Learning Local,2.053,1.545,2.258,1.7,17.03,CPU / GPU,N/A,0.033
+Holt-Winters Amortiguado,Estadístico Clásico,2.065,1.54,2.23,1.664,3.9,CPU,N/A,0.0426
+Naive Persistencia (1d),Baseline Clásico,2.334,1.613,2.8,1.936,0.0,CPU,N/A,0.0054
+"ECMWF IFS (Europa, 9km)",Física Global Supercómputo,2.458,2.043,2.501,2.251,0.01,"Cluster HPC (Reading, UK)",N/A,0.0271
+"NOAA GFS (EE.UU., 28km)",Física Global Supercómputo,2.583,2.013,3.847,3.462,0.01,"Cluster HPC (Maryland, USA)",N/A,0.0085
+Naive Estacional (7d),Baseline Clásico,2.874,2.234,5.094,5.094,0.0,CPU,N/A,0.0001

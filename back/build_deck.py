@@ -584,9 +584,11 @@ def build_deck():
                 label: "RMSE (°C) en Holdout de 90 Días",
                 data: d.map(r => r.rmse_1d),
                 backgroundColor: d.map(r => {{
-                  if (r.modelo.includes("ExtraTrees")) return "#059669";
-                  if (r.p_valor_vs_mejor > 0.05) return "#2563EB";
-                  return "#DC2626";
+                  if (r.modelo && r.modelo.includes("ExtraTrees")) return "#059669";
+                  if (r.familia && r.familia.includes("Física Global")) return "#8B5CF6";
+                  if (r.p_valor_vs_mejor > 0.05) return "#10B981";
+                  if (r.familia && r.familia.includes("Baseline")) return "#EF4444";
+                  return "#F59E0B";
                 }})
               }}]
             }},
@@ -598,7 +600,7 @@ def build_deck():
                 legend: {{ display: false }}
               }},
               scales: {{
-                x: {{ min: 1.6, max: 3.0, title: {{ display: true, text: "RMSE (°C) en Holdout de 90 Días — Menor es mejor" }} }}
+                x: {{ min: 1.6, max: 3.1, title: {{ display: true, text: "RMSE (°C) en Holdout de 90 Días — Menor es mejor" }} }}
               }}
             }}
           }});
@@ -654,8 +656,26 @@ def build_deck():
                 {{
                   label: "TimesFM 200M Zero-Shot",
                   data: d.map(r => r.pred_timesfm),
-                  borderColor: "#7C3AED",
+                  borderColor: "#6366F1",
                   borderWidth: 2,
+                  pointRadius: 2.5,
+                  hidden: false
+                }},
+                {{
+                  label: "ECMWF IFS (~9km)",
+                  data: d.map(r => r.pred_ecmwf),
+                  borderColor: "#8B5CF6",
+                  borderWidth: 1.8,
+                  borderDash: [4, 3],
+                  pointRadius: 2.5,
+                  hidden: false
+                }},
+                {{
+                  label: "NOAA GFS (~28km)",
+                  data: d.map(r => r.pred_noaa_gfs),
+                  borderColor: "#F97316",
+                  borderWidth: 1.8,
+                  borderDash: [2, 2],
                   pointRadius: 2.5,
                   hidden: false
                 }},
@@ -686,7 +706,7 @@ def build_deck():
                 legend: {{ position: "top", labels: {{ font: {{ family: "IBM Plex Mono", size: 10.5 }} }} }}
               }},
               scales: {{
-                y: {{ min: 28, max: 37, title: {{ display: true, text: "Tmax (°C)" }} }}
+                y: {{ min: 22, max: 38, title: {{ display: true, text: "Tmax (°C)" }} }}
               }}
             }}
           }});
