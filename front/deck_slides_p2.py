@@ -5,6 +5,8 @@ def get_slides_part2(branding=None):
     b64_dw = branding.get("b64_dw", "")
     b64_header = branding.get("b64_header", "")
     b64_qr = branding.get("b64_qr", "")
+    anatomy_c1_svg = branding.get("anatomy_c1_svg", "")
+    anatomy_c2_svg = branding.get("anatomy_c2_svg", "")
 
     return f"""
   <!-- ============================================================= -->
@@ -34,14 +36,20 @@ def get_slides_part2(branding=None):
       <div class="graphic-card-col">
         <div class="chart-wrapper">
           <div class="chart-toolbar">
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">FILTRAR:</span>
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">MODO:</span>
+            <button class="chart-filter-btn active" id="btnPunchanaChart" onclick="switchPunchanaView('chart')">Gráfico de Benchmark</button>
+            <button class="chart-filter-btn" id="btnPunchanaAnatomy" onclick="switchPunchanaView('anatomy')" style="border-color:var(--fest-cyan); color:var(--fest-cyan);">📐 Anatomía del Sistema</button>
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin:0 4px 0 10px;" class="mono">FILTRAR:</span>
             <button class="chart-filter-btn active" id="btnBmAll" onclick="filterBenchmarkPunchana('all')">Todos (14)</button>
             <button class="chart-filter-btn" id="btnBmLeaders" onclick="filterBenchmarkPunchana('leaders')">Líderes (p &gt; 0.05)</button>
             <button class="chart-filter-btn" id="btnBmNwp" onclick="filterBenchmarkPunchana('nwp')">Física Global (ECMWF/NOAA)</button>
-            <button class="chart-filter-btn" id="btnBmLocal" onclick="filterBenchmarkPunchana('local')">ML Local / Árboles</button>
+            <button class="chart-filter-btn" id="btnBmLocal" onclick="filterBenchmarkPunchana('local')">ML Local</button>
           </div>
-          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
+          <div id="punchanaChartContainer" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:flex;">
             <canvas id="chartBenchmark"></canvas>
+          </div>
+          <div id="punchanaAnatomyContainer" class="iso" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:var(--bg-dark-card); border-radius:8px; overflow:hidden;">
+            {anatomy_c1_svg}
           </div>
         </div>
       </div>
@@ -315,13 +323,19 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
       <div class="graphic-card-col">
         <div class="chart-wrapper">
           <div class="chart-toolbar">
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">VARIABLE EJE X:</span>
-            <button class="chart-filter-btn active" id="btnScatterNdvi" onclick="switchScatterVariable('ndvi')">MODIS NDVI Anual (r=0.154, p=0.60)</button>
-            <button class="chart-filter-btn" id="btnScatterDef" onclick="switchScatterVariable('deficit')">Déficit Hídrico Floración (r=0.756, p=0.002)</button>
-            <button class="chart-filter-btn" id="btnScatterLluvia" onclick="switchScatterVariable('lluvia')">Lluvia en Floración (r=0.751, p=0.002)</button>
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">MODO:</span>
+            <button class="chart-filter-btn active" id="btnCafeChart" onclick="switchCafeSystemView('chart')">Dispersión Empírica</button>
+            <button class="chart-filter-btn" id="btnCafeAnatomy" onclick="switchCafeSystemView('anatomy')" style="border-color:var(--fest-cyan); color:var(--fest-cyan);">📐 Anatomía: Dosel vs Satélite</button>
+            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin:0 4px 0 10px;" class="mono">VARIABLE:</span>
+            <button class="chart-filter-btn active" id="btnScatterNdvi" onclick="switchScatterVariable('ndvi')">MODIS NDVI (r=0.154)</button>
+            <button class="chart-filter-btn" id="btnScatterDef" onclick="switchScatterVariable('deficit')">Déficit Hídrico (r=0.756)</button>
+            <button class="chart-filter-btn" id="btnScatterLluvia" onclick="switchScatterVariable('lluvia')">Lluvia Floración (r=0.751)</button>
           </div>
-          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
+          <div id="cafeChartContainer" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:flex;">
             <canvas id="chartScatterNdvi"></canvas>
+          </div>
+          <div id="cafeAnatomyContainer" class="iso" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:var(--bg-dark-card); border-radius:8px; overflow:hidden;">
+            {anatomy_c2_svg}
           </div>
         </div>
       </div>

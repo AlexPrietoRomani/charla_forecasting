@@ -67,6 +67,12 @@ def build_deck():
 
     css_content = get_deck_css(branding=branding)
 
+    # Cargar diagramas anatómicos generados con Anatomy Framework
+    anatomy_c1_path = BASE_DIR / "front/components/anatomy/anatomy_estacion_vs_malla.svg"
+    anatomy_c2_path = BASE_DIR / "front/components/anatomy/anatomy_cafe_sombra_ndvi.svg"
+    branding["anatomy_c1_svg"] = anatomy_c1_path.read_text(encoding="utf-8") if anatomy_c1_path.exists() else ""
+    branding["anatomy_c2_svg"] = anatomy_c2_path.read_text(encoding="utf-8") if anatomy_c2_path.exists() else ""
+
     # Inyección de Chart.js local offline como fallback si CDN no responde
     chartjs_local_code = ""
     if os.path.exists("scripts/assets/chart.umd.min.js"):
@@ -1081,6 +1087,46 @@ def build_deck():
           }}
         }}
       }});
+    }}
+  }}
+
+  function switchPunchanaView(mode) {{
+    const chartBox = document.getElementById("punchanaChartContainer");
+    const anatomyBox = document.getElementById("punchanaAnatomyContainer");
+    const btnChart = document.getElementById("btnPunchanaChart");
+    const btnAnatomy = document.getElementById("btnPunchanaAnatomy");
+
+    if (mode === "anatomy") {{
+      if (chartBox) chartBox.style.display = "none";
+      if (anatomyBox) anatomyBox.style.display = "flex";
+      if (btnChart) btnChart.classList.remove("active");
+      if (btnAnatomy) btnAnatomy.classList.add("active");
+    }} else {{
+      if (anatomyBox) anatomyBox.style.display = "none";
+      if (chartBox) chartBox.style.display = "flex";
+      if (btnAnatomy) btnAnatomy.classList.remove("active");
+      if (btnChart) btnChart.classList.add("active");
+      if (charts["benchmark"]) charts["benchmark"].resize();
+    }}
+  }}
+
+  function switchCafeSystemView(mode) {{
+    const chartBox = document.getElementById("cafeChartContainer");
+    const anatomyBox = document.getElementById("cafeAnatomyContainer");
+    const btnChart = document.getElementById("btnCafeChart");
+    const btnAnatomy = document.getElementById("btnCafeAnatomy");
+
+    if (mode === "anatomy") {{
+      if (chartBox) chartBox.style.display = "none";
+      if (anatomyBox) anatomyBox.style.display = "flex";
+      if (btnChart) btnChart.classList.remove("active");
+      if (btnAnatomy) btnAnatomy.classList.add("active");
+    }} else {{
+      if (anatomyBox) anatomyBox.style.display = "none";
+      if (chartBox) chartBox.style.display = "flex";
+      if (btnAnatomy) btnAnatomy.classList.remove("active");
+      if (btnChart) btnChart.classList.add("active");
+      if (charts["scatterNdvi"]) charts["scatterNdvi"].resize();
     }}
   }}
 

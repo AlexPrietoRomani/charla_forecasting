@@ -1009,4 +1009,90 @@ def get_deck_css(branding=None):
     justify-content: center;
     border: 1px solid var(--fest-cyan);
   }}
+
+  /* ======================================================== */
+  /* ANATOMY ISOMETRIC FRAMEWORK STYLES                      */
+  /* ======================================================== */
+  .iso {{
+    --anatomy-page: #03050F;
+    --anatomy-card: #070D1E;
+    --anatomy-text: #94A3B8;
+    --anatomy-strong: #F8FAFC;
+    --anatomy-muted: #64748B;
+    --anatomy-paper: #0B132B;
+    --anatomy-face: #101B3B;
+    --anatomy-top: #15244F;
+    --anatomy-shade-0: #060B18;
+    --anatomy-shade-1: #091226;
+    --anatomy-shade-2: #0D1A36;
+    --anatomy-shade-3: #122245;
+    --anatomy-lit-top: #1E3066;
+    --anatomy-lit-shade: #182855;
+    --anatomy-hi: #12C8FC;
+    --anatomy-mid: #4A6999;
+    --anatomy-lo: #203359;
+    --anatomy-faint: #121D38;
+    --anatomy-lit: #FFFFFF;
+    --anatomy-halo: #02040A;
+    --anatomy-halo-opacity: .95;
+    --anatomy-dot: #12C8FC;
+    --anatomy-red: #FF4757;
+    --anatomy-green: #2EE6A6;
+    --anatomy-blue: #1E7BFF;
+    --anatomy-weight: .75px;
+    --anatomy-mono: "IBM Plex Mono", monospace;
+  }}
+  .iso-svg {{
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow: visible;
+  }}
+  .iso-svg path, .iso-svg circle {{
+    vector-effect: non-scaling-stroke;
+  }}
+  .iso-fill {{ fill: var(--anatomy-paper); stroke: none; }}
+  .iso-solid[data-lit] > .iso-fill {{ fill: var(--anatomy-face); }}
+  .iso-shade, .iso-top {{ stroke: none; }}
+  .iso-shade[data-shade="0"] {{ fill: var(--anatomy-shade-0); }}
+  .iso-shade[data-shade="1"] {{ fill: var(--anatomy-shade-1); }}
+  .iso-shade[data-shade="2"] {{ fill: var(--anatomy-shade-2); }}
+  .iso-shade[data-shade="3"] {{ fill: var(--anatomy-shade-3); }}
+  .iso-top {{ fill: var(--anatomy-top); }}
+  .iso-solid[data-lit] > .iso-top {{ fill: var(--anatomy-lit-top); }}
+  .iso-solid[data-lit] > .iso-shade {{ fill: var(--anatomy-lit-shade); }}
+  .iso-halo {{
+    fill: var(--anatomy-halo);
+    stroke: none;
+    filter: blur(10px);
+    opacity: var(--anatomy-halo-opacity);
+    transform: translateY(4px);
+  }}
+  .iso-line {{
+    fill: none;
+    stroke: var(--anatomy-lo);
+    stroke-width: var(--anatomy-weight);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }}
+  .iso-line[data-tone="hi"] {{ stroke: var(--anatomy-hi); }}
+  .iso-line[data-tone="mid"] {{ stroke: var(--anatomy-mid); }}
+  .iso-line[data-tone="lo"] {{ stroke: var(--anatomy-lo); }}
+  .iso-line[data-tone="faint"] {{ stroke: var(--anatomy-faint); }}
+  .iso-line[data-tone="lit"] {{ stroke: var(--anatomy-lit); }}
+  .iso-line[data-tone="red"] {{ stroke: var(--anatomy-red); }}
+  .iso-line[data-tone="green"] {{ stroke: var(--anatomy-green); }}
+  .iso-line[data-tone="blue"] {{ stroke: var(--anatomy-blue); }}
+  .iso-dots circle {{
+    fill: var(--anatomy-dot);
+    stroke: none;
+    opacity: .5;
+  }}
+  .iso-dots[data-tone="hi"] circle {{ opacity: .95; }}
+  .iso-face-text {{
+    fill: var(--anatomy-mid);
+    font-family: var(--anatomy-mono);
+  }}
+  .iso-face-text[data-tone="hi"] {{ fill: var(--anatomy-strong); }}
 """
