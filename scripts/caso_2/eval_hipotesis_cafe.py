@@ -6,8 +6,8 @@ Evaluación formal y reproducible de las 4 Hipótesis Científicas del Caso B (C
 - H4 (Firma Espectral de la Roya 2012-2014): Análisis de la desconexión espectral durante el choque fitosanitario.
 
 Exporta:
-- data/cafe_jaen_hipotesis.json
-- data/cafe_jaen_resultados.csv
+- data/caso_2/cafe_jaen_hipotesis.json
+- data/caso_2/cafe_jaen_resultados.csv
 """
 
 import json
@@ -18,9 +18,9 @@ from scipy import stats
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-CSV_PATH = Path("data/cafe_jaen_campanias.csv")
-OUT_JSON = Path("data/cafe_jaen_hipotesis.json")
-OUT_RES_CSV = Path("data/cafe_jaen_resultados.csv")
+CSV_PATH = Path("data/caso_2/cafe_jaen_campanias.csv")
+OUT_JSON = Path("data/caso_2/cafe_jaen_hipotesis.json")
+OUT_RES_CSV = Path("data/caso_2/cafe_jaen_resultados.csv")
 
 def evaluate_hypotheses():
     df = pd.read_csv(CSV_PATH)

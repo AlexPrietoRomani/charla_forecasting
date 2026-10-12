@@ -1,5 +1,5 @@
 """
-Compilación del dataset consolidado del Caso B: data/cafe_jaen_campanias.csv.
+Compilación del dataset consolidado del Caso B: data/caso_2/cafe_jaen_campanias.csv.
 100% determinista, cero números aleatorios, trazabilidad total a data/raw/cafe_real/.
 
 Fuentes primarias integradas:
@@ -144,7 +144,7 @@ def build_cafe_dataset():
             
     df_camp["anomalia_rend_kg_ha"] = anomalias
     
-    out_csv = "data/cafe_jaen_campanias.csv"
+    out_csv = "data/caso_2/cafe_jaen_campanias.csv"
     df_camp.to_csv(out_csv, index=False)
     print(f"\nCompilado exitoso! Guardado en {out_csv} (Total campañas: {len(df_camp)})")
     

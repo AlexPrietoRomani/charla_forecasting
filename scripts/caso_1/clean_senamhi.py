@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 RAW_PATH = Path("data/raw/senamhi_punchana_raw.csv")
-OUT_PATH = Path("data/senamhi_diario.csv")
+OUT_PATH = Path("data/caso_1/senamhi_diario.csv")
 
 def clean_senamhi_data():
     df = pd.read_csv(RAW_PATH, sep=";")

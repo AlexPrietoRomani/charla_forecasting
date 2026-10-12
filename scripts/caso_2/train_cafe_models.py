@@ -15,7 +15,7 @@ from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_percentage_error, mean_squared_error, r2_score
 
-DATA_PATH = Path("data/cafe_ndvi_rendimiento.csv")
+DATA_PATH = Path("data/caso_2/deprecated/cafe_ndvi_rendimiento_SINTETICO.csv")
 
 def train_cafe_loyo():
     df = pd.read_csv(DATA_PATH)

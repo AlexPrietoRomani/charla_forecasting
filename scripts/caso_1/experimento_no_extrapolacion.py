@@ -12,7 +12,7 @@ Compara:
 1. Árbol en niveles (y_t): Colapsa en la media de la hoja más alta (meseta plana <= 34.0 °C).
 2. Modelo en diferencias (Delta y_t = y_t - y_{t-1}) o Regresión Lineal/ARIMA: Extrapola la tendencia.
 
-Exporta: data/experimento_extrapolacion.csv
+Exporta: data/caso_1/experimento_extrapolacion.csv
 """
 
 from pathlib import Path
@@ -21,8 +21,8 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Ridge
 
-DATA_PATH = Path("data/senamhi_diario.csv")
-OUT_CSV = Path("data/experimento_extrapolacion.csv")
+DATA_PATH = Path("data/caso_1/senamhi_diario.csv")
+OUT_CSV = Path("data/caso_1/experimento_extrapolacion.csv")
 
 def run_extrapolation_experiment():
     print("Iniciando Experimento Propio de No-Extrapolación...")

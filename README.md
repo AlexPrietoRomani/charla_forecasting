@@ -5,14 +5,21 @@ Charla estilo `Data_Wizard`: deck interactivo single-file `presentacion.html` (C
 ## Estructura
 ```text
 charla_forecasting/
-├── presentacion.html   # deck final (a construir, clonando estilo Data_Wizard)
+├── presentacion.html   # deck final interactivo (23 slides, Chart.js + datos reales)
 ├── articles/           # papers descargados (PDF+MD, NO se versionan — ver .gitignore)
-├── data/               # CSVs demo del deck (temperatura, NDVI-fruta)
+├── data/               # datos separados por casos
+│   ├── caso_1/         # Caso 1: Clima SENAMHI Punchana (Iquitos)
+│   └── caso_2/         # Caso 2: Rendimiento Café Jaén (Cajamarca)
 ├── models/             # pesos .pt/.pkl/etc (NO se versionan)
-├── images/             # assets del deck
-├── notebooks/          # demos (temperatura, NDVI)
-├── reference/          # Brief + outline de la charla
-├── refs.bib            # bibliografía (resultado de la investigación)
+├── images/             # assets del deck y gráficos generados
+├── notebooks/          # demos Jupyter (01_clima_senamhi, 02_cafe_ndvi)
+├── docs/               # documentación del proyecto (Project Suite)
+│   └── reference/      # planes, fases de trabajo y especificaciones de la charla
+├── scripts/            # scripts organizados por casos y deck
+│   ├── caso_1/         # ETL, benchmark y modelos de Clima Iquitos
+│   ├── caso_2/         # Satélite, clima ERA5, MIDAGRI y modelos Café Jaén
+│   └── build_deck.py   # ensamblador del deck interactivo
+├── refs.bib            # bibliografía académica
 └── .gitignore
 ```
 

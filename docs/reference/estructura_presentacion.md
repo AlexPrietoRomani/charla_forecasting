@@ -34,7 +34,7 @@ Deck interactivo en un solo archivo `presentacion.html` (Chart.js + PapaParse + 
 ### Bloque 3: Casos Reales en Perú con Mapas y Demos en Vivo
 16. **Caso A (SENAMHI Iquitos - Ubicación):** Mapa satelital interactivo Leaflet (Esri World Imagery) de la estación Punchana (`103015`, Loreto, 91 msnm) y zona de influencia térmica.
 17. **Caso A (Benchmark Multi-modelo 7 Años):** Tabla comparativa de métricas reales sobre 7 años de datos (2019–2025, 2,557 días) y holdout estricto de 90 días: LSTM (2.097 °C) y ExtraTrees (2.166 °C) baten al Naive (2.315 °C).
-18. **Caso A (DEMO 1 EN VIVO):** Gráfico interactivo Chart.js leyendo `data/senamhi_forecast_7d.csv`: curvas multi-modelo y bandas de incertidumbre al 90% (±1.645 $\sigma$).
+18. **Caso A (DEMO 1 EN VIVO):** Gráfico interactivo Chart.js leyendo `data/caso_1/senamhi_forecast_7d.csv`: curvas multi-modelo y bandas de incertidumbre al 90% (±1.645 $\sigma$).
 19. **Caso B (Café & Sentinel-2 Jaén - Ubicación):** Mapa satelital interactivo Leaflet de la finca cafetalera en Jaén (-5.6766°, -78.7742°, 1,100 msnm) con **Visor Interactivo de Capas (Heatmap Switcher)**: Satélite RGB, Heatmap NDVI (saturado), Heatmap EVI (biomasa real) y Heatmap NDRE (nitrógeno).
 20. **Caso B (La Evidencia de Campo):** La prueba de las 6 campañas (2020–2025): cómo el NDVI anual plano en 0.788 no detecta el golpe de calor de 2024, mientras que la fusión fenológica acierta con solo 0.26 qq/ha de error.
 21. **Caso B (DEMO 2 EN VIVO):** Gráfico interactivo Chart.js leyendo `data/cafe_ndvi_rendimiento.csv`: rendimiento real observado ($qq/ha$) vs modelo de fusión vs modelo estancado de solo NDVI (LOYO cross-validation).

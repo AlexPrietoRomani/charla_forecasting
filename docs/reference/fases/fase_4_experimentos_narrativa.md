@@ -1,6 +1,6 @@
 # Fase 4: Experimentos de Respaldo, Citas Verificadas y Consolidación Narrativa
 
-> **Documento de Fase:** `reference/fases/fase_4_experimentos_narrativa.md`  
+> **Documento de Fase:** `docs/reference/fases/fase_4_experimentos_narrativa.md`  
 > **Plan Relacionado:** [plan_detallado_diapositivas.md](../plan_detallado_diapositivas.md) (Sección 1 y Sección 5)  
 > **Estado:** `[ ] Pendiente de Ejecución` (Requiere aprobación explícita del usuario)
 
@@ -15,9 +15,9 @@
 ---
 
 ## 2. Entregables
-1. `scripts/experimento_no_extrapolacion.py` y `data/experimento_extrapolacion.csv` (Datos de la prueba rotulada `EXPERIMENTO PROPIO`).
-2. Actualización de `reference/investigacion_fuentes.md` con las citas académicas definitivas.
-3. `reference/plan_detallado_diapositivas.md` actualizado con todas las Frases-clave ⏳ completadas y sin marcadores provisionales.
+1. `scripts/caso_1/experimento_no_extrapolacion.py` y `data/caso_1/experimento_extrapolacion.csv` (Datos de la prueba rotulada `EXPERIMENTO PROPIO`).
+2. Actualización de `docs/reference/investigacion_fuentes.md` con las citas académicas definitivas.
+3. `docs/reference/plan_detallado_diapositivas.md` actualizado con todas las Frases-clave ⏳ completadas y sin marcadores provisionales.
 
 ---
 
@@ -27,12 +27,12 @@
 - [X] **T4.1.1** Tomar la serie diaria de Punchana y simular un escenario de entrenamiento restringido a temperaturas habituales ($T \le 34.0\,^{\circ}\text{C}$).
 - [X] **T4.1.2** Someter a prueba a un Random Forest / ExtraTrees frente a una ola de calor real de $37.4\,^{\circ}\text{C}$ (2023).
 - [X] **T4.1.3** Demostrar empíricamente cómo el árbol colapsa en una meseta horizontal constante ($\hat{y} = 31.5\,^{\circ}\text{C}$, error 5.5 °C), mientras que un modelo que predice diferencias acumuladas ($\Delta y$) acompaña la tendencia ($35.45\,^{\circ}\text{C}$).
-- [X] **T4.1.4** Exportar `data/experimento_extrapolacion.csv` para renderizar el gráfico SVG correspondiente en la diapositiva 05 rotulado como `EXPERIMENTO PROPIO`.
+- [X] **T4.1.4** Exportar `data/caso_1/experimento_extrapolacion.csv` para renderizar el gráfico SVG correspondiente en la diapositiva 05 rotulado como `EXPERIMENTO PROPIO`.
 
 ### SF4.2 Verificación Cruzada de Fuentes Bibliográficas
 - [X] **T4.2.1** Verificar citas de fenología del café en Perú y temperatura crítica de aborto floral.
 - [X] **T4.2.2** Verificar descripción del modelo ECMWF IFS y ciclo 4D-Var en Bauer et al. (Nature 2015).
-- [X] **T4.2.3** Calcular la discrepancia media absoluta en °C entre NOAA GFS y ECMWF IFS para Punchana en `data/noaa_ecmwf_forecast.csv` (Media 6.36 °C, Max 9.3 °C) y consignar la fecha exacta de la foto comparativa.
+- [X] **T4.2.3** Calcular la discrepancia media absoluta en °C entre NOAA GFS y ECMWF IFS para Punchana en `data/caso_1/noaa_ecmwf_forecast.csv` (Media 6.36 °C, Max 9.3 °C) y consignar la fecha exacta de la foto comparativa.
 
 ### SF4.3 Redacción Definitiva de Frases-clave (⏳)
 - [X] **T4.3.1** Redactar Frase-clave de Diapositiva 08 (siembra de saturación) ajustada al resultado de H1.

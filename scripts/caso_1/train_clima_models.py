@@ -7,7 +7,7 @@ Compara:
   4. XGBoost & LightGBM
   5. LSTM (PyTorch)
 
-Valida con holdout temporal de 90 días (sin leakage) y genera data/senamhi_forecast_7d.csv.
+Valida con holdout temporal de 90 días (sin leakage) y genera data/caso_1/senamhi_forecast_7d.csv.
 """
 
 from pathlib import Path
@@ -21,8 +21,8 @@ from statsmodels.tsa.arima.model import ARIMA
 import torch
 import torch.nn as nn
 
-DATA_PATH = Path("data/senamhi_diario.csv")
-OUT_FORECAST_PATH = Path("data/senamhi_forecast_7d.csv")
+DATA_PATH = Path("data/caso_1/senamhi_diario.csv")
+OUT_FORECAST_PATH = Path("data/caso_1/senamhi_forecast_7d.csv")
 
 def create_features(df, target_col="tmax", max_lags=14):
     df_feat = df.copy()

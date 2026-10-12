@@ -1,6 +1,6 @@
 # Fase 5: Refactorización de la Presentación Interactiva (20 Diapositivas)
 
-> **Documento de Fase:** `reference/fases/fase_5_deck_20_slides.md`  
+> **Documento de Fase:** `docs/reference/fases/fase_5_deck_20_slides.md`  
 > **Plan Relacionado:** [plan_detallado_diapositivas.md](../plan_detallado_diapositivas.md) (Sección 2, 4 y 5)  
 > **Estado:** `[ ] Pendiente de Ejecución` (Requiere aprobación explícita del usuario)
 
@@ -43,8 +43,8 @@ Reescribir el generador `scripts/build_deck.py` para compilar el archivo único 
 - [X] **T5.3.3** Incorporar media query `@media (prefers-reduced-motion: reduce)` para pausar las animaciones si el sistema del usuario lo requiere.
 
 ### SF5.4 Conexión de Demos Interactivas a CSVs Reales
-- [X] **T5.4.1** Actualizar Demo 1 (Diapositiva 14): Gráfico interactivo con Chart.js conectado a `data/senamhi_forecast_7d.csv`, mostrando la predicción del modelo ganador de Iquitos, bandas de incertidumbre y conmutadores para NOAA GFS / ECMWF IFS / TimesFM.
-- [X] **T5.4.2** Actualizar Demo 2 (Diapositiva 17): Gráfico interactivo conectado a `data/cafe_jaen_campanias.csv` y `data/cafe_jaen_resultados.csv`, permitiendo explorar la validación temporal expansiva año a año.
+- [X] **T5.4.1** Actualizar Demo 1 (Diapositiva 14): Gráfico interactivo con Chart.js conectado a `data/caso_1/senamhi_forecast_7d.csv`, mostrando la predicción del modelo ganador de Iquitos, bandas de incertidumbre y conmutadores para NOAA GFS / ECMWF IFS / TimesFM.
+- [X] **T5.4.2** Actualizar Demo 2 (Diapositiva 17): Gráfico interactivo conectado a `data/caso_2/cafe_jaen_campanias.csv` y `data/caso_2/cafe_jaen_resultados.csv`, permitiendo explorar la validación temporal expansiva año a año.
 - [X] **T5.4.3** Garantizar que ninguna cifra de la presentación esté escrita a mano en el código HTML/JS: todas se inyectan dinámicamente desde los CSVs de `data/`.
 
 ---

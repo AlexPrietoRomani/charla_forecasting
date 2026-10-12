@@ -1,6 +1,6 @@
 # Fase 7: Rediseño Visual (Front-Design) — Márgenes, Densidad y Cero Espacios Vacíos
 
-> **Documento de Fase:** `reference/fases/fase_7_rediseno_visual.md`  
+> **Documento de Fase:** `docs/reference/fases/fase_7_rediseno_visual.md`  
 > **Archivos a tocar:** `scripts/deck_styles.py`, `scripts/deck_slides_p1.py`, `scripts/deck_slides_p2.py`, `scripts/build_deck.py`  
 > **Herramientas:** `scripts/audit_layout.py` (capturas 1920×1080 en `docs/audit_layout/`), skill de front-design (si el usuario la provee/activa), skill `visualizar-datos`  
 > **Estado:** `[ ] Pendiente de Ejecución` (**NO ejecutar hasta visto bueno explícito del usuario**)
@@ -55,7 +55,7 @@
 - [ ] **T7.2.7** Slide 07: tabla de Foundation Models con tipografía ≥ 15 px y fila destacada por modelo.
 - [ ] **T7.2.8** Slide 08: reordenar a 3 bandas (infografía grande → 2 SVG grandes → nota); corregir solapes de etiquetas NDVI/zona saturada.
 - [ ] **T7.2.9** Slide 09: donut fenológico ≥ 420 px con etiquetas fuera del anillo (sin solapes) + línea de tiempo mensual; tarjetas inferiores más altas.
-- [ ] **T7.2.10** Slide 10: gráfico NOAA vs ECMWF + KPI de discrepancia media (dato de `data/noaa_ecmwf_forecast.csv`).
+- [ ] **T7.2.10** Slide 10: gráfico NOAA vs ECMWF + KPI de discrepancia media (dato de `data/caso_1/noaa_ecmwf_forecast.csv`).
 - [ ] **T7.2.11** Slide 11: malla icosaédrica ≥ 420 px (icosaedro/geodésica SVG animada) y métricas ECMWF vs GraphCast con números ≥ 56 px, apiladas sin vacío.
 - [ ] **T7.2.12** Slides 12–14: KPIs sobre/bajo canvas (RMSE, MAE, ganador por parsimonia) leídos desde `benchmark_punchana.csv`.
 - [ ] **T7.2.13** Slide 15: infografía de dron grande + HUD de telemetría; serie SIEA con anotaciones (2014 roya, 2020 pico).

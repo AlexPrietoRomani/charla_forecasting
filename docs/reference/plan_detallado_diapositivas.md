@@ -139,7 +139,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
 - **Repetibilidad:** semillas fijas; LSTM promediada en 5 semillas, con su desviación estándar.
 - **Prueba de significancia:** Diebold-Mariano entre el mejor modelo y el siguiente. Si la diferencia no es significativa, **se dice "empate"**.
 - **Regla de conclusión (decidida antes de ver los resultados):** gana el de menor RMSE. Si hay empate estadístico, gana **el más simple y barato** (parsimonia; Makridakis et al. M4/M5, Hyndman & Athanasopoulos 2021).
-- **Salida:** `data/benchmark_punchana.csv`, que alimenta automáticamente las diapos 13 y 18 (sin cifras escritas a mano).
+- **Salida:** `data/caso_1/benchmark_punchana.csv`, que alimenta automáticamente las diapos 13 y 18 (sin cifras escritas a mano).
 - **Contexto bibliográfico para interpretar:** Chronos reporta un zero-shot "comparable y ocasionalmente superior" a modelos entrenados (Ansari 2024). Zeng et al. (AAAI 2023) muestran que modelos lineales simples superan a muchos Transformers en series largas. Grinsztajn (2022) explica la ventaja de los árboles en tabular.
 
 ---
@@ -240,7 +240,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
 - **Propósito:** las agencias resuelven ecuaciones físicas con supercomputadores y, aun así, discrepan.
 - **Frase-clave:** *"Incluso la física más cara del mundo tiene incertidumbre."*
 - **Visual:** una malla atmosférica 3D con ciclo de asimilación. Al lado, 2 termómetros (GFS vs ECMWF) para Punchana **con su fecha**, más la discrepancia media en N días.
-- **Fuentes:** Bauer, Thorpe & Brunet (Nature 2015); `data/noaa_ecmwf_forecast.csv`.
+- **Fuentes:** Bauer, Thorpe & Brunet (Nature 2015); `data/caso_1/noaa_ecmwf_forecast.csv`.
 
 **11 · GraphCast** — `EVIDENCIA` · 1.5 min
 - **Propósito:** la IA ya compite con la física en el clima global.
@@ -272,7 +272,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
   - Chronos-T5 (Amazon): RMSE = 2.143 °C (p = 0.0126, estadísticamente inferior).
   - Naive Estacional: RMSE = 2.874 °C (p = 0.0001).
 - **Notas:** Plantilla ejecutada: "En empate estadístico (Diebold-Mariano p > 0.05), la regla de parsimonia elige el modelo más simple, rápido y barato (ExtraTrees en 0.11s). Sin embargo, TimesFM demuestra que un Foundation Model Zero-Shot empata con modelos entrenados sin requerir un solo paso de ajuste".
-- **Fuentes:** `data/benchmark_punchana.csv`; Makridakis M4/M5; Zeng et al. (2023); Ansari et al. (2024); Das et al. (ICML 2024).
+- **Fuentes:** `data/caso_1/benchmark_punchana.csv`; Makridakis M4/M5; Zeng et al. (2023); Ansari et al. (2024); Das et al. (ICML 2024).
 
 **14 · DEMO 1: pronóstico a 7 días** — `DEMO` · 2 min
 - **Propósito:** mostrar la incertidumbre en vivo.
@@ -281,7 +281,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
 
 ### ACTO 4 · CASO B: CAFÉ EN JAÉN (datos reales, ver sección 7)
 
-> Todas las cifras de estas 3 diapos salen de `data/cafe_jaen_campanias.csv`, `data/cafe_jaen_resultados.csv` y `data/cafe_jaen_hipotesis.json`.
+> Todas las cifras de estas 3 diapos salen de `data/caso_2/cafe_jaen_campanias.csv`, `data/caso_2/cafe_jaen_resultados.csv` y `data/caso_2/cafe_jaen_hipotesis.json`.
 
 **15 · Contexto: rendimiento oficial y satélite real** — `CASO REAL` · 1.5 min
 - **Propósito:** presentar datos reales y públicos, con sus límites declarados.
@@ -346,8 +346,8 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
 | Paso | Qué | Entregable | Verificación |
 |---|---|---|---|
 | E0 | Reintentar `research_import` (Deep Research de 41 fuentes); importar solo las fuentes citadas | Fuentes en NotebookLM | `source_list` |
-| E1 | **Caso B con datos reales:** ejecutar las fases B0–B7 de la sección 7 | `data/cafe_jaen_campanias.csv` + `data/SOURCES.md` | Checklist de la sección 7.8 |
-| E2 | `scripts/benchmark_punchana.py`: 8 modelos con el protocolo de la sección 3 (instalar `chronos-forecasting` y `timesfm`) | `data/benchmark_punchana.csv` + notebook 01 con outputs | Tests: holdout sin fuga, mismas fechas para todos |
+| E1 | **Caso B con datos reales:** ejecutar las fases B0–B7 de la sección 7 | `data/caso_2/cafe_jaen_campanias.csv` + `data/SOURCES.md` | Checklist de la sección 7.8 |
+| E2 | `scripts/caso_1/benchmark_punchana.py`: 8 modelos con el protocolo de la sección 3 (instalar `chronos-forecasting` y `timesfm`) | `data/caso_1/benchmark_punchana.csv` + notebook 01 con outputs | Tests: holdout sin fuga, mismas fechas para todos |
 | E3 | Experimento de no-extrapolación con datos de Punchana (diapo 05) | CSV pequeño en `data/` | Reproducible con semilla; rotulado `EXPERIMENTO PROPIO` |
 | E4 | Verificar en NotebookLM las citas restantes (diapo 09: fenología del café; diapo 10: cifras NWP; roya 2012–2014) | Tabla de la sección 1 actualizada | Sin filas ❌ en uso |
 | E5 | Redactar las Frases-clave (diapos 08, 13, 16, 17, 18, 19) según E1 y E2, con las reglas fijadas de antemano | Plan actualizado | [X] Completado con métricas reales auditadas |
@@ -418,12 +418,12 @@ Tareas:
 ### 7.4 Ventanas fenológicas y tabla por campaña
 
 - **B3.1 Fuente de las ventanas:** el calendario agrícola del café en Jaén según MIDAGRI o un artículo verificado en NotebookLM. Las ventanas actuales (floración Ago–Oct, llenado Nov–Feb, cosecha Mar–Jul) **se mantienen solo si una fuente las respalda**; si no, se ajustan a la fuente.
-- **B3.2** Construir `data/cafe_jaen_campanias.csv` (una fila por campaña):
+- **B3.2** Construir `data/caso_2/cafe_jaen_campanias.csv` (una fila por campaña):
   - Objetivo: `rendimiento_kg_ha` y `anomalia_rend`, que es el residuo respecto a una tendencia lineal estimada **solo con años pasados** (para no filtrar información del futuro).
   - Satélite: `ndvi_flor, ndvi_llen, evi_flor, evi_llen, ndvi_anual, n_obs_validas`.
   - Clima: `lluvia_flor, lluvia_llen, tmax_flor, tmax_llen, deficit_hidrico_flor (lluvia − ET0)`.
   - Trazabilidad: `fuente_rend`.
-- **B3.3** El script `scripts/build_cafe_real.py` es determinista: lee solo `data/raw/cafe_real/` y no llama a ningún generador aleatorio.
+- **B3.3** El script `scripts/caso_2/build_cafe_real.py` es determinista: lee solo `data/raw/cafe_real/` y no llama a ningún generador aleatorio.
 
 ### 7.5 Hipótesis (escritas antes de ver los resultados)
 
@@ -447,7 +447,7 @@ Regla: cada hipótesis se reporta como *confirmada / refutada / no concluyente (
 - **Validación secundaria:** LOYO, reportada aparte y rotulada como "usa años futuros".
 - **Métricas:** MAE, MAPE, y la mejora frente a M1 con IC 95% por bootstrap. Prueba de Diebold-Mariano entre M4 y M1.
 - **Selección de variables:** máximo 3 predictores por modelo, elegidos **por la hipótesis**, no por búsqueda automática, para evitar sobreajuste con n pequeño.
-- **Salidas:** `data/cafe_jaen_resultados.csv` (predicción por año y modelo) y `data/cafe_jaen_hipotesis.json`.
+- **Salidas:** `data/caso_2/cafe_jaen_resultados.csv` (predicción por año y modelo) y `data/caso_2/cafe_jaen_hipotesis.json`.
 
 ### 7.7 Limpieza del material sintético
 
@@ -460,7 +460,7 @@ Regla: cada hipótesis se reporta como *confirmada / refutada / no concluyente (
 ### 7.8 Checklist de verificación (Definition of Done del Caso B)
 
 - [ ] `data/SOURCES.md` lista cada archivo crudo con URL, fecha y SHA-256.
-- [ ] `grep -r "np.random" scripts/build_cafe_real.py` no devuelve nada.
+- [ ] `grep -r "np.random" scripts/caso_2/build_cafe_real.py` no devuelve nada.
 - [ ] El control produccion/superficie ≈ rendimiento pasa (≤ 2%).
 - [ ] La tabla por campaña no tiene valores del objetivo imputados.
 - [ ] Las hipótesis H1–H4 quedaron registradas **antes** de entrenar (con fecha en el commit).

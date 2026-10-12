@@ -33,7 +33,7 @@ def create_clima_notebook():
                     "import matplotlib.pyplot as plt\n",
                     "\n",
                     "# 1. Cargar benchmark consolidado de 8 modelos\n",
-                    "df_bm = pd.read_csv('../data/benchmark_punchana.csv')\n",
+                    "df_bm = pd.read_csv('../data/caso_1/benchmark_punchana.csv')\n",
                     "print('=== BENCHMARK DE 8 MODELOS (HOLDOUT 90 DÍAS) ===')\n",
                     "df_bm"
                 ]
@@ -78,7 +78,7 @@ def create_clima_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "df_fc = pd.read_csv('../data/senamhi_forecast_7d.csv')\n",
+                    "df_fc = pd.read_csv('../data/caso_1/senamhi_forecast_7d.csv')\n",
                     "print('Pronóstico a 7 días:')\n",
                     "df_fc"
                 ]
@@ -143,7 +143,7 @@ def create_cafe_notebook():
                     "import matplotlib.pyplot as plt\n",
                     "import json\n",
                     "\n",
-                    "df = pd.read_csv('../data/cafe_jaen_campanias.csv')\n",
+                    "df = pd.read_csv('../data/caso_2/cafe_jaen_campanias.csv')\n",
                     "print(f'Total campañas: {len(df)}')\n",
                     "con_rend = df.dropna(subset=['rendimiento_kg_ha'])\n",
                     "con_rend[['campania', 'rendimiento_qq_ha', 'superficie_cosechada_ha', 'produccion_t', 'ndvi_anual', 'lluvia_flor_mm', 'tmax_flor_c']]"
@@ -203,7 +203,7 @@ def create_cafe_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "with open('../data/cafe_jaen_hipotesis.json', 'r', encoding='utf-8') as f:\n",
+                    "with open('../data/caso_2/cafe_jaen_hipotesis.json', 'r', encoding='utf-8') as f:\n",
                     "    hip = json.load(f)\n",
                     "for h_key, h_val in hip.items():\n",
                     "    print(f'=== {h_key.upper()} ({h_val[\"estado\"]}) ===')\n",
@@ -224,7 +224,7 @@ def create_cafe_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "df_res = pd.read_csv('../data/cafe_jaen_resultados.csv')\n",
+                    "df_res = pd.read_csv('../data/caso_2/cafe_jaen_resultados.csv')\n",
                     "print('Predicciones año a año sin contaminación futura:')\n",
                     "df_res"
                 ]

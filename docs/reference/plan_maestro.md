@@ -73,7 +73,7 @@ ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
   7. Chronos-Bolt Zero-Shot (Amazon).
   8. TimesFM 200M Zero-Shot (Google).
 - **Regla de Conclusión:** Gana el de menor RMSE. En caso de empate estadístico según la prueba de Diebold-Mariano ($p > 0.05$), gana el modelo más simple y parsimonioso.
-- **Entregable:** `data/benchmark_punchana.csv` y `notebooks/01_clima_senamhi.ipynb`.
+- **Entregable:** `data/caso_1/benchmark_punchana.csv` y `notebooks/01_clima_senamhi.ipynb`.
 
 ---
 
@@ -86,15 +86,15 @@ ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
   - **Ventana Fenológica:** Floración (Ago–Oct), Llenado (Nov–Feb), Cosecha (Mar–Jul).
 - **Modelos:** Tendencia (M1), Solo NDVI (M2), Solo Clima (M3), Fusión Satélite + Clima (M4).
 - **Validación Principal:** Ventana temporal expansiva (entrenar con $\le t-1$, predecir $t$).
-- **Entregables:** `data/cafe_jaen_campanias.csv`, `data/cafe_jaen_resultados.csv` y `notebooks/02_cafe_ndvi.ipynb`.
+- **Entregables:** `data/caso_2/cafe_jaen_campanias.csv`, `data/caso_2/cafe_jaen_resultados.csv` y `notebooks/02_cafe_ndvi.ipynb`.
 
 ---
 
 ## 5. Fases de Ejecución del Proyecto
 
-1. **F1: Depuración y Setup** (`reference/fases/fase_1_depuracion_setup.md`) — Aislar material sintético a `data/deprecated/`, crear `SOURCES.md`, instalar dependencias.
-2. **F2: Caso B con Datos Reales** (`reference/fases/fase_2_cafe_datos_reales.md`) — Descargar SIEA/MIDAGRI, extraer MODIS/S2 y ERA5, evaluar hipótesis H1–H4.
-3. **F3: Caso A Benchmark Iquitos** (`reference/fases/fase_3_benchmark_iquitos_fm.md`) — Ejecutar 8 modelos, test Diebold-Mariano, exportar CSVs de benchmark.
-4. **F4: Experimentos y Citas** (`reference/fases/fase_4_experimentos_narrativa.md`) — Experimento propio de no-extrapolación, redactar Frases-clave ⏳ y validar con el usuario.
-5. **F5: Refactorización del Deck** (`reference/fases/fase_5_deck_20_slides.md`) — Generar `presentacion.html` de 20 diapositivas conectadas a CSVs reales.
-6. **F6: QA, Ensayo y Bitácora** (`reference/fases/fase_6_qa_ensayo.md`) — Auditoría 1920x1080 / 1366x768, ensayo 35 min, bitácora `docs/logs/log.md`.
+1. **F1: Depuración y Setup** (`docs/reference/fases/fase_1_depuracion_setup.md`) — Aislar material sintético a `data/deprecated/`, crear `SOURCES.md`, instalar dependencias.
+2. **F2: Caso B con Datos Reales** (`docs/reference/fases/fase_2_cafe_datos_reales.md`) — Descargar SIEA/MIDAGRI, extraer MODIS/S2 y ERA5, evaluar hipótesis H1–H4.
+3. **F3: Caso A Benchmark Iquitos** (`docs/reference/fases/fase_3_benchmark_iquitos_fm.md`) — Ejecutar 8 modelos, test Diebold-Mariano, exportar CSVs de benchmark.
+4. **F4: Experimentos y Citas** (`docs/reference/fases/fase_4_experimentos_narrativa.md`) — Experimento propio de no-extrapolación, redactar Frases-clave ⏳ y validar con el usuario.
+5. **F5: Refactorización del Deck** (`docs/reference/fases/fase_5_deck_20_slides.md`) — Generar `presentacion.html` de 20 diapositivas conectadas a CSVs reales.
+6. **F6: QA, Ensayo y Bitácora** (`docs/reference/fases/fase_6_qa_ensayo.md`) — Auditoría 1920x1080 / 1366x768, ensayo 35 min, bitácora `docs/logs/log.md`.

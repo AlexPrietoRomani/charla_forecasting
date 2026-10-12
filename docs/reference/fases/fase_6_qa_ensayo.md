@@ -1,6 +1,6 @@
 # Fase 6: QA Visual, Auditoría Multi-Resolución, Ensayo y Bitácora
 
-> **Documento de Fase:** `reference/fases/fase_6_qa_ensayo.md`  
+> **Documento de Fase:** `docs/reference/fases/fase_6_qa_ensayo.md`  
 > **Plan Relacionado:** [plan_detallado_diapositivas.md](../plan_detallado_diapositivas.md) (Sección 6)  
 > **Estado:** `[ ] Pendiente de Ejecución` (Requiere aprobación explícita del usuario)
 

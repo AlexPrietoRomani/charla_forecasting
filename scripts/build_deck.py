@@ -18,17 +18,17 @@ def clean_nans(obj):
 
 def build_deck():
     # Cargar datos reales auditados
-    bench_df = pd.read_csv("data/benchmark_punchana.csv")
-    forecast_7d_df = pd.read_csv("data/senamhi_forecast_7d.csv")
-    extrap_df = pd.read_csv("data/experimento_extrapolacion.csv")
-    cafe_camp_df = pd.read_csv("data/cafe_jaen_campanias.csv")
-    cafe_res_df = pd.read_csv("data/cafe_jaen_resultados.csv")
-    noaa_ecmwf_df = pd.read_csv("data/noaa_ecmwf_forecast.csv")
+    bench_df = pd.read_csv("data/caso_1/benchmark_punchana.csv")
+    forecast_7d_df = pd.read_csv("data/caso_1/senamhi_forecast_7d.csv")
+    extrap_df = pd.read_csv("data/caso_1/experimento_extrapolacion.csv")
+    cafe_camp_df = pd.read_csv("data/caso_2/cafe_jaen_campanias.csv")
+    cafe_res_df = pd.read_csv("data/caso_2/cafe_jaen_resultados.csv")
+    noaa_ecmwf_df = pd.read_csv("data/caso_1/noaa_ecmwf_forecast.csv")
     
-    with open("data/cafe_jaen_hipotesis.json", "r", encoding="utf-8") as f:
+    with open("data/caso_2/cafe_jaen_hipotesis.json", "r", encoding="utf-8") as f:
         hipotesis_cafe = json.load(f)
 
-    senamhi_diario_df = pd.read_csv("data/senamhi_diario.csv")
+    senamhi_diario_df = pd.read_csv("data/caso_1/senamhi_diario.csv")
     senamhi_sub = senamhi_diario_df.tail(180).to_dict(orient="records")
 
     raw_payload = {

@@ -1,6 +1,6 @@
 # Fase 1: Depuración de Material Sintético, Trazabilidad y Setup de Modelos
 
-> **Documento de Fase:** `reference/fases/fase_1_depuracion_setup.md`  
+> **Documento de Fase:** `docs/reference/fases/fase_1_depuracion_setup.md`  
 > **Plan Relacionado:** [plan_detallado_diapositivas.md](../plan_detallado_diapositivas.md) (Sección 6 y 7.7)  
 > **Estado:** `[ ] Pendiente de Ejecución` (Requiere aprobación explícita del usuario)
 
@@ -28,7 +28,7 @@ Aislar y archivar todo archivo con datos sintéticos no verificables para evitar
 
 ### SF1.2 Registro de Trazabilidad (`data/SOURCES.md`)
 - [ ] **T1.2.1** Crear `data/SOURCES.md` con la plantilla de registro: Nombre, URL/Endpoint, Fecha de Acceso, Versión, Parámetros de consulta y SHA-256 de los archivos crudos.
-- [ ] **T1.2.2** Registrar la procedencia de `data/senamhi_diario.csv` (descarga `garua` de la estación Punchana 103015/150208) y de `data/noaa_ecmwf_forecast.csv`.
+- [ ] **T1.2.2** Registrar la procedencia de `data/caso_1/senamhi_diario.csv` (descarga `garua` de la estación Punchana 103015/150208) y de `data/caso_1/noaa_ecmwf_forecast.csv`.
 
 ### SF1.3 Setup de Dependencias de Modelado
 - [ ] **T1.3.1** Verificar disponibilidad de PyTorch y paquetes base (`statsmodels`, `scikit-learn`, `xgboost`, `lightgbm`).

@@ -191,7 +191,7 @@
   2. *TimesFM Zero-Shot:* Trayectoria proyectada por el modelo fundacional de Google sin entrenamiento local.
   3. *Conmutadores interactivos:* Superposición en tiempo real de los pronósticos de NOAA GFS y ECMWF IFS.
 - **Frase-clave:** *"El valor está en la banda, no en la línea."*
-- **Visual:** Chart.js dinámico conectado a `data/senamhi_forecast_7d.csv` con botones interactivos para activar/desactivar agencias globales.
+- **Visual:** Chart.js dinámico conectado a `data/caso_1/senamhi_forecast_7d.csv` con botones interactivos para activar/desactivar agencias globales.
 - **Guion del orador:** "Miren esta demo interactiva conectada a los datos reales. La línea central es solo una guía; lo que importa para la toma de decisiones son las bandas P10 y P90. Podemos comparar en vivo con GFS y ECMWF."
 
 ---

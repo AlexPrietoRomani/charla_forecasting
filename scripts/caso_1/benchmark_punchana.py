@@ -46,9 +46,9 @@ def seed_all(seed=42):
 
 seed_all(42)
 
-DATA_PATH = Path("data/senamhi_diario.csv")
-BENCHMARK_OUT = Path("data/benchmark_punchana.csv")
-FORECAST_7D_OUT = Path("data/senamhi_forecast_7d.csv")
+DATA_PATH = Path("data/caso_1/senamhi_diario.csv")
+BENCHMARK_OUT = Path("data/caso_1/benchmark_punchana.csv")
+FORECAST_7D_OUT = Path("data/caso_1/senamhi_forecast_7d.csv")
 
 def diebold_mariano_test(y_true, y_pred1, y_pred2, h=1):
     """
@@ -454,7 +454,7 @@ def run_benchmark():
     print(df_bm[["modelo", "rmse_1d", "mae_1d", "rmse_7d", "tiempo_s", "hardware", "p_valor_vs_mejor"]].to_string(index=False))
     
     # -------------------------------------------------------------
-    # Generar data/senamhi_forecast_7d.csv para la Demo Interactiva
+    # Generar data/caso_1/senamhi_forecast_7d.csv para la Demo Interactiva
     # -------------------------------------------------------------
     last_7_days = test_df.iloc[-7:]
     fechas_7d = [d.strftime("%Y-%m-%d") for d in last_7_days.index]

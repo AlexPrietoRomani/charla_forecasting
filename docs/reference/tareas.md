@@ -8,7 +8,7 @@
 ---
 
 ## F1: Depuración de Material Sintético, Trazabilidad y Setup
-*Detalle completo en:* [`reference/fases/fase_1_depuracion_setup.md`](fases/fase_1_depuracion_setup.md)
+*Detalle completo en:* [`docs/reference/fases/fase_1_depuracion_setup.md`](fases/fase_1_depuracion_setup.md)
 
 - [X] **SF1.1 Aislamiento de Datos Sintéticos**
   - [X] T1.1.1 Crear `data/deprecated/` y mover `data/cafe_ndvi_rendimiento.csv` como `cafe_ndvi_rendimiento_SINTETICO.csv`.
@@ -25,7 +25,7 @@
 ---
 
 ## F2: Caso B — Reconstrucción con Datos Reales de Café (Jaén)
-*Detalle completo en:* [`reference/fases/fase_2_cafe_datos_reales.md`](fases/fase_2_cafe_datos_reales.md)
+*Detalle completo en:* [`docs/reference/fases/fase_2_cafe_datos_reales.md`](fases/fase_2_cafe_datos_reales.md)
 
 - [X] **SF2.1 Rendimiento Oficial SIEA / MIDAGRI**
   - [X] T2.1.1 Localizar compendios y anuarios estadísticos agrícolas de Jaén (meta: 2000–2024).
@@ -41,21 +41,21 @@
 - [X] **SF2.3 Agregación Fenológica y Clima Real**
   - [X] T2.3.1 Descargar clima ERA5 Open-Meteo para el centroide cafetalero (2000–2024).
   - [X] T2.3.2 Alinear ventanas fenológicas de Jaén (Floración, Llenado, Cosecha).
-  - [X] T2.3.3 Crear `scripts/build_cafe_real.py` (determinista, sin `np.random`) y compilar `data/cafe_jaen_campanias.csv`.
+  - [X] T2.3.3 Crear `scripts/caso_2/build_cafe_real.py` (determinista, sin `np.random`) y compilar `data/caso_2/cafe_jaen_campanias.csv`.
 - [X] **SF2.4 Evaluación de Hipótesis y Modelado con Ventana Expansiva**
   - [X] T2.4.1 Evaluar H1: Correlación empírica `ndvi_anual` vs `anomalia_rendimiento`.
   - [X] T2.4.2 Evaluar H2: Correlación de clima de floración vs NDVI.
   - [X] T2.4.3 Evaluar H3: Comparación de MAE en ventana expansiva (Tendencia vs NDVI vs Clima vs Fusión).
   - [X] T2.4.4 Evaluar H4: Firma espectral del impacto de la roya amarilla (2012–2014).
-  - [X] T2.4.5 Exportar `data/cafe_jaen_hipotesis.json` y actualizar `notebooks/02_cafe_ndvi.ipynb`.
+  - [X] T2.4.5 Exportar `data/caso_2/cafe_jaen_hipotesis.json` y actualizar `notebooks/02_cafe_ndvi.ipynb`.
 
 ---
 
 ## F3: Caso A — Benchmark de 8 Modelos en Iquitos con Foundation Models
-*Detalle completo en:* [`reference/fases/fase_3_benchmark_iquitos_fm.md`](fases/fase_3_benchmark_iquitos_fm.md)
+*Detalle completo en:* [`docs/reference/fases/fase_3_benchmark_iquitos_fm.md`](fases/fase_3_benchmark_iquitos_fm.md)
 
 - [X] **SF3.1 Preparación y Holdout Estricto**
-  - [X] T3.1.1 Cargar `data/senamhi_diario.csv` (2019–2025, 2,557 días).
+  - [X] T3.1.1 Cargar `data/caso_1/senamhi_diario.csv` (2019–2025, 2,557 días).
   - [X] T3.1.2 Fijar split temporal estricto: Entrenamiento = 2,467 días; Holdout ciego = 90 días finales.
   - [X] T3.1.3 Construir matriz de rezagos 1–14 sin filtración futura.
 - [X] **SF3.2 Ejecución de los 8 Modelos de Pronóstico**
@@ -71,18 +71,18 @@
   - [X] T3.3.1 Calcular RMSE y MAE para horizontes 1d y 7d.
   - [X] T3.3.2 Prueba formal de Diebold-Mariano vs el mejor modelo (detectar empates).
   - [X] T3.3.3 Aplicar regla de parsimonia para declarar al ganador operativo.
-  - [X] T3.3.4 Exportar `data/benchmark_punchana.csv` y `data/senamhi_forecast_7d.csv`.
+  - [X] T3.3.4 Exportar `data/caso_1/benchmark_punchana.csv` y `data/caso_1/senamhi_forecast_7d.csv`.
   - [X] T3.3.5 Reejecutar `notebooks/01_clima_senamhi.ipynb` con celdas ejecutadas y limpias.
 
 ---
 
 ## F4: Experimentos de Respaldo, Citas y Consolidación Narrativa
-*Detalle completo en:* [`reference/fases/fase_4_experimentos_narrativa.md`](fases/fase_4_experimentos_narrativa.md)
+*Detalle completo en:* [`docs/reference/fases/fase_4_experimentos_narrativa.md`](fases/fase_4_experimentos_narrativa.md)
 
 - [X] **SF4.1 Experimento Propio de No-Extrapolación (Diapositiva 05)**
   - [X] T4.1.1 Configurar experimento con datos de Punchana restringidos en $T \le 34.0\,^{\circ}\text{C}$.
   - [X] T4.1.2 Demostrar la meseta plana del árbol vs la extrapolación del modelo diferenciado ($\Delta y$).
-  - [X] T4.1.3 Exportar `data/experimento_extrapolacion.csv` rotulado `EXPERIMENTO PROPIO`.
+  - [X] T4.1.3 Exportar `data/caso_1/experimento_extrapolacion.csv` rotulado `EXPERIMENTO PROPIO`.
 - [X] **SF4.2 Verificación Cruzada de Fuentes**
   - [X] T4.2.1 Verificar citas fenológicas y temperaturas de aborto en café.
   - [X] T4.2.2 Verificar datos de supercómputo y asimilación 4D-Var en ECMWF IFS.
@@ -98,7 +98,7 @@
 ---
 
 ## F5: Refactorización de la Presentación Interactiva (20 Diapositivas)
-*Detalle completo en:* [`reference/fases/fase_5_deck_20_slides.md`](fases/fase_5_deck_20_slides.md)
+*Detalle completo en:* [`docs/reference/fases/fase_5_deck_20_slides.md`](fases/fase_5_deck_20_slides.md)
 
 - [X] **SF5.1 Layout 40/60 Split-Screen y 5 Insignias Fijas**
   - [X] T5.1.1 Estructurar exactamente 20 diapositivas en `scripts/build_deck.py`.
@@ -112,14 +112,14 @@
   - [X] T5.3.2 Controlar intensidad (loops dinámicos solo en diapos clave, lentos en el resto).
   - [X] T5.3.3 Soportar `prefers-reduced-motion`.
 - [X] **SF5.4 Demos Conectadas a CSVs Reales**
-  - [X] T5.4.1 Demo 1 (Diapo 14): Conectar Chart.js a `data/senamhi_forecast_7d.csv`.
-  - [X] T5.4.2 Demo 2 (Diapo 17): Conectar Chart.js a `data/cafe_jaen_campanias.csv` y validación expansiva.
+  - [X] T5.4.1 Demo 1 (Diapo 14): Conectar Chart.js a `data/caso_1/senamhi_forecast_7d.csv`.
+  - [X] T5.4.2 Demo 2 (Diapo 17): Conectar Chart.js a `data/caso_2/cafe_jaen_campanias.csv` y validación expansiva.
   - [X] T5.4.3 Verificar que ninguna cifra esté cableada a mano en el HTML.
 
 ---
 
 ## F6: QA Visual, Auditoría Multi-Resolución, Ensayo y Bitácora
-*Detalle completo en:* [`reference/fases/fase_6_qa_ensayo.md`](fases/fase_6_qa_ensayo.md)
+*Detalle completo en:* [`docs/reference/fases/fase_6_qa_ensayo.md`](fases/fase_6_qa_ensayo.md)
 
 - [X] **SF6.1 Auditoría Visual y de Responsividad**
   - [X] T6.1.1 Probar en resolución 1920×1080 (cero desborde vertical).
@@ -137,7 +137,7 @@
 ---
 
 ## F7: Rediseño Visual (Front-Design) — Márgenes, Densidad y Cero Espacios Vacíos
-*Detalle completo en:* [`reference/fases/fase_7_rediseno_visual.md`](fases/fase_7_rediseno_visual.md)
+*Detalle completo en:* [`docs/reference/fases/fase_7_rediseno_visual.md`](fases/fase_7_rediseno_visual.md)
 > **Estado:** `[X]` completada — Verificado con Playwright en `scripts/audit_layout.py` (0 vacíos >31px, 0 errores de consola).
 
 - [X] **SF7.1 Marco global y sistema de espaciado**

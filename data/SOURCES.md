@@ -6,7 +6,7 @@ Este documento registra la procedencia, endpoints oficiales, parámetros de desc
 
 ## 1. Clima Punchana — SENAMHI Perú (Caso A)
 
-* **Archivo Procesado:** `data/senamhi_diario.csv`
+* **Archivo Procesado:** `data/caso_1/senamhi_diario.csv`
 * **SHA-256:** `5C2D1BDD7A94E0BDB9AFBEB2F98EF9D014C1FE706DD027D9EBE9AAF80D6588E9`
 * **Fuente:** Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI)
 * **Estación:** Punchana (Código estación: `103015`, código web: `150208`)
@@ -24,7 +24,7 @@ Este documento registra la procedencia, endpoints oficiales, parámetros de desc
 
 ## 2. Pronóstico Multi-Agencia Global en Iquitos (Caso A)
 
-* **Archivo:** `data/noaa_ecmwf_forecast.csv`
+* **Archivo:** `data/caso_1/noaa_ecmwf_forecast.csv`
 * **SHA-256:** `73D8A48E038459CB11DF10A353682BC3CE694DB503644BCFA898603FE1CDE865`
 * **Fuente:** Open-Meteo Weather Forecast API (`https://api.open-meteo.com/v1/forecast`)
 * **Coordenadas:** `-3.6903°`, `-73.2556°` (Estación Punchana)
@@ -74,19 +74,19 @@ Este documento registra la procedencia, endpoints oficiales, parámetros de desc
 
 ## 6. Dataset Consolidado Fenológico y Resultados de Hipótesis (Caso B)
 
-* **Archivo Consolidado:** `data/cafe_jaen_campanias.csv`
+* **Archivo Consolidado:** `data/caso_2/cafe_jaen_campanias.csv`
 * **SHA-256:** `1931b33e74009005427e2b8f937c089b0debd3d43253da17337ef510732aa421`
-* **Resultados Validación Expansiva:** `data/cafe_jaen_resultados.csv` (SHA-256: `24f1ffeafe379d9ce8ef1845c273676627db83b86d79043b5b001424ad86feae`)
-* **Auditoría de Hipótesis H1-H4:** `data/cafe_jaen_hipotesis.json` (SHA-256: `e03edb8f2d379083532e121e921edc9ed3e4bc69716cfbb2575c9e5f1f279847`)
-* **Código Generador:** `scripts/build_cafe_real.py` (cero llamadas a `np.random`).
+* **Resultados Validación Expansiva:** `data/caso_2/cafe_jaen_resultados.csv` (SHA-256: `24f1ffeafe379d9ce8ef1845c273676627db83b86d79043b5b001424ad86feae`)
+* **Auditoría de Hipótesis H1-H4:** `data/caso_2/cafe_jaen_hipotesis.json` (SHA-256: `e03edb8f2d379083532e121e921edc9ed3e4bc69716cfbb2575c9e5f1f279847`)
+* **Código Generador:** `scripts/caso_2/build_cafe_real.py` (cero llamadas a `np.random`).
 
 ---
 
 ## 7. Benchmark de 8 Modelos en Iquitos (Caso A)
 
-* **Archivo del Benchmark:** `data/benchmark_punchana.csv`
+* **Archivo del Benchmark:** `data/caso_1/benchmark_punchana.csv`
 * **SHA-256:** `76f7fd8bc75e5688b05f9bc45628ee759b27254f8c4c8db8221fd79e49eff1b1`
-* **Archivo de Pronóstico 7 Días:** `data/senamhi_forecast_7d.csv`
+* **Archivo de Pronóstico 7 Días:** `data/caso_1/senamhi_forecast_7d.csv`
 * **SHA-256:** `b04dac5b08c9242050e10c185fac98d3992ba40cd256b48df95a35094b57298b`
 * **Metodología:** Holdout ciego de 90 días (Octubre-Diciembre 2025). Prueba de Diebold-Mariano con corrección de Harvey-Leybourne-Newbold (1997).
 * **Modelos:** Naive Estacional, ARIMA (2,0,1), Holt-Winters Amortiguado, Random Forest, ExtraTrees, LSTM (PyTorch, 5 semillas), Chronos-T5 (Amazon Zero-Shot), TimesFM 2.5 200M (Google Zero-Shot).
