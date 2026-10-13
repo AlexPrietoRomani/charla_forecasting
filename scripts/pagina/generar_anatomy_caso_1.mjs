@@ -2,40 +2,49 @@ import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import * as k from "/home/aprietor/.gemini/antigravity-cli/skills/anatomy/kit/iso-kit.mjs";
 
-const WIDTH = 760;
-const HEIGHT = 520;
+const WIDTH = 840;
+const HEIGHT = 560;
 
-// Escena: Microclima Local SENAMHI Punchana vs Celda Global NWP (ECMWF ~9km / NOAA GFS ~28km)
-// 1. Plataforma instrumental con base de acero, patas antivibración, canaletas de cables
-// 2. Garita meteorológica (Stevenson screen) con lamas de ventilación, termohigrómetro digital PT100 interno
-// 3. Torre reticulada metálica (mástil con crucetas, escalerilla y pernos)
-// 4. Estación de sensores: anemómetro ultrasónico de 3 ejes, veleta direccional, piranómetro solar
-// 5. Pluviómetro de balancín en pedestal con aro receptor calibrado (200 cm²)
-// 6. Datalogger / gabinete industrial IP66 con panel solar y cableado conduit blindado
-// 7. Envolvente volumétrica de Supercómputo NWP: celda ortogonal masiva, vórtices de fluido, gradiente térmico
+// Escena: Tierra vs Supercómputo (Caso 1 SENAMHI Punchana)
+// Lado Izquierdo: Estación Meteorológica SENAMHI Punchana (Tierra, microclima tropical a 2m)
+//   - Torre reticulada de 3 patas de acero galvanizado con celosías en X
+//   - Garita Stevenson reglamentaria OMM con lamas de ventilación y sensor termohigrométrico PT100 interno
+//   - Pluviómetro de balancín en pedestal calibrado (200 cm²)
+//   - Datalogger industrial IP66 con panel solar y tubería conduit apantallada
+//   - Cruceta superior con anemómetro de 3 cazoletas, veleta direccional y piranómetro solar
+//
+// Lado Derecho: Supercomputador HPC Cluster / Rack de Centro de Datos (ECMWF IFS / NOAA GFS)
+//   - Gabinete rack estándar 42U de centro de datos con zócalo, puertas biseladas y pies niveladores
+//   - Bahías de servidores blade modulares extraíbles con manijas y orejetas de montaje en rack
+//   - Ranuras/rejillas de ventilación horizontal de flujo forzado
+//   - Matriz de LEDs indicadores de estado (verde/azul de cómputo paralelo activo)
+//   - Panel de control y consola frontal iluminada con pantalla OLED: "ECMWF IFS · RESOLUCIÓN 9km · SESGO +2.46°C"
+//   - Bandeja de cableado estructurado de fibra óptica y ducto de refrigeración líquida
+
 const BASE = { x: -150, y: -110, w: 300, d: 220, r: 8 };
 const BASE_H = 12;
 const FOOT_H = 6;
 
 // Mástil y estación meteorológica (SENAMHI Punchana, izquierda)
-const TOWER = [ -70, 15 ];
-const TOWER_H = 140;
+const TOWER = [ -75, 15 ];
+const TOWER_H = 145;
 
-// Cubo de volumen global (NWP ECMWF / GFS, derecha)
-const CUBE = { x: 25, y: -90, w: 110, d: 110, r: 0 };
-const CUBE_Z0 = 25;
-const CUBE_H = 105;
+// Rack de Supercómputo HPC (Centro de datos ECMWF / NOAA, derecha)
+const RACK = { x: 35, y: -70, w: 85, d: 115, r: 4 };
+const RACK_BASE_Z = 0;
+const RACK_H = 150;
 
 const P = k.fitProjection(
   [
     ...k.boxCorners(BASE, -BASE_H - FOOT_H, 0),
-    [TOWER[0] - 25, TOWER[1] - 25, TOWER_H + 30],
-    [TOWER[0] + 25, TOWER[1] + 25, TOWER_H + 30],
-    ...k.boxCorners(CUBE, CUBE_Z0, CUBE_Z0 + CUBE_H + 15)
+    [TOWER[0] - 28, TOWER[1] - 25, TOWER_H + 30],
+    [TOWER[0] + 28, TOWER[1] + 25, TOWER_H + 30],
+    [RACK.x - 10, RACK.y - 10, RACK_H + 15],
+    [RACK.x + RACK.w + 10, RACK.y + RACK.d + 10, RACK_H + 15]
   ],
   WIDTH,
   HEIGHT,
-  { pad: 28, azimuth: 44, elevation: 31 }
+  { pad: 32, azimuth: 44, elevation: 32 }
 );
 
 const at = (point) => k.iso(point, P);
@@ -50,7 +59,7 @@ function buildFigure() {
   // 1. Halo base y patas
   parts.push(`<path class="iso-halo" d="${k.haloOf(BASE, -BASE_H - FOOT_H, BASE_H, P)}"/>`);
 
-  for (const [x, y] of byDepth(k.corners(BASE, 22))) {
+  for (const [x, y] of byDepth(k.corners(BASE, 20))) {
     parts.push(S(k.cylinder(x, y, 9, -BASE_H - FOOT_H, 2, P, 28), { tone: "lo" }));
     parts.push(S(k.cylinder(x, y, 7, -BASE_H - FOOT_H + 2, FOOT_H - 2, P, 28), { tone: "mid" }));
   }
@@ -87,7 +96,6 @@ function buildFigure() {
   const leg2 = [TOWER[0] - legOffset * 0.86, TOWER[1] + legOffset * 0.5];
   const leg3 = [TOWER[0] + legOffset * 0.86, TOWER[1] + legOffset * 0.5];
 
-  // Columnas verticales de la torre
   for (const leg of [leg1, leg2, leg3]) {
     parts.push(S(k.cylinder(leg[0], leg[1], 2.2, 5, TOWER_H - 15, P, 16), { tone: "mid" }));
   }
@@ -98,7 +106,6 @@ function buildFigure() {
     parts.push(L(k.segment([leg2[0], leg2[1], z], [leg1[0], leg1[1], z + 20], P), { tone: "lo" }));
     parts.push(L(k.segment([leg2[0], leg2[1], z], [leg3[0], leg3[1], z + 20], P), { tone: "lo" }));
     parts.push(L(k.segment([leg3[0], leg3[1], z], [leg2[0], leg2[1], z + 20], P), { tone: "lo" }));
-    // Anillo horizontal de rigidización
     parts.push(L(k.segment([leg1[0], leg1[1], z + 20], [leg2[0], leg2[1], z + 20], P), { tone: "mid" }));
     parts.push(L(k.segment([leg2[0], leg2[1], z + 20], [leg3[0], leg3[1], z + 20], P), { tone: "mid" }));
     parts.push(L(k.segment([leg3[0], leg3[1], z + 20], [leg1[0], leg1[1], z + 20], P), { tone: "mid" }));
@@ -127,7 +134,7 @@ function buildFigure() {
   parts.push(S(k.slabOf(pvPanel, 70, 2, P, 2), { tone: "mid" }));
   parts.push(L(k.segment([pvPanel.x + 11, pvPanel.y, 72], [pvPanel.x + 11, pvPanel.y + pvPanel.d, 72], P), { tone: "blue" }));
 
-  // Pluviómetro de balancín
+  // Pluviómetro de balancín en pedestal propio
   const rainX = TOWER[0] - 25;
   const rainY = TOWER[1] + 35;
   parts.push(S(k.cylinder(rainX, rainY, 11, 0, 32, P, 28), { tone: "mid" }));
@@ -173,79 +180,85 @@ function buildFigure() {
     parts.push(L(k.segment(conduitPts[i], conduitPts[i + 1], P), { tone: "faint" }));
   }
 
-  // 3. Celda de Volumen Global NWP (Supercómputo, Derecha)
-  parts.push(S(k.slabOf(k.insetPlan(CUBE, -6), 0, 5, P, 3), { tone: "lo" }));
-
-  for (let step = 1; step <= 4; step++) {
-    const gx = CUBE.x + (CUBE.w / 5) * step;
-    parts.push(L(k.segment([gx, CUBE.y, 5.2], [gx, CUBE.y + CUBE.d, 5.2], P), { tone: "lo" }));
-    const gy = CUBE.y + (CUBE.d / 5) * step;
-    parts.push(L(k.segment([CUBE.x, gy, 5.2], [CUBE.x + CUBE.w, gy, 5.2], P), { tone: "lo" }));
+  // 3. Supercomputador HPC Cluster (Gabinete Rack de Centro de Datos, Derecha)
+  // Zócalo base del rack con pies antivibración
+  parts.push(S(k.slabOf(k.insetPlan(RACK, -4), 0, 6, P, 3, 0.8), { tone: "lo" }));
+  const rackFeet = k.corners(RACK, -2);
+  for (const [fx, fy] of rackFeet) {
+    parts.push(S(k.cylinder(fx, fy, 4, 0, 4, P, 16), { tone: "mid" }));
   }
 
-  const c000 = [CUBE.x, CUBE.y, CUBE_Z0];
-  const c100 = [CUBE.x + CUBE.w, CUBE.y, CUBE_Z0];
-  const c010 = [CUBE.x, CUBE.y + CUBE.d, CUBE_Z0];
-  const c110 = [CUBE.x + CUBE.w, CUBE.y + CUBE.d, CUBE_Z0];
+  // Chasis principal del Rack (Cuerpo monolítico de acero con esquinas biseladas)
+  parts.push(S(k.slabOf(RACK, 6, RACK_H, P, 4, 1.2), { tone: "mid" }));
+  parts.push(L(k.planOutline(k.insetPlan(RACK, 3), 6 + RACK_H, P), { tone: "hi" }));
 
-  const c001 = [CUBE.x, CUBE.y, CUBE_Z0 + CUBE_H];
-  const c101 = [CUBE.x + CUBE.w, CUBE.y, CUBE_Z0 + CUBE_H];
-  const c011 = [CUBE.x, CUBE.y + CUBE.d, CUBE_Z0 + CUBE_H];
-  const c111 = [CUBE.x + CUBE.w, CUBE.y + CUBE.d, CUBE_Z0 + CUBE_H];
-
-  parts.push(L(k.segment(c000, c001, P), { tone: "mid" }));
-  parts.push(L(k.segment(c100, c101, P), { tone: "mid" }));
-  parts.push(L(k.segment(c010, c011, P), { tone: "mid" }));
-  parts.push(L(k.segment(c110, c111, P), { tone: "hi" }));
-
-  parts.push(L(k.segment(c001, c101, P), { tone: "hi" }));
-  parts.push(L(k.segment(c101, c111, P), { tone: "hi" }));
-  parts.push(L(k.segment(c111, c011, P), { tone: "hi" }));
-  parts.push(L(k.segment(c011, c001, P), { tone: "hi" }));
-
-  for (const lz of [CUBE_Z0 + 35, CUBE_Z0 + 70]) {
-    parts.push(L(k.segment([CUBE.x, CUBE.y, lz], [CUBE.x + CUBE.w, CUBE.y, lz], P), { tone: "faint" }));
-    parts.push(L(k.segment([CUBE.x + CUBE.w, CUBE.y, lz], [CUBE.x + CUBE.w, CUBE.y + CUBE.d, lz], P), { tone: "faint" }));
-    parts.push(L(k.segment([CUBE.x + CUBE.w, CUBE.y + CUBE.d, lz], [CUBE.x, CUBE.y + CUBE.d, lz], P), { tone: "faint" }));
-    parts.push(L(k.segment([CUBE.x, CUBE.y + CUBE.d, lz], [CUBE.x, CUBE.y, lz], P), { tone: "faint" }));
+  // Techo del rack: rejilla de extracción de ventiladores (Fans de enfriamiento)
+  const fanZ = 6 + RACK_H;
+  for (const foffset of [-20, 0, 20]) {
+    const fcx = RACK.x + RACK.w / 2;
+    const fcy = RACK.y + RACK.d / 2 + foffset;
+    parts.push(S(k.cylinder(fcx, fcy, 10, fanZ, 2.5, P, 24), { tone: "lo" }));
+    parts.push(L(k.ring(fcx, fcy, 9.5, fanZ + 2.5, P, 24), { tone: "faint" }));
   }
 
-  for (let step = 1; step <= 4; step++) {
-    const gx = CUBE.x + (CUBE.w / 5) * step;
-    parts.push(L(k.segment([gx, CUBE.y, CUBE_Z0 + CUBE_H], [gx, CUBE.y + CUBE.d, CUBE_Z0 + CUBE_H], P), { tone: "faint" }));
-    const gy = CUBE.y + (CUBE.d / 5) * step;
-    parts.push(L(k.segment([CUBE.x, gy, CUBE_Z0 + CUBE_H], [CUBE.x + CUBE.w, gy, CUBE_Z0 + CUBE_H], P), { tone: "faint" }));
+  // Frontal del Rack (y = RACK.y + RACK.d): Bahías de Servidores Blade (42U)
+  const frontY = RACK.y + RACK.d;
+  const numUnits = 7; // 7 servidores blade de alta densidad
+  const unitH = (RACK_H - 30) / numUnits;
+
+  for (let u = 0; u < numUnits; u++) {
+    const uz = 12 + u * unitH;
+    // Marco exterior de la unidad blade
+    const unitPlan = { x: RACK.x + 6, y: frontY - 1.5, w: RACK.w - 12, d: 3, r: 1 };
+    parts.push(S(k.slabOf(unitPlan, uz, unitH - 2.5, P, 2, 0.4), { tone: u === 3 ? "hi" : "mid", lit: u === 3 }));
+
+    // Manijas metálicas a los costados del servidor blade
+    parts.push(L(k.segment([RACK.x + 9, frontY + 2.5, uz + 2], [RACK.x + 9, frontY + 2.5, uz + unitH - 4.5], P), { tone: "hi" }));
+    parts.push(L(k.segment([RACK.x + RACK.w - 9, frontY + 2.5, uz + 2], [RACK.x + RACK.w - 9, frontY + 2.5, uz + unitH - 4.5], P), { tone: "hi" }));
+
+    // Ranuras horizontales de ventilación forzada en la cara frontal del servidor
+    for (let slotZ = uz + 3; slotZ < uz + unitH - 5; slotZ += 3.2) {
+      parts.push(L(k.segment([RACK.x + 16, frontY + 1.6, slotZ], [RACK.x + RACK.w - 24, frontY + 1.6, slotZ], P), { tone: "lo" }));
+    }
+
+    // LEDs de actividad de CPU / Cómputo (Verde / Cyan en los paneles frontales)
+    const ledPt1 = at([RACK.x + RACK.w - 15, frontY + 1.8, uz + unitH / 2]);
+    const ledPt2 = at([RACK.x + RACK.w - 19, frontY + 1.8, uz + unitH / 2]);
+    parts.push(`<circle cx="${ledPt1[0]}" cy="${ledPt1[1]}" r="1.4" fill="var(--anatomy-green)"/>`);
+    parts.push(`<circle cx="${ledPt2[0]}" cy="${ledPt2[1]}" r="1.4" fill="var(--anatomy-blue)"/>`);
   }
 
-  const gridNodes = [
-    c001, c101, c011, c111,
-    [CUBE.x + CUBE.w / 2, CUBE.y + CUBE.d / 2, CUBE_Z0 + CUBE_H],
-    [CUBE.x + CUBE.w / 2, CUBE.y + CUBE.d / 2, CUBE_Z0 + 50]
+  // Pantalla / Consola de Diagnóstico Operacional en la unidad central (u = 3)
+  const oledZ = 12 + 3 * unitH + 3;
+  const oledBox = { x: RACK.x + 18, y: frontY - 0.5, w: 45, d: 2, r: 1 };
+  parts.push(S(k.slabOf(oledBox, oledZ, unitH - 8, P, 2), { tone: "hi", lit: true }));
+  // Líneas de telemetría en la pantalla del rack
+  parts.push(L(k.segment([oledBox.x + 4, frontY + 1.8, oledZ + 3], [oledBox.x + 40, frontY + 1.8, oledZ + 3], P), { tone: "cyan" }));
+  parts.push(L(k.segment([oledBox.x + 4, frontY + 1.8, oledZ + 6], [oledBox.x + 28, frontY + 1.8, oledZ + 6], P), { tone: "cyan" }));
+
+  // Ducto aéreo de fibra óptica y refrigeración líquida que sale del rack hacia el exterior
+  const pipePts = [
+    [RACK.x + 20, RACK.y + 20, RACK_H + 6],
+    [RACK.x + 20, RACK.y - 15, RACK_H + 25],
+    [RACK.x + 70, RACK.y - 25, RACK_H + 25]
   ];
-  for (const node of gridNodes) {
-    parts.push(S(k.cylinder(node[0], node[1], 3.2, node[2] - 1.5, 3.5, P, 16), { tone: "hi", lit: true }));
-    parts.push(D([at([node[0], node[1], node[2] + 2])], { size: 0.65, tone: "hi" }));
+  for (let i = 0; i < pipePts.length - 1; i++) {
+    parts.push(L(k.segment(pipePts[i], pipePts[i + 1], P), { tone: "blue" }));
   }
 
-  const biasVec1 = [CUBE.x + 10, CUBE.y - 12, CUBE_Z0 + 50];
-  const biasVec2 = [CUBE.x + CUBE.w - 10, CUBE.y + CUBE.d + 12, CUBE_Z0 + 50];
-  parts.push(L(k.segment(biasVec1, biasVec2, P), { tone: "red" }));
-  parts.push(L(k.segment(biasVec2, [biasVec2[0] - 8, biasVec2[1] - 4, biasVec2[2] + 4], P), { tone: "red" }));
-  parts.push(L(k.segment(biasVec2, [biasVec2[0] - 8, biasVec2[1] - 4, biasVec2[2] - 4], P), { tone: "red" }));
-
-  // 4. Placas grabadas y lecturas ubicadas en zonas despejadas
-  const tagStation = at([TOWER[0] - 30, TOWER[1] + 55, 0]);
-  const tagGrid = at([CUBE.x + 15, CUBE.y + CUBE.d + 34, 0]);
+  // 4. Placas grabadas y etiquetas técnicas ubicadas en espacios limpios
+  const tagStation = at([TOWER[0] - 25, TOWER[1] + 55, 0]);
+  const tagHpc = at([RACK.x + RACK.w / 2, frontY + 36, 0]);
 
   const bodyContent = `
   ${parts.join("\n  ")}
   <g class="iso-face-text" data-tone="hi">
     <text x="${tagStation[0]}" y="${tagStation[1]}" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="0.08em">SENAMHI PUNCHANA · MEDICIÓN LOCAL (2m)</text>
-    <text x="${tagStation[0]}" y="${tagStation[1] + 13}" font-size="9" fill="var(--anatomy-blue)" text-anchor="middle">MAE MODELOS ML: 1.88 °C · RESIDUOS CALIBRADOS</text>
+    <text x="${tagStation[0]}" y="${tagStation[1] + 13}" font-size="9" fill="var(--fest-cyan)" text-anchor="middle">MAE MODELOS ML: 1.88 °C · RESIDUOS CALIBRADOS</text>
   </g>
   <g class="iso-face-text" data-tone="hi">
-    <text x="${tagGrid[0]}" y="${tagGrid[1]}" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="0.08em">CELDA NWP (ECMWF ~9km / NOAA GFS ~28km)</text>
-    <text x="${tagGrid[0]}" y="${tagGrid[1] + 13}" font-size="9" fill="var(--anatomy-red)" text-anchor="middle">SESGO SISTEMÁTICO: +2.58 °C (SIN DOWNSCALING)</text>
+    <text x="${tagHpc[0]}" y="${tagHpc[1]}" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="0.08em">SUPERCOMPUTADOR NUMÉRICO (HPC RACK)</text>
+    <text x="${tagHpc[0]}" y="${tagHpc[1] + 13}" font-size="9" fill="var(--anatomy-red)" text-anchor="middle">ECMWF IFS (9 km) / NOAA GFS (28 km) · SESGO: +2.58 °C</text>
   </g>`;
 
   return k.figureSvg({ body: bodyContent, standalone: "dark", width: WIDTH, height: HEIGHT });
@@ -253,4 +266,4 @@ function buildFigure() {
 
 const svgOut = buildFigure();
 writeFileSync(join(process.cwd(), "front/components/anatomy/anatomy_estacion_vs_malla.svg"), svgOut);
-console.log("Generado con éxito con standalone:dark: front/components/anatomy/anatomy_estacion_vs_malla.svg");
+console.log("Generado con éxito con HPC Supercomputer Rack: front/components/anatomy/anatomy_estacion_vs_malla.svg");
