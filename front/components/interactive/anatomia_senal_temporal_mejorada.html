@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Anatomía de la señal temporal · Descomposición interactiva</title>
+  <style>
+    :root {
+      --bg: #050817;
+      --panel: rgba(10, 17, 35, .88);
+      --panel-2: rgba(7, 13, 28, .88);
+      --line: rgba(148, 163, 184, .16);
+      --text: #edf5ff;
+      --muted: #94a3b8;
+      --yt: #38efff;
+      --trend: #49a5ff;
+      --season: #c778ff;
+      --cycle: #ffc05c;
+      --noise: #ff6688;
+      --signal: #6ef0b4;
+      --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+      --sans: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      overflow: auto;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 82% 13%, rgba(14, 116, 144, .16), transparent 31%),
+        radial-gradient(ellipse at 14% 86%, rgba(126, 34, 206, .11), transparent 34%),
+        #030613;
+      font-family: var(--sans);
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+      outline: 2px solid #75f4ff;
+      outline-offset: 3px;
+    }
+
+    #slideFrame {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      gap: clamp(8px, 1.05vw, 15px);
+      width: min(100vw, 1600px, calc(100svh * 16 / 9));
+      aspect-ratio: 16 / 9;
+      padding: clamp(15px, 1.65vw, 27px) clamp(16px, 1.85vw, 30px) clamp(10px, 1.15vw, 18px);
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 73% 46%, rgba(7, 80, 115, .13), transparent 46%),
+        linear-gradient(145deg, rgba(8, 14, 31, .985), rgba(4, 8, 21, .99));
+      border: 1px solid rgba(82, 128, 170, .25);
+      box-shadow: 0 24px 90px rgba(0, 0, 0, .48), inset 0 0 70px rgba(4, 40, 70, .12);
+    }
+    #slideFrame::before {
+      position: absolute; z-index: -1; inset: 0; content: ""; pointer-events: none;
+      opacity: .31;
+      background-image:
+        linear-gradient(rgba(78, 111, 153, .105) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(78, 111, 153, .105) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, black, transparent 92%);
+    }
+
+    body.is-embedded {
+      width: 100vw !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: stretch !important;
+      justify-content: stretch !important;
+    }
+    body.is-embedded #slideFrame {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      aspect-ratio: auto !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: clamp(10px, 1.2vw, 18px) clamp(14px, 1.5vw, 24px) clamp(8px, 1vw, 14px) !important;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 20px;
+      min-width: 0;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+    .brand-mark {
+      display: grid; place-items: center; flex: 0 0 42px; width: 42px; height: 42px;
+      border: 1px solid rgba(56, 239, 255, .36); border-radius: 13px;
+      color: var(--yt); background: rgba(0, 245, 255, .075);
+      box-shadow: inset 0 0 20px rgba(0, 245, 255, .045), 0 0 24px rgba(0, 245, 255, .06);
+    }
+    .brand-mark svg { width: 23px; height: 23px; }
+    .eyebrow { margin: 0 0 4px; color: var(--yt); font: 600 10px/1.2 var(--mono); letter-spacing: .17em; text-transform: uppercase; }
+    h1 { margin: 0; color: #f5f8ff; font: 700 clamp(22px, 2vw, 31px)/1.05 var(--display); letter-spacing: -.035em; }
+    h1 span { color: var(--yt); text-shadow: 0 0 20px rgba(56, 239, 255, .24); }
+    .equation {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px;
+      padding: 11px 14px; border: 1px solid rgba(104, 138, 180, .2); border-radius: 12px;
+      background: rgba(7, 13, 29, .88); white-space: nowrap;
+      font: 500 clamp(12px, 1.05vw, 16px)/1 var(--mono);
+      box-shadow: inset 0 0 22px rgba(255,255,255,.015);
+    }
+    .eq-y { color: var(--yt); } .eq-t { color: var(--trend); } .eq-s { color: var(--season); }
+    .eq-c { color: var(--cycle); } .eq-e { color: var(--noise); } .eq-op { color: #75839c; }
+
+    .modebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
+    .mode-tabs { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: rgba(7, 12, 27, .8); }
+    .mode-btn, .icon-btn, .action-btn {
+      border: 1px solid transparent; cursor: pointer; transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+    }
+    .mode-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px;
+      color: #9aa8bd; background: transparent; font: 600 11px/1 var(--display); white-space: nowrap;
+    }
+    .mode-btn:hover { color: #fff; background: rgba(148, 163, 184, .08); }
+    .mode-btn[aria-pressed="true"][data-mode="stl"] { color: #fff; border-color: rgba(56,239,255,.24); background: rgba(8, 145, 178, .26); box-shadow: 0 0 18px rgba(0,245,255,.065); }
+    .mode-btn[aria-pressed="true"][data-mode="signal"] { color: #e1fff1; border-color: rgba(110,240,180,.24); background: rgba(5, 150, 105, .22); }
+    .mode-btn[aria-pressed="true"][data-mode="overfit"] { color: #fff0f3; border-color: rgba(255,102,136,.27); background: rgba(190, 24, 93, .2); }
+    .mode-symbol { display: inline-grid; place-items: center; width: 14px; color: var(--yt); font: 700 14px/1 var(--mono); }
+    [data-mode="signal"] .mode-symbol { color: var(--signal); }
+    [data-mode="overfit"] .mode-symbol { color: var(--noise); }
+    .bar-meta { display: flex; align-items: center; justify-content: flex-end; gap: 10px; color: #71819a; font: 9px/1.4 var(--mono); letter-spacing: .08em; text-align: right; }
+    .bar-meta .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 9px var(--signal); }
+    .icon-btn { display: inline-grid; place-items: center; width: 32px; height: 31px; border: 1px solid var(--line); border-radius: 8px; color: #9ba9bd; background: rgba(12, 21, 40, .8); }
+    .icon-btn:hover, .action-btn:hover { color: #fff; border-color: rgba(56,239,255,.34); background: rgba(20, 42, 65, .9); }
+
+    .workspace { display: grid; grid-template-columns: minmax(270px, .355fr) minmax(0, 1fr); gap: clamp(10px, 1.2vw, 18px); min-width: 0; min-height: 0; }
+    .layers-panel { display: grid; grid-template-rows: auto repeat(5, minmax(0, 1fr)) auto; gap: 7px; min-width: 0; min-height: 0; }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 2px 2px; color: #a4b3c8; font: 600 10px/1.25 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .section-hint { color: #5f718c; font: 9px/1.3 var(--mono); letter-spacing: 0; text-transform: none; text-align: right; }
+    .component-card {
+      --layer: var(--yt);
+      display: grid; grid-template-columns: 38px minmax(0, 1fr) 29px; align-items: center; gap: 10px;
+      min-width: 0; padding: 9px 10px; border: 1px solid rgba(133, 158, 192, .13); border-radius: 11px;
+      background: linear-gradient(105deg, rgba(13, 22, 43, .86), rgba(8, 15, 31, .72));
+      cursor: pointer; transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .component-card[data-key="T"] { --layer: var(--trend); }
+    .component-card[data-key="S"] { --layer: var(--season); }
+    .component-card[data-key="C"] { --layer: var(--cycle); }
+    .component-card[data-key="E"] { --layer: var(--noise); }
+    .component-card:hover { border-color: color-mix(in srgb, var(--layer) 38%, transparent); }
+    .component-card.selected { border-color: color-mix(in srgb, var(--layer) 60%, transparent); background: linear-gradient(105deg, color-mix(in srgb, var(--layer) 10%, rgba(9,16,32,.94)), rgba(9,15,30,.92)); box-shadow: inset 0 0 20px color-mix(in srgb, var(--layer) 5%, transparent), 0 0 17px color-mix(in srgb, var(--layer) 7%, transparent); }
+    .component-card.layer-hidden { opacity: .58; }
+    .symbol-box { display: grid; place-items: center; align-self: center; width: 38px; height: 38px; border: 1px solid color-mix(in srgb, var(--layer) 40%, transparent); border-radius: 9px; color: var(--layer); background: color-mix(in srgb, var(--layer) 10%, transparent); font: 600 12px/1 var(--mono); }
+    .component-copy { min-width: 0; }
+    .component-title-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; min-width: 0; }
+    .component-title { overflow: hidden; color: #eef4ff; font: 650 12px/1.25 var(--display); text-overflow: ellipsis; white-space: nowrap; }
+    .component-tag { color: var(--layer); font: 9px/1.2 var(--mono); opacity: .95; }
+    .component-description { display: -webkit-box; overflow: hidden; margin: 4px 0 0; color: #a4b1c4; font: 10px/1.32 var(--sans); -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .visibility-toggle { display: grid; place-items: center; width: 28px; height: 29px; border: 1px solid transparent; border-radius: 7px; color: var(--layer); background: transparent; cursor: pointer; }
+    .visibility-toggle:hover { border-color: color-mix(in srgb, var(--layer) 34%, transparent); background: color-mix(in srgb, var(--layer) 9%, transparent); }
+    .visibility-toggle svg { width: 16px; height: 16px; }
+    .visibility-toggle[aria-pressed="false"] { color: #53647e; }
+
+    .inspector { min-height: 83px; padding: 10px 12px 9px; border: 1px solid rgba(56, 239, 255, .2); border-radius: 11px; background: linear-gradient(120deg, rgba(6, 35, 52, .48), rgba(8, 16, 34, .85)); }
+    .inspector-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
+    .inspector-label { color: var(--yt); font: 600 9px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .inspector-chip { padding: 3px 6px; border: 1px solid rgba(56,239,255,.18); border-radius: 5px; color: #9ceef5; background: rgba(56,239,255,.07); font: 9px/1.1 var(--mono); white-space: nowrap; }
+    .inspector-title { margin: 0 0 3px; color: #f0f6ff; font: 650 11px/1.2 var(--display); }
+    .inspector-body { margin: 0; color: #9aa9bf; font: 10px/1.35 var(--sans); }
+
+    .visual-column { display: grid; grid-template-rows: minmax(139px, .34fr) minmax(0, .66fr); gap: clamp(9px, 1vw, 14px); min-width: 0; min-height: 0; }
+    .glass-card { min-width: 0; min-height: 0; border: 1px solid rgba(133, 158, 192, .16); border-radius: 13px; background: linear-gradient(145deg, rgba(10, 18, 36, .93), rgba(5, 11, 26, .91)); box-shadow: inset 0 1px 0 rgba(255,255,255,.025); }
+    .monitor-card { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px 8px; overflow: hidden; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
+    .panel-title { display: flex; align-items: center; gap: 9px; min-width: 0; color: #dce8f8; font: 650 12px/1.25 var(--display); }
+    .panel-glyph { display: inline-grid; place-items: center; width: 24px; height: 24px; flex: 0 0 24px; border: 1px solid rgba(56,239,255,.19); border-radius: 7px; color: var(--yt); background: rgba(56,239,255,.07); font: 700 12px/1 var(--mono); }
+    .monitor-metrics { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 9px; color: #7c8da8; font: 9px/1.2 var(--mono); }
+    .metric strong { color: #dceafa; font-weight: 600; }
+    .metric .noise-value { color: var(--noise); }
+    .model-badge { display: inline-flex; align-items: center; gap: 5px; max-width: 235px; padding: 4px 7px; overflow: hidden; border: 1px solid rgba(110,240,180,.19); border-radius: 6px; color: #92f0bf; background: rgba(16,185,129,.08); font: 9px/1.2 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+    .model-badge.warn { border-color: rgba(255,102,136,.24); color: #ff9cb0; background: rgba(244,63,94,.1); }
+    .model-badge.neutral { border-color: rgba(73,165,255,.22); color: #9bcaff; background: rgba(56,189,248,.08); }
+    .chart-wrap { position: relative; flex: 1; min-height: 52px; overflow: hidden; border: 1px solid rgba(119, 151, 191, .12); border-radius: 8px; background: rgba(2, 7, 19, .68); }
+    #oscCanvas, #isoCanvas { display: block; width: 100%; height: 100%; }
+    .chart-axis { display: flex; justify-content: space-between; gap: 8px; color: #566782; font: 8px/1.1 var(--mono); letter-spacing: .04em; }
+    .legend { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; color: #91a1b9; font: 9px/1.2 var(--mono); }
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .legend-line { width: 17px; height: 0; border-top: 2px solid var(--yt); box-shadow: 0 0 6px color-mix(in srgb, var(--yt) 50%, transparent); }
+    .legend-line.recon { border-top: 2px dashed var(--signal); box-shadow: none; }
+    .legend-line.overfit { border-top: 2px dashed var(--noise); box-shadow: none; }
+
+    .model-card { display: flex; flex-direction: column; padding: 10px 11px 9px; overflow: hidden; }
+    .model-card .panel-heading { padding: 0 1px 8px; }
+    .model-actions { display: inline-flex; align-items: center; gap: 11px; color: #7688a3; font: 9px/1.2 var(--mono); }
+    .text-action { padding: 3px 0; border: 0; color: #80deed; background: transparent; cursor: pointer; font: 9px/1.2 var(--mono); white-space: nowrap; }
+    .text-action:hover { color: #e0fcff; text-decoration: underline; }
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; border: 1px solid rgba(119, 151, 191, .13); border-radius: 10px; background: radial-gradient(ellipse at 48% 42%, rgba(10, 58, 86, .15), rgba(2, 7, 18, .88) 68%); }
+    .canvas-wrap::after { position: absolute; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg, rgba(1, 5, 17, .06), transparent 28%, transparent 78%, rgba(1, 5, 17, .2)); }
+    .canvas-caption { position: absolute; z-index: 2; top: 9px; left: 10px; color: rgba(134, 164, 196, .6); font: 8px/1.2 var(--mono); letter-spacing: .12em; pointer-events: none; }
+    .drag-hint { position: absolute; z-index: 2; top: 8px; right: 9px; padding: 4px 6px; border: 1px solid rgba(118, 148, 185, .12); border-radius: 5px; color: #778aa4; background: rgba(6, 13, 28, .74); font: 8px/1.2 var(--mono); pointer-events: none; }
+    .canvas-legend { position: absolute; z-index: 2; bottom: 8px; left: 9px; display: flex; flex-wrap: wrap; gap: 6px 10px; max-width: 78%; padding: 5px 7px; border: 1px solid rgba(125, 151, 186, .12); border-radius: 7px; color: #8d9eb6; background: rgba(5, 11, 25, .79); font: 8px/1.1 var(--mono); pointer-events: none; }
+    .canvas-legend span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .legend-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 7px color-mix(in srgb, var(--dot) 45%, transparent); }
+    .controlbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 12px; padding: 9px 2px 0; }
+    .range-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 17px; }
+    .range-control { display: flex; align-items: center; gap: 7px; color: #8e9eb6; font: 9px/1 var(--mono); white-space: nowrap; }
+    .range-control label { display: inline-flex; align-items: center; gap: 5px; }
+    .range-control output { min-width: 31px; color: #c2d1e7; text-align: right; }
+    input[type="range"] { width: clamp(64px, 7vw, 100px); height: 4px; accent-color: var(--trend); cursor: pointer; }
+    #sliderNoise { accent-color: var(--noise); }
+    #sliderSpeed { accent-color: var(--cycle); width: clamp(56px, 5.5vw, 78px); }
+    .control-actions { display: flex; align-items: center; gap: 6px; }
+    .action-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 9px; border: 1px solid rgba(128, 151, 184, .17); border-radius: 7px; color: #a7b7cd; background: rgba(18, 28, 48, .68); font: 9px/1 var(--mono); white-space: nowrap; }
+    .action-btn.primary { color: #b8f9ff; border-color: rgba(56,239,255,.18); background: rgba(8, 145, 178, .13); }
+    .footnote { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-width: 0; padding-top: 3px; color: #6f819b; font: 9px/1.25 var(--mono); }
+    .footnote strong { color: #9eafc7; font-weight: 500; }
+    .footnote .right-note { color: #4f627d; text-align: right; }
+
+    @media (max-height: 760px) and (min-width: 821px) {
+      #slideFrame { padding-top: 13px; padding-bottom: 10px; gap: 8px; }
+      .topbar { padding-bottom: 8px; }
+      .brand-mark { width: 36px; height: 36px; flex-basis: 36px; }
+      h1 { font-size: clamp(20px, 1.9vw, 26px); }
+      .equation { padding: 8px 10px; }
+      .mode-btn { padding: 7px 9px; }
+      .component-card { padding: 6px 8px; gap: 8px; }
+      .symbol-box { width: 33px; height: 33px; }
+      .component-description { margin-top: 2px; -webkit-line-clamp: 1; }
+      .inspector { min-height: 68px; padding: 7px 9px; }
+      .monitor-card { padding: 8px 10px 7px; }
+      .model-card { padding: 8px 9px 7px; }
+      .canvas-legend { bottom: 5px; }
+      .controlbar { padding-top: 6px; }
+    }
+    @media (max-width: 1100px) and (min-width: 821px) {
+      .workspace { grid-template-columns: minmax(245px, .38fr) minmax(0, 1fr); }
+      .equation { gap: 5px; }
+      .bar-meta { font-size: 8px; }
+      .component-description { font-size: 9px; }
+      .range-controls { gap: 9px; }
+      .range-control { gap: 5px; font-size: 8px; }
+      input[type="range"] { width: 64px; }
+    }
+    @media (max-width: 820px) {
+      body { display: block; }
+      #slideFrame { width: 100%; height: auto; min-height: 100svh; aspect-ratio: auto; overflow: visible; padding: 18px 14px 14px; }
+      .topbar { grid-template-columns: minmax(0,1fr); gap: 12px; }
+      .equation { justify-self: start; }
+      .modebar { align-items: flex-start; flex-direction: column; }
+      .mode-tabs { max-width: 100%; }
+      .mode-btn { padding: 8px 9px; }
+      .bar-meta { width: 100%; justify-content: space-between; text-align: left; }
+      .workspace { grid-template-columns: minmax(0,1fr); }
+      .layers-panel { grid-template-rows: auto repeat(5, minmax(65px, auto)) auto; }
+      .visual-column { grid-template-rows: 190px 390px; }
+      .monitor-metrics { gap: 6px; }
+      .model-card { min-height: 360px; }
+      .canvas-wrap { min-height: 250px; }
+      .controlbar { align-items: flex-start; }
+      .range-controls { gap: 12px; }
+      .footnote { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .footnote .right-note { text-align: left; }
+    }
+    @media (max-width: 480px) {
+      .brand-mark { width: 36px; height: 36px; flex-basis: 36px; }
+      h1 { font-size: 23px; line-height: 1.12; }
+      .mode-tabs { width: 100%; display: grid; grid-template-columns: 1fr; }
+      .mode-btn { justify-content: flex-start; }
+      .section-heading { font-size: 9px; }
+      .component-card { min-height: 70px; }
+      .panel-heading { align-items: flex-start; }
+      .monitor-card { min-height: 205px; }
+      .monitor-metrics { justify-content: flex-start; }
+      .panel-title { font-size: 11px; }
+      .legend { gap: 8px; }
+      .control-actions { width: 100%; }
+      .action-btn { flex: 1; }
+      .canvas-legend { max-width: 95%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main id="slideFrame" aria-label="Diapositiva interactiva sobre la anatomía de una serie temporal">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M2 13h3l2.1-7 3.2 13 2.6-9 2.1 5H22" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 3h18v18H3z" stroke="currentColor" stroke-opacity=".18"/></svg>
+        </div>
+        <div>
+          <p class="eyebrow">Descomposición temporal · Física y entropía</p>
+          <h1>Anatomía de la señal <span>temporal</span></h1>
+        </div>
+      </div>
+      <div class="equation" aria-label="Y de t igual a T de t más S de t más C de t más épsilon de t">
+        <span class="eq-y">Y(t)</span><span class="eq-op">=</span>
+        <span class="eq-t">T(t)</span><span class="eq-op">+</span>
+        <span class="eq-s">S(t)</span><span class="eq-op">+</span>
+        <span class="eq-c">C(t)</span><span class="eq-op">+</span>
+        <span class="eq-e">ε(t)</span>
+      </div>
+    </header>
+
+    <nav class="modebar" aria-label="Modos de visualización">
+      <div class="mode-tabs">
+        <button class="mode-btn" type="button" data-mode="stl" aria-pressed="true"><span class="mode-symbol">▱</span> Descomposición</button>
+        <button class="mode-btn" type="button" data-mode="signal" aria-pressed="false"><span class="mode-symbol">∿</span> Señal vs. ruido</button>
+        <button class="mode-btn" type="button" data-mode="overfit" aria-pressed="false"><span class="mode-symbol">⚠</span> Trampa del overfitting</button>
+      </div>
+      <div class="bar-meta">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>MODELO CONCEPTUAL</span>
+        <span>·</span>
+        <span>SEÑAL SINTÉTICA</span>
+        <button class="icon-btn" type="button" id="fullscreenBtn" aria-label="Activar o salir de pantalla completa" title="Pantalla completa">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <section class="workspace">
+      <aside class="layers-panel" aria-label="Componentes de la serie temporal">
+        <div class="section-heading"><span>Capas aditivas</span><span class="section-hint">Selecciona para inspeccionar</span></div>
+
+        <article class="component-card selected" data-key="Y" tabindex="0" role="button" aria-label="Inspeccionar señal observada Y(t)">
+          <div class="symbol-box">Y(t)</div>
+          <div class="component-copy">
+            <div class="component-title-row"><span class="component-title">Señal observada</span><span class="component-tag">TOTAL</span></div>
+            <p class="component-description">Registro original: estructura más fluctuación residual.</p>
+          </div>
+          <button class="visibility-toggle" type="button" data-toggle="Y" aria-pressed="true" aria-label="Ocultar señal observada" title="Mostrar u ocultar curva observada">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </article>
+
+        <article class="component-card" data-key="T" tabindex="0" role="button" aria-label="Inspeccionar tendencia T(t)">
+          <div class="symbol-box">T(t)</div>
+          <div class="component-copy">
+            <div class="component-title-row"><span class="component-title">Tendencia secular</span><span class="component-tag">LARGO PLAZO</span></div>
+            <p class="component-description">Deriva lenta e inercia estructural del sistema.</p>
+          </div>
+          <button class="visibility-toggle" type="button" data-toggle="T" aria-pressed="true" aria-label="Ocultar tendencia" title="Mostrar u ocultar capa y aporte a la reconstrucción">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </article>
+
+        <article class="component-card" data-key="S" tabindex="0" role="button" aria-label="Inspeccionar estacionalidad S(t)">
+          <div class="symbol-box">S(t)</div>
+          <div class="component-copy">
+            <div class="component-title-row"><span class="component-title">Estacionalidad</span><span class="component-tag">PERIÓDICA</span></div>
+            <p class="component-description">Patrones repetidos: horas, semana y calendario.</p>
+          </div>
+          <button class="visibility-toggle" type="button" data-toggle="S" aria-pressed="true" aria-label="Ocultar estacionalidad" title="Mostrar u ocultar capa y aporte a la reconstrucción">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </article>
+
+        <article class="component-card" data-key="C" tabindex="0" role="button" aria-label="Inspeccionar ciclo C(t)">
+          <div class="symbol-box">C(t)</div>
+          <div class="component-copy">
+            <div class="component-title-row"><span class="component-title">Ciclo endógeno</span><span class="component-tag">RÉGIMEN</span></div>
+            <p class="component-description">Oscilaciones no estrictamente periódicas y cambios de régimen.</p>
+          </div>
+          <button class="visibility-toggle" type="button" data-toggle="C" aria-pressed="true" aria-label="Ocultar ciclo" title="Mostrar u ocultar capa y aporte a la reconstrucción">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </article>
+
+        <article class="component-card" data-key="E" tabindex="0" role="button" aria-label="Inspeccionar residuo estocástico epsilon">
+          <div class="symbol-box">ε(t)</div>
+          <div class="component-copy">
+            <div class="component-title-row"><span class="component-title">Ruido / residuo</span><span class="component-tag">INCERTIDUMBRE</span></div>
+            <p class="component-description">Variación no explicada: evitar que el modelo la memorice.</p>
+          </div>
+          <button class="visibility-toggle" type="button" data-toggle="E" aria-pressed="true" aria-label="Ocultar residuo estocástico" title="Mostrar u ocultar capa y aporte a la reconstrucción">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </article>
+
+        <section class="inspector" aria-live="polite" aria-label="Inspector del componente seleccionado">
+          <div class="inspector-head"><span class="inspector-label">Lectura de la capa</span><span class="inspector-chip" id="inspectorChip">Señal total</span></div>
+          <h2 class="inspector-title" id="inspectorTitle">Y(t) · Señal observada</h2>
+          <p class="inspector-body" id="inspectorBody">La serie medida superpone tendencia, estacionalidad, ciclo y residuo.</p>
+        </section>
+      </aside>
+
+      <div class="visual-column">
+        <section class="glass-card monitor-card" aria-label="Monitor de reconstrucción de la señal">
+          <div class="panel-heading">
+            <div class="panel-title"><span class="panel-glyph">∿</span><span>Monitor de reconstrucción continua <span style="color:var(--yt)">Y(t)</span></span></div>
+            <div class="monitor-metrics">
+              <span class="metric">Capas <strong id="layersCount">4/4</strong></span>
+              <span class="metric">Amplitud ε <strong class="noise-value" id="noiseMetric">26%</strong></span>
+              <span class="model-badge" id="modelStatus" aria-live="polite">Reconstrucción completa</span>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="oscCanvas" aria-label="Gráfico temporal de señal observada y señal reconstruida"></canvas></div>
+          <div class="panel-heading">
+            <div class="legend" aria-label="Leyenda del monitor">
+              <span class="legend-item"><i class="legend-line"></i> Observada Y(t)</span>
+              <span class="legend-item"><i class="legend-line recon"></i> Reconstrucción activa</span>
+              <span class="legend-item" id="overfitLegend" hidden><i class="legend-line overfit"></i> Modelo memorizador</span>
+            </div>
+            <div class="chart-axis"><span>HISTORIAL</span><span>t →</span></div>
+          </div>
+        </section>
+
+        <section class="glass-card model-card" aria-label="Modelo tridimensional de descomposición">
+          <div class="panel-heading">
+            <div class="panel-title"><span class="panel-glyph" style="color:var(--trend);border-color:rgba(73,165,255,.2);background:rgba(73,165,255,.07)">▱</span><span>Descomposición espacial <span style="color:#91a4bf;font-weight:500">· placas apiladas 3D</span></span></div>
+            <div class="model-actions"><span>ROTACIÓN LIBRE</span><button class="text-action" type="button" id="centerCameraBtn">↺ Centrar cámara</button></div>
+          </div>
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="isoCanvas" aria-label="Representación tridimensional de Y, T, S, C y epsilon; arrastra para rotar"></canvas>
+            <span class="canvas-caption">VISTA EXPLOTADA · COMPONENTES ADITIVOS</span>
+            <span class="drag-hint">↔ ARRASTRA PARA ORBITAR</span>
+            <div class="canvas-legend" aria-label="Colores de las capas">
+              <span><i class="legend-dot" style="--dot:var(--yt)"></i>Y observada</span>
+              <span><i class="legend-dot" style="--dot:var(--trend)"></i>T tendencia</span>
+              <span><i class="legend-dot" style="--dot:var(--season)"></i>S estacional</span>
+              <span><i class="legend-dot" style="--dot:var(--cycle)"></i>C ciclo</span>
+              <span><i class="legend-dot" style="--dot:var(--noise)"></i>ε residuo</span>
+            </div>
+          </div>
+          <div class="controlbar">
+            <div class="range-controls">
+              <div class="range-control"><label for="sliderGap"><span style="color:var(--trend)">↕</span> Separación</label><input id="sliderGap" type="range" min="34" max="68" value="48"><output id="gapVal" for="sliderGap">48</output></div>
+              <div class="range-control"><label for="sliderNoise"><span style="color:var(--noise)">∿</span> Ruido ε</label><input id="sliderNoise" type="range" min="0" max="80" value="26"><output id="noiseVal" for="sliderNoise">26%</output></div>
+              <div class="range-control"><label for="sliderSpeed"><span style="color:var(--cycle)">»</span> Flujo</label><input id="sliderSpeed" type="range" min="0" max="100" value="45"><output id="speedVal" for="sliderSpeed">45%</output></div>
+            </div>
+            <div class="control-actions">
+              <button class="action-btn primary" type="button" id="playBtn"><span id="playSymbol">Ⅱ</span><span id="playLabel">Pausar</span></button>
+              <button class="action-btn" type="button" id="resetBtn">↺ Restablecer</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footnote">
+      <span><strong>Idea clave:</strong> separar estructura y residuo antes de modelar reduce el riesgo de memorizar fluctuaciones que no se repetirán.</span>
+      <span class="right-note">Esquema sintético · STL clásico: Yₜ = Tₜ + Sₜ + Rₜ</span>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      if (window.self !== window.top) {
+        document.body.classList.add("is-embedded");
+      }
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'resize') {
+          if (typeof setCanvasSizes === 'function') setCanvasSizes();
+        }
+      });
+
+      const COLORS = {
+        Y: '#38efff', T: '#49a5ff', S: '#c778ff', C: '#ffc05c', E: '#ff6688',
+        signal: '#6ef0b4', muted: '#66758d', grid: 'rgba(139, 164, 197, .105)'
+      };
+      const N = 180;
+      const state = {
+        mode: 'stl',
+        activeLayers: { Y: true, T: true, S: true, C: true, E: true },
+        selected: 'Y',
+        layerGap: 48,
+        noiseAmp: 26,
+        speed: 45,
+        isPlaying: true,
+        time: 0,
+        camera: { yaw: -0.42, pitch: 0.66, dragging: false, lastX: 0, lastY: 0 }
+      };
+
+      const meta = {
+        Y: { title: 'Y(t) · Señal observada', chip: 'Señal total', body: 'La medición completa: tendencia, estacionalidad, ciclo y residuo superpuestos.' },
+        T: { title: 'T(t) · Tendencia secular', chip: 'Largo plazo', body: 'Componente de variación lenta que representa la deriva estructural del sistema.' },
+        S: { title: 'S(t) · Estacionalidad', chip: 'Patrón periódico', body: 'Oscilaciones que se repiten por ritmos horarios, semanales, anuales o de calendario.' },
+        C: { title: 'C(t) · Ciclo endógeno', chip: 'Régimen', body: 'Expansiones y contracciones no estrictamente periódicas; pueden reflejar retroalimentación o cambios de régimen.' },
+        E: { title: 'ε(t) · Residuo estocástico', chip: 'Incertidumbre', body: 'Variación no explicada por las demás capas. Ajustarla como si fuera una ley puede provocar sobreajuste fuera de muestra.' }
+      };
+      const slabOrder = [
+        { key: 'E', label: 'ε(t)  RESIDUO', sub: 'incertidumbre', center: 0, scale: 1.0 },
+        { key: 'C', label: 'C(t)  CICLO', sub: 'dinámica de régimen', center: 0, scale: 1.22 },
+        { key: 'S', label: 'S(t)  ESTACIONAL', sub: 'patrón periódico', center: 0, scale: 1.05 },
+        { key: 'T', label: 'T(t)  TENDENCIA', sub: 'deriva secular', center: 0, scale: 0.78 },
+        { key: 'Y', label: 'Y(t)  OBSERVADA', sub: 'superposición total', center: 0, scale: 0.67 }
+      ];
+
+      const oscCanvas = document.getElementById('oscCanvas');
+      const oscCtx = oscCanvas.getContext('2d');
+      const isoCanvas = document.getElementById('isoCanvas');
+      const isoCtx = isoCanvas.getContext('2d');
+      let lastFrame = 0;
+      let lastData = null;
+      let lastRecon = null;
+      let lastModel = null;
+      let rafId = 0;
+
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+      const mean = values => values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length);
+      const hashNoise = n => {
+        const v = Math.sin(n * 127.1 + 311.7) * 43758.5453123;
+        return (v - Math.floor(v)) * 2 - 1;
+      };
+
+      // Señal demostrativa determinista: los componentes generan Y; ocultar una capa
+      // solo modifica la reconstrucción visible, nunca altera la observación original.
+      function computeSignalData(time) {
+        const data = { Y: [], T: [], S: [], C: [], E: [], physical: [] };
+        const drift = time * 0.42;
+        const cell = Math.floor(drift);
+        const blend = drift - cell;
+        const smooth = blend * blend * (3 - 2 * blend);
+        for (let i = 0; i < N; i++) {
+          const x = i / (N - 1);
+          const t = x * 12 + time * 0.17;
+          const trend = 25 + 13 / (1 + Math.exp(-0.78 * (t - 6))) + t * 0.48;
+          const season = 9.2 * Math.sin(t * 3.55) + 2.7 * Math.cos(t * 7.1);
+          const cycle = 5.4 * Math.sin(t * 0.82 + 0.5) + 2.0 * Math.sin(t * 1.55 - 0.35);
+          const noise0 = hashNoise(i * 1.37 + cell * 191.7);
+          const noise1 = hashNoise(i * 1.37 + (cell + 1) * 191.7);
+          const noiseUnit = noise0 * (1 - smooth) + noise1 * smooth;
+          const noise = noiseUnit * (state.noiseAmp / 80) * 14;
+          data.T.push(trend);
+          data.S.push(season);
+          data.C.push(cycle);
+          data.E.push(noise);
+          data.physical.push(trend + season + cycle);
+          data.Y.push(trend + season + cycle + noise);
+        }
+        return data;
+      }
+
+      function getReconstruction(data) {
+        const recon = new Array(N).fill(0);
+        ['T', 'S', 'C', 'E'].forEach(key => {
+          const include = state.activeLayers[key] && !(state.mode === 'signal' && key === 'E');
+          if (!include) return;
+          for (let i = 0; i < N; i++) recon[i] += data[key][i];
+        });
+        return recon;
+      }
+
+      function getOverfitCurve(data) {
+        const split = Math.floor(N * 0.62);
+        const curve = data.Y.slice();
+        const base = data.Y[split];
+        const trendSlope = (data.T[split] - data.T[Math.max(0, split - 8)]) / 8;
+        for (let i = split; i < N; i++) {
+          const p = (i - split) / (N - 1 - split);
+          curve[i] = base + trendSlope * (i - split) + 17 * p + 11 * Math.sin((i - split) * 0.72) * p;
+        }
+        return { curve, split };
+      }
+
+      function setCanvasSize(canvas, ctx) {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width < 1 || rect.height < 1) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.round(rect.width * dpr);
+        const height = Math.round(rect.height * dpr);
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function setCanvasSizes() {
+        setCanvasSize(oscCanvas, oscCtx);
+        setCanvasSize(isoCanvas, isoCtx);
+        if (lastData) renderAll(lastData);
+      }
+
+      function drawSeries(ctx, values, xAt, yAt, options = {}) {
+        if (!values || !values.length) return;
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = options.width || 2;
+        ctx.strokeStyle = options.color || '#fff';
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.setLineDash(options.dash || []);
+        ctx.shadowColor = options.glow ? (options.color || '#fff') : 'transparent';
+        ctx.shadowBlur = options.glow ? 7 : 0;
+        for (let i = 0; i < values.length; i++) {
+          const x = xAt(i);
+          const y = yAt(values[i]);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawOscilloscope(data, recon, model) {
+        const rect = oscCanvas.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+        if (w < 2 || h < 2) return;
+        oscCtx.clearRect(0, 0, w, h);
+
+        // Cuadrícula ligera, con espaciado relativo al tamaño del canvas.
+        oscCtx.save();
+        oscCtx.strokeStyle = COLORS.grid;
+        oscCtx.lineWidth = 1;
+        const dx = Math.max(32, w / 16);
+        for (let x = 0.5; x < w; x += dx) {
+          oscCtx.beginPath(); oscCtx.moveTo(x, 0); oscCtx.lineTo(x, h); oscCtx.stroke();
+        }
+        for (let y = 12.5; y < h; y += Math.max(19, h / 4)) {
+          oscCtx.beginPath(); oscCtx.moveTo(0, y); oscCtx.lineTo(w, y); oscCtx.stroke();
+        }
+        oscCtx.restore();
+
+        const values = [...data.Y, ...recon];
+        if (state.mode === 'overfit') values.push(...model.curve);
+        let min = Math.min(...values), max = Math.max(...values);
+        if (!Number.isFinite(min) || !Number.isFinite(max)) { min = -1; max = 1; }
+        if (max - min < 1e-6) { min -= 1; max += 1; }
+        const padValue = (max - min) * 0.12;
+        min -= padValue; max += padValue;
+        const topPad = 7, bottomPad = 7;
+        const xAt = i => (i / (N - 1)) * w;
+        const yAt = v => h - bottomPad - ((v - min) / (max - min)) * (h - topPad - bottomPad);
+
+        if (state.mode === 'overfit') {
+          const splitX = xAt(model.split);
+          oscCtx.fillStyle = 'rgba(73,165,255,.055)'; oscCtx.fillRect(0, 0, splitX, h);
+          oscCtx.fillStyle = 'rgba(255,102,136,.085)'; oscCtx.fillRect(splitX, 0, w - splitX, h);
+          oscCtx.save(); oscCtx.strokeStyle = 'rgba(255,102,136,.64)'; oscCtx.setLineDash([4, 4]);
+          oscCtx.beginPath(); oscCtx.moveTo(splitX, 0); oscCtx.lineTo(splitX, h); oscCtx.stroke(); oscCtx.restore();
+        }
+
+        // Se dibuja primero la observación y luego la reconstrucción discontinua.
+        // Si coinciden, los segmentos verdes intercalados hacen visible esa coincidencia;
+        // si se oculta una capa, ambas trayectorias se separan sin mutar Y(t).
+        if (state.activeLayers.Y) {
+          drawSeries(oscCtx, data.Y, xAt, yAt, { color: COLORS.Y, width: 2.15, glow: true });
+        }
+        drawSeries(oscCtx, recon, xAt, yAt, { color: COLORS.signal, width: 2.05, dash: [5, 4], glow: false });
+        if (state.mode === 'overfit') {
+          drawSeries(oscCtx, model.curve, xAt, yAt, { color: COLORS.E, width: 1.65, dash: [4, 3], glow: true });
+          oscCtx.save(); oscCtx.font = '9px ' + 'monospace'; oscCtx.textAlign = 'right';
+          oscCtx.fillStyle = '#ff9fb4'; oscCtx.fillText('OUT-OF-SAMPLE', w - 8, 12); oscCtx.restore();
+        }
+
+        const count = ['T', 'S', 'C', 'E'].filter(k => state.activeLayers[k] && !(state.mode === 'signal' && k === 'E')).length;
+        document.getElementById('layersCount').textContent = `${count}/4`;
+        document.getElementById('noiseMetric').textContent = `${state.noiseAmp}%`;
+        document.getElementById('noiseVal').textContent = `${state.noiseAmp}%`;
+        document.getElementById('modelStatus').className = 'model-badge';
+        const badge = document.getElementById('modelStatus');
+        if (state.mode === 'overfit') {
+          badge.textContent = 'Divergencia fuera de muestra';
+          badge.classList.add('warn');
+        } else if (state.mode === 'signal') {
+          badge.textContent = 'Señal estructural · ε excluido';
+          badge.classList.add('neutral');
+        } else if (count === 4) {
+          badge.textContent = 'Componentes alineados';
+        } else {
+          badge.textContent = 'Reconstrucción parcial';
+          badge.classList.add('neutral');
+        }
+        document.getElementById('overfitLegend').hidden = state.mode !== 'overfit';
+      }
+
+      // Proyección oblicua ortográfica. La escala y el origen se recalculan con el tamaño
+      // disponible; así las placas y las etiquetas permanecen dentro del canvas al redimensionar.
+      function project3D(x, y, z) {
+        const cy = Math.cos(state.camera.yaw), sy = Math.sin(state.camera.yaw);
+        const cp = Math.cos(state.camera.pitch), sp = Math.sin(state.camera.pitch);
+        const xr = x * cy - y * sy;
+        const yr = x * sy + y * cy;
+        return { x: xr, y: yr * cp - z * sp, depth: yr * sp + z * cp };
+      }
+
+      function activeStructural(data) {
+        return Array.from({ length: N }, (_, i) =>
+          (state.activeLayers.T ? data.T[i] : 0) +
+          (state.activeLayers.S ? data.S[i] : 0) +
+          (state.activeLayers.C ? data.C[i] : 0)
+        );
+      }
+
+      function drawPolygon(ctx, points, fill, stroke, lineWidth = 1) {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+        ctx.closePath();
+        if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+        if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lineWidth; ctx.stroke(); }
+      }
+
+      function layerExcursion(key, value, center) {
+        const spec = slabOrder.find(s => s.key === key);
+        return (value - center) * (spec ? spec.scale : 1);
+      }
+
+      function drawLayer(ctx, project, def, elevation, data, options = {}) {
+        const width = 440, depth = 74, thickness = 4.5;
+        const active = options.active !== false;
+        const selected = options.selected === true;
+        const [r, g, b] = hexToRgb(def.color);
+        const alpha = active ? (selected ? .19 : .105) : .018;
+        const p0 = project(-width/2, -depth/2, elevation);
+        const p1 = project(width/2, -depth/2, elevation);
+        const p2 = project(width/2, depth/2, elevation);
+        const p3 = project(-width/2, depth/2, elevation);
+        const p1b = project(width/2, -depth/2, elevation - thickness);
+        const p2b = project(width/2, depth/2, elevation - thickness);
+        const p3b = project(-width/2, depth/2, elevation - thickness);
+
+        // Bisel lateral: crea grosor visible sin usar geometría externa.
+        drawPolygon(ctx, [p1, p2, p2b, p1b], `rgba(${r},${g},${b},${alpha * 1.55})`, active ? `rgba(${r},${g},${b},.48)` : 'rgba(150,165,186,.08)', .8);
+        drawPolygon(ctx, [p2, p3, p3b, p2b], `rgba(${r},${g},${b},${alpha * 1.15})`, active ? `rgba(${r},${g},${b},.34)` : 'rgba(150,165,186,.06)', .8);
+
+        const gradient = ctx.createLinearGradient(p0.x, p0.y, p2.x, p2.y);
+        gradient.addColorStop(0, `rgba(${r},${g},${b},${alpha * 1.35})`);
+        gradient.addColorStop(1, `rgba(${r},${g},${b},${alpha * .55})`);
+        drawPolygon(ctx, [p0, p1, p2, p3], gradient, active ? (selected ? def.color : `rgba(${r},${g},${b},.72)`) : 'rgba(147,163,184,.16)', selected ? 1.65 : 1.05);
+
+        if (active && data) {
+          const center = mean(data);
+          const samples = 116;
+          ctx.save();
+          ctx.beginPath();
+          ctx.strokeStyle = def.color;
+          ctx.lineWidth = selected ? 1.9 : 1.35;
+          ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.shadowColor = def.color; ctx.shadowBlur = selected ? 8 : 4;
+          for (let s = 0; s < samples; s++) {
+            const frac = s / (samples - 1);
+            const idx = Math.floor(frac * (data.length - 1));
+            const x = -width/2 + frac * width;
+            const z = elevation + layerExcursion(def.key, data[idx], center) + 2.5;
+            const pt = project(x, 0, z);
+            if (s === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.stroke(); ctx.restore();
+        }
+
+        const labelPos = project(width/2 + 14, 0, elevation + 1);
+        ctx.save();
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        const labelAlpha = active ? 1 : .38;
+        ctx.globalAlpha = labelAlpha;
+        const labelScale = options.scale || 1;
+        const showSub = labelScale >= 1.02;
+        const titleSize = Math.max(7.2, Math.min(10.8, 10 * labelScale));
+        const subSize = Math.max(6.2, Math.min(8.5, 8 * labelScale));
+        ctx.font = `600 ${titleSize}px "Segoe UI", Arial, sans-serif`;
+        ctx.fillStyle = active ? def.color : '#73839a';
+        ctx.shadowColor = active ? def.color : 'transparent'; ctx.shadowBlur = selected ? 5 : 0;
+        ctx.fillText(def.label, labelPos.x, labelPos.y - (showSub ? 5 * labelScale : 0));
+        if (showSub) {
+          ctx.shadowBlur = 0; ctx.font = `${subSize}px monospace`; ctx.fillStyle = '#8192ab';
+          ctx.fillText(def.sub, labelPos.x, labelPos.y + 7 * labelScale);
+        }
+        ctx.restore();
+      }
+
+      function hexToRgb(hex) {
+        const raw = hex.replace('#', '');
+        return [parseInt(raw.slice(0, 2), 16), parseInt(raw.slice(2, 4), 16), parseInt(raw.slice(4, 6), 16)];
+      }
+
+      function drawSignalAggregate(ctx, project, elevation, values, labelScale) {
+        const width = 440, depth = 74;
+        const p0 = project(-width/2, -depth/2, elevation);
+        const p1 = project(width/2, -depth/2, elevation);
+        const p2 = project(width/2, depth/2, elevation);
+        const p3 = project(-width/2, depth/2, elevation);
+        drawPolygon(ctx, [p0,p1,p2,p3], 'rgba(58,224,160,.08)', 'rgba(110,240,180,.78)', 1.2);
+        const center = mean(values);
+        ctx.save(); ctx.beginPath(); ctx.strokeStyle = COLORS.signal; ctx.lineWidth = 1.9;
+        ctx.shadowColor = COLORS.signal; ctx.shadowBlur = 8;
+        for (let s = 0; s < 116; s++) {
+          const frac = s / 115, idx = Math.floor(frac * (values.length - 1));
+          const point = project(-width/2 + frac * width, 0, elevation + (values[idx] - center) * .7 + 2);
+          if (!s) ctx.moveTo(point.x, point.y); else ctx.lineTo(point.x, point.y);
+        }
+        ctx.stroke(); ctx.restore();
+        const label = project(width/2 + 14, 0, elevation);
+        const showSub = labelScale >= 1.02;
+        const titleSize = Math.max(7.2, Math.min(10.8, 10 * labelScale));
+        ctx.save(); ctx.font = `600 ${titleSize}px "Segoe UI", Arial, sans-serif`; ctx.fillStyle = COLORS.signal;
+        ctx.fillText('SEÑAL ESTRUCTURAL', label.x, label.y - (showSub ? 4 * labelScale : 0));
+        if (showSub) { ctx.font = `${Math.max(6.2, Math.min(8.5, 8 * labelScale))}px monospace`; ctx.fillStyle = '#8cd8b6'; ctx.fillText('T(t) + S(t) + C(t)', label.x, label.y + 8 * labelScale); }
+        ctx.restore();
+      }
+
+      function draw3D(data) {
+        const rect = isoCanvas.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+        if (w < 2 || h < 2) return;
+        isoCtx.clearRect(0, 0, w, h);
+        // Retícula discreta, más tenue en el perímetro.
+        isoCtx.save(); isoCtx.strokeStyle = 'rgba(65, 115, 155, .09)'; isoCtx.lineWidth = 1;
+        const step = 32;
+        for (let x = 0.5; x < w; x += step) { isoCtx.beginPath(); isoCtx.moveTo(x,0); isoCtx.lineTo(x,h); isoCtx.stroke(); }
+        for (let y = 0.5; y < h; y += step) { isoCtx.beginPath(); isoCtx.moveTo(0,y); isoCtx.lineTo(w,y); isoCtx.stroke(); }
+        isoCtx.restore();
+
+        const width = 440, depth = 74, gap = state.layerGap;
+        const elevations = { E: 0, C: gap, S: gap*2, T: gap*3, Y: gap*4 };
+        const signalElevation = gap * 5 + 8;
+        const bounds = [];
+        const worldPoints = (z, extra = false) => {
+          const pts = [];
+          for (const x of [-width/2, width/2]) for (const y of [-depth/2, depth/2]) pts.push(project3D(x, y, z));
+          if (extra) pts.push(project3D(width/2 + 16, 0, z));
+          return pts;
+        };
+        Object.values(elevations).forEach(z => bounds.push(...worldPoints(z, true), ...worldPoints(z - 5)));
+        if (state.mode === 'signal') bounds.push(...worldPoints(signalElevation, true), ...worldPoints(signalElevation - 4));
+        // Reserva espacio para el ancho de los rótulos, evitando recortes al orbitar.
+        const xs = bounds.map(p => p.x), ys = bounds.map(p => p.y);
+        let minX = Math.min(...xs), maxX = Math.max(...xs) + 132;
+        let minY = Math.min(...ys) - 17, maxY = Math.max(...ys) + 17;
+        const spanX = Math.max(1, maxX - minX), spanY = Math.max(1, maxY - minY);
+        const scale = Math.min((w - 28) / spanX, (h - 24) / spanY, 1.12);
+        const originX = w/2 - ((minX + maxX) / 2) * scale;
+        const originY = h/2 - ((minY + maxY) / 2) * scale;
+        const P = (x,y,z) => {
+          const p = project3D(x,y,z);
+          return { x: originX + p.x * scale, y: originY + p.y * scale, depth: p.depth };
+        };
+
+        // Orden de fondo a primer plano: residuo -> ciclo -> estacionalidad -> tendencia -> total.
+        slabOrder.forEach(def => {
+          drawLayer(isoCtx, P, { ...def, color: COLORS[def.key] }, elevations[def.key], data[def.key], {
+            active: state.activeLayers[def.key], selected: state.selected === def.key, scale
+          });
+        });
+
+        if (state.mode === 'signal') {
+          const structural = activeStructural(data);
+          drawSignalAggregate(isoCtx, P, signalElevation, structural, scale);
+        }
+        if (state.mode === 'overfit' && state.activeLayers.Y) {
+          const model = getOverfitCurve(data);
+          const center = mean(data.Y), zBase = elevations.Y + 3;
+          isoCtx.save(); isoCtx.beginPath(); isoCtx.strokeStyle = COLORS.E; isoCtx.lineWidth = 1.7; isoCtx.setLineDash([5,4]); isoCtx.shadowColor = COLORS.E; isoCtx.shadowBlur = 5;
+          for (let i = model.split; i < N; i++) {
+            const p = i / (N - 1);
+            const x = -width/2 + p * width;
+            const z = zBase + (model.curve[i] - center) * .67;
+            const point = P(x, 0, z);
+            if (i === model.split) isoCtx.moveTo(point.x, point.y); else isoCtx.lineTo(point.x, point.y);
+          }
+          isoCtx.stroke(); isoCtx.restore();
+        }
+
+        // Pequeño eje temporal al pie del modelo.
+        isoCtx.save(); isoCtx.fillStyle = 'rgba(125, 154, 190, .55)'; isoCtx.font = '8px monospace';
+        isoCtx.fillText('t₀', 14, h - 12); isoCtx.textAlign = 'right'; isoCtx.fillText('t →', w - 14, h - 12); isoCtx.restore();
+      }
+
+      function renderAll(data) {
+        if (!data) return;
+        const recon = getReconstruction(data);
+        const model = getOverfitCurve(data);
+        lastData = data; lastRecon = recon; lastModel = model;
+        drawOscilloscope(data, recon, model);
+        draw3D(data);
+      }
+
+      function updateInspector(key) {
+        state.selected = key;
+        document.querySelectorAll('.component-card').forEach(card => {
+          const selected = card.dataset.key === key;
+          card.classList.toggle('selected', selected);
+          card.setAttribute('aria-pressed', String(selected));
+        });
+        const info = meta[key];
+        document.getElementById('inspectorTitle').textContent = info.title;
+        document.getElementById('inspectorChip').textContent = info.chip;
+        let body = info.body;
+        if (key === 'Y') {
+          body = state.activeLayers.Y ? info.body : 'La curva observada está oculta en pantalla; sus valores originales se conservan para comparar la reconstrucción.';
+        } else if (state.mode === 'signal' && key === 'E') {
+          body += ' En este modo se excluye de la reconstrucción para contrastar estructura y residuo.';
+        } else {
+          body += state.activeLayers[key] ? ' Capa visible e incluida en la reconstrucción.' : ' Capa oculta y excluida de la reconstrucción.';
+        }
+        document.getElementById('inspectorBody').textContent = body;
+      }
+
+      function syncLayerButtons() {
+        Object.keys(state.activeLayers).forEach(key => {
+          const card = document.querySelector(`.component-card[data-key="${key}"]`);
+          const button = document.querySelector(`[data-toggle="${key}"]`);
+          card.classList.toggle('layer-hidden', !state.activeLayers[key]);
+          button.setAttribute('aria-pressed', String(state.activeLayers[key]));
+          button.setAttribute('aria-label', `${state.activeLayers[key] ? 'Ocultar' : 'Mostrar'} ${key === 'E' ? 'residuo' : key === 'Y' ? 'señal observada' : key === 'T' ? 'tendencia' : key === 'S' ? 'estacionalidad' : 'ciclo'}`);
+          button.innerHTML = state.activeLayers[key]
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 18 18M10.6 5.2A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.1 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1 0 2-.2 2.9-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+        });
+      }
+
+      function setMode(mode) {
+        state.mode = mode;
+        document.querySelectorAll('.mode-btn').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
+        updateInspector(state.selected);
+        if (lastData) renderAll(lastData);
+      }
+
+      function toggleLayer(key) {
+        state.activeLayers[key] = !state.activeLayers[key];
+        syncLayerButtons();
+        updateInspector(state.selected);
+        if (lastData) renderAll(lastData);
+      }
+
+      function centerCamera() {
+        state.camera.yaw = -0.42;
+        state.camera.pitch = 0.66;
+        if (lastData) draw3D(lastData);
+      }
+
+      function resetAll() {
+        state.mode = 'stl';
+        state.activeLayers = { Y: true, T: true, S: true, C: true, E: true };
+        state.layerGap = 48; state.noiseAmp = 26; state.speed = 45; state.time = 0; state.isPlaying = true;
+        document.getElementById('sliderGap').value = '48';
+        document.getElementById('sliderNoise').value = '26';
+        document.getElementById('sliderSpeed').value = '45';
+        document.getElementById('gapVal').textContent = '48';
+        document.getElementById('noiseVal').textContent = '26%';
+        document.getElementById('speedVal').textContent = '45%';
+        document.getElementById('playSymbol').textContent = 'Ⅱ';
+        document.getElementById('playLabel').textContent = 'Pausar';
+        document.querySelectorAll('.mode-btn').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === 'stl')));
+        centerCamera(); syncLayerButtons(); updateInspector('Y'); renderAll(computeSignalData(state.time));
+      }
+
+      function togglePlay() {
+        state.isPlaying = !state.isPlaying;
+        document.getElementById('playSymbol').textContent = state.isPlaying ? 'Ⅱ' : '▶';
+        document.getElementById('playLabel').textContent = state.isPlaying ? 'Pausar' : 'Reanudar';
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          const result = document.documentElement.requestFullscreen?.();
+          if (result && typeof result.catch === 'function') result.catch(() => {});
+        } else {
+          const result = document.exitFullscreen?.();
+          if (result && typeof result.catch === 'function') result.catch(() => {});
+        }
+      }
+
+      document.querySelectorAll('.component-card').forEach(card => {
+        const key = card.dataset.key;
+        card.addEventListener('click', event => {
+          if (event.target.closest('.visibility-toggle')) return;
+          updateInspector(key);
+          if (lastData) draw3D(lastData);
+        });
+        card.addEventListener('keydown', event => {
+          if (event.target !== card || (event.key !== 'Enter' && event.key !== ' ')) return;
+          event.preventDefault(); updateInspector(key);
+          if (lastData) draw3D(lastData);
+        });
+      });
+      document.querySelectorAll('[data-toggle]').forEach(button => {
+        button.addEventListener('click', event => { event.stopPropagation(); toggleLayer(button.dataset.toggle); });
+      });
+      document.querySelectorAll('.mode-btn').forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
+      document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+      document.getElementById('centerCameraBtn').addEventListener('click', centerCamera);
+      document.getElementById('playBtn').addEventListener('click', togglePlay);
+      document.getElementById('resetBtn').addEventListener('click', resetAll);
+      document.getElementById('sliderGap').addEventListener('input', event => {
+        state.layerGap = Number(event.target.value); document.getElementById('gapVal').textContent = event.target.value;
+        if (lastData) draw3D(lastData);
+      });
+      document.getElementById('sliderNoise').addEventListener('input', event => {
+        state.noiseAmp = Number(event.target.value); document.getElementById('noiseVal').textContent = `${state.noiseAmp}%`;
+        if (lastData) renderAll(computeSignalData(state.time));
+      });
+      document.getElementById('sliderSpeed').addEventListener('input', event => {
+        state.speed = Number(event.target.value); document.getElementById('speedVal').textContent = `${state.speed}%`;
+      });
+
+      // Eventos de puntero funcionan con ratón, lápiz y pantalla táctil.
+      isoCanvas.addEventListener('pointerdown', event => {
+        state.camera.dragging = true; state.camera.lastX = event.clientX; state.camera.lastY = event.clientY;
+        isoCanvas.setPointerCapture?.(event.pointerId);
+      });
+      isoCanvas.addEventListener('pointermove', event => {
+        if (!state.camera.dragging) return;
+        const dx = event.clientX - state.camera.lastX, dy = event.clientY - state.camera.lastY;
+        state.camera.yaw = clamp(state.camera.yaw + dx * .0065, -1.2, 1.2);
+        state.camera.pitch = clamp(state.camera.pitch + dy * .006, .28, 1.12);
+        state.camera.lastX = event.clientX; state.camera.lastY = event.clientY;
+        if (lastData) draw3D(lastData);
+      });
+      const endDrag = () => { state.camera.dragging = false; };
+      isoCanvas.addEventListener('pointerup', endDrag);
+      isoCanvas.addEventListener('pointercancel', endDrag);
+      isoCanvas.addEventListener('lostpointercapture', endDrag);
+
+      function frame(timestamp) {
+        const dt = lastFrame ? Math.min(50, timestamp - lastFrame) : 16;
+        lastFrame = timestamp;
+        if (state.isPlaying && state.speed > 0) state.time += (dt / 1000) * (state.speed / 45) * .7;
+        const data = computeSignalData(state.time);
+        renderAll(data);
+        rafId = window.requestAnimationFrame(frame);
+      }
+
+      if ('ResizeObserver' in window) {
+        const resizeObserver = new ResizeObserver(() => setCanvasSizes());
+        resizeObserver.observe(oscCanvas.parentElement);
+        resizeObserver.observe(isoCanvas.parentElement);
+      }
+      window.addEventListener('resize', setCanvasSizes, { passive: true });
+      document.addEventListener('fullscreenchange', () => setTimeout(setCanvasSizes, 60));
+
+      syncLayerButtons(); updateInspector('Y');
+      setCanvasSizes();
+      rafId = window.requestAnimationFrame(frame);
+      window.addEventListener('pagehide', () => { if (rafId) cancelAnimationFrame(rafId); }, { once: true });
+    })();
+  </script>
+</body>
+</html>

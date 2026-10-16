@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 11: Guía Práctica — ¿Qué Arquitectura Elegir Hoy?</title>
+<style>
+:root {
+  --bg: #040714;
+  --line: rgba(148, 163, 184, 0.16);
+  --text: #f8fbff;
+  --muted: #94a3b8;
+  --v1: #ffc05c; /* Vía 1: Ámbar */
+  --v2: #38efff; /* Vía 2: Cian */
+  --v3: #b48eff; /* Vía 3: Violeta */
+  --v4: #6ef0b4; /* Vía 4: Menta */
+  --danger: #ff5277;
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(56, 239, 255, 0.12), transparent 40%),
+    radial-gradient(ellipse at 15% 90%, rgba(180, 142, 255, 0.12), transparent 40%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(10px, 1.2vw, 18px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(16px, 1.8vw, 28px) clamp(20px, 2.2vw, 34px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(14, 116, 144, 0.14), transparent 55%),
+    linear-gradient(155deg, rgba(8, 14, 30, 0.98), rgba(3, 7, 18, 0.99));
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.65);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+html:has(body.is-embedded) {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(10px, 1.4vh, 20px) clamp(14px, 1.8vw, 26px) clamp(8px, 1.1vh, 16px) !important;
+  gap: clamp(8px, 1.1vh, 14px) !important;
+  flex: 1 1 100% !important;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
+
+/* 1. HEADER LIMPIO */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.title-group p {
+  margin: 0 0 3px;
+  color: var(--v2);
+  font: 700 10.5px/1 var(--mono);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.title-group h1 {
+  margin: 0;
+  font: 700 clamp(22px, 2vw, 31px)/1.1 var(--display);
+  letter-spacing: -0.02em;
+}
+
+.title-group h1 span { color: var(--v1); }
+
+.top-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 11px/1 var(--mono);
+  transition: all 0.18s;
+}
+
+.ctrl-btn:hover {
+  color: #fff;
+  border-color: rgba(56, 239, 255, 0.45);
+}
+
+.ctrl-btn.active {
+  border-color: rgba(56, 239, 255, 0.55);
+  background: rgba(8, 145, 178, 0.25);
+  color: #a5f3fc;
+}
+
+/* 2. ÁRBOL DE DECISIÓN HORIZONTAL (3 PREGUNTAS -> 4 VÍAS) */
+.tree-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.3vw, 20px);
+  align-items: stretch;
+}
+
+.question-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(12, 20, 40, 0.85);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.question-node[data-via="0"] { --qc: var(--v1); }
+.question-node[data-via="1"] { --qc: var(--v2); }
+.question-node[data-via="2"] { --qc: var(--v3); }
+.question-node[data-via="3"] { --qc: var(--v4); }
+
+.question-node.is-active {
+  border-color: var(--qc);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--qc) 18%, rgba(12, 20, 40, 0.95)), rgba(10, 16, 34, 0.95));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--qc) 22%, transparent);
+  transform: translateY(-2px);
+}
+
+/* Flecha horizontal entre preguntas */
+.question-node:not(:last-child)::after {
+  content: "─▶";
+  position: absolute;
+  right: calc(-1 * clamp(12px, 1.3vw, 20px) + 1px);
+  top: 50%;
+  transform: translateY(-50%);
+  font: 700 11px/1 var(--mono);
+  color: #475569;
+  pointer-events: none;
+}
+
+/* Flecha vertical hacia la tarjeta inferior */
+.question-node::before {
+  content: "▼ SÍ";
+  position: absolute;
+  left: 50%;
+  bottom: -15px;
+  transform: translateX(-50%);
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: #060c1f;
+  border: 1px solid color-mix(in srgb, var(--qc) 60%, transparent);
+  color: var(--qc);
+  font: 700 8.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  z-index: 2;
+}
+
+.q-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--qc);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.q-text {
+  margin: 0;
+  font: 700 clamp(12.5px, 1.05vw, 15px)/1.25 var(--display);
+  color: #ffffff;
+}
+
+/* 3. LAS 4 TARJETAS GRANDES DE LAS VÍAS */
+.vias-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.3vw, 20px);
+  min-height: 0;
+}
+
+.via-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(12px, 1.3vw, 18px);
+  border-radius: 16px;
+  border: 1.5px solid color-mix(in srgb, var(--vc) 35%, rgba(148, 163, 184, 0.15));
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--vc) 12%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(10, 17, 36, 0.94), rgba(5, 9, 22, 0.96));
+  cursor: pointer;
+  transition: all 0.25s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--vc) 45%, transparent) rgba(5, 10, 24, 0.4);
+}
+
+.via-card::-webkit-scrollbar {
+  width: 4px;
+}
+.via-card::-webkit-scrollbar-track {
+  background: rgba(5, 10, 24, 0.4);
+  border-radius: 4px;
+}
+.via-card::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--vc) 45%, transparent);
+  border-radius: 4px;
+}
+
+.via-card[data-via="0"] { --vc: var(--v1); }
+.via-card[data-via="1"] { --vc: var(--v2); }
+.via-card[data-via="2"] { --vc: var(--v3); }
+.via-card[data-via="3"] { --vc: var(--v4); }
+
+.via-card.is-dimmed {
+  opacity: 0.42;
+  filter: saturate(0.65);
+}
+
+.via-card.is-active {
+  border-color: var(--vc);
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--vc) 20%, rgba(0, 0, 0, 0.5)), inset 0 0 24px color-mix(in srgb, var(--vc) 8%, transparent);
+  transform: translateY(-3px);
+}
+
+.via-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3.5px;
+  width: 0%;
+  background: var(--vc);
+  transition: width 0.1s linear;
+}
+
+.via-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.via-icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.via-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 20px;
+  background: color-mix(in srgb, var(--vc) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--vc) 42%, transparent);
+}
+
+.via-tag {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--vc);
+  background: color-mix(in srgb, var(--vc) 12%, transparent);
+}
+
+.via-title {
+  margin: 2px 0 0;
+  font: 700 clamp(16px, 1.35vw, 20px)/1.15 var(--display);
+  color: #ffffff;
+}
+
+.model-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.m-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font: 600 clamp(9.5px, 0.78vw, 11px)/1.1 var(--mono);
+  color: #ffffff;
+  background: color-mix(in srgb, var(--vc) 16%, rgba(15, 23, 42, 0.9));
+  border: 1px solid color-mix(in srgb, var(--vc) 45%, transparent);
+  white-space: nowrap;
+}
+
+.m-chip small {
+  font-weight: 500;
+  font-size: 0.85em;
+  color: var(--vc);
+  opacity: 0.95;
+}
+
+/* BLOQUES INTERNOS FÁCILES DE LEER */
+.via-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.via-box {
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: rgba(4, 8, 20, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+}
+
+.via-box-label {
+  display: block;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.via-box-label.cond { color: #94a3b8; }
+.via-box-label.pro  { color: var(--v4); }
+.via-box-label.con  { color: var(--danger); }
+
+.via-box-text {
+  margin: 0;
+  font: 450 clamp(11.5px, 0.92vw, 13px)/1.35 var(--sans);
+  color: #e2e8f0;
+}
+
+.via-box-text b { color: #ffffff; font-weight: 650; }
+
+.via-footer {
+  padding-top: 8px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.2);
+  font: 600 clamp(10.5px, 0.85vw, 12px)/1.3 var(--sans);
+  color: #cbd5e1;
+}
+
+.via-footer strong {
+  color: var(--vc);
+  font-family: var(--mono);
+  font-size: 0.92em;
+}
+
+/* 4. CINTILLO INFERIOR: REGLA DE ORO + 3 AXIOMAS */
+.golden-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 11px 18px;
+  border-radius: 13px;
+  border: 1px solid rgba(255, 192, 92, 0.42);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(15, 23, 42, 0.9));
+}
+
+.golden-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 clamp(12px, 0.98vw, 14px)/1.3 var(--sans);
+  color: #f8fafc;
+}
+
+.golden-left strong {
+  color: var(--v1);
+  font-weight: 700;
+}
+
+.axiom-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ax-pill {
+  padding: 5px 10px;
+  border-radius: 7px;
+  font: 600 10px/1 var(--mono);
+  background: rgba(4, 7, 20, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  color: #e2e8f0;
+}
+
+.ax-pill span { color: var(--v4); font-weight: 700; }
+
+@media (max-width: 1200px) and (min-width: 881px) {
+  .title-group h1 { font-size: clamp(20px, 1.8vw, 24px); }
+  .q-text { font-size: 12.5px; }
+  .via-card { padding: 10px 12px; }
+  .via-box { padding: 6px 8px; }
+  .m-chip { font-size: 9.5px; }
+}
+
+@media (max-width: 880px) {
+  body { display: block; overflow: auto; }
+  #slideFrame { width: 100%; height: auto; aspect-ratio: auto; min-height: 100svh; padding: 14px 14px 20px; }
+  .topbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .tree-flow { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .question-node::after, .question-node::before { display: none; }
+  .vias-grid { grid-template-columns: 1fr; gap: 12px; }
+  .via-card { min-height: 280px; }
+  .golden-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+@media (max-height: 780px) and (min-width: 881px) {
+  #slideFrame {
+    padding: clamp(8px, 1.1vh, 12px) clamp(12px, 1.4vw, 20px) clamp(6px, 0.9vh, 10px) !important;
+    gap: clamp(6px, 0.9vh, 10px) !important;
+  }
+  .topbar { padding-bottom: 6px; }
+  .title-group h1 { font-size: clamp(18px, 1.5vw, 22px); }
+  .title-group p { font-size: 9.5px; }
+  .tree-flow { gap: 10px; }
+  .question-node { padding: 6px 10px; }
+  .q-step { font-size: 8.5px; }
+  .q-text { font-size: clamp(11.5px, 0.92vw, 13px); }
+  .question-node::before { bottom: -12px; font-size: 7.5px; padding: 1px 5px; }
+  .vias-grid { gap: 10px; }
+  .via-card { padding: 9px 11px; }
+  .via-icon { width: 30px; height: 30px; font-size: 16px; }
+  .via-title { font-size: clamp(14px, 1.15vw, 17px); }
+  .via-tag { font-size: 8.5px; padding: 2px 6px; }
+  .m-chip { font-size: 9px; padding: 2px 5px; }
+  .via-items { gap: 5px; margin: 4px 0; }
+  .via-box { padding: 5px 7px; }
+  .via-box-label { font-size: 8px; margin-bottom: 1px; }
+  .via-box-text { font-size: clamp(10.5px, 0.8vw, 12px); line-height: 1.25; }
+  .via-footer { padding-top: 4px; font-size: clamp(9.5px, 0.72vw, 11px); }
+  .golden-banner { padding: 6px 14px; gap: 8px; }
+  .golden-left { font-size: clamp(10.5px, 0.85vw, 12px); }
+  .ax-pill { font-size: 9px; padding: 3px 6px; }
+}
+
+@media (max-height: 640px) and (min-width: 881px) {
+  #slideFrame {
+    padding: 6px 12px 5px !important;
+    gap: 5px !important;
+  }
+  .topbar { padding-bottom: 4px; }
+  .title-group p { display: none; }
+  .title-group h1 { font-size: 16px; }
+  .ctrl-btn { padding: 4px 8px; font-size: 9.5px; }
+  .question-node { padding: 4px 8px; }
+  .question-node::before { display: none; }
+  .via-card { padding: 6px 8px; }
+  .via-icon-row { gap: 4px; }
+  .via-icon { width: 24px; height: 24px; font-size: 13px; }
+  .model-chips { display: none; }
+  .via-items { gap: 3px; margin: 3px 0; }
+  .via-box { padding: 3px 5px; }
+  .via-box-text { font-size: 10px; line-height: 1.2; }
+  .via-footer { display: none; }
+  .golden-banner { padding: 4px 8px; }
+  .ax-pill { display: none; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 11: Guía Práctica de Selección de Arquitectura">
+
+  <!-- 1. CABECERA -->
+  <header class="topbar">
+    <div class="title-group">
+      <p>Cierre Ejecutivo · Árbol de Decisión en 3 Filtros: Datos (N), Latencia (CPU/GPU) y Riesgo</p>
+      <h1>Guía práctica: <span>¿Qué arquitectura elegir hoy?</span></h1>
+    </div>
+
+    <div class="top-controls">
+      <button class="ctrl-btn" type="button" id="showAllBtn" title="Ver las 4 vías iluminadas a la vez">
+        ✨ Ver Todas
+      </button>
+      <button class="ctrl-btn active" type="button" id="loopBtn" title="Recorrido automático paso a paso">
+        <span id="loopIcon">🔁</span> <span id="loopText">Recorrido Auto: ON</span>
+      </button>
+      <button class="ctrl-btn" type="button" id="fullscreenBtn" title="Pantalla completa">⛶</button>
+    </div>
+  </header>
+
+  <!-- 2. FLUJO DE PREGUNTAS (ÁRBOL DE DECISIÓN RÁPIDO) -->
+  <section class="tree-flow" aria-label="Preguntas filtro del árbol de decisión">
+    <div class="question-node is-active" data-via="0" tabindex="0" role="button">
+      <div class="q-step"><span>FILTRO 1 · POCOS DATOS</span><span>TECLA 1</span></div>
+      <p class="q-text">¿Serie corta (N &lt; 500) y necesitas CPU en microsegundos?</p>
+    </div>
+
+    <div class="question-node" data-via="1" tabindex="0" role="button">
+      <div class="q-step"><span>FILTRO 2 · TABLA ESTABLE</span><span>TECLA 2</span></div>
+      <p class="q-text">¿Tienes 10³–10⁵ datos con promos sin récords fuera de rango?</p>
+    </div>
+
+    <div class="question-node" data-via="2" tabindex="0" role="button">
+      <div class="q-step"><span>FILTRO 3 · ESCALA MASIVA</span><span>TECLA 3</span></div>
+      <p class="q-text">¿Sistema complejo (&gt; 10⁵ series) en GPU o riesgo de récords?</p>
+    </div>
+
+    <div class="question-node" data-via="3" tabindex="0" role="button">
+      <div class="q-step"><span>FILTRO 4 · COLD-START</span><span>TECLA 4</span></div>
+      <p class="q-text">¿Producto nuevo sin historial o escasez para calibrar bandas?</p>
+    </div>
+  </section>
+
+  <!-- 3. LAS 4 VÍAS (CLARAS, GRANDES Y ESCANEABLES EN 3 SEGUNDOS) -->
+  <section class="vias-grid" aria-label="Las 4 Vías Metodológicas">
+
+    <!-- VÍA 1 -->
+    <article class="via-card is-active" data-via="0" tabindex="0">
+      <div class="via-progress" id="prog-0"></div>
+      <div class="via-head">
+        <div class="via-icon-row">
+          <span class="via-icon">⚡</span>
+          <span class="via-tag">CPU &lt; 2 µs · $0 GPU</span>
+        </div>
+        <h2 class="via-title">Vía 1: Analíticos</h2>
+        <div class="model-chips">
+          <span class="m-chip">Verhulst <small>Techo S</small></span>
+          <span class="m-chip">Holt-Winters <small>α,β,γ</small></span>
+          <span class="m-chip">ARIMA</span>
+          <span class="m-chip">SARIMA <small>Estacional</small></span>
+        </div>
+      </div>
+
+      <div class="via-items">
+        <div class="via-box">
+          <span class="via-box-label cond">📌 CONDICIÓN</span>
+          <p class="via-box-text"><b>N &lt; 500 puntos</b> y estacionalidad clara.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label pro">✅ VENTAJA</span>
+          <p class="via-box-text"><b>Parsimonia total:</b> Verhulst acota topes (L) y SARIMA/HW modelan ciclos con 3–5 parámetros.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label con">⚠️ LÍMITE</span>
+          <p class="via-box-text">Colapsa ante <b>no-linealidades</b> y clima cruzado.</p>
+        </div>
+      </div>
+
+      <div class="via-footer">
+        <strong>SECTORES:</strong> Brotes acotados (INS/MINSA Loreto), micro-retail y sensores Edge.
+      </div>
+    </article>
+
+    <!-- VÍA 2 -->
+    <article class="via-card is-dimmed" data-via="1" tabindex="0">
+      <div class="via-progress" id="prog-1"></div>
+      <div class="via-head">
+        <div class="via-icon-row">
+          <span class="via-icon">📊</span>
+          <span class="via-tag">CPU Multihilo (ms)</span>
+        </div>
+        <h2 class="via-title">Vía 2: Tabular con Lags</h2>
+        <div class="model-chips">
+          <span class="m-chip">LightGBM <small>Rey M5</small></span>
+          <span class="m-chip">XGBoost</span>
+          <span class="m-chip">CatBoost</span>
+          <span class="m-chip">Random Forest</span>
+        </div>
+      </div>
+
+      <div class="via-items">
+        <div class="via-box">
+          <span class="via-box-label cond">📌 CONDICIÓN</span>
+          <p class="via-box-text"><b>10³ a 10⁵ datos</b> dentro del rango histórico.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label pro">✅ VENTAJA</span>
+          <p class="via-box-text">El <b>truco de los lags</b> permite cruzar miles de SKUs, precios y promociones sin GPU.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label con">⚠️ LÍMITE (AXIOMA 2)</span>
+          <p class="via-box-text"><b>No extrapola récords:</b> predice meseta plana.</p>
+        </div>
+      </div>
+
+      <div class="via-footer">
+        <strong>SECTORES:</strong> Retail masivo con promociones (Walmart M5) y stock recurrente.
+      </div>
+    </article>
+
+    <!-- VÍA 3 -->
+    <article class="via-card is-dimmed" data-via="2" tabindex="0">
+      <div class="via-progress" id="prog-2"></div>
+      <div class="via-head">
+        <div class="via-icon-row">
+          <span class="via-icon">🧠</span>
+          <span class="via-tag">GPU Dedicada · O((L/P)²)</span>
+        </div>
+        <h2 class="via-title">Vía 3: Deep Learning</h2>
+        <div class="model-chips">
+          <span class="m-chip">RNN / LSTM <small>Flujo</small></span>
+          <span class="m-chip">N-BEATS</span>
+          <span class="m-chip">TFT <small>Exógenas</small></span>
+          <span class="m-chip">PatchTST</span>
+          <span class="m-chip">iTransformer</span>
+        </div>
+      </div>
+
+      <div class="via-items">
+        <div class="via-box">
+          <span class="via-box-label cond">📌 CONDICIÓN</span>
+          <p class="via-box-text"><b>&gt; 10⁵ registros</b> en series multivariadas.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label pro">✅ VENTAJA</span>
+          <p class="via-box-text">De la memoria secuencial (<b>LSTM/TFT</b>) a <b>parches de 16 días (PatchTST)</b> que sí extrapolan.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label con">⚠️ LÍMITE</span>
+          <p class="via-box-text">LSTM sufre olvido secuencial; exige GPU y &gt;10⁵ datos.</p>
+        </div>
+      </div>
+
+      <div class="via-footer">
+        <strong>SECTORES:</strong> Redes eléctricas (COES, CAISO) y cientos de turbinas eólicas/solares.
+      </div>
+    </article>
+
+    <!-- VÍA 4 -->
+    <article class="via-card is-dimmed" data-via="3" tabindex="0">
+      <div class="via-progress" id="prog-3"></div>
+      <div class="via-head">
+        <div class="via-icon-row">
+          <span class="via-icon">🔮</span>
+          <span class="via-tag">0% Entreno Local</span>
+        </div>
+        <h2 class="via-title">Vía 4: Foundation Zero-Shot</h2>
+        <div class="model-chips">
+          <span class="m-chip">TimesFM <small>Google</small></span>
+          <span class="m-chip">Chronos-Bolt <small>Amazon</small></span>
+          <span class="m-chip">Moirai <small>Exóg.</small></span>
+          <span class="m-chip">Lag-Llama</span>
+          <span class="m-chip">TimeGPT-1</span>
+        </div>
+      </div>
+
+      <div class="via-items">
+        <div class="via-box">
+          <span class="via-box-label cond">📌 CONDICIÓN</span>
+          <p class="via-box-text"><b>Cold-start</b> o series cortas sin datos para entrenar.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label pro">✅ VENTAJA</span>
+          <p class="via-box-text">Predice en frío (27B+ datos) y cede <b>80% del historial a calibrar bandas SCP</b>.</p>
+        </div>
+        <div class="via-box">
+          <span class="via-box-label con">⚠️ LÍMITE</span>
+          <p class="via-box-text">Moirai/TimeGPT leen exógenas futuras; Chronos base y Lag-Llama son univariados.</p>
+        </div>
+      </div>
+
+      <div class="via-footer">
+        <strong>SECTORES:</strong> Catálogos nuevos e-commerce, alertas climáticas y finanzas.
+      </div>
+    </article>
+
+  </section>
+
+  <!-- 4. CINTILLO DE CIERRE: REGLA DE ORO Y LOS 3 AXIOMAS -->
+  <footer class="golden-banner">
+    <div class="golden-left">
+      <span style="font-size:20px">💡</span>
+      <span><strong>Regla de Oro:</strong> La IA no reemplaza el criterio experto, lo escala. No busques adivinar el punto exacto: <strong>domina la incertidumbre con Conformal Prediction (P10–P90)</strong>.</span>
+    </div>
+
+    <div class="axiom-pills">
+      <span class="ax-pill"><span>Axioma 1:</span> Parsimonia antes que 500M</span>
+      <span class="ax-pill"><span>Axioma 2:</span> Prohibido árboles en récords</span>
+      <span class="ax-pill"><span>Axioma 3:</span> Siempre bandas P10–P90 (SCP)</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const LOOP_MS = 5500; // 5.5 segundos por vía para una lectura ágil y limpia
+  const state = {
+    activeVia: 0,
+    showAll: false,
+    loopOn: true,
+    elapsed: 0
+  };
+
+  const qNodes = document.querySelectorAll('.question-node');
+  const vCards = document.querySelectorAll('.via-card');
+  const loopBtn = document.getElementById('loopBtn');
+  const loopText = document.getElementById('loopText');
+  const showAllBtn = document.getElementById('showAllBtn');
+
+  function updateView() {
+    qNodes.forEach((q, idx) => {
+      const active = state.showAll || idx === state.activeVia;
+      q.classList.toggle('is-active', active);
+    });
+
+    vCards.forEach((card, idx) => {
+      const active = state.showAll || idx === state.activeVia;
+      card.classList.toggle('is-active', active);
+      card.classList.toggle('is-dimmed', !active);
+      const prog = document.getElementById(`prog-${idx}`);
+      if (prog && (state.showAll || idx !== state.activeVia)) {
+        prog.style.width = state.showAll ? '100%' : '0%';
+      }
+    });
+
+    loopBtn.classList.toggle('active', state.loopOn && !state.showAll);
+    loopText.textContent = (state.loopOn && !state.showAll) ? 'Recorrido Auto: ON' : 'Recorrido: PAUSA';
+    showAllBtn.classList.toggle('active', state.showAll);
+  }
+
+  function selectVia(idx) {
+    state.showAll = false;
+    state.activeVia = idx;
+    state.elapsed = 0;
+    updateView();
+  }
+
+  qNodes.forEach(q => {
+    q.addEventListener('click', () => selectVia(Number(q.dataset.via)));
+  });
+
+  vCards.forEach(c => {
+    c.addEventListener('click', () => selectVia(Number(c.dataset.via)));
+  });
+
+  showAllBtn.addEventListener('click', () => {
+    state.showAll = !state.showAll;
+    if (state.showAll) state.loopOn = false;
+    state.elapsed = 0;
+    updateView();
+  });
+
+  loopBtn.addEventListener('click', () => {
+    state.showAll = false;
+    state.loopOn = !state.loopOn;
+    state.elapsed = 0;
+    updateView();
+  });
+
+  document.getElementById('fullscreenBtn').addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') selectVia(0);
+    if (e.key === '2') selectVia(1);
+    if (e.key === '3') selectVia(2);
+    if (e.key === '4') selectVia(3);
+    if (e.key === '0' || e.key === 'a' || e.key === 'A') {
+      state.showAll = true;
+      state.loopOn = false;
+      updateView();
+    }
+    if (e.key === 'ArrowRight') {
+      if (state.activeVia === 3 || state.showAll) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+          return;
+        }
+      }
+      selectVia((state.activeVia + 1) % 4);
+    }
+    if (e.key === 'ArrowLeft') {
+      if (state.activeVia === 0 || state.showAll) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+          return;
+        }
+      }
+      selectVia((state.activeVia + 3) % 4);
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.showAll = false;
+      state.loopOn = !state.loopOn;
+      updateView();
+    }
+    const deckNavKeys = ['PageUp', 'PageDown', 'Home', 'End', 'n', 'N', 'd', 'D', 'f', 'F', 'Escape', 'ArrowUp', 'ArrowDown'];
+    if (deckNavKeys.includes(e.key)) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+      }
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && (e.data.type === 'resize' || e.data.type === 'activate')) {
+      updateView();
+    }
+  });
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      updateView();
+    });
+    ro.observe(document.body);
+  }
+
+  let lastTs = 0;
+  function tick(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+
+    if (state.loopOn && !state.showAll) {
+      state.elapsed += dt;
+      const pct = Math.min(100, (state.elapsed / LOOP_MS) * 100);
+      const prog = document.getElementById(`prog-${state.activeVia}`);
+      if (prog) prog.style.width = `${pct}%`;
+
+      if (state.elapsed >= LOOP_MS) {
+        state.activeVia = (state.activeVia + 1) % 4;
+        state.elapsed = 0;
+        updateView();
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  updateView();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

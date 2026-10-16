@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPO 13 v1: Datos que importan · SENAMHI Punchana</title>
+<style>
+:root{--bg:#040714;--line:rgba(148,163,184,.15);--text:#edf5ff;--muted:#94a3b8;--cyan:#38efff;--amber:#ffc05c;--red:#ff5277;--green:#6ef0b4;--mono:"JetBrains Mono",Consolas,monospace;--display:"Space Grotesk",Inter,sans-serif;--sans:Inter,"Segoe UI",Arial,sans-serif}
+*{box-sizing:border-box}html,body{width:100%;min-height:100%;margin:0}
+body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);background:radial-gradient(ellipse at 80% 10%,rgba(14,116,144,.16),transparent 35%),#030511;font-family:var(--sans)}
+#slideFrame{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;width:min(100vw,1600px,calc(100svh*16/9));aspect-ratio:16/9;padding:16px 22px 10px;overflow:hidden;background:linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));border:1px solid rgba(82,128,170,.25)}
+body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
+body.is-embedded #slideFrame{width:100%!important;height:100%!important;aspect-ratio:auto!important;border:none!important;padding:10px 16px 6px!important}
+button{font:inherit;color:inherit;cursor:pointer}
+.topbar{padding-bottom:9px;border-bottom:1px solid var(--line)}
+.eyebrow{margin:0;color:var(--cyan);font:600 10px/1.2 var(--mono);letter-spacing:.15em}
+h1{margin:2px 0 0;font:700 clamp(19px,1.7vw,26px)/1.1 var(--display)}h1 .n{color:var(--amber)}
+.sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.4 var(--sans)}.sub b{color:#d7e5f8}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;min-height:0;overflow:hidden}
+.card{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:4px;min-height:0;overflow:hidden;padding:9px 11px;border:1px solid rgba(133,158,192,.16);border-radius:12px;background:linear-gradient(145deg,rgba(10,17,36,.94),rgba(4,10,24,.92))}
+.card h3{margin:0;font:650 12px/1.2 var(--display);color:#e2edfb}.card h3 span{font:500 9px/1 var(--mono);color:#7c8fa9}
+.canvas-frame{position:relative;min-height:0;border:1px solid rgba(119,151,191,.14);border-radius:9px;background:rgba(2,6,17,.85);overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.cap{font:8.5px/1.4 var(--mono);color:#5f7385;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.cap b{color:#a9c0da}
+.kpis{position:absolute;top:7px;left:8px;display:flex;gap:6px}
+.kpis span{font:700 8.5px/1 var(--mono);padding:4px 7px;border-radius:5px;background:rgba(3,5,15,.78);border:1px solid rgba(56,239,255,.3);color:#a9f3ff}
+.foot{display:flex;justify-content:space-between;gap:10px;font:9px/1.3 var(--mono);color:#6e8099;border-top:1px solid var(--line);padding-top:6px}
+.tip{position:absolute;pointer-events:none;font:9px/1.3 var(--mono);background:rgba(3,8,20,.92);border:1px solid rgba(56,239,255,.35);border-radius:6px;padding:4px 7px;color:#dff7ff;display:none;white-space:nowrap;z-index:5}
+</style>
+</head>
+<body>
+<main id="slideFrame">
+<header class="topbar"><p class="eyebrow">ACTO 2 · DATOS SENAMHI · 2019 → 2025</p>
+<h1><span class="n">13</span> Datos que importan: estación Punchana</h1>
+<p class="sub"><b>2,557 días</b> · tmax media <b>31.79 °C</b> · récord <b>38.0 °C</b> · pasa el mouse sobre las barras para leer cada valor real.</p></header>
+<section class="workspace">
+<div class="card"><h3>📊 Distribución de tmax diaria <span>bins de 1 °C · N=2,557</span></h3>
+<div class="canvas-frame"><div class="kpis"><span>MODA 31–32 °C (472+453)</span><span>COLA DER: olas ≥36 °C</span></div><canvas id="hist"></canvas><div class="tip" id="tipH"></div></div>
+<div class="cap"><span>izquierda: noches frías <b>19.2 °C mín</b> (friajes)</span><span>derecha: olas <b>38.0 °C</b> fuera de rango</span></div></div>
+<div class="card"><h3>🗓️ Ciclo estacional medio <span>media mensual real 2019–2025</span></h3>
+<div class="canvas-frame"><div class="kpis"><span>FRESCO MAY–JUL ≈30.5 °C</span><span>PICO SEP–NOV ≈33.1 °C</span></div><canvas id="seas"></canvas><div class="tip" id="tipS"></div></div>
+<div class="cap"><span><b>h &gt; 7d:</b> horizonte de ruptura entrópica</span><span>Δ estacional ≈ <b>2.7 °C</b></span></div></div>
+</section>
+<footer class="foot"><span><strong>SENAMHI Punchana (103015)</strong> · −3.6903°, −73.2556°, 91 msnm</span><span>tmin con vacíos iniciales · precip con control de ceros</span></footer>
+</main>
+<script>
+(()=>{if(window.self!==window.top)document.body.classList.add('is-embedded');
+const HIST=[2,2,0,4,5,4,18,51,81,97,183,346,472,453,351,297,113,65,13];
+const MM=[32.05,31.77,31.41,31.35,30.50,30.41,30.67,32.00,33.12,33.01,33.08,32.08];
+const MXM=[36.2,35.8,35.4,34.8,34.2,34.4,34.8,36.0,37.6,38.0,36.0,36.0];
+const MN=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+function setup(id,tipId,draw){const cv=document.getElementById(id),ctx=cv.getContext('2d'),tip=document.getElementById(tipId);
+function fit(){const r=cv.getBoundingClientRect();if(r.width<4)return;const d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
+let bars=[];
+function render(hover=-1){bars=draw(ctx,cv,hover)}
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+const b=bars.find(b=>mx>=b.x&&mx<=b.x+b.w&&my>=b.y&&my<=b.y+b.h);
+if(b){render(bars.indexOf(b));tip.style.display='block';tip.style.left=(b.x+b.w+6)+'px';tip.style.top=(b.y-4)+'px';tip.textContent=b.t}else{tip.style.display='none';render()}});
+cv.addEventListener('mouseleave',()=>{tip.style.display='none';render()});
+addEventListener('resize',()=>{fit();render()});fit();render();}
+// Histograma
+setup('hist','tipH',(ctx,cv,hov)=>{const r=cv.getBoundingClientRect(),w=r.width,h=r.height;ctx.clearRect(0,0,w,h);
+const max=Math.max(...HIST),bw=w/19,out=[];
+HIST.forEach((v,i)=>{const bh=(v/max)*(h-46),x=i*bw+2,y=h-24-bh,bwid=bw-4;
+const hot=v>=300,mid=v>=100;
+const g=ctx.createLinearGradient(0,y,0,h-24);
+if(i>=17){g.addColorStop(0,'rgba(255,82,119,.85)');g.addColorStop(1,'rgba(255,82,119,.12)')}
+else if(hot){g.addColorStop(0,'rgba(56,239,255,.8)');g.addColorStop(1,'rgba(56,239,255,.1)')}
+else{g.addColorStop(0,'rgba(120,150,190,.55)');g.addColorStop(1,'rgba(120,150,190,.08)')}
+ctx.fillStyle=g;ctx.fillRect(x,y,bwid,bh);
+if(i===hov){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(x,y,bwid,bh)}
+ctx.fillStyle='#5f7385';ctx.font='7px JetBrains Mono';ctx.textAlign='center';
+if(i%2===0)ctx.fillText((19+i)+'°',x+bwid/2,h-10);
+out.push({x,y,w:bwid,h:bh,t:(19+i)+'–'+(20+i)+' °C: '+v+' días'})});
+ctx.fillStyle='#8fa3bd';ctx.font='8px JetBrains Mono';ctx.textAlign='left';ctx.fillText('máx barra: 472 días (31–32 °C)',8,14);return out});
+// Estacional
+setup('seas','tipS',(ctx,cv,hov)=>{const r=cv.getBoundingClientRect(),w=r.width,h=r.height;ctx.clearRect(0,0,w,h);
+const lo=29.5,hi=34,Y=v=>h-26-((v-lo)/(hi-lo))*(h-50),bw=w/12,out=[];
+MM.forEach((v,i)=>{const x=i*bw+3,bwid=bw-6,y=Y(v);
+const hot=v>=32.5,warm=v>=31.5;
+ctx.fillStyle=hot?'rgba(255,192,92,.85)':warm?'rgba(56,239,255,.6)':'rgba(110,240,180,.55)';
+ctx.fillRect(x,y,bwid,h-26-y);
+ctx.fillStyle='#ff9cb0';ctx.font='7px JetBrains Mono';ctx.textAlign='center';ctx.fillText('▲'+MXM[i].toFixed(0),x+bwid/2,Y(MXM[i])+14);
+if(i===hov){ctx.strokeStyle='#fff';ctx.strokeRect(x,y,bwid,h-26-y)}
+ctx.fillStyle='#8fa3bd';ctx.font='8px JetBrains Mono';ctx.fillText(MN[i],x+bwid/2,h-10);
+out.push({x,y,w:bwid,h:h-26-y,t:MN[i]+' media '+v.toFixed(2)+' °C · máx '+MXM[i].toFixed(1)+' °C'})});return out});
+})();
+</script>
+</body>
+</html>

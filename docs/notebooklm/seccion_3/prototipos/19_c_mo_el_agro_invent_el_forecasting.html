@@ -1,0 +1,1974 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 19: Cómo el Agro Inventó el Forecasting Antes que la IA</title>
+<style>
+:root {
+  --bg: #040812;
+  --panel: rgba(9, 18, 34, 0.93);
+  --panel-soft: rgba(6, 13, 26, 0.84);
+  --line: rgba(148, 163, 184, 0.17);
+  --line-bright: rgba(110, 240, 180, 0.42);
+  --text: #f1f7ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --ancestral: #ffc05c; /* Oro / Tierra / Almanaque 10,000 a.C. */
+  --agro: #6ef0b4;      /* Verde malla digital / Botánica */
+  --water: #38efff;     /* Cian / Agua / Telemetría */
+  --danger: #ff5277;    /* Estrés hídrico / Fallo algorítmico */
+  --purple: #b48eff;    /* Ciencia de datos / Redes */
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 18% 15%, rgba(255, 192, 92, 0.14), transparent 38%),
+    radial-gradient(ellipse at 85% 85%, rgba(110, 240, 180, 0.15), transparent 40%),
+    #03060f;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 30% 35%, rgba(245, 158, 11, 0.09), transparent 48%),
+    radial-gradient(ellipse at 75% 35%, rgba(16, 185, 129, 0.12), transparent 48%),
+    linear-gradient(145deg, rgba(8, 15, 29, 0.985), rgba(3, 8, 18, 0.99));
+  border: 1px solid rgba(110, 240, 180, 0.26);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.65), inset 0 0 60px rgba(6, 48, 38, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 130, 115, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 130, 115, 0.12) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 12px 18px 8px !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--agro); outline-offset: 2px; }
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(110, 240, 180, 0.42);
+  border-radius: 12px;
+  color: var(--agro);
+  background: linear-gradient(135deg, rgba(255, 192, 92, 0.14), rgba(110, 240, 180, 0.12));
+}
+
+.brand-mark svg { width: 23px; height: 23px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--ancestral);
+  font: 700 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--agro); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 192, 92, 0.34);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.11), rgba(6, 15, 28, 0.92));
+  max-width: 530px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--ancestral);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 22, 0.88);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--agro));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--agro)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--agro)) 18%, transparent);
+}
+
+.proc-node[data-step="origins"] { --node-color: var(--ancestral); }
+.proc-node[data-step="memory"]  { --node-color: var(--water); }
+.proc-node[data-step="physics"] { --node-color: var(--agro); }
+.proc-node[data-step="bridge20"]{ --node-color: var(--purple); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--agro));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--agro)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--agro));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(110, 240, 180, 0.5);
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(335px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(12px, 1.3vw, 18px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN: NARRATIVE FOCUS CARD */
+.narrative-card {
+  --stage-accent: var(--ancestral);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(8px, 1vh, 12px);
+  padding: clamp(12px, 1.3vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 24, 0.75);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 32%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(10.5px, 0.88vw, 12.5px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11px, 0.9vw, 12.6px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(110, 240, 180, 0.12);
+  border: 1px solid rgba(110, 240, 180, 0.35);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 35%, rgba(16, 78, 62, 0.22), rgba(2, 6, 16, 0.94) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(255, 192, 92, 0.4);
+  background: rgba(15, 23, 42, 0.84);
+  color: #ffe1a8;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(110, 240, 180, 0.4);
+  background: rgba(15, 23, 42, 0.84);
+  color: #a7f3d0;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #6ef0b4);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 78px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(80px, 8vw, 130px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(110, 240, 180, 0.45);
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.25), rgba(6, 95, 70, 0.42));
+  color: #d1fae5;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(16, 185, 129, 0.48);
+  color: #fff;
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #a7f3d0; }
+
+@media (max-width: 920px) {
+  body { display: block; }
+  #slideFrame { width: 100%; height: auto; aspect-ratio: auto; min-height: 100svh; }
+  .topbar, .flowbar, .workspace { grid-template-columns: 1fr; }
+  .process-track { grid-template-columns: 1fr 1fr; }
+  .proc-arrow { display: none; }
+  .canvas-wrap { min-height: 300px; }
+}
+
+@media (max-height: 800px) {
+  body.is-embedded #slideFrame {
+    padding: 8px 14px 6px !important;
+    gap: 6px !important;
+  }
+  .topbar {
+    padding-bottom: 6px !important;
+  }
+  .narr-lead {
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+  }
+  .info-block {
+    padding: 6px 10px !important;
+  }
+  .info-block-text {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  .math-strip {
+    padding: 5px 10px !important;
+    font-size: 10.5px !important;
+  }
+  .speaker-box {
+    padding: 6px 10px !important;
+  }
+  .speaker-quote {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+}
+
+@media (max-height: 660px) {
+  .eyebrow {
+    display: none !important;
+  }
+  .topbar h1 {
+    font-size: 14px !important;
+  }
+  .narr-title {
+    font-size: 14px !important;
+  }
+  .info-block {
+    padding: 4px 8px !important;
+  }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 19: Cómo el agro inventó el forecasting antes que la IA">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/>
+          <circle cx="12" cy="12" r="4"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ACTO 3 · SECCIÓN 3 · 10,000 a.C. ──▶ PRESENTE · GENEALOGÍA OBSERVACIONAL</p>
+        <h1>Cómo el agro inventó el <span class="era">forecasting antes que la IA</span> <span class="sub">· De las cabañuelas a la malla neuronal</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Tesis central de la Sección 3">
+      <div class="via-title">
+        <span>🌱 TESIS CENTRAL DEL AGRO</span>
+        <span>EL TIEMPO ES BIOLOGÍA ACUMULADA</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">⏳ <strong>10,000 años</strong> prediciendo</span>
+        <span class="via-pill">🌿 <strong>Memoria τ = 6–8 meses</strong></span>
+        <span class="via-pill">⚖️ <strong>Física &gt; Algoritmo</strong></span>
+        <span class="via-pill">📉 <strong>N = 24</strong> cosechas</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. 10,000 a.C. vs IA ─▶ 2. Memoria de Meses (τ) ─▶ 3. Física > Algoritmo ─▶ 4. Los 5 Hitos & Pase a Diapo 20 -->
+  <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 19">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="origins" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">10,000 a.C. ↔ Hoy</span>
+          <span class="proc-sub">El primer científico de datos</span>
+        </div>
+        <div class="proc-progress" id="prog-origins"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="memory" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">Memoria de Meses (τ)</span>
+          <span class="proc-sub">Estrés hoy = -50% en cosecha</span>
+        </div>
+        <div class="proc-progress" id="prog-memory"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="physics" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">La Física Manda</span>
+          <span class="proc-sub">Los 3 lentes expertos en campo</span>
+        </div>
+        <div class="proc-progress" id="prog-physics"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="bridge20" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">Supuestos ─▶ Diapo 20</span>
+          <span class="proc-sub">Del almanaque al satélite</span>
+        </div>
+        <div class="proc-progress" id="prog-bridge20"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE PRINCIPAL: NARRATIVA AMIGABLE (IZQ) + ESCENARIO DIVIDIDO (DER) -->
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA PASO A PASO PARA NO EXPERTOS -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">PILAR 1 DE 4 · 10,000 a.C. → PRESENTE</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. El campo pronostica desde siempre: el primer científico de datos</h2>
+        <p class="narr-lead" id="narrLead">
+          Mucho antes de Silicon Valley, hace <b>10,000 años</b> la supervivencia humana dependía de anticipar ciclos de lluvia y heladas: <b>el agricultor fue el primer científico de datos de la historia</b>.
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">🌕 DEL ALMANAQUE Y LAS CABAÑUELAS A LA RED NEURONAL</div>
+          <p class="info-block-text" id="block1Text">
+            Las comunidades andinas y amazónicas cruzaban <b>bioindicadores ecológicos</b> (fases lunares, floración de árboles nativos, aves) con las lluvias. Hoy medimos ese mismo valle con <b>mallas topográficas 3D, satélites y redes neuronales</b>.
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">⚠️ LA CEGUERA HEREDADA SI CAMBIA EL CLIMA</div>
+          <p class="info-block-text" id="block2Text">
+            El almanaque ancestral asumía que el clima era <b>estacionario</b> (que cada década se repetía igual). Ante el cambio climático actual, necesitamos unir ese saber botánico con telemetría en tiempo real.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">Almanaque (Bioindicadores)  ⟷  Gemelo Digital (Sensores + IA)</span>
+          <span class="hint" id="mathHint">Desliza la cortina inferior para cruzar 10,000 años</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren, todos creen que predecir el futuro lo inventó Silicon Valley. Falso. El agricultor lleva diez mil años mirando las nubes para no morir de hambre. La diferencia es que antes usábamos el almanaque y las cabañuelas, y hoy usamos redes neuronales.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: LIENZO INTERACTIVO DUAL (10,000 a.C. ↔ MALLA IA) -->
+    <section class="stage-card" aria-label="Simulador visual interactivo del agro">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">🌾</span>
+          <h3 class="stage-title" id="canvasTitle">Espejo Histórico Interactivo: Valle Ancestral (10,000 a.C.) ↔ Gemelo Digital IA</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Pasado: <strong>Almanaque Lunar</strong></span>
+          <span class="kpi-chip" id="kpi2">Presente: <strong style="color:var(--agro)">Malla 3D + Sensores</strong></span>
+          <span class="kpi-chip" id="kpi3">Regla: <strong>Biología Manda</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">☀️ Izquierda: 10,000 a.C. (Almanaque, Andenes y Bioindicadores)</span>
+          <span class="ov-badge right" id="ovRight">🌐 Derecha: Presente (Malla Topográfica 3D y Series Temporales)</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Saberes Ancestrales (Andenes y Sol/Luna)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Topografía Digital 3D (IA)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Flujo Hídrico y Telemetría</span>
+        </div>
+        <span id="legendTip">INTERACTÚA CON EL CONTROL INFERIOR</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlSplitWrap">
+            <label for="sliderSplit">🌗 Cortina 10,000 a.C. ↔ IA:</label>
+            <input id="sliderSplit" type="range" min="15" max="85" step="1" value="50" style="accent-color:var(--ancestral)">
+            <output id="outSplit">50% / 50%</output>
+          </div>
+          <div class="ctrl-item" id="ctrlStressWrap" hidden>
+            <label for="sliderStress">☀️ Sequía en Floración (Hoy):</label>
+            <input id="sliderStress" type="range" min="0" max="50" step="5" value="50" style="accent-color:var(--danger)">
+            <output id="outStress">-50% Cosecha</output>
+          </div>
+          <div class="ctrl-item" id="ctrlLensWrap" hidden>
+            <label for="sliderLens">🔬 Lente Experto (1–3):</label>
+            <input id="sliderLens" type="range" min="0" max="2" step="1" value="0" style="accent-color:var(--agro)">
+            <output id="outLens">Fisiólogo</output>
+          </div>
+          <div class="ctrl-item" id="ctrlEraPreviewWrap" hidden>
+            <label for="sliderEraPreview">🛰️ Hito Observacional (1–5):</label>
+            <input id="sliderEraPreview" type="range" min="0" max="4" step="1" value="0" style="accent-color:var(--purple)">
+            <output id="outEraPreview">1. Almanaque</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente pilar ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Regla de Oro del Agro:</strong> “Si nuestro código no respeta la biología de la planta y su memoria de meses, los datos no sirven para nada.”</span>
+    <span>Fuente: Saberes ancestrales integrados con estadística agrícola moderna (Ramos et al., 2020) · Sección 3</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['origins', 'memory', 'physics', 'bridge20'];
+  const LOOP_DURATION_MS = 9500;
+
+  const LENSES = [
+    {
+      short: '1. Fisiólogo Vegetal',
+      role: '🌱 EL FISIÓLOGO VEGETAL (Botánica Real)',
+      blindness: 'Si el modelo ve solo números en una tabla, ignora que la planta es un ser vivo con umbrales fatales (>32°C aborta la flor).',
+      rule: 'Exige meter la memoria fisiológica (τ = 6–8 meses) y el estrés hídrico dentro de la ecuación.',
+      color: '#6ef0b4'
+    },
+    {
+      short: '2. Agrometeorólogo',
+      role: '🌦️ EL AGROMETEORÓLOGO (Física del Clima)',
+      blindness: 'Transferir supuestos de estacionariedad o linealidad sobre datos de campo hace colapsar cualquier algoritmo.',
+      rule: 'Cada sensor (estación, satélite o dron) mide una física distinta y tiene su propio punto ciego.',
+      color: '#ffc05c'
+    },
+    {
+      short: '3. Data Scientist',
+      role: '💻 EL DATA SCIENTIST (Límite Estadístico)',
+      blindness: 'Un dataset agrícola no es una serie limpia como la bolsa: tiene solo N=24 cosechas anuales y cientos de variables.',
+      rule: 'Un modelo con 100% de precisión en laboratorio (R²=0.99) fracasa en el campo si memoriza ruido sin ley física.',
+      color: '#38efff'
+    }
+  ];
+
+  const MILESTONES_PREVIEW = [
+    {
+      short: '1. Saberes Locales',
+      title: 'Hito 1 · Calendarios y Almanaques (Estacional)',
+      solved: 'Sincronizó siembra y cosecha con luna, flora y aves.',
+      assumed: 'Supuesto: Clima estacionario e inmutable por décadas.',
+      blind: 'Ceguera: Desfase total ante cambio climático rápido.',
+      color: '#ffc05c'
+    },
+    {
+      short: '2. Parcelas Ensayo',
+      title: 'Hito 2 · Estaciones Experimentales (Semanal/Mensual)',
+      solved: 'Tabulación sistemática in situ del desarrollo foliar.',
+      assumed: 'Supuesto: Homogeneidad espacial en todo el valle.',
+      blind: 'Ceguera: Invisibiliza microclimas y suelo intra-parcela.',
+      color: '#38efff'
+    },
+    {
+      short: '3. SENAMHI / GDD',
+      title: 'Hito 3 · Agrometeorología Operativa (Diaria)',
+      solved: 'Acumulado térmico fisiológico (Grados-Día GDD).',
+      assumed: 'Supuesto: Respuesta lineal sobre temperatura base.',
+      blind: 'Ceguera: Ignora colapso por calor extremo (>32°C).',
+      color: '#6ef0b4'
+    },
+    {
+      short: '4. Satélite NDVI',
+      title: 'Hito 4 · Revolución Satelital (Cada 5–12 días)',
+      solved: 'Cobertura continua de verdor (NDVI) por píxel.',
+      assumed: 'Supuesto: Más verdor foliar = más quintales cosechados.',
+      blind: 'Ceguera: Saturación óptica (LAI>3); no ve flor caída.',
+      color: '#b48eff'
+    },
+    {
+      short: '5. IoT + Modelos IA',
+      title: 'Hito 5 · Agricultura de Precisión (Tiempo Real)',
+      solved: 'Fusión de drones, sondas de suelo, clima e IA.',
+      assumed: 'Supuesto: 500 variables (p) compensan tener N=24 años.',
+      blind: 'Ceguera: Overfitting severo ante récords no vistos.',
+      color: '#ff5277'
+    }
+  ];
+
+  const state = {
+    step: 'origins',
+    splitPct: 50,
+    stressLoss: 50,
+    lensIdx: 0,
+    milestoneIdx: 0,
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    origins: {
+      accent: 'var(--ancestral)',
+      tag: 'PILAR 1 DE 4 · 10,000 a.C. → PRESENTE',
+      title: '1. El campo pronostica desde siempre: el primer científico de datos',
+      lead: 'Mucho antes de Silicon Valley, hace <b>10,000 años</b> la supervivencia humana dependía de anticipar ciclos de lluvia y heladas: <b>el agricultor fue el primer científico de datos de la historia</b>.',
+      b1Label: '🌕 DEL ALMANAQUE Y LAS CABAÑUELAS A LA RED NEURONAL',
+      b1Text: 'Las comunidades andinas y amazónicas cruzaban <b>bioindicadores ecológicos</b> (fases lunares, floración de árboles nativos, aves) con las lluvias. Hoy medimos ese mismo valle con <b>mallas topográficas 3D, satélites y redes neuronales</b>.',
+      b2Label: '⚠️ LA CEGUERA HEREDADA SI CAMBIA EL CLIMA',
+      b2Text: 'El almanaque ancestral asumía que el clima era <b>estacionario</b> (que cada década se repetía igual). Ante el cambio climático actual, necesitamos unir ese saber botánico con telemetría en tiempo real.',
+      formula: 'Almanaque (Bioindicadores)  ⟷  Gemelo Digital (Sensores + IA)',
+      hint: 'Desliza la cortina inferior para cruzar 10,000 años',
+      quote: '“Miren, todos creen que predecir el futuro lo inventó Silicon Valley. Falso. El agricultor lleva diez mil años mirando las nubes para no morir de hambre. La diferencia es que antes usábamos el almanaque y las cabañuelas, y hoy usamos redes neuronales.”',
+      icon: '🌾',
+      canvasTitle: 'Espejo Histórico Interactivo: Valle Ancestral (10,000 a.C.) ↔ Gemelo Digital IA',
+      ovLeft: '☀️ Izquierda: 10,000 a.C. (Almanaque, Andenes y Bioindicadores)',
+      ovRight: '🌐 Derecha: Presente (Malla Topográfica 3D y Series Temporales)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Saberes Ancestrales (Andenes y Sol/Luna)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Topografía Digital 3D (IA)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Flujo Hídrico y Telemetría</span>',
+      nextLabel: 'Ver Memoria de la Planta (τ) ─▶'
+    },
+    memory: {
+      accent: 'var(--water)',
+      tag: 'PILAR 2 DE 4 · LA TESIS CENTRAL DE LA BIOLOGÍA',
+      title: '2. La planta tiene memoria de meses: el tiempo no es un reloj simple',
+      lead: 'A diferencia de la bolsa de valores o el retail donde un cambio impacta hoy mismo, en el agro <b>el tiempo es biología acumulada con una memoria fisiológica de 6 a 8 meses</b>.',
+      b1Label: '🥀 UN ESTRÉS HÍDRICO HOY DICTA EL FUTURO MESES DESPUÉS',
+      b1Text: 'En el café, si falta lluvia o golpea una ola de calor durante la <b>floración (agosto–octubre)</b>, la flor aborta. <b>El 50% de la producción puede perderse 7 meses antes de cosechar</b>, aunque luego llueva perfecto en enero.',
+      b2Label: '📐 TRADUCCIÓN PARA LA IA: RETARDO EXPLÍCITO Yₜ = f(Xₜ₋τ)',
+      b2Text: 'Alimentar un modelo con el clima de “ayer” (<i>t−1</i>) no sirve. La red neuronal debe mirar hacia atrás en la ventana biológica donde se formó la flor (<b>τ = 6 a 8 meses atrás</b>).',
+      formula: 'Cosecha Yₜ = f( Clima en Floración Xₜ₋τ )  con  τ = 6 a 8 meses',
+      hint: 'Ajusta el estrés en floración abajo y mira qué pasa 7 meses después',
+      quote: '“Una planta de café no olvida. Si pasa sed dos semanas en septiembre cuando está abriendo la flor, aborta el fruto; y aunque en enero caiga un diluvio y el campo se vea verde, ya perdiste la mitad de la cosecha ocho meses antes de recogerla.”',
+      icon: '⏳',
+      canvasTitle: 'Línea de Tiempo Biológica: Cómo una Sequía en Floración Destruye la Cosecha 7 Meses Después',
+      ovLeft: '🌸 Hace 7 Meses (Ago–Oct): Floración y Cuajado Crítico',
+      ovRight: '🍒 Hoy (Mar–Jul): Cosecha Real dictada por la Memoria τ',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Lluvia en Floración (Ago–Oct)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Cosecha Saludable (Sin estrés)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Caída por Memoria de Sequía (-50%)</span>',
+      nextLabel: 'Ver La Física Manda ─▶'
+    },
+    physics: {
+      accent: 'var(--agro)',
+      tag: 'PILAR 3 DE 4 · EL DIÁLOGO INTERDISCIPLINARIO',
+      title: '3. La física manda sobre el algoritmo: ¿Por qué falla la IA pura?',
+      lead: 'Modelos de Inteligencia Artificial con <b>100% de precisión teórica en computadora</b> fallan estrepitosamente en el campo cuando ignoran la botánica real.',
+      b1Label: '🔬 LOS 3 LENTES EXPERTOS (SECCIÓN 1 DEL INFORME)',
+      b1Text: '• <b>El Fisiólogo Vegetal:</b> La planta tiene umbrales térmicos e hídricos irreversibles.<br>• <b>El Agrometeorólogo:</b> Cada instrumento tiene sesgos físicos.<br>• <b>El Data Scientist:</b> Tratar la tabla como números puros lleva a memorizar ruido.',
+      b2Label: '⚖️ LA REGLA DE ORO INQUEBRANTABLE',
+      b2Text: '<i>“Pero la regla de oro no ha cambiado: <b>si nuestro código no respeta la biología de la planta, los datos no sirven para nada</b>.”</i>',
+      formula: 'IA Pura (100% In-Sample / 0% Botánica) = Fracaso en Campo',
+      hint: 'Cambia el lente experto abajo para ver qué sesgo detecta cada uno',
+      quote: '“Podemos tener el Transformer más caro del mundo con 100% de precisión en el laboratorio, pero si nuestro código no respeta la biología de la planta ni entiende cómo se midió el dato, en el campo no sirve para nada.”',
+      icon: '⚖️',
+      canvasTitle: 'Choque de Paradigmas: IA Ciega a la Botánica vs. Pronóstico Guiado por la Física',
+      ovLeft: '✕ Izquierda: IA de Caja Negra (Ignora umbrales y retardos τ)',
+      ovRight: '✅ Derecha: IA + Biología (Fisiólogo + Agrometeorólogo + Data Scientist)',
+      legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> IA sin Botánica (Falla en campo)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> IA Guiada por la Física (Acierto)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Lentes Expertos</span>',
+      nextLabel: 'Ver Los 5 Hitos y Pase a Diapo 20 ─▶'
+    },
+    bridge20: {
+      accent: 'var(--purple)',
+      tag: 'PILAR 4 DE 4 · GENEALOGÍA Y PASE A LA DIAPOSITIVA 20',
+      title: '4. La Genealogía Observacional: Qué resolvió y qué ceguera dejó cada era',
+      lead: 'Cada época inventó un instrumento mejor para observar el campo, pero <b>heredó un supuesto oculto y dejó una nueva ceguera biofísica</b> que veremos en la <b>Diapositiva 20</b>.',
+      b1Label: '📜 DE 1 DATO CUALITATIVO AL AÑO A 1 DATO POR DÍA Y PÍXEL',
+      b1Text: 'Pasamos de los <b>Almanaques ancestrales (Hito 1)</b> y las <b>Parcelas de ensayo (Hito 2)</b> a las <b>Estaciones SENAMHI con Grados-Día GDD (Hito 3)</b>, los <b>Satélites NDVI (Hito 4)</b> y los <b>Drones + IoT + Modelos Fundacionales (Hito 5)</b>.',
+      b2Label: '⏭️ PASE A LA DIAPOSITIVA 20: “DEL ALMANAQUE AL SATÉLITE”',
+      b2Text: 'En la siguiente diapositiva recorreremos esta explosión de densidad (de las <i>alcancías de calor GDD</i> al <i>NDVI satelital</i>) y descubriremos por qué tener más datos por segundo no basta si no llegan a tiempo.',
+      formula: 'Hito 1 (Almanaque) ➔ Hito 2 (Parcela) ➔ Hito 3 (GDD) ➔ Hito 4 (NDVI) ➔ Hito 5 (IoT/IA)',
+      hint: 'Explora los 5 Hitos con el deslizador antes de pasar a la Diapo 20',
+      quote: '“Cada instrumento que inventamos resolvió un problema pero nos dejó un punto ciego: el satélite ve todo el valle pero se satura en verde; el sensor IoT ve el suelo pero no ve el récord histórico. Pasemos a la Diapositiva 20 para ver esta evolución del almanaque al satélite.”',
+      icon: '🛰️',
+      canvasTitle: 'Matriz Genealogía Observacional (Los 5 Hitos): Logros, Supuestos Heredados y Cegueras',
+      ovLeft: '📜 Los 5 Escalones de Observación Agrícola (Sección 1)',
+      ovRight: '⏭️ Siguiente Diapo (20): Del Almanaque al Satélite (1 dato/día/píxel)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> (i) Qué problema resolvió</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> (ii) Qué supuesto heredó</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> (iii) Qué ceguera dejó</span>',
+      nextLabel: 'Reiniciar bucle (10,000 a.C.) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    $('ctrlSplitWrap').hidden = (state.step !== 'origins');
+    $('ctrlStressWrap').hidden = (state.step !== 'memory');
+    $('ctrlLensWrap').hidden = (state.step !== 'physics');
+    $('ctrlEraPreviewWrap').hidden = (state.step !== 'bridge20');
+
+    $('outSplit').textContent = `${state.splitPct}% / ${100 - state.splitPct}%`;
+    $('outStress').textContent = state.stressLoss === 0 ? 'Sin sequía (100%)' : `-${state.stressLoss}% Cosecha`;
+    $('outLens').textContent = LENSES[state.lensIdx].short;
+    $('outEraPreview').textContent = MILESTONES_PREVIEW[state.milestoneIdx].short;
+
+    if (state.step === 'origins') {
+      $('kpi1').innerHTML = `10,000 a.C.: <strong style="color:var(--ancestral)">Almanaque y Cabañuelas</strong>`;
+      $('kpi2').innerHTML = `Hoy: <strong style="color:var(--agro)">Malla 3D + Redes</strong>`;
+      $('kpi3').innerHTML = `Cortina: <strong>${state.splitPct}% Ancestral</strong>`;
+    } else if (state.step === 'memory') {
+      const harvestPct = 100 - state.stressLoss;
+      $('kpi1').innerHTML = `Retardo Botánico: <strong style="color:var(--water)">τ = 6 a 8 meses</strong>`;
+      $('kpi2').innerHTML = `Daño en Floración: <strong style="color:var(--danger)">-${state.stressLoss}%</strong>`;
+      $('kpi3').innerHTML = `Cosecha Final: <strong style="color:var(--agro)">${harvestPct}% del potencial</strong>`;
+    } else if (state.step === 'physics') {
+      const ln = LENSES[state.lensIdx];
+      $('kpi1').innerHTML = `Lente Activo: <strong style="color:${ln.color}">${ln.short}</strong>`;
+      $('kpi2').innerHTML = `IA sin Botánica: <strong style="color:var(--danger)">Colapsa en campo</strong>`;
+      $('kpi3').innerHTML = `Regla: <strong style="color:var(--agro)">Física &gt; Algoritmo</strong>`;
+    } else {
+      const ml = MILESTONES_PREVIEW[state.milestoneIdx];
+      $('kpi1').innerHTML = `Hito: <strong style="color:${ml.color}">${ml.short}</strong>`;
+      $('kpi2').innerHTML = `Evolución: <strong>1 dato/año ➔ 1 dato/día/píxel</strong>`;
+      $('kpi3').innerHTML = `Pase: <strong style="color:var(--purple)">Diapositiva 20</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawOriginsSplitWorld(w, h) {
+    const splitX = (state.splitPct / 100) * w;
+
+    // Función de altura de montaña y terrazas (compartida por ambos mundos para que encajen perfecto)
+    function mountainY(x, ridgeIdx) {
+      const u = x / w;
+      if (ridgeIdx === 0) {
+        return h * 0.44 - Math.sin(u * Math.PI * 1.8 + 0.3) * (h * 0.14) - Math.cos(u * Math.PI * 4.2) * (h * 0.04);
+      } else if (ridgeIdx === 1) {
+        return h * 0.60 - Math.sin(u * Math.PI * 2.2 + 1.1) * (h * 0.11);
+      } else {
+        return h * 0.76 - Math.cos(u * Math.PI * 1.6 - 0.5) * (h * 0.08);
+      }
+    }
+
+    // =========================================================================
+    // 1. MITAD IZQUIERDA: MUNDO ANCESTRAL (10,000 a.C. - Grabado Cálido, Sol/Luna, Andenes y Río)
+    // =========================================================================
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, splitX, h);
+    ctx.clip();
+
+    // Fondo pergamino oscuro cálido
+    const bgLeft = ctx.createLinearGradient(0, 0, 0, h);
+    bgLeft.addColorStop(0, 'rgba(48, 34, 18, 0.92)');
+    bgLeft.addColorStop(0.5, 'rgba(34, 24, 14, 0.95)');
+    bgLeft.addColorStop(1, 'rgba(20, 15, 10, 0.98)');
+    ctx.fillStyle = bgLeft;
+    ctx.fillRect(0, 0, splitX, h);
+
+    // Rueda de Almanaque Astronómico / Zodiacal y Sol-Luna en el cielo izquierdo
+    const wheelX = w * 0.20, wheelY = h * 0.24, wheelR = Math.min(w, h) * 0.13;
+    ctx.save();
+    ctx.translate(wheelX, wheelY);
+    ctx.rotate(state.simTime * 0.15);
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.55)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(0, 0, wheelR, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, wheelR * 0.72, 0, Math.PI * 2); ctx.stroke();
+    for (let k = 0; k < 12; k++) {
+      const ang = (k / 12) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(ang) * wheelR * 0.72, Math.sin(ang) * wheelR * 0.72);
+      ctx.lineTo(Math.cos(ang) * wheelR, Math.sin(ang) * wheelR);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('☽ ALMANAQUE Y CABAÑUELAS ☀', wheelX, wheelY + wheelR + 16);
+
+    // Sol partido en el centro (Mitad izquierda = Sol radiante ancestral)
+    const sunY = h * 0.25;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.45)';
+    ctx.lineWidth = 1.4;
+    for (let r = 0; r < 24; r++) {
+      const ang = (r / 24) * Math.PI * 2 + state.simTime * 0.08;
+      ctx.beginPath();
+      ctx.moveTo(splitX + Math.cos(ang) * 34, sunY + Math.sin(ang) * 34);
+      ctx.lineTo(splitX + Math.cos(ang) * 68, sunY + Math.sin(ang) * 68);
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#ffc05c';
+    ctx.beginPath(); ctx.arc(splitX, sunY, 32, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    // Cordilleras y Andenes Agrícolas (Terrazas grabadas)
+    const terraceColors = ['rgba(120, 82, 38, 0.55)', 'rgba(98, 66, 30, 0.68)', 'rgba(74, 50, 22, 0.82)'];
+    for (let r = 0; r < 3; r++) {
+      ctx.fillStyle = terraceColors[r];
+      ctx.strokeStyle = '#ffc05c';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      for (let x = 0; x <= w; x += 12) {
+        ctx.lineTo(x, mountainY(x, r));
+      }
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Líneas de contorno de andenes agrícolas
+      for (let t = 1; t <= 4; t++) {
+        ctx.strokeStyle = 'rgba(255, 192, 92, 0.25)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 14) {
+          const yy = mountainY(x, r) + t * 14;
+          x === 0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy);
+        }
+        ctx.stroke();
+      }
+    }
+
+    // Río serpenteante en el valle ancestral
+    ctx.strokeStyle = '#fde68a';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    for (let py = h * 0.52; py <= h; py += 8) {
+      const prog = (py - h * 0.52) / (h * 0.48);
+      const rx = splitX - 25 + Math.sin(prog * 5 + state.simTime) * (40 * prog);
+      py === h * 0.52 ? ctx.moveTo(rx, py) : ctx.lineTo(rx, py);
+    }
+    ctx.stroke();
+
+    // Tarjeta flotante izquierda: Saberes ancestrales
+    ctx.fillStyle = 'rgba(24, 17, 10, 0.88)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.6)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.roundRect(18, h - 86, Math.min(290, splitX - 30), 68, 9); ctx.fill(); ctx.stroke();
+    if (splitX > 180) {
+      ctx.fillStyle = '#ffc05c';
+      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText('🌾 10,000 a.C.: BIOINDICADORES', 30, h - 66);
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '500 10px Inter, sans-serif';
+      ctx.fillText('• Fases lunares, floración nativa y aves.', 30, h - 48);
+      ctx.fillText('• El agricultor: 1er científico de datos.', 30, h - 32);
+    }
+    ctx.restore();
+
+    // =========================================================================
+    // 2. MITAD DERECHA: MUNDO DIGITAL IA (Malla Wireframe 3D Verde + Telemetría y Series)
+    // =========================================================================
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(splitX, 0, w - splitX, h);
+    ctx.clip();
+
+    const bgRight = ctx.createLinearGradient(0, 0, 0, h);
+    bgRight.addColorStop(0, 'rgba(4, 18, 24, 0.95)');
+    bgRight.addColorStop(1, 'rgba(2, 10, 16, 0.98)');
+    ctx.fillStyle = bgRight;
+    ctx.fillRect(splitX, 0, w - splitX, h);
+
+    // Mitad derecha del Sol = Esfera Geodésica / Satelital Cian-Verde
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(splitX, sunY, 32, 0, Math.PI * 2); ctx.stroke();
+    for (let lat = -20; lat <= 20; lat += 10) {
+      ctx.beginPath();
+      ctx.ellipse(splitX, sunY + lat, Math.sqrt(Math.max(1, 32 * 32 - lat * lat)), 4, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Panel de Series Temporales en el cielo derecho (como en 19_El_agro_inventó_el_forecasting.png)
+    const chartX = Math.max(splitX + 24, w * 0.58);
+    const chartW = w - chartX - 22;
+    const chartY = 44, chartH = h * 0.25;
+    if (chartW > 90) {
+      ctx.fillStyle = 'rgba(6, 22, 28, 0.85)';
+      ctx.strokeStyle = 'rgba(110, 240, 180, 0.4)';
+      ctx.beginPath(); ctx.roundRect(chartX, chartY, chartW, chartH, 8); ctx.fill(); ctx.stroke();
+
+      ctx.strokeStyle = '#6ef0b4';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i <= 32; i++) {
+        const u = i / 32;
+        const cx = chartX + 10 + u * (chartW - 20);
+        const cy = chartY + chartH * 0.58 - Math.sin(u * 9 + state.simTime * 1.4) * (chartH * 0.28);
+        i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#a7f3d0';
+      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText('📈 TELEMETRÍA MULTIESPECTRAL & IA', chartX + 10, chartY + 15);
+    }
+
+    // Malla Topográfica 3D Wireframe (Continuación exacta de las montañas ancestrales)
+    for (let r = 0; r < 3; r++) {
+      ctx.fillStyle = 'rgba(6, 40, 32, 0.55)';
+      ctx.strokeStyle = '#6ef0b4';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      for (let x = 0; x <= w; x += 12) {
+        ctx.lineTo(x, mountainY(x, r));
+      }
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Malla poligonal wireframe sobre las laderas
+      ctx.strokeStyle = 'rgba(110, 240, 180, 0.26)';
+      ctx.lineWidth = 1;
+      for (let x = splitX; x <= w; x += 26) {
+        const yTop = mountainY(x, r);
+        ctx.beginPath();
+        ctx.moveTo(x, yTop);
+        ctx.lineTo(x - 18, h);
+        ctx.moveTo(x, yTop);
+        ctx.lineTo(x + 18, h);
+        ctx.stroke();
+      }
+    }
+
+    // Río digital con partículas de datos luminosas
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 4;
+    ctx.shadowColor = '#38efff';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    for (let py = h * 0.52; py <= h; py += 8) {
+      const prog = (py - h * 0.52) / (h * 0.48);
+      const rx = splitX - 25 + Math.sin(prog * 5 + state.simTime) * (40 * prog);
+      py === h * 0.52 ? ctx.moveTo(rx, py) : ctx.lineTo(rx, py);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Pines de Sensores IoT sobre la malla derecha
+    const pins = [
+      { u: 0.62, r: 0, val: 'VPD: 1.4 kPa' },
+      { u: 0.76, r: 1, val: 'NDVI: 0.82' },
+      { u: 0.88, r: 2, val: 'GDD: +18°C' }
+    ];
+    pins.forEach(p => {
+      const px = w * p.u;
+      if (px > splitX + 20) {
+        const py = mountainY(px, p.r);
+        ctx.strokeStyle = '#ffc05c';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py - 24); ctx.stroke();
+        ctx.fillStyle = '#ffc05c';
+        ctx.beginPath(); ctx.arc(px, py - 24, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fde68a';
+        ctx.font = '700 8.5px "JetBrains Mono"';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.val, px, py - 32);
+      }
+    });
+
+    // Tarjeta flotante derecha: Gemelo Digital
+    const rCardW = Math.min(300, w - splitX - 30);
+    if (rCardW > 160) {
+      ctx.fillStyle = 'rgba(6, 20, 28, 0.9)';
+      ctx.strokeStyle = 'rgba(110, 240, 180, 0.6)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.roundRect(w - rCardW - 18, h - 86, rCardW, 68, 9); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = '#6ef0b4';
+      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText('🌐 HOY: REDES Y BIOLOGÍA', w - rCardW - 6, h - 66);
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '500 10px Inter, sans-serif';
+      ctx.fillText('• Sensores IoT, satélites y redes neuronales.', w - rCardW - 6, h - 48);
+      ctx.fillText('• Misma regla: respetar la física botánica.', w - rCardW - 6, h - 32);
+    }
+    ctx.restore();
+
+    // Línea Divisoria Brillante (Cortina del Tiempo 10,000 a.C. ↔ IA)
+    ctx.save();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#6ef0b4';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.moveTo(splitX, 0);
+    ctx.lineTo(splitX, h);
+    ctx.stroke();
+
+    ctx.fillStyle = '#040812';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(splitX, h * 0.50, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('↔', splitX, h * 0.50 + 3.5);
+    ctx.restore();
+  }
+
+  function drawBiologicalMemoryStage(w, h) {
+    const padL = 42, padR = 28, padT = 48, padB = 34;
+    const pw = w - padL - padR;
+    const ph = h - padT - padB;
+
+    const months = ['AGO', 'SEP', 'OCT', 'NOV', 'DIC', 'ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN'];
+    const X = idx => padL + (idx / (months.length - 1)) * pw;
+
+    // 3 Fases Fenológicas en el fondo
+    const xOct = X(2.5), xFeb = X(6.5);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.08)';
+    ctx.fillRect(padL, padT, xOct - padL, ph);
+    ctx.fillStyle = 'rgba(56, 239, 255, 0.05)';
+    ctx.fillRect(xOct, padT, xFeb - xOct, ph);
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.07)';
+    ctx.fillRect(xFeb, padT, padL + pw - xFeb, ph);
+
+    // Etiquetas de ventanas
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fda4af';
+    ctx.fillText('1. FLORACIÓN (AGO–OCT)', (padL + xOct) / 2, padT + 16);
+    ctx.fillStyle = '#a5f3fc';
+    ctx.fillText('2. LLENADO DE GRANO (NOV–FEB)', (xOct + xFeb) / 2, padT + 16);
+    ctx.fillStyle = '#8ef7c7';
+    ctx.fillText('3. COSECHA Y CORTE (MAR–JUN)', (xFeb + padL + pw) / 2, padT + 16);
+
+    // Meses en el eje X
+    months.forEach((m, i) => {
+      const xx = X(i);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 9px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(m, xx, padT + ph + 16);
+    });
+
+    // Arco grande de Memoria Fisiológica τ = 6 a 8 meses
+    const startArcX = X(1), endArcX = X(8.5), arcY = padT + ph * 0.34;
+    ctx.save();
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(startArcX, arcY + 20);
+    ctx.quadraticCurveTo((startArcX + endArcX) / 2, padT + 18, endArcX, arcY + 20);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('⏳ MEMORIA FISIOLÓGICA DE LA PLANTA: τ = 6 a 8 MESES DE RETARDO', (startArcX + endArcX) / 2, padT + 38);
+
+    // Curva 1: Cosecha potencial saludable (100% si no hubo sequía en floración)
+    const Y = pct => padT + ph - 16 - (pct / 115) * (ph - 54);
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 2.8;
+    ctx.beginPath();
+    for (let i = 0; i <= 100; i++) {
+      const u = i / 100;
+      const mPos = u * (months.length - 1);
+      const val = 25 + 70 / (1 + Math.exp(-0.9 * (mPos - 4.5)));
+      const xx = padL + u * pw, yy = Y(val);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Curva 2: Cosecha con Estrés Hídrico en Floración (Techo irreversible por aborto floral)
+    const capFactor = (100 - state.stressLoss) / 100;
+    ctx.save();
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 3.2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    for (let i = 0; i <= 100; i++) {
+      const u = i / 100;
+      const mPos = u * (months.length - 1);
+      const val = 25 + (70 * capFactor) / (1 + Math.exp(-0.9 * (mPos - 4.5)));
+      const xx = padL + u * pw, yy = Y(val);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Indicador de pérdida en la cosecha final
+    const endX = X(9.5);
+    const yHealthy = Y(95);
+    const yStressed = Y(25 + 70 * capFactor);
+
+    if (state.stressLoss > 0) {
+      ctx.fillStyle = '#fda4af';
+      ctx.font = '700 10.5px "JetBrains Mono"';
+      ctx.textAlign = 'right';
+      ctx.fillText(`🥀 -${state.stressLoss}% Pérdida Irreversible (Aborto Floral en Sep)`, padL + pw - 10, yStressed + 18);
+    }
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('🍒 Potencial Saludable (100%)', padL + pw - 10, yHealthy - 8);
+  }
+
+  function drawPhysicsOverAlgoStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const topH = (h - padT - 18) * 0.52;
+
+    // 1. MITAD SUPERIOR: LAS 3 TARJETAS DEL PANEL DE EXPERTOS (AGROMETEORÓLOGO, FISIÓLOGO, DATA SCIENTIST)
+    const cardW = (usableW - 20) / 3;
+    LENSES.forEach((ln, idx) => {
+      const cx = pad + idx * (cardW + 10);
+      const isSel = (idx === state.lensIdx);
+
+      ctx.save();
+      ctx.fillStyle = isSel ? 'rgba(12, 26, 44, 0.96)' : 'rgba(7, 14, 28, 0.84)';
+      ctx.strokeStyle = isSel ? ln.color : 'rgba(148, 163, 184, 0.22)';
+      ctx.lineWidth = isSel ? 2.4 : 1.2;
+      if (isSel) {
+        ctx.shadowColor = ln.color;
+        ctx.shadowBlur = 12;
+      }
+      ctx.beginPath();
+      ctx.roundRect(cx, padT, cardW, topH, 10);
+      ctx.fill();
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = ln.color;
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText(ln.role, cx + 12, padT + 18);
+
+      // Wrap simple para el diagnóstico y regla
+      function drawWrapped(text, x, startY, maxW, lineH, color, font) {
+        ctx.fillStyle = color;
+        ctx.font = font;
+        const words = text.split(' ');
+        let line = '', y = startY;
+        words.forEach((wd, i) => {
+          const test = line + wd + ' ';
+          if (ctx.measureText(test).width > maxW && i > 0) {
+            ctx.fillText(line, x, y);
+            line = wd + ' ';
+            y += lineH;
+          } else {
+            line = test;
+          }
+        });
+        ctx.fillText(line, x, y);
+        return y + lineH;
+      }
+
+      let nextY = drawWrapped('⚠️ Riesgo: ' + ln.blindness, cx + 12, padT + 38, cardW - 24, 13.5, '#cbd5e1', '500 9.5px Inter, sans-serif');
+      drawWrapped('✅ Regla: ' + ln.rule, cx + 12, nextY + 6, cardW - 24, 13.5, '#f8fafc', '600 9.5px Inter, sans-serif');
+      ctx.restore();
+    });
+
+    // 2. MITAD INFERIOR: COMPARATIVA EN CAMPO (IA PURA 100% TEÓRICA VS IA GUIADA POR LA BOTÁNICA)
+    const botY = padT + topH + 12;
+    const botH = h - botY - 12;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(6, 12, 26, 0.92)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.35)';
+    ctx.beginPath();
+    ctx.roundRect(pad, botY, usableW, botH, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⚖️ DEMOSTRACIÓN EN CAMPO: ¿QUÉ PASA CUANDO EL ALGORITMO IGNORA LA BOTÁNICA?', pad + 14, botY + 18);
+
+    // Barras comparativas de desempeño en laboratorio vs campo real
+    const bLeft = pad + 210, bMaxW = usableW - 330;
+
+    // Fila 1: IA Ciega a la Botánica
+    const r1Y = botY + 38;
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('1. IA Ciega (Sin Fenología):', pad + 14, r1Y + 10);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.28)';
+    ctx.fillRect(bLeft, r1Y, bMaxW * 0.98, 13);
+    ctx.fillStyle = '#ff5277';
+    ctx.fillRect(bLeft, r1Y + 16, bMaxW * 0.22, 13);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.fillText('Laboratorio: 99% (Memoriza ruido)  ➔  En Campo Real: 22% (Fracaso estrepitoso)', bLeft + 8, r1Y + 10);
+
+    // Fila 2: IA Guiada por la Física y Biología
+    const r2Y = botY + 78;
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('2. IA + Biología (Con τ y VPD):', pad + 14, r2Y + 10);
+    ctx.fillStyle = '#6ef0b4';
+    ctx.fillRect(bLeft, r2Y, bMaxW * 0.91, 16);
+    ctx.fillStyle = '#040812';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText('En Campo Real: Reduce 4× el error (Respeta floración τ, umbrales y suelo)', bLeft + 8, r2Y + 12);
+    ctx.restore();
+  }
+
+  function drawBridge20Stage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const tableH = usableH - 42;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(6, 12, 28, 0.94)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.38)';
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, usableW, tableH, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    const cols = [
+      { name: 'Hito Histórico y Frecuencia', w: 0.24 },
+      { name: '(i) Qué problema resolvió', w: 0.25 },
+      { name: '(ii) Qué supuesto heredó', w: 0.25 },
+      { name: '(iii) Qué ceguera dejó', w: 0.26 }
+    ];
+
+    const rowH = tableH / 6.1;
+    ctx.fillStyle = 'rgba(180, 142, 255, 0.16)';
+    ctx.fillRect(pad, padT, usableW, rowH);
+
+    let accX = pad;
+    cols.forEach(c => {
+      ctx.fillStyle = '#e9d5ff';
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText(c.name, accX + 8, padT + rowH * 0.64);
+      accX += usableW * c.w;
+    });
+
+    MILESTONES_PREVIEW.forEach((m, ri) => {
+      const ry = padT + (ri + 1) * rowH;
+      const isSel = (ri === state.milestoneIdx);
+
+      if (isSel) {
+        ctx.fillStyle = 'rgba(110, 240, 180, 0.12)';
+        ctx.fillRect(pad + 2, ry, usableW - 4, rowH);
+      }
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.14)';
+      ctx.beginPath();
+      ctx.moveTo(pad, ry);
+      ctx.lineTo(pad + usableW, ry);
+      ctx.stroke();
+
+      const cells = [
+        m.title.replace('Hito ', ''),
+        m.solved,
+        m.assumed.replace('Supuesto: ', ''),
+        m.blind.replace('Ceguera: ', '')
+      ];
+
+      let cx = pad;
+      cells.forEach((txt, ci) => {
+        ctx.fillStyle = ci === 0 ? m.color : (ci === 3 ? '#fda4af' : (isSel ? '#ffffff' : '#cbd5e1'));
+        ctx.font = (ci === 0 || isSel) ? '700 9px "JetBrains Mono"' : '500 9px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(txt, cx + 8, ry + rowH * 0.64);
+        cx += usableW * cols[ci].w;
+      });
+    });
+    ctx.restore();
+
+    // Banner inferior de pase a la Diapositiva 20
+    const bannerY = padT + tableH + 8;
+    ctx.save();
+    ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.45)';
+    ctx.beginPath();
+    ctx.roundRect(pad, bannerY, usableW, 32, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#a7f3d0';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 20: “Del Almanaque al Satélite” (De 1 dato/año a 1 dato/día/píxel con GDD y NDVI)', pad + usableW / 2, bannerY + 20);
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+
+    if (state.step === 'origins') {
+      drawOriginsSplitWorld(w, h);
+    } else if (state.step === 'memory') {
+      drawBiologicalMemoryStage(w, h);
+    } else if (state.step === 'physics') {
+      drawPhysicsOverAlgoStage(w, h);
+    } else {
+      drawBridge20Stage(w, h);
+    }
+  }
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => setStep(btn.dataset.step, true));
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    setStep(STEPS[(idx + 1) % STEPS.length], true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderSplit').addEventListener('input', e => {
+    state.splitPct = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderStress').addEventListener('input', e => {
+    state.stressLoss = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderLens').addEventListener('input', e => {
+    state.lensIdx = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderEraPreview').addEventListener('input', e => {
+    state.milestoneIdx = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'origins',
+      splitPct: 50,
+      stressLoss: 50,
+      lensIdx: 0,
+      milestoneIdx: 0,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderSplit').value = 50;
+    $('sliderStress').value = 50;
+    $('sliderLens').value = 0;
+    $('sliderEraPreview').value = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('origins', true);
+    if (e.key === '2') setStep('memory', true);
+    if (e.key === '3') setStep('physics', true);
+    if (e.key === '4') setStep('bridge20', true);
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+      } else {
+        setStep(STEPS[(idx + 1) % STEPS.length], true);
+      }
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+      } else {
+        setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+      }
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    }
+    if (['n', 'd', 'f', 'Escape', 'Home', 'End'].includes(e.key) && window.parent !== window) {
+      window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'activate') {
+      setStep(STEPS[0], false);
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    } else if (e.data && e.data.type === 'resize') {
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        setStep(STEPS[(idx + 1) % STEPS.length], false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    ro.observe(canvas.parentElement);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

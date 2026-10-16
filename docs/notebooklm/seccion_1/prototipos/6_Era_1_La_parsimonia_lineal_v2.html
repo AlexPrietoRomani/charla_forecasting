@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>ERA 1 v2: La Parsimonia Lineal · Explicada para todos</title>
+<style>
+:root{
+  --bg:#040714; --panel:rgba(10,16,32,.92);
+  --line:rgba(148,163,184,.15); --line-bright:rgba(56,239,255,.32);
+  --text:#edf5ff; --muted:#94a3b8; --dim:#5c6c84;
+  --phi:#38efff; --ockham:#ffc05c; --rupture:#ff5277;
+  --lab:#6ef0b4; --real:#ff7597;
+  --mono:"JetBrains Mono",SFMono-Regular,Consolas,monospace;
+  --display:"Space Grotesk",Inter,"Segoe UI",sans-serif;
+  --sans:Inter,"Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box} [hidden]{display:none!important}
+html,body{width:100%;min-height:100%;margin:0}
+body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);
+  background:radial-gradient(ellipse at 85% 10%,rgba(14,116,144,.18),transparent 35%),radial-gradient(ellipse at 15% 90%,rgba(225,29,72,.12),transparent 35%),#030511;
+  font-family:var(--sans)}
+#slideFrame{position:relative;isolation:isolate;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;
+  gap:clamp(7px,.9vw,12px);width:min(100vw,1600px,calc(100svh * 16 / 9));aspect-ratio:16/9;
+  padding:clamp(12px,1.4vw,22px) clamp(14px,1.6vw,26px) clamp(8px,1vw,14px);overflow:hidden;
+  background:radial-gradient(ellipse at 70% 35%,rgba(6,68,98,.12),transparent 45%),linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));
+  border:1px solid rgba(82,128,170,.25);box-shadow:0 24px 90px rgba(0,0,0,.55),inset 0 0 60px rgba(4,30,60,.12)}
+#slideFrame::before{position:absolute;z-index:-1;inset:0;content:"";pointer-events:none;opacity:.26;
+  background-image:linear-gradient(rgba(78,111,153,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(78,111,153,.11) 1px,transparent 1px);
+  background-size:36px 36px;mask-image:linear-gradient(to bottom,black 5%,transparent 95%)}
+body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
+body.is-embedded #slideFrame{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;aspect-ratio:auto!important;border:none!important;border-radius:0!important;box-shadow:none!important;padding:10px 16px 6px!important}
+button,input{font:inherit} button{color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--phi);outline-offset:2px}
+.topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand-mark{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid rgba(56,239,255,.35);border-radius:11px;color:var(--phi);background:rgba(56,239,255,.08)}
+.brand-mark svg{width:21px;height:21px}
+.eyebrow{margin:0 0 2px;color:var(--phi);font:600 10px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+h1{margin:0;color:#f5f8ff;font:700 clamp(19px,1.7vw,26px)/1.08 var(--display);letter-spacing:-.03em}
+h1 span.era{color:var(--ockham)} h1 span.sub{color:#a5b9d3;font-weight:500;font-size:.84em}
+.human-sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.35 var(--sans)}
+.human-sub b{color:#d7e5f8;font-weight:650}
+.eq-badge{display:flex;flex-direction:column;align-items:flex-end;gap:3px;padding:7px 12px;border:1px solid rgba(104,138,180,.22);border-radius:11px;background:rgba(6,12,26,.88);max-width:360px}
+.eq-label{font:600 8.5px/1 var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.eq-formula{font:500 clamp(11px,.92vw,13.5px)/1.15 var(--mono);white-space:nowrap;color:#cbd7eb}
+.eq-formula .a{color:var(--phi);font-weight:700}.eq-formula .b{color:var(--lab);font-weight:700}.eq-formula .c{color:var(--ockham);font-weight:700}.eq-formula .d{color:var(--rupture)}
+.eq-hint{font:9px/1.3 var(--sans);color:#7c8fa9;text-align:right}
+.modebar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.step-tabs{display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--line);border-radius:11px;background:rgba(5,10,24,.8)}
+.step-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid transparent;border-radius:8px;color:#94a3b8;background:transparent;font:600 11px/1 var(--display);transition:all .16s}
+.step-btn:hover{color:#fff;background:rgba(148,163,184,.08)}
+.step-btn[aria-pressed="true"]{color:#fff;border-color:rgba(56,239,255,.28);background:rgba(8,145,178,.25)}
+.step-btn[data-step="rupture"][aria-pressed="true"]{border-color:rgba(255,82,119,.35);background:rgba(225,29,72,.22);color:#ffe4ea}
+.step-num{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.09);font:700 9px/1 var(--mono)}
+.meta-tools{display:flex;align-items:center;gap:8px;font:9px/1.2 var(--mono);color:#72849e}
+.shock-alert{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid rgba(255,82,119,.3);border-radius:7px;background:rgba(255,82,119,.1);color:#ff9cb0;font-weight:600;animation:pulseAlert 2s infinite}
+@keyframes pulseAlert{0%,100%{opacity:.95}50%{opacity:.45}}
+.workspace{display:grid;grid-template-columns:minmax(300px,.38fr) minmax(0,1fr);gap:clamp(10px,1.1vw,16px);min-width:0;min-height:0;overflow:hidden}
+.pillars-panel{display:grid;grid-template-rows:auto repeat(4,minmax(0,1fr)) auto;gap:5px;min-width:0;min-height:0;overflow:hidden}
+.section-title-bar{display:flex;align-items:center;justify-content:space-between;color:#9cb0c9;font:600 10px/1.2 var(--mono);letter-spacing:.13em;text-transform:uppercase;padding:0 2px 1px;flex:0 0 auto}
+.pillar-card{--accent:var(--phi);display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:8px;padding:5px 8px;border:1px solid rgba(133,158,192,.14);border-radius:11px;background:linear-gradient(110deg,rgba(12,20,39,.85),rgba(7,13,28,.75));cursor:pointer;transition:all .16s;min-height:0;overflow:hidden}
+.section-title-bar{display:flex;align-items:center;justify-content:space-between;color:#9cb0c9;font:600 10px/1.2 var(--mono);letter-spacing:.13em;text-transform:uppercase;padding:0 2px 1px}
+.pillar-card{--accent:var(--phi);display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:10px;padding:8px 10px;border:1px solid rgba(133,158,192,.14);border-radius:12px;background:linear-gradient(110deg,rgba(12,20,39,.85),rgba(7,13,28,.75));cursor:pointer;transition:all .16s}
+.pillar-card[data-pillar="memory"]{--accent:var(--phi)} .pillar-card[data-pillar="ockham"]{--accent:var(--ockham)} .pillar-card[data-pillar="rupture"]{--accent:var(--rupture)}
+.pillar-card:hover{border-color:color-mix(in srgb,var(--accent) 45%,transparent);transform:translateX(2px)}
+.pillar-card.active{border-color:color-mix(in srgb,var(--accent) 70%,transparent);background:linear-gradient(110deg,color-mix(in srgb,var(--accent) 13%,rgba(9,16,34,.95)),rgba(7,14,29,.95))}
+.pillar-icon{font-size:17px;line-height:1;display:grid;place-items:center;width:34px;height:34px;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:9px;background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.pillar-name{color:#f2f7ff;font:650 11.5px/1.2 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pillar-tag{color:var(--accent);font:8px/1 var(--mono)}
+.pillar-desc{margin:2px 0 0;color:#9aa9bd;font:10px/1.3 var(--sans);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pillar-desc b{color:#d5e2f5}
+.speaker-cue{padding:7px 10px;border:1px solid rgba(56,239,255,.22);border-radius:11px;background:linear-gradient(125deg,rgba(6,32,50,.5),rgba(7,14,30,.85));min-height:0;overflow:hidden}
+.cue-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.cue-label{color:var(--phi);font:700 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}
+.cue-chip{font:8.5px/1 var(--mono);padding:2px 6px;border-radius:4px;background:rgba(56,239,255,.1);color:#8feaf3}
+.cue-title{margin:0 0 2px;font:650 11.3px/1.2 var(--display);color:#edf4fe}
+.cue-body{margin:0;font:10.4px/1.38 var(--sans);color:#9bb0c9}
+.cue-say{margin:6px 0 0;padding:6px 8px;border-left:2px solid var(--phi);background:rgba(56,239,255,.06);font:italic 10.3px/1.4 var(--sans);color:#c8dcf2}
+.visual-column{display:grid;grid-template-rows:minmax(0,1.45fr) minmax(0,1fr) auto;gap:clamp(6px,.8vw,10px);min-width:0;min-height:0;overflow:hidden}
+.glass-card{min-width:0;min-height:0;border:1px solid rgba(133,158,192,.16);border-radius:13px;background:linear-gradient(145deg,rgba(10,17,36,.94),rgba(4,10,24,.92));overflow:hidden}
+.sim-card{display:flex;flex-direction:column;gap:4px;padding:8px 10px 6px;overflow:hidden;min-height:0}
+.sim-header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;flex:0 0 auto}
+.sim-title{display:flex;align-items:center;gap:8px;font:650 11.5px/1.2 var(--display);color:#e2edfb;min-width:0}
+.sim-title{display:flex;align-items:center;gap:8px;font:650 12px/1.2 var(--display);color:#e2edfb}
+.sim-pill{display:inline-grid;place-items:center;width:22px;height:22px;border:1px solid rgba(56,239,255,.25);border-radius:6px;background:rgba(56,239,255,.08);color:var(--phi);font:700 11px/1 var(--mono)}
+.sim-stats{display:flex;align-items:center;gap:9px;font:9px/1 var(--mono);color:#7f91ac}
+.sim-stats strong{color:#f0f6ff} .sim-stats .err strong{color:var(--rupture)}
+.canvas-frame{position:relative;flex:1 1 auto;min-height:0;border:1px solid rgba(119,151,191,.14);border-radius:9px;background:radial-gradient(ellipse at 50% 30%,rgba(10,40,68,.2),rgba(2,6,17,.85) 75%);overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.split-indicators{position:absolute;top:6px;left:8px;right:8px;display:flex;justify-content:space-between;gap:6px;pointer-events:none}
+.split-badge{font:600 8px/1.2 var(--mono);letter-spacing:.04em;padding:3px 7px;border-radius:5px;text-transform:uppercase;max-width:48%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.split-badge.lab{border:1px solid rgba(110,240,180,.25);background:rgba(16,185,129,.12);color:#8ef7c7}
+.split-badge.real{border:1px solid rgba(255,82,119,.3);background:rgba(225,29,72,.15);color:#ff9cb0}
+.split-badge.real.off{border:1px solid rgba(110,240,180,.22);background:rgba(16,185,129,.08);color:#8ef7c7}
+.canvas-legend-row{display:flex;align-items:center;justify-content:space-between;font:9px/1.2 var(--mono);color:#8e9fb7;gap:8px;flex-wrap:wrap}
+.legends{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.leg-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.leg-dash{width:14px;height:0;border-top:2.5px solid var(--c)} .leg-dash.dashed{border-top-style:dashed}
+.lower-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:7px 9px;min-height:0;overflow:hidden}
+.decay-pane,.logistic-pane{display:flex;flex-direction:column;gap:3px;min-width:0;min-height:0;overflow:hidden}
+.decay-pane .canvas-frame,.logistic-pane .canvas-frame{flex:1 1 auto;min-height:0}
+.decay-pane,.logistic-pane{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pane-title{font:650 10.8px/1.2 var(--display);color:#d6e3f5;display:flex;align-items:center;gap:6px}
+.pane-sub{font:8.5px/1.3 var(--mono);color:#788ea8}
+.logistic-pane{padding:7px 9px;border:1px solid rgba(255,192,92,.22);border-radius:9px;background:linear-gradient(135deg,rgba(255,192,92,.06),rgba(7,13,27,.8))}
+.chip-label{font:700 8.5px/1 var(--mono);color:var(--ockham);letter-spacing:.11em;text-transform:uppercase}
+.logi-formula{text-align:center;font:700 clamp(11px,.95vw,13.5px)/1.25 var(--mono);color:#ffe6ba;text-shadow:0 0 14px rgba(255,192,92,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logi-explain{font:9px/1.3 var(--sans);color:#9bb0cb;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.logi-explain{font:9.4px/1.32 var(--sans);color:#9bb0cb;margin:0}
+.logi-explain b{color:#ffe1a8}
+.vs-strip{display:flex;align-items:center;justify-content:space-between;gap:8px;font:8.5px/1.25 var(--mono);color:#8da1bc;border-top:1px dashed rgba(255,192,92,.2);padding-top:5px}
+.vs-strip strong{color:var(--ockham)} .vs-strip .mega{color:var(--rupture)}
+.controlbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 8px;padding:6px 8px 2px;border-top:1px solid var(--line);background:rgba(5,10,24,.55);border-radius:0 0 12px 12px;flex:0 0 auto;min-height:0}
+.sliders-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.slider-item{display:flex;align-items:center;gap:5px;font:8.5px/1 var(--mono);color:#90a1b9;white-space:nowrap}
+.slider-item{display:flex;align-items:center;gap:6px;font:9px/1 var(--mono);color:#90a1b9}
+.slider-item output{min-width:30px;color:#d0e0f8;font-weight:600;text-align:right}
+input[type=range]{width:clamp(48px,4.5vw,70px);height:4px;cursor:pointer}
+.btn-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:6px 10px;border:1px solid rgba(128,151,184,.2);border-radius:7px;color:#a8b9cf;background:rgba(18,28,48,.7);font:9.5px/1 var(--mono);transition:all .15s}
+.action-btn:hover{color:#fff;border-color:var(--line-bright)}
+.action-btn.shock{border-color:rgba(255,82,119,.4);background:rgba(225,29,72,.2);color:#ffb8c9;font-weight:700}
+.action-btn.shock:hover{background:rgba(225,29,72,.38);color:#fff;box-shadow:0 0 16px rgba(255,82,119,.3)}
+.action-btn.primary{color:#aff6ff;border-color:rgba(56,239,255,.25);background:rgba(8,145,178,.18)}
+.footnote{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:2px;font:9px/1.3 var(--mono);color:#6e8099}
+.footnote strong{color:#a4b6cf} .footnote .meta-right{color:#4e6079;text-align:right}
+.timeline{display:flex;align-items:center;gap:0;font:8px/1 var(--mono);color:#7c8fa9;overflow-x:auto;overflow-y:hidden;flex:0 0 auto;padding-bottom:1px;scrollbar-width:none}
+.timeline::-webkit-scrollbar{display:none}
+.tl-node{display:flex;align-items:center;gap:5px;padding:3px 8px;border:1px solid var(--line);border-radius:20px;background:rgba(8,14,30,.7);white-space:nowrap}
+.tl-node b{color:#e6effc}.tl-node.ver{border-color:rgba(255,192,92,.4);color:#ffe1a8}.tl-node.ari{border-color:rgba(56,239,255,.35);color:#a9f3ff}
+.tl-node.brk{border-color:rgba(255,82,119,.4);color:#ffb8c9}.tl-node.on{background:rgba(56,239,255,.14);color:#fff;border-color:var(--line-bright)}
+.tl-arrow{color:#3d4f68;padding:0 4px}
+.compare-box{display:none;gap:6px;font:8.8px/1.35 var(--sans);color:#9bb0c9;flex:0 0 auto;max-height:76px;overflow:hidden}
+.compare-box.show{display:grid;grid-template-columns:1fr 1fr 1fr}
+.compare-box.show{display:grid;grid-template-columns:1fr 1fr 1fr}
+.cmp-col{padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:rgba(6,12,26,.6)}
+.cmp-col h4{margin:0 0 3px;font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.cmp-col.same h4{color:var(--lab)}.cmp-col.diff h4{color:var(--phi)}.cmp-col.why h4{color:var(--rupture)}
+.cmp-col ul{margin:0;padding-left:13px}.cmp-col li{margin:1px 0}
+.pane-dim{opacity:.38;filter:saturate(.5);transition:all .2s}.pane-hot{opacity:1}
+.diff-note{position:absolute;top:8px;right:10px;font:700 8px/1 var(--mono);letter-spacing:.1em;color:#0b1526;background:var(--ockham);padding:3px 7px;border-radius:5px}
+@media (max-width:860px){body{display:block}#slideFrame{width:100%;height:auto;aspect-ratio:auto;min-height:100svh}.workspace{grid-template-columns:1fr}.visual-column{grid-template-rows:250px 230px}.lower-card{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Era 1 v2 explicada para todos">
+<span class="diff-note">V2 · PARA NO ESTADÍSTICOS</span>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 15l3-6 4 8 3-4"/></svg></div>
+    <div>
+      <p class="eyebrow">La saga del forecasting · 1838 → 1970 → 1995 · Era 1 de 4</p>
+      <h1>ERA 1: <span class="era">La Parsimonia Lineal</span> <span class="sub">· de la maceta al eco</span></h1>
+      <p class="human-sub">Historia en orden: <b>1838 Verhulst</b> descubre el techo 🪴 → <b>1970 Box-Jenkins</b> enseña a pronosticar semana a semana 🔉. Misma virtud, distinto truco.</p>
+    </div>
+  </div>
+  <div class="eq-badge" title="Verhulst 1838: techo L · Box-Jenkins 1970: ayer + tendencia + error">
+    <span class="eq-label">1838 → 1970 · misma parsimonia, distinto truco</span>
+    <div class="eq-formula"><span class="c">🪴 S con techo L</span> <span style="color:#5c6c84">→</span> <span class="a">ayer pesa</span> + <span class="b">tendencia</span> + <span class="c">corrige error</span></div>
+    <div class="eq-hint">En libros: L/(1+e⁻ᵏ⁽ᵗ⁻ᵗ⁰⁾) → (1−ΣφB)(1−B)ᵈYₜ = c + (1+ΣθB)εₜ</div>
+  </div>
+</header>
+
+<nav class="modebar" aria-label="Historia en 4 pasos cronológicos">
+  <div class="step-tabs">
+    <button class="step-btn" type="button" data-step="verhulst" aria-pressed="true"><span class="step-num">1</span> 🪴 1838 Verhulst: el techo</button>
+    <button class="step-btn" type="button" data-step="arima" aria-pressed="false"><span class="step-num">2</span> 🔉 1970 ARIMA: el eco</button>
+    <button class="step-btn" type="button" data-step="bridge" aria-pressed="false"><span class="step-num">3</span> ⚖️ Iguales, distintos y por qué evolucionó</button>
+    <button class="step-btn" type="button" data-step="rupture" aria-pressed="false"><span class="step-num">4</span> 🦟 Por qué se agotó</button>
+  </div>
+  <div class="meta-tools">
+    <span id="shockIndicator" class="shock-alert" style="display:none">🦟 BROTE / SHOCK ACTIVO</span>
+    <span>💰 Cabe en calculadora · <strong>&lt;2 µs CPU</strong></span>
+    <span>·</span>
+    <button class="action-btn" type="button" id="storyBtn" title="Contar historia automáticamente">▶ Contar historia</button>
+    <button class="action-btn" type="button" id="fullscreenBtn" title="Pantalla completa">⛶</button>
+  </div>
+</nav>
+
+<section class="workspace">
+<aside class="pillars-panel" aria-label="Historia en 4 actos">
+  <div class="section-title-bar"><span>4 actos · en orden de historia</span><span style="font-size:8.5px;text-transform:none;color:var(--dim)">⌨️ teclas 1·2·3·4</span></div>
+
+  <article class="pillar-card active" data-pillar="verhulst" tabindex="0" role="button">
+    <div class="pillar-icon">🪴</div>
+    <div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px"><span class="pillar-name">1. 1838: la maceta</span><span class="pillar-tag">VERHULST · L,k</span></div>
+    <p class="pillar-desc">Nada crece infinito: <b>población, dengue, cultivo</b> chocan con techo <b>L</b>. Curva <b>S</b>: acelera, frena, se asienta.</p></div>
+  </article>
+
+  <article class="pillar-card" data-pillar="arima" tabindex="0" role="button">
+    <div class="pillar-icon">🔉</div>
+    <div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px"><span class="pillar-name">2. 1970: el eco</span><span class="pillar-tag">ARIMA (p,d,q)</span></div>
+    <p class="pillar-desc"><b>Receta semanal:</b> ayer + tendencia + último error. El pasado es un <b>eco que se apaga</b> hasta la media.</p></div>
+  </article>
+
+  <article class="pillar-card" data-pillar="bridge" tabindex="0" role="button">
+    <div class="pillar-icon">⚖️</div>
+    <div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px"><span class="pillar-name">3. Puente: ¿qué cambia?</span><span class="pillar-tag">COMÚN · DISTINTO</span></div>
+    <p class="pillar-desc"><b>Misma virtud:</b> 3 números, CPU. <b>Salto:</b> Verhulst dibuja <b>el destino</b>; ARIMA pronostica <b>el camino</b> con ruido y estaciones.</p></div>
+  </article>
+
+  <article class="pillar-card" data-pillar="rupture" tabindex="0" role="button">
+    <div class="pillar-icon">🦟</div>
+    <div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px"><span class="pillar-name">4. Se agotó en Loreto</span><span class="pillar-tag">SHOCK · ERA 2</span></div>
+    <p class="pillar-desc">Ante <b>brote o clima raro</b>, la recta sigue ciega. Por eso se buscó <b>lags + árboles, luego deep learning</b>.</p></div>
+  </article>
+
+  <section class="speaker-cue" aria-live="polite">
+    <div class="cue-head"><span class="cue-label">🎤 Qué decir (15 seg)</span><span class="cue-chip" id="cueChip">Acto 1 · 1838</span></div>
+    <h2 class="cue-title" id="cueTitle">1838: Verhulst descubre que todo tiene techo</h2>
+    <p class="cue-body" id="cueBody">Miren la S ámbar: al inicio vuela, luego frena y se asienta en L. La curva roja ingenua decía “infinito”.</p>
+    <p class="cue-say" id="cueSay">“Dilo así: ninguna planta rompe la maceta. Ese borde es L: camas, hectáreas, peces.”</p>
+  </section>
+</aside>
+
+<div class="visual-column">
+  <section class="glass-card sim-card" aria-label="Simulador principal">
+    <div class="sim-header">
+      <div class="sim-title"><span class="sim-pill">∿</span><span id="simHeadline">1838 · La S que pone techo al crecimiento</span></div>
+      <div class="sim-stats">
+        <span id="statLeftWrap">Techo L: <strong id="statPhi">100</strong></span>
+        <span id="statMidWrap">Velocidad k: <strong id="statMid">0.55</strong></span>
+        <span class="err" id="statError" style="display:none">Error: <strong id="statErrVal">+38 camas</strong></span>
+      </div>
+    </div>
+    <div class="timeline" id="timeline">
+      <span class="tl-node ver on" data-tl="verhulst">🪴 <b>1838</b>&nbsp;Verhulst S</span><span class="tl-arrow">─▶</span>
+      <span class="tl-node ari" data-tl="arima">🔉 <b>1970</b>&nbsp;Box-Jenkins ARIMA</span><span class="tl-arrow">─▶</span>
+      <span class="tl-node" data-tl="bridge">⚖️ puente: del destino al camino</span><span class="tl-arrow">─▶</span>
+      <span class="tl-node brk" data-tl="rupture">🦟 límite → Era 2</span>
+    </div>
+    <div class="canvas-frame"><canvas id="mainCanvas"></canvas>
+      <div class="split-indicators"><span class="split-badge lab" id="badgeLeft">🪴 acumulado real (S)</span><span class="split-badge real off" id="badgeReal">ingenua “infinito” ✕</span></div>
+    </div>
+    <div class="compare-box" id="compareBox">
+      <div class="cmp-col same"><h4>✅ En común (parsimonia)</h4><ul><li><b>3 números</b> lo explican todo</li><li>Cada número <b>significa algo</b> (L, k / p,d,q)</li><li>Corre en <b>calculadora/CPU µs</b>, $0 GPU</li></ul></div>
+      <div class="cmp-col diff"><h4>🔀 En qué se diferencian</h4><ul><li>Verhulst: dibuja <b>el destino final</b> (una S única)</li><li>ARIMA: pronostica <b>el camino semana a semana</b> con eco + ruido</li><li>ARIMA suma <b>estación y error</b> (Holt-Winters αβγ)</li></ul></div>
+      <div class="cmp-col why"><h4>🚀 Por qué se evolucionó</h4><ul><li>Verhulst <b>no sabe de ruido ni estaciones</b></li><li>Se necesitaba <b>re-pronosticar cada día</b>, no una curva para siempre</li><li>Nace Box-Jenkins: <b>misma dieta, más flexible</b></li></ul></div>
+    </div>
+    <div class="canvas-legend-row" id="legendRow">
+      <div class="legends" id="legendItems">
+        <span class="leg-item"><i class="leg-dash" style="--c:#ffc05c"></i> Verhulst S (ámbar)</span>
+        <span class="leg-item"><i class="leg-dash dashed" style="--c:#ff5277"></i> Ingenua infinito (roja - - -)</span>
+        <span class="leg-item" id="legShock" style="display:none"><i class="leg-dash" style="--c:#38efff"></i> Realidad con brote</span>
+      </div>
+      <div style="font-size:8px" id="legendHint">MUEVE L · k Y MIRA CÓMO SE APLASTA LA S</div>
+    </div>
+  </section>
+
+  <section class="glass-card lower-card">
+    <div class="decay-pane">
+      <span class="pane-title">🔉 1970 El eco ARIMA: ayer pesa más que anteayer</span>
+      <span class="pane-sub">Cada barra = un día atrás · altura = cuánto lo escucha el modelo</span>
+      <div class="canvas-frame"><canvas id="decayCanvas"></canvas></div>
+    </div>
+    <div class="logistic-pane">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip-label">🪴 1838 La maceta de Verhulst — nada es infinito</span></div>
+      <div class="canvas-frame" style="border-color:rgba(255,192,92,.25)"><canvas id="logiCanvas"></canvas></div>
+      <div class="logi-formula" id="logiFormula">techo L = 100 · velocidad k = 0.55</div>
+      <p class="logi-explain" id="logiExplain">En <b>Loreto</b>, la fórmula ingenua decía “<b>infinitos enfermos</b>”. Verhulst dijo: no, el hospital tiene <b>L camas</b>. El brote frena en <b>S</b>.</p>
+      <div class="vs-strip"><span><strong>3 números</strong> caben en calculadora</span><span>vs <span class="mega">500 MILLONES</span> en GPU</span><span>⚡ <strong>$0 GPU</strong></span></div>
+    </div>
+  </section>
+
+  <div class="controlbar">
+    <div class="sliders-group">
+      <div class="slider-item"><label for="sliderPhi">🔉 Memoria:</label><input id="sliderPhi" type="range" min="10" max="95" step="5" value="82"><output id="outPhi">82%</output></div>
+      <div class="slider-item"><label for="sliderL">🪴 Techo L:</label><input id="sliderL" type="range" min="40" max="140" step="10" value="100" style="accent-color:var(--ockham)"><output id="outL">100</output></div>
+      <div class="slider-item"><label for="sliderK">🌱 Velocidad k:</label><input id="sliderK" type="range" min="20" max="95" step="5" value="55" style="accent-color:var(--ockham)"><output id="outK">0.55</output></div>
+      <div class="slider-item"><label for="sliderShock">🦟 Brote:</label><input id="sliderShock" type="range" min="10" max="70" step="5" value="38" style="accent-color:var(--rupture)"><output id="outShock">+38</output></div>
+    </div>
+    <div class="btn-actions">
+      <button class="action-btn shock" type="button" id="triggerShockBtn">🦟 Llega el brote de Loreto</button>
+      <button class="action-btn primary" type="button" id="playBtn"><span id="playIcon">Ⅱ</span> <span id="playText">Pausar</span></button>
+      <button class="action-btn" type="button" id="resetBtn">↺ Reiniciar</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer class="footnote">
+  <span><strong>Moraleja Era 1:</strong> 1838 techo 🪴 → 1970 eco semanal 🔉 (misma dieta, más flexible) → ciego ante shocks 🦟 → nace Era 2.</span>
+  <span class="meta-right">Verhulst (1838) S · Box & Jenkins (1970) · Holt-Winters αβγ · INS/MINSA Loreto</span>
+</footer>
+</main>
+
+<script>
+(()=>{'use strict';
+if(window.self!==window.top)document.body.classList.add('is-embedded');
+const state={step:'verhulst',phi:.82,L:100,k:.55,shockMag:38,hasShock:false,shockPos:.58,playing:true,time:0,crack:0,storyTimer:null,storyOn:false};
+const cues={
+ verhulst:{chip:'Acto 1 · 1838',title:'1838: Verhulst descubre que todo tiene techo',body:'Miren la S ámbar arriba: al inicio vuela, luego frena y se asienta en L. La roja ingenua decía “infinito”. Abajo-derecha el mismo freno en detalle.',say:'“Dilo así: ninguna planta rompe la maceta. Ese borde es L: camas, hectáreas, peces.”',pill:'1838 · La S que pone techo al crecimiento'},
+ arima:{chip:'Acto 2 · 1970',title:'1970: Box-Jenkins enseña a pronosticar el camino',body:'132 años después: ya no una curva para siempre, sino receta semanal — ayer + tendencia + último error. El eco se apaga hacia la media. Mueve Memoria y mira.',say:'“Dilo así: ¿cuánto pesó ayer? ¿sube o baja? ¿en qué me equivoqué ayer? Eso es ARIMA.”',pill:'1970 · El eco semanal que se apaga'},
+ bridge:{chip:'Acto 3 · Puente',title:'Iguales en virtud, distintos en truco — por eso evolucionó',body:'En común: 3 números, interpretables, CPU. Diferencia: Verhulst dibuja el destino (una S); ARIMA recalcula el camino con ruido y estaciones (αβγ). Verhulst no sabía de ruido: hubo que evolucionar.',say:'“Dilo así: Verhulst te dice dónde termina la fiesta; ARIMA te dice cómo va la música cada semana.”',pill:'Puente · Misma dieta parsimoniosa, más flexibilidad'},
+ rupture:{chip:'Acto 4 · Límite',title:'Por qué se agotó: Loreto rompe la regla',body:'Cuando llega un brote o clima nunca visto, la recta verde sigue ciega y la roja se dispara. Ni S ni eco saben cambiar de régimen. Por eso se buscó Era 2: lags + árboles.',say:'“Dilo así: si nunca viste una crecida, tu regla no la imagina. Eso pasó en Loreto y en Texas.”',pill:'Límite · La recta ciega vs. el brote real'}};
+const $=id=>document.getElementById(id);
+const main=$('mainCanvas'),mctx=main.getContext('2d'),dec=$('decayCanvas'),dctx=dec.getContext('2d'),lg=$('logiCanvas'),lctx=lg.getContext('2d');
+function fit(cv,ctx){const r=cv.getBoundingClientRect();if(r.width<2||r.height<2)return;const d=Math.min(devicePixelRatio||1,2),w=Math.round(r.width*d),h=Math.round(r.height*d);if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}ctx.setTransform(d,0,0,d,0,0)}
+function resize(){fit(main,mctx);fit(dec,dctx);fit(lg,lctx);render()}
+const N=160;
+function simData(t){const hist=[],fc=[],real=[],split=Math.floor(N*state.shockPos);let base=50,last=base;
+ for(let i=0;i<N;i++){const tt=i*.12+t, harm=14*Math.sin(tt*1.2)+6*Math.sin(tt*2.8), nz=((Math.sin(i*12.9898+tt*4.1)*43758.5453)%1-.5)*5, nv=base+harm+nz;
+  if(i<split){hist.push(nv);real.push(nv);fc.push(nv);last=nv}else{const s=i-split,dw=Math.pow(state.phi,s*.6);
+   fc.push(last*dw+base*(1-dw)+Math.sin((split+s*.2)*1.2)*8*dw);
+   if(state.hasShock){const jump=state.shockMag*(1-Math.exp(-s*.35)),cn=(Math.sin(i*37.1)%1)*9;real.push(nv+jump+cn)}else real.push(nv)}}return{hist,fc,real,split}}
+function drawArimaMain(d){const r=main.getBoundingClientRect(),w=r.width,h=r.height;if(w<10||h<10)return;
+ mctx.clearRect(0,0,w,h);mctx.save();mctx.strokeStyle='rgba(110,140,180,.08)';mctx.lineWidth=1;const dx=w/16;for(let x=0;x<w;x+=dx){mctx.beginPath();mctx.moveTo(x,0);mctx.lineTo(x,h);mctx.stroke()}mctx.restore();
+ const sx=(d.split/(N-1))*w;mctx.fillStyle='rgba(110,240,180,.03)';mctx.fillRect(0,0,sx,h);
+ if(state.hasShock){mctx.fillStyle='rgba(255,82,119,.07)';mctx.fillRect(sx,0,w-sx,h)}
+ mctx.save();mctx.strokeStyle=state.hasShock?'rgba(255,82,119,.8)':'rgba(56,239,255,.4)';mctx.lineWidth=state.hasShock?2:1;mctx.setLineDash([4,4]);mctx.beginPath();mctx.moveTo(sx,0);mctx.lineTo(sx,h);mctx.stroke();mctx.restore();
+ const all=[...d.real,...d.fc];let mn=Math.min(...all)-8,mx=Math.max(...all)+12;
+ const Y=v=>h-14-((v-mn)/(mx-mn))*(h-28),X=i=>(i/(N-1))*w;
+ mctx.save();mctx.beginPath();mctx.lineWidth=2.4;mctx.strokeStyle='#38efff';mctx.shadowColor='#38efff';mctx.shadowBlur=8;
+ for(let i=0;i<=d.split;i++){const x=X(i),y=Y(d.hist[i]);i===0?mctx.moveTo(x,y):mctx.lineTo(x,y)}mctx.stroke();mctx.restore();
+ mctx.save();mctx.beginPath();mctx.lineWidth=2;mctx.strokeStyle='#6ef0b4';mctx.setLineDash([6,4]);
+ for(let i=d.split;i<N;i++){const x=X(i),y=Y(d.fc[i]);i===d.split?mctx.moveTo(x,y):mctx.lineTo(x,y)}mctx.stroke();mctx.restore();
+ mctx.save();mctx.beginPath();mctx.lineWidth=state.hasShock?2.6:1.8;mctx.strokeStyle=state.hasShock?'#ff5277':'#38efff';
+ if(state.hasShock){mctx.shadowColor='#ff5277';mctx.shadowBlur=10}
+ for(let i=d.split;i<N;i++){const x=X(i),y=Y(d.real[i]);i===d.split?mctx.moveTo(x,y):mctx.lineTo(x,y)}mctx.stroke();mctx.restore();
+ if(state.hasShock){mctx.save();mctx.strokeStyle='rgba(255,82,119,.5)';mctx.lineWidth=1;
+  const rays=[{dx:45,dy:-32},{dx:60,dy:28},{dx:30,dy:-48},{dx:75,dy:8},{dx:25,dy:42},{dx:55,dy:-14}];
+  const cy=Y(d.real[d.split]);rays.forEach(o=>{mctx.beginPath();mctx.moveTo(sx,cy);mctx.lineTo(sx+o.dx*state.crack,cy+o.dy*state.crack);mctx.stroke()});
+  mctx.fillStyle='#ff9cb0';mctx.font='700 9px "JetBrains Mono"';mctx.fillText('🦟 BROTE: el modelo no lo vio venir',sx+8,cy-14);mctx.restore();
+  mctx.save();mctx.strokeStyle='#ffcfda';mctx.setLineDash([3,3]);mctx.beginPath();mctx.moveTo(X(N-1),Y(d.fc[N-1]));mctx.lineTo(X(N-1),Y(d.real[N-1]));mctx.stroke();mctx.restore();}
+}
+// Acto 1: Verhulst puro — S acumulada vs exponencial ingenua, con L, t0 y velocidad kL/4
+function drawVerhulstMain(){const r=main.getBoundingClientRect(),w=r.width,h=r.height;if(w<10||h<10)return;
+ mctx.clearRect(0,0,w,h);
+ mctx.save();mctx.strokeStyle='rgba(110,140,180,.08)';for(let x=0;x<w;x+=w/16){mctx.beginPath();mctx.moveTo(x,0);mctx.lineTo(x,h);mctx.stroke()}mctx.restore();
+ const L=state.L,k=state.k,MAX=150,Y=v=>h-20-(v/MAX)*(h-52),X=i=>8+(i/120)*(w-16);
+ // zona bajo techo
+ mctx.fillStyle='rgba(255,192,92,.05)';mctx.fillRect(0,0,w,Y(0)-Y(L));
+ // techo L
+ mctx.save();mctx.strokeStyle='rgba(255,192,92,.7)';mctx.setLineDash([5,4]);mctx.beginPath();mctx.moveTo(0,Y(L));mctx.lineTo(w,Y(L));mctx.stroke();mctx.restore();
+ mctx.fillStyle='#ffe6ba';mctx.font='700 8.5px "JetBrains Mono"';mctx.textAlign='right';mctx.fillText('techo L = '+L+'  (camas / hectáreas)',w-6,Y(L)+12);
+ // ingenua exponencial (sale volando)
+ mctx.save();mctx.strokeStyle='rgba(255,82,119,.65)';mctx.setLineDash([4,4]);mctx.lineWidth=1.8;mctx.beginPath();
+ for(let i=0;i<=120;i++){const t=(i-40)/12,y0=(L/2)*Math.exp(.32*(t-0));const x=X(i),yy=Y(Math.min(MAX,y0));i===0?mctx.moveTo(x,yy):mctx.lineTo(x,yy)}mctx.stroke();mctx.restore();
+ mctx.fillStyle='#ff9cb0';mctx.font='700 8px "JetBrains Mono"';mctx.textAlign='right';mctx.fillText('ingenua: “infinito” ✕ se dispara',w-6,h-6);
+ // S de Verhulst animada (revela de izquierda a derecha con time)
+ const prog=.55+.45*Math.sin(state.time*.7)*0+.95; // casi completa, leve pulso
+ mctx.save();mctx.beginPath();mctx.lineWidth=2.8;mctx.strokeStyle='#ffc05c';mctx.shadowColor='#ffc05c';mctx.shadowBlur=8;
+ for(let i=0;i<=120*prog;i++){const t=(i-60)/12,y=L/(1+Math.exp(-k*4*t));const x=X(i),yy=Y(y);i===0?mctx.moveTo(x,yy):mctx.lineTo(x,yy)}mctx.stroke();mctx.restore();
+ // t0 + velocidad máxima kL/4
+ const x0=X(60),y0=Y(L/2);
+ mctx.save();mctx.strokeStyle='rgba(255,255,255,.5)';mctx.setLineDash([3,3]);mctx.beginPath();mctx.moveTo(x0,0);mctx.lineTo(x0,h);mctx.stroke();mctx.restore();
+ mctx.fillStyle='#fff';mctx.beginPath();mctx.arc(x0,y0,4,0,7);mctx.fill();
+ mctx.fillStyle='#0b1526';mctx.font='700 7px "JetBrains Mono"';mctx.textAlign='center';mctx.fillText('●',x0,y0+2.5);
+ mctx.fillStyle='#ffe1a8';mctx.font='700 8px "JetBrains Mono"';mctx.fillText('t₀ freno · vel máx kL/4 = '+(k*L/4).toFixed(1)+'/sem',x0,Y(L/2)-28);
+ mctx.fillStyle='#8a7a55';mctx.font='8px "JetBrains Mono"';mctx.fillText('acelera ▲    │    ▼ frena',x0,Y(L/2)-16);
+ // etiquetas fases
+ mctx.fillStyle='#6f84a0';mctx.font='8px "JetBrains Mono"';mctx.textAlign='left';mctx.fillText('inicio lento',X(8),h-18);
+ mctx.textAlign='right';mctx.fillText('se asienta en L →',w-8,Y(L)+14);
+}
+function drawDecay(){const r=dec.getBoundingClientRect(),w=r.width,h=r.height;if(w<10||h<10)return;dctx.clearRect(0,0,w,h);
+ const K=10,bw=w/K;for(let k=0;k<K;k++){const wt=Math.pow(state.phi,k),bh=wt*(h-20),x=k*bw+2,y=h-14-bh;
+  const g=dctx.createLinearGradient(0,y,0,h-14);g.addColorStop(0,`rgba(56,239,255,${.35+wt*.55})`);g.addColorStop(1,'rgba(56,239,255,.05)');
+  dctx.fillStyle=g;dctx.strokeStyle='rgba(56,239,255,.6)';dctx.lineWidth=1;
+  const bwid=Math.max(7,bw-5);dctx.fillRect(x,y,bwid,bh);dctx.strokeRect(x,y,bwid,bh);
+  dctx.fillStyle=k===0?'#38efff':'#6f84a0';dctx.font='8px "JetBrains Mono"';dctx.textAlign='center';
+  dctx.fillText(k===0?'hoy':'-'+k,x+bwid/2,h-3);
+  if(k===0){dctx.fillStyle='#dff7ff';dctx.font='700 8px "JetBrains Mono"';dctx.fillText(Math.round(wt*100)+'%',x+bwid/2,Math.max(9,y-3))}
+  if(k>0){const pw=Math.pow(state.phi,k-1),px=(k-1)*bw+2+bwid/2,py=h-14-pw*(h-20);
+   dctx.beginPath();dctx.strokeStyle='#ffc05c';dctx.lineWidth=1.4;dctx.moveTo(px,py);dctx.lineTo(x+bwid/2,y);dctx.stroke()}}}
+function drawLogi(){const r=lg.getBoundingClientRect(),w=r.width,h=r.height;if(w<10||h<10)return;lctx.clearRect(0,0,w,h);
+ const L=state.L,k=state.k,t0=0;const Y=v=>h-8-(v/150)*(h-16),X=i=>8+(i/100)*(w-16);
+ // techo L dashed
+ lctx.save();lctx.strokeStyle='rgba(255,192,92,.55)';lctx.setLineDash([5,4]);lctx.beginPath();lctx.moveTo(0,Y(L));lctx.lineTo(w,Y(L));lctx.stroke();lctx.restore();
+ lctx.fillStyle='#ffe6ba';lctx.font='700 8px "JetBrains Mono"';lctx.textAlign='right';lctx.fillText('techo L = '+L+' camas',w-4,Y(L)-4);
+ // curva S
+ lctx.save();lctx.beginPath();lctx.lineWidth=2.4;lctx.strokeStyle='#ffc05c';lctx.shadowColor='#ffc05c';lctx.shadowBlur=7;
+ for(let i=0;i<=100;i++){const t=(i-50)/10,y=L/(1+Math.exp(-k*4*(t-t0)));const x=X(i),yy=Y(y);i===0?lctx.moveTo(x,yy):lctx.lineTo(x,yy)}lctx.stroke();lctx.restore();
+ // punto inflexión
+ lctx.save();lctx.fillStyle='#fff';lctx.beginPath();lctx.arc(X(50),Y(L/2),3.4,0,7);lctx.fill();
+ lctx.fillStyle='#8a7a55';lctx.font='8px "JetBrains Mono"';lctx.textAlign='center';lctx.fillText('freno: crece más rápido aquí',X(50),Y(L/2)-8);lctx.restore();
+ // curva ingenua infinita (punteada roja) para contraste
+ lctx.save();lctx.strokeStyle='rgba(255,82,119,.55)';lctx.setLineDash([3,3]);lctx.beginPath();
+ for(let i=50;i<=100;i++){const t=(i-50)/10,y=(L/2)*Math.exp(.45*(t));const x=X(i),yy=Y(Math.min(150,y));i===50?lctx.moveTo(x,yy):lctx.lineTo(x,yy)}lctx.stroke();
+ lctx.fillStyle='#ff9cb0';lctx.font='7.5px "JetBrains Mono"';lctx.fillText('ingenua: “infinito” ✕',w-4,h-4);lctx.restore();}
+function render(){if(state.step==='verhulst'){drawVerhulstMain()}else{drawArimaMain(simData(state.time))}drawDecay();drawLogi();
+ // resalta panel activo: Verhulst=abajo-der, ARIMA=abajo-izq
+ const decPane=document.querySelector('.decay-pane'),logPane=document.querySelector('.logistic-pane');
+ decPane.classList.toggle('pane-dim',state.step==='verhulst');logPane.classList.toggle('pane-dim',state.step==='arima'||state.step==='rupture');
+ decPane.classList.toggle('pane-hot',state.step!=='verhulst');logPane.classList.toggle('pane-hot',state.step!=='arima');}
+const LEGENDS={
+ verhulst:'<span class="leg-item"><i class="leg-dash" style="--c:#ffc05c"></i> Verhulst S (ámbar)</span><span class="leg-item"><i class="leg-dash dashed" style="--c:#ff5277"></i> Ingenua infinito (roja - - -)</span>',
+ arima:'<span class="leg-item"><i class="leg-dash" style="--c:#38efff"></i> Pasado real (azul)</span><span class="leg-item"><i class="leg-dash dashed" style="--c:#6ef0b4"></i> ARIMA imagina (verde - - -)</span>',
+ bridge:'<span class="leg-item"><i class="leg-dash" style="--c:#38efff"></i> Camino semanal (ARIMA)</span><span class="leg-item"><i class="leg-dash" style="--c:#ffc05c"></i> Destino con techo (Verhulst)</span><span class="leg-item">Misma parsimonia</span>',
+ rupture:'<span class="leg-item"><i class="leg-dash" style="--c:#6ef0b4"></i> Modelo imagina (verde - - -)</span><span class="leg-item"><i class="leg-dash" style="--c:#ff5277"></i> Brote real (rojo)</span>'};
+function update(){ $('statPhi').textContent=state.step==='verhulst'?state.L:Math.round(state.phi*100)+'%';
+ $('statLeftWrap').childNodes[0].textContent=state.step==='verhulst'?'Techo L: ':'Memoria: ';
+ $('statMid').textContent=state.step==='verhulst'?state.k.toFixed(2):'3 números';
+ $('statMidWrap').childNodes[0].textContent=state.step==='verhulst'?'Velocidad k: ':'Receta: ';
+ $('outPhi').textContent=Math.round(state.phi*100)+'%';
+ $('outL').textContent=state.L;$('outK').textContent=state.k.toFixed(2);$('outShock').textContent='+'+state.shockMag;
+ $('logiFormula').textContent=`techo L = ${state.L} · velocidad k = ${state.k.toFixed(2)} · pico kL/4 = ${(state.k*state.L/4).toFixed(1)}/sem`;
+ const on=state.hasShock;$('shockIndicator').style.display=on?'inline-flex':'none';$('statError').style.display=on?'inline':'none';
+ if(on){$('statErrVal').textContent='+'+state.shockMag+' camas'}
+ $('legendItems').innerHTML=LEGENDS[state.step]||LEGENDS.arima;
+ $('legendHint').textContent=state.step==='verhulst'?'MUEVE L · k Y MIRA CÓMO SE APLASTA LA S':state.step==='arima'?'MUEVE MEMORIA Y MIRA CÓMO EL ECO SE APAGA':state.step==='bridge'?'MISMA DIETA · DISTINTO TRUCO · LEE EL CUADRO':'PULSA “LLEGA EL BROTE” Y MIRA LA RECTA CIEGA';
+ $('compareBox').classList.toggle('show',state.step==='bridge');
+ const bl=$('badgeLeft'),br=$('badgeReal');
+ if(state.step==='verhulst'){bl.className='split-badge lab';bl.textContent='🪴 acumulado real (S)';br.className='split-badge real';br.textContent='ingenua “infinito” ✕'}
+ else if(state.step==='rupture'){bl.className='split-badge lab';bl.textContent='🟦 vida normal';br.className='split-badge real';br.textContent='🦟 brote real — modelo recto'}
+ else if(state.step==='bridge'){bl.className='split-badge lab';bl.textContent='🔉 camino semanal';br.className='split-badge real off';br.textContent='🪴 destino con techo L'}
+ else{bl.className='split-badge lab';bl.textContent='🟦 pasado real';br.className='split-badge real off';br.textContent='🟩 ARIMA imagina'}
+ document.querySelectorAll('#timeline .tl-node').forEach(n=>n.classList.toggle('on',n.dataset.tl===state.step));
+ const c=cues[state.step];$('cueChip').textContent=c.chip;$('cueTitle').textContent=c.title;$('cueBody').textContent=c.body;$('cueSay').textContent=c.say;$('simHeadline').textContent=c.pill;
+ document.querySelectorAll('.step-btn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.step===state.step)));
+ document.querySelectorAll('.pillar-card').forEach(cd=>cd.classList.toggle('active',cd.dataset.pillar===state.step));}
+function setStep(s){state.step=s;
+ if(s==='verhulst'){state.hasShock=false}
+ if(s==='arima'){state.hasShock=false}
+ if(s==='bridge'){state.hasShock=false}
+ if(s==='rupture'){state.hasShock=true;state.crack=0}
+ update();render()}
+function shock(){state.hasShock=true;state.crack=0;state.step='rupture';update();render()}
+document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{stopStory();setStep(b.dataset.step)}));
+document.querySelectorAll('.pillar-card').forEach(c=>{c.addEventListener('click',()=>{stopStory();setStep(c.dataset.pillar)});c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();stopStory();setStep(c.dataset.pillar)}})});
+document.addEventListener('keydown',e=>{if(e.key==='1'){stopStory();setStep('verhulst')}if(e.key==='2'){stopStory();setStep('arima')}if(e.key==='3'){stopStory();setStep('bridge')}if(e.key==='4'){shock()}if(e.key===' '&&e.target===document.body){e.preventDefault();togglePlay()}});
+document.querySelectorAll('#timeline .tl-node').forEach(n=>n.addEventListener('click',()=>{stopStory();n.dataset.tl==='rupture'?shock():setStep(n.dataset.tl)}));
+$('triggerShockBtn').addEventListener('click',shock);
+$('sliderPhi').addEventListener('input',e=>{state.phi=+e.target.value/100;update();render()});
+$('sliderL').addEventListener('input',e=>{state.L=+e.target.value;update();render()});
+$('sliderK').addEventListener('input',e=>{state.k=+e.target.value/100;update();render()});
+$('sliderShock').addEventListener('input',e=>{state.shockMag=+e.target.value;update();render()});
+function togglePlay(){state.playing=!state.playing;$('playIcon').textContent=state.playing?'Ⅱ':'▶';$('playText').textContent=state.playing?'Pausar':'Reanudar'}
+$('playBtn').addEventListener('click',togglePlay);
+$('resetBtn').addEventListener('click',()=>{stopStory();Object.assign(state,{step:'verhulst',phi:.82,L:100,k:.55,shockMag:38,hasShock:false,playing:true,time:0,crack:0});
+ $('sliderPhi').value=82;$('sliderL').value=100;$('sliderK').value=55;$('sliderShock').value=38;$('playIcon').textContent='Ⅱ';$('playText').textContent='Pausar';$('storyBtn').textContent='▶ Contar historia';update();render()});
+$('fullscreenBtn').addEventListener('click',()=>{document.fullscreenElement?document.exitFullscreen?.().catch(()=>{}):document.documentElement.requestFullscreen?.().catch(()=>{})});
+function stopStory(){state.storyOn=false;clearInterval(state.storyTimer);$('storyBtn').textContent='▶ Contar historia'}
+$('storyBtn').addEventListener('click',()=>{if(state.storyOn){stopStory();return}
+ state.storyOn=true;$('storyBtn').textContent='⏸ Contando… (clic para parar)';
+ const order=['verhulst','arima','bridge','rupture'];let i=0;setStep(order[0]);
+ state.storyTimer=setInterval(()=>{i++;if(i>=order.length){stopStory();return}setStep(order[i])},4600)});
+let last=0;function loop(t){const dt=last?Math.min(50,t-last):16;last=t;
+ if(state.playing){state.time+=dt*.0016;if(state.hasShock&&state.crack<1)state.crack=Math.min(1,state.crack+dt*.0032)}
+ render();requestAnimationFrame(loop)}
+if('ResizeObserver' in window){const ro=new ResizeObserver(resize);ro.observe(main.parentElement);ro.observe(dec.parentElement);ro.observe(lg.parentElement)}
+addEventListener('resize',resize,{passive:true});
+update();resize();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1916 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>ERA 1 v3: Modelos Analíticos y Suavizado · 1838 ─▶ 1970 ─▶ Puente ─▶ Era 2</title>
+<style>
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --phi: #38efff;
+  --ockham: #ffc05c;
+  --rupture: #ff5277;
+  --lab: #6ef0b4;
+  --purple: #b48eff;
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(14, 116, 144, 0.18), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(225, 29, 72, 0.12), transparent 38%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(6, 68, 98, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(7, 13, 29, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(82, 128, 170, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--phi); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  border-radius: 12px;
+  color: var(--phi);
+  background: rgba(56, 239, 255, 0.08);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--phi);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--ockham); }
+h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(110, 240, 180, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.09), rgba(6, 12, 26, 0.9));
+  max-width: 470px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--lab);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+/* UNIFIED TIMELINE FLOW BAR (1838 -> 1970 -> puente -> Era 2) */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--phi));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--phi)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--phi)) 18%, transparent);
+}
+
+.proc-node[data-step="verhulst"] { --node-color: var(--ockham); }
+.proc-node[data-step="arima"]    { --node-color: var(--phi); }
+.proc-node[data-step="bridge"]   { --node-color: var(--lab); }
+.proc-node[data-step="era2"]     { --node-color: var(--rupture); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--phi));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--phi)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--phi));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(56, 239, 255, 0.45);
+  background: rgba(8, 145, 178, 0.22);
+  color: #a5f3fc;
+}
+
+/* WORKSPACE: 2 CLEAN COLUMNS */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.38fr) minmax(0, 0.62fr);
+  gap: clamp(8px, 1.1vw, 16px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN: NARRATIVE FOCUS CARD */
+.narrative-card {
+   --stage-accent: var(--ockham);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(6px, 0.9vh, 10px);
+  padding: clamp(10px, 1.2vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 239, 255, 0.3) rgba(5, 10, 24, 0.4);
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 5px;
+}
+.narrative-card::-webkit-scrollbar-track {
+  background: rgba(5, 10, 24, 0.4);
+  border-radius: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(56, 239, 255, 0.28);
+  border-radius: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 239, 255, 0.5);
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 25, 0.72);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 32%, transparent);
+  background: rgba(3, 7, 18, 0.85);
+  font: 600 clamp(11px, 0.92vw, 13px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11.5px, 0.92vw, 13px)/1.4 var(--sans);
+  color: #e2eeff;
+}
+
+/* RIGHT COLUMN: SINGLE HERO INTERACTIVE STAGE */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 17, 36, 0.94), rgba(4, 10, 24, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(56, 239, 255, 0.1);
+  border: 1px solid rgba(56, 239, 255, 0.3);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.8);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.16);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 25%, rgba(12, 45, 78, 0.22), rgba(2, 6, 17, 0.9) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* OVERLAY CARDS FOR STEP 3 (PUENTE) & STEP 4 (PASE A ERA 2) */
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(255, 192, 92, 0.35);
+  background: rgba(15, 23, 42, 0.82);
+  color: #ffe1a8;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  background: rgba(15, 23, 42, 0.82);
+  color: #a5f3fc;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #38efff);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+/* CONTEXTUAL CONTROLS */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.72);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 38px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(70px, 6.5vw, 105px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 82, 119, 0.45);
+  background: linear-gradient(120deg, rgba(225, 29, 72, 0.25), rgba(136, 19, 55, 0.35));
+  color: #fecdd3;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(225, 29, 72, 0.45);
+  color: #fff;
+}
+
+/* FOOTER */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #cbd5e1; }
+
+/* MEDIA QUERIES FOR COMPREHENSIVE RESPONSIVENESS */
+@media (max-width: 1200px) and (min-width: 881px) {
+  .workspace { grid-template-columns: minmax(260px, 0.38fr) minmax(0, 0.62fr); gap: 10px; }
+  .via-card { max-width: 380px; padding: 6px 10px; }
+  .via-pill { font-size: 9.5px; padding: 2px 5px; }
+  .ctrl-group { gap: 10px; }
+  input[type="range"] { width: 65px; }
+}
+
+@media (max-width: 880px) {
+  body { display: block; overflow-y: auto; }
+  body.is-embedded {
+    overflow-y: auto !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: block !important;
+  }
+  body.is-embedded #slideFrame {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    padding: 12px 14px !important;
+  }
+  #slideFrame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 100svh;
+    overflow: visible;
+    grid-template-rows: auto auto auto auto;
+    gap: 12px;
+  }
+  .topbar { grid-template-columns: 1fr; gap: 10px; }
+  .via-card { max-width: 100%; }
+  .flowbar { grid-template-columns: 1fr; gap: 8px; }
+  .process-track {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 3px;
+  }
+  .proc-node { padding: 6px 6px; gap: 5px; }
+  .proc-arrow { display: none; }
+  .proc-sub { display: none; }
+  .proc-year { font-size: 10px; }
+  .workspace { grid-template-columns: 1fr; overflow: visible; gap: 12px; }
+  .narrative-card { max-height: none; overflow: visible; }
+  .stage-card { min-height: 480px; overflow: visible; }
+  .canvas-wrap { min-height: 320px; height: 320px; }
+  .controls-bar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .ctrl-actions { justify-content: flex-end; }
+  .footnote { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
+@media (max-width: 520px) {
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  h1 { font-size: 18px; }
+  .process-track { grid-template-columns: repeat(2, 1fr); }
+  .proc-node { padding: 6px 8px; }
+  .proc-sub { display: block; font-size: 8.5px; }
+}
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 8px 16px 6px; }
+  body.is-embedded #slideFrame { padding: 6px 14px 4px !important; gap: 6px !important; }
+  .topbar { padding-bottom: 6px; }
+  .brand-mark { width: 34px; height: 34px; flex: 0 0 34px; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .eyebrow { font-size: 9.5px; margin-bottom: 2px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 4px 10px; gap: 2px; }
+  .via-title { font-size: 8.5px; }
+  .via-pills { font-size: 9px; gap: 4px; }
+  .via-pill { padding: 1px 5px; }
+  .process-track { padding: 3px; gap: 4px; }
+  .proc-node { padding: 5px 8px; gap: 6px; border-radius: 7px; }
+  .proc-num { width: 20px; height: 20px; font-size: 9.5px; }
+  .proc-year { font-size: 11px; }
+  .proc-sub { font-size: 8.5px; }
+  .tool-btn { padding: 5px 9px; font-size: 9.5px; }
+  .narrative-card { padding: 8px 12px; gap: 6px; border-radius: 11px; }
+  .stage-tag { padding: 2px 7px; font-size: 9px; }
+  .stage-year-pill { font-size: 9px; }
+  .narr-title { font-size: clamp(14px, 1.2vw, 17px); line-height: 1.15; }
+  .narr-lead { font-size: clamp(11px, 0.9vw, 12.5px); line-height: 1.35; }
+  .narr-blocks { gap: 5px; }
+  .info-block { padding: 6px 9px; border-radius: 8px; }
+  .info-block-label { font-size: 8.5px; margin-bottom: 2px; }
+  .info-block-text { font-size: clamp(10.5px, 0.82vw, 12px); line-height: 1.32; }
+  .math-strip { padding: 5px 9px; font-size: 11px; }
+  .math-strip span.hint { font-size: 8.5px; }
+  .speaker-box { padding: 6px 9px; border-radius: 0 8px 8px 0; }
+  .speaker-head { font-size: 8px; margin-bottom: 2px; }
+  .speaker-quote { font-size: clamp(10px, 0.8vw, 11.5px); line-height: 1.3; }
+  .stage-card { padding: 8px 11px; gap: 5px; border-radius: 11px; }
+  .stage-header { gap: 8px; }
+  .stage-icon { width: 24px; height: 24px; font-size: 12px; }
+  .stage-title { font-size: clamp(12.5px, 1vw, 15px); }
+  .kpi-chip { padding: 2px 7px; font-size: 9px; }
+  .legend-bar { font-size: 9px; }
+  .controls-bar { padding: 5px 9px; gap: 8px; border-radius: 8px; }
+  .ctrl-item { font-size: 9.5px; gap: 5px; }
+  .next-era-btn { padding: 5px 9px; font-size: 9.5px; }
+  .footnote { font-size: 8.5px; padding-top: 2px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .narr-lead { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  h1 { font-size: 15px; }
+  .topbar { padding-bottom: 4px; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Era 1 v3: De Verhulst (1838) a ARIMA (1970), el Puente Analítico y el Pase a la Era 2">
+
+  <!-- TOPBAR: Conexión con Descomposición + Especificación Vía 1 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 17c3 0 4-10 9-10s6 10 9 10"/>
+          <path d="M3 12h18" stroke-opacity="0.35" stroke-dasharray="2 2"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">Continuación de Descomposición (Yₜ = Tₜ + Sₜ + Rₜ) · Saga Evolutiva (Era 1 de 4)</p>
+        <h1>VÍA 1: <span class="era">Modelos Analíticos y Suavizado</span> <span class="sub">· Verhulst, Holt-Winters y ARIMA</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Condiciones operativas de la Vía 1">
+      <div class="via-title">
+        <span>⚡ FICHA OPERATIVA VÍA 1</span>
+        <span>PARSIMONIA LINEAL</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">📊 <strong>N &lt; 500</strong> puntos</span>
+        <span class="via-pill">🌊 <strong>Estacionalidad clara</strong></span>
+        <span class="via-pill">⏱️ <strong>CPU &lt; 2 µs</strong> ($0 GPU)</span>
+        <span class="via-pill">🏥 <strong>INS/MINSA</strong> · Micro-retail</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO CRONOLÓGICO EN BUCLE: 1838 ─▶ 1970 ─▶ puente ─▶ Era 2 -->
+  <nav class="flowbar" aria-label="Proceso evolutivo 1838 a Era 2">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="verhulst" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">1838 · Verhulst</span>
+          <span class="proc-sub">¿Por qué nació? El techo L</span>
+        </div>
+        <div class="proc-progress" id="prog-verhulst"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="arima" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">1970 · ARIMA / HW</span>
+          <span class="proc-sub">¿Por qué seguimos? El eco</span>
+        </div>
+        <div class="proc-progress" id="prog-arima"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="bridge" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">El Puente Analítico</span>
+          <span class="proc-sub">¿Qué los une? Ockham y CPU</span>
+        </div>
+        <div class="proc-progress" id="prog-bridge"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="era2" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">Quiebre ─▶ Era 2</span>
+          <span class="proc-sub">Pase a Lags + GBDT</span>
+        </div>
+        <div class="proc-progress" id="prog-era2"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE PRINCIPAL: NARRATIVA CLARA (IZQ) + LIENZO DINÁMICO UNIFICADO (DER) -->
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: EXPLICACIÓN PASO A PASO SIN SATURACIÓN -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · EL ORIGEN (1838)</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1838: ¿De dónde comenzó todo? El límite biológico de Verhulst</h2>
+        <p class="narr-lead" id="narrLead">
+          Tras descomponer una serie en tendencia y ciclo, el primer reto histórico fue entender que <b>ningún fenómeno físico o biológico crece hasta el infinito</b>: el entorno impone una frontera.
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">🌱 ¿POR QUÉ NACIÓ EN 1838?</div>
+          <p class="info-block-text" id="block1Text">
+            Las proyecciones polinomiales ingenuas asumían que una población o epidemia se multiplicaba sin fin. <b>Verhulst</b> introdujo la resistencia del medio: una curva en <b>S (sigmoidea)</b> que acelera hasta el punto de inflexión (<b>t₀</b>) y se frena al chocar con la capacidad máxima (<b>L</b>).
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">🏥 IMPACTO EN PRODUCCIÓN (INS/MINSA LORETO)</div>
+          <p class="info-block-text" id="block2Text">
+            Durante el brote de <b>Dengue en Loreto</b>, los modelos no acotados predecían infinitos infectados. La curva de Verhulst proyectó con exactitud el <b>techo biológico de camas hospitalarias (L)</b> y el pico de velocidad máxima (<b>kL/4</b>), evitando sobredimensionar recursos.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">yₜ = L / [ 1 + e⁻ᵏ⁽ᵗ⁻ᵗ⁰⁾ ]</span>
+          <span class="hint" id="mathHint">Pico máx. en t₀: dy/dt = kL / 4</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Todo comenzó en 1838 con una pregunta física: ¿puede una epidemia o población crecer para siempre? Verhulst demostró que no; todo sistema tiene un techo L, como las camas de hospital en el brote de dengue de Loreto.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: UN SOLO ESCENARIO VISUAL GRANDE Y LEGIBLE -->
+    <section class="stage-card" aria-label="Visualización interactiva">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">🪴</span>
+          <h3 class="stage-title" id="canvasTitle">Curva Logística Acotada (Verhulst) vs. Proyección Infinidad</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Techo L: <strong>100 camas</strong></span>
+          <span class="kpi-chip" id="kpi2">Tasa k: <strong>0.55</strong></span>
+          <span class="kpi-chip" id="kpi3">Pico kL/4: <strong>13.8 /sem</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">🪴 Dinámica Biológica Acotada (S)</span>
+          <span class="ov-badge right" id="ovRight">⚡ Inferencia cerrada: &lt; 2 µs en CPU</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Curva de Verhulst (Techo L)</span>
+          <span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Polinomio no acotado (“Infinito”)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Punto de inflexión t₀ (Velocidad máx.)</span>
+        </div>
+        <span id="legendTip">INTERACTÚA CON LOS CONTROLES INFERIORES</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlLWrap">
+            <label for="sliderL">🪴 Techo (L):</label>
+            <input id="sliderL" type="range" min="50" max="140" step="5" value="100" style="accent-color:var(--ockham)">
+            <output id="outL">100</output>
+          </div>
+          <div class="ctrl-item" id="ctrlKWrap">
+            <label for="sliderK">🌱 Tasa (k):</label>
+            <input id="sliderK" type="range" min="25" max="90" step="5" value="55" style="accent-color:var(--ockham)">
+            <output id="outK">0.55</output>
+          </div>
+          <div class="ctrl-item" id="ctrlPhiWrap" hidden>
+            <label for="sliderPhi">🔉 Memoria (φ):</label>
+            <input id="sliderPhi" type="range" min="20" max="92" step="4" value="80" style="accent-color:var(--phi)">
+            <output id="outPhi">0.80</output>
+          </div>
+          <div class="ctrl-item" id="ctrlShockWrap" hidden>
+            <label for="sliderShock">🦟 Shock Exógeno:</label>
+            <input id="sliderShock" type="range" min="15" max="65" step="5" value="42" style="accent-color:var(--rupture)">
+            <output id="outShock">+42</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente etapa ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Ruta Evolutiva Era 1:</strong> 1838 Verhulst (Techo físico L) ─▶ 1970 Box-Jenkins / Holt-Winters (Eco secuencial α,β,γ) ─▶ Puente (Parsimonia N&lt;500 en CPU) ─▶ Quiebre ante no-linealidad ─▶ <strong>Era 2 (Lags + GBDT)</strong>.</span>
+    <span>Referencias: Verhulst (1838) · Box &amp; Jenkins (1970) · INS/MINSA Loreto</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['verhulst', 'arima', 'bridge', 'era2'];
+  const LOOP_DURATION_MS = 9500; // 9.5 segundos por etapa en bucle automático
+
+  const state = {
+    step: 'verhulst',
+    L: 100,
+    k: 0.55,
+    phi: 0.80,
+    shockMag: 42,
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    verhulst: {
+      accent: 'var(--ockham)',
+      tag: 'ETAPA 1 DE 4 · 1838 (EL ORIGEN)',
+      title: '1838: ¿De dónde comenzó todo? El límite biológico de Verhulst',
+      lead: 'Tras descomponer una serie temporal, el primer paso histórico fue notar que <b>ningún proceso físico o biológico crece hacia el infinito</b>: el entorno impone una frontera.',
+      b1Label: '🌱 ¿POR QUÉ NACIÓ EN 1838?',
+      b1Text: 'Los polinomios ingenuos proyectaban un crecimiento eterno. <b>Pierre François Verhulst</b> formuló la curva logística en <b>S</b>: crece rápido al inicio, alcanza su velocidad pico en <b>t₀</b> y se frena al saturar la capacidad máxima <b>L</b>.',
+      b2Label: '🏥 CASO REAL: EPIDEMIOLOGÍA DE BROTES (INS/MINSA)',
+      b2Text: 'En el brote de <b>Dengue en Loreto</b>, los modelos no acotados predecían infinitos pacientes. Verhulst proyectó con precisión el <b>techo biológico hospitalario (L)</b>, evitando una asignación errónea de camas.',
+      formula: 'yₜ = L / [ 1 + e⁻ᵏ⁽ᵗ⁻ᵗ⁰⁾ ]',
+      hint: 'Velocidad pico en t₀: dy/dt = kL / 4',
+      quote: '“Todo comenzó en 1838 con una ley natural: nada rompe su maceta. Mientras un polinomio predecía infinitos casos en Loreto, Verhulst puso el techo biológico L.”',
+      icon: '🪴',
+      canvasTitle: '1838 · Curva Logística Acotada (S) vs. Explosión Polinomial Ingenua',
+      ovLeft: '🪴 Crecimiento Biológico Acotado (Verhulst)',
+      ovRight: '🏥 Caso INS/MINSA: Límite de capacidad L',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Logística de Verhulst (Techo L)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Polinomio no acotado (“Infinito”)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Inflexión t₀ (Pico kL/4)</span>',
+      nextLabel: 'Ir a 1970 (ARIMA) ─▶'
+    },
+    arima: {
+      accent: 'var(--phi)',
+      tag: 'ETAPA 2 DE 4 · 1970 (LA EVOLUCIÓN SECUENCIAL)',
+      title: '1970: ¿Por qué seguimos a ARIMA y Holt-Winters?',
+      lead: 'Verhulst dibujaba un único destino final en forma de S, pero la industria necesitaba <b>pronosticar el camino semana a semana</b> con ciclos repetitivos y ruido estocástico.',
+      b1Label: '🔉 ¿POR QUÉ EVOLUCIONÓ DESDE VERHULST?',
+      b1Text: 'El inventario de micro-retail o la demanda diaria no se detienen en una meseta única; oscilan continuamente. <b>Box & Jenkins (1970)</b> y <b>Holt-Winters</b> transformaron la predicción en una <b>receta secuencial de memoria decreciente</b>.',
+      b2Label: '⚙️ LA MECÁNICA DEL ECO (p, d, q & α, β, γ)',
+      b2Text: 'El futuro se calcula como un <b>eco geométrico del pasado</b>: ayer pesa <b>φ</b>, anteayer <b>φ²</b>, hace k días <b>φᵏ</b>, sumado a la actualización explícita de <b>nivel (α), tendencia (β) y estacionalidad (γ)</b>.',
+      formula: '(1 − ΣφᵢBⁱ)(1 − B)ᵈ Yₜ = c + (1 + ΣθⱼBʲ)εₜ',
+      hint: 'Holt-Winters: α (nivel) · β (tendencia) · γ (estación)',
+      quote: '“¿Por qué saltamos de 1838 a 1970? Porque Verhulst solo veía el destino final; con Holt-Winters y ARIMA aprendimos a escuchar el eco de cada semana para re-pronosticar en vivo.”',
+      icon: '🔉',
+      canvasTitle: '1970 · Memoria Geométrica (φᵏ) y Suavizado Estacional Paso a Paso',
+      ovLeft: '🔉 Pasado Reciente: Eco Exponencial (φᵏ)',
+      ovRight: '🟩 Proyección Estacionaria (Nivel + Estación)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Serie Histórica (Tₜ + Sₜ + εₜ)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#6ef0b4"></i> Pronóstico ARIMA / Holt-Winters</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Decaimiento de pesos φᵏ</span>',
+      nextLabel: 'Ir al Puente Analítico ─▶'
+    },
+    bridge: {
+      accent: 'var(--lab)',
+      tag: 'ETAPA 3 DE 4 · EL PUENTE DE LA ERA 1',
+      title: 'El Puente Analítico: La Navaja de Ockham en Producción',
+      lead: 'Tanto 1838 (Verhulst) como 1970 (ARIMA/HW) comparten un mismo superpoder industrial: <b>máxima parsimonia matemática</b> y transparencia total.',
+      b1Label: '⚖️ ¿QUÉ UNE A VERHULST Y ARIMA? (LA VÍA 1)',
+      b1Text: 'Ambos resuelven el problema con <b>3 a 5 parámetros con significado físico directo</b>. No requieren GPUs ni miles de datos: operan con <b>N &lt; 500 observaciones</b> y ejecutan inferencias en <b>CPU en microsegundos (&lt; 2 µs)</b>.',
+      b2Label: '🏪 ¿DÓNDE REINA HOY ESTA VÍA 1?',
+      b2Text: 'Es imbatible cuando la física o la estacionalidad dominan: <b>epidemiología de brotes acotados (INS/MINSA)</b>, control de stock en <b>micro-retail</b> y sensores <b>edge</b> de ultra-baja latencia.',
+      formula: '3 a 5 Parámetros Interpretables ──▶ Inferencia CPU < 2 µs',
+      hint: 'Condición: N < 500 · Estacionalidad clara · $0 GPU',
+      quote: '“Este puente resume la Era 1: desde el techo L de 1838 hasta el eco ARIMA de 1970, tres números bastan para predecir en microsegundos sobre cualquier CPU.”',
+      icon: '⚖️',
+      canvasTitle: 'Síntesis de la Vía 1: Del Destino Acotado (1838) al Camino Estocástico (1970)',
+      ovLeft: '✅ Fortaleza: Interpretabilidad + CPU (µs)',
+      ovRight: '📌 Regla de uso: N < 500 y serie estable',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> 1838: Techo Físico (L, k, t₀)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> 1970: Eco Estacional (p,d,q / α,β,γ)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Zona Óptima Vía 1 (N &lt; 500)</span>',
+      nextLabel: 'Ver Quiebre y Pase a Era 2 ─▶'
+    },
+    era2: {
+      accent: 'var(--rupture)',
+      tag: 'ETAPA 4 DE 4 · EL QUIEBRE Y PASE A ERA 2',
+      title: '¿Por qué se quiebra la Era 1? El pase al Puente Tabular (Era 2)',
+      lead: 'La elegancia analítica se rompe cuando el mundo real deja de ser lineal e irrumpen <b>variables exógenas cruzadas</b> (clima extremo, precios, promociones).',
+      b1Label: '💥 EL MOMENTO DE QUIEBRE EN PRODUCCIÓN',
+      b1Text: 'En Loreto, ante <b>variaciones climáticas multivariadas impredecibles</b>, o en retail con miles de SKUs interconectados, la ecuación rígida es ciega: sigue proyectando su eco lineal hacia el vacío sin poder reajustar sus supuestos.',
+      b2Label: '🚀 EL SALTO A LA SIGUIENTE DIAPOSITIVA (ERA 2: PUENTE TABULAR)',
+      b2Text: 'Para ingerir lluvias, precios y miles de series sin ecuaciones rígidas, <b>convertimos la secuencia temporal en una Matriz Supervisada (“El Truco de los Lags”)</b> alimentando árboles <b>GBDT (LightGBM / XGBoost)</b>.',
+      formula: 'Serie Yₜ ──▶ Matriz [ Yₜ₋₁, Yₜ₋₂, Climaₜ, Promoₜ ] ──▶ LightGBM',
+      hint: 'Siguiente Diapo · Era 2: El Puente Tabular (Walmart M5)',
+      quote: '“Cuando el clima cambia en Loreto o cruzamos miles de productos con promociones, la fórmula lineal queda ciega. ¿La solución? Romper la ecuación y transformar el tiempo en una tabla de Lags: bienvenidos a la Era 2.”',
+      icon: '🚀',
+      canvasTitle: 'Quiebre por No-Linealidad y Transformación hacia la Era 2 (Matriz de Lags + GBDT)',
+      ovLeft: '💥 Fallo Era 1: Extrapolación lineal ciega ante shocks',
+      ovRight: '⏭️ Pase a Era 2: Matriz Supervisada (Lags + LightGBM)',
+      legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#6ef0b4"></i> Proyección ciega Era 1</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Realidad con Shock Multivariado</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Salto a Era 2 (Lags + GBDT)</span>',
+      nextLabel: 'Reiniciar bucle (1838) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    // Contextual KPIs & Sliders
+    const showVerhulst = state.step === 'verhulst' || state.step === 'bridge';
+    const showArima = state.step === 'arima' || state.step === 'bridge';
+    const showShock = state.step === 'era2';
+
+    $('ctrlLWrap').hidden = !showVerhulst;
+    $('ctrlKWrap').hidden = (state.step !== 'verhulst');
+    $('ctrlPhiWrap').hidden = !showArima;
+    $('ctrlShockWrap').hidden = !showShock;
+
+    $('outL').textContent = state.L;
+    $('outK').textContent = state.k.toFixed(2);
+    $('outPhi').textContent = state.phi.toFixed(2);
+    $('outShock').textContent = '+' + state.shockMag;
+
+    if (state.step === 'verhulst') {
+      const peak = (state.k * state.L / 4).toFixed(1);
+      $('kpi1').innerHTML = `Techo L: <strong>${state.L} camas</strong>`;
+      $('kpi2').innerHTML = `Tasa k: <strong>${state.k.toFixed(2)}</strong>`;
+      $('kpi3').innerHTML = `Pico kL/4: <strong>${peak} /sem</strong>`;
+    } else if (state.step === 'arima') {
+      const w3 = Math.round(Math.pow(state.phi, 3) * 100);
+      $('kpi1').innerHTML = `Peso t-1 (φ): <strong>${Math.round(state.phi * 100)}%</strong>`;
+      $('kpi2').innerHTML = `Peso t-3 (φ³): <strong>${w3}%</strong>`;
+      $('kpi3').innerHTML = `Inferencia: <strong>&lt; 2 µs CPU</strong>`;
+    } else if (state.step === 'bridge') {
+      $('kpi1').innerHTML = `Muestra: <strong>N &lt; 500</strong>`;
+      $('kpi2').innerHTML = `Parámetros: <strong>3 a 5</strong>`;
+      $('kpi3').innerHTML = `Cómputo: <strong>CPU (µs) · $0 GPU</strong>`;
+    } else {
+      $('kpi1').innerHTML = `Shock Exógeno: <strong style="color:var(--rupture)">+${state.shockMag} u.</strong>`;
+      $('kpi2').innerHTML = `Error Lineal: <strong style="color:var(--rupture)">Ruptura</strong>`;
+      $('kpi3').innerHTML = `Solución: <strong style="color:var(--lab)">Era 2 (Lags+GBDT)</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) {
+      // Mantiene el bucle activo pero reinicia el contador de los 9.5s para dar tiempo a leer
+      state.stepElapsed = 0;
+    }
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawGrid(w, h) {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(110, 140, 180, 0.08)';
+    ctx.lineWidth = 1;
+    const cols = 14, rows = 7;
+    for (let i = 1; i < cols; i++) {
+      const x = (w / cols) * i;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let j = 1; j < rows; j++) {
+      const y = (h / rows) * j;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ACTO 1: 1838 VERHULST
+  function drawVerhulstStage(w, h) {
+    const padL = 44, padR = 28, padT = 46, padB = 34;
+    const pw = w - padL - padR;
+    const ph = h - padT - padB;
+    const maxVal = 155;
+
+    const X = u => padL + u * pw;
+    const Y = v => padT + ph - (v / maxVal) * ph;
+
+    // Ejes base
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+    ctx.beginPath();
+    ctx.moveTo(padL, padT);
+    ctx.lineTo(padL, padT + ph);
+    ctx.lineTo(padL + pw, padT + ph);
+    ctx.stroke();
+    ctx.restore();
+
+    // Banda de capacidad hospitalaria L
+    const yL = Y(state.L);
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.06)';
+    ctx.fillRect(padL, yL, pw, padT + ph - yL);
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.8)';
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(padL, yL);
+    ctx.lineTo(padL + pw, yL);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText(`Capacidad Máxima L = ${state.L} camas (Frontera biológica INS/MINSA)`, padL + pw - 8, yL - 7);
+
+    // Curva polinomial/exponencial ingenua (No acotada)
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.75)';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const u = i / 120;
+      const t = (u - 0.5) * 10;
+      const yExp = (state.L / 2) * Math.exp(0.38 * t);
+      if (yExp > maxVal * 1.03) break;
+      const xx = X(u), yy = Y(yExp);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#ff9cb0';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('✕ Modelo no acotado: proyecta “infinitos” casos', X(0.54), padT + 22);
+
+    // Curva S de Verhulst
+    ctx.save();
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 3.2;
+    ctx.shadowColor = 'rgba(255, 192, 92, 0.45)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    for (let i = 0; i <= 140; i++) {
+      const u = i / 140;
+      const t = (u - 0.5) * 10;
+      const yLog = state.L / (1 + Math.exp(-state.k * 1.65 * t));
+      const xx = X(u), yy = Y(yLog);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Punto de inflexión t0 en u = 0.5, y = L/2
+    const x0 = X(0.5), y0 = Y(state.L / 2);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.45)';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(x0, yL);
+    ctx.lineTo(x0, padT + ph);
+    ctx.stroke();
+    ctx.restore();
+
+    // Pulso animado en t0
+    const pulse = 6 + 2.5 * Math.sin(state.simTime * 3.2);
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.22)';
+    ctx.beginPath(); ctx.arc(x0, y0, pulse, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#6ef0b4';
+    ctx.beginPath(); ctx.arc(x0, y0, 4.5, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#a7f3d0';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Inflexión t₀ (L/2 = ${(state.L / 2).toFixed(0)})`, x0 + 10, y0 - 6);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.fillText(`Velocidad pico kL/4 = ${(state.k * state.L / 4).toFixed(1)}/sem`, x0 + 10, y0 + 9);
+
+    // Fases inferiores
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('1. Fase exponencial incipiente ▲', padL + 10, padT + ph - 10);
+    ctx.textAlign = 'right';
+    ctx.fillText('3. Saturación por resistencia ambiental (L) ▼', padL + pw - 10, padT + ph - 10);
+  }
+
+  // ACTO 2: 1970 ARIMA / HOLT-WINTERS + INSET DE MEMORIA GEOMÉTRICA
+  function drawArimaStage(w, h) {
+    const padL = 36, padR = 24, padT = 46, padB = 30;
+    const pw = w - padL - padR;
+    const ph = h - padT - padB;
+    const N = 130;
+    const split = 82;
+
+    const X = i => padL + (i / (N - 1)) * pw;
+    const Y = v => padT + ph - ((v - 15) / 80) * ph;
+
+    // Fondo de zona de pronóstico
+    const sx = X(split);
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.04)';
+    ctx.fillRect(sx, padT, padL + pw - sx, ph);
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.45)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(sx, padT); ctx.lineTo(sx, padT + ph); ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('PRONÓSTICO SECUENCIAL (Eco amortiguado hacia la media)', sx + 8, padT + 14);
+
+    // Media histórica
+    const baseMean = 54;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+    ctx.setLineDash([2, 4]);
+    ctx.beginPath(); ctx.moveTo(padL, Y(baseMean)); ctx.lineTo(padL + pw, Y(baseMean)); ctx.stroke();
+    ctx.restore();
+
+    // Serie histórica (T + S + R)
+    const series = [];
+    for (let i = 0; i < N; i++) {
+      const t = i * 0.16 + state.simTime * 0.7;
+      const wave = 15 * Math.sin(t) + 5 * Math.cos(t * 2.3);
+      const noise = Math.sin(i * 19.7 + state.simTime) * 2.8;
+      series.push(baseMean + wave + noise);
+    }
+
+    ctx.save();
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(56, 239, 255, 0.35)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    for (let i = 0; i <= split; i++) {
+      const xx = X(i), yy = Y(series[i]);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Pronóstico ARIMA / Holt-Winters con amortiguación φ^s
+    const lastVal = series[split];
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 2.6;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    for (let i = split; i < N; i++) {
+      const s = i - split;
+      const decay = Math.pow(state.phi, s * 0.45);
+      const t = i * 0.16 + state.simTime * 0.7;
+      const seasonal = (15 * Math.sin(t) + 5 * Math.cos(t * 2.3)) * decay;
+      const fcVal = baseMean + (lastVal - baseMean) * Math.pow(state.phi, s) + seasonal * 0.85;
+      const xx = X(i), yy = Y(fcVal);
+      i === split ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // INSET: Curva de Decaimiento Geométrico de la Memoria (φ^k)
+    const boxW = Math.min(255, pw * 0.42);
+    const boxH = Math.min(115, ph * 0.48);
+    const bx = padL + 10;
+    const by = padT + 8;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(6, 12, 28, 0.9)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.32)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(bx, by, boxW, boxH, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Ponderación del Pasado (φ = ${state.phi.toFixed(2)})`, bx + 10, by + 16);
+
+    const bars = 8;
+    const bAreaW = boxW - 20;
+    const bAreaH = boxH - 36;
+    const bw = bAreaW / bars;
+    for (let k = 0; k < bars; k++) {
+      const wgt = Math.pow(state.phi, k);
+      const bh = wgt * bAreaH;
+      const x = bx + 10 + k * bw + 2;
+      const y = by + boxH - 14 - bh;
+      ctx.fillStyle = k === 0 ? '#38efff' : 'rgba(56, 239, 255, 0.48)';
+      ctx.fillRect(x, y, bw - 6, bh);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '500 8px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(k === 0 ? 't-1' : `-${k + 1}`, x + (bw - 6) / 2, by + boxH - 4);
+    }
+    ctx.restore();
+  }
+
+  // ACTO 3: EL PUENTE ANALÍTICO (COMPARATIVA VISUAL + CURVAS SINCRONIZADAS)
+  function drawBridgeStage(w, h) {
+    const pad = 18;
+    const topH = h * 0.50;
+    const botY = topH + 18;
+    const botH = h - botY - 10;
+
+    // Mitad superior: 2 mini-lienzos conectados (1838 Destino vs 1970 Camino)
+    const halfW = (w - pad * 3) / 2;
+    const yTop = 42;
+    const panelH = topH - yTop;
+
+    // Caja Izquierda: 1838 Verhulst
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 18, 38, 0.78)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.35)';
+    ctx.beginPath(); ctx.roundRect(pad, yTop, halfW, panelH, 10); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('1838 · VERHULST: El Destino Acotado (L, k, t₀)', pad + 12, yTop + 18);
+
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const u = i / 80;
+      const t = (u - 0.5) * 9;
+      const yLog = 1 / (1 + Math.exp(-state.k * 1.7 * t));
+      const xx = pad + 14 + u * (halfW - 28);
+      const yy = yTop + panelH - 12 - yLog * (panelH - 38);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Caja Derecha: 1970 ARIMA / Holt-Winters
+    const rx = pad * 2 + halfW;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 18, 38, 0.78)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.35)';
+    ctx.beginPath(); ctx.roundRect(rx, yTop, halfW, panelH, 10); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('1970 · ARIMA / HW: El Camino Semanal (p,d,q / α,β,γ)', rx + 12, yTop + 18);
+
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const u = i / 80;
+      const t = u * 14 + state.simTime * 0.9;
+      const v = 0.5 + 0.32 * Math.sin(t) * Math.pow(state.phi, u * 1.5);
+      const xx = rx + 14 + u * (halfW - 28);
+      const yy = yTop + panelH - 12 - v * (panelH - 38);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Mitad inferior: 3 Tarjetas de Síntesis del Puente Analítico
+    const colW = (w - pad * 4) / 3;
+    const cols = [
+      {
+        title: '1. ¿QUÉ TIENEN EN COMÚN?',
+        color: '#6ef0b4',
+        lines: [
+          '• Navaja de Ockham: 3 a 5 parámetros.',
+          '• Interpretabilidad física directa.',
+          '• Inferencia CPU < 2 µs ($0 GPU).'
+        ]
+      },
+      {
+        title: '2. ¿POR QUÉ EVOLUCIONÓ A 1970?',
+        color: '#38efff',
+        lines: [
+          '• Verhulst trazaba una sola curva S fija.',
+          '• Faltaba modelar ciclos (Sₜ) y ruido (εₜ).',
+          '• ARIMA re-pronostica cada paso con eco φᵏ.'
+        ]
+      },
+      {
+        title: '3. CONDICIÓN OPERATIVA VÍA 1',
+        color: '#ffc05c',
+        lines: [
+          '• Series cortas (N < 500 observaciones).',
+          '• Estacionalidad clara y régimen estable.',
+          '• Brotes INS/MINSA y stock micro-retail.'
+        ]
+      }
+    ];
+
+    cols.forEach((c, idx) => {
+      const cx = pad + idx * (colW + pad);
+      ctx.save();
+      ctx.fillStyle = 'rgba(6, 12, 26, 0.9)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.beginPath(); ctx.roundRect(cx, botY, colW, botH, 10); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = c.color;
+      const titleFont = Math.max(8, Math.min(10, w * 0.016));
+      ctx.font = `700 ${titleFont}px "JetBrains Mono"`;
+      ctx.textAlign = 'left';
+      ctx.fillText(c.title, cx + 10, botY + Math.max(14, botH * 0.20));
+
+      const lineFont = Math.max(7.5, Math.min(10.5, w * 0.016));
+      ctx.fillStyle = '#d8e6f8';
+      ctx.font = `500 ${lineFont}px Inter, sans-serif`;
+      const lH = Math.max(11, Math.min(18, (botH - 30) / 3));
+      c.lines.forEach((ln, li) => {
+        ctx.fillText(ln, cx + 10, botY + Math.max(26, botH * 0.38) + li * lH);
+      });
+      ctx.restore();
+    });
+  }
+
+  // ACTO 4: QUIEBRE ESTRUCTURAL Y PASE A LA ERA 2 (PUENTE TABULAR)
+  function drawEra2TransitionStage(w, h) {
+    const padL = 32, padT = 46, padB = 28;
+    const leftW = w * 0.54;
+    const ph = h - padT - padB;
+    const N = 90, split = 50;
+
+    const X = i => padL + (i / (N - 1)) * (leftW - padL - 12);
+    const Y = v => padT + ph - ((v - 20) / 100) * ph;
+
+    const sx = X(split);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.07)';
+    ctx.fillRect(sx, padT, X(N - 1) - sx, ph);
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.75)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(sx, padT); ctx.lineTo(sx, padT + ph); ctx.stroke();
+    ctx.restore();
+
+    // Pasado normal
+    ctx.save();
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let i = 0; i <= split; i++) {
+      const v = 50 + 10 * Math.sin(i * 0.22 + state.simTime * 0.5);
+      const xx = X(i), yy = Y(v);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Pronóstico ciego Era 1 (sigue oscilando suavemente)
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    for (let i = split; i < N; i++) {
+      const s = i - split;
+      const v = 50 + 10 * Math.sin(i * 0.22 + state.simTime * 0.5) * Math.pow(0.95, s);
+      const xx = X(i), yy = Y(v);
+      i === split ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Realidad con Shock Multivariado (Clima extremo en Loreto / Promoción Retail)
+    ctx.save();
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(255, 82, 119, 0.5)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    for (let i = split; i < N; i++) {
+      const s = i - split;
+      const jump = state.shockMag * (1 - Math.exp(-s * 0.22));
+      const v = 50 + 8 * Math.sin(i * 0.35) + jump;
+      const xx = X(i), yy = Y(v);
+      i === split ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⚡ RUPTURA NO LINEAL', sx + 6, padT + 16);
+    ctx.fillStyle = '#6ef0b4';
+    ctx.fillText('─ - Era 1 sigue ciega', sx + 6, padT + ph - 10);
+
+    // PANEL DERECHO DEL CANVAS: ESQUEMA DE PASE A LA ERA 2 (EL TRUCO DE LOS LAGS)
+    const rx = leftW + 14;
+    const rw = w - rx - 18;
+    const ry = padT;
+    const rh = ph;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(13, 18, 38, 0.92)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.45)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.roundRect(rx, ry, rw, rh, 12); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#d8b4fe';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 2', rx + 14, ry + 22);
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = '700 13px "Space Grotesk", sans-serif';
+    ctx.fillText('El Puente Tabular (Lags + LightGBM)', rx + 14, ry + 42);
+
+    // Mini tabla visual del "Truco de los Lags"
+    const tx = rx + 14, ty = ry + 56, tw = rw - 28, th = rh - 106;
+    const cols = ['Yₜ₋₁', 'Yₜ₋₂', 'Climaₜ', 'Promoₜ', '➔ Yₜ'];
+    const cw = tw / cols.length;
+    const rowH = Math.min(24, th / 4);
+
+    // Cabecera de tabla
+    ctx.fillStyle = 'rgba(180, 142, 255, 0.16)';
+    ctx.fillRect(tx, ty, tw, rowH);
+    cols.forEach((cname, ci) => {
+      ctx.fillStyle = ci === 4 ? '#6ef0b4' : '#e2e8f0';
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(cname, tx + ci * cw + cw / 2, ty + rowH * 0.68);
+    });
+
+    const sampleRows = [
+      ['52', '48', '34°C', '0', '55'],
+      ['55', '52', '39°C', '1', '89'],
+      ['89', '55', '41°C', '1', String(55 + state.shockMag)]
+    ];
+
+    sampleRows.forEach((r, ri) => {
+      const rY = ty + (ri + 1) * rowH;
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.15)';
+      ctx.strokeRect(tx, rY, tw, rowH);
+      r.forEach((val, ci) => {
+        ctx.fillStyle = ci === 4 ? '#6ef0b4' : (ci >= 2 ? '#ffc05c' : '#cbd5e1');
+        ctx.font = '500 9.5px "JetBrains Mono"';
+        ctx.textAlign = 'center';
+        ctx.fillText(val, tx + ci * cw + cw / 2, rY + rowH * 0.68);
+      });
+    });
+
+    // Pie de pase a Era 2
+    ctx.fillStyle = '#b8cae0';
+    ctx.font = '500 10.5px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('• Convierte la serie en matriz supervisada.', rx + 14, ry + rh - 30);
+    ctx.fillText('• Domina Walmart M5 con miles de covariables.', rx + 14, ry + rh - 13);
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(w, h);
+
+    if (state.step === 'verhulst') {
+      drawVerhulstStage(w, h);
+    } else if (state.step === 'arima') {
+      drawArimaStage(w, h);
+    } else if (state.step === 'bridge') {
+      drawBridgeStage(w, h);
+    } else {
+      drawEra2TransitionStage(w, h);
+    }
+  }
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setStep(btn.dataset.step, true);
+    });
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    const next = STEPS[(idx + 1) % STEPS.length];
+    setStep(next, true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderL').addEventListener('input', e => {
+    state.L = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderK').addEventListener('input', e => {
+    state.k = +e.target.value / 100;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderPhi').addEventListener('input', e => {
+    state.phi = +e.target.value / 100;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderShock').addEventListener('input', e => {
+    state.shockMag = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'verhulst',
+      L: 100,
+      k: 0.55,
+      phi: 0.80,
+      shockMag: 42,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderL').value = 100;
+    $('sliderK').value = 55;
+    $('sliderPhi').value = 80;
+    $('sliderShock').value = 42;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.target && e.target.tagName === 'INPUT' && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) return;
+
+    if (e.key === '1') setStep('verhulst', true);
+    else if (e.key === '2') setStep('arima', true);
+    else if (e.key === '3') setStep('bridge', true);
+    else if (e.key === '4') setStep('era2', true);
+    else if (e.key === 'ArrowRight') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1 && window.self !== window.top) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+      } else {
+        setStep(STEPS[(idx + 1) % STEPS.length], true);
+      }
+    } else if (e.key === 'ArrowLeft') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0 && window.self !== window.top) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+      } else {
+        setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+      }
+    } else if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    } else if (window.self !== window.top) {
+      if (['PageUp', 'PageDown', 'Home', 'End', 'n', 'N', 'd', 'D', 'f', 'F', 'Escape'].includes(e.key)) {
+        window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+      }
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && (e.data.type === 'resize' || e.data.type === 'activate')) {
+      setTimeout(() => {
+        fitCanvas();
+        renderCanvas();
+      }, 30);
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        const next = STEPS[(idx + 1) % STEPS.length];
+        setStep(next, false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    if (canvas.parentElement) ro.observe(canvas.parentElement);
+    ro.observe(document.body);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2089 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 22: Reloj Fenológico del Café · Ventanas Críticas (Ago → Jul)</title>
+<style>
+:root {
+  --bg: #040812;
+  --panel: rgba(9, 18, 34, 0.93);
+  --panel-soft: rgba(6, 13, 26, 0.84);
+  --line: rgba(148, 163, 184, 0.17);
+  --line-bright: rgba(110, 240, 180, 0.42);
+  --text: #f1f7ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --flor: #ff7a59;      /* Terracota / Coral: Ventana 1 Floración (Ago-Oct, 56%) */
+  --ancestral: #ffc05c; /* Oro / Calor / Alerta Umbral */
+  --agro: #6ef0b4;      /* Verde botánico: Ventana 2 Llenado (Nov-Feb, r=0.751) */
+  --water: #38efff;     /* Cian / Azul pizarra: Ventana 3 Cosecha (Mar-Jul) */
+  --danger: #ff5277;    /* Rojo / Aborto floral <140mm / Broca / Error NDVI */
+  --purple: #b48eff;    /* Violeta / Verhulst Maceta Agrícola / Fusión */
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 16% 14%, rgba(255, 122, 89, 0.13), transparent 38%),
+    radial-gradient(ellipse at 84% 86%, rgba(110, 240, 180, 0.13), transparent 40%),
+    #03060f;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 25% 30%, rgba(255, 122, 89, 0.08), transparent 48%),
+    radial-gradient(ellipse at 78% 32%, rgba(16, 185, 129, 0.11), transparent 48%),
+    linear-gradient(145deg, rgba(8, 15, 29, 0.985), rgba(3, 8, 18, 0.99));
+  border: 1px solid rgba(110, 240, 180, 0.26);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.65), inset 0 0 60px rgba(6, 48, 38, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 130, 115, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 130, 115, 0.12) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 12px 18px 8px !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--agro); outline-offset: 2px; }
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 122, 89, 0.48);
+  border-radius: 12px;
+  color: var(--flor);
+  background: linear-gradient(135deg, rgba(255, 122, 89, 0.18), rgba(110, 240, 180, 0.12));
+}
+
+.brand-mark svg { width: 23px; height: 23px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--flor);
+  font: 700 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--agro); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 122, 89, 0.36);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 122, 89, 0.13), rgba(6, 15, 28, 0.92));
+  max-width: 560px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--ancestral);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 22, 0.88);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--agro));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--agro)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--agro)) 18%, transparent);
+}
+
+.proc-node[data-step="clock"]   { --node-color: var(--ancestral); }
+.proc-node[data-step="flor"]    { --node-color: var(--flor); }
+.proc-node[data-step="llenado"] { --node-color: var(--agro); }
+.proc-node[data-step="cosecha"] { --node-color: var(--water); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--agro));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--agro)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--agro));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(110, 240, 180, 0.5);
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(335px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(12px, 1.3vw, 18px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.narrative-card {
+  --stage-accent: var(--ancestral);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(8px, 1vh, 12px);
+  padding: clamp(12px, 1.3vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 24, 0.75);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 32%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(10.5px, 0.88vw, 12.2px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11px, 0.9vw, 12.5px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 192, 92, 0.14);
+  border: 1px solid rgba(255, 192, 92, 0.38);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 45% 45%, rgba(16, 78, 62, 0.20), rgba(2, 6, 16, 0.94) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(255, 122, 89, 0.45);
+  background: rgba(15, 23, 42, 0.84);
+  color: #fed7aa;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(110, 240, 180, 0.42);
+  background: rgba(15, 23, 42, 0.84);
+  color: #a7f3d0;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #6ef0b4);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 120px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(85px, 8.5vw, 135px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(110, 240, 180, 0.45);
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.25), rgba(6, 95, 70, 0.42));
+  color: #d1fae5;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(16, 185, 129, 0.48);
+  color: #fff;
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #a7f3d0; }
+
+@media (max-width: 920px) {
+  body { display: block; }
+  #slideFrame { width: 100%; height: auto; aspect-ratio: auto; min-height: 100svh; }
+  .topbar, .flowbar, .workspace { grid-template-columns: 1fr; }
+  .process-track { grid-template-columns: 1fr 1fr; }
+  .proc-arrow { display: none; }
+  .canvas-wrap { min-height: 320px; }
+}
+
+@media (max-height: 800px) {
+  body.is-embedded #slideFrame {
+    padding: 8px 14px 6px !important;
+    gap: 6px !important;
+  }
+  .topbar {
+    padding-bottom: 6px !important;
+  }
+  .narr-lead {
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+  }
+  .info-block {
+    padding: 6px 10px !important;
+  }
+  .info-block-text {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  .math-strip {
+    padding: 5px 10px !important;
+    font-size: 10.5px !important;
+  }
+  .speaker-box {
+    padding: 6px 10px !important;
+  }
+  .speaker-quote {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+}
+
+@media (max-height: 660px) {
+  .eyebrow {
+    display: none !important;
+  }
+  .topbar h1 {
+    font-size: 14px !important;
+  }
+  .narr-title {
+    font-size: 14px !important;
+  }
+  .info-block {
+    padding: 4px 8px !important;
+  }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 22: Reloj fenológico del café (Ecosistemas y Ventanas Críticas Ago → Jul)">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3.5 2"/>
+          <path d="M12 3v2M21 12h-2M12 21v-2M3 12h2"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ECOSISTEMAS · VENTANAS CRÍTICAS (AGO → JUL) · SECCIÓN 3</p>
+        <h1>Reloj <span class="era">fenológico del café</span> <span class="sub">· Cómo predecir quintales exactos meses antes del corte</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Las 3 ventanas críticas del reloj fenológico del café">
+      <div class="via-title">
+        <span>🕰️ LAS 3 VENTANAS DEL RELOJ (COFFEA ARABICA)</span>
+        <span>CENICAFÉ / MIDAGRI</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">🌸 <strong>Ago–Oct:</strong> 56% varianza (&lt;140 mm aborta)</span>
+        <span class="via-pill">🟢 <strong>Nov–Feb:</strong> Peso físico (r = 0.751)</span>
+        <span class="via-pill">🍒 <strong>Mar–Jul:</strong> Cosecha y taza</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. El Reloj Completo (Ago→Jul) ─▶ 2. Floración (56%) y Jaén 2024 ─▶ 3. Llenado (r=0.751) y Maceta Verhulst ─▶ 4. Cosecha y Pase a Diapo 23 -->
+  <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 22">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="clock" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">El Reloj Completo (Ago→Jul)</span>
+          <span class="proc-sub">Las 3 ventanas críticas en vivo</span>
+        </div>
+        <div class="proc-progress" id="prog-clock"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="flor" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">Floración (56%) y Jaén 2024</span>
+          <span class="proc-sub">Sequía &lt;140 mm · 18.46 vs 24 qq/ha</span>
+        </div>
+        <div class="proc-progress" id="prog-flor"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="llenado" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">Llenado (r=0.751) + Verhulst</span>
+          <span class="proc-sub">Alcancía de calor y Maceta (kL/4)</span>
+        </div>
+        <div class="proc-progress" id="prog-llenado"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="cosecha" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">Cosecha y Broca ─▶ Diapo 23</span>
+          <span class="proc-sub">Lluvia en corte y Las 3 Trampas</span>
+        </div>
+        <div class="proc-progress" id="prog-cosecha"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA AMIGABLE -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · ECOSISTEMAS Y VENTANAS CRÍTICAS</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. El Reloj Fenológico del Café: Un calendario biológico de 12 meses</h2>
+        <p class="narr-lead" id="narrLead">
+          No es lo mismo una sequía en marzo que una en septiembre. Un índice satelital que promedie el año entero sin separar estas <b>3 ventanas fisiológicas (Ago → Jul)</b> fracasará siempre:
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">🌸 1. FLORACIÓN (AGO–OCT: 56%) Y 🟢 2. LLENADO (NOV–FEB: r=0.751)</div>
+          <p class="info-block-text" id="block1Text">
+            • <b>Floración Crítica (Ago–Oct):</b> El clima aquí dicta el cuajado; predecir esta fase aislada explica el <b>56% de la variabilidad final</b> (si llueve &lt;140 mm la flor aborta).<br>
+            • <b>Llenado de Grano (Nov–Feb):</b> Define el tamaño y peso físico del grano (<i>“alcancía de calor”</i>); su correlación de impacto es <b>r = 0.751</b>.
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">🍒 3. COSECHA Y CORTE (MAR–JUL: RECOLECCIÓN Y TAZA)</div>
+          <p class="info-block-text" id="block2Text">
+            De <b>marzo a julio</b> es la recolección: aquí la lluvia ya no crea más café; al contrario, un exceso de agua pudre la cereza madura y dispara la plaga de la <b>broca (<i>Hypothenemus hampei</i>)</b>, mientras que el clima seco optimiza la calidad en taza.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">Ago–Oct (56% Varianza) ──▶ Nov–Feb (r = 0.751) ──▶ Mar–Jul (Corte)</span>
+          <span class="hint" id="mathHint">Haz clic en el reloj o mueve el deslizador inferior</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren, el café tiene un reloj interno estricto. No es lo mismo una sequía en marzo que una en septiembre. Si falta agua entre agosto y octubre, la flor se cae y perdimos la mitad de la cosecha, ¡así de brutal! Entender este reloj botánico nos dio el superpoder de predecir, con alta certeza, los quintales exactos meses antes de cortarlos.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: LIENZO INTERACTIVO -->
+    <section class="stage-card" aria-label="Simulador visual del reloj fenológico del café">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">🕰️</span>
+          <h3 class="stage-title" id="canvasTitle">Reloj Fenológico Interactivo (Ago → Jul) y Diagnóstico por Ventana</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Floración: <strong style="color:var(--flor)">56% Varianza</strong></span>
+          <span class="kpi-chip" id="kpi2">Llenado: <strong style="color:var(--agro)">r = 0.751</strong></span>
+          <span class="kpi-chip" id="kpi3">Cosecha: <strong style="color:var(--water)">Mar–Jul</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">🕰️ Izquierda: Reloj Fenológico Anual (Clic para inspeccionar fase)</span>
+          <span class="ov-badge right" id="ovRight">🔬 Derecha: Fisiología, Umbrales y Regla para el Modelo IA</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line" style="--c:#ff7a59"></i> Ventana 1: Floración (Ago–Oct · 56%)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Ventana 2: Llenado (Nov–Feb · r=0.751)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Ventana 3: Cosecha y Corte (Mar–Jul)</span>
+        </div>
+        <span id="legendTip">HAZ CLIC EN LA RUEDA O USA EL DESLIZADOR</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlWinWrap">
+            <label for="sliderWin">🕰️ Ventana Activa del Reloj:</label>
+            <input id="sliderWin" type="range" min="0" max="2" step="1" value="0" style="accent-color:var(--flor)">
+            <output id="outWin">1. Floración (Ago–Oct)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlRainWrap" hidden>
+            <label for="sliderRain">🌧️ Lluvia en Floración (Ago–Oct):</label>
+            <input id="sliderRain" type="range" min="90" max="310" step="10" value="110" style="accent-color:var(--danger)">
+            <output id="outRain">110 mm (¡Sequía Jaén 2024!)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlTempWrap" hidden>
+            <label for="sliderTemp">🌡️ Temperatura Llenado (Nov–Feb):</label>
+            <input id="sliderTemp" type="range" min="22" max="36" step="1" value="26" style="accent-color:var(--agro)">
+            <output id="outTemp">26 °C (Llenado Óptimo)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlHarvRainWrap" hidden>
+            <label for="sliderHarvRain">🌦️ Clima en Cosecha (Mar–Jul):</label>
+            <input id="sliderHarvRain" type="range" min="0" max="1" step="1" value="0" style="accent-color:var(--water)">
+            <output id="outHarvRain">Seco (Taza Óptima ✅)</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente acto ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Superpoder Fenológico (Jaén 2024):</strong> “El modelo NDVI ingenuo predijo 24.0 qq/ha viendo hojas verdes; la Fusión Fenológica capturó la sequía de floración y acertó con 18.46 qq/ha frente a los 18.20 qq/ha reales.”</span>
+    <span>Fuente: Barbosa et al. (2021) / Cenicafé / Ramos et al. (2020) / Cooperativas CENFROCAFE Jaén · Sección 3</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['clock', 'flor', 'llenado', 'cosecha'];
+  const LOOP_DURATION_MS = 9500;
+
+  const WINDOWS_DATA = [
+    {
+      id: 0,
+      name: '1. Floración y Cuajado (Ago–Oct)',
+      months: 'AGO · SEP · OCT',
+      metric: '56% de la Varianza Total',
+      icon: '🌸',
+      color: '#ff7a59',
+      bio: 'Inducción floral, antesis y cuajado del fruto. Requiere un breve estrés seco seguido de lluvias (~290 mm histórico).',
+      hazard: '⚠️ Umbral Fatal: Si llueve < 140 mm o T > 32°C, ocurre aborto floral masivo e irreversible.',
+      aiRule: '🛠️ Regla IA: Integrar lluvia y VPD de hace τ = 6–8 meses fija el techo máximo de la cosecha.'
+    },
+    {
+      id: 1,
+      name: '2. Llenado de Grano (Nov–Feb)',
+      months: 'NOV · DIC · ENE · FEB',
+      metric: 'Correlación r = 0.751',
+      icon: '🟢',
+      color: '#6ef0b4',
+      bio: 'Expansión celular y acumulación de materia seca (“alcancía de calor” GDD) gobernada por la radiación PAR y el VPD.',
+      hazard: '⚠️ Umbral Fatal: A > 32°C la respiración supera a la fotosíntesis y produce “granos vanos” (sin peso).',
+      aiRule: '🛠️ Regla IA: Coincide con la inflexión t₀ de Verhulst (dy/dt = kL/4: paso de rama a fruto).'
+    },
+    {
+      id: 2,
+      name: '3. Cosecha y Corte (Mar–Jul)',
+      months: 'MAR · ABR · MAY · JUN · JUL',
+      metric: 'Calidad y Recolección',
+      icon: '🍒',
+      color: '#38efff',
+      bio: 'Maduración de la cereza, recolección manual y beneficio húmedo. El requerimiento hídrico se invierte por completo.',
+      hazard: '⚠️ Peligro en Cosecha: Lluvias intensas tiran el grano maduro, pudren la cereza y disparan la Broca (Hypothenemus hampei).',
+      aiRule: '🛠️ Regla IA: Un clima moderado/seco aquí preserva los quintales ya formados y optimiza la taza.'
+    }
+  ];
+
+  const state = {
+    step: 'clock',
+    winIdx: 0,        // 0 = Floración, 1 = Llenado, 2 = Cosecha
+    rainFlor: 110,    // mm en Ago-Oct (Por defecto 110 mm < 140 mm para mostrar el caso Jaén 2024)
+    tempFill: 26,     // °C en Nov-Feb (22 a 36 °C)
+    rainHarv: 0,      // 0 = Seco óptimo en cosecha, 1 = Lluvia anómala + Broca
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    clock: {
+      accent: 'var(--ancestral)',
+      tag: 'ACTO 1 DE 4 · ECOSISTEMAS Y VENTANAS CRÍTICAS',
+      title: '1. El Reloj Fenológico del Café: Un calendario biológico de 12 meses',
+      lead: 'No es lo mismo una sequía en marzo que una en septiembre. Un índice satelital que promedie el año entero sin separar estas <b>3 ventanas fisiológicas (Ago → Jul)</b> fracasará siempre:',
+      b1Label: '🌸 1. FLORACIÓN (AGO–OCT: 56%) Y 🟢 2. LLENADO (NOV–FEB: r=0.751)',
+      b1Text: '• <b>Floración Crítica (Ago–Oct):</b> El clima aquí dicta el cuajado; predecir esta fase aislada explica el <b>56% de la variabilidad final</b> (si llueve &lt;140 mm la flor aborta).<br>• <b>Llenado de Grano (Nov–Feb):</b> Define el tamaño y peso físico del grano (<i>“alcancía de calor”</i>); su correlación de impacto es <b>r = 0.751</b>.',
+      b2Label: '🍒 3. COSECHA Y CORTE (MAR–JUL: RECOLECCIÓN Y TAZA)',
+      b2Text: 'De <b>marzo a julio</b> es la recolección: aquí la lluvia ya no crea más café; al contrario, un exceso de agua pudre la cereza madura y dispara la plaga de la <b>broca (<i>Hypothenemus hampei</i>)</b>, mientras que el clima seco optimiza la calidad en taza.',
+      formula: 'Ago–Oct (56% Varianza) ──▶ Nov–Feb (r = 0.751) ──▶ Mar–Jul (Corte)',
+      hint: 'Haz clic en los sectores del reloj o mueve el deslizador inferior',
+      quote: '“Miren, el café tiene un reloj interno estricto. No es lo mismo una sequía en marzo que una en septiembre. Si falta agua entre agosto y octubre, la flor se cae y perdimos la mitad de la cosecha, ¡así de brutal! Entender este reloj botánico nos dio el superpoder de predecir, con alta certeza, los quintales exactos meses antes de cortarlos.”',
+      icon: '🕰️',
+      canvasTitle: 'Reloj Fenológico Interactivo (Ago → Jul) y Diagnóstico por Ventana',
+      ovLeft: '🕰️ Izquierda: Reloj Fenológico Anual (Clic para cambiar de ventana)',
+      ovRight: '🔬 Derecha: Fisiología, Umbrales y Regla para el Modelo IA',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff7a59"></i> Ventana 1: Floración (Ago–Oct · 56%)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Ventana 2: Llenado (Nov–Feb · r=0.751)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Ventana 3: Cosecha y Corte (Mar–Jul)</span>',
+      nextLabel: 'Explorar Floración y Caso Jaén 2024 ─▶'
+    },
+    flor: {
+      accent: 'var(--flor)',
+      tag: 'ACTO 2 DE 4 · VENTANA 1 (AGO–OCT) Y PRUEBA REAL EN JAÉN 2024',
+      title: '2. Floración Crítica (56% Varianza): El acierto en la crisis de Jaén 2024',
+      lead: 'Entre <b>agosto y octubre</b> se decide el techo de toda la campaña. Si el acumulado de lluvia cae por debajo de <b>140 mm</b> (frente a los <b>290 mm</b> normales), la flor se seca y cae antes de formar el fruto.',
+      b1Label: '🥀 EL TECHO IRREVERSIBLE: AUNQUE LLUEVA EN ENERO, LA FLOR YA NO VUELVE',
+      b1Text: 'En la campaña <b>Jaén 2024 (Cooperativas CENFROCAFE / Finca La Palma)</b>, una sequía en floración (&lt;140 mm) provocó una caída real del <b>24%</b> en la cosecha (bajando del histórico de <b>24.0 qq/ha</b> a solo <b>18.20 qq/ha</b>).',
+      b2Label: '🏆 VICTORIA DE LA FUSIÓN FENOLÓGICA VS. CEGUERA DEL SATÉLITE NDVI',
+      b2Text: '• <b>Modelo NDVI Ingenuo:</b> Vio el cafetal verde en enero y predijo <b>24.00 qq/ha</b> (Error masivo de <b>+5.80 qq/ha</b>).<br>• <b>Modelo con Reloj Fenológico:</b> Detectó la sequía de Ago–Oct y predijo <b>18.46 qq/ha</b> (Error mínimo de solo <b>+0.26 qq/ha</b>).',
+      formula: 'Jaén 2024: Real = 18.20 qq/ha │ Fusión Fenológica = 18.46 │ NDVI Ciego = 24.00',
+      hint: 'Mueve la lluvia de floración abajo para ver el aborto floral (<140 mm)',
+      quote: '“En Jaén 2024 llovió menos de 140 milímetros en floración y se perdió casi un cuarto de la cosecha. El satélite ingenuo miró las hojas verdes en enero y predijo 24 quintales; nuestro modelo leyó el reloj fenológico en septiembre y clavó la predicción en 18.46 quintales contra 18.20 reales.”',
+      icon: '🌸',
+      canvasTitle: 'Simulador de Ventana 1 (Umbral < 140 mm) y Benchmark Real Campaña Jaén 2024',
+      ovLeft: '🌧️ Izquierda: Lluvia en Floración (Ago–Oct) vs. Umbral Crítico 140 mm',
+      ovRight: '📊 Derecha: Comparativa Real Jaén 2024 (NDVI Ciego vs. Fusión Fenológica)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Fusión Fenológica (18.46 qq/ha · Error +0.26)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> NDVI Ingenuo (24.00 qq/ha · Error +5.80)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Cosecha Real (18.20 qq/ha)</span>',
+      nextLabel: 'Explorar Llenado (r=0.751) y Maceta Verhulst ─▶'
+    },
+    llenado: {
+      accent: 'var(--agro)',
+      tag: 'ACTO 3 DE 4 · VENTANA 2 (NOV–FEB: r=0.751) Y MACETA DE VERHULST',
+      title: '3. Llenado de Grano (r = 0.751) y la “Maceta Agrícola” de Verhulst',
+      lead: 'Una vez que la flor cuajó, entre <b>noviembre y febrero</b> el fruto crece como una <i>“alcancía de calor”</i> que define la densidad y el peso físico del grano (correlación <b>r = 0.751</b>).',
+      b1Label: '🌡️ EL PELIGRO DE LOS “GRANOS VANOS” CUANDO SUPERA > 32 °C',
+      b1Text: 'Si la temperatura supera constantemente los <b>32 °C</b> (o el VPD cierra los estomas), la <b>respiración celular supera a la fotosíntesis neta</b>: la planta quema sus propias reservas para enfriarse y produce <b>granos vanos (huecos y sin peso)</b>.',
+      b2Label: '🪴 CONEXIÓN CON VERHULST (1838): LA INFLEXIÓN t₀ (dy/dt = kL/4)',
+      b2Text: 'La parcela es una <b>“Maceta Agrícola”</b> con techo físico <b>L</b> (suelo, CIC, raíces y luz PAR). El punto de inflexión <b>t₀ (velocidad máxima kL/4)</b> marca exactamente el salto desde el crecimiento de ramas hacia el <b>llenado del fruto (<i>sink strength</i>)</b>.',
+      formula: 'dy/dt = k·y·(1 − y/L)  │  Inflexión t₀: dy/dt = kL/4 (Salto de Rama a Fruto)',
+      hint: 'Sube la temperatura abajo (>32°C) para ver cómo aparece el grano vano',
+      quote: '“Entre noviembre y febrero la planta llena el grano. En la curva S de Verhulst, el punto de máxima velocidad kL/4 es exactamente cuando el cafeto deja de echar rama y mete toda su energía al fruto. Pero si pasamos de 32 grados, la planta respira más de lo que come y el grano queda hueco.”',
+      icon: '🟢',
+      canvasTitle: 'Ventana 2 (Nov–Feb): Balance Fotosíntesis vs. Respiración (>32°C) y Maceta de Verhulst (kL/4)',
+      ovLeft: '☕ Izquierda: Densidad del Grano vs. Grano Vano por Calor (>32°C)',
+      ovRight: '🪴 Derecha: Curva S de la “Maceta Agrícola” e Inflexión Reproductiva (t₀)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Fotosíntesis Neta / Grano Denso</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Respiración >32°C (Grano Vano)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#b48eff"></i> Inflexión t₀ (kL/4: Fuerza de Vertedero)</span>',
+      nextLabel: 'Explorar Cosecha, Broca y Pase a Diapo 23 ─▶'
+    },
+    cosecha: {
+      accent: 'var(--water)',
+      tag: 'ACTO 4 DE 4 · VENTANA 3 (MAR–JUL) Y PASE A LA DIAPOSITIVA 23',
+      title: '4. Cosecha y Corte (Mar–Jul): La Paradoja del Agua y Pase a las 3 Trampas',
+      lead: 'De <b>marzo a julio</b> ocurre la maduración y recolección. Aquí la regla del agua se invierte por completo respecto a la floración:',
+      b1Label: '🪲 ¿POR QUÉ LA LLUVIA EN COSECHA DESTRUYE EL CAFÉ? (LA BROCA)',
+      b1Text: 'En mayo o junio, un aguacero ya no aumenta el peso del grano; por el contrario, <b>tira mecánicamente las cerezas maduras al suelo, las pudre por hongos y dispara la plaga de la broca del café (<i>Hypothenemus hampei</i>)</b>. Un clima seco optimiza el secado y la calidad en taza.',
+      b2Label: '⏭️ PASE A LA DIAPOSITIVA 23: “PRECISIÓN ACTUAL Y LAS TRES TRAMPAS”',
+      b2Text: 'Ahora que conocemos el Reloj del Café, en la <b>Diapositiva 23</b> veremos por qué el moderno stack de <b>Satélites + Drones + IoT</b> fracasa cuando cae en las <b>3 Trampas: 1. El NDVI miente en verde, 2. Ignorar el retraso τ y 3. N=24 no perdona</b>.',
+      formula: 'Lluvia en Ago–Oct = +Cosecha ✅ │ Lluvia en Mar–Jul = Caída + Broca (H. hampei) ✕',
+      hint: 'Alterna el clima en cosecha abajo antes de pasar a la Diapo 23',
+      quote: '“Fíjense por qué una IA sin botánica se vuelve loca: la misma lluvia que en septiembre es una bendición para abrir la flor, en mayo durante la cosecha es una maldición que tira el grano maduro y multiplica el insecto de la broca. Con este reloj claro, pasemos a la Diapositiva 23 para ver las tres trampas de la tecnología actual.”',
+      icon: '🍒',
+      canvasTitle: 'La Paradoja Estacional del Agua (Broca Hypothenemus hampei) y Puente a la Diapositiva 23',
+      ovLeft: '🍒 Izquierda: Efecto Opuesto de la Lluvia según la Ventana del Reloj',
+      ovRight: '⏭️ Derecha: Pase a la Diapo 23 (Stack IoT/Dron/Satélite y las 3 Trampas)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Clima Seco en Cosecha (Óptimo en Taza)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Lluvia en Cosecha (Pudrición + Broca)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Pase a Diapo 23 (Las 3 Trampas)</span>',
+      nextLabel: 'Reiniciar bucle (Reloj Fenológico) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    $('ctrlWinWrap').hidden = (state.step !== 'clock');
+    $('ctrlRainWrap').hidden = (state.step !== 'flor');
+    $('ctrlTempWrap').hidden = (state.step !== 'llenado');
+    $('ctrlHarvRainWrap').hidden = (state.step !== 'cosecha');
+
+    const wData = WINDOWS_DATA[state.winIdx];
+    $('outWin').textContent = wData.name.split(' (')[0];
+
+    const isDrought = state.rainFlor < 140;
+    $('outRain').textContent = `${state.rainFlor} mm (${isDrought ? '¡Aborto Floral!' : 'Cuajado Sano ✅'})`;
+
+    const isHeat = state.tempFill > 32;
+    $('outTemp').textContent = `${state.tempFill} °C (${isHeat ? '¡Grano Vano!' : 'Llenado Denso ✅'})`;
+
+    $('outHarvRain').textContent = state.rainHarv ? 'Lluvia (+Broca / Caída ✕)' : 'Seco (Taza Óptima ✅)';
+
+    if (state.step === 'clock') {
+      $('kpi1').innerHTML = `Ventana Activa: <strong style="color:${wData.color}">${wData.name.split(' (')[0]}</strong>`;
+      $('kpi2').innerHTML = `Meses: <strong>${wData.months}</strong>`;
+      $('kpi3').innerHTML = `Impacto: <strong style="color:${wData.color}">${wData.metric}</strong>`;
+    } else if (state.step === 'flor') {
+      const simYield = isDrought
+        ? (12 + (state.rainFlor / 140) * 6.5).toFixed(1)
+        : (22.5 + ((state.rainFlor - 140) / 170) * 2.0).toFixed(1);
+      $('kpi1').innerHTML = `Lluvia Ago–Oct: <strong style="color:${isDrought ? 'var(--danger)' : 'var(--agro)'}">${state.rainFlor} mm</strong>`;
+      $('kpi2').innerHTML = `Techo Cosecha: <strong>${simYield} qq/ha</strong>`;
+      $('kpi3').innerHTML = `Jaén 2024: <strong style="color:var(--agro)">18.46 vs 18.20 Real</strong>`;
+    } else if (state.step === 'llenado') {
+      $('kpi1').innerHTML = `Temp Nov–Feb: <strong style="color:${isHeat ? 'var(--danger)' : 'var(--agro)'}">${state.tempFill} °C</strong>`;
+      $('kpi2').innerHTML = `Correlación: <strong style="color:var(--agro)">r = 0.751</strong>`;
+      $('kpi3').innerHTML = `Inflexión t₀: <strong style="color:var(--purple)">dy/dt = kL/4</strong>`;
+    } else {
+      $('kpi1').innerHTML = `Ventana 3: <strong>Marzo a Julio</strong>`;
+      $('kpi2').innerHTML = `Estado: <strong style="color:${state.rainHarv ? 'var(--danger)' : 'var(--water)'}">${state.rainHarv ? '⚠️ Broca + Pudrición' : '✅ Cosecha Sana'}</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--ancestral)">Diapo 23 (3 Trampas)</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawClockStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 12;
+
+    const clockAreaW = usableW * 0.50;
+    const cx = pad + clockAreaW * 0.48;
+    const cy = padT + usableH * 0.50;
+    const outerR = Math.min(clockAreaW * 0.39, usableH * 0.39);
+    const midR = outerR * 0.77;
+    const innerR = outerR * 0.40;
+
+    // 12 meses del año cafetero comenzando en AGOSTO arriba a la izquierda (como en image4.png)
+    const months = [
+      { m: 'AGO', win: 0 },
+      { m: 'SEP', win: 0 },
+      { m: 'OCT', win: 0 },
+      { m: 'NOV', win: 1 },
+      { m: 'DIC', win: 1 },
+      { m: 'ENE', win: 1 },
+      { m: 'FEB', win: 1 },
+      { m: 'MAR', win: 2 },
+      { m: 'ABR', win: 2 },
+      { m: 'MAY', win: 2 },
+      { m: 'JUN', win: 2 },
+      { m: 'JUL', win: 2 }
+    ];
+
+    const winColors = ['#ff7a59', '#6ef0b4', '#38efff'];
+    const winBgSoft = [
+      'rgba(255, 122, 89, 0.22)',
+      'rgba(110, 240, 180, 0.20)',
+      'rgba(56, 239, 255, 0.18)'
+    ];
+
+    // Ángulo base: ponemos AGO-SEP-OCT en el sector superior-izquierdo (-165° a -75°),
+    // NOV-DIC-ENE-FEB abajo (-75° a +45°), y MAR-ABR-MAY-JUN-JUL a la derecha (+45° a +195°)
+    // Espera: en sentido antihorario como en image4.png o sentido horario?
+    // Hagámoslo limpio y legible:
+    // Sector 0 (AGO, SEP, OCT): de 150° a 240° (izquierda-arriba)
+    // Sector 1 (NOV, DIC, ENE, FEB): de 30° a 150° (abajo)
+    // Sector 2 (MAR, ABR, MAY, JUN, JUL): de -120° (240°) a +30° (derecha-arriba)
+    // Para que cada uno de los 12 meses ocupe exactamente 30° (Math.PI / 6) en orden:
+    // Pongamos AGO empezando arriba (-120° = -2*PI/3) en sentido antihorario o en sentido horario estándar:
+    // Sentido horario estándar es muy intuitivo: AGO (-150°), SEP (-120°), OCT (-90°),
+    // pero en image4.png:
+    // Arriba-Izquierda está AGO, SEP, OCT (Floración 56%)
+    // Abajo está NOV, DIC, ENE, FEB (Llenado r=0.751)
+    // Arriba-Derecha está MAR, ABR, MAY, JUN, JUL (Cosecha)
+    // ¡Exacto! Si recorremos en sentido ANTIHORARIO desde arriba (-90°):
+    // i=0 (AGO): -90° a -120°
+    // i=1 (SEP): -120° a -150°
+    // i=2 (OCT): -150° a -180°
+    // i=3 (NOV): -180° a -210° (150°)
+    // i=4 (DIC): 150° a 120°
+    // i=5 (ENE): 120° a 90°
+    // i=6 (FEB): 90° a 60°
+    // i=7 (MAR): 60° a 30°
+    // i=8 (ABR): 30° a 0°
+    // i=9 (MAY): 0° a -30°
+    // i=10 (JUN): -30° a -60°
+    // i=11 (JUL): -60° a -90°
+    // ¡Eso ubica exactamente Floración arriba-izquierda, Llenado abajo y Cosecha a la derecha como en el gráfico original, y con los 12 meses bien escritos sin duplicar NOV!
+
+    const stepAng = (Math.PI * 2) / 12;
+
+    months.forEach((item, idx) => {
+      const aStart = -Math.PI / 2 - (idx + 1) * stepAng;
+      const aEnd = -Math.PI / 2 - idx * stepAng;
+      const aMid = (aStart + aEnd) / 2;
+      const isWinSel = (item.win === state.winIdx);
+      const col = winColors[item.win];
+
+      // Sector interior del mes
+      ctx.save();
+      ctx.fillStyle = isWinSel ? winBgSoft[item.win] : 'rgba(15, 23, 42, 0.55)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, midR, aStart, aEnd);
+      ctx.arc(cx, cy, innerR, aEnd, aStart, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Anillo exterior con el nombre del mes
+      ctx.fillStyle = isWinSel ? col : 'rgba(30, 41, 59, 0.85)';
+      ctx.strokeStyle = isWinSel ? '#ffffff' : col;
+      ctx.lineWidth = isWinSel ? 2 : 1.2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, aStart, aEnd);
+      ctx.arc(cx, cy, midR, aEnd, aStart, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Texto del mes
+      const tx = cx + Math.cos(aMid) * ((outerR + midR) / 2);
+      const ty = cy + Math.sin(aMid) * ((outerR + midR) / 2);
+      ctx.fillStyle = isWinSel ? '#040812' : '#e2eeff';
+      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.m, tx, ty);
+      ctx.restore();
+    });
+
+    // Iconos grandes en los 3 sectores del reloj (Flor blanca, Granos verdes, Saco/Cereza cosecha)
+    const sectorIcons = [
+      { ang: -Math.PI * 0.75, icon: '🌸', label: 'Floración', win: 0 },
+      { ang: Math.PI * 0.66,  icon: '🟢', label: 'Llenado',   win: 1 },
+      { ang: -Math.PI * 0.08, icon: '🍒', label: 'Cosecha',   win: 2 }
+    ];
+    sectorIcons.forEach(s => {
+      const ix = cx + Math.cos(s.ang) * ((midR + innerR) * 0.52);
+      const iy = cy + Math.sin(s.ang) * ((midR + innerR) * 0.52);
+      ctx.save();
+      ctx.font = `${Math.round(outerR * 0.19)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(s.icon, ix, iy - 5);
+      ctx.fillStyle = s.win === state.winIdx ? '#ffffff' : '#cbd5e1';
+      ctx.font = '700 9.5px "Space Grotesk", sans-serif';
+      ctx.fillText(s.label, ix, iy + 15);
+      ctx.restore();
+    });
+
+    // Aguja del reloj apuntando al sector activo con leve oscilación viva
+    const targetAngles = [-Math.PI * 0.75, Math.PI * 0.66, -Math.PI * 0.08];
+    const handAng = targetAngles[state.winIdx] + Math.sin(state.simTime * 2.2) * 0.06;
+    ctx.save();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = winColors[state.winIdx];
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(handAng) * (midR - 6), cy + Math.sin(handAng) * (midR - 6));
+    ctx.stroke();
+    ctx.restore();
+
+    // Círculo central: Planta de Café y raíces
+    ctx.save();
+    ctx.fillStyle = '#071226';
+    ctx.strokeStyle = winColors[state.winIdx];
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = `${Math.round(innerR * 0.72)}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🌱', cx, cy - 4);
+    ctx.fillStyle = '#a7f3d0';
+    ctx.font = '700 8.5px "JetBrains Mono"';
+    ctx.fillText('Coffea arabica', cx, cy + innerR * 0.52);
+    ctx.restore();
+
+    // Callout Badges exteriores como en 22_Reloj_fenológico_del_café.png e image4.png:
+    // Badge 1: "56%" junto a Floración (Arriba-Izquierda)
+    const b1x = cx - outerR * 0.72, b1y = cy - outerR * 0.78;
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+    ctx.strokeStyle = '#ff7a59';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(b1x - 30, b1y - 14, 60, 28, 8);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#ff7a59';
+    ctx.font = '700 13px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('56%', b1x, b1y + 5);
+
+    // Badge 2: "r = 0.751" abajo junto a Llenado de Grano
+    const b2x = cx, b2y = cy + outerR + 16;
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(b2x - 42, b2y - 13, 84, 26, 8);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 11px "JetBrains Mono"';
+    ctx.fillText('r = 0.751', b2x, b2y + 4);
+    ctx.restore();
+
+    // PANEL DERECHO: TARJETA DE DIAGNÓSTICO DE LA VENTANA SELECCIONADA + LAS 3 VENTANAS RESUMIDAS
+    const rx = pad + clockAreaW + 10;
+    const rw = usableW - clockAreaW - 10;
+    const wInfo = WINDOWS_DATA[state.winIdx];
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.94)';
+    ctx.strokeStyle = wInfo.color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 12);
+    ctx.fill();
+    ctx.stroke();
+
+    const isCompact = usableH < 340;
+    const topY1 = padT + (isCompact ? 16 : 24);
+    const topY2 = padT + (isCompact ? 33 : 46);
+    const topY3 = padT + (isCompact ? 48 : 66);
+
+    ctx.fillStyle = wInfo.color;
+    ctx.font = isCompact ? '700 9px "JetBrains Mono"' : '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${wInfo.icon} VENTANA ACTIVA · ${wInfo.months}`, rx + 16, topY1);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = isCompact ? '700 13px "Space Grotesk", sans-serif' : '700 15px "Space Grotesk", sans-serif';
+    ctx.fillText(wInfo.name, rx + 16, topY2);
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = isCompact ? '700 9.5px "JetBrains Mono"' : '700 11px "JetBrains Mono"';
+    ctx.fillText(`Impacto Estadístico: ${wInfo.metric}`, rx + 16, topY3);
+
+    function drawWrappedBox(title, text, yStart, borderCol, titleCol) {
+      const availH = usableH - (isCompact ? 56 : 80);
+      const boxH = Math.max(30, Math.floor((availH - (isCompact ? 10 : 16)) / 3));
+      ctx.fillStyle = 'rgba(4, 9, 20, 0.82)';
+      ctx.strokeStyle = borderCol;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.roundRect(rx + 14, yStart, rw - 28, boxH, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = titleCol;
+      ctx.font = isCompact ? '700 8px "JetBrains Mono"' : '700 9.5px "JetBrains Mono"';
+      ctx.fillText(title, rx + 22, yStart + (isCompact ? 12 : 17));
+
+      ctx.fillStyle = '#e2eeff';
+      ctx.font = isCompact ? '500 8.5px Inter, sans-serif' : '500 10px Inter, sans-serif';
+      const words = text.split(' ');
+      let line = '', ly = yStart + (isCompact ? 22 : 33);
+      const maxW = rw - 44;
+      const lineStep = isCompact ? 10 : 14;
+      words.forEach((wd, i) => {
+        const test = line + wd + ' ';
+        if (ctx.measureText(test).width > maxW && i > 0) {
+          ctx.fillText(line, rx + 22, ly);
+          line = wd + ' ';
+          ly += lineStep;
+        } else {
+          line = test;
+        }
+      });
+      ctx.fillText(line, rx + 22, ly);
+      return yStart + boxH + (isCompact ? 5 : 8);
+    }
+
+    let nextY = padT + (isCompact ? 58 : 80);
+    nextY = drawWrappedBox('🌿 PROCESO FISIOLÓGICO EN LA PLANTA:', wInfo.bio, nextY, 'rgba(148,163,184,0.22)', '#a5f3fc');
+    nextY = drawWrappedBox('🔥 UMBRAL CRÍTICO Y RIESGO DE QUIEBRE:', wInfo.hazard, nextY, 'rgba(255,82,119,0.35)', '#fda4af');
+    drawWrappedBox('🧠 TRADUCCIÓN PARA EL MODELO DE IA:', wInfo.aiRule, nextY, 'rgba(110,240,180,0.35)', '#8ef7c7');
+    ctx.restore();
+  }
+
+  function drawFlorStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.45;
+    const isDrought = state.rainFlor < 140;
+
+    // 1. CAJA IZQUIERDA: PLUVIÓMETRO DE FLORACIÓN (AGO-OCT) Y ESTADO DE LA FLOR
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = isDrought ? 'rgba(255, 82, 119, 0.5)' : 'rgba(110, 240, 180, 0.4)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fed7aa';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🌸 VENTANA 1 (AGO–OCT): UMBRAL DE LLUVIA = 140 mm', pad + 14, padT + 20);
+
+    // Barra vertical del pluviómetro a la izquierda
+    const gaugeX = pad + 38, gaugeY = padT + 38, gaugeW = 34, gaugeH = usableH - 72;
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    ctx.beginPath();
+    ctx.roundRect(gaugeX, gaugeY, gaugeW, gaugeH, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    const rainFrac = Math.min(1, state.rainFlor / 320);
+    const fillH = rainFrac * (gaugeH - 8);
+    ctx.fillStyle = isDrought ? '#ff5277' : '#38efff';
+    ctx.beginPath();
+    ctx.roundRect(gaugeX + 4, gaugeY + gaugeH - fillH - 4, gaugeW - 8, fillH, 5);
+    ctx.fill();
+
+    // Línea de Umbral Crítico 140 mm y Promedio 290 mm
+    const y140 = gaugeY + gaugeH - (140 / 320) * (gaugeH - 8) - 4;
+    const y290 = gaugeY + gaugeH - (290 / 320) * (gaugeH - 8) - 4;
+
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(gaugeX - 6, y140); ctx.lineTo(gaugeX + gaugeW + 85, y140); ctx.stroke();
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText('Umbral <140 mm (Aborto)', gaugeX + gaugeW + 8, y140 - 5);
+
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.beginPath(); ctx.moveTo(gaugeX - 6, y290); ctx.lineTo(gaugeX + gaugeW + 85, y290); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#8ef7c7';
+    ctx.fillText('Promedio 290 mm', gaugeX + gaugeW + 8, y290 - 5);
+
+    // Estado visual de la rama de café en floración
+    const flX = pad + leftW * 0.66, flY = padT + usableH * 0.54;
+    ctx.fillStyle = isDrought ? 'rgba(255, 82, 119, 0.14)' : 'rgba(110, 240, 180, 0.14)';
+    ctx.strokeStyle = isDrought ? '#ff5277' : '#6ef0b4';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(flX, flY, 38, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = '28px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(isDrought ? '🥀' : '🌸', flX, flY);
+
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.fillText(isDrought ? 'ABORTO FLORAL MASIVO' : 'CUAJADO UNIFORME', flX, flY + 54);
+    ctx.fillStyle = isDrought ? '#fda4af' : '#8ef7c7';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText(
+      isDrought ? 'La flor cae: techo fijado en ~18.2 qq/ha' : 'Potencial completo: ~24.0 qq/ha',
+      flX,
+      flY + 70
+    );
+    ctx.restore();
+
+    // 2. CAJA DERECHA: DEMOSTRACIÓN REAL CAMPAÑA JAÉN 2024 (CENFROCAFE / FINCA LA PALMA)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.42)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🏆 CAMPAÑA JAÉN 2024 (CENFROCAFE): PRONÓSTICO VS. REALIDAD', rx + 14, padT + 20);
+
+    const bars = [
+      {
+        label: '1. Promedio Histórico Base (Sin sequía)',
+        val: 24.00,
+        err: 'Referencia normal',
+        col: 'rgba(148, 163, 184, 0.45)',
+        textCol: '#cbd5e1'
+      },
+      {
+        label: '2. Modelo Satelital NDVI Ingenuo (Vio hojas verdes en Ene)',
+        val: 24.00,
+        err: '✕ Error Masivo: +5.80 qq/ha (Ciego a pérdida de flor)',
+        col: 'rgba(255, 82, 119, 0.78)',
+        textCol: '#fda4af'
+      },
+      {
+        label: '3. Modelo Fusión Fenológica (Capturó sequía Ago–Oct)',
+        val: 18.46,
+        err: '✅ Error Mínimo: +0.26 qq/ha (Congeló techo en Ventana 1)',
+        col: '#6ef0b4',
+        textCol: '#8ef7c7'
+      },
+      {
+        label: '4. Rendimiento Cosechado Real en Campo (Jaén 2024)',
+        val: 18.20,
+        err: '🍒 Caída real del -24% por aborto floral',
+        col: '#ffc05c',
+        textCol: '#fde68a'
+      }
+    ];
+
+    const rowH = (usableH - 46) / 4;
+    const maxBarW = rw - 150;
+
+    bars.forEach((b, i) => {
+      const by = padT + 34 + i * rowH;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 9.5px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(b.label, rx + 16, by + 12);
+
+      const bw = (b.val / 26) * maxBarW;
+      ctx.fillStyle = b.col;
+      ctx.beginPath();
+      ctx.roundRect(rx + 16, by + 17, bw, 15, 4);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.fillText(`${b.val.toFixed(2)} qq/ha`, rx + 22 + bw, by + 28);
+
+      ctx.fillStyle = b.textCol;
+      ctx.font = '500 9px "JetBrains Mono"';
+      ctx.fillText(b.err, rx + 16, by + 44);
+    });
+    ctx.restore();
+  }
+
+  function drawLlenadoStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.44;
+    const isOverheated = state.tempFill > 32;
+
+    // 1. CAJA IZQUIERDA: FOTOSÍNTESIS VS RESPIRACIÓN CELULAR Y DENSIDAD DEL GRANO (NOV-FEB)
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = isOverheated ? 'rgba(255, 82, 119, 0.55)' : 'rgba(110, 240, 180, 0.4)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🟢 VENTANA 2 (NOV–FEB): PESO FÍSICO (r = 0.751)', pad + 14, padT + 20);
+
+    // Visualización del grano de café (Lleno y denso vs. Grano Vano / Hueco a >32°C)
+    const bx = pad + leftW * 0.5, by = padT + usableH * 0.43;
+    const fillPct = isOverheated ? Math.max(0.28, 1 - (state.tempFill - 31) * 0.16) : 0.95;
+
+    // Contorno del grano de café
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+    ctx.strokeStyle = isOverheated ? '#ff5277' : '#6ef0b4';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.ellipse(bx, by, 42, 30, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Relleno de endospermo (materia seca)
+    ctx.fillStyle = isOverheated ? 'rgba(255, 82, 119, 0.35)' : 'rgba(110, 240, 180, 0.55)';
+    ctx.beginPath();
+    ctx.ellipse(bx, by, 38 * fillPct, 26 * fillPct, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Hendidura central del grano de café
+    ctx.strokeStyle = '#040812';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(bx - 28, by);
+    ctx.bezierCurveTo(bx - 10, by - 8, bx + 10, by + 8, bx + 28, by);
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      isOverheated
+        ? `⚠️ T = ${state.tempFill}°C (>32°C): ¡GRANO VANO (${Math.round(fillPct * 100)}% masa)!`
+        : `✅ T = ${state.tempFill}°C: GRANO DENSO Y PESADO (${Math.round(fillPct * 100)}% masa)`,
+      bx,
+      by + 50
+    );
+
+    ctx.fillStyle = isOverheated ? '#fda4af' : '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText(
+      isOverheated
+        ? 'La respiración celular supera a la fotosíntesis: la planta quema sus reservas.'
+        : 'Fotosíntesis neta alta (PAR + VPD controlado): acumula sólidos solubles.',
+      bx,
+      by + 68
+    );
+    ctx.restore();
+
+    // 2. CAJA DERECHA: LA "MACETA AGRÍCOLA" DE VERHULST (1838) Y EL PUNTO DE INFLEXIÓN t₀ (dy/dt = kL/4)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.42)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#e9d5ff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🪴 LA “MACETA AGRÍCOLA” DE VERHULST: INFLEXIÓN t₀ (dy/dt = kL/4)', rx + 14, padT + 20);
+
+    const gx = rx + 40, gy = padT + 42, gw = rw - 64, gh = usableH - 80;
+    const X = u => gx + u * gw;
+    const Y = v => gy + gh - v * gh;
+
+    // Ejes
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx, gy + gh); ctx.lineTo(gx + gw, gy + gh); ctx.stroke();
+
+    // Techo físico L de la Maceta Agrícola (Suelo, CIC, Raíces, Radiación PAR)
+    const capL = isOverheated ? 0.62 : 0.88;
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 1.8;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(gx, Y(capL)); ctx.lineTo(gx + gw, Y(capL)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('Techo Físico L (“Maceta Agrícola”: Suelo, CIC y Luz PAR)', gx + gw - 6, Y(capL) - 6);
+
+    // Curva Sigmoide de Verhulst y = L / (1 + e^(-k(t - t0)))
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const u = i / 80;
+      const v = capL / (1 + Math.exp(-9 * (u - 0.50)));
+      i === 0 ? ctx.moveTo(X(u), Y(v)) : ctx.lineTo(X(u), Y(v));
+    }
+    ctx.stroke();
+
+    // Punto de Inflexión t0 (u = 0.5, v = capL / 2): Transición de Rama a Fruto (Sink Strength)
+    const ix = X(0.50), iy = Y(capL / 2);
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.75)';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(ix, gy + 10); ctx.lineTo(ix, gy + gh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#b48eff';
+    ctx.beginPath(); ctx.arc(ix, iy, 6.5, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#e9d5ff';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('● Inflexión t₀ (Velocidad máx = kL/4)', ix + 10, iy - 4);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9px Inter, sans-serif';
+    ctx.fillText('Salto de crecimiento vegetativo a llenado del fruto', ix + 10, iy + 11);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 9px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Tiempo Fenológico: Ramas (Ago–Oct) ──▶ Llenado de Fruto (Nov–Feb) ──▶', gx + gw / 2, gy + gh + 22);
+    ctx.restore();
+  }
+
+  function drawCosechaStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.48;
+
+    // 1. CAJA IZQUIERDA: LA PARADOJA DEL AGUA EN VENTANA 3 (MAR–JUL) Y LA BROCA (HYPOTHENEMUS HAMPEI)
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = state.rainHarv ? 'rgba(255, 82, 119, 0.5)' : 'rgba(56, 239, 255, 0.4)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🍒 VENTANA 3 (MAR–JUL): ¿POR QUÉ EL EXCESO DE LLUVIA DAÑA AQUÍ?', pad + 14, padT + 20);
+
+    // Comparación visual de dos escenarios en Cosecha (Seco Óptimo vs Lluvioso con Broca)
+    const c1Y = padT + 34, cH = (usableH - 54) / 2;
+
+    // Tarjeta 1: Clima Seco / Moderado en Mar-Jul
+    const isDrySel = !state.rainHarv;
+    ctx.fillStyle = isDrySel ? 'rgba(16, 185, 129, 0.14)' : 'rgba(6, 11, 24, 0.65)';
+    ctx.strokeStyle = isDrySel ? '#6ef0b4' : 'rgba(148, 163, 184, 0.2)';
+    ctx.lineWidth = isDrySel ? 2 : 1;
+    ctx.beginPath(); ctx.roundRect(pad + 12, c1Y, leftW - 24, cH - 4, 9); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.fillText('☀️ CLIMA SECO EN COSECHA (MAR–JUL) · ¡ÓPTIMO!', pad + 22, c1Y + 20);
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• Maduración uniforme de la cereza roja en el árbol.', pad + 22, c1Y + 38);
+    ctx.fillText('• Secado solar limpio y máxima calidad organoléptica en taza.', pad + 22, c1Y + 54);
+
+    // Tarjeta 2: Lluvia Anómala en Mar-Jul -> Pudrición y Broca (Hypothenemus hampei)
+    const c2Y = c1Y + cH + 4;
+    const isWetSel = !!state.rainHarv;
+    ctx.fillStyle = isWetSel ? 'rgba(255, 82, 119, 0.16)' : 'rgba(6, 11, 24, 0.65)';
+    ctx.strokeStyle = isWetSel ? '#ff5277' : 'rgba(148, 163, 184, 0.2)';
+    ctx.lineWidth = isWetSel ? 2.2 : 1;
+    ctx.beginPath(); ctx.roundRect(pad + 12, c2Y, leftW - 24, cH - 4, 9); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.fillText('🌧️🪲 LLUVIA INTENSA EN COSECHA · ¡DESASTRE FITOSANITARIO!', pad + 22, c2Y + 20);
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• Golpe mecánico tira las cerezas maduras al suelo y las pudre.', pad + 22, c2Y + 38);
+    ctx.fillText('• Dispara la plaga de la Broca del Café (Hypothenemus hampei).', pad + 22, c2Y + 54);
+    ctx.restore();
+
+    // 2. CAJA DERECHA: PASE A LA DIAPOSITIVA 23 ("PRECISIÓN ACTUAL Y LAS TRES TRAMPAS")
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 18, 36, 0.95)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.45)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffc05c';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 23: PRECISIÓN ACTUAL Y LAS 3 TRAMPAS', rx + 14, padT + 20);
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('Cuando el stack moderno (IoT + Dron + Satélite) ignora este reloj, cae en 3 trampas:', rx + 14, padT + 38);
+
+    const traps = [
+      {
+        title: '1. Trampa NDVI (“El NDVI miente en verde”)',
+        desc: 'Con LAI > 3 el satélite se satura (>0.85): ve hojas verdes aunque la flor ya abortó.',
+        col: '#6ef0b4'
+      },
+      {
+        title: '2. Trampa τ (“El clima de ayer no es la cosecha de mañana”)',
+        desc: 'Meter lluvia en t-1 ignora el retraso de 6 a 8 meses de la ventana de floración.',
+        col: '#ff7a59'
+      },
+      {
+        title: '3. Trampa N=24 (“N=24 no perdona el sobreajuste”)',
+        desc: 'Con solo 24 cosechas anuales, un Transformer crudo memoriza ruido (Exige Zero-Shot + SCP).',
+        col: '#b48eff'
+      }
+    ];
+
+    const tH = (usableH - 60) / 3;
+    traps.forEach((tr, idx) => {
+      const ty = padT + 48 + idx * (tH + 4);
+      ctx.fillStyle = 'rgba(6, 11, 24, 0.88)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.beginPath(); ctx.roundRect(rx + 12, ty, rw - 24, tH - 4, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = tr.col;
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.fillText(tr.title, rx + 20, ty + 17);
+
+      ctx.fillStyle = '#e2eeff';
+      ctx.font = '500 9.5px Inter, sans-serif';
+      ctx.fillText(tr.desc, rx + 20, ty + 34);
+    });
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+
+    if (state.step === 'clock') {
+      drawClockStage(w, h);
+    } else if (state.step === 'flor') {
+      drawFlorStage(w, h);
+    } else if (state.step === 'llenado') {
+      drawLlenadoStage(w, h);
+    } else {
+      drawCosechaStage(w, h);
+    }
+  }
+
+  // Clic directo sobre la rueda del reloj en el Acto 1 para cambiar de ventana
+  canvas.addEventListener('click', e => {
+    if (state.step !== 'clock') return;
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    const pad = 16, padT = 46;
+    const usableW = rect.width - pad * 2;
+    const usableH = rect.height - padT - 12;
+    const clockAreaW = usableW * 0.52;
+    const cx = pad + clockAreaW * 0.50;
+    const cy = padT + usableH * 0.52;
+
+    const dx = clickX - cx, dy = clickY - cy;
+    const dist = Math.hypot(dx, dy);
+    const outerR = Math.min(clockAreaW * 0.42, usableH * 0.43);
+    if (dist > outerR * 1.15) {
+      // Si hace clic fuera del reloj, rotamos a la siguiente ventana
+      state.winIdx = (state.winIdx + 1) % 3;
+    } else {
+      // Determinar cuál de las 3 ventanas fue clicada según el ángulo
+      let ang = Math.atan2(dy, dx); // -PI a PI
+      if (ang < -Math.PI / 2 && ang >= -Math.PI) {
+        state.winIdx = 0; // AGO-OCT (Arriba-Izquierda)
+      } else if (ang >= Math.PI / 6 && ang <= Math.PI) {
+        state.winIdx = 1; // NOV-FEB (Abajo)
+      } else {
+        state.winIdx = 2; // MAR-JUL (Derecha)
+      }
+    }
+    $('sliderWin').value = state.winIdx;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => setStep(btn.dataset.step, true));
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    setStep(STEPS[(idx + 1) % STEPS.length], true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderWin').addEventListener('input', e => {
+    state.winIdx = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderRain').addEventListener('input', e => {
+    state.rainFlor = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderTemp').addEventListener('input', e => {
+    state.tempFill = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderHarvRain').addEventListener('input', e => {
+    state.rainHarv = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'clock',
+      winIdx: 0,
+      rainFlor: 110,
+      tempFill: 26,
+      rainHarv: 0,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderWin').value = 0;
+    $('sliderRain').value = 110;
+    $('sliderTemp').value = 26;
+    $('sliderHarvRain').value = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('clock', true);
+    if (e.key === '2') setStep('flor', true);
+    if (e.key === '3') setStep('llenado', true);
+    if (e.key === '4') setStep('cosecha', true);
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+      } else {
+        setStep(STEPS[(idx + 1) % STEPS.length], true);
+      }
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+      } else {
+        setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+      }
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    }
+    if (['n', 'd', 'f', 'Escape', 'Home', 'End'].includes(e.key) && window.parent !== window) {
+      window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'activate') {
+      setStep(STEPS[0], false);
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    } else if (e.data && e.data.type === 'resize') {
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        setStep(STEPS[(idx + 1) % STEPS.length], false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    ro.observe(canvas.parentElement);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

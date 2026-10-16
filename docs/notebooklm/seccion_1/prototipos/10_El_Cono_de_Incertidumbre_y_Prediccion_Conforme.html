@@ -1,0 +1,2049 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 10: La Ilusión de la Certeza y el Cono de Incertidumbre · Lyapunov ─▶ 5 Pasos SCP ─▶ ERCOT ─▶ Pase a Diapo 11</title>
+<style>
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --phi: #38efff;
+  --ockham: #ffc05c;
+  --rupture: #ff5277;
+  --lab: #6ef0b4;
+  --purple: #b48eff;
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(56, 239, 255, 0.16), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(255, 82, 119, 0.14), transparent 38%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(8, 145, 178, 0.15), transparent 48%),
+    linear-gradient(145deg, rgba(7, 13, 29, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+html:has(body.is-embedded) {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(5px, 0.9vh, 10px) clamp(10px, 1.4vw, 18px) clamp(4px, 0.7vh, 8px) !important;
+  flex: 1 1 100% !important;
+  gap: clamp(4px, 0.75vh, 9px) !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--phi); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(56, 239, 255, 0.4);
+  border-radius: 12px;
+  color: var(--phi);
+  background: rgba(56, 239, 255, 0.1);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--phi);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--phi); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(56, 239, 255, 0.32);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.14), rgba(6, 12, 26, 0.92));
+  max-width: 530px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--phi);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+/* UNIFIED TIMELINE FLOW BAR */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--phi));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--phi)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--phi)) 18%, transparent);
+}
+
+.proc-node[data-step="cone"]    { --node-color: var(--rupture); }
+.proc-node[data-step="scp"]     { --node-color: var(--phi); }
+.proc-node[data-step="ercot"]   { --node-color: var(--lab); }
+.proc-node[data-step="bridge11"]{ --node-color: var(--ockham); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--phi));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--phi)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--phi));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(56, 239, 255, 0.5);
+  background: rgba(8, 145, 178, 0.22);
+  color: #a5f3fc;
+}
+
+/* WORKSPACE: 2 CLEAN COLUMNS */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(330px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(12px, 1.3vw, 18px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN: NARRATIVE FOCUS CARD */
+.narrative-card {
+  --stage-accent: var(--rupture);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(6px, 0.9vh, 10px);
+  padding: clamp(10px, 1.2vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 82, 119, 0.3) rgba(5, 10, 24, 0.4);
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 5px;
+}
+.narrative-card::-webkit-scrollbar-track {
+  background: rgba(5, 10, 24, 0.4);
+  border-radius: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 82, 119, 0.28);
+  border-radius: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 82, 119, 0.5);
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 25, 0.72);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 32%, transparent);
+  background: rgba(3, 7, 18, 0.85);
+  font: 600 clamp(10.5px, 0.88vw, 12.5px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11.5px, 0.92vw, 13px)/1.4 var(--sans);
+  color: #e2eeff;
+}
+
+/* RIGHT COLUMN: SINGLE HERO INTERACTIVE STAGE */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 17, 36, 0.94), rgba(4, 10, 24, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(56, 239, 255, 0.12);
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.8);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.16);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 55% 45%, rgba(8, 145, 178, 0.18), rgba(2, 6, 17, 0.94) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  background: rgba(15, 23, 42, 0.82);
+  color: #a5f3fc;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(255, 82, 119, 0.38);
+  background: rgba(15, 23, 42, 0.82);
+  color: #fda4af;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #38efff);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+/* CONTEXTUAL CONTROLS */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.72);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 68px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(75px, 7.5vw, 120px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.45);
+  background: linear-gradient(120deg, rgba(8, 145, 178, 0.28), rgba(14, 116, 144, 0.42));
+  color: #cffafe;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(8, 145, 178, 0.5);
+  color: #fff;
+}
+
+/* FOOTER */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #cbd5e1; }
+
+/* MEDIA QUERIES FOR COMPREHENSIVE RESPONSIVENESS */
+@media (max-width: 1200px) and (min-width: 881px) {
+  .workspace { grid-template-columns: minmax(280px, 0.4fr) minmax(0, 0.6fr); gap: 10px; }
+  .via-card { max-width: 380px; padding: 6px 10px; }
+  .via-pill { font-size: 9.5px; padding: 2px 5px; }
+  .ctrl-group { gap: 10px; }
+  input[type="range"] { width: 65px; }
+}
+
+@media (max-width: 880px) {
+  body { display: block; overflow-y: auto; }
+  body.is-embedded {
+    overflow-y: auto !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: block !important;
+  }
+  body.is-embedded #slideFrame {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    padding: 12px 14px !important;
+  }
+  #slideFrame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 100svh;
+    overflow: visible;
+    grid-template-rows: auto auto auto auto;
+    gap: 12px;
+  }
+  .topbar { grid-template-columns: 1fr; gap: 10px; }
+  .via-card { max-width: 100%; }
+  .flowbar { grid-template-columns: 1fr; gap: 8px; }
+  .process-track {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 3px;
+  }
+  .proc-node { padding: 6px 6px; gap: 5px; }
+  .proc-arrow { display: none; }
+  .proc-sub { display: none; }
+  .proc-year { font-size: 10px; }
+  .workspace { grid-template-columns: 1fr; overflow: visible; gap: 12px; }
+  .narrative-card { max-height: none; overflow: visible; }
+  .stage-card { min-height: 480px; overflow: visible; }
+  .canvas-wrap { min-height: 320px; height: 320px; }
+  .controls-bar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .ctrl-actions { justify-content: flex-end; }
+  .footnote { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
+@media (max-width: 520px) {
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  h1 { font-size: 18px; }
+  .process-track { grid-template-columns: repeat(2, 1fr); }
+  .proc-node { padding: 6px 8px; }
+  .proc-sub { display: block; font-size: 8.5px; }
+}
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 8px 16px 6px; }
+  body.is-embedded #slideFrame { padding: 6px 14px 4px !important; gap: 6px !important; }
+  .topbar { padding-bottom: 6px; }
+  .brand-mark { width: 34px; height: 34px; flex: 0 0 34px; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .eyebrow { font-size: 9.5px; margin-bottom: 2px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 4px 10px; gap: 2px; }
+  .via-title { font-size: 8.5px; }
+  .via-pills { font-size: 9px; gap: 4px; }
+  .via-pill { padding: 1px 5px; }
+  .process-track { padding: 3px; gap: 4px; }
+  .proc-node { padding: 5px 8px; gap: 6px; border-radius: 7px; }
+  .proc-num { width: 20px; height: 20px; font-size: 9.5px; }
+  .proc-year { font-size: 11px; }
+  .proc-sub { font-size: 8.5px; }
+  .tool-btn { padding: 5px 9px; font-size: 9.5px; }
+  .narrative-card { padding: 8px 12px; gap: 6px; border-radius: 11px; }
+  .stage-tag { padding: 2px 7px; font-size: 9px; }
+  .stage-year-pill { font-size: 9px; }
+  .narr-title { font-size: clamp(14px, 1.2vw, 17px); line-height: 1.15; }
+  .narr-lead { font-size: clamp(11px, 0.9vw, 12.5px); line-height: 1.35; }
+  .narr-blocks { gap: 5px; }
+  .info-block { padding: 6px 9px; border-radius: 8px; }
+  .info-block-label { font-size: 8.5px; margin-bottom: 2px; }
+  .info-block-text { font-size: clamp(10.5px, 0.82vw, 12px); line-height: 1.32; }
+  .math-strip { padding: 5px 9px; font-size: 11px; }
+  .math-strip span.hint { font-size: 8.5px; }
+  .speaker-box { padding: 6px 9px; border-radius: 0 8px 8px 0; }
+  .speaker-head { font-size: 8px; margin-bottom: 2px; }
+  .speaker-quote { font-size: clamp(10px, 0.8vw, 11.5px); line-height: 1.3; }
+  .stage-card { padding: 8px 11px; gap: 5px; border-radius: 11px; }
+  .stage-header { gap: 8px; }
+  .stage-icon { width: 24px; height: 24px; font-size: 12px; }
+  .stage-title { font-size: clamp(12.5px, 1vw, 15px); }
+  .kpi-chip { padding: 2px 7px; font-size: 9px; }
+  .legend-bar { font-size: 9px; }
+  .controls-bar { padding: 5px 9px; gap: 8px; border-radius: 8px; }
+  .ctrl-item { font-size: 9.5px; gap: 5px; }
+  .next-era-btn { padding: 5px 9px; font-size: 9.5px; }
+  .footnote { font-size: 8.5px; padding-top: 2px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .narr-lead { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  h1 { font-size: 15px; }
+  .topbar { padding-bottom: 4px; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 10: La Ilusión de la Certeza, el Cono de Incertidumbre y Predicción Conforme (SCP)">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h4l3-7 4 14 3-7h4" stroke-opacity="0.35"/>
+          <path d="M11 12L21 5v14l-10-7z" fill=" rgba(56, 239, 255, 0.18)"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">Sección 3 · Continuación de Era 4 (Intervalos Garantizados) · El Cono de la Honestidad</p>
+        <h1>LA ILUSIÓN DE LA CERTEZA: <span class="era">El Cono de Incertidumbre</span> <span class="sub">· Lyapunov y Predicción Conforme (SCP)</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Principios matemáticos de cuantificación de incertidumbre">
+      <div class="via-title">
+        <span>🛡️ REGLA DE ORO DE INGENIERÍA</span>
+        <span>SPLIT CONFORMAL PREDICTION (SCP)</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">✕ <strong>Punto fijo ŷₜ</strong> = Apuesta ciega</span>
+        <span class="via-pill">🌪️ <strong>σ(h) ∝ σ₁·√h</strong> (Lyapunov)</span>
+        <span class="via-pill">📏 <strong>I(x) = [f̂(x) ± q̂]</strong></span>
+        <span class="via-pill">✅ <strong>Cobertura ≥ 90%</strong> finita</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. El Cono y Lyapunov ─▶ 2. Los 5 Pasos SCP ─▶ 3. Local vs Global & ERCOT ─▶ 4. Riesgo Asimétrico y Pase a Diapo 11 -->
+  <nav class="flowbar" aria-label="Secuencia explicativa del Cono de Incertidumbre y Predicción Conforme">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="cone" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">La Mentira del Punto Fijo</span>
+          <span class="proc-sub">Cono caótico y Límite de Lyapunov</span>
+        </div>
+        <div class="proc-progress" id="prog-cone"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="scp" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">Receta Conforme (5 Pasos)</span>
+          <span class="proc-sub">El escudo q̂ sin asumir Gauss</span>
+        </div>
+        <div class="proc-progress" id="prog-scp"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">Local vs. Global &amp; ERCOT</span>
+          <span class="proc-sub">Por qué Zero-Shot + SCP arrasa</span>
+        </div>
+        <div class="proc-progress" id="prog-ercot"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="bridge11" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">Asimetría ─▶ Diapo 11</span>
+          <span class="proc-sub">P10–P90 y ¿Cómo saber cuál elegir?</span>
+        </div>
+        <div class="proc-progress" id="prog-bridge11"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE PRINCIPAL: NARRATIVA AMIGABLE (IZQ) + ESCENARIO INTERACTIVO (DER) -->
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA PASO A PASO PARA NO ESTADÍSTICOS -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · LA MENTIRA DETERMINISTA</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. La Ilusión de la Certeza: ¿Por qué un número único (ŷₜ) siempre miente?</h2>
+        <p class="narr-lead" id="narrLead">
+          Quien te prometa adivinar el punto exacto del próximo mes te está mintiendo. En cualquier sistema real, <b>pequeñas variaciones hoy se multiplican mañana como un abanico que se abre</b>.
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">🌪️ EFECTO MARIPOSA Y EL LÍMITE DE LYAPUNOV</div>
+          <p class="info-block-text" id="block1Text">
+            Igual que en el pronóstico del clima, las posibles trayectorias futuras (<b>Monte Carlo</b>) divergen con la distancia: <b>σ(h) ∝ σ₁·√h</b>. Más allá del <b>Límite de Lyapunov</b>, una línea recta puntual pierde toda relación con la realidad.
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">⚠️ LAS 3 TRAMPAS DE EXIGIR UN PUNTO FIJO EN PRODUCCIÓN</div>
+          <p class="info-block-text" id="block2Text">
+            1. <b>Oculta la asimetría del riesgo:</b> quedarse sin energía (apagón) cuesta 100 veces más que guardar reserva.<br>2. <b>Falsa sensación de control</b> ante directivos.<br>3. <b>Degradación exponencial</b> al alejar el horizonte <b>h</b>.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">σ(h) ∝ σ₁ · √h  ──▶  Bandas P25–P75 (50%) y P10–P90 (80%)</span>
+          <span class="hint" id="mathHint">La única decisión ejecutable vive en el abanico</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Pedir un único número para el próximo mes es una apuesta ciega. La línea roja central es una ilusión: el futuro real serpentea dentro de este Cono de Incertidumbre. La IA moderna no elimina el azar: ilumina y mide el riesgo.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: LIENZO ÚNICO DE ALTA LEGIBILIDAD -->
+    <section class="stage-card" aria-label="Simulador visual del Cono de Incertidumbre y Predicción Conforme">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">🌪️</span>
+          <h3 class="stage-title" id="canvasTitle">El Cono de Incertidumbre: Divergencia de Monte Carlo y Límite de Lyapunov</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Horizonte: <strong>t+30 pasos</strong></span>
+          <span class="kpi-chip" id="kpi2">Núcleo: <strong>P25–P75 (50%)</strong></span>
+          <span class="kpi-chip" id="kpi3">Operativo: <strong style="color:var(--phi)">P10–P90 (80%)</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">⬜ Izquierda: Realidad Observada (Pasado Fijo)</span>
+          <span class="ov-badge right" id="ovRight">🌪️ Derecha: Cono de Incertidumbre y Trayectorias Caóticas</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Punto Fijo ŷₜ (La Mentira Determinista)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Banda P10–P90 (80%)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Trayectorias Monte Carlo</span>
+        </div>
+        <span id="legendTip">AJUSTA EL DESLIZADOR INFERIOR PARA INTERACTUAR</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlChaosWrap">
+            <label for="sliderChaos">🌪️ Volatilidad / Caos (σ₁):</label>
+            <input id="sliderChaos" type="range" min="40" max="150" step="10" value="100" style="accent-color:var(--rupture)">
+            <output id="outChaos">1.0x</output>
+          </div>
+          <div class="ctrl-item" id="ctrlAlphaWrap" hidden>
+            <label for="sliderAlpha">🛡️ Nivel Cobertura (1−α):</label>
+            <input id="sliderAlpha" type="range" min="75" max="98" step="1" value="90" style="accent-color:var(--phi)">
+            <output id="outAlpha">90% (α=0.10)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlCalPctWrap" hidden>
+            <label for="sliderCalPct">📊 % Historial a Calibración:</label>
+            <input id="sliderCalPct" type="range" min="20" max="90" step="10" value="80" style="accent-color:var(--lab)">
+            <output id="outCalPct">80% |Cal|</output>
+          </div>
+          <div class="ctrl-item" id="ctrlRiskWrap" hidden>
+            <label for="sliderRisk">⚖️ Penalización por Faltante:</label>
+            <input id="sliderRisk" type="range" min="50" max="95" step="5" value="90" style="accent-color:var(--ockham)">
+            <output id="outRisk">Usar P90</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente etapa ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Síntesis Sección 3:</strong> La Mentira del Punto Fijo (Lyapunov σ(h) ∝ √h) ─▶ Split Conformal Prediction (5 pasos con garantía finita MCR ≥ 1−α) ─▶ Sinergia Zero-Shot + 80% Calibración en ERCOT ─▶ <strong>Pase a Diapo 11: ¿Cómo elegir tu modelo?</strong></span>
+    <span>Referencias: Lei et al. (2017) Split Conformal Prediction · Lorenz (1963) · Achour et al. (2025) ERCOT/NN5/M3</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['cone', 'scp', 'ercot', 'bridge11'];
+  const LOOP_DURATION_MS = 9500;
+
+  const state = {
+    step: 'cone',
+    chaosScale: 1.0,
+    coveragePct: 90,
+    calibShare: 80,
+    targetQuantile: 90,
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    cone: {
+      accent: 'var(--rupture)',
+      tag: 'ETAPA 1 DE 4 · LA MENTIRA DETERMINISTA',
+      title: '1. La Ilusión de la Certeza: ¿Por qué un número único (ŷₜ) siempre miente?',
+      lead: 'Quien te prometa adivinar el punto exacto del próximo mes te está mintiendo. En cualquier sistema real, <b>pequeñas variaciones hoy se multiplican mañana como un abanico que se abre</b>.',
+      b1Label: '🌪️ EFECTO MARIPOSA Y EL LÍMITE DE LYAPUNOV',
+      b1Text: 'Igual que en el pronóstico del clima, las posibles trayectorias futuras (<b>Monte Carlo</b>) divergen con la distancia: <b>σ(h) ∝ σ₁·√h</b>. Más allá del <b>Límite de Lyapunov</b>, una línea recta puntual pierde toda relación con la realidad.',
+      b2Label: '⚠️ LAS 3 TRAMPAS DE EXIGIR UN PUNTO FIJO EN PRODUCCIÓN',
+      b2Text: '1. <b>Oculta la asimetría del riesgo:</b> quedarse sin energía (apagón) cuesta 100 veces más que guardar reserva.<br>2. <b>Falsa sensación de control</b> ante directivos.<br>3. <b>Degradación exponencial</b> al alejar el horizonte <b>h</b>.',
+      formula: 'σ(h) ∝ σ₁ · √h  ──▶  Bandas P25–P75 (50%) y P10–P90 (80%)',
+      hint: 'La única decisión ejecutable vive en el abanico',
+      quote: '“Pedir un único número para el próximo mes es una apuesta ciega. La línea roja central es una ilusión: el futuro real serpentea dentro de este Cono de Incertidumbre. La IA moderna no elimina el azar: ilumina y mide el riesgo.”',
+      icon: '🌪️',
+      canvasTitle: 'El Cono de Incertidumbre: Divergencia de Monte Carlo y Límite de Lyapunov',
+      ovLeft: '⬜ Izquierda: Realidad Observada (Pasado Fijo)',
+      ovRight: '🌪️ Derecha: Cono de Incertidumbre y Trayectorias Caóticas',
+      legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Punto Fijo ŷₜ (La Mentira Determinista)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Banda P10–P90 (80%)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Trayectorias Monte Carlo</span>',
+      nextLabel: 'Ver Receta Conforme (5 Pasos) ─▶'
+    },
+    scp: {
+      accent: 'var(--phi)',
+      tag: 'ETAPA 2 DE 4 · SPLIT CONFORMAL PREDICTION (LEI ET AL., 2017)',
+      title: '2. Predicción Conforme (SCP): El Escudo Matemático en 5 Pasos',
+      lead: '¿Cómo construimos ese abanico sin inventar supuestos falsos de campanas de Gauss? La <b>Predicción Conforme</b> mide con honestidad <b>cuánto se equivocó tu modelo en el pasado reciente</b>.',
+      b1Label: '📏 LOS 5 PASOS SENCILLOS DE SPLIT CONFORMAL PREDICTION',
+      b1Text: '<b>1. Dividir:</b> Separar historia en Entreno (<i>Tr</i>) y Calibración (<i>Cal</i>).<br><b>2. Entrenar:</b> Ajustar el modelo f̂ en <i>Tr</i>.<br><b>3. Medir tropiezos (Sᵢ):</b> Calcular el error real en <i>Cal</i>: <b>Sᵢ = |f̂(xᵢ) − yᵢ|</b>.<br><b>4. Umbral q̂:</b> Ordenar los errores y tomar el percentil <b>(1−α)</b>.<br><b>5. Blindar el futuro:</b> Sumar y restar ese escudo: <b>I(x) = [f̂(x) − q̂, f̂(x) + q̂]</b>.',
+      b2Label: '✅ GARANTÍA REAL EN MUESTRAS FINITAS (SIN ASUMIR DISTRIBUCIONES)',
+      b2Text: 'Si eliges <b>90% de cobertura (α = 0.10)</b>, el escudo <b>±q̂</b> garantiza matemáticamente atrapar al menos 9 de cada 10 valores futuros reales, sin importar qué modelo uses por dentro.',
+      formula: 'Sᵢ = |f̂(xᵢ) − yᵢ|  ──▶  q̂ = cuantil₁₋α(S_Cal)  ──▶  I(x) = [ f̂(x) ± q̂ ]',
+      hint: 'Corrección finita: (1−α̂) = ⌈(|Cal|+1)(1−α)⌉ / |Cal|',
+      quote: '“La Predicción Conforme es pura honestidad ingenieril: revisamos los últimos 100 días, vemos que el 90% de las veces nos equivocamos por menos de q̂ unidades, y le ponemos ese margen ±q̂ al pronóstico de mañana. Garantizado sin magia.”',
+      icon: '📏',
+      canvasTitle: 'Los 5 Pasos de Split Conformal Prediction: De Errores Históricos (Sᵢ) al Escudo ±q̂',
+      ovLeft: '📊 Arriba: Errores de Calibración Sᵢ ordenados hasta el cuantil q̂',
+      ovRight: '🛡️ Abajo: Intervalo Garantizado I(x) = [f̂(x) − q̂, f̂(x) + q̂]',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Residuos Absolutos Sᵢ = |f̂ − y|</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Umbral Conforme q̂</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Banda Blindada [f̂ ± q̂]</span>',
+      nextLabel: 'Ver Local vs Global y ERCOT ─▶'
+    },
+    ercot: {
+      accent: 'var(--lab)',
+      tag: 'ETAPA 3 DE 4 · EVIDENCIA EMPÍRICA (ACHOUR ET AL., 2025)',
+      title: '3. Cuantil Local vs. Global y la Victoria Zero-Shot en ERCOT',
+      lead: 'Al aplicar Predicción Conforme en la industria aparecen dos secretos prácticos: <b>cómo calibrar múltiples series</b> y <b>por qué los Foundation Models aplastan a LightGBM cuando hay pocos datos</b>.',
+      b1Label: '🔀 CUANTIL LOCAL (q̂ⱼ) VS. CUANTIL GLOBAL (q̂_global)',
+      b1Text: '• <b>Cuantil Local (q̂ⱼ):</b> Calcula un escudo propio para cada serie; ideal cuando tienes productos muy volátiles junto a otros estables.<br>• <b>Cuantil Global (∪ S_Cal,j):</b> Une los errores de todas las series cuando cada producto tiene un historial muy corto.',
+      b2Label: '🏆 HALLAZGO EN ERCOT 2232: ¿POR QUÉ COLAPSA LIGHTGBM Y GANA CHRONOS-BOLT?',
+      b2Text: 'Si das pocos datos a <b>LightGBM</b> para guardar 80% en calibración, crear los <i>lags</i> llena la tabla de vacíos (<b>NaNs</b>) y destruye el entrenamiento (<b>MASE se dispara a 1.195</b>). Como <b>Chronos-Bolt es Zero-Shot (0% entreno)</b>, dedica el <b>80%–90% de tus datos a calibrar |Cal|</b>, logrando <b>MASE 0.362, banda estrecha MSIW 0.312 y cobertura 91.3%</b>.',
+      formula: 'ERCOT-2232: Chronos-Bolt (MASE 0.362, MSIW 0.312) vs. LightGBM (1.195)',
+      hint: 'Zero-Shot no destruye filas con lags y maximiza la muestra |Cal|',
+      quote: '“Cuando tienes pocos datos históricos, LightGBM sufre una paradoja: si entrenas mucho te quedas sin datos para calibrar el cono, y si entrenas poco los lags destruyen la muestra. Un modelo Zero-Shot regala casi todo el historial a la calibración.”',
+      icon: '🏆',
+      canvasTitle: 'Cuantil Local vs. Global y Benchmark en ERCOT-2232 (Chronos-Bolt vs. LightGBM)',
+      ovLeft: '🔀 Izquierda: Cuantil Local (q̂ⱼ) vs. Global (q̂_global)',
+      ovRight: '🏆 Derecha: Evidencia ERCOT-2232 (Achour et al., 2025)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Chronos-Bolt + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> LightGBM 80/20 (0.659)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM 20/80 Colapso (1.195)</span>',
+      nextLabel: 'Ver Asimetría y Pase a Diapo 11 ─▶'
+    },
+    bridge11: {
+      accent: 'var(--ockham)',
+      tag: 'ETAPA 4 DE 4 · DECISIÓN BAJO RIESGO Y PASE A DIAPO 11',
+      title: '4. Decidir con P10–P90 y el Pase al Árbol de Decisión (Diapo 11)',
+      lead: 'El Cono de la Honestidad transforma un pronóstico en una <b>decisión financiera inteligente</b> y nos deja listos para la <b>última diapositiva (Diapo 11): ¿Cómo elegir el modelo ideal hoy?</b>',
+      b1Label: '⚖️ ASIMETRÍA DEL RIESGO: ¿CUÁNDO USAR P90, P50 O P10?',
+      b1Text: '• <b>Escenario P90 (Techo seguro):</b> Úsalo para despachar energía eléctrica o stock médico crítico donde <b>faltar cuesta un apagón o vidas</b>.<br>• <b>Escenario P50 (Mediana):</b> Planificación financiera base.<br>• <b>Escenario P10 (Piso conservador):</b> Flujo de caja mínimo garantizado.',
+      b2Label: '🧭 PASE A LA DIAPOSITIVA 11: ARQUITECTURA DE DECISIÓN (LAS 4 VÍAS)',
+      b2Text: 'Ya dominamos las <b>4 Eras</b> y el <b>Cono Conforme</b>. En la <b>Diapositiva 11 (Cierre General)</b> responderemos con <b>3 preguntas simples</b> (Volumen de datos <b>N</b>, Latencia <b>CPU vs GPU</b> y <b>Riesgo de Récords</b>) cuál de las 4 Vías debes desplegar en tu negocio.',
+      formula: '4 Eras + Cono Conforme (P10–P90) ──▶ Diapo 11: Árbol de Decisión en 3 Preguntas',
+      hint: 'Siguiente Diapo (Cierre Final) · Matriz Ejecutiva y Árbol de Decisión Sectorial',
+      quote: '“Nunca tomes una decisión crítica con un número desnudo: usa el P90 cuando fallar hacia abajo sea catastrófico. Y ahora que conocemos las 4 Eras y el Cono Conforme, pasemos a la última diapositiva: el mapa definitivo para saber cuál modelo elegir.”',
+      icon: '🧭',
+      canvasTitle: 'Toma de Decisiones Asimétrica (P10 / P50 / P90) y Puente a la Diapositiva 11',
+      ovLeft: '⚖️ Izquierda: Decisión Ejecutiva sobre el Cono (P10 · P50 · P90)',
+      ovRight: '⏭️ Derecha: Pase a la Diapo 11 (¿Qué modelo usar hoy?)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> P90 (Cobertura Antiapagón / Stock Crítico)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> P50 (Valor Esperado)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> P10 (Escenario Conservador)</span>',
+      nextLabel: 'Reiniciar bucle (Cono) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    // Controles contextuales sin saturar
+    $('ctrlChaosWrap').hidden = (state.step !== 'cone');
+    $('ctrlAlphaWrap').hidden = (state.step !== 'scp');
+    $('ctrlCalPctWrap').hidden = (state.step !== 'ercot');
+    $('ctrlRiskWrap').hidden = (state.step !== 'bridge11');
+
+    $('outChaos').textContent = `${state.chaosScale.toFixed(1)}x`;
+    const alphaVal = ((100 - state.coveragePct) / 100).toFixed(2);
+    $('outAlpha').textContent = `${state.coveragePct}% (α=${alphaVal})`;
+    $('outCalPct').textContent = `${state.calibShare}% |Cal|`;
+    $('outRisk').textContent = `Usar P${state.targetQuantile}`;
+
+    if (state.step === 'cone') {
+      $('kpi1').innerHTML = `Divergencia: <strong>σ(h) = ${(state.chaosScale).toFixed(1)}·√h</strong>`;
+      $('kpi2').innerHTML = `Núcleo 50%: <strong>P25–P75</strong>`;
+      $('kpi3').innerHTML = `Banda Operativa: <strong style="color:var(--phi)">P10–P90 (80%)</strong>`;
+    } else if (state.step === 'scp') {
+      const qVal = (8.5 + (state.coveragePct - 75) * 0.72).toFixed(1);
+      $('kpi1').innerHTML = `Cobertura 1−α: <strong style="color:var(--lab)">≥ ${state.coveragePct}%</strong>`;
+      $('kpi2').innerHTML = `Umbral Conforme q̂: <strong style="color:var(--ockham)">±${qVal} u.</strong>`;
+      $('kpi3').innerHTML = `Supuesto Gauss: <strong>Ninguno (Libre)</strong>`;
+    } else if (state.step === 'ercot') {
+      $('kpi1').innerHTML = `Chronos-Bolt: <strong style="color:var(--lab)">MASE 0.362 / MSIW 0.312</strong>`;
+      $('kpi2').innerHTML = `Cobertura MCR: <strong style="color:var(--lab)">91.3% (≥90%)</strong>`;
+      $('kpi3').innerHTML = `LGBM (20% Train): <strong style="color:var(--rupture)">Colapso 1.195</strong>`;
+    } else {
+      $('kpi1').innerHTML = `Decisión Elegida: <strong style="color:var(--ockham)">Cuantil P${state.targetQuantile}</strong>`;
+      $('kpi2').innerHTML = `Riesgo Apagón: <strong style="color:var(--lab)">Blindado</strong>`;
+      $('kpi3').innerHTML = `Siguiente Diapo: <strong style="color:var(--phi)">11. Árbol de Decisión</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) {
+      state.stepElapsed = 0;
+    }
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawGrid(w, h) {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(110, 140, 180, 0.08)';
+    ctx.lineWidth = 1;
+    const cols = 14, rows = 7;
+    for (let i = 1; i < cols; i++) {
+      const x = (w / cols) * i;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let j = 1; j < rows; j++) {
+      const y = (h / rows) * j;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ACTO 1: EL CONO DE INCERTIDUMBRE Y DIVERGENCIA CAÓTICA (FIEL A 10_El_cono_de_incertidumbre.png)
+  function drawConeStage(w, h) {
+    const padL = 36, padR = 32, padT = 46, padB = 34;
+    const pw = w - padL - padR;
+    const ph = h - padT - padB;
+    const splitX = padL + pw * 0.28; // Frontera de Inferencia (Hoy)
+    const cy = padT + ph * 0.52;
+
+    // Eje horizontal temporal
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT + ph - 14);
+    ctx.lineTo(padL + pw, padT + ph - 14);
+    ctx.stroke();
+
+    const ticks = [
+      { x: padL + 10, label: 't₀ Pasado' },
+      { x: splitX, label: 'Hoy (t=0)' },
+      { x: splitX + (pw * 0.72) * 0.28, label: 't₊₂' },
+      { x: splitX + (pw * 0.72) * 0.58, label: 'Límite Lyapunov' },
+      { x: padL + pw - 16, label: 't₊₃₀ Horizonte' }
+    ];
+    ticks.forEach(tk => {
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 9px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(tk.label, tk.x, padT + ph - 2);
+    });
+    ctx.restore();
+
+    const coneW = (padL + pw) - splitX;
+    const maxSpread = (ph * 0.44) * state.chaosScale;
+
+    // Función auxiliar para dibujar cada capa del abanico σ(h) ∝ √h
+    function drawFanBand(mult, fillStyle, strokeStyle) {
+      ctx.save();
+      ctx.fillStyle = fillStyle;
+      ctx.beginPath();
+      const steps = 60;
+      for (let i = 0; i <= steps; i++) {
+        const u = i / steps;
+        const spread = Math.sqrt(u) * maxSpread * mult;
+        const x = splitX + u * coneW;
+        const y = cy - spread;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      for (let i = steps; i >= 0; i--) {
+        const u = i / steps;
+        const spread = Math.sqrt(u) * maxSpread * mult;
+        const x = splitX + u * coneW;
+        const y = cy + spread;
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      if (strokeStyle) {
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // 1. Velo Exterior Tenue: 99% Límites Físicos
+    drawFanBand(1.0, 'rgba(148, 163, 184, 0.11)', 'rgba(148, 163, 184, 0.28)');
+    // 2. Azul Azur Semi-transparente: 80% Intervalo de Confianza (P10 - P90)
+    drawFanBand(0.70, 'rgba(14, 116, 144, 0.26)', 'rgba(56, 239, 255, 0.45)');
+    // 3. Núcleo Cyan Intenso: 50% Intervalo de Confianza (P25 - P75)
+    drawFanBand(0.40, 'rgba(56, 239, 255, 0.24)', 'rgba(56, 239, 255, 0.75)');
+
+    // Trayectoria Histórica Observada (Izquierda de la Frontera)
+    const histPts = [
+      { u: 0.0, dy: 48 },
+      { u: 0.22, dy: 28 },
+      { u: 0.40, dy: 34 },
+      { u: 0.62, dy: 8 },
+      { u: 0.82, dy: -16 },
+      { u: 1.0, dy: 0 }
+    ];
+    ctx.save();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    histPts.forEach((pt, idx) => {
+      const x = padL + pt.u * (splitX - padL);
+      const y = cy + pt.dy;
+      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+
+    // Trayectorias de Monte Carlo (Divergencia Caótica y Efecto Mariposa)
+    const numPaths = 7;
+    for (let p = 0; p < numPaths; p++) {
+      ctx.save();
+      ctx.strokeStyle = p % 2 === 0 ? 'rgba(255, 117, 151, 0.72)' : 'rgba(255, 192, 92, 0.65)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      const steps = 65;
+      for (let i = 0; i <= steps; i++) {
+        const u = i / steps;
+        const env = Math.sqrt(u) * maxSpread * 0.88;
+        const phase = p * 1.35 + state.simTime * (0.9 + p * 0.12);
+        const wave = Math.sin(u * 11 + phase) * 0.58 + Math.cos(u * 23 - phase * 0.7) * 0.35;
+        const x = splitX + u * coneW;
+        const y = cy + wave * env;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Pronóstico Puntual ŷ (La Mentira Determinista - Línea Roja Punteada Central)
+    ctx.save();
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 3.2;
+    ctx.setLineDash([8, 6]);
+    ctx.shadowColor = 'rgba(255, 82, 119, 0.65)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.moveTo(splitX, cy);
+    ctx.lineTo(padL + pw, cy);
+    ctx.stroke();
+    ctx.restore();
+
+    // Línea Vertical Brillante: Frontera de Inferencia (Hoy)
+    ctx.save();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.4;
+    ctx.shadowColor = '#38efff';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.moveTo(splitX, padT + 4);
+    ctx.lineTo(splitX, padT + ph - 16);
+    ctx.stroke();
+    ctx.restore();
+
+    // Marcador Vertical del Límite de Lyapunov
+    const lyapX = splitX + coneW * 0.58;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.6)';
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.moveTo(lyapX, padT + 18);
+    ctx.lineTo(lyapX, padT + ph - 18);
+    ctx.stroke();
+    ctx.restore();
+
+    // Etiquetas claras dentro del lienzo
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Frontera (Hoy)', splitX, padT + 14);
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('Pronóstico Puntual ŷₜ (La Mentira Determinista)', padL + pw - 10, cy - 8);
+
+    ctx.fillStyle = '#67e8f9';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('Núcleo 50% (P25–P75)', padL + pw - 10, cy - maxSpread * 0.26);
+    ctx.fillStyle = '#a5f3fc';
+    ctx.fillText('Banda Operativa 80% (P10–P90)', padL + pw - 10, cy + maxSpread * 0.56);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText('Velo 99% (Límites Físicos)', padL + pw - 10, cy + maxSpread * 0.90);
+  }
+
+  // ACTO 2: LOS 5 PASOS DE SPLIT CONFORMAL PREDICTION (SCP - LEI ET AL., 2017)
+  function drawScpStage(w, h) {
+    const padL = 34, padR = 26, padT = 46;
+    const pw = w - padL - padR;
+    const topH = h * 0.42;
+
+    // 1. MITAD SUPERIOR: CALIBRACIÓN DE RESIDUOS ABSOLUTOS S_i = |f(x_i) - y_i| ORDENADOS DE MENOR A MAYOR
+    const boxX = padL, boxY = padT, boxW = pw, boxH = topH;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 15, 34, 0.9)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.32)';
+    ctx.beginPath(); ctx.roundRect(boxX, boxY, boxW, boxH, 10); ctx.fill(); ctx.stroke();
+
+    const numScores = 20;
+    const qIdx = Math.min(numScores - 1, Math.floor((state.coveragePct / 100) * numScores));
+    const qVal = (8.5 + (state.coveragePct - 75) * 0.72).toFixed(1);
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`PASOS 1–4: Medir errores reales Sᵢ = |f̂(xᵢ) − yᵢ| en Calibración (Cal) y tomar el cuantil ${state.coveragePct}% ➔ q̂ = ${qVal}`, boxX + 12, boxY + 18);
+
+    const bLeft = boxX + 16, bW = boxW - 32, bBottom = boxY + boxH - 18;
+    const maxBarH = boxH - 44;
+    const colW = bW / numScores;
+
+    for (let i = 0; i < numScores; i++) {
+      const frac = (i + 1) / numScores;
+      const bh = Math.pow(frac, 1.35) * maxBarH;
+      const x = bLeft + i * colW + 2;
+      const y = bBottom - bh;
+
+      const isQ = (i === qIdx);
+      const isCovered = (i <= qIdx);
+
+      ctx.fillStyle = isQ ? '#ffc05c' : (isCovered ? 'rgba(56, 239, 255, 0.65)' : 'rgba(255, 82, 119, 0.45)');
+      ctx.fillRect(x, y, colW - 5, bh);
+
+      if (isQ) {
+        // Línea horizontal del umbral conforme q_hat
+        ctx.save();
+        ctx.strokeStyle = '#ffc05c';
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(bLeft, y);
+        ctx.lineTo(bLeft + bW, y);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#ffe1a8';
+        ctx.font = '700 9.5px "JetBrains Mono"';
+        ctx.textAlign = 'right';
+        ctx.fillText(`Umbral q̂ (${state.coveragePct}%) = ±${qVal} u.`, bLeft + bW - 4, y - 5);
+      }
+    }
+    ctx.restore();
+
+    // 2. MITAD INFERIOR: PASO 5 — APLICACIÓN DEL ESCUDO I(x) = [f(x) - q, f(x) + q] AL FUTURO
+    const chartY = padT + topH + 14;
+    const chartH = h - chartY - 20;
+    const N = 64, split = 34;
+    const X = i => padL + (i / (N - 1)) * pw;
+    const Y = v => chartY + chartH - ((v - 15) / 70) * chartH;
+
+    const sx = X(split);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.5)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(sx, chartY); ctx.lineTo(sx, chartY + chartH); ctx.stroke();
+    ctx.restore();
+
+    const shield = 7 + ((state.coveragePct - 75) / 23) * 14;
+
+    // Banda Conforme [f(x) - q, f(x) + q] en la zona futura
+    ctx.save();
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.18)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.75)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = split; i < N; i++) {
+      const fVal = 50 + 14 * Math.sin(i * 0.25 + state.simTime * 0.7);
+      const xx = X(i), yy = Y(fVal + shield);
+      i === split ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    for (let i = N - 1; i >= split; i--) {
+      const fVal = 50 + 14 * Math.sin(i * 0.25 + state.simTime * 0.7);
+      ctx.lineTo(X(i), Y(fVal - shield));
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // Curva del Regresor Base f(x)
+    ctx.save();
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) {
+      const fVal = 50 + 14 * Math.sin(i * 0.25 + state.simTime * 0.7);
+      const xx = X(i), yy = Y(fVal);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Puntos reales observados cayendo dentro del escudo conforme
+    for (let i = split + 2; i < N; i += 3) {
+      const fVal = 50 + 14 * Math.sin(i * 0.25 + state.simTime * 0.7);
+      const noise = Math.sin(i * 13.7) * 11.5;
+      const yReal = fVal + noise;
+      const inside = Math.abs(noise) <= shield;
+
+      ctx.fillStyle = inside ? '#6ef0b4' : '#ff5277';
+      ctx.beginPath();
+      ctx.arc(X(i), Y(yReal), 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`PASO 5: Intervalo Garantizado I(x) = [ f̂(x) − ${qVal}, f̂(x) + ${qVal} ] · Cobertura empírica ≥ ${state.coveragePct}%`, sx + 10, chartY + 16);
+  }
+
+  // ACTO 3: CUANTIL LOCAL VS GLOBAL + EVIDENCIA EMPÍRICA EN ERCOT 2232 (ACHOUR ET AL., 2025)
+  function drawErcotStage(w, h) {
+    const pad = 16, padT = 46;
+    const leftW = w * 0.46;
+    const boxH = h - padT - 14;
+
+    // IZQUIERDA: CUANTIL LOCAL (q_j) VS CUANTIL GLOBAL (q_global) EN SERIES MULTIVARIADAS
+    const lx = pad, ly = padT, lw = leftW - pad;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 17, 36, 0.92)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.35)';
+    ctx.beginPath(); ctx.roundRect(lx, ly, lw, boxH, 11); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🔀 CUANTIL LOCAL (q̂ⱼ) VS. GLOBAL (q̂_global)', lx + 14, ly + 20);
+
+    // Serie 1: Estable (Con Cuantil Local estrecho vs Global inflado)
+    const s1Y = ly + 36, sH = (boxH - 60) / 2;
+    ctx.fillStyle = 'rgba(6, 11, 25, 0.85)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.3)';
+    ctx.beginPath(); ctx.roundRect(lx + 12, s1Y, lw - 24, sH, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText('✅ CUANTIL LOCAL (q̂ⱼ): Traje a medida por serie', lx + 20, s1Y + 16);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• Evita que una serie volátil ensanche artificialmente', lx + 20, s1Y + 34);
+    ctx.fillText('  las bandas de tus productos o regiones estables.', lx + 20, s1Y + 50);
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.fillText('q̂ⱼ = q₁₋α( S_Cal, j )  [Ideal en varianzas heterogéneas]', lx + 20, s1Y + sH - 12);
+
+    // Serie 2: Cuantil Global
+    const s2Y = s1Y + sH + 10;
+    ctx.fillStyle = 'rgba(6, 11, 25, 0.85)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.3)';
+    ctx.beginPath(); ctx.roundRect(lx + 12, s2Y, lw - 24, sH, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#d8b4fe';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText('🌐 CUANTIL GLOBAL (q̂_global): Agrupa M series cortas', lx + 20, s2Y + 16);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• Cuando cada serie individual tiene muy pocos puntos', lx + 20, s2Y + 34);
+    ctx.fillText('  (|Calⱼ| corto), une los errores para estabilizar q̂.', lx + 20, s2Y + 50);
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.fillText('q̂_global = q₁₋α( ⋃ S_Cal, j )  [Ideal en series cortas NN5/M3]', lx + 20, s2Y + sH - 12);
+    ctx.restore();
+
+    // DERECHA: EVIDENCIA NUMÉRICA EN ERCOT 2232 (ACHOUR ET AL., 2025)
+    const rx = leftW + 10;
+    const rw = w - rx - 16;
+    const ry = padT;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 17, 36, 0.94)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.42)';
+    ctx.beginPath(); ctx.roundRect(rx, ry, rw, boxH, 11); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🏆 ESTUDIO ACHOUR ET AL. (2025) · ERCOT 2232 PUNTOS', rx + 14, ry + 20);
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText(`Al asignar ${state.calibShare}% del historial a Calibración (|Cal|), mira qué ocurre con el error (MASE) y el ancho (MSIW):`, rx + 14, ry + 38);
+
+    const benchmarks = [
+      {
+        name: '1. Chronos-Bolt (Zero-Shot · 0% Train / 80% Cal)',
+        mase: 0.362,
+        msiw: 0.312,
+        mcr: '91.3% ✅',
+        color: '#6ef0b4',
+        note: 'Óptimo: No gasta datos entrenando; todo va a calibrar q̂.'
+      },
+      {
+        name: '2. LightGBM (80% Train / 20% Cal)',
+        mase: 0.659,
+        msiw: 0.428,
+        mcr: '89.0% ⚠️',
+        color: '#ffc05c',
+        note: 'Queda <20% de datos para calibrar: intervalo más ancho e inestable.'
+      },
+      {
+        name: '3. LightGBM (20% Train / 80% Cal · Destrucción por Lags)',
+        mase: 1.195,
+        msiw: 0.724,
+        mcr: 'Colapso ✕',
+        color: '#ff5277',
+        note: 'Crear lags en muestra chica genera NaNs y destruye el entrenamiento.'
+      }
+    ];
+
+    const cardH = (boxH - 64) / 3;
+    const maxMase = 1.3;
+
+    benchmarks.forEach((b, idx) => {
+      const by = ry + 48 + idx * (cardH + 4);
+      ctx.fillStyle = 'rgba(6, 11, 25, 0.88)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
+      ctx.beginPath(); ctx.roundRect(rx + 12, by, rw - 24, cardH - 4, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = b.color;
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText(b.name, rx + 20, by + 16);
+
+      ctx.fillStyle = '#e2eeff';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Cobertura MCR: ${b.mcr}`, rx + rw - 22, by + 16);
+
+      // Barra de MASE
+      const barMaxW = rw - 210;
+      const bw = (b.mase / maxMase) * barMaxW;
+      ctx.fillStyle = b.color;
+      ctx.fillRect(rx + 20, by + 24, bw, 11);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText(`MASE: ${b.mase} · Ancho MSIW: ${b.msiw}`, rx + 26 + bw, by + 33);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '500 9px Inter, sans-serif';
+      ctx.fillText(b.note, rx + 20, by + cardH - 12);
+    });
+    ctx.restore();
+  }
+
+  // ACTO 4: ASIMETRÍA DEL RIESGO (P10 / P50 / P90) Y PASE A LA DIAPOSITIVA 11 (ÁRBOL DE DECISIÓN)
+  function drawBridge11Stage(w, h) {
+    const pad = 16, padT = 46;
+    const leftW = w * 0.48;
+    const boxH = h - padT - 14;
+
+    // IZQUIERDA: EL CONO DE LA HONESTIDAD Y SELECCIÓN ASIMÉTRICA DE CUANTIL (P10 / P50 / P90)
+    const lx = pad, ly = padT, lw = leftW - pad;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 17, 36, 0.92)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.4)';
+    ctx.beginPath(); ctx.roundRect(lx, ly, lw, boxH, 11); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⚖️ EL CONO DE LA HONESTIDAD: DECISIÓN ASIMÉTRICA', lx + 14, ly + 20);
+
+    // Mini Cono P10 - P50 - P90 interactivo según state.targetQuantile
+    const cLeft = lx + 20, cW = lw - 40, cTop = ly + 36, cH = boxH * 0.50;
+    const splitX = cLeft + cW * 0.28;
+    const cy = cTop + cH * 0.54;
+    const coneW = (cLeft + cW) - splitX;
+    const maxS = cH * 0.42;
+
+    // Relleno del cono
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.14)';
+    ctx.beginPath();
+    ctx.moveTo(splitX, cy);
+    for (let i = 0; i <= 40; i++) {
+      const u = i / 40;
+      ctx.lineTo(splitX + u * coneW, cy - Math.sqrt(u) * maxS);
+    }
+    for (let i = 40; i >= 0; i--) {
+      const u = i / 40;
+      ctx.lineTo(splitX + u * coneW, cy + Math.sqrt(u) * maxS);
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    // Historia fija blanca
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    ctx.moveTo(cLeft, cy + 18);
+    ctx.lineTo(cLeft + (splitX - cLeft) * 0.5, cy - 8);
+    ctx.lineTo(splitX, cy);
+    ctx.stroke();
+
+    // P90 (Arriba), P50 (Centro), P10 (Abajo)
+    const qFactor = (state.targetQuantile - 50) / 40; // de 0 (P50) a +1 (P90)
+    const activeYEnd = cy - qFactor * maxS;
+
+    // P90
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = state.targetQuantile >= 85 ? 3 : 1.5;
+    ctx.beginPath();
+    for (let i = 0; i <= 40; i++) {
+      const u = i / 40;
+      const x = splitX + u * coneW, y = cy - Math.sqrt(u) * maxS;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // P50
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = state.targetQuantile === 50 ? 3 : 1.5;
+    ctx.beginPath();
+    ctx.moveTo(splitX, cy);
+    ctx.lineTo(cLeft + cW, cy);
+    ctx.stroke();
+
+    // P10
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    for (let i = 0; i <= 40; i++) {
+      const u = i / 40;
+      const x = splitX + u * coneW, y = cy + Math.sqrt(u) * maxS;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('P90 (Reserva Antiapagón)', cLeft + cW - 4, cy - maxS - 5);
+    ctx.fillStyle = '#a5f3fc';
+    ctx.fillText('P50 (Valor Esperado)', cLeft + cW - 4, cy - 5);
+    ctx.fillStyle = '#8ef7c7';
+    ctx.fillText('P10 (Escenario Pesimista)', cLeft + cW - 4, cy + maxS + 12);
+
+    // Punto de decisión elegido por el usuario según la asimetría del riesgo
+    ctx.fillStyle = '#ffc05c';
+    ctx.beginPath(); ctx.arc(cLeft + cW - 8, activeYEnd, 5.5, 0, Math.PI * 2); ctx.fill();
+
+    // Explicación de los 3 Axiomas al pie de la caja izquierda
+    const axY = cTop + cH + 20;
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('📌 AXIOMA DE CERTIDUMBRE PROBABILÍSTICA:', lx + 14, axY);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('Subestimar demanda eléctrica o médica cuesta un colapso;', lx + 14, axY + 18);
+    ctx.fillText(`por eso planificamos sobre la banda superior calibrada (P${state.targetQuantile}).`, lx + 14, axY + 34);
+    ctx.restore();
+
+    // DERECHA: PUENTE DIRECTO A LA DIAPOSITIVA 11 (¿CÓMO SABER CUÁL MODELO ELEGIR?)
+    const rx = leftW + 10;
+    const rw = w - rx - 16;
+    const ry = padT;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(13, 18, 38, 0.95)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.48)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.roundRect(rx, ry, rw, boxH, 11); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#38efff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 11 (EL CIERRE EJECUTIVO)', rx + 14, ry + 20);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 13px "Space Grotesk", sans-serif';
+    ctx.fillText('Arquitectura de Decisión: ¿Qué modelo usar hoy?', rx + 14, ry + 40);
+
+    ctx.fillStyle = '#b8cae0';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('En la siguiente diapositiva cruzaremos las 4 Eras con 3 filtros prácticos:', rx + 14, ry + 58);
+
+    const filters = [
+      {
+        q: '❓ Filtro 1: ¿Cuántos datos históricos tienes por serie (N)?',
+        a: 'N < 500 o Cold-Start (Vía 1 / Vía 4) · 10³–10⁵ (Vía 2) · >10⁵ (Vía 3)',
+        c: '#38efff'
+      },
+      {
+        q: '⚡ Filtro 2: ¿Cuál es tu presupuesto de latencia y cómputo?',
+        a: 'Microsegundos en CPU edge (Vía 1) · CPU multihilo (Vía 2) · GPU (Vía 3/4)',
+        c: '#ffc05c'
+      },
+      {
+        q: '🌪️ Filtro 3: ¿Qué pasa si ocurre un récord fuera de rango?',
+        a: 'Si el fallo es crítico: Prohibido Vía 2 (Árboles) ➔ Usa Vía 3 o Vía 4 + SCP',
+        c: '#ff5277'
+      }
+    ];
+
+    const fH = (boxH - 80) / 3;
+    filters.forEach((f, idx) => {
+      const fy = ry + 70 + idx * (fH + 4);
+      ctx.fillStyle = 'rgba(6, 11, 25, 0.88)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.beginPath(); ctx.roundRect(rx + 12, fy, rw - 24, fH - 4, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = f.c;
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.fillText(f.q, rx + 20, fy + 18);
+
+      ctx.fillStyle = '#e2eeff';
+      ctx.font = '500 9.5px Inter, sans-serif';
+      ctx.fillText(f.a, rx + 20, fy + 36);
+    });
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(w, h);
+
+    if (state.step === 'cone') {
+      drawConeStage(w, h);
+    } else if (state.step === 'scp') {
+      drawScpStage(w, h);
+    } else if (state.step === 'ercot') {
+      drawErcotStage(w, h);
+    } else {
+      drawBridge11Stage(w, h);
+    }
+  }
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setStep(btn.dataset.step, true);
+    });
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    if (idx === STEPS.length - 1) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+        return;
+      }
+    }
+    const next = STEPS[(idx + 1) % STEPS.length];
+    setStep(next, true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderChaos').addEventListener('input', e => {
+    state.chaosScale = +e.target.value / 100;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderAlpha').addEventListener('input', e => {
+    state.coveragePct = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderCalPct').addEventListener('input', e => {
+    state.calibShare = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderRisk').addEventListener('input', e => {
+    state.targetQuantile = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'cone',
+      chaosScale: 1.0,
+      coveragePct: 90,
+      calibShare: 80,
+      targetQuantile: 90,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderChaos').value = 100;
+    $('sliderAlpha').value = 90;
+    $('sliderCalPct').value = 80;
+    $('sliderRisk').value = 90;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('cone', true);
+    if (e.key === '2') setStep('scp', true);
+    if (e.key === '3') setStep('ercot', true);
+    if (e.key === '4') setStep('bridge11', true);
+    if (e.key === 'ArrowRight') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+          return;
+        }
+      }
+      setStep(STEPS[(idx + 1) % STEPS.length], true);
+    }
+    if (e.key === 'ArrowLeft') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+          return;
+        }
+      }
+      setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    }
+    const deckNavKeys = ['PageUp', 'PageDown', 'Home', 'End', 'n', 'N', 'd', 'D', 'f', 'F', 'Escape', 'ArrowUp', 'ArrowDown'];
+    if (deckNavKeys.includes(e.key)) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+      }
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && (e.data.type === 'resize' || e.data.type === 'activate')) {
+      setTimeout(() => {
+        fitCanvas();
+        renderCanvas();
+      }, 30);
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        const next = STEPS[(idx + 1) % STEPS.length];
+        setStep(next, false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    if (canvas.parentElement) ro.observe(canvas.parentElement);
+    ro.observe(document.body);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

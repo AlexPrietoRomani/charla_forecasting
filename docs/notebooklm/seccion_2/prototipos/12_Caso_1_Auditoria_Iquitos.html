@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPO 12 v1: Caso 1 · Auditoría empírica en Iquitos</title>
+<style>
+:root{--bg:#040714;--line:rgba(148,163,184,.15);--line-bright:rgba(56,239,255,.32);
+--text:#edf5ff;--muted:#94a3b8;--dim:#5c6c84;--cyan:#38efff;--amber:#ffc05c;--red:#ff5277;--green:#6ef0b4;
+--mono:"JetBrains Mono",Consolas,monospace;--display:"Space Grotesk",Inter,"Segoe UI",sans-serif;--sans:Inter,"Segoe UI",Arial,sans-serif}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{width:100%;min-height:100%;margin:0}
+body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);background:radial-gradient(ellipse at 80% 10%,rgba(14,116,144,.18),transparent 35%),#030511;font-family:var(--sans)}
+#slideFrame{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;width:min(100vw,1600px,calc(100svh*16/9));aspect-ratio:16/9;padding:16px 22px 10px;overflow:hidden;background:linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));border:1px solid rgba(82,128,170,.25)}
+body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
+body.is-embedded #slideFrame{width:100%!important;height:100%!important;aspect-ratio:auto!important;border:none!important;padding:10px 16px 6px!important}
+button{font:inherit;color:inherit;cursor:pointer}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.eyebrow{margin:0;color:var(--cyan);font:600 10px/1.2 var(--mono);letter-spacing:.15em}
+h1{margin:2px 0 0;font:700 clamp(19px,1.7vw,26px)/1.1 var(--display);letter-spacing:-.02em}
+h1 .n{color:var(--amber)}.sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.4 var(--sans)}.sub b{color:#d7e5f8}
+.badge{padding:7px 12px;border:1px solid rgba(104,138,180,.22);border-radius:11px;background:rgba(6,12,26,.88);font:600 9px/1.5 var(--mono);color:#9fb2cb;text-align:right;white-space:nowrap}
+.badge b{color:var(--cyan)}
+.workspace{display:grid;grid-template-columns:minmax(280px,.36fr) minmax(0,1fr);gap:14px;min-height:0;overflow:hidden}
+.left{display:grid;grid-template-rows:auto auto auto minmax(0,1fr);gap:7px;min-height:0;overflow:hidden}
+.kpi{display:flex;align-items:center;gap:10px;padding:8px 11px;border:1px solid rgba(133,158,192,.16);border-radius:11px;background:linear-gradient(110deg,rgba(12,20,39,.9),rgba(7,13,28,.8))}
+.kpi .v{font:700 19px/1 var(--mono);color:#fff}.kpi .v small{font-size:11px;color:var(--muted)}
+.kpi .l{font:400 10px/1.35 var(--sans);color:#9aa9bd}.kpi .l b{color:#d5e2f5}
+.q{padding:8px 11px;border:1px solid rgba(56,239,255,.22);border-radius:11px;background:linear-gradient(125deg,rgba(6,32,50,.5),rgba(7,14,30,.85));font:400 10.5px/1.45 var(--sans);color:#9bb0c9;overflow:hidden}
+.q b{color:#e8f2ff}.q .say{display:block;margin-top:5px;padding:5px 8px;border-left:2px solid var(--cyan);background:rgba(56,239,255,.06);font-style:italic;color:#c8dcf2}
+.right{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px;min-height:0;overflow:hidden}
+.years{display:flex;gap:5px;flex-wrap:wrap}
+.ybtn{padding:5px 10px;border:1px solid rgba(128,151,184,.25);border-radius:7px;background:rgba(18,28,48,.7);font:600 10px/1 var(--mono);color:#a8b9cf}
+.ybtn[aria-pressed="true"]{color:#aff6ff;border-color:rgba(56,239,255,.4);background:rgba(8,145,178,.25)}
+.ybtn small{color:var(--dim);font-weight:400}
+.canvas-frame{position:relative;min-height:0;border:1px solid rgba(119,151,191,.16);border-radius:10px;background:radial-gradient(ellipse at 50% 30%,rgba(10,40,68,.2),rgba(2,6,17,.88) 75%);overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.hint{font:8.5px/1.4 var(--mono);color:#5f7385;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.foot{display:flex;justify-content:space-between;gap:10px;font:9px/1.3 var(--mono);color:#6e8099;border-top:1px solid var(--line);padding-top:6px}
+.foot strong{color:#a4b6cf}
+</style>
+</head>
+<body>
+<main id="slideFrame">
+<header class="topbar">
+<div><p class="eyebrow">ACTO 2 · CASO 1 · CLIMA SENAMHI · IQUITOS</p>
+<h1><span class="n">02</span> Caso 1: predicción de temperatura en Iquitos</h1>
+<p class="sub">Auditoría empírica con <b>2,557 días reales</b> de la estación <b>Punchana (SENAMHI)</b>. Cómo la física tropical desafía a los algoritmos.</p></div>
+<div class="badge">ESTACIÓN <b>103015</b> · −3.6903°, −73.2556° · <b>91 msnm</b><br>2019-01-01 → 2025-12-31 · <b>2,557 días</b> sin huecos</div>
+</header>
+<section class="workspace">
+<div class="left">
+<div class="kpi"><div class="v">2,557 <small>días</small></div><div class="l"><b>Serie diaria continua</b> tmax · tmin · precip · humedad</div></div>
+<div class="kpi"><div class="v" id="kpiMean">31.79 <small>°C</small></div><div class="l" id="kpiYear"><b>Récord 38.0 °C</b> (2023-10-07 y 2024-10-18) · clic un año →</div></div>
+<div class="q"><b>🎤 3 preguntas que este caso responde:</b><br>1️⃣ ¿Por qué los árboles fallan en olas récord? 2️⃣ ¿Tierra (CPU) o supercómputo? 3️⃣ ¿Y a 7 días con bandas?<span class="say">“Dilo así: 7 años de termómetro en Iquitos. Vamos a auditar a 14 modelos con esos datos.”</span></div>
+</div>
+<div class="right">
+<div class="years" id="years"></div>
+<div class="canvas-frame"><canvas id="cv"></canvas></div>
+<div class="hint"><span id="hlab">● CICLO ESTACIONAL MEDIO (12 medias mensuales reales) · puntos = récords Top-5</span><span>SEP–NOV = pico térmico · MAY–JUL = fresco</span></div>
+</div>
+</section>
+<footer class="foot"><span><strong>SENAMHI Punchana</strong> · control de ceros en precipitación + interpolación lineal física</span><span>tmax media 31.79 °C · máx 38.0 · mín 19.2</span></footer>
+</main>
+<script>
+(()=>{if(window.self!==window.top)document.body.classList.add('is-embedded');
+const MM=[32.05,31.77,31.41,31.35,30.50,30.41,30.67,32.00,33.12,33.01,33.08,32.08];
+const YY={'2019':[31.61,36.0],'2020':[31.70,36.0],'2021':[31.19,35.4],'2022':[31.57,37.0],'2023':[32.18,38.0],'2024':[32.75,38.0],'2025':[31.50,36.2]};
+const TOP=[['2024-10-18',38.0],['2023-10-07',38.0],['2024-10-17',37.8],['2024-10-03',37.6],['2024-09-25',37.6]];
+const MN=['E','F','M','A','M','J','J','A','S','O','N','D'];
+let sel=null;const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+const yb=document.getElementById('years');
+Object.keys(YY).forEach(y=>{const b=document.createElement('button');b.className='ybtn';b.setAttribute('aria-pressed','false');b.innerHTML=y+' <small>'+YY[y][0].toFixed(2)+'°</small>';b.onclick=()=>{sel=(sel===y?null:y);[...yb.children].forEach(x=>x.setAttribute('aria-pressed',String(x.textContent.slice(0,4)===sel)));document.getElementById('kpiMean').innerHTML=(sel?YY[sel][0].toFixed(2):'31.79')+' <small>°C</small>';document.getElementById('kpiYear').innerHTML=sel?('<b>'+sel+' · media '+YY[sel][0].toFixed(2)+' °C · máx '+YY[sel][1].toFixed(1)+' °C</b>'):'<b>Récord 38.0 °C</b> (2023-10-07 y 2024-10-18) · clic un año →';draw()};yb.appendChild(b)});
+function fit(){const r=cv.getBoundingClientRect();if(r.width<4)return;const d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
+function draw(){const r=cv.getBoundingClientRect(),w=r.width,h=r.height;if(w<10)return;ctx.clearRect(0,0,w,h);
+const Y=v=>h-24-((v-29)/(39-29))*(h-44),X=i=>34+(i/11)*(w-46);
+ctx.strokeStyle='rgba(110,140,180,.12)';for(let g=30;g<=38;g+=2){ctx.beginPath();ctx.moveTo(30,Y(g));ctx.lineTo(w-8,Y(g));ctx.stroke();ctx.fillStyle='#5f7385';ctx.font='8px JetBrains Mono';ctx.fillText(g+'°',4,Y(g)+3)}
+ctx.save();ctx.beginPath();ctx.lineWidth=2.6;ctx.strokeStyle='#38efff';ctx.shadowColor='#38efff';ctx.shadowBlur=8;
+MM.forEach((v,i)=>{i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))});ctx.stroke();ctx.restore();
+ctx.fillStyle='#8fa3bd';ctx.font='8.5px JetBrains Mono';ctx.textAlign='center';MN.forEach((m,i)=>ctx.fillText(m,X(i),h-8));
+TOP.forEach(([f,v])=>{const mo=+f.slice(5,7)-1,x=X(mo)+(mo>=8?10:-10);ctx.fillStyle='#ff5277';ctx.beginPath();ctx.arc(x,Y(v),3.4,0,7);ctx.fill();ctx.fillStyle='#ff9cb0';ctx.font='700 8px JetBrains Mono';ctx.textAlign=x>w/2?'right':'left';ctx.fillText(v.toFixed(1)+'° '+f.slice(5),x+(x>w/2?-7:7),Y(v)-6)});
+ctx.fillStyle='#ffc05c';ctx.font='700 9px JetBrains Mono';ctx.textAlign='left';ctx.fillText('PICO SEP–NOV (ola 2023-2024: 38.0 °C)',36,16);
+if(sel){ctx.fillStyle='rgba(255,192,92,.08)';const i=+sel%12;}}
+addEventListener('resize',()=>{fit();draw()});fit();draw();})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1942 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 5 v3: Anatomía de la Señal Temporal · 4 Capas 3D ─▶ Método STL (COES) ─▶ Señal vs Ruido ─▶ Overfitting y Pase a Era 1</title>
+<style>
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.84);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --yt: #38efff;
+  --trend: #49a5ff;
+  --season: #c778ff;
+  --cycle: #ffc05c;
+  --noise: #ff5277;
+  --signal: #6ef0b4;
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 82% 12%, rgba(14, 116, 144, 0.18), transparent 36%),
+    radial-gradient(ellipse at 15% 88%, rgba(126, 34, 206, 0.12), transparent 36%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 0.95vw, 13px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(13px, 1.45vw, 22px) clamp(16px, 1.75vw, 26px) clamp(9px, 1vw, 15px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 40%, rgba(7, 80, 115, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(8, 14, 31, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(82, 128, 170, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.26;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--yt); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(56, 239, 255, 0.38);
+  border-radius: 12px;
+  color: var(--yt);
+  background: rgba(56, 239, 255, 0.08);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--yt);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.accent { color: var(--yt); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.eq-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 7px 14px;
+  border: 1px solid rgba(104, 138, 180, 0.25);
+  border-radius: 12px;
+  background: rgba(6, 12, 28, 0.9);
+}
+
+.eq-top {
+  font: 700 9px/1 var(--mono);
+  color: var(--signal);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.equation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 clamp(12px, 1vw, 15px)/1.1 var(--mono);
+  white-space: nowrap;
+}
+
+.eq-y { color: var(--yt); }
+.eq-t { color: var(--trend); }
+.eq-s { color: var(--season); }
+.eq-c { color: var(--cycle); }
+.eq-e { color: var(--noise); }
+.eq-op { color: #64748b; }
+
+/* UNIFIED FLOWBAR WITH 4-ACT AUTO-LOOP */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--yt));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--yt)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--yt)) 18%, transparent);
+}
+
+.proc-node[data-step="anatomy"] { --node-color: var(--yt); }
+.proc-node[data-step="stl"]     { --node-color: var(--season); }
+.proc-node[data-step="signal"]  { --node-color: var(--signal); }
+.proc-node[data-step="overfit"] { --node-color: var(--noise); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 23px;
+  width: 23px;
+  height: 23px;
+  border-radius: 7px;
+  font: 700 10.5px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--yt));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--yt)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 11.5px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub { color: #d6e4f7; }
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--yt));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 11px/1 var(--mono);
+  user-select: none;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(56, 239, 255, 0.45);
+  background: rgba(8, 145, 178, 0.22);
+  color: #a5f3fc;
+}
+
+/* WORKSPACE: LEFT NARRATIVE + LAYER SWITCHER | RIGHT 2D MONITOR + 3D SLABS */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(340px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN */
+.left-column {
+  --stage-accent: var(--yt);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(6px, 0.9vh, 10px);
+  padding: clamp(10px, 1.2vw, 16px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 239, 255, 0.3) rgba(5, 10, 24, 0.4);
+}
+
+.left-column::-webkit-scrollbar {
+  width: 5px;
+}
+.left-column::-webkit-scrollbar-track {
+  background: rgba(5, 10, 24, 0.4);
+  border-radius: 4px;
+}
+.left-column::-webkit-scrollbar-thumb {
+  background: rgba(56, 239, 255, 0.28);
+  border-radius: 4px;
+}
+.left-column::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 239, 255, 0.5);
+}
+
+.narr-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(15.5px, 1.3vw, 19.5px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(11px, 0.9vw, 12.6px)/1.38 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+/* INTERACTIVE LAYER CHIPS WITH EYE TOGGLES */
+.layers-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.layers-strip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 700 9px/1 var(--mono);
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.layer-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.layer-row {
+  --lc: var(--yt);
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 25, 0.76);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.layer-row[data-key="T"] { --lc: var(--trend); }
+.layer-row[data-key="S"] { --lc: var(--season); }
+.layer-row[data-key="C"] { --lc: var(--cycle); }
+.layer-row[data-key="E"] { --lc: var(--noise); }
+
+.layer-row:hover {
+  border-color: color-mix(in srgb, var(--lc) 45%, transparent);
+}
+
+.layer-row.selected {
+  border-color: color-mix(in srgb, var(--lc) 75%, transparent);
+  background: linear-gradient(95deg, color-mix(in srgb, var(--lc) 14%, rgba(9, 16, 34, 0.95)), rgba(8, 14, 30, 0.92));
+}
+
+.layer-row.layer-hidden {
+  opacity: 0.48;
+}
+
+.layer-sym {
+  display: grid;
+  place-items: center;
+  height: 26px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  color: var(--lc);
+  background: color-mix(in srgb, var(--lc) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lc) 38%, transparent);
+}
+
+.layer-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.layer-name {
+  font: 650 11px/1.15 var(--display);
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layer-name span {
+  font: 600 9px/1 var(--mono);
+  color: var(--lc);
+  margin-left: 5px;
+}
+
+.layer-desc {
+  font: 400 10px/1.25 var(--sans);
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eye-btn {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--lc);
+}
+
+.eye-btn:hover {
+  background: color-mix(in srgb, var(--lc) 14%, transparent);
+}
+
+.eye-btn[aria-pressed="false"] {
+  color: #475569;
+}
+
+.eye-btn svg { width: 15px; height: 15px; }
+
+.info-block {
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 25, 0.78);
+}
+
+.info-block-label {
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  margin-bottom: 3px;
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 11px/1.36 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; }
+
+.speaker-box {
+  padding: 8px 10px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 9px 9px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.55));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  font: 700 8.5px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 10.8px/1.36 var(--sans);
+  color: #e2eeff;
+}
+
+/* RIGHT COLUMN: 2D RECONSTRUCTION MONITOR + 3D EXPLODED SLABS */
+.visual-column {
+  display: grid;
+  grid-template-rows: minmax(132px, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(8px, 0.9vw, 12px);
+  min-width: 0;
+  min-height: 0;
+}
+
+.glass-card {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 13px;
+  background: linear-gradient(145deg, rgba(10, 18, 36, 0.94), rgba(5, 11, 26, 0.92));
+  overflow: hidden;
+}
+
+.monitor-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px 12px 7px;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2edfb;
+  font: 700 12px/1.2 var(--display);
+}
+
+.panel-glyph {
+  display: inline-grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border: 1px solid rgba(56, 239, 255, 0.25);
+  border-radius: 6px;
+  color: var(--yt);
+  background: rgba(56, 239, 255, 0.08);
+  font: 700 11px/1 var(--mono);
+}
+
+.monitor-metrics {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 9.5px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.monitor-metrics strong { color: #f8fafc; }
+
+.model-badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(110, 240, 180, 0.28);
+  color: #8ef7c7;
+  background: rgba(16, 185, 129, 0.1);
+  font: 600 9px/1.1 var(--mono);
+}
+
+.model-badge.warn {
+  border-color: rgba(255, 82, 119, 0.35);
+  color: #fda4af;
+  background: rgba(225, 29, 72, 0.14);
+}
+
+.model-badge.neutral {
+  border-color: rgba(73, 165, 255, 0.3);
+  color: #a5f3fc;
+  background: rgba(14, 116, 144, 0.16);
+}
+
+.chart-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 48px;
+  border: 1px solid rgba(119, 151, 191, 0.14);
+  border-radius: 8px;
+  background: rgba(2, 7, 19, 0.75);
+  overflow: hidden;
+}
+
+#oscCanvas, #isoCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #94a3b8;
+  font: 500 9.5px/1.1 var(--mono);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-line {
+  width: 16px;
+  height: 0;
+  border-top: 2.5px solid var(--yt);
+}
+
+.legend-line.recon { border-top: 2.5px dashed var(--signal); }
+.legend-line.overfit { border-top: 2.5px dashed var(--noise); }
+
+.model-card {
+  display: flex;
+  flex-direction: column;
+  padding: 9px 12px 8px;
+}
+
+.canvas-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 5px;
+  border: 1px solid rgba(119, 151, 191, 0.15);
+  border-radius: 10px;
+  background: radial-gradient(ellipse at 50% 42%, rgba(10, 58, 86, 0.18), rgba(2, 7, 18, 0.9) 70%);
+  overflow: hidden;
+}
+
+.canvas-caption {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  color: #a5f3fc;
+  background: rgba(6, 13, 28, 0.78);
+  border: 1px solid rgba(56, 239, 255, 0.25);
+  padding: 3px 7px;
+  border-radius: 5px;
+  font: 600 8.5px/1.1 var(--mono);
+  pointer-events: none;
+}
+
+.drag-hint {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  padding: 3px 7px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 5px;
+  color: #cbd5e1;
+  background: rgba(6, 13, 28, 0.78);
+  font: 600 8.5px/1.1 var(--mono);
+  pointer-events: none;
+}
+
+.controlbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding-top: 7px;
+}
+
+.range-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.range-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #cbd5e1;
+  font: 500 9.5px/1 var(--mono);
+}
+
+.range-control output {
+  min-width: 32px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(60px, 6vw, 90px);
+  height: 4px;
+  cursor: pointer;
+}
+
+.control-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid rgba(128, 151, 184, 0.22);
+  border-radius: 7px;
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.75);
+  font: 600 9.5px/1 var(--mono);
+}
+
+.action-btn.primary {
+  color: #cffafe;
+  border-color: rgba(56, 239, 255, 0.35);
+  background: rgba(8, 145, 178, 0.22);
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.25 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #cbd5e1; }
+
+/* MEDIA QUERIES FOR COMPREHENSIVE RESPONSIVENESS */
+@media (max-width: 1200px) and (min-width: 881px) {
+  .workspace { grid-template-columns: minmax(280px, 0.4fr) minmax(0, 0.6fr); gap: 10px; }
+  .controlbar { gap: 6px 8px; }
+  .range-controls { gap: 8px; }
+  input[type="range"] { width: 60px; }
+}
+
+@media (max-width: 880px) {
+  body { display: block; overflow-y: auto; }
+  body.is-embedded {
+    overflow-y: auto !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: block !important;
+  }
+  body.is-embedded #slideFrame {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    padding: 12px 14px !important;
+  }
+  #slideFrame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 100svh;
+    overflow: visible;
+    grid-template-rows: auto auto auto auto;
+    gap: 12px;
+  }
+  .topbar { grid-template-columns: 1fr; gap: 10px; }
+  .flowbar { grid-template-columns: 1fr; gap: 8px; }
+  .process-track {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 3px;
+  }
+  .proc-node { padding: 6px 6px; gap: 5px; }
+  .proc-arrow { display: none; }
+  .proc-sub { display: none; }
+  .proc-year { font-size: 10px; }
+  .workspace { grid-template-columns: 1fr; overflow: visible; gap: 12px; }
+  .left-column { max-height: none; overflow: visible; }
+  .visual-column { min-height: 480px; overflow: visible; grid-template-rows: 190px 360px; }
+  .controlbar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .action-controls { justify-content: flex-end; }
+  .footnote { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
+@media (max-width: 520px) {
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  h1 { font-size: 18px; }
+  .process-track { grid-template-columns: repeat(2, 1fr); }
+  .proc-node { padding: 6px 8px; }
+  .proc-sub { display: block; font-size: 8.5px; }
+}
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 8px 16px 6px; }
+  body.is-embedded #slideFrame { padding: 6px 14px 4px !important; gap: 6px !important; }
+  .topbar { padding-bottom: 6px; }
+  .brand-mark { width: 34px; height: 34px; flex: 0 0 34px; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .eyebrow { font-size: 9.5px; margin-bottom: 2px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .process-track { padding: 3px; gap: 4px; }
+  .proc-node { padding: 5px 8px; gap: 6px; border-radius: 7px; }
+  .proc-num { width: 20px; height: 20px; font-size: 9.5px; }
+  .proc-year { font-size: 11px; }
+  .proc-sub { font-size: 8.5px; }
+  .left-column { padding: 8px 12px; gap: 6px; border-radius: 11px; }
+  .narr-title { font-size: clamp(14px, 1.2vw, 17px); line-height: 1.15; }
+  .narr-lead { font-size: clamp(11px, 0.9vw, 12.5px); line-height: 1.35; }
+  .info-box { padding: 6px 9px; border-radius: 8px; }
+  .info-box-label { font-size: 8.5px; margin-bottom: 2px; }
+  .info-box-text { font-size: clamp(10.5px, 0.82vw, 12px); line-height: 1.32; }
+  .speaker-box { padding: 6px 9px; border-radius: 0 8px 8px 0; }
+  .speaker-head { font-size: 8px; margin-bottom: 2px; }
+  .speaker-quote { font-size: clamp(10px, 0.8vw, 11.5px); line-height: 1.3; }
+  .footnote { font-size: 8.5px; padding-top: 2px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .left-column { gap: 4px; padding: 6px 8px; }
+  .narr-lead { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  h1 { font-size: 15px; }
+  .topbar { padding-bottom: 4px; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 5 v3: Anatomía Ontológica de la Señal Temporal, Método STL y Trampa del Overfitting">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M2 13h3l2.1-7 3.2 13 2.6-9 2.1 5H22" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-opacity="0.22"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">Sección 1 · Descomposición Ontológica, Método STL y Entropía · Base antes de Modelar</p>
+        <h1>ANATOMÍA DE LA SEÑAL: <span class="accent">¿Qué es una Serie Temporal?</span> <span class="sub">· Física Causal vs. Ruido</span></h1>
+      </div>
+    </div>
+
+    <div class="eq-card" aria-label="Ecuación ontológica de descomposición">
+      <span class="eq-top">⚡ ECUACIÓN ONTOLÓGICA &amp; STL (CLEVELAND ET AL., 1990)</span>
+      <div class="equation">
+        <span class="eq-y">Y(t)</span><span class="eq-op">=</span>
+        <span class="eq-t" title="Tendencia = Inercia Física">T(t)</span><span class="eq-op">+</span>
+        <span class="eq-s" title="Estacionalidad = Geometría Terrestre">S(t)</span><span class="eq-op">+</span>
+        <span class="eq-c" title="Ciclo = Dinámica de Régimen">C(t)</span><span class="eq-op">+</span>
+        <span class="eq-e" title="Ruido = Entropía Irreducible">ε(t)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. Anatomía y Metáfora del Río ─▶ 2. Método STL (COES/RTE) ─▶ 3. Señal vs Ruido ─▶ 4. Overfitting y Pase a Era 1 -->
+  <nav class="flowbar" aria-label="Secuencia explicativa en 4 etapas">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="anatomy" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">Las 4 Capas y el Río</span>
+          <span class="proc-sub">Inercia, marea, ciclo y entropía</span>
+        </div>
+        <div class="proc-progress" id="prog-anatomy"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="stl" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">Método STL en Vivo</span>
+          <span class="proc-sub">COES Perú · RTE Francia (±2.5σ)</span>
+        </div>
+        <div class="proc-progress" id="prog-stl"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="signal" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">Señal Causal vs. Ruido</span>
+          <span class="proc-sub">Aislar T+S+C y rechazar ε(t)</span>
+        </div>
+        <div class="proc-progress" id="prog-signal"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="overfit" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">Overfitting ─▶ Era 1</span>
+          <span class="proc-sub">Trampa del ruido y pase a 1838</span>
+        </div>
+        <div class="proc-progress" id="prog-overfit"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE PRINCIPAL -->
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA + INTERRUPTORES DE CAPAS + GUÍA DE EXPOSICIÓN -->
+    <aside class="left-column" id="leftCard" aria-live="polite">
+      <div class="narr-header">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · METÁFORA FÍSICO-BIOLÓGICA</span>
+          <span style="font:600 9.5px/1 var(--mono);color:#8fa3bd">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. La Metáfora del Río: 4 Fuerzas Superpuestas</h2>
+        <p class="narr-lead" id="narrLead">
+          Antes de entrenar cualquier IA, debemos desglosar la señal. Imagina una serie temporal como el <b>flujo de un río o un cultivo agrícola</b>:
+        </p>
+      </div>
+
+      <!-- LISTA DE CAPAS CON BOTÓN DE OJO PARA PRENDER/APAGAR EN VIVO -->
+      <div class="layers-strip">
+        <div class="layers-strip-head">
+          <span>Capas Aditivas (Clic para inspeccionar)</span>
+          <span>👁️ Prender / Apagar</span>
+        </div>
+        <div class="layer-list">
+          <div class="layer-row selected" data-key="Y" tabindex="0" role="button">
+            <div class="layer-sym">Y(t)</div>
+            <div class="layer-info">
+              <div class="layer-name">Señal Real Observada <span>TOTAL</span></div>
+              <div class="layer-desc">El caudal total medido sin filtrar: suma de las 4 fuerzas.</div>
+            </div>
+            <button class="eye-btn" type="button" data-toggle="Y" aria-pressed="true" title="Mostrar u ocultar Y(t)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <div class="layer-row" data-key="T" tabindex="0" role="button">
+            <div class="layer-sym">T(t)</div>
+            <div class="layer-info">
+              <div class="layer-name">Tendencia Secular <span>INERCIA FÍSICA</span></div>
+              <div class="layer-desc">El cauce del río: dirección lenta y estructural a largo plazo.</div>
+            </div>
+            <button class="eye-btn" type="button" data-toggle="T" aria-pressed="true" title="Mostrar u ocultar T(t)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <div class="layer-row" data-key="S" tabindex="0" role="button">
+            <div class="layer-sym">S(t)</div>
+            <div class="layer-info">
+              <div class="layer-name">Estacionalidad <span>GEOMETRÍA TERRESTRE</span></div>
+              <div class="layer-desc">Mareas y deshielo: ciclos fijos de 24h, 7 días o 12 meses.</div>
+            </div>
+            <button class="eye-btn" type="button" data-toggle="S" aria-pressed="true" title="Mostrar u ocultar S(t)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <div class="layer-row" data-key="C" tabindex="0" role="button">
+            <div class="layer-sym">C(t)</div>
+            <div class="layer-info">
+              <div class="layer-name">Ciclo Endógeno <span>CAMBIO DE RÉGIMEN</span></div>
+              <div class="layer-desc">Sequías o El Niño: expansiones y contracciones no periódicas.</div>
+            </div>
+            <button class="eye-btn" type="button" data-toggle="C" aria-pressed="true" title="Mostrar u ocultar C(t)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <div class="layer-row" data-key="E" tabindex="0" role="button">
+            <div class="layer-sym">ε(t)</div>
+            <div class="layer-info">
+              <div class="layer-name">Ruido Irreducible <span>ENTROPÍA PURA</span></div>
+              <div class="layer-desc">Ráfagas y turbulencia local: azar que jamás debes memorizar.</div>
+            </div>
+            <button class="eye-btn" type="button" data-toggle="E" aria-pressed="true" title="Mostrar u ocultar ε(t)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label" id="contextLabel">🌊 ¿POR QUÉ DESCOMPONER ANTES DE MODELAR?</div>
+        <p class="info-block-text" id="contextText">
+          En redes eléctricas (<b>COES Perú / RTE Francia</b>) o agroexportación, aplicar un algoritmo sin separar estas capas hace que el modelo confunda una turbulencia aleatoria (<b>εₜ</b>) con una ley física (<b>Tₜ + Sₜ</b>).
+        </p>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span>~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Toda serie temporal es como un río: tiene un cauce profundo que es la tendencia T(t), mareas exactas que son la estacionalidad S(t), años de sequía que son el ciclo C(t) y espuma en la superficie que es el ruido ε(t).”
+        </p>
+      </div>
+    </aside>
+
+    <!-- COLUMNA DERECHA: MONITOR 2D ARRIBA + PLACAS 3D ORBITABLES ABAJO -->
+    <div class="visual-column">
+      <section class="glass-card monitor-card" aria-label="Monitor de reconstrucción continua 2D">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <span class="panel-glyph">∿</span>
+            <span id="monitorTitle">Monitor 2D: Suma Constructiva de la Señal <span style="color:var(--yt)">Y(t)</span></span>
+          </div>
+          <div class="monitor-metrics">
+            <span>Capas activas: <strong id="layersCount">4/4</strong></span>
+            <span>Ruido ε: <strong style="color:var(--noise)" id="noiseMetric">26%</strong></span>
+            <span class="model-badge" id="modelStatus">Componentes alineados</span>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="oscCanvas" aria-label="Gráfico 2D de señal observada y reconstrucción"></canvas>
+        </div>
+
+        <div class="panel-heading">
+          <div class="legend">
+            <span class="legend-item"><i class="legend-line"></i> Observada Y(t)</span>
+            <span class="legend-item"><i class="legend-line recon"></i> Señal Reconstruida</span>
+            <span class="legend-item" id="overfitLegend" hidden><i class="legend-line overfit"></i> Modelo Memorizador (Colapso Out-of-Sample)</span>
+          </div>
+          <span style="font:600 8.5px/1 var(--mono);color:#64748b" id="axisRightLabel">HISTORIAL CONTINUO (t →)</span>
+        </div>
+      </section>
+
+      <section class="glass-card model-card" aria-label="Descomposición espacial en placas 3D">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <span class="panel-glyph" style="color:var(--trend)">▱</span>
+            <span id="slabTitle">Descomposición Ontológica 3D <span style="color:#94a3b8;font-weight:500">· Placas Aditivas Apiladas</span></span>
+          </div>
+          <div class="monitor-metrics">
+            <button class="action-btn" type="button" id="centerCameraBtn" style="padding:3px 8px">↺ Centrar cámara 3D</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="isoCanvas" aria-label="Placas 3D de Y, T, S, C y épsilon; arrastra para rotar"></canvas>
+          <span class="canvas-caption" id="canvasCaption">VISTA EXPLOTADA 3D · Y(t) = T(t) + S(t) + C(t) + ε(t)</span>
+          <span class="drag-hint">↔ ARRASTRA CON EL MOUSE PARA ORBITAR EN 3D</span>
+        </div>
+
+        <div class="controlbar">
+          <div class="range-controls">
+            <div class="range-control">
+              <label for="sliderGap"><span style="color:var(--trend)">↕</span> Separación 3D:</label>
+              <input id="sliderGap" type="range" min="34" max="68" value="48" style="accent-color:var(--trend)">
+              <output id="gapVal">48</output>
+            </div>
+            <div class="range-control">
+              <label for="sliderNoise"><span style="color:var(--noise)">∿</span> Entropía Ruido ε:</label>
+              <input id="sliderNoise" type="range" min="0" max="80" value="26" style="accent-color:var(--noise)">
+              <output id="noiseVal">26%</output>
+            </div>
+            <div class="range-control">
+              <label for="sliderSpeed"><span style="color:var(--cycle)">»</span> Velocidad:</label>
+              <input id="sliderSpeed" type="range" min="0" max="100" value="45" style="accent-color:var(--cycle)">
+              <output id="speedVal">45%</output>
+            </div>
+          </div>
+
+          <div class="control-actions">
+            <button class="action-btn primary" type="button" id="nextActBtn">Siguiente acto ─▶</button>
+            <button class="action-btn" type="button" id="playBtn"><span id="playSymbol">Ⅱ</span> <span id="playLabel">Pausar onda</span></button>
+            <button class="action-btn" type="button" id="resetBtn" title="Restaurar todo">↺</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Puente a la Diapositiva 6 (Era 1):</strong> Una vez aislada la señal causal (Tₜ + Sₜ) del ruido (εₜ), en 1838 nació la Era 1 (Verhulst, Holt-Winters, ARIMA) para modelar esa ley física con parsimonia.</span>
+    <span>Referencias: Cleveland et al. (1990) STL · Operaciones COES (Perú) &amp; RTE (Francia)</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['anatomy', 'stl', 'signal', 'overfit'];
+  const LOOP_DURATION_MS = 9500;
+  const N = 180;
+
+  const COLORS = {
+    Y: '#38efff',
+    T: '#49a5ff',
+    S: '#c778ff',
+    C: '#ffc05c',
+    E: '#ff5277',
+    signal: '#6ef0b4',
+    grid: 'rgba(139, 164, 197, 0.105)'
+  };
+
+  const state = {
+    step: 'anatomy',
+    mode: 'stl', // 'stl' | 'signal' | 'overfit'
+    activeLayers: { Y: true, T: true, S: true, C: true, E: true },
+    selected: 'Y',
+    layerGap: 48,
+    noiseAmp: 26,
+    speed: 45,
+    isPlaying: true,
+    loopOn: true,
+    stepElapsed: 0,
+    time: 0,
+    camera: { yaw: -0.42, pitch: 0.66, dragging: false, lastX: 0, lastY: 0 }
+  };
+
+  const ACT_CONTENT = {
+    anatomy: {
+      accent: 'var(--yt)',
+      tag: 'ACTO 1 DE 4 · METÁFORA FÍSICO-BIOLÓGICA',
+      title: '1. La Metáfora del Río: 4 Fuerzas Superpuestas',
+      lead: 'Antes de entrenar cualquier IA, debemos desglosar la señal. Imagina una serie temporal como el <b>flujo de un río o un cultivo agrícola</b>:',
+      ctxLabel: '🌊 CAUCE, MAREAS, SEQUÍAS Y TURBULENCIA (SECCIÓN 1.1)',
+      ctxText: '• <b>Tendencia T(t):</b> El cauce geomorfológico (inercia física a largo plazo).<br>• <b>Estacionalidad S(t):</b> Las mareas y el sol (geometría terrestre fija).<br>• <b>Ciclo C(t):</b> Sequías o inundaciones plurianuales.<br>• <b>Ruido ε(t):</b> Ráfagas de viento y espuma (entropía irreducible).',
+      quote: '“Toda serie temporal es como un río: tiene un cauce profundo que es la tendencia T(t), mareas exactas que son la estacionalidad S(t), años de sequía que son el ciclo C(t) y espuma en la superficie que es el ruido ε(t).”',
+      caption: 'VISTA EXPLOTADA 3D · Y(t) = T(t) + S(t) + C(t) + ε(t)'
+    },
+    stl: {
+      accent: 'var(--season)',
+      tag: 'ACTO 2 DE 4 · DESCOMPOSICIÓN STL EN PRODUCCIÓN',
+      title: '2. El Método STL en Vivo: COES (Perú) y RTE (Francia)',
+      lead: 'En 1990, <b>Cleveland et al.</b> crearon <b>STL (Seasonal-Trend Decomposition based on Loess)</b>: el bisturí que separa la serie ruidosa en subgráficos sincronizados.',
+      ctxLabel: '⚡ CASO REAL: DESPACHO ELÉCTRICO (COES PERÚ & RTE FRANCIA)',
+      ctxText: 'Operadores como el <b>COES en el Perú</b> y <b>RTE en Francia</b> usan STL cada hora para separar el pico diario de megavatios (<b>Sₜ</b>) del crecimiento industrial (<b>Tₜ</b>) y encender alertas cuando el residuo <b>Rₜ supera ±2.5σ</b>.',
+      quote: '“Así operan hoy el COES en Perú y RTE en Francia: pasan la demanda de megavatios por el bisturí STL para no confundir el pico de las 7 de la noche con el crecimiento anual del país, vigilando anomalías de ±2.5 sigmas.”',
+      caption: 'MÉTODO STL (LOESS) · Yₜ = Tₜ + Sₜ + Rₜ (ALERTA ANOMALÍAS ±2.5σ)'
+    },
+    signal: {
+      accent: 'var(--signal)',
+      tag: 'ACTO 3 DE 4 · SEÑAL CAUSAL VS. ENTROPÍA',
+      title: '3. El Filtro de Oro: Aprender la Señal, Ignorar el Ruido',
+      lead: 'Observa cómo en las placas 3D aparece arriba en verde la <b>Señal Estructural Pura (T + S + C)</b> tras apagar la placa roja del azar (<b>εₜ</b>).',
+      ctxLabel: '🎯 FÍSICA SUBYACENTE VS. AZAR PURO (SECCIÓN 1.2)',
+      ctxText: 'El mayor error en ciencia de datos no es equivocarse por poco, sino <b>intentar predecir el caos</b>. Un buen modelo captura el determinismo físico (<b>T + S + C</b>) y trata a <b>ε(t)</b> como incertidumbre para calibrar bandas.',
+      quote: '“El mayor error no es equivocarse, es intentar predecir el caos en lugar de entender la señal. Al apagar la placa roja del ruido ε(t), nos queda en verde la ley física pura que sí debemos aprender.”',
+      caption: 'AISLAMIENTO DE SEÑAL · ESTRUCTURA CAUSAL [T(t)+S(t)+C(t)] SIN RUIDO ε(t)'
+    },
+    overfit: {
+      accent: 'var(--noise)',
+      tag: 'ACTO 4 DE 4 · LA TRAMPA DEL OVERFITTING Y PASE A ERA 1',
+      title: '4. La Trampa de Memorizar el Ruido y el Salto a la Era 1',
+      lead: 'Si fuerzas a una red compleja o árbol sin podar a acertar cada pico de <b>ε(t)</b> en el entrenamiento, caes en la <b>“Trampa de la Memorización” (Overfitting)</b>.',
+      ctxLabel: '💥 LOS 3 PILARES DEL COLAPSO EN PRODUCCIÓN ──▶ PASE A ERA 1 (1838)',
+      ctxText: '<b>1. Colapso Out-of-Sample:</b> Mira en el monitor 2D cómo la curva roja memorizadora se dispara fuera del historial.<br><b>2. El Salto a la Diapo 6 (Era 1):</b> Para capturar la ley física pura sin memorizar ruido nacieron en <b>1838 los Modelos Analíticos (Verhulst, Holt-Winters, ARIMA)</b>.',
+      quote: '“Miren la zona roja del monitor 2D: un modelo que memorizó el ruido histórico parece perfecto entrenando, pero se estrella al salir a producción. Para modelar solo la ley física con apenas 3 números nació la Era 1: pasemos a 1838 con Verhulst.”',
+      caption: 'COLAPSO FUERA DE MUESTRA (OVERFITTING) ──▶ PASE A DIAPO 6: ERA 1 (1838)'
+    }
+  };
+
+  const slabOrder = [
+    { key: 'E', label: 'ε(t)  RUIDO / RESIDUO', sub: 'entropía irreducible (±2.5σ)', scale: 1.0 },
+    { key: 'C', label: 'C(t)  CICLO ENDÓGENO', sub: 'sequías / cambio de régimen', scale: 1.22 },
+    { key: 'S', label: 'S(t)  ESTACIONALIDAD', sub: 'geometría terrestre (24h/12m)', scale: 1.05 },
+    { key: 'T', label: 'T(t)  TENDENCIA SECULAR', sub: 'inercia física / cauce', scale: 0.78 },
+    { key: 'Y', label: 'Y(t)  SEÑAL OBSERVADA', sub: 'superposición total', scale: 0.67 }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const oscCanvas = $('oscCanvas');
+  const oscCtx = oscCanvas.getContext('2d');
+  const isoCanvas = $('isoCanvas');
+  const isoCtx = isoCanvas.getContext('2d');
+
+  let lastFrame = 0;
+  let lastData = null;
+
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const mean = values => values.reduce((s, v) => s + v, 0) / Math.max(1, values.length);
+  const hexToRgb = hex => {
+    const raw = hex.replace('#', '');
+    return [parseInt(raw.slice(0, 2), 16), parseInt(raw.slice(2, 4), 16), parseInt(raw.slice(4, 6), 16)];
+  };
+  const hashNoise = n => {
+    const v = Math.sin(n * 127.1 + 311.7) * 43758.5453123;
+    return (v - Math.floor(v)) * 2 - 1;
+  };
+
+  function computeSignalData(time) {
+    const data = { Y: [], T: [], S: [], C: [], E: [], physical: [] };
+    const drift = time * 0.42;
+    const cell = Math.floor(drift);
+    const blend = drift - cell;
+    const smooth = blend * blend * (3 - 2 * blend);
+    for (let i = 0; i < N; i++) {
+      const x = i / (N - 1);
+      const t = x * 12 + time * 0.17;
+      const trend = 25 + 13 / (1 + Math.exp(-0.78 * (t - 6))) + t * 0.48;
+      const season = 9.2 * Math.sin(t * 3.55) + 2.7 * Math.cos(t * 7.1);
+      const cycle = 5.4 * Math.sin(t * 0.82 + 0.5) + 2.0 * Math.sin(t * 1.55 - 0.35);
+      const noise0 = hashNoise(i * 1.37 + cell * 191.7);
+      const noise1 = hashNoise(i * 1.37 + (cell + 1) * 191.7);
+      const noiseUnit = noise0 * (1 - smooth) + noise1 * smooth;
+      const noise = noiseUnit * (state.noiseAmp / 80) * 14;
+      data.T.push(trend);
+      data.S.push(season);
+      data.C.push(cycle);
+      data.E.push(noise);
+      data.physical.push(trend + season + cycle);
+      data.Y.push(trend + season + cycle + noise);
+    }
+    return data;
+  }
+
+  function getReconstruction(data) {
+    const recon = new Array(N).fill(0);
+    ['T', 'S', 'C', 'E'].forEach(key => {
+      const include = state.activeLayers[key] && !(state.mode === 'signal' && key === 'E');
+      if (!include) return;
+      for (let i = 0; i < N; i++) recon[i] += data[key][i];
+    });
+    return recon;
+  }
+
+  function getOverfitCurve(data) {
+    const split = Math.floor(N * 0.62);
+    const curve = data.Y.slice();
+    const base = data.Y[split];
+    const trendSlope = (data.T[split] - data.T[Math.max(0, split - 8)]) / 8;
+    for (let i = split; i < N; i++) {
+      const p = (i - split) / (N - 1 - split);
+      curve[i] = base + trendSlope * (i - split) + 17 * p + 11 * Math.sin((i - split) * 0.72) * p;
+    }
+    return { curve, split };
+  }
+
+  function setCanvasSize(canvas, ctx) {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function setCanvasSizes() {
+    setCanvasSize(oscCanvas, oscCtx);
+    setCanvasSize(isoCanvas, isoCtx);
+    if (lastData) renderAll(lastData);
+  }
+
+  function drawSeries(ctx, values, xAt, yAt, options = {}) {
+    if (!values || !values.length) return;
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = options.width || 2;
+    ctx.strokeStyle = options.color || '#fff';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.setLineDash(options.dash || []);
+    ctx.shadowColor = options.glow ? (options.color || '#fff') : 'transparent';
+    ctx.shadowBlur = options.glow ? 7 : 0;
+    for (let i = 0; i < values.length; i++) {
+      const x = xAt(i);
+      const y = yAt(values[i]);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawOscilloscope(data, recon, model) {
+    const rect = oscCanvas.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    if (w < 4 || h < 4) return;
+    oscCtx.clearRect(0, 0, w, h);
+
+    oscCtx.save();
+    oscCtx.strokeStyle = COLORS.grid;
+    oscCtx.lineWidth = 1;
+    const dx = Math.max(32, w / 16);
+    for (let x = 0.5; x < w; x += dx) {
+      oscCtx.beginPath(); oscCtx.moveTo(x, 0); oscCtx.lineTo(x, h); oscCtx.stroke();
+    }
+    for (let y = 12.5; y < h; y += Math.max(18, h / 4)) {
+      oscCtx.beginPath(); oscCtx.moveTo(0, y); oscCtx.lineTo(w, y); oscCtx.stroke();
+    }
+    oscCtx.restore();
+
+    const values = [...data.Y, ...recon];
+    if (state.mode === 'overfit') values.push(...model.curve);
+    let min = Math.min(...values), max = Math.max(...values);
+    if (max - min < 1e-6) { min -= 1; max += 1; }
+    const padValue = (max - min) * 0.14;
+    min -= padValue; max += padValue;
+    const topPad = 7, bottomPad = 7;
+    const xAt = i => (i / (N - 1)) * w;
+    const yAt = v => h - bottomPad - ((v - min) / (max - min)) * (h - topPad - bottomPad);
+
+    if (state.mode === 'overfit') {
+      const splitX = xAt(model.split);
+      oscCtx.fillStyle = 'rgba(73, 165, 255, 0.06)';
+      oscCtx.fillRect(0, 0, splitX, h);
+      oscCtx.fillStyle = 'rgba(255, 82, 119, 0.10)';
+      oscCtx.fillRect(splitX, 0, w - splitX, h);
+      oscCtx.save();
+      oscCtx.strokeStyle = 'rgba(255, 82, 119, 0.75)';
+      oscCtx.setLineDash([4, 4]);
+      oscCtx.beginPath(); oscCtx.moveTo(splitX, 0); oscCtx.lineTo(splitX, h); oscCtx.stroke();
+      oscCtx.restore();
+
+      oscCtx.fillStyle = '#93c5fd';
+      oscCtx.font = '700 9px "JetBrains Mono"';
+      oscCtx.textAlign = 'left';
+      oscCtx.fillText('IN-SAMPLE (Entrenamiento: Memoriza εₜ)', 8, 13);
+    }
+
+    if (state.activeLayers.Y) {
+      drawSeries(oscCtx, data.Y, xAt, yAt, { color: COLORS.Y, width: 2.2, glow: true });
+    }
+    drawSeries(oscCtx, recon, xAt, yAt, { color: COLORS.signal, width: 2.1, dash: [5, 4], glow: false });
+
+    if (state.mode === 'overfit') {
+      drawSeries(oscCtx, model.curve, xAt, yAt, { color: COLORS.E, width: 2.0, dash: [4, 3], glow: true });
+      oscCtx.save();
+      oscCtx.font = '700 9px "JetBrains Mono"';
+      oscCtx.textAlign = 'right';
+      oscCtx.fillStyle = '#fda4af';
+      oscCtx.fillText('⚠️ OUT-OF-SAMPLE (Colapso en Producción)', w - 8, 13);
+      oscCtx.restore();
+    }
+
+    const count = ['T', 'S', 'C', 'E'].filter(k => state.activeLayers[k] && !(state.mode === 'signal' && k === 'E')).length;
+    $('layersCount').textContent = `${count}/4`;
+    $('noiseMetric').textContent = `${state.noiseAmp}%`;
+    $('noiseVal').textContent = `${state.noiseAmp}%`;
+
+    const badge = $('modelStatus');
+    badge.className = 'model-badge';
+    if (state.mode === 'overfit') {
+      badge.textContent = '⚠️ Colapso por Overfitting';
+      badge.classList.add('warn');
+    } else if (state.mode === 'signal') {
+      badge.textContent = '✅ Señal Causal Pura (ε excluido)';
+      badge.classList.add('neutral');
+    } else if (state.step === 'stl') {
+      badge.textContent = '⚡ STL Activo (Alerta ±2.5σ)';
+      badge.classList.add('neutral');
+    } else {
+      badge.textContent = count === 4 ? 'Componentes alineados' : 'Reconstrucción parcial';
+    }
+    $('overfitLegend').hidden = state.mode !== 'overfit';
+  }
+
+  function project3D(x, y, z) {
+    const cy = Math.cos(state.camera.yaw), sy = Math.sin(state.camera.yaw);
+    const cp = Math.cos(state.camera.pitch), sp = Math.sin(state.camera.pitch);
+    const xr = x * cy - y * sy;
+    const yr = x * sy + y * cy;
+    return { x: xr, y: yr * cp - z * sp, depth: yr * sp + z * cp };
+  }
+
+  function activeStructural(data) {
+    return Array.from({ length: N }, (_, i) =>
+      (state.activeLayers.T ? data.T[i] : 0) +
+      (state.activeLayers.S ? data.S[i] : 0) +
+      (state.activeLayers.C ? data.C[i] : 0)
+    );
+  }
+
+  function drawPolygon(ctx, points, fill, stroke, lineWidth = 1) {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lineWidth; ctx.stroke(); }
+  }
+
+  function layerExcursion(key, value, center) {
+    const spec = slabOrder.find(s => s.key === key);
+    return (value - center) * (spec ? spec.scale : 1);
+  }
+
+  function drawLayer(ctx, project, def, elevation, data, options = {}) {
+    const width = 440, depth = 74, thickness = 4.5;
+    const active = options.active !== false;
+    const selected = options.selected === true;
+    const [r, g, b] = hexToRgb(def.color);
+    const alpha = active ? (selected ? 0.21 : 0.11) : 0.02;
+    const p0 = project(-width / 2, -depth / 2, elevation);
+    const p1 = project(width / 2, -depth / 2, elevation);
+    const p2 = project(width / 2, depth / 2, elevation);
+    const p3 = project(-width / 2, depth / 2, elevation);
+    const p1b = project(width / 2, -depth / 2, elevation - thickness);
+    const p2b = project(width / 2, depth / 2, elevation - thickness);
+    const p3b = project(-width / 2, depth / 2, elevation - thickness);
+
+    drawPolygon(ctx, [p1, p2, p2b, p1b], `rgba(${r},${g},${b},${alpha * 1.55})`, active ? `rgba(${r},${g},${b},0.48)` : 'rgba(150,165,186,0.08)', 0.8);
+    drawPolygon(ctx, [p2, p3, p3b, p2b], `rgba(${r},${g},${b},${alpha * 1.15})`, active ? `rgba(${r},${g},${b},0.34)` : 'rgba(150,165,186,0.06)', 0.8);
+
+    const gradient = ctx.createLinearGradient(p0.x, p0.y, p2.x, p2.y);
+    gradient.addColorStop(0, `rgba(${r},${g},${b},${alpha * 1.35})`);
+    gradient.addColorStop(1, `rgba(${r},${g},${b},${alpha * 0.55})`);
+    drawPolygon(ctx, [p0, p1, p2, p3], gradient, active ? (selected ? def.color : `rgba(${r},${g},${b},0.72)`) : 'rgba(147,163,184,0.16)', selected ? 1.8 : 1.1);
+
+    if (active && data) {
+      const center = mean(data);
+      const samples = 116;
+      ctx.save();
+      ctx.beginPath();
+      ctx.strokeStyle = def.color;
+      ctx.lineWidth = selected ? 2.0 : 1.4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.shadowColor = def.color;
+      ctx.shadowBlur = selected ? 8 : 4;
+      for (let s = 0; s < samples; s++) {
+        const frac = s / (samples - 1);
+        const idx = Math.floor(frac * (data.length - 1));
+        const x = -width / 2 + frac * width;
+        const z = elevation + layerExcursion(def.key, data[idx], center) + 2.5;
+        const pt = project(x, 0, z);
+        if (s === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const labelPos = project(width / 2 + 14, 0, elevation + 1);
+    ctx.save();
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.globalAlpha = active ? 1 : 0.38;
+    const labelScale = options.scale || 1;
+    const showSub = labelScale >= 0.96;
+    const titleSize = Math.max(8, Math.min(11, 10.2 * labelScale));
+    const subSize = Math.max(7, Math.min(9, 8.2 * labelScale));
+    ctx.font = `700 ${titleSize}px "Space Grotesk", "Segoe UI", sans-serif`;
+    ctx.fillStyle = active ? def.color : '#73839a';
+    ctx.shadowColor = active ? def.color : 'transparent';
+    ctx.shadowBlur = selected ? 5 : 0;
+    ctx.fillText(def.label, labelPos.x, labelPos.y - (showSub ? 5 * labelScale : 0));
+    if (showSub) {
+      ctx.shadowBlur = 0;
+      ctx.font = `500 ${subSize}px "JetBrains Mono", monospace`;
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(def.sub, labelPos.x, labelPos.y + 7 * labelScale);
+    }
+    ctx.restore();
+  }
+
+  function drawSignalAggregate(ctx, project, elevation, values, labelScale) {
+    const width = 440, depth = 74;
+    const p0 = project(-width / 2, -depth / 2, elevation);
+    const p1 = project(width / 2, -depth / 2, elevation);
+    const p2 = project(width / 2, depth / 2, elevation);
+    const p3 = project(-width / 2, depth / 2, elevation);
+    drawPolygon(ctx, [p0, p1, p2, p3], 'rgba(58, 224, 160, 0.10)', 'rgba(110, 240, 180, 0.85)', 1.4);
+    const center = mean(values);
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle = COLORS.signal;
+    ctx.lineWidth = 2.1;
+    ctx.shadowColor = COLORS.signal;
+    ctx.shadowBlur = 8;
+    for (let s = 0; s < 116; s++) {
+      const frac = s / 115, idx = Math.floor(frac * (values.length - 1));
+      const point = project(-width / 2 + frac * width, 0, elevation + (values[idx] - center) * 0.7 + 2);
+      if (!s) ctx.moveTo(point.x, point.y); else ctx.lineTo(point.x, point.y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    const label = project(width / 2 + 14, 0, elevation);
+    const showSub = labelScale >= 0.96;
+    const titleSize = Math.max(8, Math.min(11, 10.2 * labelScale));
+    ctx.save();
+    ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
+    ctx.fillStyle = COLORS.signal;
+    ctx.fillText('SEÑAL CAUSAL PURA', label.x, label.y - (showSub ? 4 * labelScale : 0));
+    if (showSub) {
+      ctx.font = `500 ${Math.max(7, Math.min(9, 8.2 * labelScale))}px "JetBrains Mono", monospace`;
+      ctx.fillStyle = '#8ef7c7';
+      ctx.fillText('T(t) + S(t) + C(t) [Sin ε]', label.x, label.y + 8 * labelScale);
+    }
+    ctx.restore();
+  }
+
+  function draw3D(data) {
+    const rect = isoCanvas.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    if (w < 4 || h < 4) return;
+    isoCtx.clearRect(0, 0, w, h);
+
+    isoCtx.save();
+    isoCtx.strokeStyle = 'rgba(65, 115, 155, 0.08)';
+    isoCtx.lineWidth = 1;
+    const step = 32;
+    for (let x = 0.5; x < w; x += step) { isoCtx.beginPath(); isoCtx.moveTo(x, 0); isoCtx.lineTo(x, h); isoCtx.stroke(); }
+    for (let y = 0.5; y < h; y += step) { isoCtx.beginPath(); isoCtx.moveTo(0, y); isoCtx.lineTo(w, y); isoCtx.stroke(); }
+    isoCtx.restore();
+
+    const width = 440, depth = 74, gap = state.layerGap;
+    const elevations = { E: 0, C: gap, S: gap * 2, T: gap * 3, Y: gap * 4 };
+    const signalElevation = gap * 5 + 8;
+    const bounds = [];
+    const worldPoints = (z, extra = false) => {
+      const pts = [];
+      for (const x of [-width / 2, width / 2]) for (const y of [-depth / 2, depth / 2]) pts.push(project3D(x, y, z));
+      if (extra) pts.push(project3D(width / 2 + 16, 0, z));
+      return pts;
+    };
+    Object.values(elevations).forEach(z => bounds.push(...worldPoints(z, true), ...worldPoints(z - 5)));
+    if (state.mode === 'signal') bounds.push(...worldPoints(signalElevation, true), ...worldPoints(signalElevation - 4));
+
+    const xs = bounds.map(p => p.x), ys = bounds.map(p => p.y);
+    let minX = Math.min(...xs), maxX = Math.max(...xs) + 150;
+    let minY = Math.min(...ys) - 18, maxY = Math.max(...ys) + 18;
+    const spanX = Math.max(1, maxX - minX), spanY = Math.max(1, maxY - minY);
+    const scale = Math.min((w - 24) / spanX, (h - 22) / spanY, 1.12);
+    const originX = w / 2 - ((minX + maxX) / 2) * scale;
+    const originY = h / 2 - ((minY + maxY) / 2) * scale;
+    const P = (x, y, z) => {
+      const p = project3D(x, y, z);
+      return { x: originX + p.x * scale, y: originY + p.y * scale, depth: p.depth };
+    };
+
+    slabOrder.forEach(def => {
+      drawLayer(isoCtx, P, { ...def, color: COLORS[def.key] }, elevations[def.key], data[def.key], {
+        active: state.activeLayers[def.key],
+        selected: state.selected === def.key,
+        scale
+      });
+    });
+
+    if (state.mode === 'signal') {
+      const structural = activeStructural(data);
+      drawSignalAggregate(isoCtx, P, signalElevation, structural, scale);
+    }
+
+    if (state.mode === 'overfit' && state.activeLayers.Y) {
+      const model = getOverfitCurve(data);
+      const center = mean(data.Y), zBase = elevations.Y + 3;
+      isoCtx.save();
+      isoCtx.beginPath();
+      isoCtx.strokeStyle = COLORS.E;
+      isoCtx.lineWidth = 2.0;
+      isoCtx.setLineDash([5, 4]);
+      isoCtx.shadowColor = COLORS.E;
+      isoCtx.shadowBlur = 6;
+      for (let i = model.split; i < N; i++) {
+        const p = i / (N - 1);
+        const x = -width / 2 + p * width;
+        const z = zBase + (model.curve[i] - center) * 0.67;
+        const point = P(x, 0, z);
+        if (i === model.split) isoCtx.moveTo(point.x, point.y); else isoCtx.lineTo(point.x, point.y);
+      }
+      isoCtx.stroke();
+      isoCtx.restore();
+    }
+  }
+
+  function renderAll(data) {
+    if (!data) return;
+    const recon = getReconstruction(data);
+    const model = getOverfitCurve(data);
+    lastData = data;
+    drawOscilloscope(data, recon, model);
+    draw3D(data);
+  }
+
+  function syncLayerButtons() {
+    Object.keys(state.activeLayers).forEach(key => {
+      const row = document.querySelector(`.layer-row[data-key="${key}"]`);
+      const btn = document.querySelector(`[data-toggle="${key}"]`);
+      if (row) row.classList.toggle('layer-hidden', !state.activeLayers[key]);
+      if (btn) {
+        btn.setAttribute('aria-pressed', String(state.activeLayers[key]));
+        btn.innerHTML = state.activeLayers[key]
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 3 18 18M10.6 5.2A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.1 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1 0 2-.2 2.9-.5"/></svg>';
+      }
+    });
+  }
+
+  function selectLayer(key) {
+    state.selected = key;
+    document.querySelectorAll('.layer-row').forEach(r => {
+      r.classList.toggle('selected', r.dataset.key === key);
+    });
+    if (lastData) draw3D(lastData);
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+
+    if (stepName === 'anatomy') {
+      state.mode = 'stl';
+      state.activeLayers = { Y: true, T: true, S: true, C: true, E: true };
+      state.selected = 'Y';
+    } else if (stepName === 'stl') {
+      state.mode = 'stl';
+      state.activeLayers = { Y: true, T: true, S: true, C: true, E: true };
+      state.selected = 'S';
+    } else if (stepName === 'signal') {
+      state.mode = 'signal';
+      state.activeLayers = { Y: true, T: true, S: true, C: true, E: false };
+      state.selected = 'T';
+    } else if (stepName === 'overfit') {
+      state.mode = 'overfit';
+      state.activeLayers = { Y: true, T: true, S: true, C: true, E: true };
+      state.selected = 'E';
+    }
+
+    const c = ACT_CONTENT[stepName];
+    $('leftCard').style.setProperty('--stage-accent', c.accent);
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('contextLabel').textContent = c.ctxLabel;
+    $('contextText').innerHTML = c.ctxText;
+    $('speakerQuote').textContent = c.quote;
+    $('canvasCaption').textContent = c.caption;
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === stepName;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    syncLayerButtons();
+    selectLayer(state.selected);
+    if (lastData) renderAll(lastData);
+  }
+
+  function toggleLayer(key) {
+    state.activeLayers[key] = !state.activeLayers[key];
+    state.stepElapsed = 0;
+    syncLayerButtons();
+    if (lastData) renderAll(lastData);
+  }
+
+  function centerCamera() {
+    state.camera.yaw = -0.42;
+    state.camera.pitch = 0.66;
+    if (lastData) draw3D(lastData);
+  }
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => setStep(btn.dataset.step, true));
+  });
+
+  $('nextActBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    if (idx === STEPS.length - 1) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+        return;
+      }
+    }
+    const next = STEPS[(idx + 1) % STEPS.length];
+    setStep(next, true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  });
+
+  document.querySelectorAll('.layer-row').forEach(row => {
+    row.addEventListener('click', e => {
+      if (e.target.closest('.eye-btn')) return;
+      state.stepElapsed = 0;
+      selectLayer(row.dataset.key);
+    });
+  });
+
+  document.querySelectorAll('[data-toggle]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleLayer(btn.dataset.toggle);
+    });
+  });
+
+  $('centerCameraBtn').addEventListener('click', centerCamera);
+
+  $('playBtn').addEventListener('click', () => {
+    state.isPlaying = !state.isPlaying;
+    $('playSymbol').textContent = state.isPlaying ? 'Ⅱ' : '▶';
+    $('playLabel').textContent = state.isPlaying ? 'Pausar onda' : 'Reanudar onda';
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    state.layerGap = 48;
+    state.noiseAmp = 26;
+    state.speed = 45;
+    state.time = 0;
+    state.isPlaying = true;
+    state.loopOn = true;
+    $('sliderGap').value = '48';
+    $('sliderNoise').value = '26';
+    $('sliderSpeed').value = '45';
+    $('gapVal').textContent = '48';
+    $('noiseVal').textContent = '26%';
+    $('speedVal').textContent = '45%';
+    $('playSymbol').textContent = 'Ⅱ';
+    $('playLabel').textContent = 'Pausar onda';
+    $('loopBtn').classList.add('loop-on');
+    $('loopText').textContent = 'Bucle Auto: ON';
+    centerCamera();
+    setStep('anatomy', true);
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  });
+
+  $('sliderGap').addEventListener('input', e => {
+    state.layerGap = Number(e.target.value);
+    $('gapVal').textContent = e.target.value;
+    state.stepElapsed = 0;
+    if (lastData) draw3D(lastData);
+  });
+
+  $('sliderNoise').addEventListener('input', e => {
+    state.noiseAmp = Number(e.target.value);
+    $('noiseVal').textContent = `${state.noiseAmp}%`;
+    state.stepElapsed = 0;
+    renderAll(computeSignalData(state.time));
+  });
+
+  $('sliderSpeed').addEventListener('input', e => {
+    state.speed = Number(e.target.value);
+    $('speedVal').textContent = `${state.speed}%`;
+  });
+
+  isoCanvas.addEventListener('pointerdown', e => {
+    state.camera.dragging = true;
+    state.camera.lastX = e.clientX;
+    state.camera.lastY = e.clientY;
+    state.stepElapsed = 0;
+    isoCanvas.setPointerCapture?.(e.pointerId);
+  });
+
+  isoCanvas.addEventListener('pointermove', e => {
+    if (!state.camera.dragging) return;
+    const dx = e.clientX - state.camera.lastX;
+    const dy = e.clientY - state.camera.lastY;
+    state.camera.yaw = clamp(state.camera.yaw + dx * 0.0065, -1.2, 1.2);
+    state.camera.pitch = clamp(state.camera.pitch + dy * 0.006, 0.28, 1.12);
+    state.camera.lastX = e.clientX;
+    state.camera.lastY = e.clientY;
+    if (lastData) draw3D(lastData);
+  });
+
+  const endDrag = () => { state.camera.dragging = false; };
+  isoCanvas.addEventListener('pointerup', endDrag);
+  isoCanvas.addEventListener('pointercancel', endDrag);
+  isoCanvas.addEventListener('lostpointercapture', endDrag);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('anatomy', true);
+    if (e.key === '2') setStep('stl', true);
+    if (e.key === '3') setStep('signal', true);
+    if (e.key === '4') setStep('overfit', true);
+    if (e.key === 'ArrowRight') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+          return;
+        }
+      }
+      setStep(STEPS[(idx + 1) % STEPS.length], true);
+    }
+    if (e.key === 'ArrowLeft') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+          return;
+        }
+      }
+      setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+    }
+    const deckNavKeys = ['PageUp', 'PageDown', 'Home', 'End', 'n', 'N', 'd', 'D', 'f', 'F', 'Escape', 'ArrowUp', 'ArrowDown'];
+    if (deckNavKeys.includes(e.key)) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+      }
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && (e.data.type === 'resize' || e.data.type === 'activate')) {
+      setTimeout(() => {
+        setCanvasSizes();
+      }, 30);
+    }
+  });
+
+  function frame(ts) {
+    const dt = lastFrame ? Math.min(50, ts - lastFrame) : 16;
+    lastFrame = ts;
+    if (state.isPlaying && state.speed > 0) {
+      state.time += (dt / 1000) * (state.speed / 45) * 0.7;
+    }
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        setStep(STEPS[(idx + 1) % STEPS.length], false);
+      }
+    }
+
+    const data = computeSignalData(state.time);
+    renderAll(data);
+    requestAnimationFrame(frame);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => setCanvasSizes());
+    ro.observe(oscCanvas.parentElement);
+    ro.observe(isoCanvas.parentElement);
+    ro.observe(document.body);
+  }
+  window.addEventListener('resize', setCanvasSizes, { passive: true });
+
+  setStep('anatomy', false);
+  setCanvasSizes();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2072 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 23: Precisión Actual y las Tres Trampas · Diagnóstico del Stack Tecnológico</title>
+<style>
+:root {
+  --bg: #040812;
+  --panel: rgba(9, 18, 34, 0.93);
+  --panel-soft: rgba(6, 13, 26, 0.84);
+  --line: rgba(148, 163, 184, 0.17);
+  --line-bright: rgba(110, 240, 180, 0.42);
+  --text: #f1f7ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --terracotta: #e06d53; /* Terracota de las 3 Trampas y Flecha Caso Jaén */
+  --ancestral: #ffc05c;  /* Oro / Alerta / Sol / Retraso τ */
+  --agro: #6ef0b4;       /* Verde botánico / IoT Hoja / NDRE Red Edge */
+  --water: #38efff;      /* Cian / Dron UAV / Telemetría */
+  --danger: #ff5277;     /* Rojo / Saturación NDVI / Suicidio Financiero Overfit */
+  --purple: #b48eff;     /* Violeta / Zero-Shot + 100% Calibración Conforme N=24 */
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 16% 14%, rgba(224, 109, 83, 0.14), transparent 38%),
+    radial-gradient(ellipse at 84% 86%, rgba(110, 240, 180, 0.13), transparent 40%),
+    #03060f;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 24% 32%, rgba(224, 109, 83, 0.09), transparent 48%),
+    radial-gradient(ellipse at 78% 32%, rgba(16, 185, 129, 0.11), transparent 48%),
+    linear-gradient(145deg, rgba(8, 15, 29, 0.985), rgba(3, 8, 18, 0.99));
+  border: 1px solid rgba(110, 240, 180, 0.26);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.65), inset 0 0 60px rgba(6, 48, 38, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 130, 115, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 130, 115, 0.12) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 12px 18px 8px !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--agro); outline-offset: 2px; }
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(224, 109, 83, 0.52);
+  border-radius: 12px;
+  color: var(--terracotta);
+  background: linear-gradient(135deg, rgba(224, 109, 83, 0.2), rgba(110, 240, 180, 0.12));
+}
+
+.brand-mark svg { width: 23px; height: 23px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--terracotta);
+  font: 700 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--agro); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(224, 109, 83, 0.42);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(224, 109, 83, 0.15), rgba(6, 15, 28, 0.92));
+  max-width: 575px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--ancestral);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 22, 0.88);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--agro));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--agro)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--agro)) 18%, transparent);
+}
+
+.proc-node[data-step="stack"]   { --node-color: var(--terracotta); }
+.proc-node[data-step="ndvi"]    { --node-color: var(--agro); }
+.proc-node[data-step="tau_n24"] { --node-color: var(--purple); }
+.proc-node[data-step="jaen"]    { --node-color: var(--ancestral); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--agro));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--agro)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--agro));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(110, 240, 180, 0.5);
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(335px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(12px, 1.3vw, 18px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.narrative-card {
+  --stage-accent: var(--terracotta);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(8px, 1vh, 12px);
+  padding: clamp(12px, 1.3vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, rgba(133, 158, 192, 0.16));
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 13%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 40%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 24, 0.75);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 34%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(10.5px, 0.88vw, 12.2px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11px, 0.9vw, 12.5px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(224, 109, 83, 0.16);
+  border: 1px solid rgba(224, 109, 83, 0.42);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 45% 45%, rgba(16, 78, 62, 0.20), rgba(2, 6, 16, 0.94) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(56, 239, 255, 0.42);
+  background: rgba(15, 23, 42, 0.84);
+  color: #a5f3fc;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(224, 109, 83, 0.48);
+  background: rgba(15, 23, 42, 0.84);
+  color: #fed7aa;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #6ef0b4);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 135px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(85px, 8.5vw, 135px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(224, 109, 83, 0.55);
+  background: linear-gradient(120deg, rgba(224, 109, 83, 0.28), rgba(154, 52, 18, 0.45));
+  color: #ffedd5;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(224, 109, 83, 0.52);
+  color: #fff;
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #fed7aa; }
+
+@media (max-width: 920px) {
+  body { display: block; }
+  #slideFrame { width: 100%; height: auto; aspect-ratio: auto; min-height: 100svh; }
+  .topbar, .flowbar, .workspace { grid-template-columns: 1fr; }
+  .process-track { grid-template-columns: 1fr 1fr; }
+  .proc-arrow { display: none; }
+  .canvas-wrap { min-height: 320px; }
+}
+
+@media (max-height: 800px) {
+  body.is-embedded #slideFrame {
+    padding: 8px 14px 6px !important;
+    gap: 6px !important;
+  }
+  .topbar {
+    padding-bottom: 6px !important;
+  }
+  .narr-lead {
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+  }
+  .info-block {
+    padding: 6px 10px !important;
+  }
+  .info-block-text {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  .math-strip {
+    padding: 5px 10px !important;
+    font-size: 10.5px !important;
+  }
+  .speaker-box {
+    padding: 6px 10px !important;
+  }
+  .speaker-quote {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+}
+
+@media (max-height: 660px) {
+  .eyebrow {
+    display: none !important;
+  }
+  .topbar h1 {
+    font-size: 14px !important;
+  }
+  .narr-title {
+    font-size: 14px !important;
+  }
+  .info-block {
+    padding: 4px 8px !important;
+  }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 23: Precisión actual y las tres trampas (Diagnóstico y Alertas del Stack Tecnológico)">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 12l10 5 10-5"/>
+          <path d="M2 17l10 5 10-5"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">DIAGNÓSTICO · ALERTAS DEL STACK TECNOLÓGICO · SECCIÓN 3</p>
+        <h1>Precisión actual y <span class="era">las tres trampas</span> <span class="sub">· Por qué la tecnología fracasa si ignora la botánica</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Resumen de las 3 Trampas del Stack Agrícola">
+      <div class="via-title">
+        <span>⚠️ LAS 3 TRAMPAS MORTALES EN CAMPO</span>
+        <span>STACK: IOT + DRON + SATÉLITE</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">🛰️ <strong>1. Trampa NDVI:</strong> Miente en verde (&gt;0.85)</span>
+        <span class="via-pill">⏳ <strong>2. Trampa τ:</strong> Clima de ayer ≠ Cosecha</span>
+        <span class="via-pill">💀 <strong>3. Trampa N=24:</strong> Overfit financiero</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. El Stack 3D y las 3 Trampas ─▶ 2. Trampa 1: NDVI vs Red Edge (NDRE) ─▶ 3. Trampas 2 y 3: Retraso τ y N=24 (Zero-Shot + SCP) ─▶ 4. 3 Axiomas e Ir al Caso Jaén -->
+  <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 23">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="stack" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">El Stack 3D y las 3 Trampas</span>
+          <span class="proc-sub">IoT + Dron + Satélite en vivo</span>
+        </div>
+        <div class="proc-progress" id="prog-stack"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">Trampa 1: NDVI vs. NDRE</span>
+          <span class="proc-sub">Saturación &gt;0.85 y Borde Rojo</span>
+        </div>
+        <div class="proc-progress" id="prog-ndvi"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="tau_n24" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">Trampas 2 y 3: τ y N=24</span>
+          <span class="proc-sub">Zero-Shot + 100% Calibración SCP</span>
+        </div>
+        <div class="proc-progress" id="prog-tau_n24"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="jaen" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">3 Axiomas ─▶ Ir al Caso Jaén</span>
+          <span class="proc-sub">La prueba de fuego en tiempo real</span>
+        </div>
+        <div class="proc-progress" id="prog-jaen"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE PRINCIPAL -->
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA AMIGABLE Y GUÍA DE CONFERENCIA -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · DIAGNÓSTICO DEL STACK MODERNO</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. El Stack de Precisión Actual y sus 3 Trampas Mortales</h2>
+        <p class="narr-lead" id="narrLead">
+          Hoy combinamos <b>3 capas tecnológicas (IoT en planta/suelo, Drones UAV y Satélites)</b>. Pero cuando optimizamos algoritmos sin botánica, caemos en <b>3 trampas que llevan al suicidio financiero</b>:
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">🛰️ TRAMPA 1 (NDVI) Y ⏳ TRAMPA 2 (RETRASO τ)</div>
+          <p class="info-block-text" id="block1Text">
+            • <b>Trampa NDVI:</b> El índice de verdor engañoso (NDVI saturado &gt;0.85). El satélite ve hojas verdes, pero la planta ya abortó la flor.<br>
+            • <b>Trampa τ:</b> Ignorar el retraso botánico. El daño térmico de hoy en floración se refleja en el rendimiento <b>8 meses después</b>.
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">💀 TRAMPA 3 (N=24) Y LA PRUEBA DE FUEGO EN JAÉN</div>
+          <p class="info-block-text" id="block2Text">
+            • <b>Trampa N=24:</b> Escasez estadística. Tenemos solo <b>24 iteraciones anuales</b>; entrenar redes profundas crudas memoriza ruido.<br>
+            • <b>La prueba de fuego:</b> La teoría es hermosa en el laboratorio, pero ahora la mediremos contra la <b>crisis real en Jaén</b>.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">Stack: 1. IoT (Suelo/Hoja) + 2. Dron (YOLO/SAM 2) + 3. Satélite (10m)</span>
+          <span class="hint" id="mathHint">Haz clic en las capas 3D o usa el deslizador inferior</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren, es muy fácil deslumbrarse viendo lucecitas de satélites y drones en una pantalla. Pero el campo está lleno de trampas invisibles: un satélite puede ver hojas verdes y creer que hay cosecha, cuando la planta ya abortó. Ignorar eso es suicidio financiero. La pregunta ahora es... ¿sobrevive nuestro algoritmo a una sequía extrema? Vamos a comprobarlo en Jaén.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: LIENZO INTERACTIVO -->
+    <section class="stage-card" aria-label="Simulador visual del Stack Tecnológico y las 3 Trampas">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">📡</span>
+          <h3 class="stage-title" id="canvasTitle">Arquitectura Multicapa (IoT · Dron · Satélite) y Diagnóstico de las 3 Trampas</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Trampa 1: <strong style="color:var(--agro)">NDVI &gt; 0.85</strong></span>
+          <span class="kpi-chip" id="kpi2">Trampa 2: <strong style="color:var(--ancestral)">Lag τ = 8m</strong></span>
+          <span class="kpi-chip" id="kpi3">Trampa 3: <strong style="color:var(--danger)">N = 24 años</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">📡 Izquierda: Stack 3D (Clic para inspeccionar IoT, Dron o Satélite)</span>
+          <span class="ov-badge right" id="ovRight">⚠️ Derecha: Las 3 Trampas Mortales y Pase al Caso Jaén</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Capa 1: IoT In Situ (Hoja/Suelo)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Capa 2: Dron UAV (YOLOv12 / SAM 2)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#e06d53"></i> Capa 3: Satélite (Sentinel-2 / CHIRPS)</span>
+        </div>
+        <span id="legendTip">HAZ CLIC EN EL STACK O USA EL DESLIZADOR</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlStackWrap">
+            <label for="sliderStack">🔍 Inspeccionar Trampa / Capa:</label>
+            <input id="sliderStack" type="range" min="0" max="2" step="1" value="0" style="accent-color:var(--terracotta)">
+            <output id="outStack">1. Trampa NDVI (Satélite)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlLaiWrap" hidden>
+            <label for="sliderLai">🌿 Frondosidad del Dosel (LAI):</label>
+            <input id="sliderLai" type="range" min="10" max="60" step="5" value="45" style="accent-color:var(--agro)">
+            <output id="outLai">LAI = 4.5 (NDVI Ciego!)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlRemedyWrap" hidden>
+            <label for="sliderRemedy">🛡️ Estrategia ante N=24:</label>
+            <input id="sliderRemedy" type="range" min="0" max="1" step="1" value="1" style="accent-color:var(--purple)">
+            <output id="outRemedy">Zero-Shot + 100% SCP ✅</output>
+          </div>
+          <div class="ctrl-item" id="ctrlAxiomWrap" hidden>
+            <label for="sliderAxiom">📜 Explorar Axioma (1–3):</label>
+            <input id="sliderAxiom" type="range" min="0" max="2" step="1" value="0" style="accent-color:var(--ancestral)">
+            <output id="outAxiom">Axioma I: Prohibido Overfit</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente acto ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>La Prueba de Fuego (Caso de Estudio 2 — Jaén):</strong> “La teoría es hermosa en el laboratorio, pero mañana la mediremos contra la crisis real en Jaén (24.0 vs. 18.46 vs. 18.20 qq/ha).”</span>
+    <span>Fuente: Huete et al. (2002) · Barnes et al. (2000) · Achour et al. (2025) · AgroVisión Perú · Sección 3</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['stack', 'ndvi', 'tau_n24', 'jaen'];
+  const LOOP_DURATION_MS = 9500;
+
+  const STACK_TRAPS = [
+    {
+      id: 0,
+      layerName: 'Capa 1: IoT In Situ (Hoja y Suelo)',
+      trapTitle: 'Trampa NDVI: El índice de verdor engañoso (NDVI saturado)',
+      trapSub: 'El satélite ve hojas verdes (>0.85), pero la planta ya abortó la flor.',
+      remedy: 'Remedio: Migrar al Borde Rojo NDRE (705–740 nm, Banda 5 Sentinel-2) o EVI.',
+      color: '#6ef0b4'
+    },
+    {
+      id: 1,
+      layerName: 'Capa 2: Dron Multiespectral (YOLOv12 + SAM 2)',
+      trapTitle: 'Trampa τ: Ignorar el retraso botánico (Lag 6–8 meses)',
+      trapSub: 'El daño térmico o sequía de hoy se refleja en el rendimiento 8 meses después.',
+      remedy: 'Remedio: Alinear las ventanas de entrenamiento con el Reloj Fenológico.',
+      color: '#ffc05c'
+    },
+    {
+      id: 2,
+      layerName: 'Capa 3: Satélite (Sentinel-2 10m + CHIRPS)',
+      trapTitle: 'Trampa N=24: Escasez estadística (Suicidio financiero)',
+      trapSub: 'Tenemos solo 24 iteraciones anuales; el sobreajuste matemático destruye el modelo.',
+      remedy: 'Remedio: TSFMs Zero-Shot (|Tr|=0) + 100% de los 24 años a Calibración Conforme (|Cal|=24).',
+      color: '#ff5277'
+    }
+  ];
+
+  const AXIOMS_AGRO = [
+    {
+      num: 'AXIOMA I',
+      title: 'Prohibido Deep Learning crudo sobre N = 24',
+      rule: '“Jamás confíes un tamaño muestral de N=24 cosechas anuales a un Transformer o LSTM sin restricciones físicas.”',
+      fix: 'Usa Physics-Informed ML y TSFMs Zero-Shot (TimesFM 2.0 / Chronos-Bolt) asignando el 100% de N=24 a Calibración SCP.',
+      color: '#b48eff'
+    },
+    {
+      num: 'AXIOMA II',
+      title: 'Un NDVI > 0.85 es ciego; la fisiología ocurre en el Red Edge',
+      rule: '“No confundas la verdura estática del dosel con frutos reales; con LAI > 3 la clorofila satura el Rojo al 100%.”',
+      fix: 'Sustituye o complementa el NDVI con el índice NDRE (Banda 5 Red Edge 705–740 nm de Sentinel-2) o EVI.',
+      color: '#6ef0b4'
+    },
+    {
+      num: 'AXIOMA III',
+      title: 'El tiempo en el campo es GDD y memoria hídrica acumulada',
+      rule: '“Un mes de sequía (<140 mm) en floración destruye la cosecha de una forma que diez meses de lluvia posterior no reparan.”',
+      fix: 'Integra el Reloj Fenológico (Ago–Oct 56% varianza, Nov–Feb r=0.751) antes de optimizar cualquier algoritmo.',
+      color: '#ffc05c'
+    }
+  ];
+
+  const state = {
+    step: 'stack',
+    trapIdx: 0,       // 0 = Trampa NDVI, 1 = Trampa τ, 2 = Trampa N=24
+    laiVal: 4.5,      // Índice de Área Foliar (1.0 a 6.0)
+    useZeroShot: 1,   // 0 = Split clásico (destruye N=24), 1 = Zero-Shot (|Tr|=0, |Cal|=24)
+    axiomIdx: 0,      // 0, 1, 2 (Los 3 Axiomas del Agro)
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    stack: {
+      accent: 'var(--terracotta)',
+      tag: 'ACTO 1 DE 4 · DIAGNÓSTICO DEL STACK TECNOLÓGICO',
+      title: '1. El Stack de Precisión Actual y sus 3 Trampas Mortales',
+      lead: 'Hoy combinamos <b>3 capas tecnológicas (IoT en planta/suelo, Drones UAV y Satélites)</b>. Pero cuando optimizamos algoritmos sin botánica, caemos en <b>3 trampas que llevan al suicidio financiero</b>:',
+      b1Label: '🛰️ TRAMPA 1 (NDVI) Y ⏳ TRAMPA 2 (RETRASO τ)',
+      b1Text: '• <b>Trampa NDVI:</b> El índice de verdor engañoso (NDVI saturado &gt;0.85). El satélite ve hojas verdes, pero la planta ya abortó la flor.<br>• <b>Trampa τ:</b> Ignorar el retraso botánico. El daño térmico de hoy en floración se refleja en el rendimiento <b>8 meses después</b>.',
+      b2Label: '💀 TRAMPA 3 (N=24) Y LA PRUEBA DE FUEGO EN JAÉN',
+      b2Text: '• <b>Trampa N=24:</b> Escasez estadística. Tenemos solo <b>24 iteraciones anuales</b>; entrenar redes profundas crudas memoriza ruido.<br>• <b>La prueba de fuego:</b> La teoría es hermosa en el laboratorio, pero ahora la mediremos contra la <b>crisis real en Jaén</b>.',
+      formula: 'Stack: 1. IoT (Suelo/Hoja) + 2. Dron (YOLO/SAM 2) + 3. Satélite (10m)',
+      hint: 'Haz clic en las capas 3D o en las 3 Trampas para inspeccionar',
+      quote: '“Miren, es muy fácil deslumbrarse viendo lucecitas de satélites y drones en una pantalla. Pero el campo está lleno de trampas invisibles: un satélite puede ver hojas verdes y creer que hay cosecha, cuando la planta ya abortó. Ignorar eso es suicidio financiero. La pregunta ahora es... ¿sobrevive nuestro algoritmo a una sequía extrema? Vamos a comprobarlo en Jaén.”',
+      icon: '📡',
+      canvasTitle: 'Arquitectura Multicapa (IoT · Dron · Satélite) y Diagnóstico de las 3 Trampas',
+      ovLeft: '📡 Izquierda: Stack 3D (IoT + Dron UAV + Satélite)',
+      ovRight: '⚠️ Derecha: Las 3 Trampas y Pase al Caso Jaén',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Capa 1: IoT In Situ (Hoja/Suelo)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Capa 2: Dron UAV (YOLOv12 / SAM 2)</span><span class="leg-item"><i class="leg-line" style="--c:#e06d53"></i> Capa 3: Satélite (Sentinel-2 / CHIRPS)</span>',
+      nextLabel: 'Auditar Trampa 1: NDVI vs. Red Edge ─▶'
+    },
+    ndvi: {
+      accent: 'var(--agro)',
+      tag: 'ACTO 2 DE 4 · TRAMPA 1: “EL NDVI MIENTE EN VERDE”',
+      title: '2. Trampa NDVI: Por qué el satélite ve hojas verdes cuando no hay café',
+      lead: 'Cuando el cafetal es frondoso y supera <b>3 capas de hojas (LAI &gt; 3)</b>, la clorofila superior absorbe el 100% de la luz roja y el <b>NDVI se estanca en una meseta ciega de 0.85–0.90</b>.',
+      b1Label: '🍃 SÍNTOMA Y DIAGNÓSTICO BIOFÍSICO (SATURACIÓN CON LAI > 3)',
+      b1Text: 'En enero, tras las lluvias de llenado, el follaje superior luce verde intenso (<b>NDVI &gt; 0.85</b>). Un modelo satelital ingenuo proyecta cosecha récord sin ver que <b>adentro del árbol las ramas no tienen cerezas porque la flor abortó en septiembre</b>.',
+      b2Label: '🔬 EL REMEDIO ESPECTRAL: MIGRAR AL BORDE ROJO (NDRE / EVI)',
+      b2Text: 'En lugar del Rojo clásico (665 nm), usamos la banda del <b>Borde Rojo (<i>Red Edge</i>, 705–740 nm, Banda 5 de Sentinel-2)</b> mediante el índice <b>NDRE</b> o el <b>EVI</b>: ondas que penetran las capas internas del dosel sin saturarse.',
+      formula: 'NDVI se satura en ~0.85 si LAI > 3  │  Remedio: NDRE (Red Edge 705–740 nm)',
+      hint: 'Mueve la frondosidad (LAI) abajo para comparar NDVI vs. NDRE',
+      quote: '“El NDVI tiene un defecto óptico mortal: cuando el cafetal tiene más de tres capas de hojas, se encandila en verde y se aplana en 0.85. Ve un bosque hermoso por arriba aunque por dentro no haya ni un grano de café. Para ver a través del follaje necesitamos la banda del Borde Rojo: el índice NDRE.”',
+      icon: '🛰️',
+      canvasTitle: 'Trampa 1 (“El NDVI Miente en Verde”): Meseta del NDVI (>0.85) vs. Linealidad del Red Edge (NDRE)',
+      ovLeft: '🍃 Izquierda: Penetración en el Dosel (Rojo 665nm vs. Red Edge 720nm)',
+      ovRight: '📈 Derecha: Curva Saturada NDVI vs. Respuesta Lineal NDRE',
+      legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> NDVI Clásico (Ciego con LAI &gt; 3)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> NDRE Red Edge (Penetra el dosel)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Umbral LAI = 3.0</span>',
+      nextLabel: 'Auditar Trampas 2 y 3 (τ y N=24) ─▶'
+    },
+    tau_n24: {
+      accent: 'var(--purple)',
+      tag: 'ACTO 3 DE 4 · TRAMPAS 2 Y 3: RETRASO τ Y ESCASEZ N=24',
+      title: '3. Trampa τ y Trampa N=24: El Remedio Zero-Shot + Conformal (100% Cal)',
+      lead: 'Las otras dos trampas ocurren en el código del científico de datos: <b>usar el clima equivocado (t−1)</b> y <b>dividir una muestra microscópica de N = 24 cosechas anuales</b>.',
+      b1Label: '⏳ REMEDIO A LA TRAMPA τ (“EL CLIMA DE AYER NO ES LA COSECHA DE MAÑANA”)',
+      b1Text: 'Un LightGBM alimentado con el clima de <i>t−1</i> logra <b>R² &gt; 0.95 por pura casualidad en laboratorio</b> y se estrella en campo. El remedio es <b>bloquear variables contemporáneas y agregar el clima en las ventanas del Reloj Fenológico (τ = 6–8 meses)</b>.',
+      b2Label: '🛡️ REMEDIO A LA TRAMPA N=24: ZERO-SHOT (|Tr|=0) + 100% CALIBRACIÓN SCP',
+      b2Text: 'En Predicción Conforme clásica (SCP), partir <b>N=24 años</b> entre Entrenamiento (<i>Tr</i>) y Calibración (<i>Cal</i>) destruye ambos. Al usar <b>Modelos Fundacionales Zero-Shot (TimesFM 2.0 / Chronos-Bolt)</b>, no gastamos datos entrenando (<b>|Tr| = 0</b>) y <b>asignamos el 100% de la historia (|Cal| = 24) a calibrar el intervalo P10–P90</b>.',
+      formula: 'Zero-Shot (|Tr| = 0) ──▶ |Cal| = 24 (100%) ──▶ I(x) = [ f̂(x) − q̂ , f̂(x) + q̂ ]',
+      hint: 'Alterna abajo entre Split Clásico y Zero-Shot + 100% SCP',
+      quote: '“Si solo tienes 24 cosechas en 24 años y gastas 18 entrenando una red neuronal, te quedan apenas 6 datos para calibrar el riesgo: un suicidio estadístico. Pero como un modelo fundacional Zero-Shot ya viene entrenado, dedicamos las 24 cosechas íntegras a calibrar el escudo Conformal al 90% de confianza.”',
+      icon: '🛡️',
+      canvasTitle: 'Remedio Matemático a las Trampas 2 y 3: Feature Engineering Fenológico + 100% Calibración SCP en N=24',
+      ovLeft: '⏳ Izquierda: Trampa τ (R²=0.95 falso con t-1 vs. Causalidad τ=6–8m)',
+      ovRight: '🛡️ Derecha: Trampa N=24 (Split Clásico Roto vs. Zero-Shot |Cal|=24)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Split Clásico en N=24 (Destruye Tr y Cal)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> TSFM Zero-Shot (|Tr|=0, |Cal|=24 íntegro)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Banda Conforme P10–P90</span>',
+      nextLabel: 'Ver Los 3 Axiomas e Ir al Caso Jaén ─▶'
+    },
+    jaen: {
+      accent: 'var(--ancestral)',
+      tag: 'ACTO 4 DE 4 · LOS 3 AXIOMAS DEL AGRO Y PUENTE AL CASO JAÉN',
+      title: '4. Los 3 Axiomas del Agro y “La Prueba de Fuego: Ir al Caso Jaén →”',
+      lead: 'Cerramos la teoría con los <b>3 Axiomas Inviolables del Forecasting Agrícola</b> y dejamos planteadas las <b>3 preguntas cuantitativas</b> que resolveremos en el <b>Caso de Estudio 2 (Jaén)</b>:',
+      b1Label: '📜 LOS 3 AXIOMAS FUNDAMENTALES DEL AGRO (SECCIÓN 5)',
+      b1Text: '• <b>Axioma I:</b> Jamás confíes <b>N=24</b> a una red profunda sin física.<br>• <b>Axioma II:</b> Un <b>NDVI &gt; 0.85</b> es ciego; la fisiología ocurre en el <b>Red Edge (NDRE)</b>.<br>• <b>Axioma III:</b> El tiempo en el campo no son días del calendario, son <b>GDD y memoria hídrica (τ = 6–8m)</b>.',
+      b2Label: '🔥 LA PRUEBA DE FUEGO: IR AL CASO DE ESTUDIO 2 (COOPERATIVAS DE JAÉN)',
+      b2Text: '¿Sobrevive nuestro algoritmo a la sequía real de <b>Jaén 2024</b>? Mediremos en vivo: <b>1) LightGBM con desfase τ=6–8m + Sentinel-2</b>, <b>2) El duelo 24.00 (NDVI) vs. 18.46 (Fusión) contra los 18.20 qq/ha reales</b>, y <b>3) Bandas Conformal al 90% con N=24</b>.',
+      formula: 'Teoría + 3 Axiomas ──▶ [ Ir al Caso Jaén → ] (24.0 vs 18.46 vs 18.20 qq/ha)',
+      hint: 'Recorre los 3 Axiomas con el deslizador antes de pasar al Caso Jaén',
+      quote: '“La teoría es hermosa en el laboratorio, pero mañana la mediremos contra la crisis real en Jaén. Ya tenemos nuestros tres axiomas claros; ahora vayamos a las cooperativas de Jaén a ver si nuestro algoritmo sobrevive a una sequía extrema de floración.”',
+      icon: '🔥',
+      canvasTitle: 'Los 3 Axiomas del Forecasting Agrícola y Puente Explícito al Caso de Estudio 2 (Jaén)',
+      ovLeft: '📜 Izquierda: Los 3 Axiomas Inviolables del Agro',
+      ovRight: '🔥 Derecha: La Prueba de Fuego — Ir al Caso de Estudio 2 (Jaén)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Axioma I (N=24 + Física)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Axioma II (Red Edge NDRE)</span><span class="leg-item"><i class="leg-line" style="--c:#e06d53"></i> Ir al Caso Jaén →</span>',
+      nextLabel: 'Reiniciar bucle (Stack y 3 Trampas) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    $('ctrlStackWrap').hidden = (state.step !== 'stack');
+    $('ctrlLaiWrap').hidden = (state.step !== 'ndvi');
+    $('ctrlRemedyWrap').hidden = (state.step !== 'tau_n24');
+    $('ctrlAxiomWrap').hidden = (state.step !== 'jaen');
+
+    const tNames = ['1. Trampa NDVI (Satélite)', '2. Trampa τ (Retraso 8m)', '3. Trampa N=24 (Overfit)'];
+    $('outStack').textContent = tNames[state.trapIdx];
+
+    const isSat = state.laiVal > 3.0;
+    $('outLai').textContent = `LAI = ${state.laiVal.toFixed(1)} (${isSat ? 'NDVI Saturado!' : 'Lineal'})`;
+
+    $('outRemedy').textContent = state.useZeroShot ? 'Zero-Shot + 100% SCP ✅' : 'Split Clásico (Falla ✕)';
+
+    const axNames = ['Axioma I: N=24 + Física', 'Axioma II: Red Edge NDRE', 'Axioma III: Memoria τ'];
+    $('outAxiom').textContent = axNames[state.axiomIdx];
+
+    if (state.step === 'stack') {
+      const tr = STACK_TRAPS[state.trapIdx];
+      $('kpi1').innerHTML = `Foco: <strong style="color:${tr.color}">${tNames[state.trapIdx]}</strong>`;
+      $('kpi2').innerHTML = `Stack: <strong>IoT + Dron + Satélite</strong>`;
+      $('kpi3').innerHTML = `Destino: <strong style="color:var(--terracotta)">Caso Jaén →</strong>`;
+    } else if (state.step === 'ndvi') {
+      const ndviVal = Math.min(0.88, 0.25 + 0.63 * (1 - Math.exp(-0.95 * state.laiVal))).toFixed(2);
+      const ndreVal = (0.18 + 0.115 * state.laiVal).toFixed(2);
+      $('kpi1').innerHTML = `Dosel: <strong>LAI = ${state.laiVal.toFixed(1)}</strong>`;
+      $('kpi2').innerHTML = `NDVI (665nm): <strong style="color:${isSat ? 'var(--danger)' : 'var(--agro)'}">${ndviVal} ${isSat ? '(Ciego)' : ''}</strong>`;
+      $('kpi3').innerHTML = `NDRE (720nm): <strong style="color:var(--agro)">${ndreVal} (Sensible ✅)</strong>`;
+    } else if (state.step === 'tau_n24') {
+      $('kpi1').innerHTML = `Muestra Anual: <strong>N = 24 cosechas</strong>`;
+      $('kpi2').innerHTML = `Entreno Local |Tr|: <strong>${state.useZeroShot ? '0 (Zero-Shot)' : '18 (Overfit)'}</strong>`;
+      $('kpi3').innerHTML = `Calibración |Cal|: <strong style="color:${state.useZeroShot ? 'var(--agro)' : 'var(--danger)'}">${state.useZeroShot ? '24 (100% Muestra ✅)' : '6 (Inestable ✕)'}</strong>`;
+    } else {
+      const ax = AXIOMS_AGRO[state.axiomIdx];
+      $('kpi1').innerHTML = `Activo: <strong style="color:${ax.color}">${ax.num}</strong>`;
+      $('kpi2').innerHTML = `Jaén 2024: <strong style="color:var(--agro)">18.46 vs 18.20 Real</strong>`;
+      $('kpi3').innerHTML = `Cobertura SCP: <strong style="color:var(--purple)">90% (α = 0.10)</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawIsoPlate(cx, cy, rx, ry, thickness, fillTop, strokeCol, isSelected) {
+    ctx.save();
+    // Cara lateral de grosor 3D
+    ctx.fillStyle = 'rgba(8, 15, 32, 0.92)';
+    ctx.strokeStyle = strokeCol;
+    ctx.lineWidth = isSelected ? 2.4 : 1.3;
+    ctx.beginPath();
+    ctx.moveTo(cx - rx, cy);
+    ctx.lineTo(cx, cy + ry);
+    ctx.lineTo(cx + rx, cy);
+    ctx.lineTo(cx + rx, cy + thickness);
+    ctx.lineTo(cx, cy + ry + thickness);
+    ctx.lineTo(cx - rx, cy + thickness);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Cara superior isométrica (rombo)
+    ctx.fillStyle = fillTop;
+    if (isSelected) {
+      ctx.shadowColor = strokeCol;
+      ctx.shadowBlur = 14;
+    }
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - ry);
+    ctx.lineTo(cx + rx, cy);
+    ctx.lineTo(cx, cy + ry);
+    ctx.lineTo(cx - rx, cy);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawStackStage(w, h) {
+    const pad = 16, padT = 44;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 12;
+
+    const leftW = usableW * 0.44;
+    const cx = pad + leftW * 0.46;
+
+    // Eje vertical punteado que atraviesa las 3 capas (como en image5.png)
+    const topY = padT + usableH * 0.20;
+    const midY = padT + usableH * 0.50;
+    const botY = padT + usableH * 0.80;
+    const rx = Math.min(leftW * 0.40, 125);
+    const ry = rx * 0.44;
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
+    ctx.lineWidth = 1.8;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(cx, topY - ry - 18);
+    ctx.lineTo(cx, botY + ry + 18);
+    ctx.stroke();
+    ctx.restore();
+
+    // CAPA 3 (ABAJO): SATÉLITE (Grilla multiespectral Sentinel-2 10m + suelo)
+    const selSat = (state.trapIdx === 0);
+    drawIsoPlate(
+      cx,
+      botY,
+      rx,
+      ry,
+      14,
+      selSat ? 'rgba(224, 109, 83, 0.25)' : 'rgba(30, 41, 59, 0.78)',
+      '#e06d53',
+      selSat
+    );
+
+    // Píxeles del mapa de calor satelital dentro del rombo inferior
+    const gridN = 5;
+    for (let gx = 0; gx < gridN; gx++) {
+      for (let gy = 0; gy < gridN; gy++) {
+        const u = (gx + 0.5) / gridN - 0.5;
+        const v = (gy + 0.5) / gridN - 0.5;
+        const px = cx + (u - v) * rx * 0.75;
+        const py = botY + (u + v) * ry * 0.75;
+        const cols = ['#6ef0b4', '#ffc05c', '#38efff', '#ff5277'];
+        ctx.fillStyle = cols[(gx * 3 + gy) % cols.length];
+        ctx.globalAlpha = 0.75;
+        ctx.beginPath();
+        ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // CAPA 2 (MEDIO): DRON UAV (Surcos de café y barrido fotogramétrico YOLOv12 / SAM 2)
+    const selDron = (state.trapIdx === 1);
+    drawIsoPlate(
+      cx,
+      midY,
+      rx,
+      ry,
+      9,
+      selDron ? 'rgba(56, 239, 255, 0.22)' : 'rgba(15, 28, 48, 0.82)',
+      '#38efff',
+      selDron
+    );
+
+    // Surcos verdes de café sobre la placa intermedia + Dron
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 3;
+    for (let r = -2; r <= 2; r++) {
+      const offX = r * 14;
+      ctx.beginPath();
+      ctx.moveTo(cx + offX - 24, midY - 8);
+      ctx.lineTo(cx + offX + 24, midY + 10);
+      ctx.stroke();
+    }
+    ctx.font = '18px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🚁', cx + Math.sin(state.simTime * 2) * 28, midY - 12);
+    ctx.restore();
+
+    // CAPA 1 (ARRIBA): IOT EN HOJA Y SUELO (Hoja verde con microchip sensor)
+    const selIot = (state.trapIdx === 2);
+    drawIsoPlate(
+      cx,
+      topY,
+      rx * 0.88,
+      ry * 0.88,
+      7,
+      selIot ? 'rgba(110, 240, 180, 0.25)' : 'rgba(12, 32, 34, 0.86)',
+      '#6ef0b4',
+      selIot
+    );
+
+    // Hoja verde con chip IoT en el centro de la capa superior
+    ctx.save();
+    ctx.fillStyle = 'rgba(16, 185, 129, 0.45)';
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(cx, topY, 34, 16, -0.25, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Microchip dorado sobre la hoja
+    ctx.fillStyle = '#0f172a';
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 1.6;
+    ctx.strokeRect(cx - 8, topY - 6, 16, 12);
+    ctx.fillStyle = '#ffc05c';
+    ctx.fillRect(cx - 4, topY - 3, 8, 6);
+    ctx.restore();
+
+    // Etiquetas laterales de las 3 capas ("IoT", "Dron", "Satélite") como en image5.png
+    const layerLabels = [
+      { y: topY, txt: 'IoT', sub: 'Sonda + Chip', col: '#6ef0b4' },
+      { y: midY, txt: 'Dron', sub: 'YOLO / SAM 2', col: '#38efff' },
+      { y: botY, txt: 'Satélite', sub: 'Sentinel 10m', col: '#e06d53' }
+    ];
+    layerLabels.forEach(lb => {
+      const lxStart = cx + rx * 0.72;
+      const lxEnd = pad + leftW - 58;
+      ctx.save();
+      ctx.strokeStyle = lb.col;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(lxStart, lb.y);
+      ctx.lineTo(lxEnd, lb.y);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 11.5px "Space Grotesk", sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(lb.txt, lxEnd + 5, lb.y + 1);
+      ctx.fillStyle = lb.col;
+      ctx.font = '600 8.5px "JetBrains Mono"';
+      ctx.fillText(lb.sub, lxEnd + 5, lb.y + 13);
+      ctx.restore();
+    });
+
+    // PANEL DERECHO: LAS 3 TARJETAS DE TRAMPAS + BANNER "LA PRUEBA DE FUEGO: IR AL CASO JAÉN →"
+    const rxStart = pad + leftW + 8;
+    const rw = usableW - leftW - 8;
+    const isCompactH = usableH < 310;
+    const bannerH = isCompactH ? 36 : 44;
+    const gap = isCompactH ? 5 : 8;
+    const cardsAreaH = usableH - bannerH - (isCompactH ? 6 : 10);
+    const cardH = (cardsAreaH - gap * 2) / 3;
+
+    STACK_TRAPS.forEach((tr, idx) => {
+      const cy = padT + idx * (cardH + gap);
+      const isSel = (idx === state.trapIdx);
+      const isCardCompact = cardH < 62;
+
+      ctx.save();
+      ctx.fillStyle = isSel ? 'rgba(15, 25, 45, 0.96)' : 'rgba(8, 15, 30, 0.86)';
+      ctx.strokeStyle = isSel ? tr.color : 'rgba(148, 163, 184, 0.22)';
+      ctx.lineWidth = isSel ? 2.2 : 1.2;
+      ctx.beginPath();
+      ctx.roundRect(rxStart, cy, rw, cardH, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      // Pestaña terracota izquierda (como en image5.png)
+      ctx.fillStyle = isSel ? tr.color : '#c2593f';
+      ctx.beginPath();
+      ctx.roundRect(rxStart, cy, 10, cardH, [8, 0, 0, 8]);
+      ctx.fill();
+
+      const tY = cy + (isCardCompact ? 13 : 18);
+      const sY = cy + (isCardCompact ? 25 : 34);
+      const rY = cy + (isCardCompact ? 37 : cardH - 8);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = isCardCompact ? '700 9.5px "Space Grotesk", sans-serif' : '700 11px "Space Grotesk", sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(tr.trapTitle, rxStart + 18, tY);
+
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = isCardCompact ? '500 8.5px Inter, sans-serif' : '500 9.8px Inter, sans-serif';
+      ctx.fillText(tr.trapSub, rxStart + 18, sY);
+
+      ctx.fillStyle = tr.color;
+      ctx.font = isCardCompact ? '700 8px "JetBrains Mono"' : '700 9px "JetBrains Mono"';
+      ctx.fillText('✓ ' + tr.remedy, rxStart + 18, rY);
+      ctx.restore();
+    });
+
+    // BANNER INFERIOR: "La prueba de fuego: ... [ Ir al Caso Jaén → ]"
+    const by = padT + cardsAreaH + 8;
+    ctx.save();
+    ctx.fillStyle = 'rgba(42, 24, 16, 0.94)';
+    ctx.strokeStyle = '#e06d53';
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.roundRect(rxStart, by, rw, bannerH, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🔥 LA PRUEBA DE FUEGO:', rxStart + 14, by + 17);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('La teoría es hermosa, pero mañana la mediremos en Jaén.', rxStart + 14, by + 33);
+
+    // Botón flecha "Ir al Caso Jaén →"
+    const btnW = 132, btnH = 28;
+    const bx = rxStart + rw - btnW - 10, bby = by + (bannerH - btnH) / 2;
+    ctx.fillStyle = '#e06d53';
+    ctx.beginPath();
+    ctx.roundRect(bx, bby, btnW, btnH, 7);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Ir al Caso Jaén →', bx + btnW / 2, bby + 18);
+    ctx.restore();
+  }
+
+  function drawNdviTrapStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.44;
+    const isSat = state.laiVal > 3.0;
+
+    // 1. CAJA IZQUIERDA: PENETRACIÓN ÓPTICA EN EL DOSEL (ROJO 665 nm VS RED EDGE 705-740 nm)
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = isSat ? 'rgba(255, 82, 119, 0.5)' : 'rgba(110, 240, 180, 0.4)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#a7f3d0';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🛰️ ¿POR QUÉ EL NDVI MIENTE Y EL RED EDGE NO?', pad + 14, padT + 20);
+
+    // Capas de hojas según state.laiVal (1 a 6 capas)
+    const layers = Math.max(1, Math.round(state.laiVal));
+    const topCanopy = padT + 68;
+    const botCanopy = padT + usableH - 58;
+
+    for (let i = 0; i < layers; i++) {
+      const ly = topCanopy + (i / Math.max(1, layers - 1 || 1)) * (botCanopy - topCanopy);
+      ctx.fillStyle = i === 0 ? 'rgba(110, 240, 180, 0.36)' : 'rgba(16, 185, 129, 0.16)';
+      ctx.strokeStyle = '#6ef0b4';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.roundRect(pad + 26, ly, leftW - 52, 13, 6);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    // Rayo 1 (Izquierda): Banda Roja Clásica (665 nm) -> Se frena al 100% en las primeras hojas
+    const r1X = pad + leftW * 0.32;
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(r1X, padT + 34);
+    ctx.lineTo(r1X, topCanopy + 12);
+    ctx.stroke();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Rojo (665 nm)', r1X, padT + 46);
+    ctx.fillText('✕ Bloqueado arriba', r1X, topCanopy + 28);
+
+    // Rayo 2 (Derecha): Banda Red Edge (705-740 nm, Banda 5 Sentinel-2) -> Penetra todo el dosel
+    const r2X = pad + leftW * 0.68;
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 3;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(r2X, padT + 34);
+    ctx.lineTo(r2X, botCanopy + 10);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.fillText('Red Edge (720 nm)', r2X, padT + 46);
+    ctx.fillText('✅ Penetra al interior', r2X, botCanopy + 24);
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.fillText('🥀 Adentro: Flor abortada invisible al NDVI clásico', pad + leftW / 2, padT + usableH - 12);
+    ctx.restore();
+
+    // 2. CAJA DERECHA: CURVA DE SATURACIÓN DEL NDVI (>0.85) VS. LINEALIDAD DEL NDRE (RED EDGE)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.38)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#38efff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('📈 CURVA DE SATURACIÓN: NDVI CLÁSICO VS. NDRE (BORDE ROJO)', rx + 14, padT + 20);
+
+    const gx = rx + 42, gy = padT + 42, gw = rw - 64, gh = usableH - 82;
+    const X = l => gx + ((l - 1.0) / 5.0) * gw; // LAI de 1.0 a 6.0
+    const Y = v => gy + gh - v * gh;            // Índice de 0 a 1.0
+
+    // Zona de Saturación (LAI > 3.0)
+    const x3 = X(3.0);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.09)';
+    ctx.fillRect(x3, gy, gx + gw - x3, gh);
+
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.75)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(x3, gy); ctx.lineTo(x3, gy + gh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('Umbral LAI > 3: NDVI se estanca en >0.85', gx + gw - 6, gy + 14);
+
+    // Ejes
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx, gy + gh); ctx.lineTo(gx + gw, gy + gh); ctx.stroke();
+
+    // Curva 1: NDVI Clásico (Satura rápido en ~0.86)
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 3;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    for (let l = 1.0; l <= 6.0; l += 0.1) {
+      const v = Math.min(0.88, 0.25 + 0.63 * (1 - Math.exp(-0.95 * l)));
+      l === 1.0 ? ctx.moveTo(X(l), Y(v)) : ctx.lineTo(X(l), Y(v));
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Curva 2: NDRE Red Edge (Mantiene pendiente lineal sensible a biomasa y nitrógeno)
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath();
+    for (let l = 1.0; l <= 6.0; l += 0.1) {
+      const v = 0.18 + 0.115 * l;
+      l === 1.0 ? ctx.moveTo(X(l), Y(v)) : ctx.lineTo(X(l), Y(v));
+    }
+    ctx.stroke();
+
+    // Marcadores en el LAI actual
+    const curX = X(state.laiVal);
+    const curNdvi = Math.min(0.88, 0.25 + 0.63 * (1 - Math.exp(-0.95 * state.laiVal)));
+    const curNdre = 0.18 + 0.115 * state.laiVal;
+
+    ctx.fillStyle = '#ff5277';
+    ctx.beginPath(); ctx.arc(curX, Y(curNdvi), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#6ef0b4';
+    ctx.beginPath(); ctx.arc(curX, Y(curNdre), 6, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Índice de Área Foliar (LAI: Capas de hojas en el cafetal) ──▶', gx + gw / 2, gy + gh + 22);
+    ctx.restore();
+  }
+
+  function drawTauAndN24Stage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.45;
+
+    // 1. CAJA IZQUIERDA: TRAMPA 2 ("EL CLIMA DE AYER NO ES LA COSECHA DE MAÑANA")
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.42)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⏳ TRAMPA 2: EL ENGAÑO DEL R² > 0.95 CON CLIMA t−1', pad + 14, padT + 20);
+
+    const b1Y = padT + 34, bH = (usableH - 52) / 2;
+    // Caja A: Modelo Ingenuo con t-1
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.12)';
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.45)';
+    ctx.beginPath(); ctx.roundRect(pad + 12, b1Y, leftW - 24, bH - 4, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('✕ ENFOQUE CIEGO: Meter clima contemporáneo (t−1 mes)', pad + 20, b1Y + 18);
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• En entrenamiento: logra R² > 0.95 por correlaciones espurias.', pad + 20, b1Y + 36);
+    ctx.fillText('• En la siguiente cosecha: colapsa porque ignora la floración.', pad + 20, b1Y + 52);
+
+    // Caja B: Remedio Fenológico (τ = 6 a 8 meses)
+    const b2Y = b1Y + bH + 4;
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.12)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.45)';
+    ctx.beginPath(); ctx.roundRect(pad + 12, b2Y, leftW - 24, bH - 4, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('✅ REMEDIO BIOFÍSICO: Ventanas del Reloj (τ = 6–8 meses)', pad + 20, b2Y + 18);
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• Fuerza causalidad: integra lluvia y VPD en Ago–Oct y Nov–Feb.', pad + 20, b2Y + 36);
+    ctx.fillText('• Congela el techo de frutos 7 meses antes del corte.', pad + 20, b2Y + 52);
+    ctx.restore();
+
+    // 2. CAJA DERECHA: TRAMPA 3 ("N=24 NO PERDONA") Y EL REMEDIO ZERO-SHOT + 100% CALIBRACIÓN SCP
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.94)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.48)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#e9d5ff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('💀 TRAMPA 3 (N=24): ¿CÓMO CALIBRAR INCERTIDUMBRE CON 24 DATOS?', rx + 14, padT + 20);
+
+    // Visualización de las 24 monedas/iteraciones anuales (N=24)
+    const gridX = rx + 16, gridY = padT + 34, gridW = rw - 32;
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText(
+      state.useZeroShot
+        ? '✅ TSFM Zero-Shot (TimesFM 2.0 / Chronos-Bolt): |Tr| = 0 ➔ ¡100% de los 24 años van a Calibrar |Cal| = 24!'
+        : '✕ Split Conformal Clásico: Gastar 18 años en entrenar |Tr| deja solo |Cal| = 6 años (Cuantil q̂ inestable)',
+      gridX,
+      gridY + 10
+    );
+
+    // Dibujar las 24 casillas (los 24 años de cosecha)
+    const boxW = (gridW - 23 * 4) / 24;
+    const boxY = gridY + 20;
+    for (let i = 0; i < 24; i++) {
+      const bx = gridX + i * (boxW + 4);
+      const isCal = state.useZeroShot ? true : (i >= 18);
+      ctx.fillStyle = isCal ? '#6ef0b4' : 'rgba(255, 82, 119, 0.45)';
+      ctx.beginPath();
+      ctx.roundRect(bx, boxY, boxW, 20, 4);
+      ctx.fill();
+    }
+
+    // Gráfico del Intervalo Conforme I(x_nuevo) = [f(x) - q, f(x) + q] al 90% (alpha = 0.10)
+    const cyTop = boxY + 32, cyH = usableH - (cyTop - padT) - 12;
+    ctx.fillStyle = 'rgba(4, 9, 20, 0.88)';
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+    ctx.beginPath(); ctx.roundRect(gridX, cyTop, gridW, cyH, 8); ctx.fill(); ctx.stroke();
+
+    const gx = gridX + 24, gy = cyTop + 18, gw = gridW - 40, gh = cyH - 36;
+    const X = i => gx + (i / 23) * gw;
+    const Y = v => gy + gh - ((v - 10) / 20) * gh;
+
+    const qBand = state.useZeroShot ? 1.8 : 5.4; // Banda estrecha y precisa con |Cal|=24 vs ancha e inestable con |Cal|=6
+
+    ctx.fillStyle = state.useZeroShot ? 'rgba(110, 240, 180, 0.18)' : 'rgba(255, 82, 119, 0.16)';
+    ctx.beginPath();
+    for (let i = 0; i < 24; i++) {
+      const med = 20 + 3 * Math.sin(i * 0.55) + (i === 22 ? -3.5 : 0);
+      i === 0 ? ctx.moveTo(X(i), Y(med + qBand)) : ctx.lineTo(X(i), Y(med + qBand));
+    }
+    for (let i = 23; i >= 0; i--) {
+      const med = 20 + 3 * Math.sin(i * 0.55) + (i === 22 ? -3.5 : 0);
+      ctx.lineTo(X(i), Y(med - qBand));
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    // Línea central f_hat(x)
+    ctx.strokeStyle = state.useZeroShot ? '#6ef0b4' : '#ff5277';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let i = 0; i < 24; i++) {
+      const med = 20 + 3 * Math.sin(i * 0.55) + (i === 22 ? -3.5 : 0);
+      i === 0 ? ctx.moveTo(X(i), Y(med)) : ctx.lineTo(X(i), Y(med));
+    }
+    ctx.stroke();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(
+      'q̂ = q₁₋α(S_Cal) con 1−α̂ = ⌈(|Cal|+1)(1−α)⌉ / |Cal|  ──▶  I(x) = [ f̂(x) ± q̂ ] (90% confianza)',
+      gx,
+      cyTop + 14
+    );
+    ctx.restore();
+  }
+
+  function drawAxiomsAndJaenBridgeStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.50;
+
+    // 1. IZQUIERDA: LOS 3 AXIOMAS FUNDAMENTALES DEL FORECASTING AGRÍCOLA (SECCIÓN 5)
+    const cardH = (usableH - 16) / 3;
+    AXIOMS_AGRO.forEach((ax, idx) => {
+      const ay = padT + idx * (cardH + 8);
+      const isSel = (idx === state.axiomIdx);
+
+      ctx.save();
+      ctx.fillStyle = isSel ? 'rgba(14, 24, 46, 0.96)' : 'rgba(7, 13, 26, 0.85)';
+      ctx.strokeStyle = isSel ? ax.color : 'rgba(148, 163, 184, 0.2)';
+      ctx.lineWidth = isSel ? 2.4 : 1.2;
+      ctx.beginPath();
+      ctx.roundRect(pad, ay, leftW, cardH, 10);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = ax.color;
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${ax.num} · ${ax.title}`, pad + 14, ay + 18);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '600 9.5px Inter, sans-serif';
+      ctx.fillText(ax.rule, pad + 14, ay + 35);
+
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '500 9px "JetBrains Mono"';
+      ctx.fillText('➔ ' + ax.fix, pad + 14, ay + 52);
+      ctx.restore();
+    });
+
+    // 2. DERECHA: PUENTE EXPLÍCITO AL CASO DE ESTUDIO 2 (COOPERATIVAS DE JAÉN - RENDIMIENTO + NDVI)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(12, 20, 38, 0.95)';
+    ctx.strokeStyle = '#e06d53';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 12);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fed7aa';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🔥 PUENTE AL CASO DE ESTUDIO 2: COOPERATIVAS DE JAÉN', rx + 16, padT + 22);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 13px "Space Grotesk", sans-serif';
+    ctx.fillText('Las 3 Interrogantes que Resolveremos en Campo:', rx + 16, padT + 42);
+
+    const questions = [
+      {
+        q: '1. Traducción del Retraso Fenológico (τ = 6–8 meses)',
+        a: '¿Cómo calibrar LightGBM cruzando series reales (qq/ha) e imágenes Sentinel-2 en Jaén?'
+      },
+      {
+        q: '2. El Duelo Real en la Crisis de Jaén 2024 (MAE y RMSE)',
+        a: 'NDVI Ingenuo (24.00 qq/ha) vs. Fusión Fenológica (18.46 qq/ha) contra Cosecha Real (18.20 qq/ha).'
+      },
+      {
+        q: '3. Bandas Conformal al 90% bajo N = 24 Cosechas',
+        a: '¿Cómo acotan la incertidumbre los TSFMs Zero-Shot usando |Cal| = 24?'
+      }
+    ];
+
+    const qH = (usableH - 110) / 3;
+    questions.forEach((it, idx) => {
+      const qy = padT + 54 + idx * (qH + 5);
+      ctx.fillStyle = 'rgba(5, 10, 22, 0.88)';
+      ctx.strokeStyle = 'rgba(224, 109, 83, 0.35)';
+      ctx.beginPath(); ctx.roundRect(rx + 14, qy, rw - 28, qH - 3, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = '#ffc05c';
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.fillText(it.q, rx + 22, qy + 17);
+
+      ctx.fillStyle = '#e2eeff';
+      ctx.font = '500 9.2px Inter, sans-serif';
+      ctx.fillText(it.a, rx + 22, qy + 34);
+    });
+
+    // Gran Botón de Acción Inferior: "Ir al Caso Jaén →"
+    const ctaY = padT + usableH - 42;
+    ctx.fillStyle = '#e06d53';
+    ctx.beginPath();
+    ctx.roundRect(rx + 14, ctaY, rw - 28, 32, 8);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 11px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('🚀 LA PRUEBA DE FUEGO: IR AL CASO JAÉN (CAMPAÑA 2024) →', rx + rw / 2, ctaY + 20);
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+
+    if (state.step === 'stack') {
+      drawStackStage(w, h);
+    } else if (state.step === 'ndvi') {
+      drawNdviTrapStage(w, h);
+    } else if (state.step === 'tau_n24') {
+      drawTauAndN24Stage(w, h);
+    } else {
+      drawAxiomsAndJaenBridgeStage(w, h);
+    }
+  }
+
+  canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    const x = e.clientX - rect.left;
+
+    if (state.step === 'stack') {
+      // Si hace clic en el botón inferior "Ir al Caso Jaén →", salta al Acto 4
+      if (y > rect.height - 62 && x > rect.width * 0.45) {
+        setStep('jaen', true);
+        return;
+      }
+      // Seleccionar cuál de las 3 capas / trampas inspeccionar según la altura del clic
+      const relY = (y - 44) / (rect.height - 60);
+      if (relY < 0.36) state.trapIdx = 0;
+      else if (relY < 0.68) state.trapIdx = 1;
+      else state.trapIdx = 2;
+      $('sliderStack').value = state.trapIdx;
+      state.stepElapsed = 0;
+      updateUI();
+      renderCanvas();
+    } else if (state.step === 'jaen') {
+      if (x < rect.width * 0.5) {
+        state.axiomIdx = (state.axiomIdx + 1) % 3;
+        $('sliderAxiom').value = state.axiomIdx;
+        state.stepElapsed = 0;
+        updateUI();
+        renderCanvas();
+      }
+    }
+  });
+
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => setStep(btn.dataset.step, true));
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    setStep(STEPS[(idx + 1) % STEPS.length], true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderStack').addEventListener('input', e => {
+    state.trapIdx = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderLai').addEventListener('input', e => {
+    state.laiVal = +e.target.value / 10;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderRemedy').addEventListener('input', e => {
+    state.useZeroShot = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderAxiom').addEventListener('input', e => {
+    state.axiomIdx = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'stack',
+      trapIdx: 0,
+      laiVal: 4.5,
+      useZeroShot: 1,
+      axiomIdx: 0,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderStack').value = 0;
+    $('sliderLai').value = 45;
+    $('sliderRemedy').value = 1;
+    $('sliderAxiom').value = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('stack', true);
+    if (e.key === '2') setStep('ndvi', true);
+    if (e.key === '3') setStep('tau_n24', true);
+    if (e.key === '4') setStep('jaen', true);
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+      } else {
+        setStep(STEPS[(idx + 1) % STEPS.length], true);
+      }
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+      } else {
+        setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+      }
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    }
+    if (['n', 'd', 'f', 'Escape', 'Home', 'End'].includes(e.key) && window.parent !== window) {
+      window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'activate') {
+      setStep(STEPS[0], false);
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    } else if (e.data && e.data.type === 'resize') {
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        setStep(STEPS[(idx + 1) % STEPS.length], false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    ro.observe(canvas.parentElement);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

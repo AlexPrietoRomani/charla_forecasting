@@ -1,0 +1,1997 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPOSITIVA 21: Física Biológica · Biofísica & Modelado (El Límite Algorítmico)</title>
+<style>
+:root {
+  --bg: #040812;
+  --panel: rgba(9, 18, 34, 0.93);
+  --panel-soft: rgba(6, 13, 26, 0.84);
+  --line: rgba(148, 163, 184, 0.17);
+  --line-bright: rgba(110, 240, 180, 0.42);
+  --text: #f1f7ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --ancestral: #ffc05c; /* Oro / Engranaje Retardo τ / Calor */
+  --agro: #6ef0b4;      /* Verde botánico / Curva Sigmoide Salud */
+  --water: #38efff;     /* Cian / Agua / Transpiración estomática */
+  --danger: #ff5277;    /* Rojo / Colapso Biológico Total / VPD > 1.8 */
+  --purple: #b48eff;    /* Violeta / Reducción 4x / Reloj Fenológico */
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 16% 14%, rgba(255, 192, 92, 0.13), transparent 38%),
+    radial-gradient(ellipse at 84% 86%, rgba(255, 82, 119, 0.13), transparent 40%),
+    #03060f;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 25% 30%, rgba(245, 158, 11, 0.08), transparent 48%),
+    radial-gradient(ellipse at 78% 32%, rgba(16, 185, 129, 0.11), transparent 48%),
+    linear-gradient(145deg, rgba(8, 15, 29, 0.985), rgba(3, 8, 18, 0.99));
+  border: 1px solid rgba(110, 240, 180, 0.26);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.65), inset 0 0 60px rgba(6, 48, 38, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 130, 115, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 130, 115, 0.12) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 12px 18px 8px !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--agro); outline-offset: 2px; }
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 192, 92, 0.45);
+  border-radius: 12px;
+  color: var(--ancestral);
+  background: linear-gradient(135deg, rgba(255, 192, 92, 0.16), rgba(255, 82, 119, 0.12));
+}
+
+.brand-mark svg { width: 23px; height: 23px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--ancestral);
+  font: 700 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--agro); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 82, 119, 0.34);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.14), rgba(6, 15, 28, 0.92));
+  max-width: 550px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--danger);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 22, 0.88);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--agro));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--agro)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--agro)) 18%, transparent);
+}
+
+.proc-node[data-step="overview"] { --node-color: var(--agro); }
+.proc-node[data-step="delay"]    { --node-color: var(--ancestral); }
+.proc-node[data-step="vpd"]      { --node-color: var(--danger); }
+.proc-node[data-step="n24"]      { --node-color: var(--purple); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--agro));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--agro)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--agro));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(110, 240, 180, 0.5);
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(335px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(12px, 1.3vw, 18px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.narrative-card {
+  --stage-accent: var(--agro);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(8px, 1vh, 12px);
+  padding: clamp(12px, 1.3vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 24, 0.75);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 32%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(10.5px, 0.88vw, 12.2px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11px, 0.9vw, 12.5px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(110, 240, 180, 0.12);
+  border: 1px solid rgba(110, 240, 180, 0.35);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 35%, rgba(16, 78, 62, 0.20), rgba(2, 6, 16, 0.94) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(255, 192, 92, 0.4);
+  background: rgba(15, 23, 42, 0.84);
+  color: #ffe1a8;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(255, 82, 119, 0.42);
+  background: rgba(15, 23, 42, 0.84);
+  color: #fda4af;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #6ef0b4);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 105px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(85px, 8.5vw, 135px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(110, 240, 180, 0.45);
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.25), rgba(6, 95, 70, 0.42));
+  color: #d1fae5;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(16, 185, 129, 0.48);
+  color: #fff;
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #a7f3d0; }
+
+@media (max-width: 920px) {
+  body { display: block; }
+  #slideFrame { width: 100%; height: auto; aspect-ratio: auto; min-height: 100svh; }
+  .topbar, .flowbar, .workspace { grid-template-columns: 1fr; }
+  .process-track { grid-template-columns: 1fr 1fr; }
+  .proc-arrow { display: none; }
+  .canvas-wrap { min-height: 300px; }
+}
+
+@media (max-height: 800px) {
+  body.is-embedded #slideFrame {
+    padding: 8px 14px 6px !important;
+    gap: 6px !important;
+  }
+  .topbar {
+    padding-bottom: 6px !important;
+  }
+  .narr-lead {
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+  }
+  .info-block {
+    padding: 6px 10px !important;
+  }
+  .info-block-text {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  .math-strip {
+    padding: 5px 10px !important;
+    font-size: 10.5px !important;
+  }
+  .speaker-box {
+    padding: 6px 10px !important;
+  }
+  .speaker-quote {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+}
+
+@media (max-height: 660px) {
+  .eyebrow {
+    display: none !important;
+  }
+  .topbar h1 {
+    font-size: 14px !important;
+  }
+  .narr-title {
+    font-size: 14px !important;
+  }
+  .info-block {
+    padding: 4px 8px !important;
+  }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 21: Física biológica (Biofísica y Modelado - El Límite Algorítmico)">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">BIOFÍSICA &amp; MODELADO · EL LÍMITE ALGORÍTMICO · SECCIÓN 3</p>
+        <h1><span class="era">Física biológica</span> <span class="sub">· Las 3 leyes que obligan a la IA a aprender botánica</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Las 3 leyes biofísicas del agro">
+      <div class="via-title">
+        <span>⚙️ LAS 3 RESTRICCIONES BIOFÍSICAS</span>
+        <span>¿POR QUÉ ES LA SERIE MÁS DIFÍCIL?</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">⏳ <strong>Retrasos τ = 6–8 meses</strong></span>
+        <span class="via-pill">🔥 <strong>Umbral &gt;32°C / VPD &gt;1.8 kPa</strong></span>
+        <span class="via-pill">📅 <strong>N = 24</strong> no perdona (4× menos error)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. Diagrama General (Engranaje + Colapso) ─▶ 2. Retrasos (τ = 6–8m) ─▶ 3. Umbrales Fatales (VPD) ─▶ 4. N=24 No Perdona & Pase a Diapo 22 -->
+  <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 21">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="overview" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">Engranaje τ + Colapso</span>
+          <span class="proc-sub">Los 3 límites biofísicos en vivo</span>
+        </div>
+        <div class="proc-progress" id="prog-overview"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="delay" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">Retrasos (τ = 6–8 meses)</span>
+          <span class="proc-sub">Memoria invisible de floración</span>
+        </div>
+        <div class="proc-progress" id="prog-delay"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="vpd" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">Umbrales Fatales (VPD)</span>
+          <span class="proc-sub">&gt;32°C · Sed del aire &gt;1.8 kPa</span>
+        </div>
+        <div class="proc-progress" id="prog-vpd"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="n24" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">N=24 No Perdona ─▶ Diapo 22</span>
+          <span class="proc-sub">Fenología reduce el error 4×</span>
+        </div>
+        <div class="proc-progress" id="prog-n24"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA AMIGABLE -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · BIOFÍSICA &amp; MODELADO</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. Física Biológica: Las 3 reglas que ningún software puede violar</h2>
+        <p class="narr-lead" id="narrLead">
+          A una planta de café no le importa qué tan caro sea tu algoritmo. Su producción está gobernada por <b>3 leyes físicas y biológicas implacables</b> que hacen del agro la serie temporal más difícil de todas:
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">⚙️ 1. RETRASOS (τ = 6–8 MESES) Y 2. UMBRALES FATALES</div>
+          <p class="info-block-text" id="block1Text">
+            • <b>Retrasos (τ = 6–8 meses):</b> Lo que pasa hoy en el clima impacta recién el próximo semestre; la red debe aprender esta larga memoria invisible.<br>
+            • <b>Umbrales fatales:</b> Más de <b>32 °C</b>, alta <i>sed del aire</i> (<b>VPD &gt; 1.8 kPa</b>) o <b>2 semanas sin agua</b> causan aborto floral inmediato y <b>colapso biológico total</b>.
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">📅 3. N = 24 NO PERDONA (EL SOBREAJUSTE ES FATAL)</div>
+          <p class="info-block-text" id="block2Text">
+            Solo tenemos <b>1 cosecha al año (24 campañas en 24 años)</b>. Entrenar una red a ciegas con cientos de datos satelitales memoriza ruido, pero <b>integrar las ventanas fenológicas reduce el error 4×</b>.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">Estímulo (Xₜ₋τ) ──[ Engranaje τ = 6–8m ]──▶ Cosecha Yₜ (Colapsa si VPD &gt; 1.8)</span>
+          <span class="hint" id="mathHint">Sube el estrés ambiental abajo para ver el colapso</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren, a la planta no le importa qué tan caro sea su software. Si hace calor extremo, el aire siente sed y la planta aborta su flor para sobrevivir. Es pura física. Lo difícil para la IA es que ese daño de hoy recién aparece en el balance financiero ocho meses después. Y como tenemos una cosecha al año, no podemos equivocarnos.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: LIENZO INTERACTIVO -->
+    <section class="stage-card" aria-label="Simulador visual de física biológica agrícola">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">⚙️</span>
+          <h3 class="stage-title" id="canvasTitle">Engranaje de Retraso (τ = 6–8m) y Curva de Umbral de Colapso Biológico</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Retraso: <strong>τ = 6–8 meses</strong></span>
+          <span class="kpi-chip" id="kpi2">Sed del Aire: <strong style="color:var(--agro)">VPD = 1.2 kPa</strong></span>
+          <span class="kpi-chip" id="kpi3">Muestra: <strong>N = 24 años (Error ÷4)</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">⚙️ Izquierda: Estímulo ➔ Engranaje Retraso (τ) ➔ Cosecha Final</span>
+          <span class="ov-badge right" id="ovRight">📉 Derecha: Curva Sigmoide vs. Colapso por Sed del Aire (VPD)</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Curva Sigmoide de Salud Vegetal</span>
+          <span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Umbral: Sed del Aire (VPD &gt; 1.8 kPa)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Colapso Biológico Total</span>
+        </div>
+        <span id="legendTip">INTERACTÚA CON EL DESLIZADOR INFERIOR</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlStressWrap">
+            <label for="sliderStress">🌡️ Estrés Ambiental / Sed del Aire:</label>
+            <input id="sliderStress" type="range" min="8" max="26" step="1" value="21" style="accent-color:var(--danger)">
+            <output id="outStress">VPD 2.1 kPa (¡Colapso!)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlTauWrap" hidden>
+            <label for="sliderTau">⏳ Ventana que mira la IA (Lag):</label>
+            <input id="sliderTau" type="range" min="1" max="8" step="1" value="7" style="accent-color:var(--ancestral)">
+            <output id="outTau">τ = 7 meses (Floración)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlVpdWrap" hidden>
+            <label for="sliderVpd">💨 Sed del Aire (VPD = eₛ − eₐ):</label>
+            <input id="sliderVpd" type="range" min="8" max="26" step="1" value="21" style="accent-color:var(--danger)">
+            <output id="outVpd">2.1 kPa (Estoma Cerrado)</output>
+          </div>
+          <div class="ctrl-item" id="ctrlPvarsWrap" hidden>
+            <label for="sliderPvars">📊 Diseño de Variables (N=24):</label>
+            <input id="sliderPvars" type="range" min="0" max="1" step="1" value="1" style="accent-color:var(--purple)">
+            <output id="outPvars">Con Fenología (Error ÷4)</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente acto ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Regla Biofísica del Agro:</strong> “El daño de hoy recién aparece en el balance financiero ocho meses después, y con una sola cosecha al año (N=24), integrar la fenología reduce el error 4×.”</span>
+    <span>Fuente: Oikonomidis et al. (2022) / MIDAGRI · Sección 3 (Física Biológica y Límite Algorítmico)</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['overview', 'delay', 'vpd', 'n24'];
+  const LOOP_DURATION_MS = 9500;
+
+  const state = {
+    step: 'overview',
+    stressVpd: 2.1,   // Por defecto muestra cómo al cruzar 1.8 kPa se activa el Colapso Biológico Total
+    tauMonths: 7,     // Retardo fisiológico entre floración y cosecha (6 a 8 meses)
+    vpdLeaf: 2.1,     // Déficit de presión de vapor en Acto 3 (kPa)
+    usePhenology: 1,  // 0 = 500 variables crudas (Overfitting), 1 = Ventanas Fenológicas (Reduce error 4x)
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    overview: {
+      accent: 'var(--agro)',
+      tag: 'ACTO 1 DE 4 · BIOFÍSICA & MODELADO (VISTA INTEGRAL)',
+      title: '1. Física Biológica: Las 3 reglas que ningún software puede violar',
+      lead: 'A una planta de café no le importa qué tan caro sea tu algoritmo. Su producción está gobernada por <b>3 leyes físicas y biológicas implacables</b> que hacen del agro la serie temporal más difícil de todas:',
+      b1Label: '⚙️ 1. RETRASOS (τ = 6–8 MESES) Y 2. UMBRALES FATALES',
+      b1Text: '• <b>Retrasos (τ = 6–8 meses):</b> Lo que pasa hoy en el clima impacta recién el próximo semestre; la red debe aprender esta larga memoria invisible.<br>• <b>Umbrales fatales:</b> Más de <b>32 °C</b>, alta <i>sed del aire</i> (<b>VPD &gt; 1.8 kPa</b>) o <b>2 semanas sin agua</b> causan aborto floral inmediato y <b>colapso biológico total</b>.',
+      b2Label: '📅 3. N = 24 NO PERDONA (EL SOBREAJUSTE ES FATAL)',
+      b2Text: 'Solo tenemos <b>1 cosecha al año (24 campañas en 24 años)</b>. Entrenar una red a ciegas con cientos de datos satelitales memoriza ruido, pero <b>integrar las ventanas fenológicas reduce el error 4×</b>.',
+      formula: 'Estímulo (Xₜ₋τ) ──[ Engranaje τ = 6–8m ]──▶ Cosecha Yₜ (Colapsa si VPD > 1.8)',
+      hint: 'Mueve el deslizador de Estrés Ambiental para cruzar el umbral',
+      quote: '“Miren, a la planta no le importa qué tan caro sea su software. Si hace calor extremo, el aire siente sed y la planta aborta su flor para sobrevivir. Es pura física. Lo difícil para la IA es que ese daño de hoy recién aparece en el balance financiero ocho meses después. Y como tenemos una cosecha al año, no podemos equivocarnos.”',
+      icon: '⚙️',
+      canvasTitle: 'Engranaje de Retraso (τ = 6–8m) y Gráfico de Umbral y Colapso Biológico',
+      ovLeft: '⚙️ Izquierda: Estímulo ➔ Engranaje Retraso (τ) ➔ Cosecha Final',
+      ovRight: '📉 Derecha: Curva Sigmoide de Salud vs. Colapso Biológico Total',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Curva Sigmoide de Salud Vegetal</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Umbral: Sed del Aire (VPD &gt; 1.8 kPa)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Colapso Biológico Total</span>',
+      nextLabel: 'Explorar Retrasos (τ = 6–8m) ─▶'
+    },
+    delay: {
+      accent: 'var(--ancestral)',
+      tag: 'ACTO 2 DE 4 · LEY 1: RETRASOS FENOLÓGICOS (LAGS FISIOLÓGICOS)',
+      title: '2. Retrasos (τ) de 6–8 meses: La larga memoria invisible del tejido',
+      lead: 'En la bolsa o en un supermercado, el clima de ayer afecta la venta de hoy. En el café, <b>el volumen cosechado hoy (Yₜ) se decidió entre 6 y 8 meses atrás durante la floración</b>.',
+      b1Label: '🌸 ¿POR QUÉ EL CLIMA DE “AYER” (t−1) DESTRUYE TU MODELO?',
+      b1Text: 'La cantidad de cerezas que recoges en mayo depende de cuántas flores abrieron y cuajaron entre <b>agosto y octubre (τ = 6 a 8 meses atrás)</b>. Meter en la tabla el clima del día anterior (<i>t−1</i>) solo inyecta ruido y correlaciones falsas.',
+      b2Label: '🛠️ TRADUCCIÓN PARA LA IA: VENTANA AGREGADA DE FLORACIÓN',
+      b2Text: 'En lugar de usar retardos diarios sueltos, debemos construir una <b>variable acumulada exactamente sobre la ventana biológica de floración</b> (sumando la lluvia y promediando la sed del aire de hace 6 a 8 meses).',
+      formula: 'Yₜ = f( Xₜ₋τ )  con τ ∈ [6, 8] meses  │  Feature_Flor = ∫ₜ₋₈ᵗ⁻⁶ (Σ Lluvia, VPD) dm',
+      hint: 'Cambia el retardo (τ) abajo y mira cómo reacciona el poder predictivo',
+      quote: '“Si usted alimenta su red neuronal con la lluvia de ayer para predecir la cosecha de mañana, el modelo va a fracasar. Tiene que enseñarle a mirar por el retrovisor exactamente de seis a ocho meses atrás, cuando el árbol estaba en flor.”',
+      icon: '⏳',
+      canvasTitle: 'Ingeniería de Características Fenológicas: Lag Inmediato (t−1) vs. Retardo Biológico (τ = 6–8 meses)',
+      ovLeft: '🌧️ Arriba: Serie Climática y Ventana donde ocurrió la Floración (hace τ meses)',
+      ovRight: '🎯 Abajo: Poder Explicativo según el Retardo τ elegido por el Data Scientist',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Ventana Crítica τ = 6–8 meses (Floración)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Lag ingenuo t−1 (Ruido sin relación)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Cosecha Final (Yₜ)</span>',
+      nextLabel: 'Explorar Umbrales Fatales (VPD) ─▶'
+    },
+    vpd: {
+      accent: 'var(--danger)',
+      tag: 'ACTO 3 DE 4 · LEY 2: UMBRALES FATALES Y SED DEL AIRE (VPD)',
+      title: '3. Umbrales Fatales: Cuando el aire siente sed (VPD > 1.8 kPa)',
+      lead: 'Las plantas no responden en línea recta. Tienen un <b>interruptor hidráulico de emergencia</b> que apaga la fotosíntesis de golpe aunque todavía quede agua en el suelo.',
+      b1Label: '💨 ¿QUÉ ES EL VPD (“SED DEL AIRE”) Y EL INTERRUPTOR ESTOMÁTICO?',
+      b1Text: 'El <b>Déficit de Presión de Vapor (VPD = eₛ(T) − eₐ)</b> mide cuán seco y hambriento de agua está el aire. Cuando supera <b>1.8 kPa</b> (o la temperatura pasa de <b>32 °C</b>), el aire succiona tan fuerte que la hoja <b>cierra sus poros (estomas)</b> para no deshidratarse, frenando en seco la entrada de CO₂.',
+      b2Label: '🧱 EL DOBLE PELIGRO: ABORTO FLORAL Y MESETA PLANA DEL ÁRBOL',
+      b2Text: 'A más de 32 °C el polen se cocina y la flor cae en 2 semanas. Y cuidado: un árbol de decisión (<b>LightGBM</b>) encerrado en su rango histórico (<i>convex hull</i>) proyectará una <b>meseta plana</b> sin ver el desplome a cero.',
+      formula: 'VPD = eₛ(T) − eₐ > 1.8 kPa  ó  T > 32°C  ──▶  Cierre Estomático y Aborto Floral',
+      hint: 'Sube la Sed del Aire (VPD) para ver cerrarse el poro de la hoja',
+      quote: '“El VPD es una esponja atmosférica. Cuando pasa de 1.8 kilopascales o 32 grados, la planta siente que el aire la va a secar viva, cierra las compuertas de sus hojas y aborta la flor para salvar el tronco.”',
+      icon: '🔥',
+      canvasTitle: 'Interruptor Hidráulico Estomático (VPD > 1.8 kPa) y Falla de Meseta Plana ante el Colapso',
+      ovLeft: '🍃 Izquierda: Poro de la Hoja (Estoma) cerrándose ante la Sed del Aire',
+      ovRight: '📉 Derecha: Colapso Biológico Real vs. Meseta Plana de Árboles (GBDT)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Entrada de CO₂ / Transpiración</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Colapso Real por Cierre Estomático</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Meseta Plana Ciega (Árbol GBDT)</span>',
+      nextLabel: 'Ver N=24 No Perdona y Pase a Diapo 22 ─▶'
+    },
+    n24: {
+      accent: 'var(--purple)',
+      tag: 'ACTO 4 DE 4 · LEY 3: N=24 NO PERDONA Y PASE A LA DIAPOSITIVA 22',
+      title: '4. “N=24 no perdona”: Cómo reducir 4× el error con Fenología',
+      lead: 'En finanzas tienes millones de datos por minuto; en un cafetal comercial solo tienes <b>1 cosecha al año</b>: 24 años de historia equivalen a apenas <b>N = 24 filas</b>.',
+      b1Label: '📉 LA MALDICIÓN DE LA DIMENSIONALIDAD (p = 500 ≫ N = 24)',
+      b1Text: 'Si intentas entrenar un Transformer o LSTM crudo metiendo <b>p = 500 variables climáticas y satelitales sobre N = 24 cosechas</b>, el modelo memoriza el ruido casual de esos 24 años (sobreajuste fatal) y colapsa en la campaña 25.',
+      b2Label: '🚀 EL REMEDIO (4× MENOS ERROR) Y PASE A LA DIAPOSITIVA 22',
+      b2Text: 'Al comprimir esas 500 variables dentro de las <b>3 ventanas del Reloj Fenológico</b> y respetar el techo de la <i>“Maceta Agrícola”</i> de Verhulst (<b>kL/4</b>), <b>el error de predicción se reduce 4×</b>. ¡Veamos ese Reloj en la <b>Diapositiva 22</b>!',
+      formula: '500 Variables Crudas sobre N=24 = Overfit  │  Restricción Fenológica = Error ÷ 4',
+      hint: 'Alterna entre IA Cruda y IA con Fenología abajo antes de ir a la Diapo 22',
+      quote: '“Tener veinticuatro años de historia suena a mucho, pero en el agro son apenas veinticuatro cosechas: veinticuatro puntos en una gráfica. Si metemos quinientas variables a lo bruto, el modelo memoriza basura; pero si las ordenamos con el reloj fenológico de la planta, reducimos el error cuatro veces. Pasemos a la Diapositiva 22 para abrir ese reloj.”',
+      icon: '📅',
+      canvasTitle: 'El Dilema N=24 (p ≫ N): Memorización de Ruido vs. Reducción 4× del Error con Fenología',
+      ovLeft: '📊 Izquierda: 24 Campañas Anuales (N=24) · IA Cruda vs. IA Guiada por Fenología',
+      ovRight: '⏭️ Derecha: Reducción 4× del Error y Pase a la Diapo 22 (Reloj del Café)',
+      legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> IA Cruda p=500 (Memoriza ruido en N=24)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> IA + Fenología (Error reducido 4×)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> 24 Cosechas Históricas</span>',
+      nextLabel: 'Reiniciar bucle (Física Biológica) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    $('ctrlStressWrap').hidden = (state.step !== 'overview');
+    $('ctrlTauWrap').hidden = (state.step !== 'delay');
+    $('ctrlVpdWrap').hidden = (state.step !== 'vpd');
+    $('ctrlPvarsWrap').hidden = (state.step !== 'n24');
+
+    const isCrashOverview = state.stressVpd > 1.8;
+    $('outStress').textContent = `VPD ${state.stressVpd.toFixed(1)} kPa (${isCrashOverview ? '¡Colapso!' : 'Saludable'})`;
+
+    const isGoodTau = state.tauMonths >= 6 && state.tauMonths <= 8;
+    $('outTau').textContent = `τ = ${state.tauMonths} m (${isGoodTau ? 'Floración ✅' : 'Desfasado ✕'})`;
+
+    const isStomaClosed = state.vpdLeaf > 1.8;
+    $('outVpd').textContent = `${state.vpdLeaf.toFixed(1)} kPa (${isStomaClosed ? 'Estoma Cerrado' : 'Estoma Abierto'})`;
+
+    $('outPvars').textContent = state.usePhenology ? 'Con Fenología (Error ÷4)' : '500 Vars Crudas (Overfit)';
+
+    if (state.step === 'overview') {
+      $('kpi1').innerHTML = `Engranaje: <strong>τ = 6–8 meses</strong>`;
+      $('kpi2').innerHTML = `Sed del Aire: <strong style="color:${isCrashOverview ? 'var(--danger)' : 'var(--agro)'}">VPD = ${state.stressVpd.toFixed(1)} kPa</strong>`;
+      $('kpi3').innerHTML = `Estado: <strong style="color:${isCrashOverview ? 'var(--danger)' : 'var(--agro)'}">${isCrashOverview ? '⚠️ Aborto Floral' : '✅ Sigmoide Sana'}</strong>`;
+    } else if (state.step === 'delay') {
+      const r2 = isGoodTau ? '0.75 (Alto)' : '0.08 (Ruido)';
+      $('kpi1').innerHTML = `Lag Evaluado: <strong>τ = ${state.tauMonths} meses atrás</strong>`;
+      $('kpi2').innerHTML = `Correlación r: <strong style="color:${isGoodTau ? 'var(--agro)' : 'var(--danger)'}">${r2}</strong>`;
+      $('kpi3').innerHTML = `Ventana: <strong>${isGoodTau ? 'Agosto–Octubre' : 'Fuera de Floración'}</strong>`;
+    } else if (state.step === 'vpd') {
+      const tempEq = Math.round(20 + (state.vpdLeaf - 0.8) * 9.5);
+      $('kpi1').innerHTML = `Temp / VPD: <strong>~${tempEq}°C / ${state.vpdLeaf.toFixed(1)} kPa</strong>`;
+      $('kpi2').innerHTML = `Estoma: <strong style="color:${isStomaClosed ? 'var(--danger)' : 'var(--water)'}">${isStomaClosed ? '🔒 Cerrado (0% CO₂)' : '🔓 Abierto (Fotosíntesis)'}</strong>`;
+      $('kpi3').innerHTML = `Árbol GBDT: <strong style="color:var(--ancestral)">Meseta Plana Ciega</strong>`;
+    } else {
+      $('kpi1').innerHTML = `Muestra: <strong>N = 24 cosechas (24 años)</strong>`;
+      $('kpi2').innerHTML = `Modo: <strong style="color:${state.usePhenology ? 'var(--agro)' : 'var(--danger)'}">${state.usePhenology ? 'Física + Fenología' : 'p=500 Crudo (p≫N)'}</strong>`;
+      $('kpi3').innerHTML = `Impacto: <strong style="color:var(--purple)">Reduce error 4×</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawGear(cx, cy, outerR, innerR, teeth, angle, fillCol, strokeCol) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.fillStyle = fillCol;
+    ctx.strokeStyle = strokeCol;
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    const step = (Math.PI * 2) / teeth;
+    for (let i = 0; i < teeth; i++) {
+      const a0 = i * step;
+      const a1 = a0 + step * 0.22;
+      const a2 = a0 + step * 0.48;
+      const a3 = a0 + step * 0.70;
+      ctx.lineTo(Math.cos(a0) * innerR, Math.sin(a0) * innerR);
+      ctx.lineTo(Math.cos(a1) * outerR, Math.sin(a1) * outerR);
+      ctx.lineTo(Math.cos(a2) * outerR, Math.sin(a2) * outerR);
+      ctx.lineTo(Math.cos(a3) * innerR, Math.sin(a3) * innerR);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#071022';
+    ctx.beginPath();
+    ctx.arc(0, 0, innerR * 0.56, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawOverviewStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.45;
+    const isCollapsed = state.stressVpd > 1.8;
+
+    // 1. MITAD IZQUIERDA: ESTÍMULO ──▶ ENGRANAJE RETRASO (τ = 6–8m) ──▶ COSECHA FINAL (COMO EN DIAPO 21)
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.38)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 12);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⚙️ MECÁNICA DEL RETRASO (τ = 6 A 8 MESES)', pad + 14, padT + 20);
+
+    const midY = padT + usableH * 0.52;
+    const stimX = pad + leftW * 0.17;
+    const gearX = pad + leftW * 0.50;
+    const harvX = pad + leftW * 0.83;
+
+    // Nodo 1: Estímulo (Sol + Nube de Lluvia)
+    ctx.fillStyle = 'rgba(56, 239, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.45)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(stimX, midY, 32, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = '24px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(isCollapsed ? '☀️🔥' : '🌦️', stimX, midY);
+
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '700 10.5px "Space Grotesk", sans-serif';
+    ctx.fillText('Estímulo Hoy', stimX, midY + 48);
+    ctx.fillStyle = '#38efff';
+    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.fillText('Ago–Oct (Flor)', stimX, midY + 61);
+
+    // Flecha Estímulo -> Engranaje
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(stimX + 36, midY);
+    ctx.lineTo(gearX - 48, midY);
+    ctx.stroke();
+
+    // Nodo 2: Engranaje Giratorio de Retraso (τ)
+    const gearR = Math.min(42, leftW * 0.15);
+    drawGear(
+      gearX,
+      midY,
+      gearR,
+      gearR * 0.78,
+      10,
+      state.simTime * 0.65,
+      'rgba(180, 83, 9, 0.55)',
+      '#ffc05c'
+    );
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Retraso (τ)', gearX, midY - 2);
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 8.5px "JetBrains Mono"';
+    ctx.fillText('6–8 meses', gearX, midY + 11);
+
+    // Flecha Engranaje -> Cosecha Final
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(gearX + 48, midY);
+    ctx.lineTo(harvX - 36, midY);
+    ctx.stroke();
+
+    // Nodo 3: Cosecha Final (Rama con cerezas de café rojas o abortadas)
+    ctx.fillStyle = isCollapsed ? 'rgba(255, 82, 119, 0.14)' : 'rgba(110, 240, 180, 0.14)';
+    ctx.strokeStyle = isCollapsed ? '#ff5277' : '#6ef0b4';
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.arc(harvX, midY, 32, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = '24px sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(isCollapsed ? '🥀' : '🍒', harvX, midY);
+
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '700 10.5px "Space Grotesk", sans-serif';
+    ctx.fillText('Cosecha Final', harvX, midY + 48);
+    ctx.fillStyle = isCollapsed ? '#fda4af' : '#8ef7c7';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText(isCollapsed ? 'Aborto (-50%)' : 'Mar–Jul (Sana)', harvX, midY + 61);
+
+    // Nota al pie de la tarjeta izquierda
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('📅 + Restricción N=24: Solo 1 cosecha/año (Fenología reduce error 4×)', pad + leftW / 2, padT + usableH - 14);
+    ctx.restore();
+
+    // 2. MITAD DERECHA: GRÁFICO DE UMBRAL Y COLAPSO BIOLÓGICO (CURVA SIGMOIDE + QUIEBRE EN VPD > 1.8 kPa)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = isCollapsed ? 'rgba(255, 82, 119, 0.5)' : 'rgba(110, 240, 180, 0.38)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 12);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('📉 GRÁFICO DE UMBRAL Y COLAPSO BIOLÓGICO (VPD > 1.8 kPa / >32°C)', rx + 14, padT + 20);
+
+    const gx = rx + 42, gy = padT + 38, gw = rw - 64, gh = usableH - 76;
+    const X = u => gx + u * gw;         // u de 0 a 1 (Tiempo / Estrés Ambiental)
+    const Y = v => gy + gh - v * gh;   // v de 0 a 1 (Rendimiento Saludable)
+
+    // Ejes X e Y
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.38)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(gx, gy);
+    ctx.lineTo(gx, gy + gh);
+    ctx.lineTo(gx + gw, gy + gh);
+    ctx.stroke();
+
+    // Línea horizontal punteada del Umbral: sed del aire (VPD = 1.8 kPa)
+    const uSplit = 0.56;
+    const yThresh = Y(0.58);
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.85)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(gx, yThresh);
+    ctx.lineTo(gx + gw, yThresh);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('Umbral: sed del aire (VPD > 1.8 kPa / 32°C)', gx + gw - 6, yThresh - 7);
+
+    // Curva Sigmoide de Salud Vegetal (Verhulst) completa en verde
+    ctx.strokeStyle = isCollapsed ? 'rgba(110, 240, 180, 0.32)' : '#6ef0b4';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const u = i / 80;
+      const sig = 0.10 + 0.82 / (1 + Math.exp(-8 * (u - 0.52)));
+      i === 0 ? ctx.moveTo(X(u), Y(sig)) : ctx.lineTo(X(u), Y(sig));
+    }
+    ctx.stroke();
+
+    // Tramo sólido hasta el umbral cuando hay colapso
+    if (isCollapsed) {
+      ctx.strokeStyle = '#6ef0b4';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      for (let i = 0; i <= 45; i++) {
+        const u = (i / 45) * uSplit;
+        const sig = 0.10 + 0.82 / (1 + Math.exp(-8 * (u - 0.52)));
+        i === 0 ? ctx.moveTo(X(u), Y(sig)) : ctx.lineTo(X(u), Y(sig));
+      }
+      ctx.stroke();
+
+      // Rayo quebrado de Colapso Biológico Total (como en 21_Infografía... e image3.png)
+      const crashPts = [
+        [uSplit, 0.58],
+        [uSplit + 0.05, 0.36],
+        [uSplit + 0.09, 0.44],
+        [uSplit + 0.15, 0.20],
+        [uSplit + 0.19, 0.28],
+        [uSplit + 0.27, 0.05]
+      ];
+      ctx.strokeStyle = '#ff5277';
+      ctx.lineWidth = 3.4;
+      ctx.shadowColor = '#ff5277';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      crashPts.forEach((pt, idx) => {
+        idx === 0 ? ctx.moveTo(X(pt[0]), Y(pt[1])) : ctx.lineTo(X(pt[0]), Y(pt[1]));
+      });
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#fda4af';
+      ctx.font = '700 10.5px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText('⚡ Colapso Biológico', X(uSplit + 0.20), Y(0.26));
+      ctx.fillText('   Total (Aborto)', X(uSplit + 0.20), Y(0.16));
+    }
+
+    // Punto indicador actual según state.stressVpd (0.8 a 2.6 kPa)
+    const curU = (state.stressVpd - 0.8) / 1.8;
+    let curV = 0.10 + 0.82 / (1 + Math.exp(-8 * (curU - 0.52)));
+    if (state.stressVpd > 1.8) {
+      curV = Math.max(0.05, 0.58 - ((state.stressVpd - 1.8) / 0.8) * 0.52);
+    }
+    ctx.fillStyle = isCollapsed ? '#ff5277' : '#6ef0b4';
+    ctx.beginPath();
+    ctx.arc(X(curU), Y(curV), 6.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Tiempo / Estrés Ambiental (VPD y Temperatura) ──▶', gx + gw / 2, gy + gh + 22);
+    ctx.restore();
+  }
+
+  function drawDelayStage(w, h) {
+    const padL = 42, padR = 28, padT = 46;
+    const usableW = w - padL - padR;
+    const topH = (h - padT - 24) * 0.52;
+
+    const months = ['AGO', 'SEP', 'OCT', 'NOV', 'DIC', 'ENE', 'FEB', 'MAR', 'ABR', 'MAY'];
+    const mX = idx => padL + (idx / (months.length - 1)) * usableW;
+
+    // 1. ARRIBA: LÍNEA DE TIEMPO DESDE LA FLORACIÓN (AGO-OCT) HASTA LA COSECHA (MAY)
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.38)';
+    ctx.beginPath();
+    ctx.roundRect(padL - 12, padT, usableW + 24, topH, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    // Franja verde de la verdadera Floración (AGO-OCT: meses 0, 1, 2 -> hace 7-8 meses respecto a MAY=9)
+    const flStart = mX(0.2), flEnd = mX(2.4);
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.11)';
+    ctx.fillRect(flStart, padT + 8, flEnd - flStart, topH - 28);
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('🌸 FLORACIÓN REAL (τ = 6–8m atrás)', (flStart + flEnd) / 2, padT + 22);
+
+    // Ventana que el modelo está mirando según state.tauMonths (1 a 8 meses atrás desde MAY=índice 9)
+    const lookIdx = Math.max(0, 9 - state.tauMonths);
+    const winX = mX(lookIdx);
+    const isAligned = state.tauMonths >= 6 && state.tauMonths <= 8;
+
+    ctx.fillStyle = isAligned ? 'rgba(255, 192, 92, 0.22)' : 'rgba(255, 82, 119, 0.22)';
+    ctx.strokeStyle = isAligned ? '#ffc05c' : '#ff5277';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.roundRect(winX - 28, padT + 28, 56, topH - 52, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    // Arco de transferencia desde la ventana mirada hasta la Cosecha en MAY (índice 9)
+    const harvX = mX(9);
+    ctx.strokeStyle = isAligned ? '#ffc05c' : '#ff5277';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(winX, padT + 38);
+    ctx.quadraticCurveTo((winX + harvX) / 2, padT + 4, harvX, padT + 48);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    months.forEach((m, i) => {
+      ctx.fillStyle = i === 9 ? '#6ef0b4' : '#cbd5e1';
+      ctx.font = i === 9 ? '700 9.5px "JetBrains Mono"' : '500 9px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(m, mX(i), padT + topH - 6);
+    });
+    ctx.restore();
+
+    // 2. ABAJO: CURVA DE CORRELACIÓN / PODER PREDICTIVO SEGÚN EL RETARDO τ ELEGIDO (1 A 8 MESES)
+    const botY = padT + topH + 10;
+    const botH = h - botY - 12;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.35)';
+    ctx.beginPath();
+    ctx.roundRect(padL - 12, botY, usableW + 24, botH, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('📊 PODER PREDICTIVO (CORRELACIÓN CON LA COSECHA) SEGÚN EL RETARDO τ ELEGIDO:', padL, botY + 18);
+
+    const corrs = [
+      { tau: 1, r: 0.08, label: 't-1m (Abr)' },
+      { tau: 2, r: 0.11, label: 't-2m (Mar)' },
+      { tau: 3, r: 0.19, label: 't-3m (Feb)' },
+      { tau: 4, r: 0.34, label: 't-4m (Ene)' },
+      { tau: 5, r: 0.48, label: 't-5m (Dic)' },
+      { tau: 6, r: 0.68, label: 'τ=6m (Nov)' },
+      { tau: 7, r: 0.75, label: 'τ=7m (Oct)' },
+      { tau: 8, r: 0.72, label: 'τ=8m (Sep)' }
+    ];
+
+    const colW = usableW / corrs.length;
+    const maxBarH = botH - 54;
+
+    corrs.forEach((c, idx) => {
+      const bx = padL + idx * colW + 8;
+      const bw = colW - 16;
+      const bh = (c.r / 0.85) * maxBarH;
+      const by = botY + botH - 22 - bh;
+      const isSel = (c.tau === state.tauMonths);
+      const isFlor = c.tau >= 6;
+
+      ctx.fillStyle = isSel ? (isFlor ? '#ffc05c' : '#ff5277') : (isFlor ? 'rgba(110, 240, 180, 0.5)' : 'rgba(148, 163, 184, 0.25)');
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 5);
+      ctx.fill();
+
+      ctx.fillStyle = isSel ? '#ffffff' : '#94a3b8';
+      ctx.font = isSel ? '700 9px "JetBrains Mono"' : '500 8.5px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(`r=${c.r}`, bx + bw / 2, by - 5);
+      ctx.fillText(c.label, bx + bw / 2, botY + botH - 7);
+    });
+    ctx.restore();
+  }
+
+  function drawVpdStage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.44;
+    const isClosed = state.vpdLeaf > 1.8;
+
+    // 1. CAJA IZQUIERDA: EL PORO DE LA HOJA (ESTOMA) ACTUANDO COMO INTERRUPTOR HIDRÁULICO ANTE VPD > 1.8 kPa
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = isClosed ? 'rgba(255, 82, 119, 0.55)' : 'rgba(56, 239, 255, 0.4)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = isClosed ? '#fda4af' : '#a5f3fc';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🍃 EL ESTOMA: INTERRUPTOR HIDRÁULICO DE LA HOJA', pad + 14, padT + 20);
+
+    const cx = pad + leftW / 2;
+    const cy = padT + usableH * 0.48;
+    const openGap = isClosed ? 2 : Math.max(4, (1.85 - state.vpdLeaf) * 20);
+
+    // Células guarda del estoma (izquierda y derecha)
+    ctx.fillStyle = isClosed ? 'rgba(255, 82, 119, 0.22)' : 'rgba(110, 240, 180, 0.26)';
+    ctx.strokeStyle = isClosed ? '#ff5277' : '#6ef0b4';
+    ctx.lineWidth = 2.8;
+
+    // Célula guarda izquierda
+    ctx.beginPath();
+    ctx.ellipse(cx - 18 - openGap * 0.4, cy, 18, 46, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Célula guarda derecha
+    ctx.beginPath();
+    ctx.ellipse(cx + 18 + openGap * 0.4, cy, 18, 46, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Poro central (abierto si VPD <= 1.8 kPa, cerrado si VPD > 1.8 kPa)
+    ctx.fillStyle = isClosed ? '#450a0a' : '#083344';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, openGap, 32, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      isClosed ? '🔒 ESTOMA CERRADO (VPD > 1.8 kPa)' : '🔓 ESTOMA ABIERTO (Entra CO₂)',
+      cx,
+      cy + 68
+    );
+
+    ctx.fillStyle = isClosed ? '#fda4af' : '#8ef7c7';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText(
+      isClosed
+        ? '¡Cero fotosíntesis y aborto floral aunque haya agua en el suelo!'
+        : 'Aire húmedo: la planta respira CO₂ y llena el fruto con normalidad.',
+      cx,
+      cy + 86
+    );
+    ctx.restore();
+
+    // 2. CAJA DERECHA: RESPUESTA REAL DE LA PLANTA VS. MESETA PLANA DEL ÁRBOL (FALLA DEL CONVEX HULL)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.38)';
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🧱 REALIDAD BIOLÓGICA VS. MESETA PLANA DEL ÁRBOL (GBDT)', rx + 14, padT + 20);
+
+    const gx = rx + 40, gy = padT + 42, gw = rw - 62, gh = usableH - 82;
+    const X = vpd => gx + ((vpd - 0.8) / 1.8) * gw; // VPD de 0.8 a 2.6 kPa
+    const Y = yld => gy + gh - (yld / 100) * gh;
+
+    const x18 = X(1.8);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.10)';
+    ctx.fillRect(x18, gy, gx + gw - x18, gh);
+
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.75)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(x18, gy); ctx.lineTo(x18, gy + gh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('Umbral VPD = 1.8 kPa (32°C)', gx + gw - 6, gy + 14);
+
+    // Meseta Plana de un Árbol de Decisión (LightGBM) fuera del Convex Hull
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 2.6;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(X(0.8), Y(82));
+    ctx.lineTo(X(2.6), Y(82));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#fde68a';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('─ - Árbol GBDT: Predice Meseta Plana (Ignora el colapso)', gx + 8, Y(82) - 7);
+
+    // Curva Real de Fijación de Carbono / Cosecha (Se desploma al cruzar 1.8 kPa)
+    function realPlantYield(v) {
+      if (v <= 1.8) return 85 - (v - 0.8) * 8;
+      return Math.max(8, 77 - (v - 1.8) * 85);
+    }
+
+    ctx.strokeStyle = '#ff5277';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath();
+    for (let v = 0.8; v <= 2.61; v += 0.05) {
+      const yy = Y(realPlantYield(v));
+      v === 0.8 ? ctx.moveTo(X(v), yy) : ctx.lineTo(X(v), yy);
+    }
+    ctx.stroke();
+
+    // Punto actual según el deslizador de VPD
+    const curX = X(state.vpdLeaf);
+    const curY = Y(realPlantYield(state.vpdLeaf));
+    ctx.fillStyle = isClosed ? '#ff5277' : '#6ef0b4';
+    ctx.beginPath(); ctx.arc(curX, curY, 6.5, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Déficit de Presión de Vapor VPD (kPa) ──▶', gx + gw / 2, gy + gh + 22);
+    ctx.restore();
+  }
+
+  function drawN24Stage(w, h) {
+    const pad = 16, padT = 46;
+    const usableW = w - pad * 2;
+    const usableH = h - padT - 14;
+    const leftW = usableW * 0.54;
+
+    // 1. IZQUIERDA: LOS 24 PUNTOS ANUALES (N=24 EN 24 AÑOS) — IA CRUDA (OVERFIT) VS. IA CON FENOLOGÍA
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 16, 32, 0.92)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.4)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(pad, padT, leftW, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#e9d5ff';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('📅 24 CAMPAÑAS EN 24 AÑOS: ¡SOLO N = 24 PUNTOS DE COSECHA!', pad + 14, padT + 20);
+
+    const gx = pad + 32, gy = padT + 38, gw = leftW - 52, gh = usableH - 74;
+    const X = i => gx + (i / 23) * gw;
+    const Y = v => gy + gh - ((v - 10) / 22) * gh;
+
+    // Frontera entre los 20 años de entrenamiento y los últimos 4 años de prueba (Out-of-Sample)
+    const splitX = X(18.5);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.08)';
+    ctx.fillRect(splitX, gy, gx + gw - splitX, gh);
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.5)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(splitX, gy); ctx.lineTo(splitX, gy + gh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 8.5px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('Prueba Futura', gx + gw - 4, gy + 12);
+
+    // 24 puntos reales de cosecha anual (qq/ha)
+    const pts = [];
+    for (let i = 0; i < 24; i++) {
+      const base = 21 + 4 * Math.sin(i * 0.55) + (i === 21 ? -5.5 : Math.cos(i * 1.9) * 1.8);
+      pts.push(base);
+    }
+
+    // Si state.usePhenology == 0, muestra la curva roja oscilando salvajemente (memoriza ruido y falla al final)
+    if (!state.usePhenology) {
+      ctx.strokeStyle = '#ff5277';
+      ctx.lineWidth = 2.4;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      for (let i = 0; i < 24; i++) {
+        const overfitVal = i <= 18 ? pts[i] : (21 + (i - 18) * 2.8 * (i % 2 === 0 ? 1 : -1));
+        i === 0 ? ctx.moveTo(X(i), Y(overfitVal)) : ctx.lineTo(X(i), Y(overfitVal));
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    } else {
+      // Curva verde restringida por las ventanas fenológicas (captura la caída real sin sobreajustar)
+      ctx.strokeStyle = '#6ef0b4';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < 24; i++) {
+        const phenoVal = pts[i] + Math.sin(i * 0.9) * 0.45;
+        i === 0 ? ctx.moveTo(X(i), Y(phenoVal)) : ctx.lineTo(X(i), Y(phenoVal));
+      }
+      ctx.stroke();
+    }
+
+    // Dibujar los 24 círculos dorados (1 por año)
+    pts.forEach((v, i) => {
+      ctx.fillStyle = '#ffc05c';
+      ctx.beginPath();
+      ctx.arc(X(i), Y(v), 4, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 9px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('24 Campañas Cafetaleras (1 punto por año) ──▶', gx + gw / 2, gy + gh + 20);
+    ctx.restore();
+
+    // 2. DERECHA: COMPARATIVA DE ERROR (REDUCCIÓN 4X) Y PASE A LA DIAPOSITIVA 22 (EL RELOJ FENOLÓGICO)
+    const rx = pad + leftW + 14;
+    const rw = usableW - leftW - 14;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 18, 36, 0.94)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.45)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(rx, padT, rw, usableH, 11);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🏆 IMPACTO DE INTEGRAR FENOLOGÍA: REDUCE EL ERROR 4×', rx + 14, padT + 20);
+
+    // Barras comparativas de Error de Predicción (4x menor con Fenología)
+    const bTop = padT + 38;
+    const maxW = rw - 40;
+
+    // Barra 1: IA Cruda sin Biología (p=500 sobre N=24)
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('1. Red Neuronal Cruda (500 vars sobre N=24):', rx + 14, bTop);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.78)';
+    ctx.beginPath(); ctx.roundRect(rx + 14, bTop + 6, maxW * 0.92, 18, 5); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText('Error Alto (4.0×) · Memoriza ruido', rx + 22, bTop + 18);
+
+    // Barra 2: IA Guiada por Fenología (Ventanas de Floración, Llenado y Cosecha)
+    const b2Top = bTop + 40;
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('2. IA + Restricciones Fenológicas (3 Ventanas):', rx + 14, b2Top);
+    ctx.fillStyle = '#6ef0b4';
+    ctx.beginPath(); ctx.roundRect(rx + 14, b2Top + 6, maxW * 0.23, 18, 5); ctx.fill();
+    ctx.fillStyle = '#040812';
+    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.fillText('1.0×', rx + 22, b2Top + 18);
+    ctx.fillStyle = '#a7f3d0';
+    ctx.fillText('¡Error reducido 4 veces!', rx + 22 + maxW * 0.23, b2Top + 18);
+
+    // Caja de la "Maceta Agrícola" (Verhulst kL/4) + Pase a la Diapositiva 22
+    const cardY = b2Top + 38;
+    const cardH = usableH - (cardY - padT) - 12;
+    ctx.fillStyle = 'rgba(6, 12, 26, 0.9)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.45)';
+    ctx.beginPath(); ctx.roundRect(rx + 14, cardY, rw - 28, cardH, 9); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#ffc05c';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 22: EL RELOJ FENOLÓGICO DEL CAFÉ', rx + 22, cardY + 18);
+
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.fillText('• 1. Floración (Ago–Oct): Explica el 56% de la varianza.', rx + 22, cardY + 36);
+    ctx.fillText('• 2. Llenado (Nov–Feb): Define peso físico (r = 0.751).', rx + 22, cardY + 52);
+    ctx.fillText('• 3. Cosecha (Mar–Jul): Recolección y corte en campo.', rx + 22, cardY + 68);
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+
+    if (state.step === 'overview') {
+      drawOverviewStage(w, h);
+    } else if (state.step === 'delay') {
+      drawDelayStage(w, h);
+    } else if (state.step === 'vpd') {
+      drawVpdStage(w, h);
+    } else {
+      drawN24Stage(w, h);
+    }
+  }
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => setStep(btn.dataset.step, true));
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    setStep(STEPS[(idx + 1) % STEPS.length], true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderStress').addEventListener('input', e => {
+    state.stressVpd = +e.target.value / 10;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderTau').addEventListener('input', e => {
+    state.tauMonths = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderVpd').addEventListener('input', e => {
+    state.vpdLeaf = +e.target.value / 10;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderPvars').addEventListener('input', e => {
+    state.usePhenology = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'overview',
+      stressVpd: 2.1,
+      tauMonths: 7,
+      vpdLeaf: 2.1,
+      usePhenology: 1,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderStress').value = 21;
+    $('sliderTau').value = 7;
+    $('sliderVpd').value = 21;
+    $('sliderPvars').value = 1;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('overview', true);
+    if (e.key === '2') setStep('delay', true);
+    if (e.key === '3') setStep('vpd', true);
+    if (e.key === '4') setStep('n24', true);
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+      } else {
+        setStep(STEPS[(idx + 1) % STEPS.length], true);
+      }
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0 && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+      } else {
+        setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+      }
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    }
+    if (['n', 'd', 'f', 'Escape', 'Home', 'End'].includes(e.key) && window.parent !== window) {
+      window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'activate') {
+      setStep(STEPS[0], false);
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    } else if (e.data && e.data.type === 'resize') {
+      if (typeof fitCanvas === 'function') fitCanvas();
+      if (typeof renderCanvas === 'function') renderCanvas();
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        setStep(STEPS[(idx + 1) % STEPS.length], false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    ro.observe(canvas.parentElement);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

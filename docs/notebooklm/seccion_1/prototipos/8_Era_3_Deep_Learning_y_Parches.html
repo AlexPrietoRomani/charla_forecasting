@@ -1,0 +1,1936 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>ERA 3: Deep Learning y la Revolución del Parche · LSTM/TFT ─▶ Quiebre O(L²) ─▶ PatchTST ─▶ Era 4</title>
+<style>
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --phi: #38efff;
+  --ockham: #ffc05c;
+  --rupture: #ff5277;
+  --lab: #6ef0b4;
+  --purple: #b48eff;
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(139, 92, 246, 0.18), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(14, 116, 144, 0.15), transparent 38%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(88, 28, 135, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(7, 13, 29, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--phi); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(180, 142, 255, 0.4);
+  border-radius: 12px;
+  color: var(--purple);
+  background: rgba(180, 142, 255, 0.1);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--purple);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(20px, 1.85vw, 28px)/1.1 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.era { color: var(--purple); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(180, 142, 255, 0.32);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.14), rgba(6, 12, 26, 0.9));
+  max-width: 500px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--purple);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+/* UNIFIED TIMELINE FLOW BAR (LSTM/TFT -> Quiebre O(L²) -> PatchTST -> CAISO & Pase a Era 4) */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--phi));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--phi)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--phi)) 18%, transparent);
+}
+
+.proc-node[data-step="lstm"]     { --node-color: var(--phi); }
+.proc-node[data-step="bottleneck"] { --node-color: var(--rupture); }
+.proc-node[data-step="patchtst"] { --node-color: var(--purple); }
+.proc-node[data-step="era4"]     { --node-color: var(--lab); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--node-color, var(--phi));
+  border: 1px solid color-mix(in srgb, var(--node-color, var(--phi)) 40%, transparent);
+}
+
+.proc-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.proc-year {
+  font: 700 12px/1.15 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #d6e4f7;
+}
+
+.proc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--node-color, var(--phi));
+  transition: width 0.1s linear;
+}
+
+.proc-arrow {
+  color: #475973;
+  font: 700 12px/1 var(--mono);
+  user-select: none;
+  padding: 0 2px;
+}
+
+.loop-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 151, 184, 0.24);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+  font: 600 10.5px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.tool-btn:hover {
+  color: #fff;
+  border-color: var(--line-bright);
+}
+
+.tool-btn.loop-on {
+  border-color: rgba(180, 142, 255, 0.5);
+  background: rgba(109, 40, 217, 0.24);
+  color: #e9d5ff;
+}
+
+/* WORKSPACE: 2 CLEAN COLUMNS */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(330px, 0.39fr) minmax(0, 0.61fr);
+  gap: clamp(12px, 1.3vw, 18px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN: NARRATIVE FOCUS CARD */
+.narrative-card {
+  --stage-accent: var(--phi);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(6px, 0.9vh, 10px);
+  padding: clamp(10px, 1.2vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
+    linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180, 142, 255, 0.3) rgba(5, 10, 24, 0.4);
+}
+
+.narrative-card::-webkit-scrollbar {
+  width: 5px;
+}
+.narrative-card::-webkit-scrollbar-track {
+  background: rgba(5, 10, 24, 0.4);
+  border-radius: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb {
+  background: rgba(180, 142, 255, 0.28);
+  border-radius: 4px;
+}
+.narrative-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 142, 255, 0.5);
+}
+
+.narr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.narr-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, transparent);
+}
+
+.stage-year-pill {
+  font: 600 10px/1 var(--mono);
+  color: #8fa3bd;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  color: #f8fbff;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  color: #b8cae0;
+}
+
+.narr-lead b { color: #ffffff; font-weight: 650; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.info-block {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(6, 11, 25, 0.72);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  margin: 0;
+  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  color: #cedcf0;
+}
+
+.info-block-text b { color: #fff; font-weight: 650; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 32%, transparent);
+  background: rgba(3, 7, 18, 0.85);
+  font: 600 clamp(11px, 0.92vw, 13px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  padding: 10px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11.5px, 0.92vw, 13px)/1.4 var(--sans);
+  color: #e2eeff;
+}
+
+/* RIGHT COLUMN: SINGLE HERO INTERACTIVE STAGE */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  padding: clamp(12px, 1.2vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(10, 17, 36, 0.94), rgba(4, 10, 24, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(180, 142, 255, 0.12);
+  border: 1px solid rgba(180, 142, 255, 0.35);
+  font-size: 14px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(14px, 1.15vw, 17px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.8);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.16);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 25%, rgba(46, 16, 101, 0.22), rgba(2, 6, 17, 0.92) 78%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ov-badge {
+  padding: 4px 9px;
+  border-radius: 6px;
+  font: 600 9.5px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+.ov-badge.left {
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  background: rgba(15, 23, 42, 0.82);
+  color: #a5f3fc;
+}
+
+.ov-badge.right {
+  border: 1px solid rgba(180, 142, 255, 0.38);
+  background: rgba(15, 23, 42, 0.82);
+  color: #e9d5ff;
+}
+
+.legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 4px 0;
+  font: 500 10px/1.2 var(--mono);
+  color: #94a3b8;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-line {
+  width: 16px;
+  height: 0;
+  border-top: 3px solid var(--c, #38efff);
+}
+
+.leg-line.dashed {
+  border-top-style: dashed;
+}
+
+/* CONTEXTUAL CONTROLS */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.72);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 10.5px/1 var(--mono);
+  color: #cbd5e1;
+}
+
+.ctrl-item output {
+  min-width: 52px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+input[type="range"] {
+  width: clamp(75px, 7vw, 115px);
+  height: 5px;
+  cursor: pointer;
+}
+
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-era-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(180, 142, 255, 0.45);
+  background: linear-gradient(120deg, rgba(109, 40, 217, 0.3), rgba(76, 29, 149, 0.4));
+  color: #f3e8ff;
+  font: 700 10px/1 var(--mono);
+  transition: all 0.16s;
+}
+
+.next-era-btn:hover {
+  background: rgba(124, 58, 237, 0.5);
+  color: #fff;
+}
+
+/* FOOTER */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font: 500 9.5px/1.3 var(--mono);
+  color: #7c8fa9;
+}
+
+.footnote strong { color: #cbd5e1; }
+
+/* MEDIA QUERIES FOR COMPREHENSIVE RESPONSIVENESS */
+@media (max-width: 1200px) and (min-width: 881px) {
+  .workspace { grid-template-columns: minmax(280px, 0.4fr) minmax(0, 0.6fr); gap: 10px; }
+  .via-card { max-width: 380px; padding: 6px 10px; }
+  .via-pill { font-size: 9.5px; padding: 2px 5px; }
+  .ctrl-group { gap: 10px; }
+  input[type="range"] { width: 65px; }
+}
+
+@media (max-width: 880px) {
+  body { display: block; overflow-y: auto; }
+  body.is-embedded {
+    overflow-y: auto !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: block !important;
+  }
+  body.is-embedded #slideFrame {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    padding: 12px 14px !important;
+  }
+  #slideFrame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 100svh;
+    overflow: visible;
+    grid-template-rows: auto auto auto auto;
+    gap: 12px;
+  }
+  .topbar { grid-template-columns: 1fr; gap: 10px; }
+  .via-card { max-width: 100%; }
+  .flowbar { grid-template-columns: 1fr; gap: 8px; }
+  .process-track {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 3px;
+  }
+  .proc-node { padding: 6px 6px; gap: 5px; }
+  .proc-arrow { display: none; }
+  .proc-sub { display: none; }
+  .proc-year { font-size: 10px; }
+  .workspace { grid-template-columns: 1fr; overflow: visible; gap: 12px; }
+  .narrative-card { max-height: none; overflow: visible; }
+  .stage-card { min-height: 480px; overflow: visible; }
+  .canvas-wrap { min-height: 320px; height: 320px; }
+  .controls-bar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .ctrl-actions { justify-content: flex-end; }
+  .footnote { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
+@media (max-width: 520px) {
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  h1 { font-size: 18px; }
+  .process-track { grid-template-columns: repeat(2, 1fr); }
+  .proc-node { padding: 6px 8px; }
+  .proc-sub { display: block; font-size: 8.5px; }
+}
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 8px 16px 6px; }
+  body.is-embedded #slideFrame { padding: 6px 14px 4px !important; gap: 6px !important; }
+  .topbar { padding-bottom: 6px; }
+  .brand-mark { width: 34px; height: 34px; flex: 0 0 34px; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .eyebrow { font-size: 9.5px; margin-bottom: 2px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 4px 10px; gap: 2px; }
+  .via-title { font-size: 8.5px; }
+  .via-pills { font-size: 9px; gap: 4px; }
+  .via-pill { padding: 1px 5px; }
+  .process-track { padding: 3px; gap: 4px; }
+  .proc-node { padding: 5px 8px; gap: 6px; border-radius: 7px; }
+  .proc-num { width: 20px; height: 20px; font-size: 9.5px; }
+  .proc-year { font-size: 11px; }
+  .proc-sub { font-size: 8.5px; }
+  .tool-btn { padding: 5px 9px; font-size: 9.5px; }
+  .narrative-card { padding: 8px 12px; gap: 6px; border-radius: 11px; }
+  .stage-tag { padding: 2px 7px; font-size: 9px; }
+  .stage-year-pill { font-size: 9px; }
+  .narr-title { font-size: clamp(14px, 1.2vw, 17px); line-height: 1.15; }
+  .narr-lead { font-size: clamp(11px, 0.9vw, 12.5px); line-height: 1.35; }
+  .narr-blocks { gap: 5px; }
+  .info-block { padding: 6px 9px; border-radius: 8px; }
+  .info-block-label { font-size: 8.5px; margin-bottom: 2px; }
+  .info-block-text { font-size: clamp(10.5px, 0.82vw, 12px); line-height: 1.32; }
+  .math-strip { padding: 5px 9px; font-size: 11px; }
+  .math-strip span.hint { font-size: 8.5px; }
+  .speaker-box { padding: 6px 9px; border-radius: 0 8px 8px 0; }
+  .speaker-head { font-size: 8px; margin-bottom: 2px; }
+  .speaker-quote { font-size: clamp(10px, 0.8vw, 11.5px); line-height: 1.3; }
+  .stage-card { padding: 8px 11px; gap: 5px; border-radius: 11px; }
+  .stage-header { gap: 8px; }
+  .stage-icon { width: 24px; height: 24px; font-size: 12px; }
+  .stage-title { font-size: clamp(12.5px, 1vw, 15px); }
+  .kpi-chip { padding: 2px 7px; font-size: 9px; }
+  .legend-bar { font-size: 9px; }
+  .controls-bar { padding: 5px 9px; gap: 8px; border-radius: 8px; }
+  .ctrl-item { font-size: 9.5px; gap: 5px; }
+  .next-era-btn { padding: 5px 9px; font-size: 9.5px; }
+  .footnote { font-size: 8.5px; padding-top: 2px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .narr-lead { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  h1 { font-size: 15px; }
+  .topbar { padding-bottom: 4px; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Era 3: El Deep Learning Secuencial y de Parches (RNN, LSTM, N-BEATS, TFT y PatchTST)">
+
+  <!-- TOPBAR: Continuación de Era 2 + Especificación Vía 3 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="6" width="5" height="12" rx="1.5"/>
+          <rect x="9.5" y="4" width="5" height="16" rx="1.5"/>
+          <rect x="17" y="7" width="5" height="10" rx="1.5"/>
+          <path d="M4.5 6C7 2 12 2 19.5 7" stroke-dasharray="2 2"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">Continuación de Era 2 (Fallo de Meseta Plana) · Saga Evolutiva (Era 3 de 4)</p>
+        <h1>VÍA 3: <span class="era">Deep Learning y Parches</span> <span class="sub">· De LSTM y TFT a la Revolución PatchTST</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Condiciones operativas de la Vía 3">
+      <div class="via-title">
+        <span>⚡ FICHA OPERATIVA VÍA 3</span>
+        <span>REPRESENTACIONES LATENTES + PARCHES</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">📊 <strong>&gt; 10⁵</strong> puntos</span>
+        <span class="via-pill">🧱 <strong>Parches O((L/P)²)</strong></span>
+        <span class="via-pill">🖥️ <strong>GPU Paralela</strong></span>
+        <span class="via-pill">🌬️ <strong>CAISO · Enel · COES</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PROCESO EN BUCLE: 1. LSTM/TFT ─▶ 2. Quiebre O(L²) ─▶ 3. PatchTST ─▶ 4. CAISO/Enel & Pase a Era 4 -->
+  <nav class="flowbar" aria-label="Proceso evolutivo de la Era 3">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" type="button" data-step="lstm" aria-selected="true">
+        <span class="proc-num">1</span>
+        <div class="proc-text">
+          <span class="proc-year">Memoria Fluida (LSTM/TFT)</span>
+          <span class="proc-sub">Sin lags manuales · Gota a gota</span>
+        </div>
+        <div class="proc-progress" id="prog-lstm"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="bottleneck" aria-selected="false">
+        <span class="proc-num">2</span>
+        <div class="proc-text">
+          <span class="proc-year">El Doble Quiebre: O(L²)</span>
+          <span class="proc-sub">Embudo RNN y punto sin sentido</span>
+        </div>
+        <div class="proc-progress" id="prog-bottleneck"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="patchtst" aria-selected="false">
+        <span class="proc-num">3</span>
+        <div class="proc-text">
+          <span class="proc-year">2023 · Revolución PatchTST</span>
+          <span class="proc-sub">Parches temporales O((L/P)²)</span>
+        </div>
+        <div class="proc-progress" id="prog-patchtst"></div>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">─▶</span>
+
+      <button class="proc-node" role="tab" type="button" data-step="era4" aria-selected="false">
+        <span class="proc-num">4</span>
+        <div class="proc-text">
+          <span class="proc-year">CAISO / Enel ─▶ Era 4</span>
+          <span class="proc-sub">Renovables y pase a Zero-Shot</span>
+        </div>
+        <div class="proc-progress" id="prog-era4"></div>
+      </button>
+    </div>
+
+    <div class="loop-tools">
+      <button class="tool-btn loop-on" type="button" id="loopBtn" title="Alternar bucle automático de exposición">
+        <span id="loopIcon">🔁</span> <span id="loopText">Bucle Auto: ON</span>
+      </button>
+      <button class="tool-btn" type="button" id="fullscreenBtn" title="Pantalla completa (F)">⛶</button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE PRINCIPAL: NARRATIVA AMIGABLE (IZQ) + ESCENARIO INTERACTIVO (DER) -->
+  <section class="workspace">
+
+    <!-- PANEL IZQUIERDO: NARRATIVA PASO A PASO PARA NO ESTADÍSTICOS -->
+    <aside class="narrative-card" id="narrativeCard" aria-live="polite">
+      <div class="narr-top">
+        <div class="narr-badges">
+          <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · EL FLUJO CONTINUO</span>
+          <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
+        </div>
+        <h2 class="narr-title" id="narrTitle">1. De Tablas Rígidas a Memoria Fluida: RNN, LSTM y TFT</h2>
+        <p class="narr-lead" id="narrLead">
+          En la Era 2 vimos que los árboles cortan el tiempo en cajas cerradas y chocan contra una <b>meseta plana</b>. El <b>Deep Learning</b> nació para leer el tiempo como una <b>película continua</b> sin crear tablas de <i>lags</i> a mano.
+        </p>
+      </div>
+
+      <div class="narr-blocks">
+        <div class="info-block">
+          <div class="info-block-label" id="block1Label">🧠 LA CINTA DE MEMORIA (LSTM, N-BEATS Y TFT)</div>
+          <p class="info-block-text" id="block1Text">
+            En lugar de mirar celdas sueltas de Excel, una red <b>LSTM</b> tiene una cinta transportadora interna con <b>3 compuertas</b>: decide qué ruido viejo borrar (<b>olvido fₜ</b>), qué dato nuevo guardar (<b>entrada iₜ</b>) y qué proyectar hoy (<b>salida oₜ</b>).
+          </p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label" id="block2Label">🎛️ SUPERPODER: EXTRAPOLAR PENDIENTES Y COVARIABLES</div>
+          <p class="info-block-text" id="block2Text">
+            Arquitecturas como <b>TFT (Temporal Fusion Transformer)</b> integran datos fijos y clima futuro aprendiendo la <b>velocidad y curvatura real de la serie</b>, superando el techo plano de los árboles.
+          </p>
+        </div>
+
+        <div class="math-strip">
+          <span id="mathFormula">Estado Latente hₜ = f( hₜ₋₁, xₜ ) · Compuertas [ fₜ, iₜ, oₜ ]</span>
+          <span class="hint" id="mathHint">Sin ingeniería manual de lags · Flujo continuo</span>
+        </div>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span id="speakerTime">~15 seg</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Para romper la meseta plana de los árboles en Texas, las redes neuronales dejaron de ver el tiempo como fotos sueltas en Excel y empezaron a leerlo como una película continua, guardando en su memoria la velocidad de subida.”
+        </p>
+      </div>
+    </aside>
+
+    <!-- PANEL DERECHO: LIENZO ÚNICO DE ALTA LEGIBILIDAD -->
+    <section class="stage-card" aria-label="Simulador visual interactivo de la Era 3">
+      <div class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">🧠</span>
+          <h3 class="stage-title" id="canvasTitle">Memoria Secuencial Continua (LSTM / TFT) vs. Meseta Plana Tabular</h3>
+        </div>
+        <div class="stage-kpis" id="stageKpis">
+          <span class="kpi-chip" id="kpi1">Memoria: <strong>Compuertas fₜ, iₜ, oₜ</strong></span>
+          <span class="kpi-chip" id="kpi2">Lags Manuales: <strong>0 (Automático)</strong></span>
+          <span class="kpi-chip" id="kpi3">Orden: <strong>Secuencial O(L)</strong></span>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="stageCanvas"></canvas>
+        <div class="canvas-overlay-top">
+          <span class="ov-badge left" id="ovLeft">🧠 Arriba: Cinta de Memoria Latente (Cₜ₋₁ ➔ Cₜ)</span>
+          <span class="ov-badge right" id="ovRight">📈 Abajo: Extrapolación continua sin meseta plana</span>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-items" id="legendItems">
+          <span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Señal Continua (xₜ)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Proyección Fluida (LSTM/TFT)</span>
+          <span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Meseta Plana Árbol (Era 2)</span>
+        </div>
+        <span id="legendTip">INTERACTÚA CON EL CONTROL INFERIOR</span>
+      </div>
+
+      <div class="controls-bar">
+        <div class="ctrl-group" id="ctrlGroup">
+          <div class="ctrl-item" id="ctrlGateWrap">
+            <label for="sliderGate">🔓 Apertura Memoria (fₜ):</label>
+            <input id="sliderGate" type="range" min="30" max="98" step="2" value="88" style="accent-color:var(--phi)">
+            <output id="outGate">88%</output>
+          </div>
+          <div class="ctrl-item" id="ctrlSeqLenWrap" hidden>
+            <label for="sliderSeqLen">📏 Longitud Secuencia (L):</label>
+            <input id="sliderSeqLen" type="range" min="64" max="512" step="64" value="512" style="accent-color:var(--rupture)">
+            <output id="outSeqLen">L = 512</output>
+          </div>
+          <div class="ctrl-item" id="ctrlPatchWrap" hidden>
+            <label for="sliderPatch">🧱 Tamaño Parche (P):</label>
+            <input id="sliderPatch" type="range" min="4" max="32" step="4" value="16" style="accent-color:var(--purple)">
+            <output id="outPatch">P = 16</output>
+          </div>
+          <div class="ctrl-item" id="ctrlParksWrap" hidden>
+            <label for="sliderParks">🌬️ Parques Eólicos/Solares:</label>
+            <input id="sliderParks" type="range" min="100" max="1000" step="100" value="800" style="accent-color:var(--lab)">
+            <output id="outParks">800 parques</output>
+          </div>
+        </div>
+
+        <div class="ctrl-actions">
+          <button class="next-era-btn" type="button" id="nextStepBtn">Siguiente etapa ─▶</button>
+          <button class="tool-btn" type="button" id="resetBtn" title="Restaurar valores">↺</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footnote">
+    <span><strong>Ruta Evolutiva Era 3:</strong> LSTM / TFT (Memoria continua sin lags manuales) ─▶ Quiebre: Embudo secuencial y costo cuadrático O(L²) ─▶ PatchTST (Parches de 16 pasos O((L/P)²)) ─▶ CAISO / Enel Green Power ─▶ <strong>Era 4 (Foundation Models Zero-Shot)</strong>.</span>
+    <span>Referencias: Hochreiter &amp; Schmidhuber (1997) · Lim et al. (2021) TFT · Nie et al. (ICLR 2023) PatchTST</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['lstm', 'bottleneck', 'patchtst', 'era4'];
+  const LOOP_DURATION_MS = 9500;
+
+  const state = {
+    step: 'lstm',
+    gateOpen: 88,
+    seqLen: 512,
+    patchSize: 16,
+    parksCount: 800,
+    loopOn: true,
+    stepElapsed: 0,
+    simTime: 0
+  };
+
+  const STAGE_CONTENT = {
+    lstm: {
+      accent: 'var(--phi)',
+      tag: 'ETAPA 1 DE 4 · LA MEMORIA FLUIDA (LSTM / TFT)',
+      title: '1. De Tablas Rígidas a Memoria Fluida: RNN, LSTM y TFT',
+      lead: 'En la Era 2 vimos que los árboles cortan el tiempo en cajas cerradas y chocan contra una <b>meseta plana</b>. El <b>Deep Learning</b> nació para leer el tiempo como una <b>película continua</b> sin crear tablas de <i>lags</i> a mano.',
+      b1Label: '🧠 LA CINTA DE MEMORIA (LSTM, N-BEATS Y TFT)',
+      b1Text: 'En lugar de mirar celdas sueltas de Excel, una red <b>LSTM</b> tiene una cinta transportadora interna con <b>3 compuertas</b>: decide qué ruido viejo borrar (<b>olvido fₜ</b>), qué dato nuevo guardar (<b>entrada iₜ</b>) y qué proyectar hoy (<b>salida oₜ</b>).',
+      b2Label: '🎛️ SUPERPODER: EXTRAPOLAR PENDIENTES Y COVARIABLES',
+      b2Text: 'Arquitecturas como <b>TFT (Temporal Fusion Transformer)</b> integran datos fijos y clima futuro aprendiendo la <b>velocidad y curvatura real de la serie</b>, superando el techo plano de los árboles.',
+      formula: 'Estado Latente hₜ = f( hₜ₋₁, xₜ ) · Compuertas [ fₜ, iₜ, oₜ ]',
+      hint: 'Sin ingeniería manual de lags · Flujo continuo',
+      quote: '“Para romper la meseta plana de los árboles en Texas, las redes neuronales dejaron de ver el tiempo como fotos sueltas en Excel y empezaron a leerlo como una película continua, guardando en su memoria la velocidad de subida.”',
+      icon: '🧠',
+      canvasTitle: 'Memoria Secuencial Continua (LSTM / TFT) vs. Meseta Plana Tabular',
+      ovLeft: '🧠 Arriba: Cinta de Memoria Latente (Cₜ₋₁ ➔ Cₜ)',
+      ovRight: '📈 Abajo: Extrapolación continua sin meseta plana',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Señal Continua (xₜ)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Proyección Fluida (LSTM/TFT)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Meseta Plana Árbol (Era 2)</span>',
+      nextLabel: 'Ver El Doble Quiebre O(L²) ─▶'
+    },
+    bottleneck: {
+      accent: 'var(--rupture)',
+      tag: 'ETAPA 2 DE 4 · EL DOBLE CUELLO DE BOTELLA',
+      title: '2. ¿Por qué colapsaron las RNN y los primeros Transformers?',
+      lead: 'Al llevar estas redes a series largas en producción, aparecieron <b>dos muros matemáticos</b>: la lentitud del “gota a gota” y la explosión de comparar puntos sueltos.',
+      b1Label: '⏳ FALLO 1 (LSTM): EL EMBUDO GOTA A GOTA Y EL OLVIDO',
+      b1Text: 'En una LSTM, para calcular el día 500 debes esperar en fila india a que terminen los 499 días anteriores. <b>No se puede paralelizar en GPU</b> y, en secuencias largas, los recuerdos lejanos se borran (<b>desvanecimiento de gradiente</b>).',
+      b2Label: '💥 FALLO 2 (TRANSFORMER): UN PUNTO AISLADO NO DICE NADA + O(L²)',
+      b2Text: 'En texto, la palabra <i>“Fuego”</i> tiene significado sola; en series temporales, el número suelto <b>“42.3” no significa nada</b> sin ver si sube o baja. Comparar 512 puntos todos contra todos exige <b>512² = 262,144 cruces O(L²)</b>, ahogando la GPU.',
+      formula: 'LSTM = Fila India Secuencial + Olvido  │  Transformer = Costo Cuadrático O(L²)',
+      hint: 'Para L = 512 puntos ──▶ 262,144 conexiones punto a punto',
+      quote: '“Aquí chocamos con dos muros: la LSTM lee gota a gota como un reloj de arena y olvida el principio; y el Transformer clásico intenta comparar cada número suelto contra todos los demás, multiplicando el costo al cuadrado.”',
+      icon: '💥',
+      canvasTitle: 'El Doble Cuello de Botella: Embudo Secuencial (LSTM) vs. Explosión Cuadrática O(L²)',
+      ovLeft: '⏳ Izquierda: Reloj de Arena LSTM (Fila india + Olvido)',
+      ovRight: '💥 Derecha: Transformer Punto a Punto O(L²) sin semántica',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Espera Secuencial Gota a Gota</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Red Cuadrática O(L²) Saturada</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Punto aislado sin contexto</span>',
+      nextLabel: 'Ver La Revolución PatchTST ─▶'
+    },
+    patchtst: {
+      accent: 'var(--purple)',
+      tag: 'ETAPA 3 DE 4 · LA REVOLUCIÓN DEL PARCHE (ICLR 2023)',
+      title: '3. PatchTST: Empaquetar Números en “Palabras del Tiempo”',
+      lead: 'En 2023, <b>PatchTST (Nie et al.)</b> resolvió ambos problemas con una idea brillante del procesamiento de señales: <b>dejar de leer números sueltos y agruparlos en bloques o “parches”</b>.',
+      b1Label: '🧱 ¿QUÉ ES UN PARCHE TEMPORAL? (FORMA + PENDIENTE)',
+      b1Text: 'Si agrupamos <b>P = 16 días seguidos en una sola cápsula (parche)</b>, ese bloque ya tiene significado propio: sabemos si dentro de él la curva <b>sube, acelera o rebota</b>. Además, cada serie viaja por un <b>canal independiente</b> sin contaminar a las demás.',
+      b2Label: '⚡ EL MILAGRO MATEMÁTICO: DE O(L²) A O((L/P)²) — HASTA 256x MENOS COSTO',
+      b2Text: 'Una serie de <b>512 puntos</b> dividida en parches de <b>16 pasos</b> se reduce a solo <b>32 bloques</b>. La matriz de atención pasa de <b>262,144 cruces a solo 1,024</b>: la GPU procesa todo de golpe en paralelo y ve horizontes larguísimos.',
+      formula: 'Secuencia L ──▶ L/P Parches ──▶ Costo cae de O(L²) a O((L/P)²)',
+      hint: 'Con P = 16: 256 veces menos memoria en el mapa de atención',
+      quote: '“Un número suelto es como una letra aislada: no dice nada. Pero un parche de 16 días es una palabra completa con forma y pendiente. Al juntar de 16 en 16, PatchTST hace que el Transformer sea hasta 256 veces más ligero.”',
+      icon: '🧱',
+      canvasTitle: 'Arquitectura PatchTST: Segmentación en Parches (P) + Autoatención Paralela O((L/P)²)',
+      ovLeft: '🧱 Paso 1: 512 puntos empaquetados en Parches con forma',
+      ovRight: '⚡ Paso 2: Autoatención rápida entre bloques O((L/P)²)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Señal Cruda (L=512)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Parches Temporales (Tamaño P)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Atención de Largo Alcance</span>',
+      nextLabel: 'Ver Caso CAISO/Enel y Pase a Era 4 ─▶'
+    },
+    era4: {
+      accent: 'var(--lab)',
+      tag: 'ETAPA 4 DE 4 · IMPACTO INDUSTRIAL Y PASE A ERA 4',
+      title: '4. Parques Renovables (CAISO / Enel) y el Salto a la Era 4',
+      lead: 'Hoy <b>PatchTST</b> gobierna el pronóstico masivo de energías renovables y, al convertir el tiempo en <i>tokens de parches</i>, abrió la puerta a los <b>Modelos Fundacionales (Era 4)</b>.',
+      b1Label: '🌬️ ÉXITO EN PRODUCCIÓN: CAISO (CALIFORNIA), ENEL Y COES',
+      b1Text: 'Operadores eléctricos como <b>CAISO</b> y <b>Enel Green Power</b> procesan cientos de parques eólicos y solares a la vez con <b>PatchTST</b>: capturan frentes de viento y radiación solar a largo plazo sin acumular error recursivo.',
+      b2Label: '🚀 EL PASE A LA SIGUIENTE DIAPOSITIVA (ERA 4: FOUNDATION MODELS ZERO-SHOT)',
+      b2Text: '¿Cuál es el límite de la Era 3? Exige <b>entrenar desde cero con &gt;100,000 datos propios y GPUs caras</b>. Pero si un parche es igual a una “palabra”, ¡podemos pre-entrenar un <b>ChatGPT del Tiempo sobre billones de series</b> para predecir sin entrenar (<b>Zero-Shot</b>)!',
+      formula: 'Parches (Era 3) + 27 Mil Millones de Datos (LOTSA) ──▶ Era 4: Zero-Shot',
+      hint: 'Siguiente Diapo · Era 4: TimesFM, Chronos, Moirai y Lag-Llama',
+      quote: '“Con PatchTST, CAISO y Enel pronostican cientos de parques eólicos en paralelo. Y lo mejor: como ya sabemos convertir series en parches-palabras, nació la Era 4: pre-entrenar modelos gigantes con billones de datos para predecir en frío (Zero-Shot).”',
+      icon: '🚀',
+      canvasTitle: 'Pronóstico Eólico/Solar Multi-Parque (CAISO / Enel) y Puente a la Era 4 (Zero-Shot)',
+      ovLeft: '🌬️ Izquierda: Red de Parques Eólicos/Solares (CAISO / Enel)',
+      ovRight: '⏭️ Derecha: Pase a Era 4 (Foundation Models Zero-Shot)',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Pronóstico Multi-Horizonte PatchTST</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Canales Independientes (Turbinas)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Salto a Era 4 (Zero-Shot)</span>',
+      nextLabel: 'Reiniciar bucle (LSTM/TFT) ↺'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('stageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr);
+    const h = Math.round(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function updateUI() {
+    const c = STAGE_CONTENT[state.step];
+    const card = $('narrativeCard');
+    card.style.setProperty('--stage-accent', c.accent);
+
+    $('stageTag').textContent = c.tag;
+    $('narrTitle').textContent = c.title;
+    $('narrLead').innerHTML = c.lead;
+    $('block1Label').textContent = c.b1Label;
+    $('block1Text').innerHTML = c.b1Text;
+    $('block2Label').textContent = c.b2Label;
+    $('block2Text').innerHTML = c.b2Text;
+    $('mathFormula').textContent = c.formula;
+    $('mathHint').textContent = c.hint;
+    $('speakerQuote').textContent = c.quote;
+
+    $('stageIcon').textContent = c.icon;
+    $('canvasTitle').textContent = c.canvasTitle;
+    $('ovLeft').textContent = c.ovLeft;
+    $('ovRight').textContent = c.ovRight;
+    $('legendItems').innerHTML = c.legend;
+    $('nextStepBtn').textContent = c.nextLabel;
+
+    // Mostrar únicamente el control contextual de la etapa activa
+    $('ctrlGateWrap').hidden = (state.step !== 'lstm');
+    $('ctrlSeqLenWrap').hidden = (state.step !== 'bottleneck');
+    $('ctrlPatchWrap').hidden = (state.step !== 'patchtst');
+    $('ctrlParksWrap').hidden = (state.step !== 'era4');
+
+    $('outGate').textContent = `${state.gateOpen}%`;
+    $('outSeqLen').textContent = `L = ${state.seqLen}`;
+    $('outPatch').textContent = `P = ${state.patchSize}`;
+    $('outParks').textContent = `${state.parksCount} parques`;
+
+    if (state.step === 'lstm') {
+      $('kpi1').innerHTML = `Compuerta fₜ: <strong>${state.gateOpen}% abierta</strong>`;
+      $('kpi2').innerHTML = `Lags Manuales: <strong>0 (Auto)</strong>`;
+      $('kpi3').innerHTML = `Extrapolación: <strong style="color:var(--lab)">Continua</strong>`;
+    } else if (state.step === 'bottleneck') {
+      const ops = state.seqLen * state.seqLen;
+      $('kpi1').innerHTML = `Longitud L: <strong>${state.seqLen} puntos</strong>`;
+      $('kpi2').innerHTML = `Cruces O(L²): <strong style="color:var(--rupture)">${ops.toLocaleString()}</strong>`;
+      $('kpi3').innerHTML = `LSTM: <strong style="color:var(--ockham)">Fila India O(L)</strong>`;
+    } else if (state.step === 'patchtst') {
+      const tokens = Math.ceil(512 / state.patchSize);
+      const patchOps = tokens * tokens;
+      const speedup = Math.round((512 * 512) / patchOps);
+      $('kpi1').innerHTML = `Parches (512/${state.patchSize}): <strong>${tokens} bloques</strong>`;
+      $('kpi2').innerHTML = `Cruces O((L/P)²): <strong style="color:var(--lab)">${patchOps.toLocaleString()}</strong>`;
+      $('kpi3').innerHTML = `Ahorro Cómputo: <strong style="color:var(--purple)">${speedup}x más rápido</strong>`;
+    } else {
+      $('kpi1').innerHTML = `Escala Red: <strong>${state.parksCount} turbinas</strong>`;
+      $('kpi2').innerHTML = `Requisito Era 3: <strong style="color:var(--ockham)">&gt;10⁵ datos + GPU</strong>`;
+      $('kpi3').innerHTML = `Pase: <strong style="color:var(--lab)">Era 4 (Zero-Shot)</strong>`;
+    }
+
+    document.querySelectorAll('.proc-node').forEach(btn => {
+      const active = btn.dataset.step === state.step;
+      btn.setAttribute('aria-selected', String(active));
+      const prog = btn.querySelector('.proc-progress');
+      if (!active && prog) prog.style.width = '0%';
+    });
+
+    $('loopBtn').classList.toggle('loop-on', state.loopOn);
+    $('loopText').textContent = state.loopOn ? 'Bucle Auto: ON' : 'Bucle Auto: PAUSA';
+  }
+
+  function setStep(stepName, manual = false) {
+    state.step = stepName;
+    state.stepElapsed = 0;
+    if (manual) {
+      state.stepElapsed = 0;
+    }
+    updateUI();
+    renderCanvas();
+  }
+
+  function drawGrid(w, h) {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(110, 140, 180, 0.08)';
+    ctx.lineWidth = 1;
+    const cols = 14, rows = 7;
+    for (let i = 1; i < cols; i++) {
+      const x = (w / cols) * i;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let j = 1; j < rows; j++) {
+      const y = (h / rows) * j;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ACTO 1: MEMORIA FLUIDA (ARRIBA: CINTA DE COMPUERTAS LSTM / TFT · ABAJO: EXTRAPOLACIÓN CONTINUA VS MESETA PLANA)
+  function drawLstmStage(w, h) {
+    const padL = 36, padR = 26, padT = 44;
+    const topH = h * 0.40;
+    const pw = w - padL - padR;
+
+    // 1. DIAGRAMA SUPERIOR: AUTOPISTA DEL ESTADO LATENTE C_{t-1} -> C_t Y 3 COMPUERTAS
+    const boxX = padL, boxY = padT + 2, boxW = pw, boxH = topH - 6;
+    ctx.save();
+    ctx.fillStyle = 'rgba(8, 15, 34, 0.88)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.32)';
+    ctx.beginPath(); ctx.roundRect(boxX, boxY, boxW, boxH, 10); ctx.fill(); ctx.stroke();
+
+    // Línea de Autopista de Memoria C_{t-1} -> C_t
+    const pipeY = boxY + 26;
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(boxX + 18, pipeY);
+    ctx.lineTo(boxX + boxW - 18, pipeY);
+    ctx.stroke();
+
+    // Partículas de memoria viajando por la autopista
+    for (let p = 0; p < 5; p++) {
+      const u = ((state.simTime * 0.35 + p * 0.2) % 1);
+      const px = boxX + 20 + u * (boxW - 40);
+      ctx.fillStyle = '#6ef0b4';
+      ctx.beginPath(); ctx.arc(px, pipeY, 4.5, 0, Math.PI * 2); ctx.fill();
+    }
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('Autopista de Memoria Latente Cₜ₋₁ ──▶ Cₜ (Transporta velocidad y contexto)', boxX + 20, pipeY - 9);
+
+    // 3 Compuertas (Olvido f_t, Entrada i_t, Salida o_t) + Selección de Variables TFT
+    const gates = [
+      { name: '1. Compuerta Olvido (fₜ)', desc: `Retiene ${state.gateOpen}% del historial`, color: '#ffc05c' },
+      { name: '2. Compuerta Entrada (iₜ)', desc: 'Inyecta cambio actual xₜ', color: '#38efff' },
+      { name: '3. Salida / Atención (oₜ)', desc: 'Proyecta pendiente futura', color: '#6ef0b4' }
+    ];
+    const gw = (boxW - 52) / 3;
+    const gy = pipeY + 14;
+    const gh = boxH - 48;
+
+    gates.forEach((g, idx) => {
+      const gx = boxX + 16 + idx * (gw + 10);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.strokeStyle = g.color;
+      ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.roundRect(gx, gy, gw, gh, 8); ctx.fill(); ctx.stroke();
+
+      // Conector vertical hacia la autopista C_t
+      ctx.beginPath();
+      ctx.moveTo(gx + gw / 2, gy);
+      ctx.lineTo(gx + gw / 2, pipeY + 3);
+      ctx.stroke();
+
+      ctx.fillStyle = g.color;
+      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(g.name, gx + gw / 2, gy + gh * 0.44);
+
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '500 9.5px Inter, sans-serif';
+      ctx.fillText(g.desc, gx + gw / 2, gy + gh * 0.78);
+    });
+    ctx.restore();
+
+    // 2. GRÁFICO INFERIOR: EXTRAPOLACIÓN CONTINUA (DEEP LEARNING) VS MESETA PLANA (ÁRBOLES ERA 2)
+    const chartY = padT + topH + 14;
+    const chartH = h - chartY - 22;
+    const N = 80, split = 46;
+    const X = i => padL + (i / (N - 1)) * pw;
+    const Y = v => chartY + chartH - ((v - 20) / 85) * chartH;
+
+    const sx = X(split);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(sx, chartY); ctx.lineTo(sx, chartY + chartH); ctx.stroke();
+    ctx.restore();
+
+    const gateFactor = state.gateOpen / 100;
+
+    // Serie histórica + Rampa ascendente
+    ctx.save();
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    for (let i = 0; i <= split; i++) {
+      const v = 32 + (i / split) * 32 + 7 * Math.sin(i * 0.35 + state.simTime);
+      const xx = X(i), yy = Y(v);
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Meseta Plana de los Árboles (Era 2 se clava en 65)
+    ctx.save();
+    ctx.strokeStyle = '#ffc05c';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(sx, Y(64));
+    ctx.lineTo(X(N - 1), Y(64));
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('🧱 Árbol Era 2: Meseta Plana Ciega (65 GW)', X(N - 1) - 6, Y(64) + 15);
+
+    // Proyección Continua de Deep Learning (LSTM / TFT sigue la pendiente y oscilación)
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(110, 240, 180, 0.4)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    for (let i = split; i < N; i++) {
+      const s = i - split;
+      const v = 64 + s * 0.85 * gateFactor + 7 * Math.sin(i * 0.35 + state.simTime) * gateFactor;
+      const xx = X(i), yy = Y(v);
+      i === split ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText('🧠 LSTM / TFT: Extrapola pendiente + ciclo continuo', X(N - 1) - 6, chartY + 16);
+  }
+
+  // ACTO 2: EL DOBLE QUIEBRE (IZQUIERDA: FILA INDIA Y OLVIDO LSTM · DERECHA: EXPLOSIÓN CUADRÁTICA O(L²) Y PUNTO SIN SENTIDO)
+  function drawBottleneckStage(w, h) {
+    const pad = 18, padT = 46;
+    const halfW = (w - pad * 3) / 2;
+    const boxH = h - padT - 18;
+
+    // MITAD IZQUIERDA: CUELLO DE BOTELLA SECUENCIAL GOTA A GOTA (LSTM)
+    const lx = pad, ly = padT;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 17, 36, 0.88)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.38)';
+    ctx.beginPath(); ctx.roundRect(lx, ly, halfW, boxH, 12); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('1. RECURRENCIA (LSTM): Fila India Gota a Gota O(L)', lx + 14, ly + 22);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillText('El paso t=8 NO puede calcularse hasta terminar t=1..7 (GPU bloqueada):', lx + 14, ly + 40);
+
+    // Cadena de 8 nodos secuenciales donde el pulso avanza lento uno por uno y se apaga el recuerdo inicial
+    const nodes = 8;
+    const activeIdx = Math.floor((state.simTime * 1.8) % nodes);
+    const stepW = (halfW - 36) / nodes;
+    const cy = ly + boxH * 0.47;
+
+    for (let i = 0; i < nodes; i++) {
+      const nx = lx + 18 + i * stepW + stepW / 2;
+      const isDone = i <= activeIdx;
+      // Desvanecimiento del gradiente: los primeros nodos pierden brillo cuando la secuencia avanza
+      const fade = isDone ? Math.max(0.18, 1 - (activeIdx - i) * 0.16) : 0.12;
+
+      if (i < nodes - 1) {
+        ctx.strokeStyle = isDone ? `rgba(255, 192, 92, ${fade})` : 'rgba(148, 163, 184, 0.2)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(nx + 13, cy);
+        ctx.lineTo(nx + stepW - 13, cy);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = i === activeIdx ? '#ffc05c' : `rgba(255, 192, 92, ${fade})`;
+      ctx.strokeStyle = i === activeIdx ? '#ffffff' : 'rgba(255, 192, 92, 0.5)';
+      ctx.lineWidth = i === activeIdx ? 2 : 1;
+      ctx.beginPath(); ctx.arc(nx, cy, 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = i === activeIdx ? '#040714' : '#e2e8f0';
+      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(`t${i + 1}`, nx, cy + 3);
+    }
+
+    // Explicación visual del desvanecimiento de gradiente
+    const gradY = ly + boxH * 0.72;
+    ctx.fillStyle = 'rgba(225, 29, 72, 0.12)';
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.35)';
+    ctx.beginPath(); ctx.roundRect(lx + 14, gradY, halfW - 28, boxH * 0.22, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⚠️ Desvanecimiento de Gradiente + 0% Paralelismo:', lx + 24, gradY + 18);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillText('Al llegar al final de una serie larga, la red ya olvidó el inicio.', lx + 24, gradY + 36);
+    ctx.restore();
+
+    // MITAD DERECHA: EXPLOSIÓN CUADRÁTICA O(L²) DEL TRANSFORMER PUNTO A PUNTO
+    const rx = pad * 2 + halfW, ry = padT;
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 17, 36, 0.88)';
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.42)';
+    ctx.beginPath(); ctx.roundRect(rx, ry, halfW, boxH, 12); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`2. TRANSFORMER PUNTO A PUNTO: Costo O(L²) = ${(state.seqLen * state.seqLen).toLocaleString()} cruces`, rx + 14, ry + 22);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillText('Un punto aislado (“42.3”) no tiene semántica, pero conecta todos contra todos:', rx + 14, ry + 40);
+
+    // Malla densa todos-contra-todos que se vuelve más tupida con state.seqLen
+    const visualNodes = Math.min(18, Math.max(6, Math.round(state.seqLen / 32)));
+    const topRowY = ry + 64;
+    const botRowY = ry + boxH * 0.64;
+    const spanW = halfW - 36;
+
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.24)';
+    ctx.lineWidth = 0.9;
+    for (let i = 0; i < visualNodes; i++) {
+      const x1 = rx + 18 + (i / (visualNodes - 1)) * spanW;
+      for (let j = 0; j < visualNodes; j++) {
+        const x2 = rx + 18 + (j / (visualNodes - 1)) * spanW;
+        ctx.beginPath();
+        ctx.moveTo(x1, topRowY);
+        ctx.lineTo(x2, botRowY);
+        ctx.stroke();
+      }
+    }
+
+    for (let i = 0; i < visualNodes; i++) {
+      const xx = rx + 18 + (i / (visualNodes - 1)) * spanW;
+      ctx.fillStyle = '#38efff';
+      ctx.beginPath(); ctx.arc(xx, topRowY, 3.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ff5277';
+      ctx.beginPath(); ctx.arc(xx, botRowY, 3.5, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Caja inferior de conclusión del problema punto a punto
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.3)';
+    ctx.beginPath(); ctx.roundRect(rx + 14, gradY, halfW - 28, boxH * 0.22, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🔍 ¿Por qué falla mirar puntos sueltos?', rx + 24, gradY + 18);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillText('Un punto no es una palabra; carece de pendiente y satura la memoria.', rx + 24, gradY + 36);
+    ctx.restore();
+  }
+
+  // ACTO 3: LA REVOLUCIÓN PATCHTST (SEÑAL CRUDA -> EMPAQUETADO EN PARCHES P -> MATRIZ DE AUTOATENCIÓN LIGERA O((L/P)²))
+  function drawPatchTSTStage(w, h) {
+    const padL = 28, padR = 24, padT = 44;
+    const pw = w - padL - padR;
+
+    // MITAD SUPERIOR: SEÑAL DE 512 PASOS SEGMENTADA EN CÁPSULAS ("PARCHES TEMPORALES")
+    const sigY = padT + 4;
+    const sigH = h * 0.43;
+
+    const numPatches = Math.max(4, Math.min(16, Math.round(128 / state.patchSize)));
+    const patchW = pw / numPatches;
+
+    for (let p = 0; p < numPatches; p++) {
+      const px = padL + p * patchW;
+      const isHighlighted = (p === 1 || p === numPatches - 2);
+
+      ctx.save();
+      ctx.fillStyle = isHighlighted ? 'rgba(180, 142, 255, 0.16)' : 'rgba(15, 23, 42, 0.55)';
+      ctx.strokeStyle = isHighlighted ? '#b48eff' : 'rgba(148, 163, 184, 0.28)';
+      ctx.lineWidth = isHighlighted ? 2 : 1;
+      ctx.beginPath();
+      ctx.roundRect(px + 3, sigY, patchW - 6, sigH, 9);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = isHighlighted ? '#e9d5ff' : '#94a3b8';
+      ctx.font = '700 8.5px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Parche ${p + 1}`, px + patchW / 2, sigY + 14);
+      ctx.restore();
+    }
+
+    // Onda continua atravesando los parches (cada parche captura forma, derivada y aceleración)
+    ctx.save();
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 2.6;
+    ctx.shadowColor = 'rgba(56, 239, 255, 0.35)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    const totalPts = 140;
+    for (let i = 0; i <= totalPts; i++) {
+      const u = i / totalPts;
+      const x = padL + u * pw;
+      const wave = Math.sin(u * Math.PI * 4 + state.simTime * 0.9) * 0.32 + Math.cos(u * Math.PI * 10) * 0.12;
+      const y = sigY + sigH * 0.56 - wave * (sigH - 28);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Arco de Autoatención conectando dos parches estacionales distantes (ej. Invierno 2023 <-> Invierno 2024)
+    const p1Center = padL + 1.5 * patchW;
+    const p2Center = padL + (numPatches - 1.5) * patchW;
+    ctx.save();
+    ctx.strokeStyle = '#6ef0b4';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(p1Center, sigY + sigH - 6);
+    ctx.quadraticCurveTo((p1Center + p2Center) / 2, sigY + sigH + 34, p2Center, sigY + sigH - 6);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText('🔗 Self-Attention conecta “Palabras Temporales” homólogas a largo plazo', (p1Center + p2Center) / 2, sigY + sigH + 16);
+
+    // MITAD INFERIOR: 2 CAJAS EXPLICATIVAS (INDEPENDENCIA DE CANALES + BARRA DE REDUCCIÓN CUADRÁTICA O((L/P)²))
+    const botY = sigY + sigH + 26;
+    const botH = h - botY - 14;
+    const halfW = (pw - 16) / 2;
+
+    // Caja Izquierda: Independencia de Canales + Semántica Local
+    ctx.save();
+    ctx.fillStyle = 'rgba(6, 12, 28, 0.9)';
+    ctx.strokeStyle = 'rgba(180, 142, 255, 0.35)';
+    ctx.beginPath(); ctx.roundRect(padL, botY, halfW, botH, 10); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#d8b4fe';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('🧬 INDEPENDENCIA DE CANALES + SEMÁNTICA LOCAL', padL + 12, botY + 18);
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 10.5px Inter, sans-serif';
+    ctx.fillText(`• Cada parche de P=${state.patchSize} pasos guarda pendiente y forma.`, padL + 12, botY + 38);
+    ctx.fillText('• Cada sensor/serie se procesa sin contaminación cruzada', padL + 12, botY + 56);
+    ctx.fillText('  compartiendo los mismos pesos del Transformer.', padL + 12, botY + 72);
+    ctx.restore();
+
+    // Caja Derecha: Comparador en vivo de Complejidad O(L²) vs O((L/P)²)
+    const rx = padL + halfW + 16;
+    const tokens = Math.ceil(512 / state.patchSize);
+    const patchOps = tokens * tokens;
+    const speedup = Math.round(262144 / patchOps);
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(6, 12, 28, 0.9)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.38)';
+    ctx.beginPath(); ctx.roundRect(rx, botY, halfW, botH, 10); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText(`⚡ REDUCCIÓN DE COSTO (L=512 con Parche P=${state.patchSize})`, rx + 12, botY + 18);
+
+    // Barra Punto a Punto
+    const barW = halfW - 150;
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.fillText('Punto a Punto:', rx + 12, botY + 40);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.8)';
+    ctx.fillRect(rx + 108, botY + 30, barW, 12);
+    ctx.fillStyle = '#fff';
+    ctx.fillText('262,144', rx + 114, botY + 40);
+
+    // Barra PatchTST
+    const patchBarW = Math.max(8, (patchOps / 262144) * barW);
+    ctx.fillStyle = '#8ef7c7';
+    ctx.fillText('Con PatchTST:', rx + 12, botY + 62);
+    ctx.fillStyle = '#6ef0b4';
+    ctx.fillRect(rx + 108, botY + 52, patchBarW, 12);
+    ctx.fillStyle = '#e2eeff';
+    ctx.fillText(`${patchOps.toLocaleString()} cruces (${speedup}x menos!)`, rx + 114 + patchBarW, botY + 62);
+    ctx.restore();
+  }
+
+  // ACTO 4: CASO REAL CAISO / ENEL GREEN POWER (IZQ) + PUENTE A LA ERA 4 FOUNDATION MODELS ZERO-SHOT (DER)
+  function drawEra4BridgeStage(w, h) {
+    const padL = 32, padT = 46, padB = 28;
+    const leftW = w * 0.54;
+    const ph = h - padT - padB;
+
+    // IZQUIERDA: MÚLTIPLES PARQUES EÓLICOS/SOLARES PROCESADOS EN PARALELO CON PATCHTST (SIN ERROR RECURSIVO)
+    const channels = [
+      { name: '🌬️ Parque Eólico Norte (CAISO)', color: '#38efff', offset: 0.0 },
+      { name: '☀️ Planta Solar Atacama (Enel)', color: '#ffc05c', offset: 1.4 },
+      { name: '💧 Demanda Red Eléctrica (COES)', color: '#6ef0b4', offset: 2.8 }
+    ];
+    const chH = (ph - 16) / 3;
+    const N = 70, split = 44;
+    const X = i => padL + (i / (N - 1)) * (leftW - padL - 10);
+
+    channels.forEach((ch, idx) => {
+      const cyTop = padT + idx * (chH + 8);
+      ctx.save();
+      ctx.fillStyle = 'rgba(8, 15, 32, 0.8)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.beginPath(); ctx.roundRect(padL - 8, cyTop, leftW - padL + 4, chH, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = ch.color;
+      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${ch.name} · (${state.parksCount} series en GPU)`, padL, cyTop + 14);
+
+      const sx = X(split);
+      ctx.strokeStyle = 'rgba(180, 142, 255, 0.45)';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(sx, cyTop + 4); ctx.lineTo(sx, cyTop + chH - 4); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Curva histórica + predicción multi-parche directa
+      ctx.strokeStyle = ch.color;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) {
+        const u = i / N;
+        const val = 0.5 + 0.34 * Math.sin(u * 12 + state.simTime + ch.offset);
+        const xx = X(i);
+        const yy = cyTop + chH - 8 - val * (chH - 24);
+        i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+      }
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // DERECHA: PUENTE VISUAL A LA SIGUIENTE DIAPOSITIVA (ERA 4: FOUNDATION MODELS ZERO-SHOT)
+    const rx = leftW + 12;
+    const rw = w - rx - 18;
+    const ry = padT;
+    const rh = ph;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(13, 18, 38, 0.94)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.48)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.roundRect(rx, ry, rw, rh, 12); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#6ef0b4';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.textAlign = 'left';
+    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 4', rx + 14, ry + 22);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 13px "Space Grotesk", sans-serif';
+    ctx.fillText('Revolución Zero-Shot (Foundation Models)', rx + 14, ry + 42);
+
+    // Diagrama: De Parches Locales a Pre-Entrenamiento Universal (LOTSA 27B -> TimesFM / Chronos / Moirai)
+    const b1Y = ry + 56, b1H = 54;
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.1)';
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.4)';
+    ctx.beginPath(); ctx.roundRect(rx + 14, b1Y, rw - 28, b1H, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#fda4af';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('⚠️ LÍMITE ERA 3 (PatchTST / TFT Supervisado):', rx + 22, b1Y + 18);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillText('Exige entrenar desde cero con >100,000 datos y GPUs.', rx + 22, b1Y + 36);
+
+    // Caja de Modelos Fundacionales Preentrenados
+    const b2Y = b1Y + b1H + 12, b2H = rh - (b2Y - ry) - 14;
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.09)';
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.45)';
+    ctx.beginPath(); ctx.roundRect(rx + 14, b2Y, rw - 28, b2H, 8); ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#8ef7c7';
+    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.fillText('🌐 EL SALTO A LA ERA 4 (TSFMs Pre-entrenados):', rx + 22, b2Y + 18);
+
+    ctx.fillStyle = '#e2eeff';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillText('• Parches + 27 Mil Millones de datos (LOTSA).', rx + 22, b2Y + 38);
+    ctx.fillText('• TimesFM (Google), Chronos (Amazon), Moirai.', rx + 22, b2Y + 56);
+    ctx.fillStyle = '#ffe1a8';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.fillText('⚡ Predicen en frío (Zero-Shot) con 0% entrenamiento!', rx + 22, b2Y + 76);
+    ctx.restore();
+  }
+
+  function renderCanvas() {
+    const r = canvas.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (w < 10 || h < 10) return;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(w, h);
+
+    if (state.step === 'lstm') {
+      drawLstmStage(w, h);
+    } else if (state.step === 'bottleneck') {
+      drawBottleneckStage(w, h);
+    } else if (state.step === 'patchtst') {
+      drawPatchTSTStage(w, h);
+    } else {
+      drawEra4BridgeStage(w, h);
+    }
+  }
+
+  // Event Listeners
+  document.querySelectorAll('.proc-node').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setStep(btn.dataset.step, true);
+    });
+  });
+
+  $('nextStepBtn').addEventListener('click', () => {
+    const idx = STEPS.indexOf(state.step);
+    if (idx === STEPS.length - 1) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+        return;
+      }
+    }
+    const next = STEPS[(idx + 1) % STEPS.length];
+    setStep(next, true);
+  });
+
+  $('loopBtn').addEventListener('click', () => {
+    state.loopOn = !state.loopOn;
+    state.stepElapsed = 0;
+    updateUI();
+  });
+
+  $('sliderGate').addEventListener('input', e => {
+    state.gateOpen = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderSeqLen').addEventListener('input', e => {
+    state.seqLen = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderPatch').addEventListener('input', e => {
+    state.patchSize = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('sliderParks').addEventListener('input', e => {
+    state.parksCount = +e.target.value;
+    state.stepElapsed = 0;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state, {
+      step: 'lstm',
+      gateOpen: 88,
+      seqLen: 512,
+      patchSize: 16,
+      parksCount: 800,
+      loopOn: true,
+      stepElapsed: 0
+    });
+    $('sliderGate').value = 88;
+    $('sliderSeqLen').value = 512;
+    $('sliderPatch').value = 16;
+    $('sliderParks').value = 800;
+    updateUI();
+    renderCanvas();
+  });
+
+  $('fullscreenBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setStep('lstm', true);
+    if (e.key === '2') setStep('bottleneck', true);
+    if (e.key === '3') setStep('patchtst', true);
+    if (e.key === '4') setStep('era4', true);
+    if (e.key === 'ArrowRight') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === STEPS.length - 1) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+          return;
+        }
+      }
+      setStep(STEPS[(idx + 1) % STEPS.length], true);
+    }
+    if (e.key === 'ArrowLeft') {
+      const idx = STEPS.indexOf(state.step);
+      if (idx === 0) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'deck_key', key: 'ArrowLeft' }, '*');
+          return;
+        }
+      }
+      setStep(STEPS[(idx - 1 + STEPS.length) % STEPS.length], true);
+    }
+    if (e.key === ' ' && e.target === document.body) {
+      e.preventDefault();
+      state.loopOn = !state.loopOn;
+      updateUI();
+    }
+    const deckNavKeys = ['PageUp', 'PageDown', 'Home', 'End', 'n', 'N', 'd', 'D', 'f', 'F', 'Escape', 'ArrowUp', 'ArrowDown'];
+    if (deckNavKeys.includes(e.key)) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deck_key', key: e.key }, '*');
+      }
+    }
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data && (e.data.type === 'resize' || e.data.type === 'activate')) {
+      setTimeout(() => {
+        fitCanvas();
+        renderCanvas();
+      }, 30);
+    }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    const dt = lastTs ? Math.min(50, ts - lastTs) : 16;
+    lastTs = ts;
+    state.simTime += dt * 0.0018;
+
+    if (state.loopOn) {
+      state.stepElapsed += dt;
+      const pct = Math.min(100, (state.stepElapsed / LOOP_DURATION_MS) * 100);
+      const activeProg = $(`prog-${state.step}`);
+      if (activeProg) activeProg.style.width = `${pct}%`;
+
+      if (state.stepElapsed >= LOOP_DURATION_MS) {
+        const idx = STEPS.indexOf(state.step);
+        const next = STEPS[(idx + 1) % STEPS.length];
+        setStep(next, false);
+      }
+    }
+
+    renderCanvas();
+    requestAnimationFrame(animate);
+  }
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => {
+      fitCanvas();
+      renderCanvas();
+    });
+    if (canvas.parentElement) ro.observe(canvas.parentElement);
+    ro.observe(document.body);
+  }
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    renderCanvas();
+  }, { passive: true });
+
+  updateUI();
+  fitCanvas();
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

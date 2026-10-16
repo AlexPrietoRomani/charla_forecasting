@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPO 14 v1: La trampa de los árboles · meseta vs diferencias</title>
+<style>
+:root{--line:rgba(148,163,184,.15);--text:#edf5ff;--cyan:#38efff;--amber:#ffc05c;--red:#ff5277;--green:#6ef0b4;--mono:"JetBrains Mono",Consolas,monospace;--display:"Space Grotesk",Inter,sans-serif;--sans:Inter,"Segoe UI",Arial,sans-serif}
+*{box-sizing:border-box}html,body{width:100%;min-height:100%;margin:0}
+body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);background:radial-gradient(ellipse at 15% 90%,rgba(225,29,72,.12),transparent 35%),#030511;font-family:var(--sans)}
+#slideFrame{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:9px;width:min(100vw,1600px,calc(100svh*16/9));aspect-ratio:16/9;padding:15px 22px 10px;overflow:hidden;background:linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));border:1px solid rgba(82,128,170,.25)}
+body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
+body.is-embedded #slideFrame{width:100%!important;height:100%!important;aspect-ratio:auto!important;border:none!important;padding:9px 15px 6px!important}
+button,input{font:inherit}button{color:inherit;cursor:pointer}
+.topbar{padding-bottom:8px;border-bottom:1px solid var(--line)}
+.eyebrow{margin:0;color:var(--cyan);font:600 10px/1.2 var(--mono);letter-spacing:.15em}
+h1{margin:2px 0 0;font:700 clamp(19px,1.7vw,26px)/1.1 var(--display)}h1 .n{color:var(--amber)}
+.sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.4 var(--sans)}.sub b{color:#d7e5f8}
+.workspace{display:grid;grid-template-columns:minmax(250px,.32fr) minmax(0,1fr);gap:12px;min-height:0;overflow:hidden}
+.left{display:flex;flex-direction:column;gap:7px;min-height:0;overflow:hidden}
+.card{padding:8px 11px;border:1px solid rgba(133,158,192,.16);border-radius:11px;background:linear-gradient(110deg,rgba(12,20,39,.9),rgba(7,13,28,.8))}
+.card h4{margin:0 0 4px;font:700 9px/1 var(--mono);letter-spacing:.1em;color:var(--cyan)}
+.card p{margin:0;font:400 10.5px/1.4 var(--sans);color:#9aa9bd}.card p b{color:#e8f2ff}
+.tgl{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tbtn{padding:5px 9px;border:1px solid rgba(128,151,184,.25);border-radius:7px;background:rgba(18,28,48,.7);font:600 9.5px/1 var(--mono);color:#a8b9cf}
+.tbtn[aria-pressed="true"]{color:#fff;border-color:currentColor}
+.sld{display:flex;align-items:center;gap:7px;font:9.5px/1 var(--mono);color:#90a1b9;margin-top:6px}
+.sld output{color:#ffd9e2;font-weight:700}
+input[type=range]{flex:1;accent-color:var(--red)}
+.err{font:700 13px/1.3 var(--mono);color:#ffd9e2}.err small{color:#8fa3bd;font-weight:400}
+.right{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:5px;min-height:0;overflow:hidden}
+.canvas-frame{position:relative;min-height:0;border:1px solid rgba(119,151,191,.16);border-radius:10px;background:rgba(2,6,17,.88);overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font:9px/1.4 var(--mono);color:#8e9fb7}
+.leg i{display:inline-block;width:14px;border-top:2.5px solid var(--c);margin-right:5px;vertical-align:middle}.leg .d{border-top-style:dashed}
+.foot{display:flex;justify-content:space-between;gap:10px;font:9px/1.3 var(--mono);color:#6e8099;border-top:1px solid var(--line);padding-top:6px}
+</style>
+</head>
+<body>
+<main id="slideFrame">
+<header class="topbar"><p class="eyebrow">ACTO 2 · EXPERIMENTO REAL · OLA SEP–OCT 2023</p>
+<h1><span class="n">14</span> La trampa de los árboles: meseta vs diferencias</h1>
+<p class="sub">Los árboles dividen el espacio en hiperrectángulos cerrados: <b>no predicen fuera de su rango</b>. Mueve el tope y mira la meseta.</p></header>
+<section class="workspace">
+<div class="left">
+<div class="card"><h4>🔴 EL PROBLEMA</h4><p>Con tope de <b>34.0 °C</b> y ola récord de <b>38.0 °C</b>, el RF en niveles colapsó en meseta plana de <b>~31.5 °C</b>.</p></div>
+<div class="card"><h4 style="color:var(--green)">🟢 LA SOLUCIÓN</h4><p>Modelar la <b>tasa de cambio Δy = y<sub>t</sub>−y<sub>t−1</sub></b> capturó la aceleración hasta <b>37.46 °C</b>.</p>
+<div class="tgl" id="tgl">
+<button class="tbtn" data-k="real" aria-pressed="true" style="color:#38efff">Real</button>
+<button class="tbtn" data-k="niv" aria-pressed="true" style="color:#ff5277">RF niveles</button>
+<button class="tbtn" data-k="dif" aria-pressed="true" style="color:#6ef0b4">RF diferencias</button>
+<button class="tbtn" data-k="ridge" aria-pressed="false" style="color:#ffc05c">Ridge dif.</button>
+</div>
+<div class="sld"><span>Tope:</span><input id="tope" type="range" min="32" max="36" step="0.5" value="34"><output id="otope">34.0 °C</output></div></div>
+<div class="card"><h4>📏 ERROR EN OLA (≥34 °C)</h4><div class="err" id="err"></div></div>
+</div>
+<div class="right">
+<div class="canvas-frame"><canvas id="cv"></canvas></div>
+<div class="leg"><span><i style="--c:#38efff"></i>Real</span><span><i class="d" style="--c:#ff5277"></i>RF niveles (meseta)</span><span><i class="d" style="--c:#6ef0b4"></i>RF diferencias</span><span><i class="d" style="--c:#ffc05c"></i>Ridge dif.</span><span>— tope 34.0 °C</span></div>
+</div>
+</section>
+<footer class="foot"><span><strong>32 días reales</strong> 2023-09-15 → 2023-10-16 · test ciego</span><span>mueve el tope: la meseta lo obedece, las diferencias no</span></footer>
+</main>
+<script>
+(()=>{if(window.self!==window.top)document.body.classList.add('is-embedded');
+// fecha,real,niveles,diferencias,ridge
+const D=[["09-15",31.2,31.59,32.31,33.81],["09-16",34.8,31.44,31.37,33.07],["09-17",32.3,32.32,33.89,34.61],["09-18",29.8,30.79,31.96,33.03],["09-19",34.2,30.94,31.68,31.61],["09-20",32.6,32.10,33.77,33.59],["09-21",34.4,31.96,31.96,32.39],["09-22",35.6,31.57,33.69,33.11],["09-23",34.4,31.40,34.53,33.63],["09-24",34.5,31.44,33.56,33.50],["09-25",34.6,31.71,33.93,33.51],["09-26",36.6,31.86,33.98,33.55],["09-27",37.0,31.21,35.35,35.17],["09-28",37.4,31.29,35.45,35.28],["09-29",35.0,31.37,36.08,35.82],["09-30",34.6,31.64,35.08,34.97],["10-01",34.9,31.47,34.99,34.84],["10-02",35.2,32.09,34.79,35.10],["10-03",36.6,32.22,34.76,35.22],["10-04",37.4,31.73,35.35,36.01],["10-05",34.4,31.06,35.86,36.30],["10-06",36.6,31.91,34.54,34.84],["10-07",38.0,31.80,36.51,35.77],["10-08",35.9,31.12,37.46,36.47],["10-09",33.8,32.50,35.41,35.55],["10-10",36.4,31.64,35.02,34.74],["10-11",36.6,31.80,36.45,36.18],["10-12",37.4,32.31,36.40,36.20],["10-13",27.2,29.72,34.13,36.22],["10-14",30.6,30.17,29.44,31.55],["10-15",32.3,31.92,31.68,33.32],["10-16",34.9,31.47,34.99,34.84]];
+let tope=34,show={real:1,niv:1,dif:1,ridge:0};
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+document.querySelectorAll('#tgl .tbtn').forEach(b=>b.onclick=()=>{const k=b.dataset.k;show[k]=!show[k];b.setAttribute('aria-pressed',String(!!show[k]));draw()});
+document.getElementById('tope').oninput=e=>{tope=+e.target.value;document.getElementById('otope').textContent=tope.toFixed(1)+' °C';draw()};
+function fit(){const r=cv.getBoundingClientRect();if(r.width<4)return;const d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
+function mae(arr){const f=D.filter(d=>d[1]>=34);const s=f.reduce((a,d)=>a+Math.abs(d[arr]),0);return (s/f.length).toFixed(2)}
+function draw(){const r=cv.getBoundingClientRect(),w=r.width,h=r.height;if(w<10)return;ctx.clearRect(0,0,w,h);
+const lo=26,hi=39,Y=v=>h-22-((v-lo)/(hi-lo))*(h-36),X=i=>36+(i/(D.length-1))*(w-48);
+ctx.strokeStyle='rgba(110,140,180,.12)';for(let g=28;g<=38;g+=2){ctx.beginPath();ctx.moveTo(32,Y(g));ctx.lineTo(w-8,Y(g));ctx.stroke();ctx.fillStyle='#5f7385';ctx.font='8px JetBrains Mono';ctx.fillText(g+'°',6,Y(g)+3)}
+// tope band
+ctx.fillStyle='rgba(255,82,119,.06)';ctx.fillRect(32,0,w-40,Y(tope));
+ctx.strokeStyle='rgba(255,82,119,.6)';ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(32,Y(tope));ctx.lineTo(w-8,Y(tope));ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff9cb0';ctx.font='700 8.5px JetBrains Mono';ctx.textAlign='right';ctx.fillText('TOPE ENTRENAMIENTO '+tope.toFixed(1)+' °C',w-10,Y(tope)-5);ctx.textAlign='left';
+const cap=v=>Math.min(v,tope+0.4);
+function line(idx,color,dash,lw,capIt){ctx.save();ctx.beginPath();ctx.lineWidth=lw;ctx.strokeStyle=color;if(dash)ctx.setLineDash([6,4]);if(color==='#ff5277'){ctx.shadowColor=color;ctx.shadowBlur=0}
+D.forEach((d,i)=>{let v=d[idx];if(capIt)v=cap(v);i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))});ctx.stroke();ctx.restore()}
+if(show.real)line(1,'#38efff',0,2.6);
+if(show.niv)line(2,'#ff5277',1,2,true);
+if(show.dif)line(3,'#6ef0b4',1,2);
+if(show.ridge)line(4,'#ffc05c',1,1.6);
+ctx.fillStyle='#8fa3bd';ctx.font='8px JetBrains Mono';[0,7,15,23,31].forEach(i=>ctx.fillText(D[i][0],X(i)-10,h-7));
+// error readout (niveles capados por tope, diferencias intactas)
+const f=D.filter(d=>d[1]>=34);
+const eN=(f.reduce((a,d)=>a+Math.abs(Math.min(d[2],tope+0.4)-d[1]),0)/f.length).toFixed(2);
+const eD=(f.reduce((a,d)=>a+Math.abs(d[3]-d[1]),0)/f.length).toFixed(2);
+document.getElementById('err').innerHTML='RF niveles MAE <span style="color:#ff5277">'+eN+' °C</span> <small>vs</small> RF dif. MAE <span style="color:#6ef0b4">'+eD+' °C</span><br><small>'+f.length+' días de ola ≥34 °C · tope '+tope.toFixed(1)+' °C</small>';
+}
+addEventListener('resize',()=>{fit();draw()});fit();draw();})();
+</script>
+</body>
+</html>
