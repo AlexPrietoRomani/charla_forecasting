@@ -42,7 +42,7 @@ Ejecutar un benchmark forense y riguroso de 8 modelos sobre los datos reales de 
 ### SF3.3 Auditoría Estadística y Exportación
 - [X] **T3.3.1** Calcular métricas cuantitativas para horizontes $h=1$ y $h=7$ días.
 - [X] **T3.3.2** Aplicar prueba de Diebold-Mariano entre el modelo de menor RMSE y los demás. Identificar empates estadísticos ($p > 0.05$).
-- [X] **T3.3.3** Aplicar la regla de conclusión preestablecida: si hay empate estadístico, gana el más simple y parsimonioso (ExtraTrees en 0.11s).
+- [X] **T3.3.3** Aplicar la regla de conclusión preestablecida: si hay empate estadístico, gana el más simple y parsimonioso (ExtraTrees en 0.25s).
 - [X] **T3.3.4** Exportar `data/caso_1/benchmark_punchana.csv` y generar `data/caso_1/senamhi_forecast_7d.csv`.
 - [X] **T3.3.5** Reejecutar `notebooks/01_clima_senamhi.ipynb` garantizando que guarde todas las celdas con resultados verificables.
 

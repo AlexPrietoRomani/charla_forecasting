@@ -31,7 +31,7 @@ insights_p2 = {
     11: ('💡 SALTO COMPUTACIONAL', 'GraphCast sustituye la integración numérica explícita de ecuaciones diferenciales por propagación de mensajes sobre un grafo icosaédrico, reduciendo el gasto energético en 99.8%.'),
     12: ('💡 PROTOCOLO DE LIMPIEZA', 'Se aplicó interpolación estricta sin fuga de información futura sobre el 9.7% de huecos de la estación Punchana (-3.693°S, -73.255°W), preservando la dinámica térmica diaria.'),
     13: ('💡 PRUEBA DIEBOLD-MARIANO', 'El test estadístico confirma que ExtraTrees (RMSE 1.880 °C) empata con TimesFM (p = 0.275) y supera a LSTM profunda (p = 0.031) consumiendo 70 veces menos cómputo.'),
-    14: ('💡 GESTIÓN OPERATIVA', 'La banda P10–P90 capturó el 85.7% de las observaciones reales en la ventana de prueba a 7 días. La línea central sirve de referencia; la banda define el margen de seguridad.'),
+    14: ('💡 GESTIÓN OPERATIVA', 'La banda P10–P90 capturó el 71.4% de las observaciones reales (5 de 7 días) en la ventana de prueba a 7 días. La línea central sirve de referencia; la banda define el margen de seguridad.'),
     15: ('💡 CONSISTENCIA ARITMÉTICA', 'Se auditaron 24 compendios anuales de MIDAGRI/SIEA verificando la regla Producción = Superficie Cosechada × Rendimiento (Δ < 0.1%). Se excluyeron datos sintéticos.'),
     16: ('💡 PATOLOGÍA VEGETAL VS SATÉLITE', 'En la crisis de la roya (2012-2014), el rendimiento cayó -56.0% mientras el NDVI subió +1.4%. El hongo afectó los granos antes de defoliar el dosel; el sensor óptico fue ciego.'),
     17: ('💡 VALIDACIÓN EXPANSIVA HONESTA', 'El protocolo Walk-Forward entrena año a año sin ver el futuro: la combinación de variables fenológicas con tendencia redujo el MAE a 4.51 qq/ha frente a 5.32 de satélite solo.'),

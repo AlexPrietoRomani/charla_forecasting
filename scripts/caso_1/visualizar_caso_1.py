@@ -181,7 +181,7 @@ def plot_forecast_7d_cono():
     ax.set_ylim(21.5, 39.5)
     ax.set_title(
         "Caso 1: Pronóstico Operativo Multi-Modelo a 7 Días y Cono de Incertidumbre\n"
-        "Banda P10-P90 cubre 6 de 7 días (85.7%); divergencia inter-agencias de hasta 7.2 °C en olas de calor",
+        "Banda P10–P90 cubre 5 de 7 días (71.4%); los friajes del 28 y 30 dic caen fuera; divergencia inter-agencias de hasta 7.2 °C",
         fontsize=12, fontweight="bold", pad=12
     )
 

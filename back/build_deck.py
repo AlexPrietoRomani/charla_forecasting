@@ -60,7 +60,113 @@ def build_deck():
     data_json = json.dumps(data_payload, ensure_ascii=False)
     notes_json = json.dumps(get_speaker_notes(), ensure_ascii=False)
 
+    import base64
+    sim_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/5_Anatomia_de_la_senal_temporal_v3.html"
+    if not sim_path.exists():
+        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/5_Anatomia_de_la_senal_temporal_v3.html"
+    if not sim_path.exists():
+        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/5_anatomia_senal_temporal_mejorada.html"
+    if not sim_path.exists():
+        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/5_anatomia_senal_temporal_mejorada.html"
+    if not sim_path.exists():
+        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/anatomia_senal_temporal_mejorada.html"
+    if not sim_path.exists():
+        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/5_anatom_a_ontol_gica_f_sica_vs_ruido.html"
+    if not sim_path.exists():
+        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/anatom_a_ontol_gica_f_sica_vs_ruido.html"
+    if sim_path.exists():
+        sim_bytes = sim_path.read_bytes()
+        b64_sim_html = base64.b64encode(sim_bytes).decode("ascii")
+    else:
+        b64_sim_html = ""
+
+    era1_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/6_Era_1_La_parsimonia_lineal_v3.html"
+    if not era1_path.exists():
+        era1_path = BASE_DIR / "docs/notebooklm/seccion_1/6_Era_1_La_parsimonia_lineal_v3.html"
+    if not era1_path.exists():
+        era1_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/6_Era_1_La_parsimonia_lineal.html"
+    if not era1_path.exists():
+        era1_path = BASE_DIR / "docs/notebooklm/seccion_1/6_Era_1_La_parsimonia_lineal.html"
+    if era1_path.exists():
+        era1_bytes = era1_path.read_bytes()
+        b64_era1_html = base64.b64encode(era1_bytes).decode("ascii")
+    else:
+        b64_era1_html = ""
+
+    era2_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/7_Era_2_El_puente_tabular.html"
+    if not era2_path.exists():
+        era2_path = BASE_DIR / "docs/notebooklm/seccion_1/7_Era_2_El_puente_tabular.html"
+    if era2_path.exists():
+        era2_bytes = era2_path.read_bytes()
+        b64_era2_html = base64.b64encode(era2_bytes).decode("ascii")
+    else:
+        b64_era2_html = ""
+
+    era3_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/8_Era_3_Deep_Learning_y_Parches.html"
+    if not era3_path.exists():
+        era3_path = BASE_DIR / "docs/notebooklm/seccion_1/8_Era_3_Deep_Learning_y_Parches.html"
+    if era3_path.exists():
+        era3_bytes = era3_path.read_bytes()
+        b64_era3_html = base64.b64encode(era3_bytes).decode("ascii")
+    else:
+        b64_era3_html = ""
+
+    era4_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/9_Era_4_Modelos_Fundacionales_Zero_Shot.html"
+    if not era4_path.exists():
+        era4_path = BASE_DIR / "docs/notebooklm/seccion_1/9_Era_4_Modelos_Fundacionales_Zero_Shot.html"
+    if era4_path.exists():
+        era4_bytes = era4_path.read_bytes()
+        b64_era4_html = base64.b64encode(era4_bytes).decode("ascii")
+    else:
+        b64_era4_html = ""
+
+    cono_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html"
+    if not cono_path.exists():
+        cono_path = BASE_DIR / "docs/notebooklm/seccion_1/10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html"
+    if cono_path.exists():
+        cono_bytes = cono_path.read_bytes()
+        b64_cono_html = base64.b64encode(cono_bytes).decode("ascii")
+    else:
+        b64_cono_html = ""
+
+    decision_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html"
+    if not decision_path.exists():
+        decision_path = BASE_DIR / "docs/notebooklm/seccion_1/11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html"
+    if decision_path.exists():
+        decision_bytes = decision_path.read_bytes()
+        b64_decision_html = base64.b64encode(decision_bytes).decode("ascii")
+    else:
+        b64_decision_html = ""
+
+    # Prototipos Sección 3 (Diapositivas 19 a 23)
+    p19_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/19_c_mo_el_agro_invent_el_forecasting.html"
+    b64_p19_html = base64.b64encode(p19_path.read_bytes()).decode("ascii") if p19_path.exists() else ""
+
+    p20_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/20_del_almanaque_al_sat_lite.html"
+    b64_p20_html = base64.b64encode(p20_path.read_bytes()).decode("ascii") if p20_path.exists() else ""
+
+    p21_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/21_f_sica_biol_gica_y_el_l_mite_algor_tmico.html"
+    b64_p21_html = base64.b64encode(p21_path.read_bytes()).decode("ascii") if p21_path.exists() else ""
+
+    p22_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/22_reloj_fenol_gico_del_caf.html"
+    b64_p22_html = base64.b64encode(p22_path.read_bytes()).decode("ascii") if p22_path.exists() else ""
+
+    p23_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/23_precisi_n_actual_y_las_tres_trampas.html"
+    b64_p23_html = base64.b64encode(p23_path.read_bytes()).decode("ascii") if p23_path.exists() else ""
+
     branding = get_branding()
+    branding["b64_sim_html"] = b64_sim_html
+    branding["b64_era1_html"] = b64_era1_html
+    branding["b64_era2_html"] = b64_era2_html
+    branding["b64_era3_html"] = b64_era3_html
+    branding["b64_era4_html"] = b64_era4_html
+    branding["b64_cono_html"] = b64_cono_html
+    branding["b64_decision_html"] = b64_decision_html
+    branding["b64_p19_html"] = b64_p19_html
+    branding["b64_p20_html"] = b64_p20_html
+    branding["b64_p21_html"] = b64_p21_html
+    branding["b64_p22_html"] = b64_p22_html
+    branding["b64_p23_html"] = b64_p23_html
     b64_header_logo = branding["b64_header"]
     b64_dw_logo = branding["b64_dw"]
     qr_svg = branding["qr_svg"]
@@ -131,7 +237,7 @@ def build_deck():
       </span>
     </div>
     <div style="width:1px; height:18px; background:rgba(18, 200, 252, 0.25); margin:0 4px;"></div>
-    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 23</div>
+    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 30</div>
     <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Apertura · Portada</div>
   </div>
 
@@ -170,7 +276,7 @@ def build_deck():
 <!-- SCRIPTS DE NAVEGACIÓN Y VISUALES -->
 <script>
   let currentSlide = 1;
-  const totalSlides = 23;
+  const totalSlides = 30;
 
   const notesBySlide = {notes_json};
 
@@ -195,6 +301,13 @@ def build_deck():
           history.replaceState(null, "", "#" + index);
         }}
       }} catch (e) {{}}
+
+      const ifr = target.querySelector("iframe");
+      if (ifr && ifr.contentWindow) {{
+        try {{
+          ifr.contentWindow.postMessage({{ type: "activate" }}, "*");
+        }} catch (err) {{}}
+      }}
 
       initSlideVisuals(index);
     }}
@@ -226,6 +339,41 @@ def build_deck():
       modal.classList.remove("active");
     }}
   }}
+
+  window.addEventListener("message", (e) => {{
+    if (e.data && e.data.type === "deck_key") {{
+      const key = e.data.key;
+      if (key === "ArrowRight" || key === "PageDown") {{
+        nextSlide();
+      }} else if (key === "ArrowLeft" || key === "PageUp") {{
+        prevSlide();
+      }} else if (key === "Home") {{
+        updateSlide(1);
+      }} else if (key === "End") {{
+        updateSlide(totalSlides);
+      }} else if (key.toLowerCase() === "n") {{
+        toggleSpeakerNotes();
+      }} else if (key.toLowerCase() === "d") {{
+        toggleDarkMode();
+      }} else if (key.toLowerCase() === "f") {{
+        if (!document.fullscreenElement) {{
+          document.documentElement.requestFullscreen();
+        }} else {{
+          document.exitFullscreen();
+        }}
+      }} else if (key === "Escape") {{
+        closeLightbox();
+      }}
+    }}
+  }});
+
+  window.addEventListener("resize", () => {{
+    document.querySelectorAll(".slide.active iframe").forEach(ifr => {{
+      try {{
+        ifr.contentWindow.postMessage({{ type: "resize" }}, "*");
+      }} catch (err) {{}}
+    }});
+  }});
 
   window.addEventListener("keydown", (e) => {{
     if (e.key === "Escape") {{
@@ -444,8 +592,8 @@ def build_deck():
         renderAlphaBars(0.35);
       }}
 
-      // Slide 10: Experimento Extrapolación
-      if (idx === 10 && !charts["extrap"]) {{
+      // Slide 14: Experimento Extrapolación (Antes diapo 10)
+      if (idx === 14 && !charts["extrap"]) {{
         const canvas = document.getElementById("chartExtrap") || document.getElementById("chartExtrapolacion");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -501,8 +649,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 10: Discrepancia NOAA vs ECMWF
-      if (idx === 10 && !charts["noaaEcmwf"]) {{
+      // Slide 14: Discrepancia NOAA vs ECMWF (Antes diapo 10)
+      if (idx === 14 && !charts["noaaEcmwf"]) {{
         const canvas = document.getElementById("chartNoaaEcmwf");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -538,8 +686,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 12: Serie histórica reciente SENAMHI
-      if (idx === 12 && !charts["senamhiReciente"]) {{
+      // Slide 16: Serie histórica reciente SENAMHI (Antes diapo 12)
+      if (idx === 16 && !charts["senamhiReciente"]) {{
         const canvas = document.getElementById("chartSenamhiReciente");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -580,8 +728,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 11: Benchmark Punchana
-      if (idx === 11 && !charts["benchmark"]) {{
+      // Slide 15: Benchmark Punchana (Antes diapo 11)
+      if (idx === 15 && !charts["benchmark"]) {{
         const canvas = document.getElementById("chartBenchmark");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -632,8 +780,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 12: Demo Pronóstico 7 Días con Bandas
-      if (idx === 12 && !charts["demo7d"]) {{
+      // Slide 16: Demo Pronóstico 7 Días con Bandas (Antes diapo 12)
+      if (idx === 16 && !charts["demo7d"]) {{
         const canvas = document.getElementById("chartDemo7d");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -751,8 +899,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 15: Jaén Histórico
-      if (idx === 15 && !charts["jaenHist"]) {{
+      // Slide 19: Jaén Histórico (Antes diapo 15)
+      if (idx === 19 && !charts["jaenHist"]) {{
         const canvas = document.getElementById("chartJaenHistorico");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -792,8 +940,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 19: Scatter NDVI vs Rendimiento
-      if (idx === 19 && !charts["scatterNdvi"]) {{
+      // Slide 26: Scatter NDVI vs Rendimiento
+      if (idx === 26 && !charts["scatterNdvi"]) {{
         const canvas = document.getElementById("chartScatterNdvi");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -847,8 +995,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 20: Demo 2 Validación expansiva Jaén
-      if (idx === 20 && !charts["demoJaen"]) {{
+      // Slide 27: Demo 2 Validación expansiva Jaén
+      if (idx === 27 && !charts["demoJaen"]) {{
         switchJaenViewMode("trajectory");
       }}
     }} catch (err) {{
@@ -1130,6 +1278,25 @@ def build_deck():
     }}
   }}
 
+  function switchFenologiaView(mode) {{
+    const relojBox = document.getElementById("fenologiaRelojContainer");
+    const trampasBox = document.getElementById("fenologiaTrampasContainer");
+    const btnReloj = document.getElementById("btnFenoReloj");
+    const btnTrampas = document.getElementById("btnFenoTrampas");
+
+    if (mode === "trampas") {{
+      if (relojBox) relojBox.style.display = "none";
+      if (trampasBox) trampasBox.style.display = "flex";
+      if (btnReloj) btnReloj.classList.remove("active");
+      if (btnTrampas) btnTrampas.classList.add("active");
+    }} else {{
+      if (trampasBox) trampasBox.style.display = "none";
+      if (relojBox) relojBox.style.display = "flex";
+      if (btnTrampas) btnTrampas.classList.remove("active");
+      if (btnReloj) btnReloj.classList.add("active");
+    }}
+  }}
+
   function toggleDataset(dsIndex) {{
     if (!charts["demo7d"]) return;
     const isHidden = charts["demo7d"].isDatasetVisible(dsIndex);
@@ -1162,7 +1329,11 @@ def build_deck():
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print(f"Deck interactivo de 23 diapositivas generado con éxito en: {output_path} ({len(html_content)} bytes)")
+    index_path = str(BASE_DIR / "index.html")
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+
+    print(f"Deck interactivo de 30 diapositivas generado con éxito en: {output_path} e {index_path} ({len(html_content)} bytes)")
 
 if __name__ == "__main__":
     build_deck()

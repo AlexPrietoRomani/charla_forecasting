@@ -174,12 +174,12 @@
 - **Insignia:** `EVIDENCIA` | **Tiempo sugerido:** 3.0 min
 - **Tesis:** Sometimos a prueba 8 modelos sobre un holdout ciego de 90 días en Punchana. 70 veces más cómputo no compra mayor precisión en una sola estación.
 - **Puntos clave:**
-  1. *Ganador por parsimonia:* **ExtraTrees** logra RMSE de **1.880 °C** en apenas **0.11 segundos** de CPU.
+  1. *Ganador por parsimonia:* **ExtraTrees** logra RMSE de **1.880 °C** en apenas **0.25 segundos** de CPU.
   2. *Empates Diebold-Mariano (\(p > 0.05\)):* Random Forest (1.885 °C, \(p=0.918\)), ARIMA (1.964 °C, \(p=0.151\)) y TimesFM 200M (1.965 °C, \(p=0.275\)) empatan estadísticamente.
   3. *Sorpresa Zero-Shot:* TimesFM logró el menor MAE del benchmark (**1.392 °C**) sin conocer la serie previamente. Redes profundas (LSTM PyTorch) resultaron estadísticamente inferiores (2.054 °C, \(p=0.029\)).
 - **Frase-clave:** *"Para una sola estación, 70 veces más cómputo no compra precisión: la parsimonia manda, aunque el Zero-Shot ya compite sin haber visto la serie."*
 - **Visual:** Gráfico de barras horizontales de RMSE ordenadas, con codificación de colores para el ganador, empates estadísticos e inferiores.
-- **Guion del orador:** "Aquí está el resultado sin filtros. ExtraTrees en 0.11 segundos de CPU empató estadísticamente con TimesFM de Google de 200 millones de parámetros y con ARIMA. La regla de parsimonia manda: para una sola estación, no gastes cómputo innecesario. Sin embargo, TimesFM logró el menor MAE en puro zero-shot."
+- **Guion del orador:** "Aquí está el resultado sin filtros. ExtraTrees en 0.25 segundos de CPU empató estadísticamente con TimesFM de Google de 200 millones de parámetros y con ARIMA. La regla de parsimonia manda: para una sola estación, no gastes cómputo innecesario. Sin embargo, TimesFM logró el menor MAE en puro zero-shot."
 
 ---
 
@@ -244,7 +244,7 @@
 - **Tesis:** Principios metodológicos destilados de 2,557 días de meteorología amazónica y 24 campañas cafetaleras reales auditadas.
 - **Puntos clave:**
   1. *Respeta la flecha del tiempo:* Jamás apliques k-fold aleatorio en series temporales.
-  2. *Baseline parsimonioso primero:* ExtraTrees y ARIMA empataron con modelos de 200M en 0.11s de cómputo.
+  2. *Baseline parsimonioso primero:* ExtraTrees y ARIMA empataron con modelos de 200M en 0.25s de cómputo.
   3. *Bandas probabilísticas obligatorias:* Reportar un punto esconde el riesgo.
   4. *La física manda antes que el código:* Conoce las limitaciones biofísicas de tus sensores (saturación NDVI).
   5. *Complejidad justificada por escala:* Redes profundas brillan con millones de series, no en sensores locales individuales.

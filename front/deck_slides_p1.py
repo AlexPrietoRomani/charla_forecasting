@@ -3,6 +3,13 @@ def get_slides_part1(branding=None):
         branding = {}
     b64_header = branding.get("b64_header", "")
     b64_profile = branding.get("b64_profile", "")
+    b64_sim_html = branding.get("b64_sim_html", "")
+    b64_era1_html = branding.get("b64_era1_html", "")
+    b64_era2_html = branding.get("b64_era2_html", "")
+    b64_era3_html = branding.get("b64_era3_html", "")
+    b64_era4_html = branding.get("b64_era4_html", "")
+    b64_cono_html = branding.get("b64_cono_html", "")
+    b64_decision_html = branding.get("b64_decision_html", "")
 
     slides = """
   <!-- ========================================== -->
@@ -128,185 +135,72 @@ def get_slides_part1(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 05: ANATOMÍA FÍSICA VS RUIDO (page-05.png)              -->
+  <!-- DIAPO 05: ANATOMÍA ONTOLÓGICA 3D (SIMULADOR INTERACTIVO TOTAL) -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="5" data-act="Acto 1 · Anatomía de la Señal" data-time="2.0 min">
-    <h2 class="slide-main-title display">Anatomía ontológica: física vs ruido</h2>
-    <div class="content-insight-layout">
-      <div class="content-bullets-col">
-        <div style="font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:#12C8FC; margin-bottom:12px;" class="mono">
-          Y(t) = T(t) + S(t) + C(t) + ε(t)
-        </div>
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Tendencia Secular T(t):</strong> Deriva física de fondo (calentamiento regional a +0.20 °C/década, envejecimiento instrumental o cambio de uso de suelo).</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Estacionalidad Solar S(t):</strong> Armónicos rígidos de 365 días impuestos por la mecánica orbital de la Tierra y los ciclos solares.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Macro-ciclo Acoplado C(t):</strong> Oscilaciones aperiódicas océano-atmósfera (como El Niño-Oscilación del Sur cada 3 a 7 años).</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Ruido Estocástico ε(t):</strong> Turbulencia convectiva irreducible. Forzar a una red neuronal profunda a memorizar el ruido residual ε(t) garantiza sobreajuste catastrófico en producción.</div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="archetype-idea-card">
-        <div class="archetype-idea-icon">💡</div>
-        <div class="archetype-idea-label">IDEA CLAVE</div>
-        <p class="archetype-idea-text">
-          Si no separas la estacionalidad, tu modelo más complejo solo estará memorizando qué mes del año es. La IA no puede conjurar física donde solo hay ruido estocástico.
-        </p>
-      </div>
+  <section class="slide" data-index="5" data-act="Acto 1 · Anatomía de la Señal" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_SIM_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide5"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 06: EVOLUCIÓN DE PARADIGMAS (page-06.png)               -->
+  <!-- DIAPO 06: ERA 1: LA PARSIMONIA LINEAL (SIMULADOR INTERACTIVO) -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="6" data-act="Acto 1 · Evolución de Paradigmas" data-time="2.0 min">
-    <h2 class="slide-main-title display">Evolución: de ARIMA a Foundation Models</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>1. Clásicos Analíticos (1838–1970s):</strong> Verhulst (techo biológico L) y Holt-Winters / ARIMA (memoria geométrica α(1-α)ᵏ). Inferencia en microsegundos sobre CPU sin GPUs.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>2. El Puente Tabular (2000s–2010s):</strong> Convertir tiempo en rezagos (lags 1..14). Random Forest y LightGBM dominaron Walmart M5 (30,490 series). Patología: no pueden extrapolar fuera de rango.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>3. Deep Learning Secuencial (2018–2023):</strong> De LSTM (cuello de botella recurrente) a PatchTST (agrupar 16 pasos como palabras, reduciendo memoria y cómputo 8×).</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>4. Foundation Models &amp; Grafos (2024–2026):</strong> Chronos (Amazon) y TimesFM (Google 200M) para Zero-Shot masivo; GraphCast (DeepMind) predice el clima global en 60s en TPU.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Makridakis Competitions (M3, M4, M5) · Hyndman &amp; Athanasopoulos (2021) · Google &amp; Amazon Research (2024)</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:12px; height:100%;">
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-cyan); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-cyan); font-weight:700; font-size:11px;" class="mono">ERA 1 · CLÁSICOS ANALÍTICOS</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">ARIMA &amp; Holt-Winters</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Parsimonia extrema, memoria geométrica, techos asintóticos e inferencia instantánea.</p>
-          </div>
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-blue); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-blue); font-weight:700; font-size:11px;" class="mono">ERA 2 · TABULAR &amp; ÁRBOLES</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">LightGBM &amp; Random Forest</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Rezagos temporales (lags 1..14). Ganadores de M5, pero colapsan en mesetas ante récords.</p>
-          </div>
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-purple); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-purple); font-weight:700; font-size:11px;" class="mono">ERA 3 · DEEP LEARNING</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">LSTM &amp; PatchTST</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Atención en parches temporales: trata el tiempo como palabras reduciendo costo 8×.</p>
-          </div>
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-magenta); display:flex; flex-direction:column; justify-content:center;">
-            <div style="color:var(--fest-magenta); font-weight:700; font-size:11px;" class="mono">ERA 4 · FOUNDATION &amp; GRAFOS</div>
-            <div style="font-weight:700; font-size:15px; margin:3px 0;">TimesFM, Chronos &amp; GraphCast</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Zero-Shot sin reentrenamiento local y grafos icosaédricos para dinámica de fluidos.</p>
-          </div>
-        </div>
-      </div>
+  <section class="slide" data-index="6" data-act="Acto 1 · Era 1: Clásicos Analíticos" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_ERA1_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide6"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 07: CONO DE INCERTIDUMBRE (page-06.png)                 -->
+  <!-- DIAPO 07: ERA 2: EL PUENTE TABULAR (SIMULADOR INTERACTIVO)    -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="7" data-act="Acto 1 · Cono de Incertidumbre" data-time="2.0 min">
-    <h2 class="slide-main-title display">La ilusión de la certeza: cono de incertidumbre</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>El sesgo puntual:</strong> Exigir a un modelo un escalar único (ŷ_t+h) es una ficción matemática que oculta el verdadero riesgo operacional.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Divergencia de Lyapunov:</strong> En sistemas caóticos y atmosféricos, los errores microscópicos se amplifican; la dispersión estocástica crece con σ_h ∝ √h.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Decisión estocástica:</strong> En horizontes h &gt; 7 días, toda decisión logística debe fundamentarse en abanicos Monte Carlo y bandas P10–P90, nunca en un valor escalar.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Simulación Estocástica Monte Carlo · Teorema del Atractor de Lorenz (1963)</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div class="chart-wrapper">
-          <svg viewBox="0 0 840 400" style="width:100%; height:100%;">
-            <defs>
-              <linearGradient id="coneGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#12C8FC" stop-opacity="0.08" />
-                <stop offset="50%" stop-color="#12C8FC" stop-opacity="0.25" />
-                <stop offset="100%" stop-color="#12C8FC" stop-opacity="0.45" />
-              </linearGradient>
-              <linearGradient id="innerConeGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#1E7BFF" stop-opacity="0.15" />
-                <stop offset="100%" stop-color="#1E7BFF" stop-opacity="0.35" />
-              </linearGradient>
-            </defs>
-            <line x1="50" y1="70" x2="720" y2="70" stroke="rgba(169,184,218,0.2)" stroke-dasharray="4" />
-            <line x1="50" y1="140" x2="720" y2="140" stroke="rgba(169,184,218,0.2)" stroke-dasharray="4" />
-            <line x1="50" y1="210" x2="720" y2="210" stroke="rgba(169,184,218,0.2)" stroke-dasharray="4" />
-            <line x1="50" y1="280" x2="720" y2="280" stroke="rgba(169,184,218,0.2)" stroke-dasharray="4" />
-            <line x1="50" y1="350" x2="720" y2="350" stroke="rgba(169,184,218,0.2)" stroke-dasharray="4" />
-            
-            <!-- Bandas de Incertidumbre -->
-            <path d="M 280 210 Q 480 180 690 70 L 690 350 Q 480 240 280 210 Z" fill="url(#coneGrad)" />
-            <path d="M 280 210 Q 480 195 690 130 L 690 290 Q 480 225 280 210 Z" fill="url(#innerConeGrad)" />
-            
-            <!-- Trayectoria Pasada -->
-            <path d="M 50 230 Q 120 180 180 220 T 280 210" fill="none" stroke="#FFFFFF" stroke-width="3.5" />
-            
-            <!-- Mediana Futura P50 -->
-            <path d="M 280 210 Q 480 210 690 210" fill="none" stroke="#12C8FC" stroke-width="2.5" stroke-dasharray="6 4" />
-            
-            <!-- Trayectorias Monte Carlo -->
-            <path d="M 280 210 Q 440 170 690 100" fill="none" stroke="#1E7BFF" stroke-width="1.4" opacity="0.8" />
-            <path d="M 280 210 Q 450 240 690 310" fill="none" stroke="#1E7BFF" stroke-width="1.4" opacity="0.8" />
-            <path d="M 280 210 Q 500 195 690 170" fill="none" stroke="#9B5CFF" stroke-width="1.2" opacity="0.8" />
-            <path d="M 280 210 Q 430 225 690 260" fill="none" stroke="#9B5CFF" stroke-width="1.2" opacity="0.8" />
-            
-            <!-- Línea de Presente t0 -->
-            <line x1="280" y1="40" x2="280" y2="360" stroke="#DC2626" stroke-width="2.2" stroke-dasharray="5 3" />
-            <text x="285" y="55" fill="#EF4444" font-size="12" font-family="IBM Plex Mono" font-weight="700">t₀ (PRESENTE)</text>
-            
-            <text x="60" y="360" fill="#A9B8DA" font-size="11" font-family="IBM Plex Mono">PASADO OBSERVADO</text>
-            <text x="400" y="360" fill="#12C8FC" font-size="11" font-family="IBM Plex Mono">CONO DE INCERTIDUMBRE (FUTURO)</text>
-            
-            <!-- Cuantiles -->
-            <text x="702" y="75" fill="#12C8FC" font-size="11" font-family="IBM Plex Mono" font-weight="700">P90 (+2.5σ)</text>
-            <text x="702" y="135" fill="#1E7BFF" font-size="10" font-family="IBM Plex Mono">P75</text>
-            <text x="702" y="214" fill="#12C8FC" font-size="11" font-family="IBM Plex Mono" font-weight="700">P50 (Mediana)</text>
-            <text x="702" y="295" fill="#1E7BFF" font-size="10" font-family="IBM Plex Mono">P25</text>
-            <text x="702" y="355" fill="#12C8FC" font-size="11" font-family="IBM Plex Mono" font-weight="700">P10 (-2.5σ)</text>
-            
-            <circle cx="280" cy="210" r="6" fill="#EF4444" class="anim-glow" />
-          </svg>
-        </div>
-      </div>
+  <section class="slide" data-index="7" data-act="Acto 1 · Era 2: El Puente Tabular" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_ERA2_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide7"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 08: SECCIÓN 02: CASO 1: IQUITOS SENAMHI (page-04.png)   -->
+  <!-- DIAPO 08: ERA 3: DEEP LEARNING Y PARCHES (SIMULADOR INTERACTIVO) -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="8" data-act="Acto 2 · Caso 1: Clima SENAMHI" data-time="1.0 min">
+  <section class="slide" data-index="8" data-act="Acto 1 · Era 3: Deep Learning" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_ERA3_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide8"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 09: ERA 4: FOUNDATION MODELS ZERO-SHOT (SIMULADOR INTERACTIVO) -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="9" data-act="Acto 1 · Era 4: Foundation Models" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(110, 240, 180, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_ERA4_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide9"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 10: EL CONO DE INCERTIDUMBRE (SIMULADOR INTERACTIVO)    -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="10" data-act="Acto 1 · Cono de Incertidumbre" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(255, 107, 107, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_CONO_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide10"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 11: ÁRBOL DE DECISIÓN DE ARQUITECTURA (SIMULADOR INTERACTIVO) -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="11" data-act="Acto 1 · Arquitectura de Decisión" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_DECISION_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide11"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 12: SECCIÓN 02: CASO 1: IQUITOS SENAMHI (page-04.png)   -->
+  <!-- ============================================================= -->
+  <section class="slide slide-archetype-section" data-index="12" data-act="Acto 2 · Caso 1: Clima SENAMHI" data-time="1.0 min">
     <div class="section-huge-num">02</div>
     <h2 class="section-title display">Caso 1: Predicción de temperatura en Iquitos</h2>
     <p class="section-desc">
@@ -315,9 +209,9 @@ def get_slides_part1(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 09: DATOS QUE IMPORTAN: SENAMHI (page-07.png)           -->
+  <!-- DIAPO 13: DATOS QUE IMPORTAN: SENAMHI (page-07.png)           -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="9" data-act="Acto 2 · Datos SENAMHI" data-time="1.5 min">
+  <section class="slide" data-index="13" data-act="Acto 2 · Datos SENAMHI" data-time="1.5 min">
     <h2 class="slide-main-title display">Datos que importan: Estación SENAMHI Punchana</h2>
     <p class="kpis-subtitle">Cifras clave de la serie climatológica de Iquitos (2018–2024).</p>
     <div class="kpis-3col-grid">
@@ -338,9 +232,9 @@ def get_slides_part1(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 10: LA TRAMPA DE LA NO LINEALIDAD (page-06.png)         -->
+  <!-- DIAPO 14: LA TRAMPA DE LA NO LINEALIDAD (page-06.png)         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="10" data-act="Acto 2 · Extrapolación de Árboles" data-time="2.0 min">
+  <section class="slide" data-index="14" data-act="Acto 2 · Extrapolación de Árboles" data-time="2.0 min">
     <h2 class="slide-main-title display">La trampa de los árboles: meseta vs diferencias</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -369,4 +263,15 @@ def get_slides_part1(branding=None):
     </div>
   </section>
 """
-    return slides.replace("__HEADER_LOGO__", b64_header).replace("__PROFILE_IMG__", b64_profile)
+    return (
+        slides.replace("__HEADER_LOGO__", b64_header)
+        .replace("__PROFILE_IMG__", b64_profile)
+        .replace("__B64_SIM_HTML__", b64_sim_html)
+        .replace("__B64_ERA1_HTML__", b64_era1_html)
+        .replace("__B64_ERA2_HTML__", b64_era2_html)
+        .replace("__B64_ERA3_HTML__", b64_era3_html)
+        .replace("__B64_ERA4_HTML__", b64_era4_html)
+        .replace("__B64_CONO_HTML__", b64_cono_html)
+        .replace("__B64_DECISION_HTML__", b64_decision_html)
+    )
+

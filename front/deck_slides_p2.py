@@ -7,12 +7,17 @@ def get_slides_part2(branding=None):
     b64_qr = branding.get("b64_qr", "")
     anatomy_c1_svg = branding.get("anatomy_c1_svg", "")
     anatomy_c2_svg = branding.get("anatomy_c2_svg", "")
+    b64_p19_html = branding.get("b64_p19_html", "")
+    b64_p20_html = branding.get("b64_p20_html", "")
+    b64_p21_html = branding.get("b64_p21_html", "")
+    b64_p22_html = branding.get("b64_p22_html", "")
+    b64_p23_html = branding.get("b64_p23_html", "")
 
-    return f"""
+    html = f"""
   <!-- ============================================================= -->
-  <!-- DIAPO 11: BENCHMARK RIGUROSO EN PUNCHANA (page-06.png)        -->
+  <!-- DIAPO 15: BENCHMARK RIGUROSO EN PUNCHANA (page-06.png)        -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="11" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min">
+  <section class="slide" data-index="15" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min">
     <h2 class="slide-main-title display">Benchmark de 14 modelos: Tierra vs Supercómputo</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -57,9 +62,9 @@ def get_slides_part2(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 12: PRONÓSTICO 7 DÍAS EN VIVO (page-06.png)            -->
+  <!-- DIAPO 16: PRONÓSTICO 7 DÍAS EN VIVO (page-06.png)            -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="12" data-act="Acto 2 · Pronóstico 7 Días" data-time="2.0 min">
+  <section class="slide" data-index="16" data-act="Acto 2 · Pronóstico 7 Días" data-time="2.0 min">
     <h2 class="slide-main-title display">Demostración: pronóstico operacional a 7 días</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -70,7 +75,7 @@ def get_slides_part2(branding=None):
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
-            <div><strong>Cobertura real:</strong> 6 de los 7 días observados (85.7%) cayeron dentro del intervalo de confianza proyectado.</div>
+            <div><strong>Cobertura real:</strong> 5 de los 7 días observados (71.4%) cayeron dentro del intervalo de confianza proyectado; los 2 fallos fueron los friajes de fin de año (28 y 30 dic).</div>
           </li>
           <li class="standard-bullet-item">
             <span class="standard-bullet-dot"></span>
@@ -97,9 +102,9 @@ def get_slides_part2(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 13: DEMO / CÓDIGO (page-08.png)                         -->
+  <!-- DIAPO 17: DEMO / CÓDIGO (page-08.png)                         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="13" data-act="Acto 2 · Código del Modelo" data-time="2.0 min">
+  <section class="slide" data-index="17" data-act="Acto 2 · Código del Modelo" data-time="2.0 min">
     <h2 class="slide-main-title display">Demo / Código: Pipeline de forecasting</h2>
     <div class="code-layout">
       <div class="code-editor-box">
@@ -123,7 +128,7 @@ df[<span style="color:#12C8FC;">'delta_tmax'</span>] = df[<span style="color:#12
 <span style="color:#9B5CFF;">for</span> k <span style="color:#9B5CFF;">in</span> [<span style="color:#FFC857;">1</span>, <span style="color:#FFC857;">2</span>, <span style="color:#FFC857;">3</span>, <span style="color:#FFC857;">7</span>, <span style="color:#FFC857;">14</span>]:
     df[<span style="color:#12C8FC;">f'lag_{{k}}'</span>] = df[<span style="color:#12C8FC;">'delta_tmax'</span>].shift(k)
 
-<span style="color:#6C7AA6;"># 3. Entrenamiento ultrarrápido y parsimonioso (CPU 0.11s)</span>
+<span style="color:#6C7AA6;"># 3. Entrenamiento ultrarrápido y parsimonioso (CPU 0.25s)</span>
 model = <span style="color:#2EE6A6;">ExtraTreesRegressor</span>(n_estimators=<span style="color:#FFC857;">100</span>, random_state=<span style="color:#FFC857;">42</span>)
 model.<span style="color:#2EE6A6;">fit</span>(X_train, y_train_delta)
 
@@ -154,7 +159,7 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
           <div class="code-step-badge">3</div>
           <div>
             <div class="code-step-title">Resultado</div>
-            <div class="code-step-desc">Inferencia instantánea en 0.11s, reduciendo el MAE a 1.15 °C con cobertura empírica del 85.7%.</div>
+            <div class="code-step-desc">Entrenamiento en 0.25s de CPU y MAE de 1.466 °C en el holdout de 90 días; el cono a 7 días cubrió el 71.4% de los días.</div>
           </div>
         </div>
       </div>
@@ -162,110 +167,66 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 14: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO (page-04.png) -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="14" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
+  <!-- DIAPO 18: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO            -->
+  <!-- ============================================================= -->
+  <section class="slide slide-archetype-section" data-index="18" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
     <div class="section-huge-num">03</div>
-    <h2 class="section-title display">Cómo se aplican las series temporales en el agro</h2>
+    <h2 class="section-title display">Series temporales en el agro: del almanaque al satélite</h2>
     <p class="section-desc">
-      Por qué la biología vegetal y la fenología imponen leyes únicas al forecasting. Dinámicas de ultrabaja frecuencia, retrasos de meses entre el estímulo y la respuesta, y por qué el sobreajuste es letal sin comprender la fisiología del cultivo.
+      Cómo la agricultura inventó el forecasting hace 10,000 años y evolucionó de la observación astronómica empírica a la teledetección multiespectral continua. La física biológica, los desfases fenológicos (τ = 6–8 meses) y los límites computacionales en sistemas vivos (p ≫ N).
     </p>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 15: FÍSICA BIOLÓGICA Y RETOS DEL AGRO (page-05.png)     -->
+  <!-- DIAPO 19: CÓMO EL AGRO INVENTÓ EL FORECASTING (PROTOTIPO)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="15" data-act="Acto 3 · Física Biológica del Agro" data-time="2.0 min">
-    <h2 class="slide-main-title display">Series temporales en el agro: física biológica</h2>
-    <div class="content-insight-layout">
-      <div class="content-bullets-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Retrasos Fenológicos Biológicos:</strong> El rendimiento final de una cosecha no depende del clima de ayer, sino de los eventos durante la floración ocurrida 6 a 8 meses atrás.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Efectos Umbral Acumulados:</strong> Los grados día de desarrollo (GDD) y el déficit de presión de vapor (VPD) tienen impactos no lineales con puntos de quiebre irreversibles.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Series de Ultrabaja Frecuencia:</strong> A diferencia de millones de ticks financieros o datos diarios de clima, en agricultura solo existe 1 dato de cosecha por año (24 datos en 24 años).</div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="archetype-idea-card">
-        <div class="archetype-idea-icon">💡</div>
-        <div class="archetype-idea-label">IDEA CLAVE</div>
-        <p class="archetype-idea-text">
-          En series agrícolas de baja frecuencia (N=24 años), el sobreajuste es fatal. Modelar la fenología biológica y los períodos críticos de estrés hídrico reduce el error 4 veces más que agregar capas de Deep Learning.
-        </p>
-      </div>
+  <section class="slide" data-index="19" data-act="Acto 3 · Historia del Agro-Forecasting" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P19_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide19"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 16: EL RELOJ FENOLÓGICO Y CALENDARIO VEGETAL (page-06.png)-->
+  <!-- DIAPO 20: DEL ALMANAQUE AL SATÉLITE (PROTOTIPO)               -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="16" data-act="Acto 3 · Reloj Fenológico" data-time="2.0 min">
-    <h2 class="slide-main-title display">El reloj fenológico: la física del calendario vegetal</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Floración Crítica (Ago–Oct):</strong> Temperaturas máximas &gt; 32 °C provocan esterilidad de polen y aborto floral masivo. La sequía en esta ventana destruye el rendimiento 8 meses antes de cosechar.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Llenado de Fruto (Nov–Feb):</strong> Demanda hídrica elevada; el déficit hídrico detiene el crecimiento del fruto y reduce drásticamente el peso del grano pergamino.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Cosecha y Secado (Mar–Jul):</strong> Las lluvias torrenciales retrasan la recolección, inducen hongos y pudrición; el clima seco favorece el beneficio y la calidad de taza.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Fisiología del Café Arábica · Cenicafé / MIDAGRI · Barbosa et al. (2021)</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div style="display:flex; flex-direction:column; gap:12px; height:100%; justify-content:center;">
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-magenta); display:flex; flex-direction:column;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--fest-magenta); font-weight:700; font-size:11px;" class="mono">VENTANA 1 · AGOSTO - OCTUBRE</span>
-              <span style="font-size:11px; background:rgba(224,64,251,0.15); color:#E040FB; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">MÁXIMA SENSIBILIDAD</span>
-            </div>
-            <div style="font-weight:700; font-size:15px; margin:4px 0;">Floración &amp; Cuajado de Fruto</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Un déficit hídrico de 2 semanas causa aborto floral severo. La anomalía de lluvia en esta ventana explica el 56% de la varianza de cosecha final (r = 0.751).</p>
-          </div>
-
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-blue); display:flex; flex-direction:column;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--fest-blue); font-weight:700; font-size:11px;" class="mono">VENTANA 2 · NOVIEMBRE - FEBRERO</span>
-              <span style="font-size:11px; background:rgba(30,123,255,0.15); color:#1E7BFF; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">ACUMULACIÓN BIOMASA</span>
-            </div>
-            <div style="font-weight:700; font-size:15px; margin:4px 0;">Llenado de Grano &amp; Expansión Celular</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">Se determina el peso volumétrico y calibre. La fotosíntesis activa demanda transpiración sin estrés de presión de vapor (VPD).</p>
-          </div>
-
-          <div style="background:var(--bg-dark-sub); padding:16px; border-radius:12px; border-left:4px solid var(--fest-cyan); display:flex; flex-direction:column;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--fest-cyan); font-weight:700; font-size:11px;" class="mono">VENTANA 3 · MARZO - JULIO</span>
-              <span style="font-size:11px; background:rgba(18,200,252,0.15); color:#12C8FC; padding:2px 8px; border-radius:10px; font-weight:600;" class="mono">COSECHA Y BENEFICIO</span>
-            </div>
-            <div style="font-weight:700; font-size:15px; margin:4px 0;">Maduración, Recolección &amp; Secado</div>
-            <p style="font-size:12px; color:var(--text-faint); line-height:1.4;">El calor seco acelera la maduración y facilita el secado al sol. Las lluvias excesivas pudren cerezas y causan caída de frutos.</p>
-          </div>
-        </div>
-      </div>
+  <section class="slide" data-index="20" data-act="Acto 3 · Del Almanaque al Satélite" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P20_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide20"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 17: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
+  <!-- DIAPO 21: FÍSICA BIOLÓGICA Y EL LÍMITE ALGORÍTMICO (PROTOTIPO)-->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="17" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
+  <section class="slide" data-index="21" data-act="Acto 3 · Biofísica &amp; Límites" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P21_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide21"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 22: RELOJ FENOLÓGICO DEL CAFÉ (PROTOTIPO)               -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="22" data-act="Acto 3 · Reloj Fenológico del Café" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(46, 230, 166, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P22_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide22"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 23: PRECISIÓN ACTUAL Y LAS TRES TRAMPAS (PROTOTIPO)     -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="23" data-act="Acto 3 · Las Tres Trampas" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(255, 107, 107, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P23_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide23"></iframe>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 24: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
+  <!-- ============================================================= -->
+  <section class="slide slide-archetype-section" data-index="24" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
     <div class="section-huge-num">04</div>
     <h2 class="section-title display">Caso 2: Predicción de rendimiento usando NDVI</h2>
     <p class="section-desc">
@@ -274,9 +235,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 18: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
+  <!-- DIAPO 25: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="18" data-act="Acto 4 · Datos Jaén" data-time="1.5 min">
+  <section class="slide" data-index="25" data-act="Acto 4 · Datos Jaén" data-time="1.5 min">
     <h2 class="slide-main-title display">Datos que importan: 24 Campañas de Café en Jaén</h2>
     <p class="kpis-subtitle">Cifras del sistema agroalimentario en la cuenca cafetalera de Jaén (2000–2024).</p>
     <div class="kpis-3col-grid">
@@ -297,9 +258,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 19: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
+  <!-- DIAPO 26: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="19" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min">
+  <section class="slide" data-index="26" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min">
     <h2 class="slide-main-title display">La trampa del satélite: NDVI vs estrés hídrico</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -343,9 +304,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 20: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
+  <!-- DIAPO 27: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="20" data-act="Acto 4 · Validación Jaén" data-time="2.0 min">
+  <section class="slide" data-index="27" data-act="Acto 4 · Validación Jaén" data-time="2.0 min">
     <h2 class="slide-main-title display">Demostración: validación Walk-Forward en Jaén</h2>
     <div class="graphic-layout">
       <div class="graphic-info-col">
@@ -382,9 +343,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 21: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
+  <!-- DIAPO 28: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="21" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
+  <section class="slide slide-archetype-section" data-index="28" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
     <div class="section-huge-num">05</div>
     <h2 class="section-title display">Conclusiones y lecciones aprendidas</h2>
     <p class="section-desc">
@@ -393,16 +354,16 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 22: CONCLUSIONES (page-09.png)                         -->
+  <!-- DIAPO 29: CONCLUSIONES (page-09.png)                         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="22" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
+  <section class="slide" data-index="29" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
     <h2 class="slide-main-title display">Conclusiones</h2>
     <div class="conclusions-3col-grid">
       <div class="conclusion-card card-1">
         <div class="conclusion-icon-box">🎯</div>
         <div class="conclusion-title display">Respeta la causalidad del tiempo</div>
         <p class="conclusion-desc">
-          Nunca utilices validación cruzada aleatoria en series temporales. Entrena siempre en el pasado y evalúa en el futuro con ventanas rodantes para evitar fuga de información. La navaja de Ockham es ley: en Punchana, ExtraTrees en CPU (0.11s) empató con redes neuronales complejas.
+          Nunca utilices validación cruzada aleatoria en series temporales. Entrena siempre en el pasado y evalúa en el futuro con ventanas rodantes para evitar fuga de información. La navaja de Ockham es ley: en Punchana, ExtraTrees en CPU (0.25s) empató con redes neuronales complejas.
         </p>
       </div>
 
@@ -425,9 +386,9 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 23: CIERRE Y PREGUNTAS (page-10.png)                   -->
+  <!-- DIAPO 30: CIERRE Y PREGUNTAS (page-10.png)                   -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-closing" data-index="23" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
+  <section class="slide slide-archetype-closing" data-index="30" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
     <div>
       <div class="cover-tag mono">
         IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span>
@@ -471,3 +432,11 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
     </div>
   </section>
 """
+
+    return (
+        html.replace("__B64_P19_HTML__", b64_p19_html)
+        .replace("__B64_P20_HTML__", b64_p20_html)
+        .replace("__B64_P21_HTML__", b64_p21_html)
+        .replace("__B64_P22_HTML__", b64_p22_html)
+        .replace("__B64_P23_HTML__", b64_p23_html)
+    )

@@ -263,7 +263,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
 - **Frase-clave:** *"Para una sola estación, 70 veces más cómputo no compra precisión: la parsimonia manda, aunque el Zero-Shot ya compite sin haber visto la serie."*
 - **Visual:** barras de RMSE ordenadas que se revelan una a una (de Naive a TimesFM), un eje secundario de tiempo/costo (log) y marcas de "empate estadístico" según Diebold-Mariano.
 - **Resultados empíricos en pantalla:**
-  - ExtraTrees: RMSE = 1.880 °C, MAE = 1.466 °C (0.11s CPU) — Ganador por parsimonia.
+  - ExtraTrees: RMSE = 1.880 °C, MAE = 1.466 °C (0.25s CPU) — Ganador por parsimonia.
   - Random Forest: RMSE = 1.885 °C (p = 0.9181, empate estadístico).
   - ARIMA (2,0,1): RMSE = 1.964 °C (p = 0.1510, empate estadístico).
   - TimesFM 2.5 200M (Google): RMSE = 1.965 °C (p = 0.2747, empate estadístico; menor MAE: 1.392 °C, Zero-Shot, 7.87s GPU).
@@ -271,7 +271,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
   - Holt-Winters Damped: RMSE = 2.065 °C (p = 0.0426).
   - Chronos-T5 (Amazon): RMSE = 2.143 °C (p = 0.0126, estadísticamente inferior).
   - Naive Estacional: RMSE = 2.874 °C (p = 0.0001).
-- **Notas:** Plantilla ejecutada: "En empate estadístico (Diebold-Mariano p > 0.05), la regla de parsimonia elige el modelo más simple, rápido y barato (ExtraTrees en 0.11s). Sin embargo, TimesFM demuestra que un Foundation Model Zero-Shot empata con modelos entrenados sin requerir un solo paso de ajuste".
+- **Notas:** Plantilla ejecutada: "En empate estadístico (Diebold-Mariano p > 0.05), la regla de parsimonia elige el modelo más simple, rápido y barato (ExtraTrees en 0.25s). Sin embargo, TimesFM demuestra que un Foundation Model Zero-Shot empata con modelos entrenados sin requerir un solo paso de ajuste".
 - **Fuentes:** `data/caso_1/benchmark_punchana.csv`; Makridakis M4/M5; Zeng et al. (2023); Ansari et al. (2024); Das et al. (ICML 2024).
 
 **14 · DEMO 1: pronóstico a 7 días** — `DEMO` · 2 min
@@ -319,7 +319,7 @@ ACTO 5 · DECIDIR (3 diapos, ~5 min)
 
 **18 · 5 lecciones** — `TEORÍA` · 2 min
 1. **Valida respetando la flecha del tiempo:** nunca uses k-fold aleatorio en series temporales.
-2. **Empieza siempre por un baseline parsimonioso:** ExtraTrees y ARIMA empataron con modelos de 200M de parámetros en Iquitos a una fracción del costo (0.11s vs 7.87s).
+2. **Empieza siempre por un baseline parsimonioso:** ExtraTrees y ARIMA empataron con modelos de 200M de parámetros en Iquitos a una fracción del costo (0.25s vs 7.87s).
 3. **El valor operativo está en las bandas:** pronosticar una línea puntual esconde el riesgo; reporta cuantiles P10–P90.
 4. **Respeta la física del sensor antes de optimizar:** el NDVI satura en copas densas y fue ciego a la roya (-56%); el clima en floración explicó el 75% de la varianza.
 5. **Justifica la complejidad con evidencia:** Foundation Models como TimesFM son revolucionarios para zero-shot en miles de series, pero no desplazan a la parsimonia en un sensor local único.
