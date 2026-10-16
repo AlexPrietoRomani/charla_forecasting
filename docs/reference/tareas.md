@@ -1,9 +1,9 @@
 # Tablero de Tareas — Charla Forecasting & IA (v2 Real-Data)
 
-> **Estado General:** `[X] Completado y Verificado al 100%`  
+> **Estado General:** `[X] F1–F9 Completadas al 100% · Proyecto Verificado y Compilado`  
 > **Convenciones:** `[ ]` pendiente · `[/]` en progreso · `[X]` completado y verificado.  
-> **Documento Rector:** [plan_detallado_diapositivas.md](plan_detallado_diapositivas.md)  
-> **Detalle por Fases:** [reference/fases/](fases/)
+> **Documento Rector:** [`docs/plan/plan_maestro.md`](../plan/plan_maestro.md)  
+> **Detalle por Fases:** [`docs/task/fases/`](fases/)
 
 ---
 
@@ -150,3 +150,113 @@
 - [X] **SF7.3 Re-uso de activos NotebookLM (recortes + lightbox)**
 - [X] **SF7.4 QA visual automatizado y manual (`scripts/audit_layout.py`), bitácora**
 
+---
+
+## F8: Integración de Simuladores Interactivos Evolutivos (Diapos 5, 6, 7, 8 y 9)
+> **Estado:** `[X] Completado y Verificado al 100%`  
+> **Objetivo:** Reemplazar las diapositivas estáticas del Acto 1 por simuladores interactivos multi-etapa totalmente responsivos ante cualquier resolución (1080p, 1366×768, 800×600) y nivel de zoom (125%, 150%), embebidos vía Base64 autónomo con sincronización bidireccional por teclado (`postMessage`).
+
+- [X] **SF8.1 Diapositiva 05: Simulador de Descomposición Ontológica 3D**
+  - [X] T8.1.1 Integrar `5_anatomia_senal_temporal_mejorada.html` vía Base64 en `back/build_deck.py` y `front/deck_slides_p1.py`.
+  - [X] T8.1.2 Sincronización y ajuste de vista responsiva sin scrollbars externas.
+- [X] **SF8.2 Diapositiva 06: Era 1 — La Parsimonia Lineal (Verhulst 1838 a ARIMA 1970)**
+  - [X] T8.2.1 Adaptar `6_Era_1_La_parsimonia_lineal_v3.html` con layout elástico `clamp()`, media queries (`max-width: 1200px`, `880px`, `max-height: 760px`, `620px`) y scrollbar interna delgada en `.narrative-card`.
+  - [X] T8.2.2 Puente de teclado bidireccional por `postMessage` (`deck_key`, navegación de deck y avance de diapositiva).
+- [X] **SF8.3 Diapositiva 07: Era 2 — El Puente Tabular (Lags, Walmart M5, Trampa de Árboles y ERCOT Texas)**
+  - [X] T8.3.1 Adaptar `7_Era_2_El_puente_tabular.html` con diseño responsivo elástico, media queries de pantalla y altura reducida, y scroll interno.
+  - [X] T8.3.2 Sincronizar eventos de teclado y avance entre etapas (1 a 4) y pase a Diapo 8.
+  - [X] T8.3.3 Codificar en Base64 en `back/build_deck.py`, inyectar iframe en `front/deck_slides_p1.py` y actualizar notas de ponente en `front/deck_notes.py`.
+- [X] **SF8.4 Diapositiva 08: Era 3 — Deep Learning y Parches (LSTM, TFT, Quiebre O(L²) y PatchTST)**
+  - [X] T8.4.1 Adaptar `8_Era_3_Deep_Learning_y_Parches.html` con reglas `body.is-embedded`, media queries responsivas y scrollbar estilizada en `.narrative-card`.
+  - [X] T8.4.2 Sincronizar eventos de teclado y pase a Diapo 9 en la última etapa ('era4').
+  - [X] T8.4.3 Codificar en Base64 en `back/build_deck.py`, inyectar iframe en `front/deck_slides_p1.py` y actualizar notas en `front/deck_notes.py`.
+- [X] **SF8.5 Diapositiva 09: Era 4 — Foundation Models Zero-Shot (Preentrenamiento, Duelo Tokens vs Parches, 5 Modelos y Conformal)**
+  - [X] T8.5.1 Adaptar `9_Era_4_Modelos_Fundacionales_Zero_Shot.html` con reglas `body.is-embedded`, media queries completas y scrollbar interna.
+  - [X] T8.5.2 Sincronizar eventos de teclado y pase a Diapo 10 en la última etapa ('limits').
+  - [X] T8.5.3 Codificar en Base64 en `back/build_deck.py`, inyectar iframe en `front/deck_slides_p1.py` y actualizar notas en `front/deck_notes.py`.
+- [X] **SF8.6 Compilación, Auditoría Multi-Resolución y Verificación Visual**
+  - [X] T8.6.1 Compilar deck integral offline mediante `.venv/bin/python scripts/build_deck.py` generando `presentacion.html` e `index.html`.
+  - [X] T8.6.2 Validar con Chromium headless capturas a 1920×1080 (1080p), 1366×768 (laptop estándar) y 800×600 (pantalla estrecha) verificando cero desbordes y adaptación total.
+- [X] **SF8.7 Diapositiva 05 v3: Anatomía de la Señal Temporal (4 Capas Físicas, STL en COES y Trampa de Overfitting)**
+  - [X] T8.7.1 Adaptar `5_Anatomia_de_la_senal_temporal_v3.html` con soporte responsivo elástico `body.is-embedded`, scrollbar interna en `.left-column`, media queries por resolución/altura y sincronización bidireccional `postMessage` (`deck_key`, pase a Diapo 6).
+  - [X] T8.7.2 Conectar en `back/build_deck.py` con fallback ordenado a `5_Anatomia_de_la_senal_temporal_v3.html` en Base64, e inyectar en `front/deck_slides_p1.py` con `id="iframeSlide5"`.
+  - [X] T8.7.3 Actualizar notas de ponente en `front/deck_notes.py` desglosando las 4 etapas del simulador ontológico (Placas 3D, STL COES Perú, Señal vs Friaje, Trampa Overfitting).
+- [X] **SF8.8 Diapositiva 10: La Ilusión de la Certeza y el Cono de Incertidumbre (Lyapunov y Conformal Prediction)**
+  - [X] T8.8.1 Adaptar `10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html` con reglas `body.is-embedded`, scrollbar delgada en `.narrative-card`, media queries y sincronización de teclado con pase a Diapo 11 en la última etapa ('bridge11').
+  - [X] T8.8.2 Codificar en Base64 en `back/build_deck.py` (`b64_cono_html`), embeber como iframe responsivo en `front/deck_slides_p1.py` (`id="iframeSlide10"`) y actualizar notas de ponente en `front/deck_notes.py`.
+- [X] **SF8.9 Diapositiva 11: Arquitectura de Decisión y Cierre Ejecutivo (Árbol, 4 Vías, Matriz y 3 Axiomas)**
+  - [X] T8.9.1 Adaptar `11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html` con diseño elástico `body.is-embedded`, ajuste fino de espaciado y padding, scrollbar en `.narrative-card`, media queries y pase a Diapo 12 en etapa 4 ('axioms').
+  - [X] T8.9.2 Codificar en Base64 en `back/build_deck.py` (`b64_decision_html`), embeber como iframe responsivo en `front/deck_slides_p1.py` (`id="iframeSlide11"`) y actualizar notas de ponente en `front/deck_notes.py`.
+  - [X] T8.9.3 Compilar y verificar en Chromium headless a 1080p y 768p la perfecta adaptación visual sin desbordes externos.
+- [X] **SF8.10 Diapositiva 18: Del Almanaque al Satélite (Evolución 1950–2026, 1 dato/año a 1 dato/día/píxel)**
+  - [X] T8.10.1 Extraer infografía oficial en alta resolución (`infografia_08_almanaque_al_satelite.png`) desde PPTX oficial a `docs/images/seccion_3/`.
+  - [X] T8.10.2 Integrar layout split en `front/deck_slides_p2.py` con lightbox interactivo HD y notas técnicas en `front/deck_notes.py`.
+- [X] **SF8.11 Diapositiva 19: Física Biológica (Retrasos τ=6–8m, Umbrales VPD y N=24)**
+  - [X] T8.11.1 Normalizar infografía biofísica (`infografia_09_fisica_biologica_retos.png`) en `docs/images/seccion_3/`.
+  - [X] T8.11.2 Integrar layout en `front/deck_slides_p2.py` con llamada a biofísica, $p \gg N$, y lightbox zoom HD.
+- [X] **SF8.12 Diapositiva 20: Reloj Fenológico del Café y las 3 Trampas del Stack Tecnológico**
+  - [X] T8.12.1 Normalizar infografías del Reloj del Café (`infografia_10_reloj_fenologico_cafe.png`) y las 3 trampas (`infografia_11_precision_tres_trampas.png`).
+  - [X] T8.12.2 Desarrollar switcher interactivo de vista (`switchFenologiaView`) entre reloj botánico y trampas de precisión.
+  - [X] T8.12.3 Actualizar notas de ponente y compilar deck offline verificado a 1080p y 768p sin solapamientos.
+- [X] **SF8.13 Prototipos Interactivos Autónomos de Sección 03 (Diapos 19 a 23)**
+  - [X] T8.13.1 Auditar y adaptar los 5 prototipos HTML/Canvas de `docs/notebooklm/seccion_3/prototipos/` (19, 20, 21, 22 y 23) asegurando total autonomía sin CDNs externos.
+  - [X] T8.13.2 Implementar reglas elásticas `body.is-embedded`, scrollbar interna delgada en `.narrative-card`, `flex-shrink: 0` en `.narr-top` y `.narr-blocks` para eliminar 100% de solapamientos con `.speaker-box`.
+  - [X] T8.13.3 Adaptar dinámicamente lienzos Canvas/SVG (radio del reloj fenológico, badges de floración/llenado, y tarjetas de diagnóstico en Diapo 22; banner flotante y escalones en Diapo 20; tarjetas compactas multilínea en Diapo 23).
+  - [X] T8.13.4 Conectar bridge bidireccional por `postMessage` (`deck_key`, avance inteligente entre etapas y diapositivas padre).
+- [X] **SF8.14 Ensamblaje y Reestructuración del Master Deck a 30 Diapositivas**
+  - [X] T8.14.1 Actualizar `back/build_deck.py` para codificar en Base64 `b64_p19_html` a `b64_p23_html` e inyectar al diccionario `branding`.
+  - [X] T8.14.2 Actualizar contador global `totalSlides = 30` en JavaScript y HTML del pie de página (`01 / 30`).
+  - [X] T8.14.3 Reconfigurar disparadores de gráficos en `initSlideVisuals`: desplazar `chartScatterNdvi` al índice 26 y `demoJaen` al índice 27.
+  - [X] T8.14.4 Actualizar `front/deck_slides_p2.py`: Portada de Sección 3 (Diapo 18), 5 iframes embebidos con layout maximizado `inset: 6px 12px; padding: 0` (Diapos 19 a 23), y renumerar Acto 4 y Acto 5 (Diapos 24 a 30).
+  - [X] T8.14.5 Expandir notas del orador en `front/deck_notes.py` cubriendo las 30 diapositivas completas con guiones conversacionales ricos.
+- [X] **SF8.15 Compilación Integral, Auditoría Visual y Verificación Responsiva**
+  - [X] T8.15.1 Compilar presentación autónoma offline de 6.78 MB en `presentacion.html` e `index.html`.
+  - [X] T8.15.2 Ejecutar suite de screenshots en Chromium headless a 1920×1080 y 1366×768 para Diapos 18, 19, 20, 21, 22, 23, 24, 26, 27 y 30.
+  - [X] T8.15.3 Inspección visual forense: confirmar cero solapamientos, perfecta legibilidad y renderizado responsivo total.
+- [X] **SF8.16 Rediseño Gerencial y Responsivo de Sección 02 (Diapos 12 a 17 — Caso 1 SENAMHI Iquitos)**
+  - [X] T8.16.1 Rediseñar `12_Caso_1_Auditoria_Iquitos.html` y `13_Datos_SENAMHI_Punchana.html` con topbar ejecutiva, flowbar de 4 etapas y ciclo/histograma interactivo sin vacíos.
+  - [X] T8.16.2 Rediseñar `14_Trampa_Arboles_Meseta_vs_Diferencias.html` y `15_Benchmark_14_Modelos_Tierra_vs_Supercomputo.html` con simulador de ola de calor récord y ranking Diebold-Mariano filtrable.
+  - [X] T8.16.3 Rediseñar `16_Pronostico_7_Dias_Cono_P10_P90.html` y `17_Pipeline_Codigo_Diferencias_ExtraTrees.html` con cono P10–P90 interactivo y arquitectura en 8 líneas de Python.
+  - [X] T8.16.4 Conectar `b64_p12_html` a `b64_p17_html` en `back/build_deck.py` y `front/deck_slides_p1.py`/`p2.py`, compilar deck (7.5 MB) y auditar capturas en 1366×768 y 1920×1080.
+
+---
+
+## F9: Desaturación Cognitiva y Rediseño Pedagógico-Visual de Secciones 1 y 3 (Diapos 5–11 y 19–23)
+*Detalle completo con 🧠 Explicación, 💡 Cómo hacerlo (código), AC y Tests en:* [`docs/task/fases/fase_9_desaturacion_visual_s1_s3.md`](fases/fase_9_desaturacion_visual_s1_s3.md)
+> **Estado:** `[X] Completada`  
+> **Macro-objetivo:** Eliminar la saturación de texto, las barras de scroll verticales y los solapamientos gráficos en los 12 prototipos interactivos de la **Sección 1 (Diapos 5 a 11)** y la **Sección 3 (Diapos 19 a 23)**, reemplazando el teleprompter en pantalla (`.speaker-box`) por una píldora ejecutiva de 1 línea (`💡 Idea Clave`), reduciendo en $\ge 40\%$ las palabras de `.narrative-card` ($\le 110$ palabras por etapa) e incorporando cotas visuales, conectores animados, medidores de barra y etiquetas limpias (*"Show, Don't Tell"*).
+
+- [X] **SF9.1 Desaturación Textual, Reemplazo del Teleprompter en Pantalla y Cero Scrollbars (Secciones 1 y 3)**
+  - [X] **T9.1.1 Reemplazo de `.speaker-box` ("Guía de Exposición") por Píldora Ejecutiva de 1 Línea (`💡 Idea Clave`) y Traslado a `front/deck_notes.py`**
+    - [X] A9.1.1.1 Actualizar `front/deck_notes.py` asegurando que contenga los guiones hablados completos de las Diapos 5–11 y 19–23.
+    - [X] A9.1.1.2 Reemplazar `.speaker-box` por `.executive-takeaway` de 1 línea ($\le 15$ palabras) en los 11 prototipos (`5`–`10` y `19`–`23`).
+  - [X] **T9.1.2 Síntesis Escaneable de `.narrative-card` (Reducción del 45% de Palabras y Eliminación de `#metaphorCard` Redundante en Diapo 5)**
+    - [X] A9.1.2.1 Ocultar `#metaphorCard` redundante durante la Etapa 1 de `5_Anatomia_de_la_senal_temporal_v3.html` y compactar sus etapas 2–4 eliminando la barra de scroll vertical.
+    - [X] A9.1.2.2 Sintetizar textos de `STAGES` (`lead` $\le 22$ palabras, cada `block.body` $\le 18$ palabras) en los prototipos `06`, `07`, `08`, `09` y `10` (Sección 1).
+    - [X] A9.1.2.3 Sintetizar textos de `STAGES` (`lead` $\le 22$ palabras, cada `block.body` $\le 18$ palabras) en los prototipos `19`, `20`, `21`, `22` y `23` (Sección 3), eliminando la barra de scroll vertical de la Diapo 23.
+- [X] **SF9.2 Rediseño Pedagógico-Visual ("Show, Don't Tell") de la Sección 1 (Diapositivas 5 a 11)**
+  - [X] **T9.2.1 Diapo 05 (`5_Anatomia_de_la_senal_temporal_v3.html`): Barras de Peso en Tarjetas de Capas y Cotas Visuales Directas en el Monitor 2D**
+    - [X] A9.2.1.1 Agregar mini-barras/badges de proporción en `#layerStack` y dibujar cotas directas (`↗ Pendiente T(t)`, `↔ Periodo S(t)`) en `#wave2d`.
+  - [X] **T9.2.2 Diapos 06 y 07 (`6_Era_1...` y `7_Era_2...`): Zonas Visuales en Curva Logística y Flechas de Mapeo Serie → Tabla Supervisada**
+    - [X] A9.2.2.1 Retirar banners redundantes en `6_Era_1_La_parsimonia_lineal_v3.html` y sombrear las 3 fases de crecimiento en la curva de Verhulst.
+    - [X] A9.2.2.2 Retirar banners `"Arriba:/Abajo:"` en `7_Era_2_El_puente_tabular.html` y trazar flechas conectoras curvas desde los puntos de la ventana deslizante ($y_{t-1}, y_{t-7}, y_{t+1}$) hacia las columnas de la tabla supervisada.
+  - [X] **T9.2.3 Diapos 08, 09 y 10 (`8_Era_3...`, `9_Era_4...`, `10_El_Cono...`): Medidores en Compuertas LSTM/PatchTST, Flujo Zero-Shot Visual y Etiquetas Limpias en el Cono**
+    - [X] A9.2.3.1 Eliminar banners redundantes en Diapos 08 y 09 e incorporar barras visuales de porcentaje dentro de las 3 compuertas de memoria en Diapo 08.
+    - [X] A9.2.3.2 Eliminar banners redundantes en `10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html` y encapsular las etiquetas del cono (`Núcleo 50%`, `Pronóstico Puntual`, `Banda 80%`) en pastillas oscuras (`roundRect`) para que no se mezclen con las curvas de Monte Carlo.
+  - [X] **T9.2.4 Diapo 11 (`11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html`): Eliminación del Vacío Central y Adición de Medidores Comparativos en las 4 Vías**
+    - [X] A9.2.4.1 Eliminar el hueco negro central en `.lane-card`, insertar el bloque `.lane-meters` con 3 barras comparativas (`📊 Datos N`, `⚡ Cómputo`, `🚀 Extrapola`) en cada una de las 4 Vías y compactar `Condición / Ventaja / Límite` a 1 línea concisa.
+- [X] **SF9.3 Rediseño Pedagógico-Visual y Corrección de Solapamientos en la Sección 3 (Diapositivas 19 a 23)**
+  - [X] **T9.3.1 Diapos 19 y 20 (`19_c_mo_el_agro...` y `20_del_almanaque_al_sat_lite.html`): Espejo Histórico con Callouts Limpios y Corrección del Recorte en los 5 Escalones**
+    - [X] A9.3.1.1 Retirar banners superiores redundantes y compactar las cajas flotantes del espejo histórico en Diapo 19.
+    - [X] A9.3.1.2 Retirar banners superiores en Diapo 20 y reemplazar el cuadro inferior cortado por un grid `.step-kpi-strip` de 3 tarjetas KPI horizontales (`Frecuencia/Escala`, `Logro Operativo`, `Reto Matemático`).
+  - [X] **T9.3.2 Diapo 21 (`21_f_sica_biol_gica_y_el_l_mite_algor_tmico.html`): Puente de Retraso ($\tau = 6\text{–}8\text{m}$) sin Solape en Engranaje y Zonas de Umbral VPD**
+    - [X] A9.3.2.1 Eliminar banners superiores, colocar placa opaca `roundRect` para el rótulo `Lag τ = 6–8m` sobre el engranaje central y colorear en verde/rojo las zonas de umbral VPD en el gráfico derecho.
+  - [X] **T9.3.3 Diapo 22 (`22_reloj_fenol_gico_del_caf.html`): Ampliación del Reloj Botánico con Etiquetas Externas Limpias y Diagnóstico Compacto**
+    - [X] A9.3.3.1 Eliminar banners superiores para ampliar el radio del reloj fenológico en $\ge 20\%$, dibujar las etiquetas `Floración`, `Llenado` y `Cosecha` en pastillas sin truncamiento (`"Florac..."`) y resumir la tarjeta derecha en 3 filas ejecutivas de 1 línea.
+  - [X] **T9.3.4 Diapo 23 (`23_precisi_n_actual_y_las_tres_trampas.html`): Eliminación de Scrollbar, Corrección de Solape en "Prueba de Fuego" y Tarjetas `❌ Error vs ✅ Remedio`**
+    - [X] A9.3.4.1 Eliminar banners superiores, aplicar `display: grid; grid-template-columns: minmax(0, 1fr) auto` al banner `"🔥 LA PRUEBA DE FUEGO"` para que el botón `"Ir al Caso Jaén →"` no pise el texto, y formatear las 3 trampas con líneas `❌ Error` / `✅ Remedio`.
+- [X] **SF9.4 Compilación del Deck Maestro y Auditoría Visual Multi-Resolución**
+  - [X] **T9.4.1 Compilación Integral del Deck Offline (`back/build_deck.py`) y Verificación de Notas del Orador**
+    - [X] A9.4.1.1 Ejecutar `.venv/bin/python back/build_deck.py` y verificar la actualización de los 12 iframes Base64 en `presentacion.html` e `index.html`.
+  - [X] **T9.4.2 Auditoría Automatizada DOM + Capturas Chromium (`1366×768` y `1920×1080`)**
+    - [X] A9.4.2.1 Crear y ejecutar `scripts/audit_f9_desaturacion.py` y generar las 24 capturas en `screenshots/f9_s{5..11,19..23}_{1366,1920}.png` comprobando 0 scrollbars, 0 solapes y $\le 110$ palabras por etapa.

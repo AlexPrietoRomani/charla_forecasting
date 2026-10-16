@@ -4,87 +4,1175 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>DIAPO 15 v1: Benchmark 14 modelos · Tierra vs Supercómputo</title>
+<title>DIAPO 15: Benchmark de 14 Modelos · Tierra (CPU) vs Supercómputo</title>
 <style>
-:root{--line:rgba(148,163,184,.15);--text:#edf5ff;--cyan:#38efff;--amber:#ffc05c;--red:#ff5277;--green:#6ef0b4;--mono:"JetBrains Mono",Consolas,monospace;--display:"Space Grotesk",Inter,sans-serif;--sans:Inter,"Segoe UI",Arial,sans-serif}
-*{box-sizing:border-box}html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);background:radial-gradient(ellipse at 85% 10%,rgba(14,116,144,.16),transparent 35%),#030511;font-family:var(--sans)}
-#slideFrame{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:9px;width:min(100vw,1600px,calc(100svh*16/9));aspect-ratio:16/9;padding:15px 22px 10px;overflow:hidden;background:linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));border:1px solid rgba(82,128,170,.25)}
-body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
-body.is-embedded #slideFrame{width:100%!important;height:100%!important;aspect-ratio:auto!important;border:none!important;padding:9px 15px 6px!important}
-button{font:inherit;color:inherit;cursor:pointer}
-.topbar{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.eyebrow{margin:0;color:var(--cyan);font:600 10px/1.2 var(--mono);letter-spacing:.15em}
-h1{margin:2px 0 0;font:700 clamp(18px,1.6vw,25px)/1.1 var(--display)}h1 .n{color:var(--amber)}
-.sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.4 var(--sans);max-width:760px}.sub b{color:#d7e5f8}
-.filters{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.fbtn{padding:6px 10px;border:1px solid rgba(128,151,184,.25);border-radius:7px;background:rgba(18,28,48,.7);font:600 9.5px/1 var(--mono);color:#a8b9cf;white-space:nowrap}
-.fbtn[aria-pressed="true"]{color:#aff6ff;border-color:rgba(56,239,255,.4);background:rgba(8,145,178,.25)}
-.workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.34fr);gap:12px;min-height:0;overflow:hidden}
-.canvas-frame{position:relative;min-height:0;border:1px solid rgba(119,151,191,.16);border-radius:10px;background:rgba(2,6,17,.88);overflow:hidden}
-canvas{display:block;width:100%;height:100%}
-.detail{padding:10px 12px;border:1px solid rgba(56,239,255,.25);border-radius:11px;background:linear-gradient(125deg,rgba(6,32,50,.5),rgba(7,14,30,.85));overflow:auto;min-height:0}
-.detail h4{margin:0 0 2px;font:650 12.5px/1.25 var(--display);color:#f0f6ff}
-.detail .fam{font:600 9px/1 var(--mono);color:var(--cyan);letter-spacing:.08em}
-.detail table{width:100%;border-collapse:collapse;margin-top:8px;font:10px/1.5 var(--mono);color:#9bb0c9}
-.detail td{padding:2px 0;border-bottom:1px dashed rgba(148,163,184,.15)}.detail td:last-child{text-align:right;color:#e8f2ff}
-.detail .verdict{margin-top:8px;padding:6px 8px;border-left:2px solid var(--green);background:rgba(110,240,180,.06);font:italic 10.5px/1.45 var(--sans);color:#c8dcf2}
-.foot{display:flex;justify-content:space-between;gap:10px;font:9px/1.3 var(--mono);color:#6e8099;border-top:1px solid var(--line);padding-top:6px}
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --phi: #38efff;
+  --ockham: #ffc05c;
+  --rupture: #ff5277;
+  --lab: #6ef0b4;
+  --purple: #b48eff;
+  --stage-accent: var(--lab);
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(16, 185, 129, 0.16), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(56, 239, 255, 0.14), transparent 38%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(6, 95, 70, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(7, 13, 29, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(110, 240, 180, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+html:has(body.is-embedded) {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 1 100% !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--lab); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(110, 240, 180, 0.35);
+  border-radius: 12px;
+  color: var(--lab);
+  background: rgba(110, 240, 180, 0.08);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--lab);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(19px, 1.75vw, 26px)/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.num { color: var(--ockham); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 13px;
+  border: 1px solid rgba(110, 240, 180, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(6, 12, 26, 0.9));
+  max-width: 500px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--lab);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+/* FLOWBAR */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--lab));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--lab)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--lab)) 18%, transparent);
+}
+
+.proc-node[data-step="podium"]   { --node-color: var(--lab); }
+.proc-node[data-step="nwp"]      { --node-color: var(--rupture); }
+.proc-node[data-step="deep"]     { --node-color: var(--ockham); }
+.proc-node[data-step="parsimony"]{ --node-color: var(--phi); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+
+.proc-node[aria-selected="true"] .proc-num {
+  background: var(--node-color, var(--lab));
+  color: #030712;
+}
+
+.proc-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.proc-year {
+  font: 700 11.5px/1.1 var(--display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.proc-node[aria-selected="true"] .proc-sub { color: #cbd5e1; }
+.proc-arrow { color: rgba(148, 163, 184, 0.35); font-size: 11px; }
+
+.flow-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.7);
+  font: 600 10px/1 var(--mono);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.tool-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #fff;
+  border-color: rgba(110, 240, 180, 0.35);
+}
+
+.tool-btn.active {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: var(--lab);
+  color: var(--lab);
+}
+
+/* WORKSPACE */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.95fr) minmax(0, 1.45fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* COLUMNA IZQUIERDA */
+.narrative-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(6px, 1vh, 10px);
+  padding: clamp(10px, 1.3vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(10, 18, 36, 0.95), rgba(5, 10, 24, 0.94));
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(110, 240, 180, 0.3) transparent;
+}
+
+.stage-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--stage-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 40%, transparent);
+  color: var(--stage-accent);
+}
+
+.stage-shortcut { font: 500 9.5px/1 var(--mono); color: #64748b; }
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(15px, 1.25vw, 18.5px)/1.2 var(--display);
+  letter-spacing: -0.015em;
+  color: #f8fafc;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.9vw, 13.5px)/1.4 var(--sans);
+  color: #cbd5e1;
+}
+
+.narr-lead strong { color: #ffffff; font-weight: 600; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-block {
+  padding: 8px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  font: 400 clamp(11.5px, 0.85vw, 12.8px)/1.35 var(--sans);
+  color: #94a3b8;
+}
+
+.info-block-text strong { color: #e2e8f0; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 30%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(11px, 0.88vw, 12.5px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11.5px, 0.88vw, 13px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+/* COLUMNA DERECHA */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: clamp(10px, 1.2vw, 14px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(110, 240, 180, 0.12);
+  border: 1px solid rgba(110, 240, 180, 0.35);
+  font-size: 13px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(13.5px, 1.1vw, 16px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong { color: #f8fafc; font-weight: 700; }
+.kpi-chip.green { border-color: rgba(110, 240, 180, 0.4); background: rgba(16, 185, 129, 0.2); color: var(--lab); }
+.kpi-chip.gold { border-color: rgba(255, 192, 92, 0.4); background: rgba(255, 192, 92, 0.2); color: var(--ockham); }
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(6, 95, 70, 0.15), rgba(2, 6, 16, 0.95) 75%);
+  overflow: hidden;
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+.tip {
+  position: absolute;
+  pointer-events: none;
+  font: 500 10px/1.35 var(--mono);
+  background: rgba(3, 8, 22, 0.96);
+  border: 1px solid rgba(110, 240, 180, 0.45);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #edf5ff;
+  display: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+  z-index: 10;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ctrl-btn {
+  padding: 5px 9px;
+  border: 1px solid rgba(128, 151, 184, 0.25);
+  border-radius: 6px;
+  background: rgba(18, 28, 48, 0.65);
+  font: 600 10px/1 var(--mono);
+  color: #a8b9cf;
+  transition: all 0.15s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(30, 48, 80, 0.8);
+  color: #fff;
+  border-color: rgba(110, 240, 180, 0.35);
+}
+
+.ctrl-btn.active {
+  color: #aff6ff;
+  border-color: rgba(110, 240, 180, 0.5);
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 20%, transparent);
+  font: 700 10.5px/1 var(--display);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: var(--stage-accent);
+  color: #030712;
+}
+
+/* FOOTNOTE */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font: 500 10px/1.2 var(--mono);
+  color: #64748b;
+}
+
+.footnote strong { color: #cbd5e1; }
+.footnote span.link { color: var(--stage-accent); }
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 6px 14px 4px !important; }
+  .topbar { padding-bottom: 5px; }
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .eyebrow { font-size: 9.5px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 5px 10px; }
+  .proc-node { padding: 5px 8px; }
+  .narrative-card { padding: 8px 12px; gap: 5px; }
+  .speaker-box { padding: 6px 9px; }
+  .stage-card { padding: 8px 10px; }
+  .controls-bar { padding: 5px 8px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .topbar { padding-bottom: 4px; }
+}
 </style>
 </head>
 <body>
-<main id="slideFrame">
-<header class="topbar"><div><p class="eyebrow">ACTO 2 · BENCHMARK AUDITADO · HOLDOUT CIEGO 90 DÍAS (Q4 2025)</p>
-<h1><span class="n">15</span> Benchmark de 14 modelos: Tierra vs Supercómputo</h1>
-<p class="sub">Protocolo estricto: <b>2,467 días train</b> + 90 holdout · Diebold-Mariano con corrección HLN (1997). <b>Verde = líder</b> (p &gt; 0.05, empate estadístico). Clic una barra para auditar.</p></div>
-<div class="filters" id="filters">
-<button class="fbtn" data-f="all" aria-pressed="true">Todos (14)</button>
-<button class="fbtn" data-f="lider" aria-pressed="false">Líderes p&gt;0.05</button>
-<button class="fbtn" data-f="fisica" aria-pressed="false">Física global</button>
-<button class="fbtn" data-f="local" aria-pressed="false">ML local CPU</button>
-</div></header>
-<section class="workspace">
-<div class="canvas-frame"><canvas id="cv"></canvas></div>
-<aside class="detail" id="detail"></aside>
-</section>
-<footer class="foot"><span><strong>Regla de parsimonia:</strong> ExtraTrees CPU 0.25s empata con TimesFM GPU 7.87s (p=0.71)</span><span>RMSE 1d °C · clic para ver MAE, tiempo, hardware y p-valor</span></footer>
+<main id="slideFrame" aria-label="Diapositiva 15: Benchmark de 14 Modelos">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H7M14 14.66V17c0 .55.45 1 1 1h2M18 2H6v7a6 6 0 0 0 12 0V2z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ACTO 2 · AUDITORÍA ESTADÍSTICA · HOLDOUT CIEGO Q4-2025</p>
+        <h1><span class="num">15</span> Benchmark de 14 modelos: <span class="sub">Tierra (CPU) vs. Supercómputo</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Protocolo estadístico del benchmark">
+      <div class="via-title">
+        <span>⚖️ PROTOCOLO ESTADÍSTICO ESTRICTO</span>
+        <span>DIEBOLD-MARIANO + HLN 1997</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">🏆 <strong>ExtraTrees 1.88 °C</strong> (0.25s CPU)</span>
+        <span class="via-pill">🤝 <strong>TimesFM 1.88 °C</strong> (p=0.71)</span>
+        <span class="via-pill">❌ <strong>ECMWF 2.46 °C</strong> (p=0.027)</span>
+        <span class="via-pill">⚡ <strong>Parsimonia gana</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLOWBAR -->
+  <nav class="flowbar" aria-label="Etapas del benchmark">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="podium" id="tab-podium">
+        <span class="proc-num">1</span>
+        <span class="proc-text">
+          <span class="proc-year">Los 5 Líderes</span>
+          <span class="proc-sub">Empate p &gt; 0.05</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="nwp" id="tab-nwp">
+        <span class="proc-num">2</span>
+        <span class="proc-text">
+          <span class="proc-year">Física Global</span>
+          <span class="proc-sub">ECMWF &amp; GFS Pierden</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="deep" id="tab-deep">
+        <span class="proc-num">3</span>
+        <span class="proc-text">
+          <span class="proc-year">Deep Learning</span>
+          <span class="proc-sub">LSTM 17s Inútil</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="parsimony" id="tab-parsimony">
+        <span class="proc-num">4</span>
+        <span class="proc-text">
+          <span class="proc-year">Pase a Diapo 16</span>
+          <span class="proc-sub">El Cono a 7 Días</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flow-controls">
+      <button class="tool-btn active" id="btnLoop" type="button" title="Pausar o reanudar rotación automática">
+        <span>🔁</span> <span id="loopTxt">Auto: ON</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE -->
+  <section class="workspace">
+    <!-- COLUMNA IZQUIERDA -->
+    <article class="narrative-card" id="narrCard">
+      <div class="stage-pill-row">
+        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · EL PODIO ESTADÍSTICO</span>
+        <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
+      </div>
+
+      <h2 class="narr-title" id="narrTitle">Microfísica local vs. supercómputo: 5 modelos empatados</h2>
+      
+      <p class="narr-lead" id="narrLead">
+        El test formal de <strong>Diebold-Mariano con corrección HLN (1997)</strong> revela un empate técnico entre los 5 modelos de punta: <strong>ExtraTrees (1.880 °C)</strong>, <strong>TimesFM Zero-Shot (1.883 °C, p=0.71)</strong>, <strong>Random Forest (1.888 °C, p=0.88)</strong>, <strong>Chronos-Bolt (1.903 °C, p=0.65)</strong> y <strong>LightGBM (1.926 °C, p=0.41)</strong>.
+      </p>
+
+      <div class="narr-blocks" id="narrBlocks">
+        <div class="info-block">
+          <div class="info-block-label">🌍 Derrota del Supercómputo Numérico</div>
+          <div class="info-block-text">ECMWF IFS (~9 km, 2.458 °C, p=0.027) y NOAA GFS (~28 km, 2.583 °C, p=0.0085) pierden estadísticamente: su malla no captura el dosel amazónico ni el río Amazonas sin downscaling.</div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label">⚡ Regla de Oro de Parsimonia</div>
+          <div class="info-block-text">ExtraTrees corre en 0.25 segundos en CPU ordinaria; TimesFM requiere GPU y tarda 7.87s. Estadísticamente idénticos: el negocio debe elegir la solución de costo cero.</div>
+        </div>
+      </div>
+
+      <div class="math-strip" id="mathStrip">
+        <span>ExtraTrees 1.880 °C (0.25s) ≈ TimesFM 1.883 °C (p=0.71)</span>
+        <span class="hint">Parsimonia = 1 / Costo</span>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎙️ GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span>~20 SEG</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren la tabla: el modelo de 0.25 segundos en un procesador normal empata con el modelo fundacional de Google y aplasta a las supercomputadoras europeas. En producción, quédense con el más barato y parsimonioso.”
+        </p>
+      </div>
+    </article>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="stage-card">
+      <header class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon">🏆</span>
+          <h3 class="stage-title" id="stageVisualTitle">Ranking Auditado: Error RMSE a 1 Día (Holdout Q4 2025)</h3>
+        </div>
+
+        <div class="stage-kpis">
+          <span class="kpi-chip green">5 Líderes (p &gt; 0.05)</span>
+          <span class="kpi-chip gold">ExtraTrees: <strong>0.25s CPU</strong></span>
+        </div>
+      </header>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="cv"></canvas>
+        <div class="tip" id="tooltip"></div>
+      </div>
+
+      <footer class="controls-bar">
+        <div class="ctrl-group">
+          <span style="font-size:10px; font-weight:700; color:var(--muted); font-family:var(--mono);">FILTRAR:</span>
+          <button class="ctrl-btn active" id="btnAll">Todos (14)</button>
+          <button class="ctrl-btn" id="btnLeaders">Líderes (5)</button>
+          <button class="ctrl-btn" id="btnNwp">Física Global (2)</button>
+          <button class="ctrl-btn" id="btnML">ML Local CPU (4)</button>
+        </div>
+
+        <button class="action-btn" id="btnNextAction">
+          <span>Ver Cono 7 Días (Diapo 16)</span> <span>→</span>
+        </button>
+      </footer>
+    </div>
+  </section>
+
+  <!-- FOOTNOTE -->
+  <footer class="footnote">
+    <span><strong>Auditoría Rigurosa:</strong> 2,467 días train + 90 días test ciego · Test Diebold-Mariano con corrección Harvey-Leybourne-Newbold (1997)</span>
+    <span class="link">Pase a Diapo 16: Demostración Operacional del Pronóstico a 7 Días →</span>
+  </footer>
+
 </main>
+
 <script>
-(()=>{if(window.self!==window.top)document.body.classList.add('is-embedded');
-// modelo,rmse,mae,tiempo,hw,p,familia
-const M=[["ExtraTrees (Geurts 06)",1.88,1.466,"0.25s","CPU",1.0,"ML árboles"],["TimesFM Zero-Shot (Google)",1.883,1.457,"7.87s","GPU/NPU",0.7095,"Foundation"],["Random Forest",1.888,1.471,"0.60s","CPU",0.8759,"ML árboles"],["Chronos Zero-Shot (Amazon)",1.903,1.418,"3.13s","GPU/NPU",0.6523,"Foundation"],["LightGBM",1.926,1.466,"0.06s","CPU",0.4136,"Boosting"],["ARIMA (2,0,1)",1.964,1.506,"3.04s","CPU",0.151,"Clásico"],["Ridge",2.017,1.521,"0.01s","CPU",0.0331,"Lineal"],["SARIMA (2,0,1)(1,0,1)7",2.026,1.543,"4.94s","CPU",0.0799,"Clásico"],["LSTM (5s)",2.053,1.545,"17.03s","CPU/GPU",0.033,"Deep local"],["Holt-Winters amort.",2.065,1.54,"3.90s","CPU",0.0426,"Clásico"],["Naive persistencia 1d",2.334,1.613,"0.00s","CPU",0.0054,"Baseline"],["ECMWF IFS (9 km)",2.458,2.043,"—","HPC Reading",0.0271,"Física global"],["NOAA GFS (28 km)",2.583,2.013,"—","HPC Maryland",0.0085,"Física global"],["Naive estacional 7d",2.874,2.234,"0.00s","CPU",0.0001,"Baseline"]];
-let f='all',sel=0;
-const cv=document.getElementById('cv'),ctx=cv.getContext('2d'),det=document.getElementById('detail');
-document.querySelectorAll('#filters .fbtn').forEach(b=>b.onclick=()=>{f=b.dataset.f;document.querySelectorAll('#filters .fbtn').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()});
-function rows(){let r=M.map((m,i)=>({m,i}));
-if(f==='lider')r=r.filter(o=>o.m[5]>0.05);
-if(f==='fisica')r=r.filter(o=>o.m[6]==='Física global');
-if(f==='local')r=r.filter(o=>['ML árboles','Boosting','Lineal','Clásico'].includes(o.m[6]));
-return r}
-function fit(){const r=cv.getBoundingClientRect();if(r.width<4)return;const d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
-let bars=[];
-function color(m){if(m[5]>0.05)return '#6ef0b4';if(m[6]==='Física global')return '#ff5277';if(m[6]==='Foundation')return '#b48eff';return '#ffc05c'}
-function draw(){const r=cv.getBoundingClientRect(),w=r.width,h=r.height;if(w<10)return;ctx.clearRect(0,0,w,h);
-const R=rows(),n=R.length,bh=Math.min(22,(h-30)/n),gap=(h-30)/n;
-const X=v=>200+((v-1.7)/(3.0-1.7))*(w-280);
-ctx.fillStyle='#5f7385';ctx.font='8px JetBrains Mono';[1.8,2.2,2.6,3.0].forEach(v=>{ctx.fillText(v.toFixed(1)+'°',X(v)-8,12);ctx.strokeStyle='rgba(110,140,180,.12)';ctx.beginPath();ctx.moveTo(X(v),18);ctx.lineTo(X(v),h-12);ctx.stroke()});
-bars=[];
-R.forEach((o,k)=>{const y=22+k*gap+(gap-bh)/2,bwid=Math.max(3,X(o.m[1])-200);
-ctx.fillStyle=color(o.m);ctx.globalAlpha=(o.i===sel)?1:.82;ctx.fillRect(200,y,bwid,bh);ctx.globalAlpha=1;
-if(o.i===sel){ctx.strokeStyle='#fff';ctx.strokeRect(200,y,bwid,bh)}
-ctx.fillStyle=o.i===sel?'#fff':'#9db0c8';ctx.font=(o.i===sel?'700':'400')+' 9.5px Inter';ctx.textAlign='right';ctx.fillText(o.m[0].slice(0,26),194,y+bh/2+3.5);ctx.textAlign='left';
-ctx.fillStyle='#e8f2ff';ctx.font='700 9.5px JetBrains Mono';ctx.fillText(o.m[1].toFixed(3)+'°',204+bwid,y+bh/2+3.5);
-bars.push({x:0,y:y-2,w:w,h:bh+4,i:o.i})});
-show(sel)}
-function show(i){const m=M[i];
-det.innerHTML='<div class="fam">'+m[6].toUpperCase()+' · RANK #'+(M.indexOf(m)+1)+'/14</div><h4>'+m[0]+'</h4><table>'
-+'<tr><td>RMSE 1d</td><td>'+m[1].toFixed(3)+' °C</td></tr>'
-+'<tr><td>MAE 1d</td><td>'+m[2].toFixed(3)+' °C</td></tr>'
-+'<tr><td>Tiempo</td><td>'+m[3]+' · '+m[4]+'</td></tr>'
-+'<tr><td>p-valor DM vs mejor</td><td>'+m[5]+(m[5]>0.05?' · EMPATE ✅':' · pierde ❌')+'</td></tr></table>'
-+'<div class="verdict">'+(m[5]>0.05?'“Dilo así: empata con el mejor. Quédate con el más barato y rápido.”':'“Dilo así: pierde estadísticamente. En Iquitos, la memoria local le gana.”')+'</div>'}
-cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect(),my=e.clientY-r.top;const b=bars.find(b=>my>=b.y&&my<=b.y+b.h);if(b){sel=b.i;draw()}});
-addEventListener('resize',()=>{fit();draw()});fit();draw();})();
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['podium', 'nwp', 'deep', 'parsimony'];
+  const LOOP_MS = 9500;
+
+  const STAGE_DATA = {
+    podium: {
+      accent: '#6ef0b4',
+      tag: 'ETAPA 1 DE 4 · EL PODIO ESTADÍSTICO',
+      title: 'Microfísica local vs. supercómputo: 5 modelos empatados',
+      lead: 'El test formal de <strong>Diebold-Mariano con corrección HLN (1997)</strong> revela un empate técnico entre los 5 modelos de punta: <strong>ExtraTrees (1.880 °C)</strong>, <strong>TimesFM Zero-Shot (1.883 °C, p=0.71)</strong>, <strong>Random Forest (1.888 °C, p=0.88)</strong>, <strong>Chronos-Bolt (1.903 °C, p=0.65)</strong> y <strong>LightGBM (1.926 °C, p=0.41)</strong>.',
+      blocks: [
+        { label: '🌍 Derrota del Supercómputo Numérico', text: 'ECMWF IFS (~9 km, 2.458 °C, p=0.027) y NOAA GFS (~28 km, 2.583 °C, p=0.0085) pierden estadísticamente: su malla no captura el dosel amazónico ni el río Amazonas sin downscaling.' },
+        { label: '⚡ Regla de Oro de Parsimonia', text: 'ExtraTrees corre en 0.25 segundos en CPU ordinaria; TimesFM requiere GPU y tarda 7.87s. Estadísticamente idénticos: el negocio debe elegir la solución de costo cero.' }
+      ],
+      math: 'ExtraTrees 1.880 °C (0.25s) ≈ TimesFM 1.883 °C (p=0.71)',
+      hint: 'Parsimonia = 1 / Costo',
+      quote: '“Miren la tabla: el modelo de 0.25 segundos en un procesador normal empata con el modelo fundacional de Google y aplasta a las supercomputadoras europeas. En producción, quédense con el más barato y parsimonioso.”',
+      filter: 'all'
+    },
+    nwp: {
+      accent: '#ff5277',
+      tag: 'ETAPA 2 DE 4 · EL COLAPSO DEL SUPERCÓMPUTO',
+      title: 'Por qué ECMWF y GFS fallan en el trópico sin downscaling',
+      lead: 'Las supercomputadoras de Reading (Reino Unido) y Maryland (EE.UU.) resuelven las ecuaciones de Navier-Stokes en mallas de 9 a 28 km. Sin embargo, en Iquitos <strong>pierden estadísticamente contra árboles locales</strong>.',
+      blocks: [
+        { label: '🌡️ ECMWF IFS (~9 km): RMSE 2.458 °C (p=0.027)', text: 'Sobreestima la convección vespertina y suaviza la temperatura de la canopia amazónica al no modelar el microclima insular de Punchana.' },
+        { label: '🌐 NOAA GFS (~28 km): RMSE 2.583 °C (p=0.0085)', text: 'Una celda de 28x28 km promedia río, selva virgen y casco urbano. Su error duplica el residuo inercial de la estación.' }
+      ],
+      math: 'ECMWF p=0.027 · NOAA GFS p=0.0085 ──▶ Rechazo Estadístico',
+      hint: 'Física Global Pierde',
+      quote: '“El supercómputo es admirable para tormentas globales a 5 días, pero en la estación Punchana la memoria inercial local del río y el suelo le gana a la física sin downscaling.”',
+      filter: 'nwp'
+    },
+    deep: {
+      accent: '#ffc05c',
+      tag: 'ETAPA 3 DE 4 · EL FRACASO DEL DEEP LEARNING',
+      title: 'LSTM: 17 segundos de GPU para quedar en el noveno puesto',
+      lead: 'Muchas organizaciones compran servidores con GPUs creyendo que las redes recurrentes profundas (LSTM) superarán a los algoritmos clásicos. En 2,557 días de datos univariados, <strong>la red recurrente fue derrotada por ARIMA</strong>.',
+      blocks: [
+        { label: '🐢 Costo Computacional Desperdiciado', text: 'LSTM tardó 17.03 segundos en GPU (68 veces más lento que ExtraTrees) y obtuvo RMSE 2.053 °C (p=0.033, estadísticamente inferior).' },
+        { label: '📉 El Olvido Gradual y la Falta de Datos', text: 'Con N=2,467 días, los miles de pesos sinápticos de la red no tienen suficiente señal para generalizar mejor que 100 árboles aleatorizados.' }
+      ],
+      math: 'LSTM: RMSE 2.053 °C (17.03s GPU) vs ARIMA: 1.964 °C (0.01s CPU)',
+      hint: 'Sobreparametrización Inútil',
+      quote: '“Gastar presupuesto en clústeres de GPUs para entrenar LSTMs en series de clima local es mala ingeniería: es más lento, más caro y estadísticamente peor que un árbol en CPU.”',
+      filter: 'all'
+    },
+    parsimony: {
+      accent: '#38efff',
+      tag: 'ETAPA 4 DE 4 · LA REGLA DE PARSIMONIA OPERACIONAL',
+      title: 'La regla de oro: quédate siempre con el modelo más simple',
+      lead: 'Si dos modelos tienen un p-valor mayor a 0.05 en el test Diebold-Mariano, son <strong>estadísticamente indistinguibles</strong>. La decisión gerencial debe basarse únicamente en <strong>costo, latencia y mantenibilidad</strong>.',
+      blocks: [
+        { label: '🥇 El Ganador Operacional: ExtraTrees', text: '100 árboles extremadamente aleatorizados en diferencias Δy. 0.25 segundos en un solo hilo de CPU, 0 dependencias pesadas.' },
+        { label: '➡️ Pase a Diapositiva 16 (Pronóstico a 7 Días)', text: '¿Qué pasa cuando proyectamos este modelo no a 1 día sino a toda la semana operacional? Veamos cómo se abre el cono.' }
+      ],
+      math: 'ExtraTrees CPU 0.25s ──▶ Producción Inmediata a Costo Cero',
+      hint: 'Pase a Diapo 16 →',
+      quote: '“La ciencia de datos madura no persigue la moda: implementa el modelo que resuelve el problema con la menor fricción técnica posible. Pasemos a la Diapo 16.”',
+      filter: 'leaders'
+    }
+  };
+
+  const MODELS = [
+    { name: 'ExtraTrees (Geurts 06)', rmse: 1.880, mae: 1.466, time: '0.25s CPU', pVal: 1.000, type: 'leader', cat: 'ml', note: 'Ganador canónico: 100 árboles en diferencias. Empate estadístico con el mejor.' },
+    { name: 'TimesFM Zero-Shot (Google)', rmse: 1.883, mae: 1.457, time: '7.87s GPU', pVal: 0.7095, type: 'leader', cat: 'tsfm', note: 'Modelo fundacional preentrenado con 100B+ puntos. Empate riguroso con ExtraTrees.' },
+    { name: 'Random Forest (Breiman 01)', rmse: 1.888, mae: 1.471, time: '0.60s CPU', pVal: 0.8759, type: 'leader', cat: 'ml', note: 'En diferencias Δy. Empata estadísticamente sin requerir GPU ni calibración compleja.' },
+    { name: 'Chronos-Bolt (Amazon)', rmse: 1.903, mae: 1.418, time: '3.13s GPU', pVal: 0.6523, type: 'leader', cat: 'tsfm', note: 'Arquitectura T5 tokenizada. Excelente MAE en holdout ciego.' },
+    { name: 'LightGBM (Ke et al. 17)', rmse: 1.926, mae: 1.466, time: '0.06s CPU', pVal: 0.4136, type: 'leader', cat: 'ml', note: 'El más rápido en entrenamiento y consulta: 60 milisegundos.' },
+    { name: 'ARIMA(2,0,1)', rmse: 1.964, mae: 1.506, time: '0.01s CPU', pVal: 0.1510, type: 'classic', cat: 'classic', note: 'Clásico lineal. Supera a LSTM profunda a costo computacional cero.' },
+    { name: 'Ridge Regression (Lags)', rmse: 2.017, mae: 1.580, time: '0.01s CPU', pVal: 0.0331, type: 'loss', cat: 'ml', note: 'Lineal regularizado. Pierde significancia estadística frente a ExtraTrees (p < 0.05).' },
+    { name: 'SARIMA(2,0,1)(1,0,1)7', rmse: 2.026, mae: 1.590, time: '0.05s CPU', pVal: 0.0799, type: 'classic', cat: 'classic', note: 'Incorpora el ciclo semanal. Ligero sobreajuste en los parámetros estacionales.' },
+    { name: 'LSTM Profunda (5 semillas)', rmse: 2.053, mae: 1.620, time: '17.03s GPU', pVal: 0.0330, type: 'loss', cat: 'deep', note: 'Red neuronal recurrente: 68x más lenta que ExtraTrees y estadísticamente inferior.' },
+    { name: 'Holt-Winters Amortiguado', rmse: 2.065, mae: 1.630, time: '0.02s CPU', pVal: 0.0426, type: 'loss', cat: 'classic', note: 'Suavizado exponencial con amortiguación de tendencia.' },
+    { name: 'Naive Persistencia (1d)', rmse: 2.334, mae: 1.820, time: '0.00s CPU', pVal: 0.0054, type: 'loss', cat: 'naive', note: 'Baseline cero costo: repite el valor de ayer. Pierde claramente.' },
+    { name: 'ECMWF IFS (~9 km malla)', rmse: 2.458, mae: 2.043, time: 'Global HPC', pVal: 0.0271, type: 'nwp', cat: 'nwp', note: 'Supercómputo europeo. Pierde por resolución espacial sin downscaling de canopia.' },
+    { name: 'NOAA GFS (~28 km malla)', rmse: 2.583, mae: 2.013, time: 'Global HPC', pVal: 0.0085, type: 'nwp', cat: 'nwp', note: 'Supercómputo de EE.UU. Su celda de 28 km promedia río y selva sin capturar la estación.' },
+    { name: 'Naive Estacional (7d)', rmse: 2.874, mae: 2.210, time: '0.00s CPU', pVal: 0.0001, type: 'loss', cat: 'naive', note: 'Repite la temperatura del mismo día de la semana anterior. Peor modelo del benchmark.' }
+  ];
+
+  let currentStep = 'podium';
+  let activeFilter = 'all'; // 'all' | 'leaders' | 'nwp' | 'ml'
+  let loopActive = true;
+  let loopTimer = null;
+  let hoverModel = null;
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const tip = document.getElementById('tooltip');
+
+  function updateStage(stepKey, manual = false) {
+    if (!STAGE_DATA[stepKey]) return;
+    currentStep = stepKey;
+    const data = STAGE_DATA[stepKey];
+
+    document.documentElement.style.setProperty('--stage-accent', data.accent);
+
+    document.querySelectorAll('.proc-node').forEach(node => {
+      const isSel = node.getAttribute('data-step') === stepKey;
+      node.setAttribute('aria-selected', isSel ? 'true' : 'false');
+    });
+
+    document.getElementById('stageTag').textContent = data.tag;
+    document.getElementById('narrTitle').textContent = data.title;
+    document.getElementById('narrLead').innerHTML = data.lead;
+    document.getElementById('mathStrip').innerHTML = `<span>${data.math}</span><span class="hint">${data.hint}</span>`;
+    document.getElementById('speakerQuote').textContent = data.quote;
+
+    const blocksContainer = document.getElementById('narrBlocks');
+    blocksContainer.innerHTML = '';
+    data.blocks.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'info-block';
+      div.innerHTML = `<div class="info-block-label">${b.label}</div><div class="info-block-text">${b.text}</div>`;
+      blocksContainer.appendChild(div);
+    });
+
+    if (data.filter) {
+      setFilter(data.filter);
+    } else {
+      draw();
+    }
+
+    if (manual) restartLoop();
+  }
+
+  function nextStep() {
+    const idx = STEPS.indexOf(currentStep);
+    const nextIdx = (idx + 1) % STEPS.length;
+    updateStage(STEPS[nextIdx]);
+  }
+
+  function restartLoop() {
+    clearInterval(loopTimer);
+    if (loopActive) {
+      loopTimer = setInterval(nextStep, LOOP_MS);
+    }
+  }
+
+  function setFilter(filt) {
+    activeFilter = filt;
+    document.getElementById('btnAll').classList.toggle('active', filt === 'all');
+    document.getElementById('btnLeaders').classList.toggle('active', filt === 'leaders');
+    document.getElementById('btnNwp').classList.toggle('active', filt === 'nwp');
+    document.getElementById('btnML').classList.toggle('active', filt === 'ml');
+    hoverModel = null;
+    tip.style.display = 'none';
+    draw();
+  }
+
+  // BOTÓN LOOP
+  const btnLoop = document.getElementById('btnLoop');
+  btnLoop.addEventListener('click', () => {
+    loopActive = !loopActive;
+    btnLoop.classList.toggle('active', loopActive);
+    document.getElementById('loopTxt').textContent = loopActive ? 'Auto: ON' : 'Auto: OFF';
+    restartLoop();
+  });
+
+  // TABS
+  STEPS.forEach(s => {
+    const btn = document.getElementById(`tab-${s}`);
+    if (btn) btn.addEventListener('click', () => updateStage(s, true));
+  });
+
+  // FILTROS
+  document.getElementById('btnAll').addEventListener('click', () => setFilter('all'));
+  document.getElementById('btnLeaders').addEventListener('click', () => setFilter('leaders'));
+  document.getElementById('btnNwp').addEventListener('click', () => setFilter('nwp'));
+  document.getElementById('btnML').addEventListener('click', () => setFilter('ml'));
+
+  // ACCIÓN SIGUIENTE DIAPO
+  document.getElementById('btnNextAction').addEventListener('click', () => {
+    try {
+      window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+    } catch(e) {}
+  });
+
+  // CANVAS
+  function fitCanvas() {
+    const r = cv.getBoundingClientRect();
+    if (r.width < 10) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = r.width * dpr;
+    cv.height = r.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  let barHitBoxes = [];
+
+  function draw() {
+    const r = cv.getBoundingClientRect();
+    const w = r.width;
+    const h = r.height;
+    if (w < 20 || h < 20) return;
+
+    ctx.clearRect(0, 0, w, h);
+    barHitBoxes = [];
+
+    // Filtrar modelos
+    let list = MODELS;
+    if (activeFilter === 'leaders') list = MODELS.filter(m => m.type === 'leader');
+    else if (activeFilter === 'nwp') list = MODELS.filter(m => m.cat === 'nwp');
+    else if (activeFilter === 'ml') list = MODELS.filter(m => m.cat === 'ml');
+
+    const padL = 185;
+    const padR = 100;
+    const padT = 24;
+    const padB = 24;
+
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    const minR = 1.6;
+    const maxR = 3.0;
+
+    const barH = Math.min(26, (plotH / list.length) - 5);
+    const gap = (plotH - (list.length * barH)) / Math.max(1, list.length - 1);
+
+    // Eje X Grid
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let rVal = 1.8; rVal <= 3.0; rVal += 0.4) {
+      const x = padL + ((rVal - minR) / (maxR - minR)) * plotW;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, h - padB);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 10px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${rVal.toFixed(1)}°`, x, h - 8);
+    }
+
+    // Línea de referencia del líder (1.88 °C)
+    const xLeader = padL + ((1.880 - minR) / (maxR - minR)) * plotW;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(110, 240, 180, 0.45)';
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(xLeader, padT);
+    ctx.lineTo(xLeader, h - padB);
+    ctx.stroke();
+    ctx.restore();
+
+    // Dibujar cada barra
+    list.forEach((m, idx) => {
+      const y = padT + idx * (barH + gap);
+      const bW = ((m.rmse - minR) / (maxR - minR)) * plotW;
+
+      barHitBoxes.push({ x: padL, y, w: bW, h: barH, model: m });
+
+      // Nombre a la izquierda
+      const isHover = (hoverModel && hoverModel.name === m.name);
+      ctx.font = (m.type === 'leader') ? '700 11.5px Space Grotesk' : '500 11px Space Grotesk';
+      ctx.textAlign = 'right';
+      ctx.fillStyle = isHover ? '#ffffff' : (m.type === 'leader') ? '#aff6ff' : (m.cat === 'nwp') ? '#ff9cb0' : '#cbd5e1';
+      ctx.fillText(m.name, padL - 10, y + barH / 2 + 4);
+
+      // Barra con gradiente
+      let grad = ctx.createLinearGradient(padL, 0, padL + bW, 0);
+      if (m.type === 'leader') {
+        grad.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+        grad.addColorStop(1, '#6ef0b4');
+      } else if (m.cat === 'nwp') {
+        grad.addColorStop(0, 'rgba(225, 29, 72, 0.35)');
+        grad.addColorStop(1, '#ff5277');
+      } else if (m.cat === 'deep') {
+        grad.addColorStop(0, 'rgba(255, 192, 92, 0.35)');
+        grad.addColorStop(1, '#ffc05c');
+      } else {
+        grad.addColorStop(0, 'rgba(148, 163, 184, 0.25)');
+        grad.addColorStop(1, '#94a3b8');
+      }
+
+      ctx.fillStyle = isHover ? '#ffffff' : grad;
+      ctx.beginPath();
+      ctx.roundRect(padL, y, bW, barH, [0, 4, 4, 0]);
+      ctx.fill();
+
+      // Valor RMSE al final de la barra
+      ctx.font = '700 10.5px JetBrains Mono';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = isHover ? '#ffffff' : (m.type === 'leader') ? '#6ef0b4' : (m.cat === 'nwp') ? '#ff5277' : '#e2e8f0';
+      ctx.fillText(`${m.rmse.toFixed(3)} °C`, padL + bW + 8, y + barH / 2 + 3.5);
+
+      // Insignia p-valor / empate a la derecha
+      if (m.type === 'leader') {
+        ctx.fillStyle = 'rgba(110, 240, 180, 0.2)';
+        ctx.fillRect(w - padR + 5, y + 2, 85, barH - 4);
+        ctx.fillStyle = '#6ef0b4';
+        ctx.font = '700 9px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(m.pVal === 1.0 ? 'LÍDER #1' : `p=${m.pVal.toFixed(2)} EMPATE`, w - padR + 47, y + barH / 2 + 3);
+      } else if (m.cat === 'nwp') {
+        ctx.fillStyle = 'rgba(255, 82, 119, 0.18)';
+        ctx.fillRect(w - padR + 5, y + 2, 85, barH - 4);
+        ctx.fillStyle = '#ff5277';
+        ctx.font = '700 9px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText('PIERDE p<0.05', w - padR + 47, y + barH / 2 + 3);
+      }
+    });
+  }
+
+  // Interacción Mouse
+  cv.addEventListener('mousemove', (e) => {
+    const rect = cv.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const hit = barHitBoxes.find(b => mx >= b.x - 170 && mx <= b.x + b.w + 100 && my >= b.y && my <= b.y + b.h);
+    if (hit) {
+      hoverModel = hit.model;
+      tip.style.display = 'block';
+      tip.style.left = `${Math.min(mx + 12, rect.width - 260)}px`;
+      tip.style.top = `${Math.max(my - 45, 8)}px`;
+      tip.innerHTML = `
+        <div style="font-size:11.5px; font-weight:700; color:#38efff; margin-bottom:3px;">${hit.model.name}</div>
+        <div>RMSE: <strong>${hit.model.rmse.toFixed(3)} °C</strong> · MAE: <strong>${hit.model.mae ? hit.model.mae.toFixed(3) : 'N/A'} °C</strong></div>
+        <div>Hardware/Tiempo: <span style="color:#ffc05c;">${hit.model.time}</span> · Test DM: <strong>p = ${hit.model.pVal.toFixed(4)}</strong></div>
+        <div style="margin-top:4px; font-size:9.5px; color:#cbd5e1; max-width:240px; white-space:normal;">${hit.model.note}</div>
+      `;
+      draw();
+    } else {
+      if (hoverModel !== null) {
+        hoverModel = null;
+        tip.style.display = 'none';
+        draw();
+      }
+    }
+  });
+
+  cv.addEventListener('mouseleave', () => {
+    hoverModel = null;
+    tip.style.display = 'none';
+    draw();
+  });
+
+  // Teclado
+  window.addEventListener('keydown', (e) => {
+    if (['1', '2', '3', '4'].includes(e.key)) {
+      const idx = parseInt(e.key, 10) - 1;
+      updateStage(STEPS[idx], true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    draw();
+  });
+
+  fitCanvas();
+  updateStage('podium');
+  restartLoop();
+})();
 </script>
 </body>
 </html>

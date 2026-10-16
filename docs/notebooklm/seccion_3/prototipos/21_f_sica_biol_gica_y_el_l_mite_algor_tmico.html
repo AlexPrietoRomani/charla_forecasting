@@ -455,28 +455,28 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
+.executive-takeaway {
   flex-shrink: 0;
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--stage-accent);
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(8, 15, 32, 0.88);
+  border: 1px solid rgba(56, 239, 255, 0.28);
 }
 
-.speaker-quote {
+.takeaway-badge {
+  font: 700 9.5px/1 var(--mono);
+  color: var(--stage-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.takeaway-text {
   margin: 0;
-  font: italic 500 clamp(11px, 0.9vw, 12.5px)/1.38 var(--sans);
+  font: italic 500 clamp(10.5px, 0.82vw, 12px)/1.35 var(--sans);
   color: #e2eeff;
 }
 
@@ -736,10 +736,10 @@ input[type="range"] {
     padding: 5px 10px !important;
     font-size: 10.5px !important;
   }
-  .speaker-box {
+  .executive-takeaway {
     padding: 6px 10px !important;
   }
-  .speaker-quote {
+  .takeaway-text {
     font-size: 11px !important;
     line-height: 1.3 !important;
   }
@@ -883,14 +883,9 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Miren, a la planta no le importa qué tan caro sea su software. Si hace calor extremo, el aire siente sed y la planta aborta su flor para sobrevivir. Es pura física. Lo difícil para la IA es que ese daño de hoy recién aparece en el balance financiero ocho meses después. Y como tenemos una cosecha al año, no podemos equivocarnos.”
-        </p>
+      <div class="executive-takeaway" id="executiveTakeaway">
+        <span class="takeaway-badge">💡 Idea Clave</span>
+        <span class="takeaway-text" id="speakerQuote">La producción agrícola obedece a leyes físicas: retrasos de meses y umbrales fatales.</span>
       </div>
     </aside>
 
@@ -910,10 +905,8 @@ input[type="range"] {
 
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
-        <div class="canvas-overlay-top">
-          <span class="ov-badge left" id="ovLeft">⚙️ Izquierda: Estímulo ➔ Engranaje Retraso (τ) ➔ Cosecha Final</span>
-          <span class="ov-badge right" id="ovRight">📉 Derecha: Curva Sigmoide vs. Colapso por Sed del Aire (VPD)</span>
-        </div>
+        <span id="ovLeft" hidden></span>
+        <span id="ovRight" hidden></span>
       </div>
 
       <div class="legend-bar">
@@ -992,18 +985,18 @@ input[type="range"] {
       accent: 'var(--agro)',
       tag: 'ACTO 1 DE 4 · BIOFÍSICA & MODELADO (VISTA INTEGRAL)',
       title: '1. Física Biológica: Las 3 reglas que ningún software puede violar',
-      lead: 'A una planta de café no le importa qué tan caro sea tu algoritmo. Su producción está gobernada por <b>3 leyes físicas y biológicas implacables</b> que hacen del agro la serie temporal más difícil de todas:',
-      b1Label: '⚙️ 1. RETRASOS (τ = 6–8 MESES) Y 2. UMBRALES FATALES',
-      b1Text: '• <b>Retrasos (τ = 6–8 meses):</b> Lo que pasa hoy en el clima impacta recién el próximo semestre; la red debe aprender esta larga memoria invisible.<br>• <b>Umbrales fatales:</b> Más de <b>32 °C</b>, alta <i>sed del aire</i> (<b>VPD &gt; 1.8 kPa</b>) o <b>2 semanas sin agua</b> causan aborto floral inmediato y <b>colapso biológico total</b>.',
-      b2Label: '📅 3. N = 24 NO PERDONA (EL SOBREAJUSTE ES FATAL)',
-      b2Text: 'Solo tenemos <b>1 cosecha al año (24 campañas en 24 años)</b>. Entrenar una red a ciegas con cientos de datos satelitales memoriza ruido, pero <b>integrar las ventanas fenológicas reduce el error 4×</b>.',
+      lead: 'La producción del café está gobernada por <b>3 leyes biofísicas implacables</b>:',
+      b1Label: '⚙️ 1. RETRASOS (τ = 6–8m) Y 2. UMBRALES FATALES',
+      b1Text: 'El clima de hoy impacta en 6 a 8 meses; sobre 32 °C o VPD > 1.8 kPa la flor aborta de inmediato.',
+      b2Label: '📅 3. N = 24 NO PERDONA',
+      b2Text: 'Solo 1 cosecha al año (24 campañas). Modelos crudos memorizan ruido; la fenología reduce el error 4×.',
       formula: 'Estímulo (Xₜ₋τ) ──[ Engranaje τ = 6–8m ]──▶ Cosecha Yₜ (Colapsa si VPD > 1.8)',
       hint: 'Mueve el deslizador de Estrés Ambiental para cruzar el umbral',
-      quote: '“Miren, a la planta no le importa qué tan caro sea su software. Si hace calor extremo, el aire siente sed y la planta aborta su flor para sobrevivir. Es pura física. Lo difícil para la IA es que ese daño de hoy recién aparece en el balance financiero ocho meses después. Y como tenemos una cosecha al año, no podemos equivocarnos.”',
+      quote: 'La producción agrícola obedece a leyes físicas: retrasos de meses y umbrales fatales.',
       icon: '⚙️',
       canvasTitle: 'Engranaje de Retraso (τ = 6–8m) y Gráfico de Umbral y Colapso Biológico',
-      ovLeft: '⚙️ Izquierda: Estímulo ➔ Engranaje Retraso (τ) ➔ Cosecha Final',
-      ovRight: '📉 Derecha: Curva Sigmoide de Salud vs. Colapso Biológico Total',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Curva Sigmoide de Salud Vegetal</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Umbral: Sed del Aire (VPD &gt; 1.8 kPa)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Colapso Biológico Total</span>',
       nextLabel: 'Explorar Retrasos (τ = 6–8m) ─▶'
     },
@@ -1011,18 +1004,18 @@ input[type="range"] {
       accent: 'var(--ancestral)',
       tag: 'ACTO 2 DE 4 · LEY 1: RETRASOS FENOLÓGICOS (LAGS FISIOLÓGICOS)',
       title: '2. Retrasos (τ) de 6–8 meses: La larga memoria invisible del tejido',
-      lead: 'En la bolsa o en un supermercado, el clima de ayer afecta la venta de hoy. En el café, <b>el volumen cosechado hoy (Yₜ) se decidió entre 6 y 8 meses atrás durante la floración</b>.',
-      b1Label: '🌸 ¿POR QUÉ EL CLIMA DE “AYER” (t−1) DESTRUYE TU MODELO?',
-      b1Text: 'La cantidad de cerezas que recoges en mayo depende de cuántas flores abrieron y cuajaron entre <b>agosto y octubre (τ = 6 a 8 meses atrás)</b>. Meter en la tabla el clima del día anterior (<i>t−1</i>) solo inyecta ruido y correlaciones falsas.',
-      b2Label: '🛠️ TRADUCCIÓN PARA LA IA: VENTANA AGREGADA DE FLORACIÓN',
-      b2Text: 'En lugar de usar retardos diarios sueltos, debemos construir una <b>variable acumulada exactamente sobre la ventana biológica de floración</b> (sumando la lluvia y promediando la sed del aire de hace 6 a 8 meses).',
+      lead: 'El volumen cosechado hoy (Yₜ) se decidió entre 6 y 8 meses atrás durante la floración.',
+      b1Label: '🌸 LAG INMEDIATO (t−1) VS RETARDO BIOLÓGICO',
+      b1Text: 'Las cerezas de mayo dependen de las flores cuajadas en agosto-octubre. Lags inmediatos solo inyectan ruido.',
+      b2Label: '🛠️ SOLUCIÓN PARA LA IA: VENTANA INTEGRADA',
+      b2Text: 'Agregar lluvia y VPD acumulados en la ventana de floración como covariable física estructurada.',
       formula: 'Yₜ = f( Xₜ₋τ )  con τ ∈ [6, 8] meses  │  Feature_Flor = ∫ₜ₋₈ᵗ⁻⁶ (Σ Lluvia, VPD) dm',
       hint: 'Cambia el retardo (τ) abajo y mira cómo reacciona el poder predictivo',
-      quote: '“Si usted alimenta su red neuronal con la lluvia de ayer para predecir la cosecha de mañana, el modelo va a fracasar. Tiene que enseñarle a mirar por el retrovisor exactamente de seis a ocho meses atrás, cuando el árbol estaba en flor.”',
+      quote: 'La cosecha actual se decidió 6 a 8 meses atrás durante la floración crítica.',
       icon: '⏳',
       canvasTitle: 'Ingeniería de Características Fenológicas: Lag Inmediato (t−1) vs. Retardo Biológico (τ = 6–8 meses)',
-      ovLeft: '🌧️ Arriba: Serie Climática y Ventana donde ocurrió la Floración (hace τ meses)',
-      ovRight: '🎯 Abajo: Poder Explicativo según el Retardo τ elegido por el Data Scientist',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Ventana Crítica τ = 6–8 meses (Floración)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Lag ingenuo t−1 (Ruido sin relación)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Cosecha Final (Yₜ)</span>',
       nextLabel: 'Explorar Umbrales Fatales (VPD) ─▶'
     },
@@ -1030,18 +1023,18 @@ input[type="range"] {
       accent: 'var(--danger)',
       tag: 'ACTO 3 DE 4 · LEY 2: UMBRALES FATALES Y SED DEL AIRE (VPD)',
       title: '3. Umbrales Fatales: Cuando el aire siente sed (VPD > 1.8 kPa)',
-      lead: 'Las plantas no responden en línea recta. Tienen un <b>interruptor hidráulico de emergencia</b> que apaga la fotosíntesis de golpe aunque todavía quede agua en el suelo.',
-      b1Label: '💨 ¿QUÉ ES EL VPD (“SED DEL AIRE”) Y EL INTERRUPTOR ESTOMÁTICO?',
-      b1Text: 'El <b>Déficit de Presión de Vapor (VPD = eₛ(T) − eₐ)</b> mide cuán seco y hambriento de agua está el aire. Cuando supera <b>1.8 kPa</b> (o la temperatura pasa de <b>32 °C</b>), el aire succiona tan fuerte que la hoja <b>cierra sus poros (estomas)</b> para no deshidratarse, frenando en seco la entrada de CO₂.',
-      b2Label: '🧱 EL DOBLE PELIGRO: ABORTO FLORAL Y MESETA PLANA DEL ÁRBOL',
-      b2Text: 'A más de 32 °C el polen se cocina y la flor cae en 2 semanas. Y cuidado: un árbol de decisión (<b>LightGBM</b>) encerrado en su rango histórico (<i>convex hull</i>) proyectará una <b>meseta plana</b> sin ver el desplome a cero.',
+      lead: 'Las plantas tienen un <b>interruptor hidráulico</b> que frena la fotosíntesis aunque haya agua en suelo.',
+      b1Label: '💨 CIERRE ESTOMÁTICO POR VPD > 1.8 kPa',
+      b1Text: 'El déficit de presión de vapor mide la sequedad atmosférica; al superarse, los poros se cierran.',
+      b2Label: '🧱 CEGUERA DE ÁRBOLES GBDT',
+      b2Text: 'A >32 °C el polen muere. Modelos tipo LightGBM proyectan mesetas planas sin prever el colapso.',
       formula: 'VPD = eₛ(T) − eₐ > 1.8 kPa  ó  T > 32°C  ──▶  Cierre Estomático y Aborto Floral',
       hint: 'Sube la Sed del Aire (VPD) para ver cerrarse el poro de la hoja',
-      quote: '“El VPD es una esponja atmosférica. Cuando pasa de 1.8 kilopascales o 32 grados, la planta siente que el aire la va a secar viva, cierra las compuertas de sus hojas y aborta la flor para salvar el tronco.”',
+      quote: 'Sobre 1.8 kPa la hoja cierra estomas y aborta flor para salvar el tronco.',
       icon: '🔥',
       canvasTitle: 'Interruptor Hidráulico Estomático (VPD > 1.8 kPa) y Falla de Meseta Plana ante el Colapso',
-      ovLeft: '🍃 Izquierda: Poro de la Hoja (Estoma) cerrándose ante la Sed del Aire',
-      ovRight: '📉 Derecha: Colapso Biológico Real vs. Meseta Plana de Árboles (GBDT)',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Entrada de CO₂ / Transpiración</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Colapso Real por Cierre Estomático</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Meseta Plana Ciega (Árbol GBDT)</span>',
       nextLabel: 'Ver N=24 No Perdona y Pase a Diapo 22 ─▶'
     },
@@ -1049,18 +1042,18 @@ input[type="range"] {
       accent: 'var(--purple)',
       tag: 'ACTO 4 DE 4 · LEY 3: N=24 NO PERDONA Y PASE A LA DIAPOSITIVA 22',
       title: '4. “N=24 no perdona”: Cómo reducir 4× el error con Fenología',
-      lead: 'En finanzas tienes millones de datos por minuto; en un cafetal comercial solo tienes <b>1 cosecha al año</b>: 24 años de historia equivalen a apenas <b>N = 24 filas</b>.',
-      b1Label: '📉 LA MALDICIÓN DE LA DIMENSIONALIDAD (p = 500 ≫ N = 24)',
-      b1Text: 'Si intentas entrenar un Transformer o LSTM crudo metiendo <b>p = 500 variables climáticas y satelitales sobre N = 24 cosechas</b>, el modelo memoriza el ruido casual de esos 24 años (sobreajuste fatal) y colapsa en la campaña 25.',
-      b2Label: '🚀 EL REMEDIO (4× MENOS ERROR) Y PASE A LA DIAPOSITIVA 22',
-      b2Text: 'Al comprimir esas 500 variables dentro de las <b>3 ventanas del Reloj Fenológico</b> y respetar el techo de la <i>“Maceta Agrícola”</i> de Verhulst (<b>kL/4</b>), <b>el error de predicción se reduce 4×</b>. ¡Veamos ese Reloj en la <b>Diapositiva 22</b>!',
+      lead: '24 años de historia agrícola equivalen a solo <b>N = 24 filas</b> anuales de cosecha.',
+      b1Label: '📉 SOBREAJUSTE SEVERO (p = 500 ≫ N = 24)',
+      b1Text: '500 variables satelitales sobre 24 campañas provocan memorización de ruido y fracaso en la campaña 25.',
+      b2Label: '🚀 FENOLOGÍA COMO REGULARIZADOR FÍSICO',
+      b2Text: 'Comprimir señales en las 3 ventanas fenológicas y techo Verhulst reduce el error 4×.',
       formula: '500 Variables Crudas sobre N=24 = Overfit  │  Restricción Fenológica = Error ÷ 4',
       hint: 'Alterna entre IA Cruda y IA con Fenología abajo antes de ir a la Diapo 22',
-      quote: '“Tener veinticuatro años de historia suena a mucho, pero en el agro son apenas veinticuatro cosechas: veinticuatro puntos en una gráfica. Si metemos quinientas variables a lo bruto, el modelo memoriza basura; pero si las ordenamos con el reloj fenológico de la planta, reducimos el error cuatro veces. Pasemos a la Diapositiva 22 para abrir ese reloj.”',
+      quote: 'Con solo 24 cosechas anuales, ordenar variables por fenología reduce el error 4×.',
       icon: '📅',
       canvasTitle: 'El Dilema N=24 (p ≫ N): Memorización de Ruido vs. Reducción 4× del Error con Fenología',
-      ovLeft: '📊 Izquierda: 24 Campañas Anuales (N=24) · IA Cruda vs. IA Guiada por Fenología',
-      ovRight: '⏭️ Derecha: Reducción 4× del Error y Pase a la Diapo 22 (Reloj del Café)',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> IA Cruda p=500 (Memoriza ruido en N=24)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> IA + Fenología (Error reducido 4×)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> 24 Cosechas Históricas</span>',
       nextLabel: 'Reiniciar bucle (Física Biológica) ↺'
     }
@@ -1262,13 +1255,23 @@ input[type="range"] {
       '#ffc05c'
     );
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '700 10px "JetBrains Mono"';
+    // Placa sólida de alto contraste para el retardo en el centro del engranaje
+    ctx.save();
+    ctx.fillStyle = 'rgba(4, 9, 22, 0.94)';
+    ctx.strokeStyle = 'rgba(255, 192, 92, 0.75)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(gearX - 44, midY - 16, 88, 32, 8);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#ffc05c';
+    ctx.font = '700 10.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('Retraso (τ)', gearX, midY - 2);
-    ctx.fillStyle = '#fde68a';
-    ctx.font = '700 8.5px "JetBrains Mono"';
-    ctx.fillText('6–8 meses', gearX, midY + 11);
+    ctx.fillText('Lag τ = 6–8m', gearX, midY - 2);
+    ctx.fillStyle = '#edf5ff';
+    ctx.font = '500 9px sans-serif';
+    ctx.fillText('Memoria oculta', gearX, midY + 10);
+    ctx.restore();
 
     // Flecha Engranaje -> Cosecha Final
     ctx.strokeStyle = '#64748b';
@@ -1339,6 +1342,15 @@ input[type="range"] {
     // Línea horizontal punteada del Umbral: sed del aire (VPD = 1.8 kPa)
     const uSplit = 0.56;
     const yThresh = Y(0.58);
+
+    // Sombreado de zonas: Verde (Fotosíntesis Normal) vs Rojo (Aborto Floral)
+    ctx.save();
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.08)';
+    ctx.fillRect(gx, yThresh, gw, (gy + gh) - yThresh);
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.09)';
+    ctx.fillRect(gx, gy, gw, yThresh - gy);
+    ctx.restore();
+
     ctx.strokeStyle = 'rgba(255, 192, 92, 0.85)';
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 4]);

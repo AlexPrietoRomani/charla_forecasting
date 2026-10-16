@@ -475,22 +475,23 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
+.speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--stage-accent);
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
+  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  color: #edf5ff;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.executive-takeaway strong { color: var(--ockham); white-space: nowrap; }
+
+.speaker-head {
+  display: none;
 }
 
 .speaker-quote {
@@ -965,14 +966,8 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Pedir un único número para el próximo mes es una apuesta ciega. La línea roja central es una ilusión: el futuro real serpentea dentro de este Cono de Incertidumbre. La IA moderna no elimina el azar: ilumina y mide el riesgo.”
-        </p>
+      <div class="executive-takeaway" id="speakerBox">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">El pronóstico puntual es una mentira matemática; la decisión vive en el cono calibrado.</span>
       </div>
     </aside>
 
@@ -993,8 +988,8 @@ input[type="range"] {
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
         <div class="canvas-overlay-top">
-          <span class="ov-badge left" id="ovLeft">⬜ Izquierda: Realidad Observada (Pasado Fijo)</span>
-          <span class="ov-badge right" id="ovRight">🌪️ Derecha: Cono de Incertidumbre y Trayectorias Caóticas</span>
+          <span class="ov-badge left" id="ovLeft">⬜ Realidad Observada (Historial)</span>
+          <span class="ov-badge right" id="ovRight">🌪️ Cono de Incertidumbre y Monte Carlo</span>
         </div>
       </div>
 
@@ -1074,18 +1069,18 @@ input[type="range"] {
       accent: 'var(--rupture)',
       tag: 'ETAPA 1 DE 4 · LA MENTIRA DETERMINISTA',
       title: '1. La Ilusión de la Certeza: ¿Por qué un número único (ŷₜ) siempre miente?',
-      lead: 'Quien te prometa adivinar el punto exacto del próximo mes te está mintiendo. En cualquier sistema real, <b>pequeñas variaciones hoy se multiplican mañana como un abanico que se abre</b>.',
-      b1Label: '🌪️ EFECTO MARIPOSA Y EL LÍMITE DE LYAPUNOV',
-      b1Text: 'Igual que en el pronóstico del clima, las posibles trayectorias futuras (<b>Monte Carlo</b>) divergen con la distancia: <b>σ(h) ∝ σ₁·√h</b>. Más allá del <b>Límite de Lyapunov</b>, una línea recta puntual pierde toda relación con la realidad.',
-      b2Label: '⚠️ LAS 3 TRAMPAS DE EXIGIR UN PUNTO FIJO EN PRODUCCIÓN',
-      b2Text: '1. <b>Oculta la asimetría del riesgo:</b> quedarse sin energía (apagón) cuesta 100 veces más que guardar reserva.<br>2. <b>Falsa sensación de control</b> ante directivos.<br>3. <b>Degradación exponencial</b> al alejar el horizonte <b>h</b>.',
+      lead: 'Un pronóstico puntual es una mentira matemática: perturbaciones mínimas hoy divergen en un cono estocástico.',
+      b1Label: '🌪️ EFECTO MARIPOSA Y LYAPUNOV',
+      b1Text: 'Las trayectorias Monte Carlo se dispersan como <b>σ(h) ∝ σ₁·√h</b>; más allá de Lyapunov, el punto fijo pierde sentido.',
+      b2Label: '⚠️ RIESGO ASIMÉTRICO',
+      b2Text: 'Quedarse sin energía cuesta 100 veces más que sobreprepararse. El valor reside en las bandas <b>P10–P90</b>.',
       formula: 'σ(h) ∝ σ₁ · √h  ──▶  Bandas P25–P75 (50%) y P10–P90 (80%)',
       hint: 'La única decisión ejecutable vive en el abanico',
-      quote: '“Pedir un único número para el próximo mes es una apuesta ciega. La línea roja central es una ilusión: el futuro real serpentea dentro de este Cono de Incertidumbre. La IA moderna no elimina el azar: ilumina y mide el riesgo.”',
+      quote: 'El pronóstico puntual es una mentira matemática; la decisión vive en el cono calibrado.',
       icon: '🌪️',
       canvasTitle: 'El Cono de Incertidumbre: Divergencia de Monte Carlo y Límite de Lyapunov',
-      ovLeft: '⬜ Izquierda: Realidad Observada (Pasado Fijo)',
-      ovRight: '🌪️ Derecha: Cono de Incertidumbre y Trayectorias Caóticas',
+      ovLeft: '⬜ Realidad Observada (Historial)',
+      ovRight: '🌪️ Cono de Incertidumbre y Monte Carlo',
       legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Punto Fijo ŷₜ (La Mentira Determinista)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Banda P10–P90 (80%)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Trayectorias Monte Carlo</span>',
       nextLabel: 'Ver Receta Conforme (5 Pasos) ─▶'
     },
@@ -1093,18 +1088,18 @@ input[type="range"] {
       accent: 'var(--phi)',
       tag: 'ETAPA 2 DE 4 · SPLIT CONFORMAL PREDICTION (LEI ET AL., 2017)',
       title: '2. Predicción Conforme (SCP): El Escudo Matemático en 5 Pasos',
-      lead: '¿Cómo construimos ese abanico sin inventar supuestos falsos de campanas de Gauss? La <b>Predicción Conforme</b> mide con honestidad <b>cuánto se equivocó tu modelo en el pasado reciente</b>.',
-      b1Label: '📏 LOS 5 PASOS SENCILLOS DE SPLIT CONFORMAL PREDICTION',
-      b1Text: '<b>1. Dividir:</b> Separar historia en Entreno (<i>Tr</i>) y Calibración (<i>Cal</i>).<br><b>2. Entrenar:</b> Ajustar el modelo f̂ en <i>Tr</i>.<br><b>3. Medir tropiezos (Sᵢ):</b> Calcular el error real en <i>Cal</i>: <b>Sᵢ = |f̂(xᵢ) − yᵢ|</b>.<br><b>4. Umbral q̂:</b> Ordenar los errores y tomar el percentil <b>(1−α)</b>.<br><b>5. Blindar el futuro:</b> Sumar y restar ese escudo: <b>I(x) = [f̂(x) − q̂, f̂(x) + q̂]</b>.',
-      b2Label: '✅ GARANTÍA REAL EN MUESTRAS FINITAS (SIN ASUMIR DISTRIBUCIONES)',
-      b2Text: 'Si eliges <b>90% de cobertura (α = 0.10)</b>, el escudo <b>±q̂</b> garantiza matemáticamente atrapar al menos 9 de cada 10 valores futuros reales, sin importar qué modelo uses por dentro.',
+      lead: 'Split Conformal Prediction (SCP) construye intervalos rigurosos sin asumir normalidad gaussiana.',
+      b1Label: '📏 LOS 5 PASOS CONFORMES',
+      b1Text: '1. Dividir train/cal. 2. Entrenar f̂. 3. Medir residuos Sᵢ=|f̂−y|. 4. Cuantil q̂ al 1−α. 5. Blindar [f̂ ± q̂].',
+      b2Label: '✅ GARANTÍA EN MUESTRAS FINITAS',
+      b2Text: 'Garantiza cobertura matemática <b>≥ 1−α (90%)</b> para cualquier modelo de caja negra sin supuestos teóricos.',
       formula: 'Sᵢ = |f̂(xᵢ) − yᵢ|  ──▶  q̂ = cuantil₁₋α(S_Cal)  ──▶  I(x) = [ f̂(x) ± q̂ ]',
       hint: 'Corrección finita: (1−α̂) = ⌈(|Cal|+1)(1−α)⌉ / |Cal|',
-      quote: '“La Predicción Conforme es pura honestidad ingenieril: revisamos los últimos 100 días, vemos que el 90% de las veces nos equivocamos por menos de q̂ unidades, y le ponemos ese margen ±q̂ al pronóstico de mañana. Garantizado sin magia.”',
+      quote: 'La predicción conforme garantiza cobertura finita midiendo honestamente los errores recientes.',
       icon: '📏',
       canvasTitle: 'Los 5 Pasos de Split Conformal Prediction: De Errores Históricos (Sᵢ) al Escudo ±q̂',
-      ovLeft: '📊 Arriba: Errores de Calibración Sᵢ ordenados hasta el cuantil q̂',
-      ovRight: '🛡️ Abajo: Intervalo Garantizado I(x) = [f̂(x) − q̂, f̂(x) + q̂]',
+      ovLeft: '📊 Residuos de Calibración Sᵢ',
+      ovRight: '🛡️ Intervalo Garantizado [f̂ ± q̂]',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Residuos Absolutos Sᵢ = |f̂ − y|</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Umbral Conforme q̂</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Banda Blindada [f̂ ± q̂]</span>',
       nextLabel: 'Ver Local vs Global y ERCOT ─▶'
     },
@@ -1112,18 +1107,18 @@ input[type="range"] {
       accent: 'var(--lab)',
       tag: 'ETAPA 3 DE 4 · EVIDENCIA EMPÍRICA (ACHOUR ET AL., 2025)',
       title: '3. Cuantil Local vs. Global y la Victoria Zero-Shot en ERCOT',
-      lead: 'Al aplicar Predicción Conforme en la industria aparecen dos secretos prácticos: <b>cómo calibrar múltiples series</b> y <b>por qué los Foundation Models aplastan a LightGBM cuando hay pocos datos</b>.',
-      b1Label: '🔀 CUANTIL LOCAL (q̂ⱼ) VS. CUANTIL GLOBAL (q̂_global)',
-      b1Text: '• <b>Cuantil Local (q̂ⱼ):</b> Calcula un escudo propio para cada serie; ideal cuando tienes productos muy volátiles junto a otros estables.<br>• <b>Cuantil Global (∪ S_Cal,j):</b> Une los errores de todas las series cuando cada producto tiene un historial muy corto.',
-      b2Label: '🏆 HALLAZGO EN ERCOT 2232: ¿POR QUÉ COLAPSA LIGHTGBM Y GANA CHRONOS-BOLT?',
-      b2Text: 'Si das pocos datos a <b>LightGBM</b> para guardar 80% en calibración, crear los <i>lags</i> llena la tabla de vacíos (<b>NaNs</b>) y destruye el entrenamiento (<b>MASE se dispara a 1.195</b>). Como <b>Chronos-Bolt es Zero-Shot (0% entreno)</b>, dedica el <b>80%–90% de tus datos a calibrar |Cal|</b>, logrando <b>MASE 0.362, banda estrecha MSIW 0.312 y cobertura 91.3%</b>.',
+      lead: 'En ERCOT 2232, la sinergia Zero-Shot + Calibración Conforme superó rotundamente a los árboles tabulares.',
+      b1Label: '🔀 CUANTIL LOCAL VS GLOBAL',
+      b1Text: 'El local calibra por serie aislada; el global agrega errores cuando cada serie tiene historial corto.',
+      b2Label: '🏆 PARADOJA EN ERCOT 2232',
+      b2Text: 'LightGBM colapsa con pocos datos (MASE 1.195). Chronos-Bolt Zero-Shot usa 80% en calibrar logrando <b>MASE 0.362</b>.',
       formula: 'ERCOT-2232: Chronos-Bolt (MASE 0.362, MSIW 0.312) vs. LightGBM (1.195)',
       hint: 'Zero-Shot no destruye filas con lags y maximiza la muestra |Cal|',
-      quote: '“Cuando tienes pocos datos históricos, LightGBM sufre una paradoja: si entrenas mucho te quedas sin datos para calibrar el cono, y si entrenas poco los lags destruyen la muestra. Un modelo Zero-Shot regala casi todo el historial a la calibración.”',
+      quote: 'Zero-Shot regala el 80% de la historia a la calibración conforme para blindar intervalos.',
       icon: '🏆',
       canvasTitle: 'Cuantil Local vs. Global y Benchmark en ERCOT-2232 (Chronos-Bolt vs. LightGBM)',
-      ovLeft: '🔀 Izquierda: Cuantil Local (q̂ⱼ) vs. Global (q̂_global)',
-      ovRight: '🏆 Derecha: Evidencia ERCOT-2232 (Achour et al., 2025)',
+      ovLeft: '🔀 Cuantil Local vs Global',
+      ovRight: '🏆 Benchmark ERCOT (Achour et al., 2025)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Chronos-Bolt + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> LightGBM 80/20 (0.659)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM 20/80 Colapso (1.195)</span>',
       nextLabel: 'Ver Asimetría y Pase a Diapo 11 ─▶'
     },
@@ -1131,18 +1126,18 @@ input[type="range"] {
       accent: 'var(--ockham)',
       tag: 'ETAPA 4 DE 4 · DECISIÓN BAJO RIESGO Y PASE A DIAPO 11',
       title: '4. Decidir con P10–P90 y el Pase al Árbol de Decisión (Diapo 11)',
-      lead: 'El Cono de la Honestidad transforma un pronóstico en una <b>decisión financiera inteligente</b> y nos deja listos para la <b>última diapositiva (Diapo 11): ¿Cómo elegir el modelo ideal hoy?</b>',
-      b1Label: '⚖️ ASIMETRÍA DEL RIESGO: ¿CUÁNDO USAR P90, P50 O P10?',
-      b1Text: '• <b>Escenario P90 (Techo seguro):</b> Úsalo para despachar energía eléctrica o stock médico crítico donde <b>faltar cuesta un apagón o vidas</b>.<br>• <b>Escenario P50 (Mediana):</b> Planificación financiera base.<br>• <b>Escenario P10 (Piso conservador):</b> Flujo de caja mínimo garantizado.',
-      b2Label: '🧭 PASE A LA DIAPOSITIVA 11: ARQUITECTURA DE DECISIÓN (LAS 4 VÍAS)',
-      b2Text: 'Ya dominamos las <b>4 Eras</b> y el <b>Cono Conforme</b>. En la <b>Diapositiva 11 (Cierre General)</b> responderemos con <b>3 preguntas simples</b> (Volumen de datos <b>N</b>, Latencia <b>CPU vs GPU</b> y <b>Riesgo de Récords</b>) cuál de las 4 Vías debes desplegar en tu negocio.',
+      lead: 'Las bandas P10–P90 habilitan decisiones gerenciales asimétricas y abren el paso a la Diapositiva 11.',
+      b1Label: '⚖️ DECISIÓN ASIMÉTRICA',
+      b1Text: 'P90 para riesgo fatal (energía, salud), P50 para valor esperado y P10 para presupuesto piso conservador.',
+      b2Label: '🧭 PASE A LA DIAPOSITIVA 11',
+      b2Text: 'Con las 4 Eras y el Cono Conforme dominados, pasamos al árbol de decisión ejecutiva de las 4 Vías.',
       formula: '4 Eras + Cono Conforme (P10–P90) ──▶ Diapo 11: Árbol de Decisión en 3 Preguntas',
       hint: 'Siguiente Diapo (Cierre Final) · Matriz Ejecutiva y Árbol de Decisión Sectorial',
-      quote: '“Nunca tomes una decisión crítica con un número desnudo: usa el P90 cuando fallar hacia abajo sea catastrófico. Y ahora que conocemos las 4 Eras y el Cono Conforme, pasemos a la última diapositiva: el mapa definitivo para saber cuál modelo elegir.”',
+      quote: 'Decidir con P10-P90 protege contra la ruina en escenarios asimétricos del mundo real.',
       icon: '🧭',
       canvasTitle: 'Toma de Decisiones Asimétrica (P10 / P50 / P90) y Puente a la Diapositiva 11',
-      ovLeft: '⚖️ Izquierda: Decisión Ejecutiva sobre el Cono (P10 · P50 · P90)',
-      ovRight: '⏭️ Derecha: Pase a la Diapo 11 (¿Qué modelo usar hoy?)',
+      ovLeft: '⚖️ Toma de Decisiones Asimétrica (P10/P90)',
+      ovRight: '⏭️ Pase a Diapo 11 (Árbol de Decisión)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> P90 (Cobertura Antiapagón / Stock Crítico)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> P50 (Valor Esperado)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> P10 (Escenario Conservador)</span>',
       nextLabel: 'Reiniciar bucle (Cono) ↺'
     }
@@ -1253,6 +1248,26 @@ input[type="range"] {
       const y = (h / rows) * j;
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
     }
+    ctx.restore();
+  }
+
+  function drawPillLabel(ctx, text, x, y, textColor, borderColor) {
+    ctx.save();
+    ctx.font = '700 9px "JetBrains Mono", monospace';
+    const padX = 7;
+    const tw = ctx.measureText(text).width;
+    const rx = x - tw - padX * 2, ry = y - 9, rw = tw + padX * 2, rh = 18;
+    ctx.fillStyle = 'rgba(4, 9, 22, 0.88)';
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(rx, ry, rw, rh, 5);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = textColor;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, rx + padX, y);
     ctx.restore();
   }
 
@@ -1409,24 +1424,16 @@ input[type="range"] {
     ctx.stroke();
     ctx.restore();
 
-    // Etiquetas claras dentro del lienzo
+    // Etiquetas claras dentro del lienzo con pastillas de alto contraste
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 9.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('Frontera (Hoy)', splitX, padT + 14);
 
-    ctx.fillStyle = '#fda4af';
-    ctx.font = '700 10px "JetBrains Mono"';
-    ctx.textAlign = 'right';
-    ctx.fillText('Pronóstico Puntual ŷₜ (La Mentira Determinista)', padL + pw - 10, cy - 8);
-
-    ctx.fillStyle = '#67e8f9';
-    ctx.font = '700 9.5px "JetBrains Mono"';
-    ctx.fillText('Núcleo 50% (P25–P75)', padL + pw - 10, cy - maxSpread * 0.26);
-    ctx.fillStyle = '#a5f3fc';
-    ctx.fillText('Banda Operativa 80% (P10–P90)', padL + pw - 10, cy + maxSpread * 0.56);
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('Velo 99% (Límites Físicos)', padL + pw - 10, cy + maxSpread * 0.90);
+    drawPillLabel(ctx, 'Pronóstico Puntual ŷₜ (La Mentira Determinista)', padL + pw - 6, cy - 8, '#fda4af', 'rgba(255, 82, 119, 0.45)');
+    drawPillLabel(ctx, 'Núcleo 50% (P25–P75)', padL + pw - 6, cy - maxSpread * 0.26, '#67e8f9', 'rgba(56, 239, 255, 0.45)');
+    drawPillLabel(ctx, 'Banda Operativa 80% (P10–P90)', padL + pw - 6, cy + maxSpread * 0.56, '#a5f3fc', 'rgba(14, 116, 144, 0.5)');
+    drawPillLabel(ctx, 'Velo 99% (Límites Físicos)', padL + pw - 6, cy + maxSpread * 0.90, '#94a3b8', 'rgba(148, 163, 184, 0.35)');
   }
 
   // ACTO 2: LOS 5 PASOS DE SPLIT CONFORMAL PREDICTION (SCP - LEI ET AL., 2017)

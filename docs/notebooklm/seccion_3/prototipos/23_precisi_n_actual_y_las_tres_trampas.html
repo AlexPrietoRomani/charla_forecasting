@@ -456,29 +456,46 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
+.executive-takeaway {
   flex-shrink: 0;
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--stage-accent);
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(8, 15, 32, 0.88);
+  border: 1px solid rgba(56, 239, 255, 0.28);
 }
 
-.speaker-quote {
+.takeaway-badge {
+  font: 700 9.5px/1 var(--mono);
+  color: var(--stage-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.takeaway-text {
   margin: 0;
-  font: italic 500 clamp(11px, 0.9vw, 12.5px)/1.38 var(--sans);
+  font: italic 500 clamp(10.5px, 0.82vw, 12px)/1.35 var(--sans);
   color: #e2eeff;
+}
+
+.fire-test-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 192, 92, 0.4);
+  background: linear-gradient(135deg, rgba(60, 28, 8, 0.65), rgba(12, 18, 34, 0.92));
+}
+
+.fire-test-btn {
+  position: static !important;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .stage-card {
@@ -737,10 +754,10 @@ input[type="range"] {
     padding: 5px 10px !important;
     font-size: 10.5px !important;
   }
-  .speaker-box {
+  .executive-takeaway {
     padding: 6px 10px !important;
   }
-  .speaker-quote {
+  .takeaway-text {
     font-size: 11px !important;
     line-height: 1.3 !important;
   }
@@ -887,14 +904,9 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Miren, es muy fácil deslumbrarse viendo lucecitas de satélites y drones en una pantalla. Pero el campo está lleno de trampas invisibles: un satélite puede ver hojas verdes y creer que hay cosecha, cuando la planta ya abortó. Ignorar eso es suicidio financiero. La pregunta ahora es... ¿sobrevive nuestro algoritmo a una sequía extrema? Vamos a comprobarlo en Jaén.”
-        </p>
+      <div class="executive-takeaway" id="executiveTakeaway">
+        <span class="takeaway-badge">💡 Idea Clave</span>
+        <span class="takeaway-text" id="speakerQuote">La tecnología sin botánica cae en 3 trampas: verdor ciego, lag τ y N=24.</span>
       </div>
     </aside>
 
@@ -914,10 +926,8 @@ input[type="range"] {
 
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
-        <div class="canvas-overlay-top">
-          <span class="ov-badge left" id="ovLeft">📡 Izquierda: Stack 3D (Clic para inspeccionar IoT, Dron o Satélite)</span>
-          <span class="ov-badge right" id="ovRight">⚠️ Derecha: Las 3 Trampas Mortales y Pase al Caso Jaén</span>
-        </div>
+        <span id="ovLeft" hidden></span>
+        <span id="ovRight" hidden></span>
       </div>
 
       <div class="legend-bar">
@@ -984,25 +994,25 @@ input[type="range"] {
     {
       id: 0,
       layerName: 'Capa 1: IoT In Situ (Hoja y Suelo)',
-      trapTitle: 'Trampa NDVI: El índice de verdor engañoso (NDVI saturado)',
-      trapSub: 'El satélite ve hojas verdes (>0.85), pero la planta ya abortó la flor.',
-      remedy: 'Remedio: Migrar al Borde Rojo NDRE (705–740 nm, Banda 5 Sentinel-2) o EVI.',
+      trapTitle: '❌ Trampa NDVI: Verdor engañoso (>0.85)',
+      trapSub: 'El satélite ve dosel verde aunque la flor haya abortado.',
+      remedy: '✅ Remedio: Borde Rojo NDRE (705–740 nm, Sentinel-2 B5).',
       color: '#6ef0b4'
     },
     {
       id: 1,
-      layerName: 'Capa 2: Dron Multiespectral (YOLOv12 + SAM 2)',
-      trapTitle: 'Trampa τ: Ignorar el retraso botánico (Lag 6–8 meses)',
-      trapSub: 'El daño térmico o sequía de hoy se refleja en el rendimiento 8 meses después.',
-      remedy: 'Remedio: Alinear las ventanas de entrenamiento con el Reloj Fenológico.',
+      layerName: 'Capa 2: Dron Multiespectral (YOLO + SAM)',
+      trapTitle: '❌ Trampa τ: Ignorar el retraso biológico',
+      trapSub: 'El estrés de hoy impacta la cosecha 8 meses después.',
+      remedy: '✅ Remedio: Alinear variables con el Reloj Fenológico.',
       color: '#ffc05c'
     },
     {
       id: 2,
-      layerName: 'Capa 3: Satélite (Sentinel-2 10m + CHIRPS)',
-      trapTitle: 'Trampa N=24: Escasez estadística (Suicidio financiero)',
-      trapSub: 'Tenemos solo 24 iteraciones anuales; el sobreajuste matemático destruye el modelo.',
-      remedy: 'Remedio: TSFMs Zero-Shot (|Tr|=0) + 100% de los 24 años a Calibración Conforme (|Cal|=24).',
+      layerName: 'Capa 3: Satélite (Sentinel-2 + CHIRPS)',
+      trapTitle: '❌ Trampa N=24: Escasez estadística extrema',
+      trapSub: 'Redes complejas memorizan ruido sobre 24 campañas.',
+      remedy: '✅ Remedio: Zero-Shot (|Tr|=0) + 100% Calibración Conformal.',
       color: '#ff5277'
     }
   ];
@@ -1047,18 +1057,18 @@ input[type="range"] {
       accent: 'var(--terracotta)',
       tag: 'ACTO 1 DE 4 · DIAGNÓSTICO DEL STACK TECNOLÓGICO',
       title: '1. El Stack de Precisión Actual y sus 3 Trampas Mortales',
-      lead: 'Hoy combinamos <b>3 capas tecnológicas (IoT en planta/suelo, Drones UAV y Satélites)</b>. Pero cuando optimizamos algoritmos sin botánica, caemos en <b>3 trampas que llevan al suicidio financiero</b>:',
-      b1Label: '🛰️ TRAMPA 1 (NDVI) Y ⏳ TRAMPA 2 (RETRASO τ)',
-      b1Text: '• <b>Trampa NDVI:</b> El índice de verdor engañoso (NDVI saturado &gt;0.85). El satélite ve hojas verdes, pero la planta ya abortó la flor.<br>• <b>Trampa τ:</b> Ignorar el retraso botánico. El daño térmico de hoy en floración se refleja en el rendimiento <b>8 meses después</b>.',
-      b2Label: '💀 TRAMPA 3 (N=24) Y LA PRUEBA DE FUEGO EN JAÉN',
-      b2Text: '• <b>Trampa N=24:</b> Escasez estadística. Tenemos solo <b>24 iteraciones anuales</b>; entrenar redes profundas crudas memoriza ruido.<br>• <b>La prueba de fuego:</b> La teoría es hermosa en el laboratorio, pero ahora la mediremos contra la <b>crisis real en Jaén</b>.',
+      lead: 'Stack de 3 capas (IoT, Drones, Satélites) vulnerable a 3 trampas mortales sin botánica:',
+      b1Label: '🛰️ 1. NDVI CIEGO Y ⏳ 2. RETARDO τ',
+      b1Text: '❌ NDVI satura en 0.85 con hojas verdes sin fruto. ❌ Ignorar τ olvida daño de hace 8 meses.',
+      b2Label: '💀 3. N = 24 Y CASO JAÉN',
+      b2Text: '❌ Redes complejas memorizan 24 filas anuales. ✅ Fenología y Conformal reducen el error.',
       formula: 'Stack: 1. IoT (Suelo/Hoja) + 2. Dron (YOLO/SAM 2) + 3. Satélite (10m)',
       hint: 'Haz clic en las capas 3D o en las 3 Trampas para inspeccionar',
-      quote: '“Miren, es muy fácil deslumbrarse viendo lucecitas de satélites y drones en una pantalla. Pero el campo está lleno de trampas invisibles: un satélite puede ver hojas verdes y creer que hay cosecha, cuando la planta ya abortó. Ignorar eso es suicidio financiero. La pregunta ahora es... ¿sobrevive nuestro algoritmo a una sequía extrema? Vamos a comprobarlo en Jaén.”',
+      quote: 'La tecnología sin botánica cae en 3 trampas: verdor ciego, lag τ y N=24.',
       icon: '📡',
       canvasTitle: 'Arquitectura Multicapa (IoT · Dron · Satélite) y Diagnóstico de las 3 Trampas',
-      ovLeft: '📡 Izquierda: Stack 3D (IoT + Dron UAV + Satélite)',
-      ovRight: '⚠️ Derecha: Las 3 Trampas y Pase al Caso Jaén',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Capa 1: IoT In Situ (Hoja/Suelo)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Capa 2: Dron UAV (YOLOv12 / SAM 2)</span><span class="leg-item"><i class="leg-line" style="--c:#e06d53"></i> Capa 3: Satélite (Sentinel-2 / CHIRPS)</span>',
       nextLabel: 'Auditar Trampa 1: NDVI vs. Red Edge ─▶'
     },
@@ -1066,18 +1076,18 @@ input[type="range"] {
       accent: 'var(--agro)',
       tag: 'ACTO 2 DE 4 · TRAMPA 1: “EL NDVI MIENTE EN VERDE”',
       title: '2. Trampa NDVI: Por qué el satélite ve hojas verdes cuando no hay café',
-      lead: 'Cuando el cafetal es frondoso y supera <b>3 capas de hojas (LAI &gt; 3)</b>, la clorofila superior absorbe el 100% de la luz roja y el <b>NDVI se estanca en una meseta ciega de 0.85–0.90</b>.',
-      b1Label: '🍃 SÍNTOMA Y DIAGNÓSTICO BIOFÍSICO (SATURACIÓN CON LAI > 3)',
-      b1Text: 'En enero, tras las lluvias de llenado, el follaje superior luce verde intenso (<b>NDVI &gt; 0.85</b>). Un modelo satelital ingenuo proyecta cosecha récord sin ver que <b>adentro del árbol las ramas no tienen cerezas porque la flor abortó en septiembre</b>.',
-      b2Label: '🔬 EL REMEDIO ESPECTRAL: MIGRAR AL BORDE ROJO (NDRE / EVI)',
-      b2Text: 'En lugar del Rojo clásico (665 nm), usamos la banda del <b>Borde Rojo (<i>Red Edge</i>, 705–740 nm, Banda 5 de Sentinel-2)</b> mediante el índice <b>NDRE</b> o el <b>EVI</b>: ondas que penetran las capas internas del dosel sin saturarse.',
+      lead: 'Con más de 3 capas de hojas (LAI > 3), el NDVI se aplana en una meseta de 0.85–0.90.',
+      b1Label: '❌ TRAMPA DE SATURACIÓN VERDE',
+      b1Text: 'El satélite ve dosel verde en enero ignorando que la flor abortó en septiembre.',
+      b2Label: '✅ REMEDIO: BORDE ROJO (NDRE / EVI)',
+      b2Text: 'La banda Red Edge (705–740 nm, Sentinel-2 B5) penetra el follaje sin saturarse.',
       formula: 'NDVI se satura en ~0.85 si LAI > 3  │  Remedio: NDRE (Red Edge 705–740 nm)',
       hint: 'Mueve la frondosidad (LAI) abajo para comparar NDVI vs. NDRE',
-      quote: '“El NDVI tiene un defecto óptico mortal: cuando el cafetal tiene más de tres capas de hojas, se encandila en verde y se aplana en 0.85. Ve un bosque hermoso por arriba aunque por dentro no haya ni un grano de café. Para ver a través del follaje necesitamos la banda del Borde Rojo: el índice NDRE.”',
+      quote: 'Con LAI > 3 el NDVI se encandila en 0.85; el Borde Rojo NDRE penetra el dosel.',
       icon: '🛰️',
       canvasTitle: 'Trampa 1 (“El NDVI Miente en Verde”): Meseta del NDVI (>0.85) vs. Linealidad del Red Edge (NDRE)',
-      ovLeft: '🍃 Izquierda: Penetración en el Dosel (Rojo 665nm vs. Red Edge 720nm)',
-      ovRight: '📈 Derecha: Curva Saturada NDVI vs. Respuesta Lineal NDRE',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> NDVI Clásico (Ciego con LAI &gt; 3)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> NDRE Red Edge (Penetra el dosel)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Umbral LAI = 3.0</span>',
       nextLabel: 'Auditar Trampas 2 y 3 (τ y N=24) ─▶'
     },
@@ -1085,18 +1095,18 @@ input[type="range"] {
       accent: 'var(--purple)',
       tag: 'ACTO 3 DE 4 · TRAMPAS 2 Y 3: RETRASO τ Y ESCASEZ N=24',
       title: '3. Trampa τ y Trampa N=24: El Remedio Zero-Shot + Conformal (100% Cal)',
-      lead: 'Las otras dos trampas ocurren en el código del científico de datos: <b>usar el clima equivocado (t−1)</b> y <b>dividir una muestra microscópica de N = 24 cosechas anuales</b>.',
-      b1Label: '⏳ REMEDIO A LA TRAMPA τ (“EL CLIMA DE AYER NO ES LA COSECHA DE MAÑANA”)',
-      b1Text: 'Un LightGBM alimentado con el clima de <i>t−1</i> logra <b>R² &gt; 0.95 por pura casualidad en laboratorio</b> y se estrella en campo. El remedio es <b>bloquear variables contemporáneas y agregar el clima en las ventanas del Reloj Fenológico (τ = 6–8 meses)</b>.',
-      b2Label: '🛡️ REMEDIO A LA TRAMPA N=24: ZERO-SHOT (|Tr|=0) + 100% CALIBRACIÓN SCP',
-      b2Text: 'En Predicción Conforme clásica (SCP), partir <b>N=24 años</b> entre Entrenamiento (<i>Tr</i>) y Calibración (<i>Cal</i>) destruye ambos. Al usar <b>Modelos Fundacionales Zero-Shot (TimesFM 2.0 / Chronos-Bolt)</b>, no gastamos datos entrenando (<b>|Tr| = 0</b>) y <b>asignamos el 100% de la historia (|Cal| = 24) a calibrar el intervalo P10–P90</b>.',
+      lead: 'Dos errores comunes: usar clima de ayer (t−1) y partir una muestra de solo N = 24 filas.',
+      b1Label: '⏳ REMEDIO A TRAMPA τ',
+      b1Text: '❌ t−1 da R² falso. ✅ Bloquear variables contemporáneas y usar ventanas de floración (τ = 6–8m).',
+      b2Label: '🛡️ REMEDIO A N=24: ZERO-SHOT + CONFORMAL',
+      b2Text: 'Modelos pre-entrenados fijan |Tr|=0 y asignan el 100% (|Cal|=24) a calibrar bandas P10–P90.',
       formula: 'Zero-Shot (|Tr| = 0) ──▶ |Cal| = 24 (100%) ──▶ I(x) = [ f̂(x) − q̂ , f̂(x) + q̂ ]',
       hint: 'Alterna abajo entre Split Clásico y Zero-Shot + 100% SCP',
-      quote: '“Si solo tienes 24 cosechas en 24 años y gastas 18 entrenando una red neuronal, te quedan apenas 6 datos para calibrar el riesgo: un suicidio estadístico. Pero como un modelo fundacional Zero-Shot ya viene entrenado, dedicamos las 24 cosechas íntegras a calibrar el escudo Conformal al 90% de confianza.”',
+      quote: 'Zero-shot deja |Tr|=0 y dedica las 24 cosechas completas a calibrar Conformal al 90%.',
       icon: '🛡️',
       canvasTitle: 'Remedio Matemático a las Trampas 2 y 3: Feature Engineering Fenológico + 100% Calibración SCP en N=24',
-      ovLeft: '⏳ Izquierda: Trampa τ (R²=0.95 falso con t-1 vs. Causalidad τ=6–8m)',
-      ovRight: '🛡️ Derecha: Trampa N=24 (Split Clásico Roto vs. Zero-Shot |Cal|=24)',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Split Clásico en N=24 (Destruye Tr y Cal)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> TSFM Zero-Shot (|Tr|=0, |Cal|=24 íntegro)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Banda Conforme P10–P90</span>',
       nextLabel: 'Ver Los 3 Axiomas e Ir al Caso Jaén ─▶'
     },
@@ -1104,18 +1114,18 @@ input[type="range"] {
       accent: 'var(--ancestral)',
       tag: 'ACTO 4 DE 4 · LOS 3 AXIOMAS DEL AGRO Y PUENTE AL CASO JAÉN',
       title: '4. Los 3 Axiomas del Agro y “La Prueba de Fuego: Ir al Caso Jaén →”',
-      lead: 'Cerramos la teoría con los <b>3 Axiomas Inviolables del Forecasting Agrícola</b> y dejamos planteadas las <b>3 preguntas cuantitativas</b> que resolveremos en el <b>Caso de Estudio 2 (Jaén)</b>:',
-      b1Label: '📜 LOS 3 AXIOMAS FUNDAMENTALES DEL AGRO (SECCIÓN 5)',
-      b1Text: '• <b>Axioma I:</b> Jamás confíes <b>N=24</b> a una red profunda sin física.<br>• <b>Axioma II:</b> Un <b>NDVI &gt; 0.85</b> es ciego; la fisiología ocurre en el <b>Red Edge (NDRE)</b>.<br>• <b>Axioma III:</b> El tiempo en el campo no son días del calendario, son <b>GDD y memoria hídrica (τ = 6–8m)</b>.',
-      b2Label: '🔥 LA PRUEBA DE FUEGO: IR AL CASO DE ESTUDIO 2 (COOPERATIVAS DE JAÉN)',
-      b2Text: '¿Sobrevive nuestro algoritmo a la sequía real de <b>Jaén 2024</b>? Mediremos en vivo: <b>1) LightGBM con desfase τ=6–8m + Sentinel-2</b>, <b>2) El duelo 24.00 (NDVI) vs. 18.46 (Fusión) contra los 18.20 qq/ha reales</b>, y <b>3) Bandas Conformal al 90% con N=24</b>.',
+      lead: 'Tres axiomas cuantitativos listos para validarse en el Caso de Estudio 2 (Jaén 2024):',
+      b1Label: '📜 LOS 3 AXIOMAS INVIOLABLES',
+      b1Text: '1. N=24 exige física. 2. NDVI > 0.85 exige Red Edge. 3. El tiempo agrícola es fenología.',
+      b2Label: '🔥 PRUEBA DE FUEGO EN JAÉN',
+      b2Text: 'Comprobaremos el duelo: 24.00 (NDVI ciego) vs 18.46 (Fusión) contra 18.20 qq/ha reales.',
       formula: 'Teoría + 3 Axiomas ──▶ [ Ir al Caso Jaén → ] (24.0 vs 18.46 vs 18.20 qq/ha)',
       hint: 'Recorre los 3 Axiomas con el deslizador antes de pasar al Caso Jaén',
-      quote: '“La teoría es hermosa en el laboratorio, pero mañana la mediremos contra la crisis real en Jaén. Ya tenemos nuestros tres axiomas claros; ahora vayamos a las cooperativas de Jaén a ver si nuestro algoritmo sobrevive a una sequía extrema de floración.”',
+      quote: 'Tres axiomas cierran la teoría: ahora comprobemos el modelo ante la sequía de Jaén.',
       icon: '🔥',
       canvasTitle: 'Los 3 Axiomas del Forecasting Agrícola y Puente Explícito al Caso de Estudio 2 (Jaén)',
-      ovLeft: '📜 Izquierda: Los 3 Axiomas Inviolables del Agro',
-      ovRight: '🔥 Derecha: La Prueba de Fuego — Ir al Caso de Estudio 2 (Jaén)',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Axioma I (N=24 + Física)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Axioma II (Red Edge NDRE)</span><span class="leg-item"><i class="leg-line" style="--c:#e06d53"></i> Ir al Caso Jaén →</span>',
       nextLabel: 'Reiniciar bucle (Stack y 3 Trampas) ↺'
     }
@@ -1460,21 +1470,21 @@ input[type="range"] {
     ctx.textAlign = 'left';
     ctx.fillText('🔥 LA PRUEBA DE FUEGO:', rxStart + 14, by + 17);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '500 9.5px Inter, sans-serif';
-    ctx.fillText('La teoría es hermosa, pero mañana la mediremos en Jaén.', rxStart + 14, by + 33);
+    ctx.font = '500 9px Inter, sans-serif';
+    ctx.fillText('Medición real en Jaén (2024)', rxStart + 14, by + 32);
 
     // Botón flecha "Ir al Caso Jaén →"
-    const btnW = 132, btnH = 28;
+    const btnW = 124, btnH = 26;
     const bx = rxStart + rw - btnW - 10, bby = by + (bannerH - btnH) / 2;
     ctx.fillStyle = '#e06d53';
     ctx.beginPath();
-    ctx.roundRect(bx, bby, btnW, btnH, 7);
+    ctx.roundRect(bx, bby, btnW, btnH, 6);
     ctx.fill();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 9.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('Ir al Caso Jaén →', bx + btnW / 2, bby + 18);
+    ctx.fillText('Ir al Caso Jaén →', bx + btnW / 2, bby + 17);
     ctx.restore();
   }
 

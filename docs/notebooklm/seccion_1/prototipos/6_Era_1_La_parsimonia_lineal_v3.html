@@ -468,21 +468,24 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
   text-align: right;
 }
 
-.speaker-box {
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
+.speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
+  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  color: #edf5ff;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.executive-takeaway strong { color: var(--ockham); white-space: nowrap; }
+
+.speaker-head {
+  display: none;
+}
   color: var(--stage-accent);
 }
 
@@ -959,14 +962,8 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Todo comenzó en 1838 con una pregunta física: ¿puede una epidemia o población crecer para siempre? Verhulst demostró que no; todo sistema tiene un techo L, como las camas de hospital en el brote de dengue de Loreto.”
-        </p>
+      <div class="executive-takeaway" id="speakerBox">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Todo sistema físico tiene un techo L; ningún proceso real crece al infinito.</span>
       </div>
     </aside>
 
@@ -1068,14 +1065,14 @@ input[type="range"] {
       accent: 'var(--ockham)',
       tag: 'ETAPA 1 DE 4 · 1838 (EL ORIGEN)',
       title: '1838: ¿De dónde comenzó todo? El límite biológico de Verhulst',
-      lead: 'Tras descomponer una serie temporal, el primer paso histórico fue notar que <b>ningún proceso físico o biológico crece hacia el infinito</b>: el entorno impone una frontera.',
-      b1Label: '🌱 ¿POR QUÉ NACIÓ EN 1838?',
-      b1Text: 'Los polinomios ingenuos proyectaban un crecimiento eterno. <b>Pierre François Verhulst</b> formuló la curva logística en <b>S</b>: crece rápido al inicio, alcanza su velocidad pico en <b>t₀</b> y se frena al saturar la capacidad máxima <b>L</b>.',
-      b2Label: '🏥 CASO REAL: EPIDEMIOLOGÍA DE BROTES (INS/MINSA)',
-      b2Text: 'En el brote de <b>Dengue en Loreto</b>, los modelos no acotados predecían infinitos pacientes. Verhulst proyectó con precisión el <b>techo biológico hospitalario (L)</b>, evitando una asignación errónea de camas.',
+      lead: 'Ningún proceso físico o biológico crece hacia el infinito: el entorno impone una frontera.',
+      b1Label: '🌱 FRONTERA BIOLÓGICA (VERHULST)',
+      b1Text: 'Reemplaza la explosión infinita por una <b>curva en S</b> que frena al chocar con el <b>techo físico L</b>.',
+      b2Label: '🏥 CASO DENGUE LORETO (INS/MINSA)',
+      b2Text: 'Proyectó con rigor el <b>techo de camas hospitalarias (L)</b>, evitando sobredimensionar recursos.',
       formula: 'yₜ = L / [ 1 + e⁻ᵏ⁽ᵗ⁻ᵗ⁰⁾ ]',
       hint: 'Velocidad pico en t₀: dy/dt = kL / 4',
-      quote: '“Todo comenzó en 1838 con una ley natural: nada rompe su maceta. Mientras un polinomio predecía infinitos casos en Loreto, Verhulst puso el techo biológico L.”',
+      quote: 'Todo sistema físico tiene un techo L; ningún proceso real crece al infinito.',
       icon: '🪴',
       canvasTitle: '1838 · Curva Logística Acotada (S) vs. Explosión Polinomial Ingenua',
       ovLeft: '🪴 Crecimiento Biológico Acotado (Verhulst)',
@@ -1087,14 +1084,14 @@ input[type="range"] {
       accent: 'var(--phi)',
       tag: 'ETAPA 2 DE 4 · 1970 (LA EVOLUCIÓN SECUENCIAL)',
       title: '1970: ¿Por qué seguimos a ARIMA y Holt-Winters?',
-      lead: 'Verhulst dibujaba un único destino final en forma de S, pero la industria necesitaba <b>pronosticar el camino semana a semana</b> con ciclos repetitivos y ruido estocástico.',
-      b1Label: '🔉 ¿POR QUÉ EVOLUCIONÓ DESDE VERHULST?',
-      b1Text: 'El inventario de micro-retail o la demanda diaria no se detienen en una meseta única; oscilan continuamente. <b>Box & Jenkins (1970)</b> y <b>Holt-Winters</b> transformaron la predicción en una <b>receta secuencial de memoria decreciente</b>.',
-      b2Label: '⚙️ LA MECÁNICA DEL ECO (p, d, q & α, β, γ)',
-      b2Text: 'El futuro se calcula como un <b>eco geométrico del pasado</b>: ayer pesa <b>φ</b>, anteayer <b>φ²</b>, hace k días <b>φᵏ</b>, sumado a la actualización explícita de <b>nivel (α), tendencia (β) y estacionalidad (γ)</b>.',
+      lead: 'La industria requería pronosticar semana a semana integrando ciclos repetitivos y ruido estocástico.',
+      b1Label: '🔉 MEMORIA DECRECIENTE SECUENCIAL',
+      b1Text: '<b>Box & Jenkins (1970)</b> modelaron la predicción como una <b>receta secuencial de memoria decreciente</b>.',
+      b2Label: '⚙️ LA MECÁNICA DEL ECO (p,d,q & α,β,γ)',
+      b2Text: 'El futuro es un <b>eco geométrico</b>: ayer pesa <b>φ</b>, anteayer <b>φ²</b>, junto con <b>nivel (α), tendencia (β) y estacionalidad (γ)</b>.',
       formula: '(1 − ΣφᵢBⁱ)(1 − B)ᵈ Yₜ = c + (1 + ΣθⱼBʲ)εₜ',
       hint: 'Holt-Winters: α (nivel) · β (tendencia) · γ (estación)',
-      quote: '“¿Por qué saltamos de 1838 a 1970? Porque Verhulst solo veía el destino final; con Holt-Winters y ARIMA aprendimos a escuchar el eco de cada semana para re-pronosticar en vivo.”',
+      quote: 'Con ARIMA y Holt-Winters el pronóstico es un eco ponderado del pasado.',
       icon: '🔉',
       canvasTitle: '1970 · Memoria Geométrica (φᵏ) y Suavizado Estacional Paso a Paso',
       ovLeft: '🔉 Pasado Reciente: Eco Exponencial (φᵏ)',
@@ -1106,14 +1103,14 @@ input[type="range"] {
       accent: 'var(--lab)',
       tag: 'ETAPA 3 DE 4 · EL PUENTE DE LA ERA 1',
       title: 'El Puente Analítico: La Navaja de Ockham en Producción',
-      lead: 'Tanto 1838 (Verhulst) como 1970 (ARIMA/HW) comparten un mismo superpoder industrial: <b>máxima parsimonia matemática</b> y transparencia total.',
-      b1Label: '⚖️ ¿QUÉ UNE A VERHULST Y ARIMA? (LA VÍA 1)',
-      b1Text: 'Ambos resuelven el problema con <b>3 a 5 parámetros con significado físico directo</b>. No requieren GPUs ni miles de datos: operan con <b>N &lt; 500 observaciones</b> y ejecutan inferencias en <b>CPU en microsegundos (&lt; 2 µs)</b>.',
-      b2Label: '🏪 ¿DÓNDE REINA HOY ESTA VÍA 1?',
-      b2Text: 'Es imbatible cuando la física o la estacionalidad dominan: <b>epidemiología de brotes acotados (INS/MINSA)</b>, control de stock en <b>micro-retail</b> y sensores <b>edge</b> de ultra-baja latencia.',
+      lead: 'Tanto Verhulst como ARIMA comparten el mismo superpoder industrial: <b>máxima parsimonia matemática</b>.',
+      b1Label: '⚖️ LA VÍA 1: PARSIMONIA PURA',
+      b1Text: 'Apenas <b>3 a 5 parámetros físicos</b>: operan con <b>N &lt; 500 datos</b> e infieren en <b>CPU en microsegundos (&lt; 2 µs)</b>.',
+      b2Label: '🏪 REINO DE APLICACIÓN',
+      b2Text: 'Imbatible en series estables: <b>epidemiología acotada (INS)</b>, micro-retail y sensores edge sin GPU.',
       formula: '3 a 5 Parámetros Interpretables ──▶ Inferencia CPU < 2 µs',
       hint: 'Condición: N < 500 · Estacionalidad clara · $0 GPU',
-      quote: '“Este puente resume la Era 1: desde el techo L de 1838 hasta el eco ARIMA de 1970, tres números bastan para predecir en microsegundos sobre cualquier CPU.”',
+      quote: '3 a 5 parámetros en CPU bastan para predecir en microsegundos.',
       icon: '⚖️',
       canvasTitle: 'Síntesis de la Vía 1: Del Destino Acotado (1838) al Camino Estocástico (1970)',
       ovLeft: '✅ Fortaleza: Interpretabilidad + CPU (µs)',
@@ -1125,14 +1122,14 @@ input[type="range"] {
       accent: 'var(--rupture)',
       tag: 'ETAPA 4 DE 4 · EL QUIEBRE Y PASE A ERA 2',
       title: '¿Por qué se quiebra la Era 1? El pase al Puente Tabular (Era 2)',
-      lead: 'La elegancia analítica se rompe cuando el mundo real deja de ser lineal e irrumpen <b>variables exógenas cruzadas</b> (clima extremo, precios, promociones).',
-      b1Label: '💥 EL MOMENTO DE QUIEBRE EN PRODUCCIÓN',
-      b1Text: 'En Loreto, ante <b>variaciones climáticas multivariadas impredecibles</b>, o en retail con miles de SKUs interconectados, la ecuación rígida es ciega: sigue proyectando su eco lineal hacia el vacío sin poder reajustar sus supuestos.',
-      b2Label: '🚀 EL SALTO A LA SIGUIENTE DIAPOSITIVA (ERA 2: PUENTE TABULAR)',
-      b2Text: 'Para ingerir lluvias, precios y miles de series sin ecuaciones rígidas, <b>convertimos la secuencia temporal en una Matriz Supervisada (“El Truco de los Lags”)</b> alimentando árboles <b>GBDT (LightGBM / XGBoost)</b>.',
+      lead: 'La parsimonia lineal quiebra ante <b>variables exógenas cruzadas</b> (clima extremo, precios, promociones).',
+      b1Label: '💥 QUIEBRE POR NO-LINEALIDAD',
+      b1Text: 'Ante <b>shocks multivariados</b> en Loreto o miles de SKUs, la ecuación rígida extrapola a ciegas hacia el vacío.',
+      b2Label: '🚀 SALTO A LA ERA 2 (PUENTE TABULAR)',
+      b2Text: 'Convertimos la serie 1D en una <b>Matriz Supervisada de Lags</b> para alimentar árboles <b>LightGBM / XGBoost</b>.',
       formula: 'Serie Yₜ ──▶ Matriz [ Yₜ₋₁, Yₜ₋₂, Climaₜ, Promoₜ ] ──▶ LightGBM',
       hint: 'Siguiente Diapo · Era 2: El Puente Tabular (Walmart M5)',
-      quote: '“Cuando el clima cambia en Loreto o cruzamos miles de productos con promociones, la fórmula lineal queda ciega. ¿La solución? Romper la ecuación y transformar el tiempo en una tabla de Lags: bienvenidos a la Era 2.”',
+      quote: 'Ante shocks no lineales, la fórmula lineal quiebra: requerimos matrices de Lags.',
       icon: '🚀',
       canvasTitle: 'Quiebre por No-Linealidad y Transformación hacia la Era 2 (Matriz de Lags + GBDT)',
       ovLeft: '💥 Fallo Era 1: Extrapolación lineal ciega ante shocks',
@@ -1273,6 +1270,33 @@ input[type="range"] {
     ctx.lineTo(padL, padT + ph);
     ctx.lineTo(padL + pw, padT + ph);
     ctx.stroke();
+    ctx.restore();
+
+    // 3 Zonas de dinámica biológica Verhulst
+    const z1x = X(0.33), z2x = X(0.66);
+    ctx.save();
+    ctx.fillStyle = 'rgba(56, 239, 255, 0.03)';
+    ctx.fillRect(padL, padT, z1x - padL, ph);
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.04)';
+    ctx.fillRect(z1x, padT, z2x - z1x, ph);
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.04)';
+    ctx.fillRect(z2x, padT, padL + pw - z2x, ph);
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.15)';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(z1x, padT); ctx.lineTo(z1x, padT + ph);
+    ctx.moveTo(z2x, padT); ctx.lineTo(z2x, padT + ph);
+    ctx.stroke();
+
+    ctx.font = '700 8.5px "JetBrains Mono"';
+    ctx.fillStyle = 'rgba(56, 239, 255, 0.7)';
+    ctx.textAlign = 'center';
+    ctx.fillText('1. Despegue', (padL + z1x) / 2, padT + 14);
+    ctx.fillStyle = 'rgba(110, 240, 180, 0.75)';
+    ctx.fillText('2. Inflexión t₀', (z1x + z2x) / 2, padT + 14);
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.75)';
+    ctx.fillText('3. Freno Techo L', (z2x + padL + pw) / 2, padT + 14);
     ctx.restore();
 
     // Banda de capacidad hospitalaria L

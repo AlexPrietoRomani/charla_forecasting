@@ -519,50 +519,59 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 .eye-btn svg { width: 15px; height: 15px; }
 
 .info-block {
-  padding: 7px 10px;
-  border-radius: 9px;
+  padding: 6px 9px;
+  border-radius: 8px;
   border: 1px solid rgba(148, 163, 184, 0.14);
   background: rgba(6, 11, 25, 0.78);
 }
 
 .info-block-label {
-  font: 700 9px/1 var(--mono);
+  font: 700 8.5px/1 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--stage-accent);
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .info-block-text {
   margin: 0;
-  font: 400 11px/1.36 var(--sans);
+  font: 400 clamp(10.5px, 0.8vw, 11.5px)/1.32 var(--sans);
   color: #cedcf0;
 }
 
 .info-block-text b { color: #fff; }
 
-.speaker-box {
-  padding: 8px 10px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 9px 9px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.55));
-}
-
-.speaker-head {
+.speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
-  font: 700 8.5px/1 var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--stage-accent);
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
+  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  color: #edf5ff;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
-.speaker-quote {
-  margin: 0;
-  font: italic 500 10.8px/1.36 var(--sans);
-  color: #e2eeff;
+.speaker-box strong, .executive-takeaway strong {
+  color: var(--ockham);
+  white-space: nowrap;
+}
+
+.speaker-head { display: none; }
+.speaker-quote { margin: 0; font-style: normal; font-weight: 500; }
+
+.layer-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 8.5px/1 var(--mono);
+  color: var(--lc);
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* RIGHT COLUMN: 2D RECONSTRUCTION MONITOR + 3D EXPLODED SLABS */
@@ -987,7 +996,7 @@ input[type="range"] {
   <!-- WORKSPACE PRINCIPAL -->
   <section class="workspace">
 
-    <!-- PANEL IZQUIERDO: NARRATIVA + INTERRUPTORES DE CAPAS + GUÍA DE EXPOSICIÓN -->
+    <!-- PANEL IZQUIERDO: NARRATIVA + INTERRUPTORES DE CAPAS + IDEA CLAVE -->
     <aside class="left-column" id="leftCard" aria-live="polite">
       <div class="narr-header">
         <div class="narr-badges">
@@ -1010,8 +1019,8 @@ input[type="range"] {
           <div class="layer-row selected" data-key="Y" tabindex="0" role="button">
             <div class="layer-sym">Y(t)</div>
             <div class="layer-info">
-              <div class="layer-name">Señal Real Observada <span>TOTAL</span></div>
-              <div class="layer-desc">El caudal total medido sin filtrar: suma de las 4 fuerzas.</div>
+              <div class="layer-name">Señal Observada <span class="layer-meter">100% TOTAL</span></div>
+              <div class="layer-desc">Caudal medido sin filtrar: suma de las 4 fuerzas.</div>
             </div>
             <button class="eye-btn" type="button" data-toggle="Y" aria-pressed="true" title="Mostrar u ocultar Y(t)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1021,8 +1030,8 @@ input[type="range"] {
           <div class="layer-row" data-key="T" tabindex="0" role="button">
             <div class="layer-sym">T(t)</div>
             <div class="layer-info">
-              <div class="layer-name">Tendencia Secular <span>INERCIA FÍSICA</span></div>
-              <div class="layer-desc">El cauce del río: dirección lenta y estructural a largo plazo.</div>
+              <div class="layer-name">Tendencia Secular <span class="layer-meter">CAUCE ~45%</span></div>
+              <div class="layer-desc">Inercia física a largo plazo: dirección lenta del cauce.</div>
             </div>
             <button class="eye-btn" type="button" data-toggle="T" aria-pressed="true" title="Mostrar u ocultar T(t)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1032,8 +1041,8 @@ input[type="range"] {
           <div class="layer-row" data-key="S" tabindex="0" role="button">
             <div class="layer-sym">S(t)</div>
             <div class="layer-info">
-              <div class="layer-name">Estacionalidad <span>GEOMETRÍA TERRESTRE</span></div>
-              <div class="layer-desc">Mareas y deshielo: ciclos fijos de 24h, 7 días o 12 meses.</div>
+              <div class="layer-name">Estacionalidad <span class="layer-meter">MAREA ~30%</span></div>
+              <div class="layer-desc">Geometría terrestre: ciclos fijos de 24h, 7d o 12 meses.</div>
             </div>
             <button class="eye-btn" type="button" data-toggle="S" aria-pressed="true" title="Mostrar u ocultar S(t)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1043,8 +1052,8 @@ input[type="range"] {
           <div class="layer-row" data-key="C" tabindex="0" role="button">
             <div class="layer-sym">C(t)</div>
             <div class="layer-info">
-              <div class="layer-name">Ciclo Endógeno <span>CAMBIO DE RÉGIMEN</span></div>
-              <div class="layer-desc">Sequías o El Niño: expansiones y contracciones no periódicas.</div>
+              <div class="layer-name">Ciclo Endógeno <span class="layer-meter">RÉGIMEN ~15%</span></div>
+              <div class="layer-desc">Dinámicas no periódicas: sequías, El Niño o booms.</div>
             </div>
             <button class="eye-btn" type="button" data-toggle="C" aria-pressed="true" title="Mostrar u ocultar C(t)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1054,8 +1063,8 @@ input[type="range"] {
           <div class="layer-row" data-key="E" tabindex="0" role="button">
             <div class="layer-sym">ε(t)</div>
             <div class="layer-info">
-              <div class="layer-name">Ruido Irreducible <span>ENTROPÍA PURA</span></div>
-              <div class="layer-desc">Ráfagas y turbulencia local: azar que jamás debes memorizar.</div>
+              <div class="layer-name">Ruido Irreducible <span class="layer-meter">ENTROPÍA ~10%</span></div>
+              <div class="layer-desc">Turbulencia y azar: entropía pura que jamás debes memorizar.</div>
             </div>
             <button class="eye-btn" type="button" data-toggle="E" aria-pressed="true" title="Mostrar u ocultar ε(t)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1064,21 +1073,15 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="info-block">
-        <div class="info-block-label" id="contextLabel">🌊 ¿POR QUÉ DESCOMPONER ANTES DE MODELAR?</div>
+      <div class="info-block" id="contextBox" hidden>
+        <div class="info-block-label" id="contextLabel">⚡ REGLA OPERATIVA DE DESCOMPOSICIÓN</div>
         <p class="info-block-text" id="contextText">
-          En redes eléctricas (<b>COES Perú / RTE Francia</b>) o agroexportación, aplicar un algoritmo sin separar estas capas hace que el modelo confunda una turbulencia aleatoria (<b>εₜ</b>) con una ley física (<b>Tₜ + Sₜ</b>).
+          Aislar <b>T(t) + S(t)</b> antes de modelar evita que un algoritmo confunda turbulencia aleatoria (<b>εₜ</b>) con leyes físicas.
         </p>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span>~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Toda serie temporal es como un río: tiene un cauce profundo que es la tendencia T(t), mareas exactas que son la estacionalidad S(t), años de sequía que son el ciclo C(t) y espuma en la superficie que es el ruido ε(t).”
-        </p>
+      <div class="executive-takeaway">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Aísla tendencia y estacionalidad; jamás entrenes sobre el ruido.</span>
       </div>
     </aside>
 
@@ -1208,40 +1211,40 @@ input[type="range"] {
       accent: 'var(--yt)',
       tag: 'ACTO 1 DE 4 · METÁFORA FÍSICO-BIOLÓGICA',
       title: '1. La Metáfora del Río: 4 Fuerzas Superpuestas',
-      lead: 'Antes de entrenar cualquier IA, debemos desglosar la señal. Imagina una serie temporal como el <b>flujo de un río o un cultivo agrícola</b>:',
-      ctxLabel: '🌊 CAUCE, MAREAS, SEQUÍAS Y TURBULENCIA (SECCIÓN 1.1)',
-      ctxText: '• <b>Tendencia T(t):</b> El cauce geomorfológico (inercia física a largo plazo).<br>• <b>Estacionalidad S(t):</b> Las mareas y el sol (geometría terrestre fija).<br>• <b>Ciclo C(t):</b> Sequías o inundaciones plurianuales.<br>• <b>Ruido ε(t):</b> Ráfagas de viento y espuma (entropía irreducible).',
-      quote: '“Toda serie temporal es como un río: tiene un cauce profundo que es la tendencia T(t), mareas exactas que son la estacionalidad S(t), años de sequía que son el ciclo C(t) y espuma en la superficie que es el ruido ε(t).”',
+      lead: 'Una serie temporal es la superposición de <b>4 fuerzas aditivas y estocásticas</b>:',
+      ctxLabel: '⚡ REGLA OPERATIVA DE DESCOMPOSICIÓN',
+      ctxText: 'Aislar <b>T(t) + S(t)</b> evita que el modelo confunda turbulencia aleatoria (<b>εₜ</b>) con leyes físicas deterministas.',
+      quote: 'Aísla tendencia y estacionalidad; jamás entrenes sobre el ruido.',
       caption: 'VISTA EXPLOTADA 3D · Y(t) = T(t) + S(t) + C(t) + ε(t)'
     },
     stl: {
       accent: 'var(--season)',
       tag: 'ACTO 2 DE 4 · DESCOMPOSICIÓN STL EN PRODUCCIÓN',
       title: '2. El Método STL en Vivo: COES (Perú) y RTE (Francia)',
-      lead: 'En 1990, <b>Cleveland et al.</b> crearon <b>STL (Seasonal-Trend Decomposition based on Loess)</b>: el bisturí que separa la serie ruidosa en subgráficos sincronizados.',
-      ctxLabel: '⚡ CASO REAL: DESPACHO ELÉCTRICO (COES PERÚ & RTE FRANCIA)',
-      ctxText: 'Operadores como el <b>COES en el Perú</b> y <b>RTE en Francia</b> usan STL cada hora para separar el pico diario de megavatios (<b>Sₜ</b>) del crecimiento industrial (<b>Tₜ</b>) y encender alertas cuando el residuo <b>Rₜ supera ±2.5σ</b>.',
-      quote: '“Así operan hoy el COES en Perú y RTE en Francia: pasan la demanda de megavatios por el bisturí STL para no confundir el pico de las 7 de la noche con el crecimiento anual del país, vigilando anomalías de ±2.5 sigmas.”',
+      lead: 'En 1990, <b>Cleveland et al.</b> crearon <b>STL (Loess)</b>: el bisturí que separa componentes limpios.',
+      ctxLabel: '⚡ COES PERÚ & RTE FRANCIA (PRODUCCIÓN)',
+      ctxText: 'Separan el pico de megavatios de las 7pm (<b>Sₜ</b>) del crecimiento estructural (<b>Tₜ</b>) y alertan si <b>Rₜ > ±2.5σ</b>.',
+      quote: 'El bisturí STL separa el pico diario del crecimiento anual y vigila anomalías.',
       caption: 'MÉTODO STL (LOESS) · Yₜ = Tₜ + Sₜ + Rₜ (ALERTA ANOMALÍAS ±2.5σ)'
     },
     signal: {
       accent: 'var(--signal)',
       tag: 'ACTO 3 DE 4 · SEÑAL CAUSAL VS. ENTROPÍA',
       title: '3. El Filtro de Oro: Aprender la Señal, Ignorar el Ruido',
-      lead: 'Observa cómo en las placas 3D aparece arriba en verde la <b>Señal Estructural Pura (T + S + C)</b> tras apagar la placa roja del azar (<b>εₜ</b>).',
-      ctxLabel: '🎯 FÍSICA SUBYACENTE VS. AZAR PURO (SECCIÓN 1.2)',
-      ctxText: 'El mayor error en ciencia de datos no es equivocarse por poco, sino <b>intentar predecir el caos</b>. Un buen modelo captura el determinismo físico (<b>T + S + C</b>) y trata a <b>ε(t)</b> como incertidumbre para calibrar bandas.',
-      quote: '“El mayor error no es equivocarse, es intentar predecir el caos en lugar de entender la señal. Al apagar la placa roja del ruido ε(t), nos queda en verde la ley física pura que sí debemos aprender.”',
+      lead: 'Observa en las placas 3D la <b>Señal Estructural Pura (T + S + C)</b> tras apagar el ruido (<b>εₜ</b>).',
+      ctxLabel: '🎯 FILTRO DE ORO EN MACHINE LEARNING',
+      ctxText: 'El objetivo de la IA no es predecir el caos: es capturar <b>T(t) + S(t) + C(t)</b> y tratar <b>ε(t)</b> como cono de duda.',
+      quote: 'Un buen modelo captura la física y trata el ruido como incertidumbre.',
       caption: 'AISLAMIENTO DE SEÑAL · ESTRUCTURA CAUSAL [T(t)+S(t)+C(t)] SIN RUIDO ε(t)'
     },
     overfit: {
       accent: 'var(--noise)',
       tag: 'ACTO 4 DE 4 · LA TRAMPA DEL OVERFITTING Y PASE A ERA 1',
       title: '4. La Trampa de Memorizar el Ruido y el Salto a la Era 1',
-      lead: 'Si fuerzas a una red compleja o árbol sin podar a acertar cada pico de <b>ε(t)</b> en el entrenamiento, caes en la <b>“Trampa de la Memorización” (Overfitting)</b>.',
-      ctxLabel: '💥 LOS 3 PILARES DEL COLAPSO EN PRODUCCIÓN ──▶ PASE A ERA 1 (1838)',
-      ctxText: '<b>1. Colapso Out-of-Sample:</b> Mira en el monitor 2D cómo la curva roja memorizadora se dispara fuera del historial.<br><b>2. El Salto a la Diapo 6 (Era 1):</b> Para capturar la ley física pura sin memorizar ruido nacieron en <b>1838 los Modelos Analíticos (Verhulst, Holt-Winters, ARIMA)</b>.',
-      quote: '“Miren la zona roja del monitor 2D: un modelo que memorizó el ruido histórico parece perfecto entrenando, pero se estrella al salir a producción. Para modelar solo la ley física con apenas 3 números nació la Era 1: pasemos a 1838 con Verhulst.”',
+      lead: 'Forzar a un modelo a memorizar <b>ε(t)</b> causa el colapso fuera de muestra (<b>Overfitting</b>).',
+      ctxLabel: '💥 DE LA MEMORIZACIÓN A LA ERA 1 (1838)',
+      ctxText: 'Para modelar leyes físicas con parsimonia sin memorizar ruido nacieron en <b>1838 los modelos analíticos (Verhulst, ARIMA)</b>.',
+      quote: 'Memorizar el ruido condena al fracaso; la parsimonia analítica salva vidas.',
       caption: 'COLAPSO FUERA DE MUESTRA (OVERFITTING) ──▶ PASE A DIAPO 6: ERA 1 (1838)'
     }
   };
@@ -1420,6 +1423,36 @@ input[type="range"] {
       oscCtx.fillStyle = '#fda4af';
       oscCtx.fillText('⚠️ OUT-OF-SAMPLE (Colapso en Producción)', w - 8, 13);
       oscCtx.restore();
+    } else {
+      if (state.activeLayers.T) {
+        oscCtx.save();
+        oscCtx.strokeStyle = 'rgba(56, 189, 248, 0.65)';
+        oscCtx.setLineDash([4, 4]);
+        oscCtx.lineWidth = 1.4;
+        const x1 = xAt(8), y1 = yAt(data.T[8]);
+        const x2 = xAt(N - 15), y2 = yAt(data.T[N - 15]);
+        oscCtx.beginPath(); oscCtx.moveTo(x1, y1); oscCtx.lineTo(x2, y2); oscCtx.stroke();
+        oscCtx.fillStyle = '#38bdf8';
+        oscCtx.font = '700 8.5px "JetBrains Mono"';
+        oscCtx.fillText('↗ Inercia T(t)', x1 + 4, y1 - 4);
+        oscCtx.restore();
+      }
+      if (state.activeLayers.S && N > 50) {
+        oscCtx.save();
+        oscCtx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
+        oscCtx.setLineDash([3, 3]);
+        oscCtx.lineWidth = 1.3;
+        const p1 = 20, p2 = 44;
+        const px1 = xAt(p1), px2 = xAt(p2), py = Math.max(16, yAt(data.S[p1]) - 10);
+        oscCtx.beginPath();
+        oscCtx.moveTo(px1, py + 4); oscCtx.lineTo(px1, py); oscCtx.lineTo(px2, py); oscCtx.lineTo(px2, py + 4);
+        oscCtx.stroke();
+        oscCtx.fillStyle = '#c084fc';
+        oscCtx.font = '700 8.5px "JetBrains Mono"';
+        oscCtx.textAlign = 'center';
+        oscCtx.fillText('↔ Periodo S(t)', (px1 + px2) / 2, py - 3);
+        oscCtx.restore();
+      }
     }
 
     const count = ['T', 'S', 'C', 'E'].filter(k => state.activeLayers[k] && !(state.mode === 'signal' && k === 'E')).length;
@@ -1713,6 +1746,7 @@ input[type="range"] {
     $('narrLead').innerHTML = c.lead;
     $('contextLabel').textContent = c.ctxLabel;
     $('contextText').innerHTML = c.ctxText;
+    $('contextBox').hidden = (stepName === 'anatomy');
     $('speakerQuote').textContent = c.quote;
     $('canvasCaption').textContent = c.caption;
 

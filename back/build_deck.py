@@ -154,7 +154,10 @@ def build_deck():
     p23_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/23_precisi_n_actual_y_las_tres_trampas.html"
     b64_p23_html = base64.b64encode(p23_path.read_bytes()).decode("ascii") if p23_path.exists() else ""
 
-    # Prototipos Sección 2 (Diapositivas 13 a 17)
+    # Prototipos Sección 2 (Diapositivas 12 a 17)
+    p12_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/12_Caso_1_Auditoria_Iquitos.html"
+    b64_p12_html = base64.b64encode(p12_path.read_bytes()).decode("ascii") if p12_path.exists() else ""
+
     p13_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/13_Datos_SENAMHI_Punchana.html"
     b64_p13_html = base64.b64encode(p13_path.read_bytes()).decode("ascii") if p13_path.exists() else ""
 
@@ -183,6 +186,7 @@ def build_deck():
     branding["b64_p21_html"] = b64_p21_html
     branding["b64_p22_html"] = b64_p22_html
     branding["b64_p23_html"] = b64_p23_html
+    branding["b64_p12_html"] = b64_p12_html
     branding["b64_p13_html"] = b64_p13_html
     branding["b64_p14_html"] = b64_p14_html
     branding["b64_p15_html"] = b64_p15_html

@@ -468,21 +468,24 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
+.speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
+  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  color: #edf5ff;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.executive-takeaway strong { color: var(--ockham); white-space: nowrap; }
+
+.speaker-head {
+  display: none;
+}
   color: var(--stage-accent);
 }
 
@@ -958,14 +961,8 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “No es magia, es escala masiva. Como el modelo ya vio 27 mil millones de curvas de clima, energía y ventas, cuando le muestras un producto nuevo predice su futuro en frío (Zero-Shot), sin entrenar nada.”
-        </p>
+      <div class="executive-takeaway" id="speakerBox">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Preentrenar sobre 27B+ observaciones permite inferir en frío sin reentrenamiento local.</span>
       </div>
     </aside>
 
@@ -986,8 +983,8 @@ input[type="range"] {
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
         <div class="canvas-overlay-top">
-          <span class="ov-badge left" id="ovLeft">🌐 Izquierda: 5 Dominios Globales (Preentreno)</span>
-          <span class="ov-badge right" id="ovRight">⚡ Derecha: Serie Nueva predicha en frío (Zero-Shot)</span>
+          <span class="ov-badge left" id="ovLeft">🌐 5 Dominios Globales (Preentreno)</span>
+          <span class="ov-badge right" id="ovRight">⚡ Serie Nueva en Frío (Zero-Shot)</span>
         </div>
       </div>
 
@@ -1120,18 +1117,18 @@ input[type="range"] {
       accent: 'var(--lab)',
       tag: 'ETAPA 1 DE 4 · EL CEREBRO UNIVERSAL',
       title: '1. ¿Qué es Zero-Shot? El “ChatGPT” de las Series Temporales',
-      lead: 'En las Eras 1, 2 y 3 teníamos que entrenar un modelo desde cero para cada problema. La <b>Era 4</b> cambia las reglas: un único modelo aprende primero <b>todas las formas posibles del tiempo</b> sobre billones de datos globales.',
-      b1Label: '🌐 PREENTRENAMIENTO MASIVO (LOTSA: 27 MIL MILLONES DE PUNTOS)',
-      b1Text: 'Así como un LLM lee todo internet para aprender a hablar, los <b>TSFMs</b> absorben <b>clima satelital, latidos ECG, redes eléctricas, tráfico web y finanzas</b>. Cuando ven tu serie nueva, ya reconocen su ritmo físico sin ajustar ni un solo peso local.',
-      b2Label: '⚡ SUPERPODER EN PRODUCCIÓN: PREDICCIÓN EN FRÍO (COLD-START)',
-      b2Text: 'Ideal cuando lanzas un <b>producto nuevo sin historial</b> o tienes pocos datos: entregas una pequeña ventana de contexto (<b>C = 32 a 512 puntos</b>) y obtienes pronósticos inmediatos <b>out-of-the-box (0 épocas, 0 reentrenamiento)</b>.',
+      lead: 'La Era 4 rompe el paradigma artesanal: un único modelo preentrenado sobre billones de observaciones globales.',
+      b1Label: '🌐 PREENTRENAMIENTO MULTIDOMINIO (LOTSA)',
+      b1Text: 'Absorbe clima satelital, energía, tráfico y finanzas. Reconoce ritmos físicos sin ajustar pesos locales.',
+      b2Label: '⚡ PREDICCIÓN EN FRÍO (ZERO-SHOT)',
+      b2Text: 'Al ingresar una ventana de contexto (C=32–512 pts), pronostica de inmediato <b>sin reentrenamiento local</b>.',
       formula: 'Preentreno (27B–100B pts) + Contexto C ──▶ Inferencia Zero-Shot',
       hint: '0% Entrenamiento Local · Listo al instante',
-      quote: '“No es magia, es escala masiva. Como el modelo ya vio 27 mil millones de curvas de clima, energía y ventas, cuando le muestras un producto nuevo predice su futuro en frío (Zero-Shot), sin entrenar nada.”',
+      quote: 'Preentrenar sobre 27B+ observaciones permite inferir en frío sin reentrenamiento local.',
       icon: '🌐',
       canvasTitle: 'Ingesta Multidominio (100B+ Puntos) e Inferencia Zero-Shot Instantánea',
-      ovLeft: '🌐 Izquierda: 5 Dominios Globales (Preentreno)',
-      ovRight: '⚡ Derecha: Serie Nueva predicha en frío (Zero-Shot)',
+      ovLeft: '🌐 5 Dominios Globales (Preentreno)',
+      ovRight: '⚡ Inferencia en Frío (Zero-Shot)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Ventana de Contexto (Tus datos)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Mediana Zero-Shot (P50)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#b48eff"></i> Abanico Probabilístico (P10–P90)</span>',
       nextLabel: 'Ver Chronos vs TimesFM ─▶'
     },
@@ -1139,18 +1136,18 @@ input[type="range"] {
       accent: 'var(--phi)',
       tag: 'ETAPA 2 DE 4 · DOS ESCUELAS DE TRADUCCIÓN',
       title: '2. ¿Cómo lee números un modelo fundacional? Chronos vs. TimesFM',
-      lead: 'Para aplicar la arquitectura de los modelos de lenguaje al tiempo, surgieron <b>dos filosofías opuestas</b>: convertir los números en “palabras discretas” o proyectar “bloques continuos”.',
-      b1Label: '🔤 ESCUELA 1: CHRONOS DE AMAZON (“EL TIEMPO COMO LENGUAJE”)',
-      b1Text: '<b>Chronos (Ansari et al., 2024)</b> escala la serie y la corta en un diccionario fijo de <b>4,096 tokens discretos</b> (como si cada altura fuera una palabra). Usa una red <b>T5 (46M/48M)</b> con <i>Cross-Entropy</i> para sortear cuál será la siguiente “palabra” del tiempo.',
-      b2Label: '📐 ESCUELA 2: TIMESFM DE GOOGLE (“GEOMETRÍA DE PARCHES CONTINUOS”)',
-      b2Text: '<b>TimesFM (Das et al., 2024)</b> evita perder precisión cortando en escalones: su red <b>Decoder-Only (200M/500M)</b> lee directamente <b>parches continuos</b> y proyecta bloques enteros de futuro en una sola pasada optimizando <b>MSE</b>.',
+      lead: 'Para modelar secuencias temporales surgieron dos filosofías: discretización a tokens vs parches continuos directos.',
+      b1Label: '🔤 CHRONOS (AMAZON T5)',
+      b1Text: 'Escala la serie a un vocabulario de <b>4,096 tokens discretos</b> y predice la siguiente palabra con Cross-Entropy.',
+      b2Label: '📐 TIMESFM (GOOGLE DECODER-ONLY)',
+      b2Text: 'Evita la cuantización: lee <b>parches continuos</b> y proyecta el horizonte futuro en una pasada optimizando MSE.',
       formula: 'Chronos = 4,096 Tokens (Cross-Entropy)  │  TimesFM = Parches Continuos (MSE)',
       hint: 'Discretización tipo texto (T5) vs. Bloques continuos (Decoder-Only)',
-      quote: '“Chronos de Amazon traduce cada número a un diccionario de 4,096 palabras y adivina la siguiente sílaba; TimesFM de Google agrupa parches continuos y dibuja todo el bloque futuro de un solo trazo.”',
+      quote: 'Chronos discretiza en 4,096 tokens mientras TimesFM proyecta parches continuos directos.',
       icon: '⚖️',
       canvasTitle: 'Comparativa de Mecanismos: Cuantización en 4,096 Tokens (Chronos) vs. Parches Continuos (TimesFM)',
-      ovLeft: '🔤 Izquierda: Chronos (Discretización a 4,096 Tokens)',
-      ovRight: '📐 Derecha: TimesFM (Proyección directa de Parches)',
+      ovLeft: '🔤 Chronos: 4,096 Tokens Discretos',
+      ovRight: '📐 TimesFM: Parches Continuos Directos',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Tokens Discretos Chronos (1..4096)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Bloques de Parches TimesFM</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Salida de Un Solo Paso</span>',
       nextLabel: 'Explorar Los 5 Grandes TSFMs ─▶'
     },
@@ -1158,18 +1155,18 @@ input[type="range"] {
       accent: 'var(--purple)',
       tag: 'ETAPA 3 DE 4 · EL ECOSISTEMA Y LA LEY DE ESCALA',
       title: '3. Las 5 Arquitecturas Estrella y la Ley de Escala Temporal',
-      lead: 'Cada gigante tecnológico diseñó su propio <b>Modelo Fundacional</b> con distinto tamaño, función de pérdida y forma de expresar la incertidumbre.',
-      b1Label: '🏛️ LOS 5 GRANDES: DE LAG-LLAMA (2.5M) A MOIRAI Y TIMESFM (500M)',
-      b1Text: '• <b>TimesFM (200M/500M):</b> Decoder-Only, MSE por parches.<br>• <b>Chronos / Bolt (46M/48M):</b> T5, 4096 tokens.<br>• <b>Lag-Llama (2.5M):</b> LLaMA + Lags, emite campana <b>Student-t</b>.<br>• <b>Moirai (LOTSA 27B):</b> Encoder-Only, mezcla <b>4 distribuciones</b>.<br>• <b>TimeGPT-1:</b> API distribuida lista para producción.',
-      b2Label: '📈 LEY DE ESCALA (SCALING LAW): MÁS PARÁMETROS = MENOR ERROR',
-      b2Text: 'Los estudios empíricos confirman que <b>el error (MASE) y el ancho del intervalo (MSIW) caen conforme crece el modelo</b>: <b>TimesFM (500M) y Chronos-Bolt (48M)</b> superan ampliamente a modelos pequeños como <b>Lag-Llama (2.5M)</b>.',
+      lead: 'Cinco arquitecturas compiten en producción gobernadas por la ley de escala temporal.',
+      b1Label: '🏛️ LOS 5 GRANDES MODELOS',
+      b1Text: 'TimesFM (500M, parches), Chronos-Bolt (48M), Lag-Llama (2.5M, Student-t), Moirai (LOTSA 27B) y TimeGPT-1 en API.',
+      b2Label: '📈 LEY DE ESCALA TEMPORAL',
+      b2Text: 'Mayor escala reduce el error (MASE) y afina la incertidumbre: <b>TimesFM y Chronos superan a modelos pequeños</b>.',
       formula: 'Rendimiento (MASE / MSIW) ∝ Escala del Modelo (# Parámetros y Datos)',
       hint: 'Mueve el deslizador inferior para auditar cada uno de los 5 modelos',
-      quote: '“En esta tabla vemos a los 5 protagonistas: desde el ligero Lag-Llama de 2.5 millones de parámetros hasta Moirai entrenado con 27 mil millones de datos y TimesFM de 500 millones. A mayor escala, menor error.”',
+      quote: 'La ley de escala temporal confirma: mayor tamaño de modelo reduce MASE y varianza.',
       icon: '🏛️',
       canvasTitle: 'Mapa de las 5 Arquitecturas Fundacionales y Ley de Escala (MASE en ERCOT)',
-      ovLeft: '📋 Izquierda: Ficha Técnica de las 5 Arquitecturas',
-      ovRight: '📉 Derecha: Ley de Escala Empírica (Menor MASE es mejor)',
+      ovLeft: '📋 Ficha Técnica de las 5 Arquitecturas',
+      ovRight: '📉 Ley de Escala Empírica (Menor MASE)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> TimesFM (500M)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Chronos-Bolt (48M)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Moirai (LOTSA 27B)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Lag-Llama (2.5M)</span>',
       nextLabel: 'Ver Límites y Pase a Conformal ─▶'
     },
@@ -1177,18 +1174,18 @@ input[type="range"] {
       accent: 'var(--ockham)',
       tag: 'ETAPA 4 DE 4 · QUIEBRE OPERATIVO Y PASE A SECCIÓN 3',
       title: '4. Los 3 Límites de los TSFMs y el Salto a Predicción Conforme',
-      lead: 'A pesar de su poder, los Modelos Fundacionales tienen <b>3 talones de Aquiles en producción</b> y sus intervalos nativos <b>no garantizan cobertura matemática</b>.',
-      b1Label: '⚠️ LAS 3 LIMITACIONES OPERATIVAS (LATENCIA, CAJA NEGRA Y EXÓGENAS)',
-      b1Text: '1. <b>Latencia y Peso:</b> 500M de parámetros son inviables en microchips <i>edge</i>.<br>2. <b>Caja Negra:</b> Difícil de auditar ante reguladores.<br>3. <b>Brecha de Exógenas Futuras:</b> Mientras <b>Moirai</b> y <b>TimeGPT (X_df)</b> sí leen clima o promos futuras, <b>Chronos base y Lag-Llama son univariados puros</b> (ciegos a variables externas).',
-      b2Label: '🛡️ EL SALTO A LA SIGUIENTE DIAPO: PREDICCIÓN CONFORME (SCP)',
-      b2Text: 'Los abanicos nativos de Chronos o Student-t <b>fallan cuando cambia la distribución</b>. Pero como Zero-Shot gasta <b>0% de datos entrenando</b>, podemos usar el <b>80%–90% de tu historial para Calibración Conforme (SCP)</b>, logrando bandas P10–P90 estrechas y garantizadas (<b>MASE 0.362 vs 1.195 de LightGBM</b> en ERCOT)!',
+      lead: 'Los modelos fundacionales presentan 3 límites operativos que exigen calibración conforme rigurosa.',
+      b1Label: '⚠️ 3 LÍMITES EN PRODUCCIÓN',
+      b1Text: '1. Latencia en edge. 2. Opacidad técnica. 3. Brecha de exógenas (Chronos base no ingiere covariables futuras).',
+      b2Label: '🛡️ SINERGIA CON CONFORMAL PREDICTION',
+      b2Text: 'Al no gastar datos entrenando (0% train), destinamos el <b>80% del historial a calibrar intervalos SCP garantizados</b>.',
       formula: 'Zero-Shot (0% Train) + 80% Datos en Calibración (SCP) ──▶ Garantía MCR ≥ 90%',
       hint: 'Siguiente Diapo · Sección 3: El Cono de Incertidumbre y Split Conformal Prediction',
-      quote: '“Ojo: que un modelo fundacional te dé un abanico de probabilidades no significa que esté garantizado. El verdadero superpoder es combinar Zero-Shot con Predicción Conforme: como no gastas datos entrenando, usas el 80% de tu historia para blindar el intervalo P10-P90.”',
+      quote: 'Zero-Shot libera datos de entrenamiento para calibrar intervalos conformes con garantía matemática.',
       icon: '🛡️',
       canvasTitle: 'Disparidad Exógena y Sinergia Zero-Shot + Predicción Conforme (Achour et al., 2025)',
-      ovLeft: '⚠️ Izquierda: Brecha de Covariables Exógenas Futuras',
-      ovRight: '⏭️ Derecha: Pase a Conformal Prediction (80% Calibración)',
+      ovLeft: '⚠️ Límites Operativos de los TSFMs',
+      ovRight: '⏭️ Pase a Predicción Conforme (SCP)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Zero-Shot + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM con pocos datos (Colapso 1.195)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Garantía Conforme ≥ 90%</span>',
       nextLabel: 'Reiniciar bucle (Zero-Shot) ↺'
     }

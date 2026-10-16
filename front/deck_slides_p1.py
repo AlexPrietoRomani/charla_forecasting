@@ -10,6 +10,7 @@ def get_slides_part1(branding=None):
     b64_era4_html = branding.get("b64_era4_html", "")
     b64_cono_html = branding.get("b64_cono_html", "")
     b64_decision_html = branding.get("b64_decision_html", "")
+    b64_p12_html = branding.get("b64_p12_html", "")
     b64_p13_html = branding.get("b64_p13_html", "")
     b64_p14_html = branding.get("b64_p14_html", "")
 
@@ -200,14 +201,12 @@ def get_slides_part1(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 12: SECCIÓN 02: CASO 1: IQUITOS SENAMHI (page-04.png)   -->
+  <!-- DIAPO 12: SECCIÓN 02: CASO 1: IQUITOS SENAMHI (PROTOTIPO)     -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="12" data-act="Acto 2 · Caso 1: Clima SENAMHI" data-time="1.0 min">
-    <div class="section-huge-num">02</div>
-    <h2 class="section-title display">Caso 1: Predicción de temperatura en Iquitos</h2>
-    <p class="section-desc">
-      Auditoría empírica con 2,557 días de mediciones reales en la estación Punchana de SENAMHI (Loreto). Cómo la física tropical desafía a los algoritmos y por qué los modelos en niveles fallan en olas de calor récord.
-    </p>
+  <section class="slide" data-index="12" data-act="Acto 2 · Caso 1: Clima SENAMHI" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P12_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide12"></iframe>
+    </div>
   </section>
 
   <!-- ============================================================= -->
@@ -238,6 +237,7 @@ def get_slides_part1(branding=None):
         .replace("__B64_ERA4_HTML__", b64_era4_html)
         .replace("__B64_CONO_HTML__", b64_cono_html)
         .replace("__B64_DECISION_HTML__", b64_decision_html)
+        .replace("__B64_P12_HTML__", b64_p12_html)
         .replace("__B64_P13_HTML__", b64_p13_html)
         .replace("__B64_P14_HTML__", b64_p14_html)
     )

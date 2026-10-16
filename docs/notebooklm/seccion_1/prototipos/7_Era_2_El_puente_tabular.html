@@ -468,21 +468,24 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
+.speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
+  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  color: #edf5ff;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.executive-takeaway strong { color: var(--ockham); white-space: nowrap; }
+
+.speaker-head {
+  display: none;
+}
   color: var(--stage-accent);
 }
 
@@ -958,14 +961,8 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Un árbol de decisión no sabe qué es un reloj. Por eso inventamos el truco de los lags: tomamos fotos de ayer y de la semana pasada y las ponemos como columnas de Excel junto al precio y al clima para adivinar mañana.”
-        </p>
+      <div class="executive-takeaway" id="speakerBox">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Deslizar ventanas convierte series 1D en matrices supervisadas para árboles GBDT.</span>
       </div>
     </aside>
 
@@ -1067,18 +1064,18 @@ input[type="range"] {
       accent: 'var(--phi)',
       tag: 'ETAPA 1 DE 4 · EL TRUCO DE LOS LAGS',
       title: '1. El “Truco de los Lags”: ¿Cómo convertir el tiempo en una tabla?',
-      lead: 'En la Era 1 vimos que una fórmula rígida colapsa cuando entran lluvias, precios o promociones. Para usar <b>Machine Learning</b>, primero hubo que enseñarle a leer el tiempo como si fuera una <b>hoja de Excel</b>.',
-      b1Label: '🪟 LA ANALOGÍA DE LA VENTANA DESLIZANTE',
-      b1Text: 'Un algoritmo de árboles no tiene reloj ni entiende qué es una secuencia. El <b>“truco de los lags”</b> consiste en deslizar una ventana por el pasado y copiar en columnas <b>cuánto vendimos ayer (yₜ₋₁), hace 7 días (yₜ₋₇) y el promedio móvil</b>, para predecir mañana (<b>yₜ₊ₕ</b>).',
-      b2Label: '🧩 EL GRAN BENEFICIO: SUMAR CUALQUIER VARIABLE',
-      b2Text: 'Una vez que el tiempo es una tabla supervisada, podemos añadir al lado <b>columnas de clima, descuentos, feriados o categorías</b>. El modelo ignora el orden temporal y aprende reglas directas de esa matriz estática.',
+      lead: 'Para usar Machine Learning, primero hubo que enseñar a leer el tiempo como una tabla de Excel.',
+      b1Label: '🪟 VENTANA DESLIZANTE DE LAGS',
+      b1Text: 'Desliza una ventana por el pasado copiando en columnas <b>ayer (yₜ₋₁), hace 7 días (yₜ₋₇) y medias móviles</b>.',
+      b2Label: '🧩 MATRIZ SUPERVISADA Y EXÓGENAS',
+      b2Text: 'Permite sumar <b>clima, promociones o feriados</b>. El árbol ignora la secuencia y aprende reglas estáticas.',
       formula: 'Vector Xₜ = [ yₜ₋₁, yₜ₋₇, Media₇, Promoₜ, Climaₜ ] ──▶ yₜ₊ₕ',
       hint: 'De secuencia 1D a matriz supervisada 2D',
-      quote: '“Un árbol de decisión no sabe qué es un reloj. Por eso inventamos el truco de los lags: tomamos fotos de ayer y de la semana pasada y las ponemos como columnas de Excel junto al precio y al clima para adivinar mañana.”',
+      quote: 'Deslizar ventanas convierte series 1D en matrices supervisadas para árboles GBDT.',
       icon: '🪟',
       canvasTitle: 'Ventana Deslizante en Vivo: De Serie Temporal a Matriz Supervisada',
-      ovLeft: '🪟 Arriba: Ventana deslizándose por la serie',
-      ovRight: '📋 Abajo: Filas creadas para entrenar el árbol',
+      ovLeft: '🪟 Ventana Deslizante (Lags)',
+      ovRight: '📋 Matriz Supervisada 2D',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Serie continua (yₜ)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Lags capturados (yₜ₋₁ … yₜ₋ₙ)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Objetivo futuro (yₜ₊₁)</span>',
       nextLabel: 'Ir al Reinado Walmart M5 ─▶'
     },
@@ -1086,18 +1083,18 @@ input[type="range"] {
       accent: 'var(--lab)',
       tag: 'ETAPA 2 DE 4 · SUPERPODER EN RETAIL MASIVO',
       title: '2. ¿Por qué LightGBM y XGBoost dominaron Walmart M5?',
-      lead: 'Al transformar miles de series en una gran tabla, los árboles potenciados (<b>GBDT: LightGBM, XGBoost, CatBoost</b>) arrasaron en la competencia mundial <b>Walmart M5 (30,490 productos)</b>.',
-      b1Label: '🛒 EL SUPERPODER: INTERACCIONES NO LINEALES SIN GPU',
-      b1Text: 'En un supermercado, bajar el precio un viernes soleado multiplica las ventas de bebidas, pero un martes lluvioso no. Los árboles descubren solos estas <b>combinaciones no lineales entre miles de variables exógenas</b> en milisegundos sobre CPU.',
-      b2Label: '✅ ¿CUÁNDO ES IMBATIBLE LA VÍA 2?',
-      b2Text: 'Cuando tienes entre <b>1,000 y 100,000 datos</b>, múltiples tablas cruzadas (precios, promociones, stock) y <b>el futuro se comporta dentro de los rangos ya conocidos en el historial</b>.',
+      lead: 'Al transformar series en matrices, los árboles GBDT (LightGBM, XGBoost) dominaron el retail masivo.',
+      b1Label: '🛒 CRUCE NO LINEAL SIN GPU',
+      b1Text: 'Descubren interacciones complejas entre <b>miles de productos, precios y clima</b> en milisegundos en CPU.',
+      b2Label: '✅ DOMINIO OPERATIVO',
+      b2Text: 'Imbatible con <b>1,000 a 100,000 datos</b> y variables exógenas, si el futuro no rompe récords históricos.',
       formula: 'LightGBM( Lags + Rolling_Mean + Precio + Promo ) ──▶ 30,490 SKUs',
       hint: 'Ganador indiscutible en Retail Masivo (Makridakis et al., 2022)',
-      quote: '“¿Por qué LightGBM ganó en Walmart M5 frente a modelos complejos? Porque puede cruzar 30,000 productos con promociones y feriados en segundos usando una laptop normal, siempre que el mundo no rompa un récord histórico.”',
+      quote: 'LightGBM arrasó en Walmart cruzando 30 mil productos sin usar GPUs.',
       icon: '🛒',
       canvasTitle: 'Walmart M5: Árboles (LightGBM) Capturando Picos por Promociones y Clima',
-      ovLeft: '🛒 30,490 SKUs + Precios + Promociones',
-      ovRight: '⚡ Precisión milimétrica dentro del rango histórico',
+      ovLeft: '🛒 Walmart M5: 30,490 SKUs + Covariables',
+      ovRight: '⚡ Precisión milimétrica dentro del rango',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Demanda Real Retail</span><span class="leg-item"><i class="leg-line dashed" style="--c:#6ef0b4"></i> Predicción LightGBM (Con Covariables)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Días de Super-Promoción</span>',
       nextLabel: 'Ver La Trampa del Árbol ─▶'
     },
@@ -1105,18 +1102,18 @@ input[type="range"] {
       accent: 'var(--ockham)',
       tag: 'ETAPA 3 DE 4 · EL PUNTO CIEGO MATEMÁTICO',
       title: '3. “La Trampa de los Árboles”: ¿Por qué jamás pueden extrapolar?',
-      lead: 'Aquí está el talón de Aquiles de la Era 2: <b>un árbol de decisión solo sabe encerrar el pasado en cajas rectangulares</b>; es matemáticamente incapaz de imaginar un valor superior al máximo que vio.',
-      b1Label: '📦 CAJAS CERRADAS (PARTICIÓN ORTOGONAL X_min, X_max)',
-      b1Text: 'Un árbol aprende cortando los datos en escalones: <i>“Si hace más de 35°C, la demanda máxima que vi en mi vida fue 65 GW”</i>. No aprende una pendiente ni una ley física; solo <b>promedia los puntos que cayeron dentro de su última caja</b>.',
-      b2Label: '🧱 EL TECHO DE CRISTAL: LA MESETA PLANA ESTÁTICA',
-      b2Text: 'Si mañana ocurre un evento extremo fuera del rango histórico de entrenamiento, el dato cae en esa misma hoja final y el árbol repite como un loro el mismo tope antiguo: proyecta una <b>meseta plana ciega (y = constante)</b>.',
+      lead: 'El talón de Aquiles de los árboles: particionan el espacio en cajas ortogonales fijas.',
+      b1Label: '📦 PARTICIÓN ORTOGONAL EN CAJAS',
+      b1Text: 'Un árbol no aprende una pendiente física; solo <b>promedia los puntos dentro de su última caja</b>.',
+      b2Label: '🧱 EL COLAPSO: MESETA PLANA',
+      b2Text: 'Si ocurre un evento fuera del rango histórico, el árbol repite su último promedio: <b>meseta plana y=cte</b>.',
       formula: 'Si X_nuevo > X_máx_histórico ──▶ Árbol devuelve constante (Meseta Plana)',
       hint: 'Incapacidad matemática de extrapolación fuera del rango',
-      quote: '“Imaginen que un árbol guarda todo lo que aprendió dentro de cajas cerradas. Si lo más alto que vio en su vida fue 65, aunque mañana el mundo se duplique, el árbol se queda clavado en 65 dibujando una línea plana.”',
+      quote: 'Los árboles particionan en cajas ortogonales: jamás pueden extrapolar fuera del rango.',
       icon: '📦',
       canvasTitle: 'Anatomía de la Falla: Escalones del Árbol vs. Frontera del Historial [X_min, X_max]',
-      ovLeft: '📦 Caja de Entrenamiento (El árbol funciona bien)',
-      ovRight: '🧱 Fuera de Caja: Meseta Plana Estática (y = cte)',
+      ovLeft: '📦 Rango Histórico de Entrenamiento',
+      ovRight: '🧱 Meseta Plana fuera de rango (y = cte)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Escalones del Árbol (GBDT)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Realidad Física Continua</span><span class="leg-item"><i class="leg-line dashed" style="--c:#38efff"></i> Frontera Histórica X_máx</span>',
       nextLabel: 'Ver Crisis Texas y Pase a Era 3 ─▶'
     },
@@ -1124,18 +1121,18 @@ input[type="range"] {
       accent: 'var(--rupture)',
       tag: 'ETAPA 4 DE 4 · COLAPSO EN TEXAS Y PASE A ERA 3',
       title: '4. El Apagón de Texas (ERCOT 2021) y el Salto a la Era 3',
-      lead: 'En febrero de 2021, esta limitación matemática se convirtió en una catástrofe real durante la <b>tormenta invernal Uri en Texas</b>, motivando el salto hacia el <b>Deep Learning</b>.',
-      b1Label: '❄️ EL CASO REAL: RÉCORD DE -18 °C Y FALLO DE +20 GW',
-      b1Text: 'La temperatura cayó a <b>-18 °C</b> (un frío jamás visto en 50 años). Como ese número no existía en la tabla histórica, los modelos tabulares proyectaron una <b>meseta plana de 65 GW</b>, pero la demanda real subió a <b>85 GW (+20 GW de error)</b>: 4 días de apagón y $195 mil millones en pérdidas.',
-      b2Label: '🚀 EL PASE A LA SIGUIENTE DIAPOSITIVA (ERA 3: DEEP LEARNING Y PARCHES)',
-      b2Text: 'Para no cortar el tiempo en celdas aisladas ni chocar con mesetas planas, la <b>Era 3 (LSTM, TFT y PatchTST)</b> lee la serie como <b>bloques o “parches” continuos de señal</b> que capturan la aceleración y pendiente real.',
+      lead: 'En 2021, la tormenta Uri en Texas provocó un colapso de +20 GW que forzó el salto a Deep Learning.',
+      b1Label: '❄️ CASO ERCOT TEXAS (-18 °C)',
+      b1Text: 'A -18 °C, los árboles proyectaron <b>meseta de 65 GW</b> ante una demanda real de <b>85 GW (+20 GW error)</b>.',
+      b2Label: '🚀 SALTO A LA ERA 3 (PARCHES)',
+      b2Text: 'Para capturar la dinámica continua sin escalones planos, <b>PatchTST y Deep Learning</b> leen parches continuos.',
       formula: 'Fallo Meseta Plana (-20 GW) ──▶ Salto a Era 3: Parches Continuos (PatchTST)',
       hint: 'Siguiente Diapo · Era 3: Deep Learning Secuencial y de Parches',
-      quote: '“En Texas 2021, cuando el termómetro marcó un récord de -18°C, los árboles predijeron una meseta plana y faltaron 20 Gigavatios. Para romper ese techo plano, dejamos las tablas y pasamos a leer parches continuos con Deep Learning: la Era 3.”',
+      quote: 'En Texas 2021 la meseta plana generó un déficit de 20 GW.',
       icon: '❄️',
       canvasTitle: 'Crisis ERCOT Texas 2021 (+20 GW de Error) y Transición a la Era 3 (Parches)',
-      ovLeft: '❄️ Izquierda: Crisis ERCOT Texas 2021 (Meseta vs +20 GW)',
-      ovRight: '⏭️ Derecha: Pase a Era 3 (Parches Continuos PatchTST)',
+      ovLeft: '❄️ Crisis ERCOT Texas 2021 (+20 GW)',
+      ovRight: '⏭️ Salto a Era 3 (Parches PatchTST)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Demanda Real ERCOT (85 GW)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Meseta Plana GBDT (65 GW)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Salto a Era 3 (Parches)</span>',
       nextLabel: 'Reiniciar bucle (Lags) ↺'
     }
@@ -1250,6 +1247,26 @@ input[type="range"] {
     ctx.restore();
   }
 
+  function drawMappingArrow(ctx, x1, y1, x2, y2, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.setLineDash([4, 3]);
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1 + 5);
+    ctx.bezierCurveTo(x1, (y1 + y2) / 2, x2, (y1 + y2) / 2, x2, y2 - 5);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2 - 2);
+    ctx.lineTo(x2 - 4, y2 - 8);
+    ctx.lineTo(x2 + 4, y2 - 8);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
   // ACTO 1: EL TRUCO DE LOS LAGS (SERIE ARRIBA + VENTANA DESLIZANTE -> TABLA ABAJO)
   function drawLagsStage(w, h) {
     const padL = 34, padR = 26, padT = 44;
@@ -1323,20 +1340,24 @@ input[type="range"] {
       }
     }
 
-    // Flechas conectoras desde la ventana hacia la tabla supervisada
+    // Flechas conectoras directas desde la ventana hacia las columnas de la tabla supervisada
     const tableY = padT + topH + 18;
     const tableH = h - tableY - 14;
     const tableX = padL;
     const tableW = pw;
+    const colWidth = tableW / 6;
 
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255, 192, 92, 0.45)';
-    ctx.setLineDash([4, 3]);
-    ctx.beginPath();
-    ctx.moveTo((wx1 + wx2) / 2, padT + topH - 2);
-    ctx.lineTo(tableX + tableW * 0.35, tableY - 2);
-    ctx.stroke();
-    ctx.restore();
+    // Flecha desde el último punto de la ventana (Lag 1) hasta columna 1 (Lag 1)
+    const lag1X = X(winEnd);
+    const lag1Y = Y(vals[winEnd]);
+    const col1TargetX = tableX + colWidth * 1.5;
+    drawMappingArrow(ctx, lag1X, lag1Y, col1TargetX, tableY, 'rgba(255, 192, 92, 0.75)');
+
+    // Flecha desde el punto objetivo (y_t) hasta columna 5 (Objetivo)
+    const tgtX = X(targetIdx);
+    const tgtY = Y(vals[targetIdx]);
+    const colTgtX = tableX + colWidth * 5.5;
+    drawMappingArrow(ctx, tgtX, tgtY, colTgtX, tableY, 'rgba(110, 240, 180, 0.85)');
 
     // TABLA SUPERVISADA INFERIOR
     ctx.save();

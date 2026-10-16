@@ -468,21 +468,24 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 11%, rgba(8, 15, 32, 0.85)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
+.speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
+  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  color: #edf5ff;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.executive-takeaway strong { color: var(--ockham); white-space: nowrap; }
+
+.speaker-head {
+  display: none;
+}
   color: var(--stage-accent);
 }
 
@@ -960,14 +963,8 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Para romper la meseta plana de los árboles en Texas, las redes neuronales dejaron de ver el tiempo como fotos sueltas en Excel y empezaron a leerlo como una película continua, guardando en su memoria la velocidad de subida.”
-        </p>
+      <div class="executive-takeaway" id="speakerBox">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Las redes neuronales leen secuencias fluidas aprendiendo velocidad y curvatura temporal.</span>
       </div>
     </aside>
 
@@ -988,8 +985,8 @@ input[type="range"] {
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
         <div class="canvas-overlay-top">
-          <span class="ov-badge left" id="ovLeft">🧠 Arriba: Cinta de Memoria Latente (Cₜ₋₁ ➔ Cₜ)</span>
-          <span class="ov-badge right" id="ovRight">📈 Abajo: Extrapolación continua sin meseta plana</span>
+          <span class="ov-badge left" id="ovLeft">🧠 Cinta de Memoria Latente (Cₜ)</span>
+          <span class="ov-badge right" id="ovRight">📈 Extrapolación Continua</span>
         </div>
       </div>
 
@@ -1069,18 +1066,18 @@ input[type="range"] {
       accent: 'var(--phi)',
       tag: 'ETAPA 1 DE 4 · LA MEMORIA FLUIDA (LSTM / TFT)',
       title: '1. De Tablas Rígidas a Memoria Fluida: RNN, LSTM y TFT',
-      lead: 'En la Era 2 vimos que los árboles cortan el tiempo en cajas cerradas y chocan contra una <b>meseta plana</b>. El <b>Deep Learning</b> nació para leer el tiempo como una <b>película continua</b> sin crear tablas de <i>lags</i> a mano.',
-      b1Label: '🧠 LA CINTA DE MEMORIA (LSTM, N-BEATS Y TFT)',
-      b1Text: 'En lugar de mirar celdas sueltas de Excel, una red <b>LSTM</b> tiene una cinta transportadora interna con <b>3 compuertas</b>: decide qué ruido viejo borrar (<b>olvido fₜ</b>), qué dato nuevo guardar (<b>entrada iₜ</b>) y qué proyectar hoy (<b>salida oₜ</b>).',
-      b2Label: '🎛️ SUPERPODER: EXTRAPOLAR PENDIENTES Y COVARIABLES',
-      b2Text: 'Arquitecturas como <b>TFT (Temporal Fusion Transformer)</b> integran datos fijos y clima futuro aprendiendo la <b>velocidad y curvatura real de la serie</b>, superando el techo plano de los árboles.',
+      lead: 'El Deep Learning nació para leer el tiempo como una película continua sin tablas manuales de lags.',
+      b1Label: '🧠 CINTA LATENTE Y COMPUERTAS',
+      b1Text: 'Una <b>LSTM</b> usa 3 compuertas: <b>olvido (fₜ)</b> para descartar ruido, <b>entrada (iₜ)</b> y <b>salida (oₜ)</b>.',
+      b2Label: '🎛️ EXTRAPOLACIÓN DE PENDIENTE',
+      b2Text: 'Aprende la <b>velocidad y curvatura real</b> de la serie temporal, superando el techo plano de los árboles.',
       formula: 'Estado Latente hₜ = f( hₜ₋₁, xₜ ) · Compuertas [ fₜ, iₜ, oₜ ]',
       hint: 'Sin ingeniería manual de lags · Flujo continuo',
-      quote: '“Para romper la meseta plana de los árboles en Texas, las redes neuronales dejaron de ver el tiempo como fotos sueltas en Excel y empezaron a leerlo como una película continua, guardando en su memoria la velocidad de subida.”',
+      quote: 'Las redes neuronales leen secuencias fluidas aprendiendo velocidad y curvatura temporal.',
       icon: '🧠',
       canvasTitle: 'Memoria Secuencial Continua (LSTM / TFT) vs. Meseta Plana Tabular',
-      ovLeft: '🧠 Arriba: Cinta de Memoria Latente (Cₜ₋₁ ➔ Cₜ)',
-      ovRight: '📈 Abajo: Extrapolación continua sin meseta plana',
+      ovLeft: '🧠 Cinta de Memoria Latente (Cₜ)',
+      ovRight: '📈 Extrapolación Continua',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Señal Continua (xₜ)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Proyección Fluida (LSTM/TFT)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Meseta Plana Árbol (Era 2)</span>',
       nextLabel: 'Ver El Doble Quiebre O(L²) ─▶'
     },
@@ -1088,18 +1085,18 @@ input[type="range"] {
       accent: 'var(--rupture)',
       tag: 'ETAPA 2 DE 4 · EL DOBLE CUELLO DE BOTELLA',
       title: '2. ¿Por qué colapsaron las RNN y los primeros Transformers?',
-      lead: 'Al llevar estas redes a series largas en producción, aparecieron <b>dos muros matemáticos</b>: la lentitud del “gota a gota” y la explosión de comparar puntos sueltos.',
-      b1Label: '⏳ FALLO 1 (LSTM): EL EMBUDO GOTA A GOTA Y EL OLVIDO',
-      b1Text: 'En una LSTM, para calcular el día 500 debes esperar en fila india a que terminen los 499 días anteriores. <b>No se puede paralelizar en GPU</b> y, en secuencias largas, los recuerdos lejanos se borran (<b>desvanecimiento de gradiente</b>).',
-      b2Label: '💥 FALLO 2 (TRANSFORMER): UN PUNTO AISLADO NO DICE NADA + O(L²)',
-      b2Text: 'En texto, la palabra <i>“Fuego”</i> tiene significado sola; en series temporales, el número suelto <b>“42.3” no significa nada</b> sin ver si sube o baja. Comparar 512 puntos todos contra todos exige <b>512² = 262,144 cruces O(L²)</b>, ahogando la GPU.',
+      lead: 'Al escalar secuencias largas aparecieron dos barreras: lentitud secuencial y explosión cuadrática.',
+      b1Label: '⏳ EMBUDO SECUENCIAL (LSTM)',
+      b1Text: 'Calcula punto a punto en fila india: <b>imposible paralelizar en GPU</b> y sufre desvanecimiento de gradiente.',
+      b2Label: '💥 EXPLOSIÓN CUADRÁTICA O(L²)',
+      b2Text: 'Un punto escalar "42.3" carece de semántica. Comparar 512 puntos punto a punto exige <b>262,144 cruces O(L²)</b>.',
       formula: 'LSTM = Fila India Secuencial + Olvido  │  Transformer = Costo Cuadrático O(L²)',
       hint: 'Para L = 512 puntos ──▶ 262,144 conexiones punto a punto',
-      quote: '“Aquí chocamos con dos muros: la LSTM lee gota a gota como un reloj de arena y olvida el principio; y el Transformer clásico intenta comparar cada número suelto contra todos los demás, multiplicando el costo al cuadrado.”',
+      quote: 'Comparar cada punto escalar suelto contra todos dispara el cómputo a O(L²).',
       icon: '💥',
       canvasTitle: 'El Doble Cuello de Botella: Embudo Secuencial (LSTM) vs. Explosión Cuadrática O(L²)',
-      ovLeft: '⏳ Izquierda: Reloj de Arena LSTM (Fila india + Olvido)',
-      ovRight: '💥 Derecha: Transformer Punto a Punto O(L²) sin semántica',
+      ovLeft: '⏳ Embudo Secuencial (LSTM)',
+      ovRight: '💥 Explosión Cuadrática O(L²)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Espera Secuencial Gota a Gota</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Red Cuadrática O(L²) Saturada</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Punto aislado sin contexto</span>',
       nextLabel: 'Ver La Revolución PatchTST ─▶'
     },
@@ -1107,18 +1104,18 @@ input[type="range"] {
       accent: 'var(--purple)',
       tag: 'ETAPA 3 DE 4 · LA REVOLUCIÓN DEL PARCHE (ICLR 2023)',
       title: '3. PatchTST: Empaquetar Números en “Palabras del Tiempo”',
-      lead: 'En 2023, <b>PatchTST (Nie et al.)</b> resolvió ambos problemas con una idea brillante del procesamiento de señales: <b>dejar de leer números sueltos y agruparlos en bloques o “parches”</b>.',
-      b1Label: '🧱 ¿QUÉ ES UN PARCHE TEMPORAL? (FORMA + PENDIENTE)',
-      b1Text: 'Si agrupamos <b>P = 16 días seguidos en una sola cápsula (parche)</b>, ese bloque ya tiene significado propio: sabemos si dentro de él la curva <b>sube, acelera o rebota</b>. Además, cada serie viaja por un <b>canal independiente</b> sin contaminar a las demás.',
-      b2Label: '⚡ EL MILAGRO MATEMÁTICO: DE O(L²) A O((L/P)²) — HASTA 256x MENOS COSTO',
-      b2Text: 'Una serie de <b>512 puntos</b> dividida en parches de <b>16 pasos</b> se reduce a solo <b>32 bloques</b>. La matriz de atención pasa de <b>262,144 cruces a solo 1,024</b>: la GPU procesa todo de golpe en paralelo y ve horizontes larguísimos.',
+      lead: 'PatchTST (ICLR 2023) agrupó puntos continuos en parches, creando palabras del tiempo.',
+      b1Label: '🧱 PARCHES: SEMÁNTICA LOCAL',
+      b1Text: 'Agrupar <b>P=16 pasos continuos</b> aporta forma y pendiente. Cada canal viaja de forma independiente.',
+      b2Label: '⚡ REDUCCIÓN DRÁSTICA O((L/P)²)',
+      b2Text: 'De 512 puntos a 32 parches: la atención cae de <b>262,144 a 1,024 operaciones (256x ahorro)</b>.',
       formula: 'Secuencia L ──▶ L/P Parches ──▶ Costo cae de O(L²) a O((L/P)²)',
       hint: 'Con P = 16: 256 veces menos memoria en el mapa de atención',
-      quote: '“Un número suelto es como una letra aislada: no dice nada. Pero un parche de 16 días es una palabra completa con forma y pendiente. Al juntar de 16 en 16, PatchTST hace que el Transformer sea hasta 256 veces más ligero.”',
+      quote: 'Agrupar 16 pasos continuos en parches reduce el costo de atención hasta 256 veces.',
       icon: '🧱',
       canvasTitle: 'Arquitectura PatchTST: Segmentación en Parches (P) + Autoatención Paralela O((L/P)²)',
-      ovLeft: '🧱 Paso 1: 512 puntos empaquetados en Parches con forma',
-      ovRight: '⚡ Paso 2: Autoatención rápida entre bloques O((L/P)²)',
+      ovLeft: '🧱 Empaquetado en Parches (P=16)',
+      ovRight: '⚡ Autoatención Eficiente O((L/P)²)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Señal Cruda (L=512)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Parches Temporales (Tamaño P)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Atención de Largo Alcance</span>',
       nextLabel: 'Ver Caso CAISO/Enel y Pase a Era 4 ─▶'
     },
@@ -1126,18 +1123,18 @@ input[type="range"] {
       accent: 'var(--lab)',
       tag: 'ETAPA 4 DE 4 · IMPACTO INDUSTRIAL Y PASE A ERA 4',
       title: '4. Parques Renovables (CAISO / Enel) y el Salto a la Era 4',
-      lead: 'Hoy <b>PatchTST</b> gobierna el pronóstico masivo de energías renovables y, al convertir el tiempo en <i>tokens de parches</i>, abrió la puerta a los <b>Modelos Fundacionales (Era 4)</b>.',
-      b1Label: '🌬️ ÉXITO EN PRODUCCIÓN: CAISO (CALIFORNIA), ENEL Y COES',
-      b1Text: 'Operadores eléctricos como <b>CAISO</b> y <b>Enel Green Power</b> procesan cientos de parques eólicos y solares a la vez con <b>PatchTST</b>: capturan frentes de viento y radiación solar a largo plazo sin acumular error recursivo.',
-      b2Label: '🚀 EL PASE A LA SIGUIENTE DIAPOSITIVA (ERA 4: FOUNDATION MODELS ZERO-SHOT)',
-      b2Text: '¿Cuál es el límite de la Era 3? Exige <b>entrenar desde cero con &gt;100,000 datos propios y GPUs caras</b>. Pero si un parche es igual a una “palabra”, ¡podemos pre-entrenar un <b>ChatGPT del Tiempo sobre billones de series</b> para predecir sin entrenar (<b>Zero-Shot</b>)!',
+      lead: 'PatchTST demostró éxito en renovables masivas y sentó las bases de los Modelos Fundacionales.',
+      b1Label: '🌬️ DESPLIEGUE EN CAISO Y ENEL',
+      b1Text: 'Pronostica cientos de parques eólicos y solares en paralelo a largo plazo sin error acumulativo recursivo.',
+      b2Label: '🚀 SALTO A FOUNDATION MODELS',
+      b2Text: 'Con parches como tokens, entrenamos modelos gigantescos con billones de datos para inferencia <b>Zero-Shot</b>.',
       formula: 'Parches (Era 3) + 27 Mil Millones de Datos (LOTSA) ──▶ Era 4: Zero-Shot',
       hint: 'Siguiente Diapo · Era 4: TimesFM, Chronos, Moirai y Lag-Llama',
-      quote: '“Con PatchTST, CAISO y Enel pronostican cientos de parques eólicos en paralelo. Y lo mejor: como ya sabemos convertir series en parches-palabras, nació la Era 4: pre-entrenar modelos gigantes con billones de datos para predecir en frío (Zero-Shot).”',
+      quote: 'Al tokenizar series en parches nacen los modelos fundacionales preentrenados Zero-Shot.',
       icon: '🚀',
       canvasTitle: 'Pronóstico Eólico/Solar Multi-Parque (CAISO / Enel) y Puente a la Era 4 (Zero-Shot)',
-      ovLeft: '🌬️ Izquierda: Red de Parques Eólicos/Solares (CAISO / Enel)',
-      ovRight: '⏭️ Derecha: Pase a Era 4 (Foundation Models Zero-Shot)',
+      ovLeft: '🌬️ Red Eléctrica CAISO / Enel',
+      ovRight: '⏭️ Salto a Modelos Fundacionales',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Pronóstico Multi-Horizonte PatchTST</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Canales Independientes (Turbinas)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Salto a Era 4 (Zero-Shot)</span>',
       nextLabel: 'Reiniciar bucle (LSTM/TFT) ↺'
     }
@@ -1312,13 +1309,24 @@ input[type="range"] {
       ctx.stroke();
 
       ctx.fillStyle = g.color;
-      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.font = '700 9.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
-      ctx.fillText(g.name, gx + gw / 2, gy + gh * 0.44);
+      ctx.fillText(g.name, gx + gw / 2, gy + gh * 0.36);
+
+      // Medidor de nivel visual dentro de la compuerta
+      const barW = gw - 24;
+      const barH = 5;
+      const barX = gx + 12;
+      const barY = gy + gh * 0.52;
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.fillRect(barX, barY, barW, barH);
+      const fillRatio = idx === 0 ? (state.gateOpen / 100) : (idx === 1 ? 0.75 : 0.88);
+      ctx.fillStyle = g.color;
+      ctx.fillRect(barX, barY, barW * fillRatio, barH);
 
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '500 9.5px Inter, sans-serif';
-      ctx.fillText(g.desc, gx + gw / 2, gy + gh * 0.78);
+      ctx.font = '500 9px Inter, sans-serif';
+      ctx.fillText(g.desc, gx + gw / 2, gy + gh * 0.82);
     });
     ctx.restore();
 

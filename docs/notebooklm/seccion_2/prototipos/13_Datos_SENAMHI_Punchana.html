@@ -4,88 +4,1210 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>DIAPO 13 v1: Datos que importan · SENAMHI Punchana</title>
+<title>DIAPO 13: Datos que Importan · SENAMHI Punchana · Distribución y Ciclo Estacional</title>
 <style>
-:root{--bg:#040714;--line:rgba(148,163,184,.15);--text:#edf5ff;--muted:#94a3b8;--cyan:#38efff;--amber:#ffc05c;--red:#ff5277;--green:#6ef0b4;--mono:"JetBrains Mono",Consolas,monospace;--display:"Space Grotesk",Inter,sans-serif;--sans:Inter,"Segoe UI",Arial,sans-serif}
-*{box-sizing:border-box}html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);background:radial-gradient(ellipse at 80% 10%,rgba(14,116,144,.16),transparent 35%),#030511;font-family:var(--sans)}
-#slideFrame{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;width:min(100vw,1600px,calc(100svh*16/9));aspect-ratio:16/9;padding:16px 22px 10px;overflow:hidden;background:linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));border:1px solid rgba(82,128,170,.25)}
-body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
-body.is-embedded #slideFrame{width:100%!important;height:100%!important;aspect-ratio:auto!important;border:none!important;padding:10px 16px 6px!important}
-button{font:inherit;color:inherit;cursor:pointer}
-.topbar{padding-bottom:9px;border-bottom:1px solid var(--line)}
-.eyebrow{margin:0;color:var(--cyan);font:600 10px/1.2 var(--mono);letter-spacing:.15em}
-h1{margin:2px 0 0;font:700 clamp(19px,1.7vw,26px)/1.1 var(--display)}h1 .n{color:var(--amber)}
-.sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.4 var(--sans)}.sub b{color:#d7e5f8}
-.workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;min-height:0;overflow:hidden}
-.card{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:4px;min-height:0;overflow:hidden;padding:9px 11px;border:1px solid rgba(133,158,192,.16);border-radius:12px;background:linear-gradient(145deg,rgba(10,17,36,.94),rgba(4,10,24,.92))}
-.card h3{margin:0;font:650 12px/1.2 var(--display);color:#e2edfb}.card h3 span{font:500 9px/1 var(--mono);color:#7c8fa9}
-.canvas-frame{position:relative;min-height:0;border:1px solid rgba(119,151,191,.14);border-radius:9px;background:rgba(2,6,17,.85);overflow:hidden}
-canvas{display:block;width:100%;height:100%}
-.cap{font:8.5px/1.4 var(--mono);color:#5f7385;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
-.cap b{color:#a9c0da}
-.kpis{position:absolute;top:7px;left:8px;display:flex;gap:6px}
-.kpis span{font:700 8.5px/1 var(--mono);padding:4px 7px;border-radius:5px;background:rgba(3,5,15,.78);border:1px solid rgba(56,239,255,.3);color:#a9f3ff}
-.foot{display:flex;justify-content:space-between;gap:10px;font:9px/1.3 var(--mono);color:#6e8099;border-top:1px solid var(--line);padding-top:6px}
-.tip{position:absolute;pointer-events:none;font:9px/1.3 var(--mono);background:rgba(3,8,20,.92);border:1px solid rgba(56,239,255,.35);border-radius:6px;padding:4px 7px;color:#dff7ff;display:none;white-space:nowrap;z-index:5}
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --phi: #38efff;
+  --ockham: #ffc05c;
+  --rupture: #ff5277;
+  --lab: #6ef0b4;
+  --purple: #b48eff;
+  --stage-accent: var(--phi);
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(14, 116, 144, 0.18), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(225, 29, 72, 0.12), transparent 38%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(6, 68, 98, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(7, 13, 29, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(82, 128, 170, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+html:has(body.is-embedded) {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 1 100% !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--phi); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  border-radius: 12px;
+  color: var(--phi);
+  background: rgba(56, 239, 255, 0.08);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--phi);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(19px, 1.75vw, 26px)/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.num { color: var(--ockham); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 13px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.14), rgba(6, 12, 26, 0.9));
+  max-width: 500px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--phi);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+/* FLOWBAR */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--phi));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--phi)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--phi)) 18%, transparent);
+}
+
+.proc-node[data-step="dist"]    { --node-color: var(--phi); }
+.proc-node[data-step="season"]  { --node-color: var(--lab); }
+.proc-node[data-step="tails"]   { --node-color: var(--rupture); }
+.proc-node[data-step="horizon"] { --node-color: var(--ockham); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+
+.proc-node[aria-selected="true"] .proc-num {
+  background: var(--node-color, var(--phi));
+  color: #030712;
+}
+
+.proc-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.proc-year {
+  font: 700 11.5px/1.1 var(--display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.proc-node[aria-selected="true"] .proc-sub { color: #cbd5e1; }
+.proc-arrow { color: rgba(148, 163, 184, 0.35); font-size: 11px; }
+
+.flow-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.7);
+  font: 600 10px/1 var(--mono);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.tool-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #fff;
+  border-color: rgba(56, 239, 255, 0.35);
+}
+
+.tool-btn.active {
+  background: rgba(8, 145, 178, 0.25);
+  border-color: var(--phi);
+  color: var(--phi);
+}
+
+/* WORKSPACE */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.95fr) minmax(0, 1.45fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* COLUMNA IZQUIERDA */
+.narrative-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(6px, 1vh, 10px);
+  padding: clamp(10px, 1.3vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(10, 18, 36, 0.95), rgba(5, 10, 24, 0.94));
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 239, 255, 0.3) transparent;
+}
+
+.stage-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--stage-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 40%, transparent);
+  color: var(--stage-accent);
+}
+
+.stage-shortcut { font: 500 9.5px/1 var(--mono); color: #64748b; }
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(15px, 1.25vw, 18.5px)/1.2 var(--display);
+  letter-spacing: -0.015em;
+  color: #f8fafc;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.9vw, 13.5px)/1.4 var(--sans);
+  color: #cbd5e1;
+}
+
+.narr-lead strong { color: #ffffff; font-weight: 600; }
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-block {
+  padding: 8px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  font: 400 clamp(11.5px, 0.85vw, 12.8px)/1.35 var(--sans);
+  color: #94a3b8;
+}
+
+.info-block-text strong { color: #e2e8f0; }
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 30%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(11px, 0.88vw, 12.5px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11.5px, 0.88vw, 13px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+/* COLUMNA DERECHA */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: clamp(10px, 1.2vw, 14px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(56, 239, 255, 0.12);
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  font-size: 13px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(13.5px, 1.1vw, 16px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong { color: #f8fafc; font-weight: 700; }
+
+.kpi-chip.cyan { border-color: rgba(56, 239, 255, 0.4); background: rgba(8, 145, 178, 0.2); color: var(--phi); }
+.kpi-chip.red { border-color: rgba(255, 82, 119, 0.4); background: rgba(225, 29, 72, 0.2); color: var(--rupture); }
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(14, 116, 144, 0.12), rgba(2, 6, 16, 0.95) 75%);
+  overflow: hidden;
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+.tip {
+  position: absolute;
+  pointer-events: none;
+  font: 500 10.5px/1.3 var(--mono);
+  background: rgba(3, 8, 22, 0.94);
+  border: 1px solid rgba(56, 239, 255, 0.4);
+  border-radius: 7px;
+  padding: 6px 9px;
+  color: #edf5ff;
+  display: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ctrl-btn {
+  padding: 5px 10px;
+  border: 1px solid rgba(128, 151, 184, 0.25);
+  border-radius: 6px;
+  background: rgba(18, 28, 48, 0.65);
+  font: 600 10px/1 var(--mono);
+  color: #a8b9cf;
+  transition: all 0.15s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(30, 48, 80, 0.8);
+  color: #fff;
+  border-color: rgba(56, 239, 255, 0.35);
+}
+
+.ctrl-btn.active {
+  color: #aff6ff;
+  border-color: rgba(56, 239, 255, 0.5);
+  background: rgba(8, 145, 178, 0.3);
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 20%, transparent);
+  font: 700 10.5px/1 var(--display);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: var(--stage-accent);
+  color: #030712;
+}
+
+/* FOOTNOTE */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font: 500 10px/1.2 var(--mono);
+  color: #64748b;
+}
+
+.footnote strong { color: #cbd5e1; }
+.footnote span.link { color: var(--stage-accent); }
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 6px 14px 4px !important; }
+  .topbar { padding-bottom: 5px; }
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .eyebrow { font-size: 9.5px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 5px 10px; }
+  .proc-node { padding: 5px 8px; }
+  .narrative-card { padding: 8px 12px; gap: 5px; }
+  .speaker-box { padding: 6px 9px; }
+  .stage-card { padding: 8px 10px; }
+  .controls-bar { padding: 5px 8px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .topbar { padding-bottom: 4px; }
+}
 </style>
 </head>
 <body>
-<main id="slideFrame">
-<header class="topbar"><p class="eyebrow">ACTO 2 · DATOS SENAMHI · 2019 → 2025</p>
-<h1><span class="n">13</span> Datos que importan: estación Punchana</h1>
-<p class="sub"><b>2,557 días</b> · tmax media <b>31.79 °C</b> · récord <b>38.0 °C</b> · pasa el mouse sobre las barras para leer cada valor real.</p></header>
-<section class="workspace">
-<div class="card"><h3>📊 Distribución de tmax diaria <span>bins de 1 °C · N=2,557</span></h3>
-<div class="canvas-frame"><div class="kpis"><span>MODA 31–32 °C (472+453)</span><span>COLA DER: olas ≥36 °C</span></div><canvas id="hist"></canvas><div class="tip" id="tipH"></div></div>
-<div class="cap"><span>izquierda: noches frías <b>19.2 °C mín</b> (friajes)</span><span>derecha: olas <b>38.0 °C</b> fuera de rango</span></div></div>
-<div class="card"><h3>🗓️ Ciclo estacional medio <span>media mensual real 2019–2025</span></h3>
-<div class="canvas-frame"><div class="kpis"><span>FRESCO MAY–JUL ≈30.5 °C</span><span>PICO SEP–NOV ≈33.1 °C</span></div><canvas id="seas"></canvas><div class="tip" id="tipS"></div></div>
-<div class="cap"><span><b>h &gt; 7d:</b> horizonte de ruptura entrópica</span><span>Δ estacional ≈ <b>2.7 °C</b></span></div></div>
-</section>
-<footer class="foot"><span><strong>SENAMHI Punchana (103015)</strong> · −3.6903°, −73.2556°, 91 msnm</span><span>tmin con vacíos iniciales · precip con control de ceros</span></footer>
+<main id="slideFrame" aria-label="Diapositiva 13: Datos que Importan SENAMHI Punchana">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 20V10M12 20V4M6 20v-6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ACTO 2 · CASO 1 · DISTRIBUCIÓN &amp; CICLO ESTACIONAL</p>
+        <h1><span class="num">13</span> Datos que importan: estación Punchana <span class="sub">· N=2,557 Días</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Ficha de dispersión empírica">
+      <div class="via-title">
+        <span>📊 FENOMENOLOGÍA TÉRMICA REAL</span>
+        <span>SENAMHI 103015</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">🎯 <strong>Moda 31–32 °C</strong> (925 días)</span>
+        <span class="via-pill">🔥 <strong>Cola ≥ 36 °C</strong> (78 días)</span>
+        <span class="via-pill">❄️ <strong>Mín 19.2 °C</strong> (Friaje)</span>
+        <span class="via-pill">📈 <strong>Δ Estacional ≈ 2.7 °C</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLOWBAR -->
+  <nav class="flowbar" aria-label="Etapas de los datos">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="dist" id="tab-dist">
+        <span class="proc-num">1</span>
+        <span class="proc-text">
+          <span class="proc-year">Histograma Tmax</span>
+          <span class="proc-sub">Moda 31–32 °C</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="season" id="tab-season">
+        <span class="proc-num">2</span>
+        <span class="proc-text">
+          <span class="proc-year">Ciclo Estacional</span>
+          <span class="proc-sub">12 Medias Mensuales</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="tails" id="tab-tails">
+        <span class="proc-num">3</span>
+        <span class="proc-text">
+          <span class="proc-year">Colas Asimétricas</span>
+          <span class="proc-sub">Friajes vs Olas 38°</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="horizon" id="tab-horizon">
+        <span class="proc-num">4</span>
+        <span class="proc-text">
+          <span class="proc-year">Ruptura h &gt; 7d</span>
+          <span class="proc-sub">Límite Entrópico</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flow-controls">
+      <button class="tool-btn active" id="btnLoop" type="button" title="Pausar o reanudar rotación automática">
+        <span>🔁</span> <span id="loopTxt">Auto: ON</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE -->
+  <section class="workspace">
+    <!-- COLUMNA IZQUIERDA -->
+    <article class="narrative-card" id="narrCard">
+      <div class="stage-pill-row">
+        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · DISTRIBUCIÓN DIARIA</span>
+        <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
+      </div>
+
+      <h2 class="narr-title" id="narrTitle">La ilusión gaussiana: la moda esconde el verdadero riesgo</h2>
+      
+      <p class="narr-lead" id="narrLead">
+        A primera vista, la temperatura en Iquitos parece ultra predecible: <strong>925 días (36.2%)</strong> se concentran rígidamente entre 31 y 32 °C. Sin embargo, los modelos lineales e ingenuos son destruidos cuando el sistema salta a la cola derecha.
+      </p>
+
+      <div class="narr-blocks" id="narrBlocks">
+        <div class="info-block">
+          <div class="info-block-label">🎯 Hiperconcentración en la Media</div>
+          <div class="info-block-text">1,271 días (casi el 50% del historial) caen en solo dos grados centígrados (31 a 33 °C). Esto seduce a los algoritmos a memorizar un valor promedio fijo.</div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label">⚠️ La Cola Roja Destructiva</div>
+          <div class="info-block-text">78 días registraron temperaturas de ola ≥ 36 °C (con récords de 38.0 °C). Un modelo comercial que minimiza MSE promedio falla catastróficamente en estos shocks.</div>
+        </div>
+      </div>
+
+      <div class="math-strip" id="mathStrip">
+        <span>Moda = [31.0, 32.0] °C (925 d) ──▶ Cola ≥ 36 °C (78 d)</span>
+        <span class="hint">Asimetría Positiva</span>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎙️ GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span>~20 SEG</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren el histograma: 9 de cada 10 días Iquitos parece un problema resuelto para un modelo simple. Pero el valor operativo está en predecir la cola roja: cuando la temperatura toca 38 °C y los sistemas colapsan.”
+        </p>
+      </div>
+    </article>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="stage-card">
+      <header class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">📊</span>
+          <h3 class="stage-title" id="stageVisualTitle">Distribución Empírica de Tmax Diaria (2,557 Días)</h3>
+        </div>
+
+        <div class="stage-kpis">
+          <span class="kpi-chip cyan" id="kpiModa">Moda: 31–32 °C (925 d)</span>
+          <span class="kpi-chip red" id="kpiOlas">Olas ≥ 36 °C: 78 d</span>
+        </div>
+      </header>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="cv"></canvas>
+        <div class="tip" id="tooltip"></div>
+      </div>
+
+      <footer class="controls-bar">
+        <div class="ctrl-group">
+          <span style="font-size:10px; font-weight:700; color:var(--muted); font-family:var(--mono);">MODO:</span>
+          <button class="ctrl-btn active" id="btnViewHist">📊 Histograma (Bins 1 °C)</button>
+          <button class="ctrl-btn" id="btnViewSeason">🗓️ Ciclo Mensual (12 Meses)</button>
+        </div>
+
+        <button class="action-btn" id="btnNextAction">
+          <span>Ver Trampa de Árboles (Diapo 14)</span> <span>→</span>
+        </button>
+      </footer>
+    </div>
+  </section>
+
+  <!-- FOOTNOTE -->
+  <footer class="footnote">
+    <span><strong>SENAMHI Punchana (103015):</strong> 2019-01-01 → 2025-12-31 · Tmin con vacíos iniciales, precipitación con control de ceros</span>
+    <span class="link">Pase a Diapo 14: La Trampa de No-Extrapolación de los Árboles →</span>
+  </footer>
+
 </main>
+
 <script>
-(()=>{if(window.self!==window.top)document.body.classList.add('is-embedded');
-const HIST=[2,2,0,4,5,4,18,51,81,97,183,346,472,453,351,297,113,65,13];
-const MM=[32.05,31.77,31.41,31.35,30.50,30.41,30.67,32.00,33.12,33.01,33.08,32.08];
-const MXM=[36.2,35.8,35.4,34.8,34.2,34.4,34.8,36.0,37.6,38.0,36.0,36.0];
-const MN=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-function setup(id,tipId,draw){const cv=document.getElementById(id),ctx=cv.getContext('2d'),tip=document.getElementById(tipId);
-function fit(){const r=cv.getBoundingClientRect();if(r.width<4)return;const d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
-let bars=[];
-function render(hover=-1){bars=draw(ctx,cv,hover)}
-cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
-const b=bars.find(b=>mx>=b.x&&mx<=b.x+b.w&&my>=b.y&&my<=b.y+b.h);
-if(b){render(bars.indexOf(b));tip.style.display='block';tip.style.left=(b.x+b.w+6)+'px';tip.style.top=(b.y-4)+'px';tip.textContent=b.t}else{tip.style.display='none';render()}});
-cv.addEventListener('mouseleave',()=>{tip.style.display='none';render()});
-addEventListener('resize',()=>{fit();render()});fit();render();}
-// Histograma
-setup('hist','tipH',(ctx,cv,hov)=>{const r=cv.getBoundingClientRect(),w=r.width,h=r.height;ctx.clearRect(0,0,w,h);
-const max=Math.max(...HIST),bw=w/19,out=[];
-HIST.forEach((v,i)=>{const bh=(v/max)*(h-46),x=i*bw+2,y=h-24-bh,bwid=bw-4;
-const hot=v>=300,mid=v>=100;
-const g=ctx.createLinearGradient(0,y,0,h-24);
-if(i>=17){g.addColorStop(0,'rgba(255,82,119,.85)');g.addColorStop(1,'rgba(255,82,119,.12)')}
-else if(hot){g.addColorStop(0,'rgba(56,239,255,.8)');g.addColorStop(1,'rgba(56,239,255,.1)')}
-else{g.addColorStop(0,'rgba(120,150,190,.55)');g.addColorStop(1,'rgba(120,150,190,.08)')}
-ctx.fillStyle=g;ctx.fillRect(x,y,bwid,bh);
-if(i===hov){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(x,y,bwid,bh)}
-ctx.fillStyle='#5f7385';ctx.font='7px JetBrains Mono';ctx.textAlign='center';
-if(i%2===0)ctx.fillText((19+i)+'°',x+bwid/2,h-10);
-out.push({x,y,w:bwid,h:bh,t:(19+i)+'–'+(20+i)+' °C: '+v+' días'})});
-ctx.fillStyle='#8fa3bd';ctx.font='8px JetBrains Mono';ctx.textAlign='left';ctx.fillText('máx barra: 472 días (31–32 °C)',8,14);return out});
-// Estacional
-setup('seas','tipS',(ctx,cv,hov)=>{const r=cv.getBoundingClientRect(),w=r.width,h=r.height;ctx.clearRect(0,0,w,h);
-const lo=29.5,hi=34,Y=v=>h-26-((v-lo)/(hi-lo))*(h-50),bw=w/12,out=[];
-MM.forEach((v,i)=>{const x=i*bw+3,bwid=bw-6,y=Y(v);
-const hot=v>=32.5,warm=v>=31.5;
-ctx.fillStyle=hot?'rgba(255,192,92,.85)':warm?'rgba(56,239,255,.6)':'rgba(110,240,180,.55)';
-ctx.fillRect(x,y,bwid,h-26-y);
-ctx.fillStyle='#ff9cb0';ctx.font='7px JetBrains Mono';ctx.textAlign='center';ctx.fillText('▲'+MXM[i].toFixed(0),x+bwid/2,Y(MXM[i])+14);
-if(i===hov){ctx.strokeStyle='#fff';ctx.strokeRect(x,y,bwid,h-26-y)}
-ctx.fillStyle='#8fa3bd';ctx.font='8px JetBrains Mono';ctx.fillText(MN[i],x+bwid/2,h-10);
-out.push({x,y,w:bwid,h:h-26-y,t:MN[i]+' media '+v.toFixed(2)+' °C · máx '+MXM[i].toFixed(1)+' °C'})});return out});
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['dist', 'season', 'tails', 'horizon'];
+  const LOOP_MS = 9500;
+
+  const STAGE_DATA = {
+    dist: {
+      accent: '#38efff',
+      tag: 'ETAPA 1 DE 4 · DISTRIBUCIÓN DIARIA',
+      title: 'La ilusión gaussiana: la moda esconde el verdadero riesgo',
+      lead: 'A primera vista, la temperatura en Iquitos parece ultra predecible: <strong>925 días (36.2%)</strong> se concentran rígidamente entre 31 y 32 °C. Sin embargo, los modelos lineales e ingenuos son destruidos cuando el sistema salta a la cola derecha.',
+      blocks: [
+        { label: '🎯 Hiperconcentración en la Media', text: '1,271 días (casi el 50% del historial) caen en solo dos grados centígrados (31 a 33 °C). Esto seduce a los algoritmos a memorizar un valor promedio fijo.' },
+        { label: '⚠️ La Cola Roja Destructiva', text: '78 días registraron temperaturas de ola ≥ 36 °C (con récords de 38.0 °C). Un modelo comercial que minimiza MSE promedio falla catastróficamente en estos shocks.' }
+      ],
+      math: 'Moda = [31.0, 32.0] °C (925 d) ──▶ Cola ≥ 36 °C (78 d)',
+      hint: 'Asimetría Positiva',
+      quote: '“Miren el histograma: 9 de cada 10 días Iquitos parece un problema resuelto para un modelo simple. Pero el valor operativo está en predecir la cola roja: cuando la temperatura toca 38 °C y los sistemas colapsan.”',
+      viewMode: 'hist'
+    },
+    season: {
+      accent: '#6ef0b4',
+      tag: 'ETAPA 2 DE 4 · CICLO ESTACIONAL REAL',
+      title: 'El reloj estacional amazónico: fresco en junio, pico en octubre',
+      lead: 'En el ecuador térmico amazónico las estaciones no se rigen por solsticios boreales. El régimen se divide en dos fases bien definidas: <strong>temporada fresca (mayo–julio ≈30.5 °C)</strong> y <strong>pico térmico (septiembre–noviembre ≈33.1 °C)</strong>.',
+      blocks: [
+        { label: '🌿 Temporada Fresca (Mayo–Julio)', text: 'Promedio mensual de 30.41 a 30.67 °C. Dominan las lluvias continuas y la nubosidad densa que actúa como escudo térmico.' },
+        { label: '☀️ Pico Térmico (Septiembre–Noviembre)', text: 'Promedio mensual salta a 33.12 °C. La radiación cenital y el cese momentáneo de lluvias incuban las olas récord.' }
+      ],
+      math: 'Δ Tmax(Octubre − Junio) = 33.12 − 30.41 = 2.71 °C',
+      hint: 'Amplitud Estacional Mínima',
+      quote: '“El delta estacional es de apenas 2.7 °C entre el mes más frío y el más caluroso. Pero esa pequeña diferencia de nivel modula la probabilidad de tener una ola extrema.”',
+      viewMode: 'season'
+    },
+    tails: {
+      accent: '#ff5277',
+      tag: 'ETAPA 3 DE 4 · COLAS ASIMÉTRICAS',
+      title: 'El choque térmico: 18.8 °C entre friajes polares y olas récord',
+      lead: 'La Amazonía no tiene una distribución simétrica. En la cola izquierda, <strong>las intrusiones polares antárticas (friajes)</strong> bajan el termómetro a 19.2 °C; en la cola derecha, <strong>las olas de calor</strong> alcanzan 38.0 °C.',
+      blocks: [
+        { label: '🧊 Cola Izquierda (Friajes Rápidos)', text: 'Vientos del sur canalizados por la cordillera desploman la temperatura en 24h. No hay memoria inercial que avise.' },
+        { label: '🔥 Cola Derecha (Olas Récord Sostenidas)', text: 'Olas de 38.0 °C el 7 de octubre de 2023 y 18 de octubre de 2024. Los modelos en niveles quedan ciegos ante lo nunca visto.' }
+      ],
+      math: 'Rango Absoluto = 38.0 °C (Máx) − 19.2 °C (Mín) = 18.8 °C',
+      hint: 'Distribución de Colas Pesadas',
+      quote: '“El promedio de 31.8 °C es una abstracción matemática: el hospital atiende golpes de calor a 38 °C y crisis respiratorias cuando el friaje lo tira a 19 °C.”',
+      viewMode: 'hist'
+    },
+    horizon: {
+      accent: '#ffc05c',
+      tag: 'ETAPA 4 DE 4 · RUPTURA ENTRÓPICA',
+      title: 'El horizonte de 7 días: donde el pronóstico pierde la física',
+      lead: 'En meteorología tropical convective, la predictibilidad numérica colapsa velozmente. A partir de <strong>h &gt; 7 días</strong>, el error de pronóstico iguala a la varianza natural de la serie climatológica.',
+      blocks: [
+        { label: '⚡ Memoria Inercial de Corto Plazo (1 a 3 días)', text: 'La humedad del suelo y la atmósfera local retienen inercia: los modelos locales de ML y persistencia dominan.' },
+        { label: '🚪 La Puerta a la Diapositiva 14 (La Trampa del Árbol)', text: 'Para aprovechar esa memoria con Machine Learning, se usan árboles de decisión. Pero los árboles tienen una trampa mortal en olas récord.' }
+      ],
+      math: 'h > 7 días ──▶ Error(Modelo) ≈ Varianza(Clima)',
+      hint: 'Pase a Diapo 14 →',
+      quote: '“Entendidos los datos, pasemos a la Diapo 14 para ver qué pasa cuando alimentamos estos datos a un Random Forest comercial: la trampa de la no-extrapolación.”',
+      viewMode: 'season'
+    }
+  };
+
+  // DATOS REALES SENAMHI PUNCHANA
+  const BINS = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37];
+  const HIST = [2, 2, 0, 4, 5, 4, 18, 51, 81, 97, 183, 346, 472, 453, 351, 297, 113, 65, 13];
+  const MM = [32.05, 31.77, 31.41, 31.35, 30.50, 30.41, 30.67, 32.00, 33.12, 33.01, 33.08, 32.08];
+  const MN = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+  let currentStep = 'dist';
+  let viewMode = 'hist'; // 'hist' | 'season'
+  let loopActive = true;
+  let loopTimer = null;
+  let hoverIndex = -1;
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const tip = document.getElementById('tooltip');
+
+  function updateStage(stepKey, manual = false) {
+    if (!STAGE_DATA[stepKey]) return;
+    currentStep = stepKey;
+    const data = STAGE_DATA[stepKey];
+
+    document.documentElement.style.setProperty('--stage-accent', data.accent);
+
+    document.querySelectorAll('.proc-node').forEach(node => {
+      const isSel = node.getAttribute('data-step') === stepKey;
+      node.setAttribute('aria-selected', isSel ? 'true' : 'false');
+    });
+
+    document.getElementById('stageTag').textContent = data.tag;
+    document.getElementById('narrTitle').textContent = data.title;
+    document.getElementById('narrLead').innerHTML = data.lead;
+    document.getElementById('mathStrip').innerHTML = `<span>${data.math}</span><span class="hint">${data.hint}</span>`;
+    document.getElementById('speakerQuote').textContent = data.quote;
+
+    const blocksContainer = document.getElementById('narrBlocks');
+    blocksContainer.innerHTML = '';
+    data.blocks.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'info-block';
+      div.innerHTML = `<div class="info-block-label">${b.label}</div><div class="info-block-text">${b.text}</div>`;
+      blocksContainer.appendChild(div);
+    });
+
+    if (data.viewMode && data.viewMode !== viewMode) {
+      setViewMode(data.viewMode);
+    } else {
+      draw();
+    }
+
+    if (manual) restartLoop();
+  }
+
+  function nextStep() {
+    const idx = STEPS.indexOf(currentStep);
+    const nextIdx = (idx + 1) % STEPS.length;
+    updateStage(STEPS[nextIdx]);
+  }
+
+  function restartLoop() {
+    clearInterval(loopTimer);
+    if (loopActive) {
+      loopTimer = setInterval(nextStep, LOOP_MS);
+    }
+  }
+
+  function setViewMode(mode) {
+    viewMode = mode;
+    document.getElementById('btnViewHist').classList.toggle('active', mode === 'hist');
+    document.getElementById('btnViewSeason').classList.toggle('active', mode === 'season');
+
+    const titleEl = document.getElementById('stageVisualTitle');
+    const iconEl = document.getElementById('stageIcon');
+
+    if (mode === 'hist') {
+      titleEl.textContent = 'Distribución Empírica de Tmax Diaria (2,557 Días)';
+      iconEl.textContent = '📊';
+    } else {
+      titleEl.textContent = 'Ciclo Estacional Medio (12 Medias Mensuales Reales)';
+      iconEl.textContent = '🗓️';
+    }
+    hoverIndex = -1;
+    tip.style.display = 'none';
+    draw();
+  }
+
+  // BOTÓN LOOP
+  const btnLoop = document.getElementById('btnLoop');
+  btnLoop.addEventListener('click', () => {
+    loopActive = !loopActive;
+    btnLoop.classList.toggle('active', loopActive);
+    document.getElementById('loopTxt').textContent = loopActive ? 'Auto: ON' : 'Auto: OFF';
+    restartLoop();
+  });
+
+  // TABS
+  STEPS.forEach(s => {
+    const btn = document.getElementById(`tab-${s}`);
+    if (btn) btn.addEventListener('click', () => updateStage(s, true));
+  });
+
+  // CONTROLES DE MODO
+  document.getElementById('btnViewHist').addEventListener('click', () => setViewMode('hist'));
+  document.getElementById('btnViewSeason').addEventListener('click', () => setViewMode('season'));
+
+  // ACCIÓN SIGUIENTE DIAPO
+  document.getElementById('btnNextAction').addEventListener('click', () => {
+    try {
+      window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+    } catch(e) {}
+  });
+
+  // CANVAS
+  function fitCanvas() {
+    const r = cv.getBoundingClientRect();
+    if (r.width < 10) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = r.width * dpr;
+    cv.height = r.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  let hitAreas = [];
+
+  function draw() {
+    const r = cv.getBoundingClientRect();
+    const w = r.width;
+    const h = r.height;
+    if (w < 20 || h < 20) return;
+
+    ctx.clearRect(0, 0, w, h);
+    hitAreas = [];
+
+    const padL = 46;
+    const padR = 20;
+    const padT = 32;
+    const padB = 34;
+
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    if (viewMode === 'hist') {
+      // DIBUJO HISTOGRAMA
+      const maxCount = 500;
+      const barW = plotW / HIST.length;
+
+      // Eje Y
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+      ctx.lineWidth = 1;
+      for (let c = 0; c <= maxCount; c += 100) {
+        const y = padT + plotH - (c / maxCount) * plotH;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(w - padR, y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 10px JetBrains Mono';
+        ctx.textAlign = 'right';
+        ctx.fillText(`${c}`, padL - 8, y + 3.5);
+      }
+
+      // Barras
+      HIST.forEach((val, i) => {
+        const x = padL + i * barW + 3;
+        const bW = Math.max(2, barW - 6);
+        const bH = (val / maxCount) * plotH;
+        const y = padT + plotH - bH;
+        const tempBin = BINS[i];
+
+        hitAreas.push({ x, y, w: bW, h: bH, label: `${tempBin} °C`, val: `${val} días (${((val/2557)*100).toFixed(1)}%)` });
+
+        // Color coding
+        let barGrad = ctx.createLinearGradient(0, y, 0, y + bH);
+        if (tempBin >= 36) {
+          // Cola Olas Récord
+          barGrad.addColorStop(0, '#ff5277');
+          barGrad.addColorStop(1, 'rgba(255, 82, 119, 0.45)');
+        } else if (tempBin >= 31 && tempBin <= 32) {
+          // Moda central
+          barGrad.addColorStop(0, '#38efff');
+          barGrad.addColorStop(1, 'rgba(8, 145, 178, 0.45)');
+        } else if (tempBin <= 21) {
+          // Friajes
+          barGrad.addColorStop(0, '#b48eff');
+          barGrad.addColorStop(1, 'rgba(180, 142, 255, 0.35)');
+        } else {
+          barGrad.addColorStop(0, '#64748b');
+          barGrad.addColorStop(1, 'rgba(71, 85, 105, 0.3)');
+        }
+
+        ctx.fillStyle = (hoverIndex === i) ? '#ffffff' : barGrad;
+        ctx.beginPath();
+        ctx.roundRect(x, y, bW, bH, [4, 4, 0, 0]);
+        ctx.fill();
+
+        // Eje X: Etiquetas de grados cada 2
+        if (tempBin % 2 === 1 || i === HIST.length - 1) {
+          ctx.fillStyle = (tempBin >= 36) ? '#ff9cb0' : (tempBin >= 31 && tempBin <= 32) ? '#aff6ff' : '#94a3b8';
+          ctx.font = '600 9.5px JetBrains Mono';
+          ctx.textAlign = 'center';
+          ctx.fillText(`${tempBin}°`, x + bW / 2, h - 12);
+        }
+      });
+
+      // Leyenda superior dentro del canvas
+      ctx.fillStyle = 'rgba(56, 239, 255, 0.85)';
+      ctx.font = '700 10.5px JetBrains Mono';
+      ctx.textAlign = 'left';
+      ctx.fillText('MODA: 31–32 °C (925 DÍAS)', padL + 10, padT + 16);
+
+      ctx.fillStyle = 'rgba(255, 82, 119, 0.85)';
+      ctx.textAlign = 'right';
+      ctx.fillText('COLA DERECHA: OLAS ≥ 36 °C (78 DÍAS)', w - padR - 10, padT + 16);
+
+    } else {
+      // DIBUJO CICLO MENSUAL
+      const minM = 29.5;
+      const maxM = 34.0;
+      const barW = plotW / MM.length;
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+      ctx.lineWidth = 1;
+      for (let t = 30.0; t <= 34.0; t += 1.0) {
+        const y = padT + plotH - ((t - minM) / (maxM - minM)) * plotH;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(w - padR, y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 10px JetBrains Mono';
+        ctx.textAlign = 'right';
+        ctx.fillText(`${t.toFixed(1)}°`, padL - 8, y + 3.5);
+      }
+
+      MM.forEach((val, i) => {
+        const x = padL + i * barW + 6;
+        const bW = Math.max(4, barW - 12);
+        const bH = ((val - minM) / (maxM - minM)) * plotH;
+        const y = padT + plotH - bH;
+
+        hitAreas.push({ x, y, w: bW, h: bH, label: MN[i], val: `${val.toFixed(2)} °C media` });
+
+        let barGrad = ctx.createLinearGradient(0, y, 0, y + bH);
+        if (i >= 8 && i <= 10) {
+          // Pico Sep-Nov
+          barGrad.addColorStop(0, '#ffc05c');
+          barGrad.addColorStop(1, 'rgba(255, 192, 92, 0.45)');
+        } else if (i >= 4 && i <= 6) {
+          // Fresco May-Jul
+          barGrad.addColorStop(0, '#6ef0b4');
+          barGrad.addColorStop(1, 'rgba(110, 240, 180, 0.35)');
+        } else {
+          barGrad.addColorStop(0, '#38efff');
+          barGrad.addColorStop(1, 'rgba(8, 145, 178, 0.35)');
+        }
+
+        ctx.fillStyle = (hoverIndex === i) ? '#ffffff' : barGrad;
+        ctx.beginPath();
+        ctx.roundRect(x, y, bW, bH, [5, 5, 0, 0]);
+        ctx.fill();
+
+        // Valor arriba de la barra
+        ctx.fillStyle = (hoverIndex === i) ? '#ffffff' : (i >= 8 && i <= 10) ? '#ffc05c' : '#cbd5e1';
+        ctx.font = '700 9.5px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${val.toFixed(1)}°`, x + bW / 2, y - 5);
+
+        // Mes en eje X
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 10.5px JetBrains Mono';
+        ctx.fillText(MN[i], x + bW / 2, h - 12);
+      });
+
+      // Leyenda estacional
+      ctx.fillStyle = 'rgba(110, 240, 180, 0.9)';
+      ctx.font = '700 10.5px JetBrains Mono';
+      ctx.textAlign = 'left';
+      ctx.fillText('MAY–JUL: TEMPORADA FRESCA (≈ 30.5 °C)', padL + 10, padT + 16);
+
+      ctx.fillStyle = 'rgba(255, 192, 92, 0.9)';
+      ctx.textAlign = 'right';
+      ctx.fillText('SEP–NOV: PICO TÉRMICO (≈ 33.1 °C)', w - padR - 10, padT + 16);
+    }
+  }
+
+  // Interacción Mouse / Tooltip
+  cv.addEventListener('mousemove', (e) => {
+    const rect = cv.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const hit = hitAreas.find(b => mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h);
+    if (hit) {
+      hoverIndex = hitAreas.indexOf(hit);
+      tip.style.display = 'block';
+      tip.style.left = `${Math.min(mx + 12, rect.width - 130)}px`;
+      tip.style.top = `${Math.max(my - 30, 8)}px`;
+      tip.innerHTML = `<strong>${hit.label}</strong>: ${hit.val}`;
+      draw();
+    } else {
+      if (hoverIndex !== -1) {
+        hoverIndex = -1;
+        tip.style.display = 'none';
+        draw();
+      }
+    }
+  });
+
+  cv.addEventListener('mouseleave', () => {
+    hoverIndex = -1;
+    tip.style.display = 'none';
+    draw();
+  });
+
+  // Teclado
+  window.addEventListener('keydown', (e) => {
+    if (['1', '2', '3', '4'].includes(e.key)) {
+      const idx = parseInt(e.key, 10) - 1;
+      updateStage(STEPS[idx], true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    draw();
+  });
+
+  fitCanvas();
+  updateStage('dist');
+  restartLoop();
 })();
 </script>
 </body>

@@ -455,29 +455,63 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   text-align: right;
 }
 
-.speaker-box {
+.executive-takeaway {
   flex-shrink: 0;
-  padding: 10px 12px;
-  border-left: 3px solid var(--stage-accent);
-  border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
-}
-
-.speaker-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--stage-accent);
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(8, 15, 32, 0.88);
+  border: 1px solid rgba(56, 239, 255, 0.28);
 }
 
-.speaker-quote {
+.takeaway-badge {
+  font: 700 9.5px/1 var(--mono);
+  color: var(--stage-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.takeaway-text {
   margin: 0;
-  font: italic 500 clamp(11px, 0.9vw, 12.6px)/1.38 var(--sans);
+  font: italic 500 clamp(10.5px, 0.82vw, 12px)/1.35 var(--sans);
   color: #e2eeff;
+}
+
+.step-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: rgba(8, 16, 34, 0.9);
+  border: 1px solid rgba(56, 239, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.step-kpi-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.step-kpi-cell.warn {
+  border-left: 2px solid #ff5277;
+  padding-left: 6px;
+}
+
+.step-kpi-lbl {
+  display: block;
+  font: 600 8.5px/1.1 var(--mono);
+  color: var(--muted);
+}
+
+.step-kpi-val {
+  display: block;
+  font: 700 clamp(10px, 0.78vw, 11.5px)/1.25 var(--sans);
+  color: #edf5ff;
 }
 
 .stage-card {
@@ -736,10 +770,10 @@ input[type="range"] {
     padding: 5px 10px !important;
     font-size: 10.5px !important;
   }
-  .speaker-box {
+  .executive-takeaway {
     padding: 6px 10px !important;
   }
-  .speaker-quote {
+  .takeaway-text {
     font-size: 11px !important;
     line-height: 1.3 !important;
   }
@@ -890,14 +924,9 @@ input[type="range"] {
         </div>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎤 GUÍA DE EXPOSICIÓN (CITA DE CONFERENCIA)</span>
-          <span id="speakerTime">~15 seg</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Miren, la diferencia entre mi abuelo y un dron es el volumen y la velocidad. Antes, el agricultor tomaba un dato al año observando su cosecha. Luego pusimos estaciones para medir las ‘alcancías de calor’. Hoy, un satélite escupe un dato diario por cada rincón de su finca. La revolución no es tener más datos, es tenerlos a tiempo para evitar la quiebra.”
-        </p>
+      <div class="executive-takeaway" id="executiveTakeaway">
+        <span class="takeaway-badge">💡 Idea Clave</span>
+        <span class="takeaway-text" id="speakerQuote">La revolución no es acumular datos, sino tenerlos a tiempo para prevenir.</span>
       </div>
     </aside>
 
@@ -917,9 +946,22 @@ input[type="range"] {
 
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
-        <div class="canvas-overlay-top">
-          <span class="ov-badge left" id="ovLeft">📈 Arriba: Curva Exponencial de Densidad de Datos</span>
-          <span class="ov-badge right" id="ovRight">🔬 Abajo: Los 5 Escalones (Del Almanaque a Modelos Acoplados)</span>
+        <span id="ovLeft" hidden></span>
+        <span id="ovRight" hidden></span>
+      </div>
+
+      <div class="step-kpi-strip" id="stepKpiStrip">
+        <div class="step-kpi-cell">
+          <span class="step-kpi-lbl">⏱️ FRECUENCIA Y ESCALA</span>
+          <strong class="step-kpi-val" id="kpiFreq">1 dato / día / píxel (10m)</strong>
+        </div>
+        <div class="step-kpi-cell">
+          <span class="step-kpi-lbl">✅ LOGRO OPERATIVO</span>
+          <strong class="step-kpi-val" id="kpiGain">Fusión Clima (CHIRPS) + Suelo + Satélite</strong>
+        </div>
+        <div class="step-kpi-cell warn">
+          <span class="step-kpi-lbl">⚠️ RETO MATEMÁTICO</span>
+          <strong class="step-kpi-val" id="kpiRisk">p = 500 variables vs N = 24 cosechas</strong>
         </div>
       </div>
 
@@ -1068,18 +1110,18 @@ input[type="range"] {
       accent: 'var(--ancestral)',
       tag: 'ACTO 1 DE 4 · LA CADENA DEL SENSOR (1950–2026)',
       title: '1. Explosión de densidad: De 1 dato al año a 1 dato por día y píxel',
-      lead: 'La diferencia entre la libreta del abuelo y la agricultura moderna es el <b>volumen y la velocidad</b>: pasamos de anotar <b>1 cosecha al año</b> a medir cada rincón de la finca desde el espacio.',
-      b1Label: '📡 LA CADENA DE LOS 5 SENSORES (1950 → 2026)',
-      b1Text: '<b>1. Saberes locales:</b> Almanaques y observación visual.<br><b>2. Estaciones SENAMHI:</b> Termómetros fijos y <i>alcancías de calor</i> (GDD).<br><b>3. Satélite NDVI:</b> Verdor de la hoja por píxel.<br><b>4. Drones / IoT:</b> Cámaras a baja altura y sondas en la raíz.<br><b>5. Modelos acoplados:</b> Cielo y tierra unidos en tiempo real.',
-      b2Label: '⚡ EL PROPÓSITO REAL DE LA TECNOLOGÍA',
-      b2Text: 'Tener millones de puntos no sirve por sí solo: <b>la verdadera revolución no es acumular más datos, sino tenerlos a tiempo</b> para detectar el estrés antes de que la planta sufra y evitar la quiebra.',
+      lead: 'De la libreta del abuelo con <b>1 dato anual</b> al satélite con <b>1 dato diario por píxel</b>.',
+      b1Label: '📡 LOS 5 ESCALONES (1950 → 2026)',
+      b1Text: 'Saberes locales → Estaciones meteorológicas → Satélites multiespectrales → Drones/IoT → Modelos acoplados.',
+      b2Label: '⚡ OBJETIVO OPERATIVO',
+      b2Text: 'Tener telemetría a tiempo para detectar estrés fisiológico antes de la pérdida de cosecha.',
       formula: '1 dato/año (Libreta) ──▶ 365 datos/año (Estación) ──▶ 1 dato/día/píxel',
       hint: 'Mueve el deslizador o haz clic en los 5 círculos para auditar cada hito',
-      quote: '“Miren, la diferencia entre mi abuelo y un dron es el volumen y la velocidad. Antes, el agricultor tomaba un dato al año observando su cosecha. Luego pusimos estaciones para medir las ‘alcancías de calor’. Hoy, un satélite escupe un dato diario por cada rincón de su finca. La revolución no es tener más datos, es tenerlos a tiempo para evitar la quiebra.”',
+      quote: 'La revolución tecnológica no es acumular datos, sino tenerlos a tiempo para prevenir.',
       icon: '📈',
       canvasTitle: 'Curva de Densidad de Datos (1950–2026): Los 5 Escalones Tecnológicos',
-      ovLeft: '📈 Arriba: Curva Exponencial (“De 1 dato/año a 1 dato/día/píxel”)',
-      ovRight: '🔬 Abajo: Haz clic o desliza sobre los 5 Escalones Tecnológicos',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Curva de Densidad de Datos</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Escalón Seleccionado</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Cadena del Sensor</span>',
       nextLabel: 'Ver Alcancías de Calor (GDD) ─▶'
     },
@@ -1087,18 +1129,18 @@ input[type="range"] {
       accent: 'var(--water)',
       tag: 'ACTO 2 DE 4 · HITO 3: ESTACIONES SENAMHI Y GRADOS-DÍA (GDD)',
       title: '2. Las “Alcancías de Calor” (GDD): El reloj térmico de la planta',
-      lead: 'Una planta no tiene calendario de pared: no sabe si hoy es 15 de octubre. La planta avanza de fase llenando una <b>“alcancía de calor” llamada Grados-Día de Desarrollo (GDD)</b>.',
-      b1Label: '🐷 ¿CÓMO FUNCIONA LA ALCANCÍA DE CALOR (GDD)?',
-      b1Text: 'Cada especie tiene una temperatura mínima para despertar (ej. <b>T_base = 10 °C</b>). Si hoy la temperatura media fue <b>24 °C</b>, la planta deposita <b>24 − 10 = +14 monedas de calor</b> en su alcancía. Cuando junta ~1,200 monedas, abre la flor o madura el fruto.',
-      b2Label: '⚠️ EL PUNTO CIEGO QUE DEJÓ ESTA FÓRMULA LINEAL',
-      b2Text: 'La ecuación GDD asumió que <i>“más calor siempre suma”</i>. Pero si la temperatura supera los <b>32 °C</b>, las enzimas del polen se cocinan y la flor aborta, aunque la fórmula siga sumando monedas felizmente.',
+      lead: 'El café avanza de fase acumulando calor en Grados-Día de Desarrollo sobre <b>T_base = 10 °C</b>.',
+      b1Label: '🌡️ ALCANCÍA TÉRMICA (GDD)',
+      b1Text: 'Cada día con T > 10 °C suma monedas térmicas hasta abrir flor o madurar fruto.',
+      b2Label: '⚠️ UMBRAL FATAL (>32 °C)',
+      b2Text: 'Sobre 32 °C el polen se desnaturaliza y la flor aborta; la respuesta lineal se rompe.',
       formula: 'GDD = Σ máx( 0 , [ (T_máx + T_mín) / 2 ] − T_base )',
       hint: 'Sube la temperatura diaria con el deslizador hasta pasar de 32 °C',
-      quote: '“Una planta de café no cuenta los días del almanaque, cuenta calor acumulado.Cada día cálido mete monedas en su ‘alcancía de calor’ (GDD) hasta que tiene suficiente energía para florecer. Pero cuidado: si pasa de 32 grados, la alcancía se rompe.”',
+      quote: 'La planta acumula calor; sobre 32°C el polen se quema y colapsa.',
       icon: '🌡️',
       canvasTitle: 'Simulador de “Alcancía de Calor” (Grados-Día GDD) y Umbral de Colapso Térmico',
-      ovLeft: '🌡️ Izquierda: Termómetro SENAMHI y Monedas de Calor Diario',
-      ovRight: '🐷 Derecha: Acumulado Fisiológico vs. Ceguera por Calor Extremo (>32°C)',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Temperatura Base (T_base = 10°C)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Calor Útil Acumulado (GDD)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> Colapso Biológico (>32°C)</span>',
       nextLabel: 'Ver Satélite NDVI y Física Óptica ─▶'
     },
@@ -1106,18 +1148,18 @@ input[type="range"] {
       accent: 'var(--agro)',
       tag: 'ACTO 3 DE 4 · HITO 4: REVOLUCIÓN SATELITAL (NDVI, CHIRPS Y SMAP)',
       title: '3. El Ojo Satelital (NDVI): Cómo medir la fotosíntesis desde el espacio',
-      lead: 'Con los satélites (<b>Sentinel-2 / Landsat</b>) pasamos de medir un solo punto en el valle a escanear <b>cada píxel de 10×10 metros</b> midiendo cómo rebota la luz solar en las hojas.',
-      b1Label: '🛰️ LA FÍSICA ELEGANTE DEL NDVI (ROJO VS. INFRARROJO CERCANO)',
-      b1Text: 'Una hoja sana hace dos cosas con el sol: su clorofila <b>absorbe toda la luz Roja (~665 nm)</b> para hacer fotosíntesis, y su tejido esponjoso <b>rebota como un espejo el Infrarrojo Cercano (NIR ~842 nm)</b> para no recalentarse.',
-      b2Label: '🌫️ LA DOBLE CEGUERA: SATURACIÓN EN VERDE (LAI > 3) Y NUBES',
-      b2Text: 'Cuando el cafetal tiene muchas capas de hojas (<b>LAI &gt; 3</b>), el NDVI se <b>estanca en un techo plano de 0.85</b> (no ve si abajo cayó la flor). Además, ante nubes tropicales hoy sumamos lluvia satelital <b>CHIRPS</b> y radar de humedad de suelo <b>SMAP/SMOS</b>.',
+      lead: 'Sentinel-2 mide cómo la clorofila absorbe luz Roja (665 nm) y refleja Infrarrojo Cercano (842 nm).',
+      b1Label: '🛰️ FÍSICA RADIATIVA',
+      b1Text: 'NDVI = (NIR − Red) / (NIR + Red). Estima vigor foliar y fotosíntesis activa.',
+      b2Label: '🌫️ SATURACIÓN ÓPTICA (LAI > 3)',
+      b2Text: 'Con follaje denso el NDVI se estanca en 0.85 y no detecta aborto floral.',
       formula: 'NDVI = ( NIR − Rojo ) / ( NIR + Rojo )   │   Se satura si LAI > 3',
       hint: 'Aumenta la frondosidad (LAI) abajo y mira cómo el NDVI se aplana',
-      quote: '“El satélite no ve granos de café, ve cómo rebota la luz: la hoja come luz roja y escupe infrarrojo. Así nace el famoso NDVI. El peligro es que cuando el árbol está muy frondoso, el satélite se encandila en verde y no ve si por dentro ya se cayó la flor.”',
+      quote: 'El satélite mide luz reflejada; con follaje denso se satura y enceguece.',
       icon: '🛰️',
       canvasTitle: 'Física Radiativa del Satélite (NIR vs. Rojo) y Saturación Óptica del NDVI (LAI > 3)',
-      ovLeft: '🍃 Izquierda: Hoja absorbiendo Rojo (665nm) y rebotando NIR (842nm)',
-      ovRight: '📉 Derecha: Curva de Saturación Logarítmica del NDVI cuando LAI > 3',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Luz Roja Absorbida (665 nm)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Infrarrojo Reflejado NIR (842 nm)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Curva NDVI (Techo en 0.85)</span>',
       nextLabel: 'Ver Convergencia y Pase a Diapo 21 ─▶'
     },
@@ -1125,18 +1167,18 @@ input[type="range"] {
       accent: 'var(--purple)',
       tag: 'ACTO 4 DE 4 · CONVERGENCIA IOT Y PASE A LA DIAPOSITIVA 21',
       title: '4. La Convergencia Cielo-Tierra y el Choque de Escalas (N=2557 vs N=24)',
-      lead: 'Hoy, los <b>modelos acoplados (Hito 5)</b> unen satélites, drones con visión artificial (<b>YOLOv12 / SAM 2</b>) y sondas IoT en la raíz. Pero enfrentan el mayor dilema estadístico del agro:',
-      b1Label: '⚖️ EL CHOQUE DE DOS MUNDOS: CLIMA DIARIO VS. COSECHA ANUAL',
-      b1Text: '• <b>Serie Clima-Diario (SENAMHI Iquitos):</b> Tiene <b>N = 2,557 datos</b> en 7 años (alta frecuencia, ruidosa).<br>• <b>Serie Cosecha-Anual (Cooperativas Jaén):</b> ¡Solo da <b>1 cosecha al año (N = 24 datos en 24 años)</b>!<br>Meter 500 variables satelitales crudas sobre N=24 años destruye cualquier red neuronal (<b>p ≫ N</b>).',
-      b2Label: '⏭️ PASE A LA DIAPOSITIVA 21: “FÍSICA BIOLÓGICA: EL LÍMITE ALGORÍTMICO”',
-      b2Text: 'En la siguiente diapositiva veremos cómo traducir miles de datos diarios a la escala de la planta respetando sus <b>3 leyes biofísicas: Retardos (τ = 6–8 meses), Umbrales fatales (VPD &gt; 1.8 kPa) y N=24 no perdona</b>.',
+      lead: 'Convergencia de satélites, drones y sensores de suelo frente al dilema de dimensionalidad (p ≫ N).',
+      b1Label: '⚖️ CHOQUE DE FRECUENCIAS',
+      b1Text: 'Clima diario continuo (N = 2,557 días) vs cosecha anual única (N = 24 campañas).',
+      b2Label: '⏭️ PASE A DIAPO 21',
+      b2Text: 'Exige modelos biofísicos con retardos biológicos (τ = 6–8 meses) y calibración conformal.',
       formula: 'Clima Diario (N=2,557) ──[ Reloj Fenológico ]──▶ Cosecha Anual (N=24)',
       hint: 'Explora los niveles de acoplamiento antes de pasar a la Diapo 21',
-      quote: '“Hoy unimos el cielo y la tierra con drones, satélites y sensores enterrados en la raíz. Pero tenemos una trampa: el clima nos da miles de datos por día y el cafetal nos da una sola cosecha al año. Pasemos a la Diapositiva 21 para ver cómo la Física Biológica resuelve este acertijo.”',
+      quote: 'El clima da miles de datos diarios pero el cafetal solo una cosecha anual.',
       icon: '🧠',
       canvasTitle: 'Convergencia Cielo-Tierra (Drones + IoT + Satélite) y Puente a la Diapositiva 21',
-      ovLeft: '🚁 Izquierda: Stack Multimodal (Satélite + Dron YOLO/SAM + Sonda IoT)',
-      ovRight: '⏭️ Derecha: Choque de Frecuencias (N=2,557 vs N=24) ─▶ Diapo 21',
+      ovLeft: '',
+      ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Clima Diario (N=2,557)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Cosecha Anual (N=24)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Modelo Acoplado Biofísico</span>',
       nextLabel: 'Reiniciar bucle (1950→2026) ↺'
     }
@@ -1177,8 +1219,8 @@ input[type="range"] {
 
     $('stageIcon').textContent = c.icon;
     $('canvasTitle').textContent = c.canvasTitle;
-    $('ovLeft').textContent = c.ovLeft;
-    $('ovRight').textContent = c.ovRight;
+    if ($('ovLeft')) $('ovLeft').textContent = c.ovLeft;
+    if ($('ovRight')) $('ovRight').textContent = c.ovRight;
     $('legendItems').innerHTML = c.legend;
     $('nextStepBtn').textContent = c.nextLabel;
 
@@ -1189,6 +1231,15 @@ input[type="range"] {
 
     const nd = TECH_NODES[state.nodeIdx];
     $('outNode').textContent = `${nd.num}. ${nd.title}`;
+
+    const kFreq = $('kpiFreq');
+    const kGain = $('kpiGain');
+    const kRisk = $('kpiRisk');
+    if (kFreq && nd) {
+      kFreq.textContent = `${nd.freq} · ${nd.scale}`;
+      kGain.textContent = nd.desc;
+      kRisk.textContent = nd.blind;
+    }
 
     const gddDaily = Math.max(0, state.avgTemp - 10);
     $('outTemp').textContent = `${state.avgTemp} °C (+${gddDaily} GDD)`;
@@ -1385,33 +1436,7 @@ input[type="range"] {
       ctx.restore();
     });
 
-    // 3. PARTE INFERIOR: TARJETA DETALLADA DEL ESCALÓN ACTIVO + LOS 3 PILARES DEL SLIDE
-    const cardY = nodesY + nodeR + 40;
-    const cardH = h - cardY - 10;
-    const sel = TECH_NODES[state.nodeIdx];
-
-    ctx.save();
-    ctx.fillStyle = 'rgba(6, 13, 28, 0.92)';
-    ctx.strokeStyle = sel.color;
-    ctx.lineWidth = 1.6;
-    ctx.beginPath();
-    ctx.roundRect(padL, cardY, usableW, cardH, 10);
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.fillStyle = sel.color;
-    ctx.font = '700 10px "JetBrains Mono"';
-    ctx.textAlign = 'left';
-    ctx.fillText(`${sel.icon} ESCALÓN ${sel.num} DE 5: ${sel.title.toUpperCase()} (${sel.freq})`, padL + 14, cardY + 19);
-
-    ctx.fillStyle = '#f1f7ff';
-    ctx.font = '500 10.5px Inter, sans-serif';
-    ctx.fillText(`• Logro operativo: ${sel.desc}`, padL + 14, cardY + 38);
-
-    ctx.fillStyle = '#fda4af';
-    ctx.font = '600 10px "JetBrains Mono"';
-    ctx.fillText(`• ${sel.blind}`, padL + 14, cardY + 56);
-    ctx.restore();
+    // 3. PARTE INFERIOR: El detalle del escalón activo se proyecta de forma responsiva en #stepKpiStrip
   }
 
   function drawGddPiggyBankStage(w, h) {

@@ -248,7 +248,8 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
   padding: clamp(12px, 1.3vw, 18px);
   border-radius: 16px;
   border: 1.5px solid color-mix(in srgb, var(--vc) 35%, rgba(148, 163, 184, 0.15));
@@ -261,6 +262,43 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--vc) 45%, transparent) rgba(5, 10, 24, 0.4);
+}
+
+.lane-meters {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(5, 11, 24, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  margin: 2px 0;
+}
+.meter-row {
+  display: grid;
+  grid-template-columns: 76px 1fr 62px;
+  align-items: center;
+  gap: 6px;
+  font: 600 9.5px/1 var(--mono);
+}
+.meter-lbl {
+  color: #94a3b8;
+  white-space: nowrap;
+}
+.meter-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.14);
+  overflow: hidden;
+}
+.meter-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+.meter-val {
+  color: #edf5ff;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .via-card::-webkit-scrollbar {
@@ -593,6 +631,24 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
       </div>
 
+      <div class="lane-meters">
+        <div class="meter-row">
+          <span class="meter-lbl">📊 Datos (N)</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 25%; background: var(--ockham);"></div></div>
+          <span class="meter-val">&lt; 500</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">⚡ Cómputo</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 15%; background: var(--lab);"></div></div>
+          <span class="meter-val">CPU μs</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">🚀 Extrapola</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 75%; background: var(--phi);"></div></div>
+          <span class="meter-val">Techo L</span>
+        </div>
+      </div>
+
       <div class="via-items">
         <div class="via-box">
           <span class="via-box-label cond">📌 CONDICIÓN</span>
@@ -600,7 +656,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
         <div class="via-box">
           <span class="via-box-label pro">✅ VENTAJA</span>
-          <p class="via-box-text"><b>Parsimonia total:</b> Verhulst acota topes (L) y SARIMA/HW modelan ciclos con 3–5 parámetros.</p>
+          <p class="via-box-text"><b>Parsimonia total:</b> 3–5 parámetros con significado físico directo.</p>
         </div>
         <div class="via-box">
           <span class="via-box-label con">⚠️ LÍMITE</span>
@@ -609,7 +665,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
       </div>
 
       <div class="via-footer">
-        <strong>SECTORES:</strong> Brotes acotados (INS/MINSA Loreto), micro-retail y sensores Edge.
+        <strong>SECTORES:</strong> Brotes acotados (INS/MINSA), micro-retail y sensores Edge.
       </div>
     </article>
 
@@ -630,6 +686,24 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
       </div>
 
+      <div class="lane-meters">
+        <div class="meter-row">
+          <span class="meter-lbl">📊 Datos (N)</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 60%; background: var(--phi);"></div></div>
+          <span class="meter-val">10³–10⁵</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">⚡ Cómputo</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 30%; background: var(--lab);"></div></div>
+          <span class="meter-val">CPU ms</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">🚀 Extrapola</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 15%; background: var(--rupture);"></div></div>
+          <span class="meter-val">No (Meseta)</span>
+        </div>
+      </div>
+
       <div class="via-items">
         <div class="via-box">
           <span class="via-box-label cond">📌 CONDICIÓN</span>
@@ -637,11 +711,11 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
         <div class="via-box">
           <span class="via-box-label pro">✅ VENTAJA</span>
-          <p class="via-box-text">El <b>truco de los lags</b> permite cruzar miles de SKUs, precios y promociones sin GPU.</p>
+          <p class="via-box-text">Cruza miles de SKUs, precios y promociones sin GPU.</p>
         </div>
         <div class="via-box">
-          <span class="via-box-label con">⚠️ LÍMITE (AXIOMA 2)</span>
-          <p class="via-box-text"><b>No extrapola récords:</b> predice meseta plana.</p>
+          <span class="via-box-label con">⚠️ LÍMITE</span>
+          <p class="via-box-text"><b>No extrapola récords:</b> predice meseta plana constante.</p>
         </div>
       </div>
 
@@ -668,6 +742,24 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
       </div>
 
+      <div class="lane-meters">
+        <div class="meter-row">
+          <span class="meter-lbl">📊 Datos (N)</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 90%; background: var(--purple);"></div></div>
+          <span class="meter-val">&gt; 10⁵</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">⚡ Cómputo</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 85%; background: var(--rupture);"></div></div>
+          <span class="meter-val">GPU O((L/P)²)</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">🚀 Extrapola</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 85%; background: var(--phi);"></div></div>
+          <span class="meter-val">Sí (Fluida)</span>
+        </div>
+      </div>
+
       <div class="via-items">
         <div class="via-box">
           <span class="via-box-label cond">📌 CONDICIÓN</span>
@@ -675,16 +767,16 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
         <div class="via-box">
           <span class="via-box-label pro">✅ VENTAJA</span>
-          <p class="via-box-text">De la memoria secuencial (<b>LSTM/TFT</b>) a <b>parches de 16 días (PatchTST)</b> que sí extrapolan.</p>
+          <p class="via-box-text"><b>Parches continuos (PatchTST):</b> capturan aceleración y pendiente.</p>
         </div>
         <div class="via-box">
           <span class="via-box-label con">⚠️ LÍMITE</span>
-          <p class="via-box-text">LSTM sufre olvido secuencial; exige GPU y &gt;10⁵ datos.</p>
+          <p class="via-box-text">Costo de entrenamiento alto; exige GPU dedicada y volumen.</p>
         </div>
       </div>
 
       <div class="via-footer">
-        <strong>SECTORES:</strong> Redes eléctricas (COES, CAISO) y cientos de turbinas eólicas/solares.
+        <strong>SECTORES:</strong> Redes eléctricas (COES, CAISO) y granjas eólicas/solares.
       </div>
     </article>
 
@@ -706,6 +798,24 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
       </div>
 
+      <div class="lane-meters">
+        <div class="meter-row">
+          <span class="meter-lbl">📊 Datos (N)</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 20%; background: var(--ockham);"></div></div>
+          <span class="meter-val">Cold-Start</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">⚡ Cómputo</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 10%; background: var(--lab);"></div></div>
+          <span class="meter-val">0 Entreno</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-lbl">🚀 Extrapola</span>
+          <div class="meter-track"><div class="meter-fill" style="width: 95%; background: var(--phi);"></div></div>
+          <span class="meter-val">Sí + Cono SCP</span>
+        </div>
+      </div>
+
       <div class="via-items">
         <div class="via-box">
           <span class="via-box-label cond">📌 CONDICIÓN</span>
@@ -713,16 +823,16 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
         </div>
         <div class="via-box">
           <span class="via-box-label pro">✅ VENTAJA</span>
-          <p class="via-box-text">Predice en frío (27B+ datos) y cede <b>80% del historial a calibrar bandas SCP</b>.</p>
+          <p class="via-box-text">Infiere en frío y cede <b>80% del historial a calibración SCP</b>.</p>
         </div>
         <div class="via-box">
           <span class="via-box-label con">⚠️ LÍMITE</span>
-          <p class="via-box-text">Moirai/TimeGPT leen exógenas futuras; Chronos base y Lag-Llama son univariados.</p>
+          <p class="via-box-text">Peso del modelo en memoria; requiere API o infraestructura GPU.</p>
         </div>
       </div>
 
       <div class="via-footer">
-        <strong>SECTORES:</strong> Catálogos nuevos e-commerce, alertas climáticas y finanzas.
+        <strong>SECTORES:</strong> Catálogos e-commerce nuevos, alertas climáticas y finanzas.
       </div>
     </article>
 

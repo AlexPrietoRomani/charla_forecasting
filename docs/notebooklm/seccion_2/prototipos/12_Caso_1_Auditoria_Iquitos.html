@@ -4,84 +4,1188 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>DIAPO 12 v1: Caso 1 · Auditoría empírica en Iquitos</title>
+<title>DIAPO 12: Caso 1 · Auditoría Empírica en Iquitos · 2,557 Días contra 14 Modelos</title>
 <style>
-:root{--bg:#040714;--line:rgba(148,163,184,.15);--line-bright:rgba(56,239,255,.32);
---text:#edf5ff;--muted:#94a3b8;--dim:#5c6c84;--cyan:#38efff;--amber:#ffc05c;--red:#ff5277;--green:#6ef0b4;
---mono:"JetBrains Mono",Consolas,monospace;--display:"Space Grotesk",Inter,"Segoe UI",sans-serif;--sans:Inter,"Segoe UI",Arial,sans-serif}
-*{box-sizing:border-box}[hidden]{display:none!important}html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100svh;display:grid;place-items:center;overflow:auto;color:var(--text);background:radial-gradient(ellipse at 80% 10%,rgba(14,116,144,.18),transparent 35%),#030511;font-family:var(--sans)}
-#slideFrame{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;width:min(100vw,1600px,calc(100svh*16/9));aspect-ratio:16/9;padding:16px 22px 10px;overflow:hidden;background:linear-gradient(145deg,rgba(7,13,29,.985),rgba(3,7,19,.99));border:1px solid rgba(82,128,170,.25)}
-body.is-embedded{width:100vw!important;height:100vh!important;min-height:100vh!important;overflow:hidden!important;margin:0!important;padding:0!important;display:flex!important}
-body.is-embedded #slideFrame{width:100%!important;height:100%!important;aspect-ratio:auto!important;border:none!important;padding:10px 16px 6px!important}
-button{font:inherit;color:inherit;cursor:pointer}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:9px;border-bottom:1px solid var(--line)}
-.eyebrow{margin:0;color:var(--cyan);font:600 10px/1.2 var(--mono);letter-spacing:.15em}
-h1{margin:2px 0 0;font:700 clamp(19px,1.7vw,26px)/1.1 var(--display);letter-spacing:-.02em}
-h1 .n{color:var(--amber)}.sub{margin:3px 0 0;color:#8fa3bd;font:400 11px/1.4 var(--sans)}.sub b{color:#d7e5f8}
-.badge{padding:7px 12px;border:1px solid rgba(104,138,180,.22);border-radius:11px;background:rgba(6,12,26,.88);font:600 9px/1.5 var(--mono);color:#9fb2cb;text-align:right;white-space:nowrap}
-.badge b{color:var(--cyan)}
-.workspace{display:grid;grid-template-columns:minmax(280px,.36fr) minmax(0,1fr);gap:14px;min-height:0;overflow:hidden}
-.left{display:grid;grid-template-rows:auto auto auto minmax(0,1fr);gap:7px;min-height:0;overflow:hidden}
-.kpi{display:flex;align-items:center;gap:10px;padding:8px 11px;border:1px solid rgba(133,158,192,.16);border-radius:11px;background:linear-gradient(110deg,rgba(12,20,39,.9),rgba(7,13,28,.8))}
-.kpi .v{font:700 19px/1 var(--mono);color:#fff}.kpi .v small{font-size:11px;color:var(--muted)}
-.kpi .l{font:400 10px/1.35 var(--sans);color:#9aa9bd}.kpi .l b{color:#d5e2f5}
-.q{padding:8px 11px;border:1px solid rgba(56,239,255,.22);border-radius:11px;background:linear-gradient(125deg,rgba(6,32,50,.5),rgba(7,14,30,.85));font:400 10.5px/1.45 var(--sans);color:#9bb0c9;overflow:hidden}
-.q b{color:#e8f2ff}.q .say{display:block;margin-top:5px;padding:5px 8px;border-left:2px solid var(--cyan);background:rgba(56,239,255,.06);font-style:italic;color:#c8dcf2}
-.right{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px;min-height:0;overflow:hidden}
-.years{display:flex;gap:5px;flex-wrap:wrap}
-.ybtn{padding:5px 10px;border:1px solid rgba(128,151,184,.25);border-radius:7px;background:rgba(18,28,48,.7);font:600 10px/1 var(--mono);color:#a8b9cf}
-.ybtn[aria-pressed="true"]{color:#aff6ff;border-color:rgba(56,239,255,.4);background:rgba(8,145,178,.25)}
-.ybtn small{color:var(--dim);font-weight:400}
-.canvas-frame{position:relative;min-height:0;border:1px solid rgba(119,151,191,.16);border-radius:10px;background:radial-gradient(ellipse at 50% 30%,rgba(10,40,68,.2),rgba(2,6,17,.88) 75%);overflow:hidden}
-canvas{display:block;width:100%;height:100%}
-.hint{font:8.5px/1.4 var(--mono);color:#5f7385;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.foot{display:flex;justify-content:space-between;gap:10px;font:9px/1.3 var(--mono);color:#6e8099;border-top:1px solid var(--line);padding-top:6px}
-.foot strong{color:#a4b6cf}
+:root {
+  --bg: #040714;
+  --panel: rgba(10, 17, 36, 0.92);
+  --panel-soft: rgba(7, 13, 28, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --phi: #38efff;
+  --ockham: #ffc05c;
+  --rupture: #ff5277;
+  --lab: #6ef0b4;
+  --purple: #b48eff;
+  --stage-accent: var(--phi);
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(14, 116, 144, 0.18), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(225, 29, 72, 0.12), transparent 38%),
+    #030511;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(6, 68, 98, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(7, 13, 29, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(82, 128, 170, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 30, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+html:has(body.is-embedded) {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 1 100% !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--phi); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  border-radius: 12px;
+  color: var(--phi);
+  background: rgba(56, 239, 255, 0.08);
+}
+
+.brand-mark svg { width: 22px; height: 22px; }
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--phi);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(19px, 1.75vw, 26px)/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+
+h1 span.num { color: var(--ockham); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 13px;
+  border: 1px solid rgba(56, 239, 255, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.14), rgba(6, 12, 26, 0.9));
+  max-width: 500px;
+}
+
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 9.5px/1 var(--mono);
+  color: var(--phi);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.via-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: 500 10.5px/1.25 var(--mono);
+  color: #d8e6f8;
+}
+
+.via-pill {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.via-pill strong { color: #fff; }
+
+/* FLOWBAR (4 ETAPAS DEL CASO) */
+.flowbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.proc-node:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--phi));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--phi)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--phi)) 18%, transparent);
+}
+
+.proc-node[data-step="lab"]     { --node-color: var(--phi); }
+.proc-node[data-step="audit"]   { --node-color: var(--ockham); }
+.proc-node[data-step="climate"] { --node-color: var(--rupture); }
+.proc-node[data-step="bridge13"]{ --node-color: var(--lab); }
+
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+
+.proc-node[aria-selected="true"] .proc-num {
+  background: var(--node-color, var(--phi));
+  color: #030712;
+}
+
+.proc-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.proc-year {
+  font: 700 11.5px/1.1 var(--display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proc-sub {
+  font: 500 9.5px/1.2 var(--mono);
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.proc-node[aria-selected="true"] .proc-sub {
+  color: #cbd5e1;
+}
+
+.proc-arrow {
+  color: rgba(148, 163, 184, 0.35);
+  font-size: 11px;
+}
+
+.flow-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.7);
+  font: 600 10px/1 var(--mono);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.tool-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #fff;
+  border-color: rgba(56, 239, 255, 0.35);
+}
+
+.tool-btn.active {
+  background: rgba(8, 145, 178, 0.25);
+  border-color: var(--phi);
+  color: var(--phi);
+}
+
+/* WORKSPACE: 2 COLUMNAS EQUILIBRADAS */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.95fr) minmax(0, 1.45fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* COLUMNA IZQUIERDA: NARRATIVA GERENCIAL */
+.narrative-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(6px, 1vh, 10px);
+  padding: clamp(10px, 1.3vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(10, 18, 36, 0.95), rgba(5, 10, 24, 0.94));
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 239, 255, 0.3) transparent;
+}
+
+.stage-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--stage-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 40%, transparent);
+  color: var(--stage-accent);
+}
+
+.stage-shortcut {
+  font: 500 9.5px/1 var(--mono);
+  color: #64748b;
+}
+
+.narr-title {
+  margin: 0;
+  font: 700 clamp(15px, 1.25vw, 18.5px)/1.2 var(--display);
+  letter-spacing: -0.015em;
+  color: #f8fafc;
+}
+
+.narr-lead {
+  margin: 0;
+  font: 400 clamp(12px, 0.9vw, 13.5px)/1.4 var(--sans);
+  color: #cbd5e1;
+}
+
+.narr-lead strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.narr-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-block {
+  padding: 8px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font: 700 9.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.info-block-text {
+  font: 400 clamp(11.5px, 0.85vw, 12.8px)/1.35 var(--sans);
+  color: #94a3b8;
+}
+
+.info-block-text strong {
+  color: #e2e8f0;
+}
+
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 30%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(11px, 0.88vw, 12.5px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+
+.math-strip span.hint {
+  font: 500 9.5px/1.2 var(--sans);
+  color: #94a3b8;
+  text-align: right;
+}
+
+.speaker-box {
+  flex-shrink: 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+}
+
+.speaker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font: 700 9px/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+
+.speaker-quote {
+  margin: 0;
+  font: italic 500 clamp(11.5px, 0.88vw, 13px)/1.38 var(--sans);
+  color: #e2eeff;
+}
+
+/* COLUMNA DERECHA: VISUAL INTERACTIVO */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: clamp(10px, 1.2vw, 14px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(10, 18, 34, 0.95), rgba(4, 10, 22, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(56, 239, 255, 0.12);
+  border: 1px solid rgba(56, 239, 255, 0.35);
+  font-size: 13px;
+}
+
+.stage-title {
+  margin: 0;
+  font: 700 clamp(13.5px, 1.1vw, 16px)/1.2 var(--display);
+  color: #f0f6ff;
+}
+
+.stage-kpis {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kpi-chip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+
+.kpi-chip strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.kpi-chip.highlight {
+  border-color: rgba(56, 239, 255, 0.4);
+  background: rgba(8, 145, 178, 0.2);
+  color: var(--phi);
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(14, 116, 144, 0.15), rgba(2, 6, 16, 0.95) 75%);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tip {
+  position: absolute;
+  pointer-events: none;
+  font: 500 10.5px/1.3 var(--mono);
+  background: rgba(3, 8, 22, 0.94);
+  border: 1px solid rgba(56, 239, 255, 0.4);
+  border-radius: 7px;
+  padding: 6px 9px;
+  color: #edf5ff;
+  display: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ctrl-btn {
+  padding: 5px 9px;
+  border: 1px solid rgba(128, 151, 184, 0.25);
+  border-radius: 6px;
+  background: rgba(18, 28, 48, 0.65);
+  font: 600 10px/1 var(--mono);
+  color: #a8b9cf;
+  transition: all 0.15s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(30, 48, 80, 0.8);
+  color: #fff;
+  border-color: rgba(56, 239, 255, 0.35);
+}
+
+.ctrl-btn.active {
+  color: #aff6ff;
+  border-color: rgba(56, 239, 255, 0.5);
+  background: rgba(8, 145, 178, 0.3);
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 20%, transparent);
+  font: 700 10.5px/1 var(--display);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: var(--stage-accent);
+  color: #030712;
+}
+
+/* FOOTNOTE */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font: 500 10px/1.2 var(--mono);
+  color: #64748b;
+}
+
+.footnote strong { color: #cbd5e1; }
+.footnote span.link { color: var(--stage-accent); }
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 6px 14px 4px !important; }
+  .topbar { padding-bottom: 5px; }
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .eyebrow { font-size: 9.5px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 5px 10px; }
+  .proc-node { padding: 5px 8px; }
+  .narrative-card { padding: 8px 12px; gap: 5px; }
+  .speaker-box { padding: 6px 9px; }
+  .stage-card { padding: 8px 10px; }
+  .controls-bar { padding: 5px 8px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .speaker-box { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .topbar { padding-bottom: 4px; }
+}
 </style>
 </head>
 <body>
-<main id="slideFrame">
-<header class="topbar">
-<div><p class="eyebrow">ACTO 2 · CASO 1 · CLIMA SENAMHI · IQUITOS</p>
-<h1><span class="n">02</span> Caso 1: predicción de temperatura en Iquitos</h1>
-<p class="sub">Auditoría empírica con <b>2,557 días reales</b> de la estación <b>Punchana (SENAMHI)</b>. Cómo la física tropical desafía a los algoritmos.</p></div>
-<div class="badge">ESTACIÓN <b>103015</b> · −3.6903°, −73.2556° · <b>91 msnm</b><br>2019-01-01 → 2025-12-31 · <b>2,557 días</b> sin huecos</div>
-</header>
-<section class="workspace">
-<div class="left">
-<div class="kpi"><div class="v">2,557 <small>días</small></div><div class="l"><b>Serie diaria continua</b> tmax · tmin · precip · humedad</div></div>
-<div class="kpi"><div class="v" id="kpiMean">31.79 <small>°C</small></div><div class="l" id="kpiYear"><b>Récord 38.0 °C</b> (2023-10-07 y 2024-10-18) · clic un año →</div></div>
-<div class="q"><b>🎤 3 preguntas que este caso responde:</b><br>1️⃣ ¿Por qué los árboles fallan en olas récord? 2️⃣ ¿Tierra (CPU) o supercómputo? 3️⃣ ¿Y a 7 días con bandas?<span class="say">“Dilo así: 7 años de termómetro en Iquitos. Vamos a auditar a 14 modelos con esos datos.”</span></div>
-</div>
-<div class="right">
-<div class="years" id="years"></div>
-<div class="canvas-frame"><canvas id="cv"></canvas></div>
-<div class="hint"><span id="hlab">● CICLO ESTACIONAL MEDIO (12 medias mensuales reales) · puntos = récords Top-5</span><span>SEP–NOV = pico térmico · MAY–JUL = fresco</span></div>
-</div>
-</section>
-<footer class="foot"><span><strong>SENAMHI Punchana</strong> · control de ceros en precipitación + interpolación lineal física</span><span>tmax media 31.79 °C · máx 38.0 · mín 19.2</span></footer>
+<main id="slideFrame" aria-label="Diapositiva 12: Caso 1 Auditoría Empírica en Iquitos">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ACTO 2 · CASO 1 · SENAMHI PUNCHANA · IQUITOS</p>
+        <h1><span class="num">02</span> Caso 1: predicción de temperatura en Iquitos <span class="sub">· 2,557 Días contra 14 Modelos</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Ficha técnica de la estación SENAMHI">
+      <div class="via-title">
+        <span>📍 ESTACIÓN SENAMHI PUNCHANA 103015</span>
+        <span>AUDITORÍA 2019–2025</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">🌐 <strong>−3.6903°, −73.2556°</strong> (91 msnm)</span>
+        <span class="via-pill">📅 <strong>2,557 días</strong> sin huecos</span>
+        <span class="via-pill">🌡️ <strong>Media 31.79 °C</strong></span>
+        <span class="via-pill">🔥 <strong>Récord 38.0 °C</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLOWBAR: 4 ETAPAS DEL CASO -->
+  <nav class="flowbar" aria-label="Etapas del Caso 1">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="lab" id="tab-lab">
+        <span class="proc-num">1</span>
+        <span class="proc-text">
+          <span class="proc-year">El Laboratorio</span>
+          <span class="proc-sub">Punchana 103015</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="audit" id="tab-audit">
+        <span class="proc-num">2</span>
+        <span class="proc-text">
+          <span class="proc-year">3 Preguntas</span>
+          <span class="proc-sub">Auditoría Real</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="climate" id="tab-climate">
+        <span class="proc-num">3</span>
+        <span class="proc-text">
+          <span class="proc-year">Microclima</span>
+          <span class="proc-sub">Varianza vs Récords</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="bridge13" id="tab-bridge13">
+        <span class="proc-num">4</span>
+        <span class="proc-text">
+          <span class="proc-year">Pase a Diapo 13</span>
+          <span class="proc-sub">Distribución &amp; Ciclo</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flow-controls">
+      <button class="tool-btn active" id="btnLoop" type="button" title="Pausar o reanudar rotación automática">
+        <span>🔁</span> <span id="loopTxt">Auto: ON</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE -->
+  <section class="workspace">
+    <!-- COLUMNA IZQUIERDA: NARRATIVA GERENCIAL -->
+    <article class="narrative-card" id="narrCard">
+      <div class="stage-pill-row">
+        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · BANCO DE PRUEBAS</span>
+        <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
+      </div>
+
+      <h2 class="narr-title" id="narrTitle">Punchana como banco de pruebas extremo de forecasting</h2>
+      
+      <p class="narr-lead" id="narrLead">
+        La Amazonía peruana es el entorno más exigente para la inteligencia artificial: un régimen hiperhúmedo con <strong>aparente baja varianza anual (2.7 °C)</strong> pero sacudido por <strong>olas de calor récord e intrusiones de friajes</strong> que rompen cualquier suposición gaussiana.
+      </p>
+
+      <div class="narr-blocks" id="narrBlocks">
+        <div class="info-block">
+          <div class="info-block-label">📡 Serie Diaria Continua</div>
+          <div class="info-block-text">2,557 días ininterrumpidos (2019–2025) con mediciones sincronizadas de temperatura máxima, mínima, precipitación y humedad relativa.</div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label">⚖️ Auditoría Empírica Ciega</div>
+          <div class="info-block-text">14 arquitecturas enfrentadas bajo el mismo protocolo: 2,467 días de entrenamiento y 90 días de holdout ciego (Q4 2025).</div>
+        </div>
+      </div>
+
+      <div class="math-strip" id="mathStrip">
+        <span>N = 2,557 días · Tmax = 31.79 ± 1.88 °C</span>
+        <span class="hint">Moda 31–32 °C (925 días)</span>
+      </div>
+
+      <div class="speaker-box">
+        <div class="speaker-head">
+          <span>🎙️ GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
+          <span>~20 SEG</span>
+        </div>
+        <p class="speaker-quote" id="speakerQuote">
+          “Miren, 7 años continuos de termómetro en la selva. Vamos a auditar a 14 modelos con estos datos reales para derribar mitos de la industria: la física manda sobre el marketing de IA.”
+        </p>
+      </div>
+    </article>
+
+    <!-- COLUMNA DERECHA: VISUAL INTERACTIVO -->
+    <div class="stage-card">
+      <header class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon">📈</span>
+          <h3 class="stage-title" id="stageVisualTitle">Serie Temporal y Ciclo Estacional (2019–2025)</h3>
+        </div>
+
+        <div class="stage-kpis">
+          <span class="kpi-chip highlight" id="kpiYearBadge">Estacional Medio</span>
+          <span class="kpi-chip">Tmax Media: <strong id="kpiValMean">31.79 °C</strong></span>
+          <span class="kpi-chip">Récord: <strong id="kpiValMax">38.0 °C</strong></span>
+        </div>
+      </header>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="cv"></canvas>
+        <div class="tip" id="tooltip"></div>
+      </div>
+
+      <footer class="controls-bar">
+        <div class="ctrl-group" id="yearSelector">
+          <span style="font-size:10px; font-weight:700; color:var(--muted); font-family:var(--mono);">AÑO:</span>
+          <button class="ctrl-btn active" data-year="all">Todos</button>
+          <button class="ctrl-btn" data-year="2019">2019</button>
+          <button class="ctrl-btn" data-year="2020">2020</button>
+          <button class="ctrl-btn" data-year="2021">2021</button>
+          <button class="ctrl-btn" data-year="2022">2022</button>
+          <button class="ctrl-btn" data-year="2023">2023</button>
+          <button class="ctrl-btn" data-year="2024">2024</button>
+          <button class="ctrl-btn" data-year="2025">2025</button>
+        </div>
+
+        <button class="action-btn" id="btnNextAction">
+          <span>Ver Distribución (Diapo 13)</span> <span>→</span>
+        </button>
+      </footer>
+    </div>
+  </section>
+
+  <!-- FOOTNOTE -->
+  <footer class="footnote">
+    <span><strong>Fuente:</strong> Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI) · Estación Punchana 103015</span>
+    <span class="link">Pase a Diapo 13: Anatomía de la Distribución y Ciclo Estacional →</span>
+  </footer>
+
 </main>
+
 <script>
-(()=>{if(window.self!==window.top)document.body.classList.add('is-embedded');
-const MM=[32.05,31.77,31.41,31.35,30.50,30.41,30.67,32.00,33.12,33.01,33.08,32.08];
-const YY={'2019':[31.61,36.0],'2020':[31.70,36.0],'2021':[31.19,35.4],'2022':[31.57,37.0],'2023':[32.18,38.0],'2024':[32.75,38.0],'2025':[31.50,36.2]};
-const TOP=[['2024-10-18',38.0],['2023-10-07',38.0],['2024-10-17',37.8],['2024-10-03',37.6],['2024-09-25',37.6]];
-const MN=['E','F','M','A','M','J','J','A','S','O','N','D'];
-let sel=null;const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-const yb=document.getElementById('years');
-Object.keys(YY).forEach(y=>{const b=document.createElement('button');b.className='ybtn';b.setAttribute('aria-pressed','false');b.innerHTML=y+' <small>'+YY[y][0].toFixed(2)+'°</small>';b.onclick=()=>{sel=(sel===y?null:y);[...yb.children].forEach(x=>x.setAttribute('aria-pressed',String(x.textContent.slice(0,4)===sel)));document.getElementById('kpiMean').innerHTML=(sel?YY[sel][0].toFixed(2):'31.79')+' <small>°C</small>';document.getElementById('kpiYear').innerHTML=sel?('<b>'+sel+' · media '+YY[sel][0].toFixed(2)+' °C · máx '+YY[sel][1].toFixed(1)+' °C</b>'):'<b>Récord 38.0 °C</b> (2023-10-07 y 2024-10-18) · clic un año →';draw()};yb.appendChild(b)});
-function fit(){const r=cv.getBoundingClientRect();if(r.width<4)return;const d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
-function draw(){const r=cv.getBoundingClientRect(),w=r.width,h=r.height;if(w<10)return;ctx.clearRect(0,0,w,h);
-const Y=v=>h-24-((v-29)/(39-29))*(h-44),X=i=>34+(i/11)*(w-46);
-ctx.strokeStyle='rgba(110,140,180,.12)';for(let g=30;g<=38;g+=2){ctx.beginPath();ctx.moveTo(30,Y(g));ctx.lineTo(w-8,Y(g));ctx.stroke();ctx.fillStyle='#5f7385';ctx.font='8px JetBrains Mono';ctx.fillText(g+'°',4,Y(g)+3)}
-ctx.save();ctx.beginPath();ctx.lineWidth=2.6;ctx.strokeStyle='#38efff';ctx.shadowColor='#38efff';ctx.shadowBlur=8;
-MM.forEach((v,i)=>{i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))});ctx.stroke();ctx.restore();
-ctx.fillStyle='#8fa3bd';ctx.font='8.5px JetBrains Mono';ctx.textAlign='center';MN.forEach((m,i)=>ctx.fillText(m,X(i),h-8));
-TOP.forEach(([f,v])=>{const mo=+f.slice(5,7)-1,x=X(mo)+(mo>=8?10:-10);ctx.fillStyle='#ff5277';ctx.beginPath();ctx.arc(x,Y(v),3.4,0,7);ctx.fill();ctx.fillStyle='#ff9cb0';ctx.font='700 8px JetBrains Mono';ctx.textAlign=x>w/2?'right':'left';ctx.fillText(v.toFixed(1)+'° '+f.slice(5),x+(x>w/2?-7:7),Y(v)-6)});
-ctx.fillStyle='#ffc05c';ctx.font='700 9px JetBrains Mono';ctx.textAlign='left';ctx.fillText('PICO SEP–NOV (ola 2023-2024: 38.0 °C)',36,16);
-if(sel){ctx.fillStyle='rgba(255,192,92,.08)';const i=+sel%12;}}
-addEventListener('resize',()=>{fit();draw()});fit();draw();})();
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['lab', 'audit', 'climate', 'bridge13'];
+  const LOOP_MS = 9500;
+
+  const STAGE_DATA = {
+    lab: {
+      accent: '#38efff',
+      tag: 'ETAPA 1 DE 4 · BANCO DE PRUEBAS',
+      title: 'Punchana como banco de pruebas extremo de forecasting',
+      lead: 'La Amazonía peruana es el entorno más exigente para la inteligencia artificial: un régimen hiperhúmedo con <strong>aparente baja varianza anual (2.7 °C)</strong> pero sacudido por <strong>olas de calor récord e intrusiones de friajes</strong> que rompen cualquier suposición gaussiana.',
+      blocks: [
+        { label: '📡 Serie Diaria Continua', text: '2,557 días ininterrumpidos (2019–2025) con mediciones sincronizadas de temperatura máxima, mínima, precipitación y humedad relativa.' },
+        { label: '⚖️ Auditoría Empírica Ciega', text: '14 arquitecturas enfrentadas bajo el mismo protocolo: 2,467 días de entrenamiento y 90 días de holdout ciego (Q4 2025).' }
+      ],
+      math: 'N = 2,557 días · Tmax = 31.79 ± 1.88 °C',
+      hint: 'Moda 31–32 °C (925 días)',
+      quote: '“Miren, 7 años continuos de termómetro en la selva. Vamos a auditar a 14 modelos con estos datos reales para derribar mitos de la industria: la física manda sobre el marketing de IA.”'
+    },
+    audit: {
+      accent: '#ffc05c',
+      tag: 'ETAPA 2 DE 4 · 3 PREGUNTAS GERENCIALES',
+      title: 'Las 3 preguntas críticas que este benchmark responde',
+      lead: 'La literatura académica y el marketing de software venden que más parámetros garantizan mejor pronóstico. Esta auditoría sobre Iquitos <strong>evalúa la parsimonia contra la física real</strong>.',
+      blocks: [
+        { label: '1️⃣ ¿Por qué fallan los árboles en olas récord?', text: 'Demostración matemática de la meseta plana en Random Forest y XGBoost, y cómo solucionarlo en producción.' },
+        { label: '2️⃣ ¿Tierra en CPU o supercómputo global?', text: 'Por qué un algoritmo de 0.25s en CPU derrota a supercomputadoras de 9 km (ECMWF) y GPUs de 7.87s.' },
+        { label: '3️⃣ ¿Cómo gobernar la incertidumbre a 7 días?', text: 'Reemplazo del punto fijo determinista por bandas de predicción conforme (P10–P90) con garantía finita.' }
+      ],
+      math: 'Decisión = f(Riesgo, Latencia, Costo Computacional)',
+      hint: 'Regla de Parsimonia Operacional',
+      quote: '“En producción no te pagan por usar redes complejas de 500M de parámetros; te pagan por no equivocarte cuando la temperatura se dispara a 38 grados.”'
+    },
+    climate: {
+      accent: '#ff5277',
+      tag: 'ETAPA 3 DE 4 · MICROCLIMA TROPICAL',
+      title: 'Baja varianza aparente con shocks récord no gaussianos',
+      lead: 'El ciclo estacional medio oscila solo entre <strong>30.4 °C (junio) y 33.1 °C (octubre)</strong>. Sin embargo, en octubre de 2023 y 2024 el termómetro golpeó <strong>38.0 °C</strong>, pulverizando los modelos en niveles.',
+      blocks: [
+        { label: '🔥 Olas de Calor SEP–OCT', text: 'La radiación cenital y el retraso de lluvias provocan olas sostenidas por encima de 35 °C donde los árboles colapsan.' },
+        { label: '❄️ Shocks de Friaje Amazónico', text: 'Intrusiones polares antárticas derrumban la temperatura hasta 19.2 °C en menos de 24 horas, desafiando a los modelos inerciales.' }
+      ],
+      math: 'Δt = 38.0 °C (Récord) − 19.2 °C (Friaje) = 18.8 °C rango real',
+      hint: 'Física local > Malla global',
+      quote: '“La selva tiene una trampa: parece predecible 9 meses al año, pero cuando llega la ola o el friaje, el algoritmo ingenuo quiebra la operación.”'
+    },
+    bridge13: {
+      accent: '#6ef0b4',
+      tag: 'ETAPA 4 DE 4 · PASE A DIAPOSITIVA 13',
+      title: 'De la serie continua a la anatomía de la distribución',
+      lead: 'Para entender el fracaso de los modelos tradicionales, debemos inspeccionar <strong>el histograma diario y el ciclo estacional</strong>: por qué la moda es engañosa y qué ocurre en las colas.',
+      blocks: [
+        { label: '📊 Histograma de 2,557 Días', text: '925 días concentrados en 31–32 °C; 78 días críticos en la cola extrema ≥ 36 °C.' },
+        { label: '➡️ Siguiente Diapositiva (Diapo 13)', text: 'Inspección interactiva de la distribución empírica de Punchana y horizonte de ruptura entrópica.' }
+      ],
+      math: 'P(Tmax ≥ 36 °C) ≈ 3.05% · Eventos de Alto Costo',
+      hint: 'Pase a Diapo 13 →',
+      quote: '“Pasemos ahora a la Diapo 13 para ver con nuestros propios ojos los datos puros de SENAMHI y por qué la moda estadística esconde el verdadero riesgo.”'
+    }
+  };
+
+  const MM = [32.05, 31.77, 31.41, 31.35, 30.50, 30.41, 30.67, 32.00, 33.12, 33.01, 33.08, 32.08];
+  const MN = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  const YY = {
+    '2019': [31.61, 36.0],
+    '2020': [31.70, 36.0],
+    '2021': [31.19, 35.4],
+    '2022': [31.57, 37.0],
+    '2023': [32.18, 38.0],
+    '2024': [32.75, 38.0],
+    '2025': [31.50, 36.2]
+  };
+
+  const TOP_RECORDS = [
+    { date: '2023-10-07', val: 38.0, label: '38.0 °C (Ola 2023)' },
+    { date: '2024-10-18', val: 38.0, label: '38.0 °C (Ola 2024)' },
+    { date: '2024-10-17', val: 37.8, label: '37.8 °C' },
+    { date: '2024-09-25', val: 37.6, label: '37.6 °C' },
+    { date: '2022-10-22', val: 37.0, label: '37.0 °C' }
+  ];
+
+  let currentStep = 'lab';
+  let selectedYear = 'all';
+  let loopActive = true;
+  let loopTimer = null;
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const tip = document.getElementById('tooltip');
+
+  function updateStage(stepKey, manual = false) {
+    if (!STAGE_DATA[stepKey]) return;
+    currentStep = stepKey;
+    const data = STAGE_DATA[stepKey];
+
+    document.documentElement.style.setProperty('--stage-accent', data.accent);
+
+    document.querySelectorAll('.proc-node').forEach(node => {
+      const isSel = node.getAttribute('data-step') === stepKey;
+      node.setAttribute('aria-selected', isSel ? 'true' : 'false');
+    });
+
+    document.getElementById('stageTag').textContent = data.tag;
+    document.getElementById('narrTitle').textContent = data.title;
+    document.getElementById('narrLead').innerHTML = data.lead;
+    document.getElementById('mathStrip').innerHTML = `<span>${data.math}</span><span class="hint">${data.hint}</span>`;
+    document.getElementById('speakerQuote').textContent = data.quote;
+
+    const blocksContainer = document.getElementById('narrBlocks');
+    blocksContainer.innerHTML = '';
+    data.blocks.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'info-block';
+      div.innerHTML = `<div class="info-block-label">${b.label}</div><div class="info-block-text">${b.text}</div>`;
+      blocksContainer.appendChild(div);
+    });
+
+    draw();
+
+    if (manual) {
+      restartLoop();
+    }
+  }
+
+  function nextStep() {
+    const idx = STEPS.indexOf(currentStep);
+    const nextIdx = (idx + 1) % STEPS.length;
+    updateStage(STEPS[nextIdx]);
+  }
+
+  function restartLoop() {
+    clearInterval(loopTimer);
+    if (loopActive) {
+      loopTimer = setInterval(nextStep, LOOP_MS);
+    }
+  }
+
+  // BOTÓN LOOP
+  const btnLoop = document.getElementById('btnLoop');
+  btnLoop.addEventListener('click', () => {
+    loopActive = !loopActive;
+    btnLoop.classList.toggle('active', loopActive);
+    document.getElementById('loopTxt').textContent = loopActive ? 'Auto: ON' : 'Auto: OFF';
+    restartLoop();
+  });
+
+  // TABS
+  STEPS.forEach(s => {
+    const btn = document.getElementById(`tab-${s}`);
+    if (btn) {
+      btn.addEventListener('click', () => updateStage(s, true));
+    }
+  });
+
+  // ACCIÓN SIGUIENTE DIAPO
+  document.getElementById('btnNextAction').addEventListener('click', () => {
+    try {
+      window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+    } catch(e) {}
+  });
+
+  // SELECTOR DE AÑO
+  document.querySelectorAll('#yearSelector button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#yearSelector button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      selectedYear = b.getAttribute('data-year');
+
+      const badge = document.getElementById('kpiYearBadge');
+      const meanEl = document.getElementById('kpiValMean');
+      const maxEl = document.getElementById('kpiValMax');
+
+      if (selectedYear === 'all') {
+        badge.textContent = 'Estacional Medio';
+        meanEl.textContent = '31.79 °C';
+        maxEl.textContent = '38.0 °C';
+      } else {
+        const yData = YY[selectedYear];
+        badge.textContent = `Año ${selectedYear}`;
+        meanEl.textContent = `${yData[0].toFixed(2)} °C`;
+        maxEl.textContent = `${yData[1].toFixed(1)} °C`;
+      }
+      draw();
+    });
+  });
+
+  // DIBUJO CANVAS RESPONSIVO
+  function fitCanvas() {
+    const r = cv.getBoundingClientRect();
+    if (r.width < 10) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = r.width * dpr;
+    cv.height = r.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function draw() {
+    const r = cv.getBoundingClientRect();
+    const w = r.width;
+    const h = r.height;
+    if (w < 20 || h < 20) return;
+
+    ctx.clearRect(0, 0, w, h);
+
+    const padL = 48;
+    const padR = 24;
+    const padT = 38;
+    const padB = 34;
+
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    const minT = 28.5;
+    const maxT = 39.0;
+
+    const mapY = (t) => padT + plotH - ((t - minT) / (maxT - minT)) * plotH;
+    const mapX = (monthIdx) => padL + (monthIdx / 11) * plotW;
+
+    // Grid lines horizontales
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let t = 29; t <= 39; t += 2) {
+      const y = mapY(t);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 10px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${t}°`, padL - 8, y + 3.5);
+    }
+
+    // Banda destacada: Pico SEP–NOV
+    const xSep = mapX(8);
+    const xNov = mapX(10);
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.07)';
+    ctx.fillRect(xSep - 14, padT, (xNov - xSep) + 28, plotH);
+
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.4)';
+    ctx.font = '600 9px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('PICO ESTACIONAL (SEP–NOV)', (xSep + xNov) / 2, padT + 14);
+
+    // Eje X: Meses
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 10.5px JetBrains Mono';
+    ctx.textAlign = 'center';
+    MN.forEach((m, i) => {
+      const x = mapX(i);
+      ctx.fillText(m, x, h - 12);
+    });
+
+    // Curva Estacional Climatológica Media (MM)
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#38efff';
+    ctx.shadowColor = 'rgba(56, 239, 255, 0.45)';
+    ctx.shadowBlur = 10;
+
+    MM.forEach((val, i) => {
+      const x = mapX(i);
+      const y = mapY(val);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+
+    // Puntos del ciclo mensual
+    MM.forEach((val, i) => {
+      const x = mapX(i);
+      const y = mapY(val);
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#030712';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#38efff';
+      ctx.stroke();
+    });
+
+    // Línea de referencia si hay un año seleccionado
+    if (selectedYear !== 'all') {
+      const yData = YY[selectedYear];
+      const yMean = mapY(yData[0]);
+      ctx.save();
+      ctx.strokeStyle = '#ffc05c';
+      ctx.setLineDash([5, 4]);
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(padL, yMean);
+      ctx.lineTo(w - padR, yMean);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = '#ffc05c';
+      ctx.font = '700 10px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Media ${selectedYear}: ${yData[0].toFixed(2)} °C`, w - padR - 8, yMean - 6);
+    }
+
+    // Top Récords Históricos (Puntos Rojos)
+    TOP_RECORDS.forEach((rec, idx) => {
+      const mo = parseInt(rec.date.split('-')[1], 10) - 1;
+      const x = mapX(mo) + (idx % 2 === 0 ? 8 : -8);
+      const y = mapY(rec.val);
+
+      ctx.beginPath();
+      ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ff5277';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#ff9cb0';
+      ctx.font = '700 9.5px JetBrains Mono';
+      ctx.textAlign = x > w / 2 ? 'right' : 'left';
+      ctx.fillText(rec.label, x + (x > w / 2 ? -8 : 8), y - 6);
+    });
+  }
+
+  // Sincronización de teclado
+  window.addEventListener('keydown', (e) => {
+    if (['1', '2', '3', '4'].includes(e.key)) {
+      const idx = parseInt(e.key, 10) - 1;
+      updateStage(STEPS[idx], true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    draw();
+  });
+
+  fitCanvas();
+  updateStage('lab');
+  restartLoop();
+})();
 </script>
 </body>
 </html>
