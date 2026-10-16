@@ -7,6 +7,9 @@ def get_slides_part2(branding=None):
     b64_qr = branding.get("b64_qr", "")
     anatomy_c1_svg = branding.get("anatomy_c1_svg", "")
     anatomy_c2_svg = branding.get("anatomy_c2_svg", "")
+    b64_p15_html = branding.get("b64_p15_html", "")
+    b64_p16_html = branding.get("b64_p16_html", "")
+    b64_p17_html = branding.get("b64_p17_html", "")
     b64_p19_html = branding.get("b64_p19_html", "")
     b64_p20_html = branding.get("b64_p20_html", "")
     b64_p21_html = branding.get("b64_p21_html", "")
@@ -17,152 +20,27 @@ def get_slides_part2(branding=None):
   <!-- ============================================================= -->
   <!-- DIAPO 15: BENCHMARK RIGUROSO EN PUNCHANA (page-06.png)        -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="15" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min">
-    <h2 class="slide-main-title display">Benchmark de 14 modelos: Tierra vs Supercómputo</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Protocolo estricto:</strong> 2,467 días de entrenamiento y 90 días de holdout ciego (Q4 2025). Test Diebold-Mariano con corrección Harvey-Leybourne-Newbold (HLN 1997).</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Microfísica local vs Supercómputo:</strong> ExtraTrees (1.88 °C) y TimesFM Zero-Shot (1.88 °C, p=0.71) superan a ECMWF IFS (~9 km, 2.46 °C, p=0.027) y NOAA GFS (~28 km, 2.58 °C, p=0.008).</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Regla de parsimonia:</strong> ExtraTrees en CPU (0.25s) empata estadísticamente con Random Forest (1.89 °C) y TimesFM (7.87s en GPU/NPU). En el microclima tropical, la memoria inercial local domina a la física numérica sin downscaling.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Benchmark auditado sobre estación SENAMHI Punchana · Holdout ciego de 90 días</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div class="chart-wrapper">
-          <div class="chart-toolbar">
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">MODO:</span>
-            <button class="chart-filter-btn active" id="btnPunchanaChart" onclick="switchPunchanaView('chart')">Gráfico de Benchmark</button>
-            <button class="chart-filter-btn" id="btnPunchanaAnatomy" onclick="switchPunchanaView('anatomy')" style="border-color:var(--fest-cyan); color:var(--fest-cyan);">📐 Anatomía del Sistema</button>
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin:0 4px 0 10px;" class="mono">FILTRAR:</span>
-            <button class="chart-filter-btn active" id="btnBmAll" onclick="filterBenchmarkPunchana('all')">Todos (14)</button>
-            <button class="chart-filter-btn" id="btnBmLeaders" onclick="filterBenchmarkPunchana('leaders')">Líderes (p &gt; 0.05)</button>
-            <button class="chart-filter-btn" id="btnBmNwp" onclick="filterBenchmarkPunchana('nwp')">Física Global (ECMWF/NOAA)</button>
-            <button class="chart-filter-btn" id="btnBmLocal" onclick="filterBenchmarkPunchana('local')">ML Local</button>
-          </div>
-          <div id="punchanaChartContainer" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:flex;">
-            <canvas id="chartBenchmark"></canvas>
-          </div>
-          <div id="punchanaAnatomyContainer" class="iso" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:var(--bg-dark-card); border-radius:8px; overflow:hidden;">
-            {anatomy_c1_svg}
-          </div>
-        </div>
-      </div>
+  <section class="slide" data-index="15" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P15_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide15"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
   <!-- DIAPO 16: PRONÓSTICO 7 DÍAS EN VIVO (page-06.png)            -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="16" data-act="Acto 2 · Pronóstico 7 Días" data-time="2.0 min">
-    <h2 class="slide-main-title display">Demostración: pronóstico operacional a 7 días</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Horizonte multi-step:</strong> Proyección día por día con bandas empíricas P10–P90 derivadas de los residuos de validación.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Cobertura real:</strong> 5 de los 7 días observados (71.4%) cayeron dentro del intervalo de confianza proyectado; los 2 fallos fueron los friajes de fin de año (28 y 30 dic).</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Ruptura en h=7:</strong> En el día 7, el error se incrementa al duplicarse la dispersión respecto a h=1.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Evaluación directa sobre los últimos 7 días registrados en SENAMHI Punchana</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div class="chart-wrapper">
-          <div class="chart-toolbar">
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">VISTA:</span>
-            <button class="chart-filter-btn active" id="btnDemoAll" onclick="filterDemo7dView('all')">Multimodelo Completo</button>
-            <button class="chart-filter-btn" id="btnDemoNwp" onclick="filterDemo7dView('nwp')">Confrontar NWP vs SENAMHI</button>
-            <button class="chart-filter-btn" id="btnDemoWinner" onclick="filterDemo7dView('winner')">Líder ExtraTrees + Cono P10/P90</button>
-          </div>
-          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
-            <canvas id="chartDemo7d"></canvas>
-          </div>
-        </div>
-      </div>
+  <section class="slide" data-index="16" data-act="Acto 2 · Pronóstico 7 Días" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P16_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide16"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
   <!-- DIAPO 17: DEMO / CÓDIGO (page-08.png)                         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="17" data-act="Acto 2 · Código del Modelo" data-time="2.0 min">
-    <h2 class="slide-main-title display">Demo / Código: Pipeline de forecasting</h2>
-    <div class="code-layout">
-      <div class="code-editor-box">
-        <div class="code-editor-header">
-          <div class="code-traffic-lights">
-            <div class="code-dot red"></div>
-            <div class="code-dot yellow"></div>
-            <div class="code-dot green"></div>
-          </div>
-          <div class="code-editor-title">senamhi_forecaster.py</div>
-        </div>
-        <div class="code-editor-body">
-<span style="color:#6C7AA6;"># 1. Modelado en diferencias finitas para evitar mesetas</span>
-<span style="color:#9B5CFF;">import</span> pandas <span style="color:#9B5CFF;">as</span> pd
-<span style="color:#9B5CFF;">from</span> sklearn.ensemble <span style="color:#9B5CFF;">import</span> ExtraTreesRegressor
-
-<span style="color:#6C7AA6;"># Calcular aceleración térmica (Δy = y_t - y_{{t-1}})</span>
-df[<span style="color:#12C8FC;">'delta_tmax'</span>] = df[<span style="color:#12C8FC;">'tmax'</span>].diff()
-
-<span style="color:#6C7AA6;"># 2. Generación de lags temporales (memoria inercial)</span>
-<span style="color:#9B5CFF;">for</span> k <span style="color:#9B5CFF;">in</span> [<span style="color:#FFC857;">1</span>, <span style="color:#FFC857;">2</span>, <span style="color:#FFC857;">3</span>, <span style="color:#FFC857;">7</span>, <span style="color:#FFC857;">14</span>]:
-    df[<span style="color:#12C8FC;">f'lag_{{k}}'</span>] = df[<span style="color:#12C8FC;">'delta_tmax'</span>].shift(k)
-
-<span style="color:#6C7AA6;"># 3. Entrenamiento ultrarrápido y parsimonioso (CPU 0.25s)</span>
-model = <span style="color:#2EE6A6;">ExtraTreesRegressor</span>(n_estimators=<span style="color:#FFC857;">100</span>, random_state=<span style="color:#FFC857;">42</span>)
-model.<span style="color:#2EE6A6;">fit</span>(X_train, y_train_delta)
-
-<span style="color:#6C7AA6;"># 4. Reconstrucción estocástica de nivel con cuantil P10-P90</span>
-pred_delta = model.<span style="color:#2EE6A6;">predict</span>(X_test)
-y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
-        </div>
-      </div>
-
-      <div class="code-steps-col">
-        <div class="code-step-item">
-          <div class="code-step-badge">1</div>
-          <div>
-            <div class="code-step-title">Qué hace el código</div>
-            <div class="code-step-desc">Diferencia la serie temporal para garantizar estacionariedad y permitir que los árboles extrapolen eventos récord.</div>
-          </div>
-        </div>
-
-        <div class="code-step-item">
-          <div class="code-step-badge">2</div>
-          <div>
-            <div class="code-step-title">Punto clave</div>
-            <div class="code-step-desc">Los retardos (lags) de 7 y 14 días capturan la inercia sin requerir redes recurrentes complejas ni GPUs.</div>
-          </div>
-        </div>
-
-        <div class="code-step-item">
-          <div class="code-step-badge">3</div>
-          <div>
-            <div class="code-step-title">Resultado</div>
-            <div class="code-step-desc">Entrenamiento en 0.25s de CPU y MAE de 1.466 °C en el holdout de 90 días; el cono a 7 días cubrió el 71.4% de los días.</div>
-          </div>
-        </div>
-      </div>
+  <section class="slide" data-index="17" data-act="Acto 2 · Código del Modelo" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P17_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide17"></iframe>
     </div>
   </section>
 
@@ -434,7 +312,10 @@ y_pred_nivel = y_last + pred_delta.<span style="color:#2EE6A6;">cumsum</span>()
 """
 
     return (
-        html.replace("__B64_P19_HTML__", b64_p19_html)
+        html.replace("__B64_P15_HTML__", b64_p15_html)
+        .replace("__B64_P16_HTML__", b64_p16_html)
+        .replace("__B64_P17_HTML__", b64_p17_html)
+        .replace("__B64_P19_HTML__", b64_p19_html)
         .replace("__B64_P20_HTML__", b64_p20_html)
         .replace("__B64_P21_HTML__", b64_p21_html)
         .replace("__B64_P22_HTML__", b64_p22_html)

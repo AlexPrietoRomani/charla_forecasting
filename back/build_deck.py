@@ -154,6 +154,22 @@ def build_deck():
     p23_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/23_precisi_n_actual_y_las_tres_trampas.html"
     b64_p23_html = base64.b64encode(p23_path.read_bytes()).decode("ascii") if p23_path.exists() else ""
 
+    # Prototipos Sección 2 (Diapositivas 13 a 17)
+    p13_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/13_Datos_SENAMHI_Punchana.html"
+    b64_p13_html = base64.b64encode(p13_path.read_bytes()).decode("ascii") if p13_path.exists() else ""
+
+    p14_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/14_Trampa_Arboles_Meseta_vs_Diferencias.html"
+    b64_p14_html = base64.b64encode(p14_path.read_bytes()).decode("ascii") if p14_path.exists() else ""
+
+    p15_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/15_Benchmark_14_Modelos_Tierra_vs_Supercomputo.html"
+    b64_p15_html = base64.b64encode(p15_path.read_bytes()).decode("ascii") if p15_path.exists() else ""
+
+    p16_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/16_Pronostico_7_Dias_Cono_P10_P90.html"
+    b64_p16_html = base64.b64encode(p16_path.read_bytes()).decode("ascii") if p16_path.exists() else ""
+
+    p17_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/17_Pipeline_Codigo_Diferencias_ExtraTrees.html"
+    b64_p17_html = base64.b64encode(p17_path.read_bytes()).decode("ascii") if p17_path.exists() else ""
+
     branding = get_branding()
     branding["b64_sim_html"] = b64_sim_html
     branding["b64_era1_html"] = b64_era1_html
@@ -167,6 +183,11 @@ def build_deck():
     branding["b64_p21_html"] = b64_p21_html
     branding["b64_p22_html"] = b64_p22_html
     branding["b64_p23_html"] = b64_p23_html
+    branding["b64_p13_html"] = b64_p13_html
+    branding["b64_p14_html"] = b64_p14_html
+    branding["b64_p15_html"] = b64_p15_html
+    branding["b64_p16_html"] = b64_p16_html
+    branding["b64_p17_html"] = b64_p17_html
     b64_header_logo = branding["b64_header"]
     b64_dw_logo = branding["b64_dw"]
     qr_svg = branding["qr_svg"]

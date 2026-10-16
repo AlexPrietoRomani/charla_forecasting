@@ -10,6 +10,8 @@ def get_slides_part1(branding=None):
     b64_era4_html = branding.get("b64_era4_html", "")
     b64_cono_html = branding.get("b64_cono_html", "")
     b64_decision_html = branding.get("b64_decision_html", "")
+    b64_p13_html = branding.get("b64_p13_html", "")
+    b64_p14_html = branding.get("b64_p14_html", "")
 
     slides = """
   <!-- ========================================== -->
@@ -211,55 +213,18 @@ def get_slides_part1(branding=None):
   <!-- ============================================================= -->
   <!-- DIAPO 13: DATOS QUE IMPORTAN: SENAMHI (page-07.png)           -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="13" data-act="Acto 2 · Datos SENAMHI" data-time="1.5 min">
-    <h2 class="slide-main-title display">Datos que importan: Estación SENAMHI Punchana</h2>
-    <p class="kpis-subtitle">Cifras clave de la serie climatológica de Iquitos (2018–2024).</p>
-    <div class="kpis-3col-grid">
-      <div class="kpi-large-card card-cyan">
-        <div class="kpi-huge-number">2,557</div>
-        <div class="kpi-card-desc">Días continuos registrados por SENAMHI en la estación Punchana (Iquitos, Loreto).</div>
-      </div>
-      <div class="kpi-large-card card-blue">
-        <div class="kpi-huge-number">31.8°C</div>
-        <div class="kpi-card-desc">Temperatura máxima media anual en el régimen ecuatorial hiperhúmedo amazónico.</div>
-      </div>
-      <div class="kpi-large-card card-purple">
-        <div class="kpi-huge-number">h &gt; 7d</div>
-        <div class="kpi-card-desc">Horizonte de ruptura entrópica donde el error meteorológico iguala a la varianza climatológica.</div>
-      </div>
+  <section class="slide" data-index="13" data-act="Acto 2 · Datos SENAMHI" data-time="1.5 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P13_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide13"></iframe>
     </div>
-    <div class="graphic-source" style="margin-top:16px;">Fuente: Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI) · Estación Punchana (2018–2024)</div>
   </section>
 
   <!-- ============================================================= -->
   <!-- DIAPO 14: LA TRAMPA DE LA NO LINEALIDAD (page-06.png)         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="14" data-act="Acto 2 · Extrapolación de Árboles" data-time="2.0 min">
-    <h2 class="slide-main-title display">La trampa de los árboles: meseta vs diferencias</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>El problema:</strong> Los árboles de decisión (Random Forest, XGBoost) dividen el espacio en hiperrectángulos cerrados. No pueden predecir valores fuera de su rango histórico de entrenamiento.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Colapso en ola de calor:</strong> Con tope de 34.0 °C y ola récord a 37.4 °C, RF colapsó en una meseta plana de 31.5 °C.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>La solución de ingeniería:</strong> Modelar la tasa de cambio (Δy = y_t - y_{t-1}) permitió capturar la aceleración térmica hasta 35.45 °C.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Experimento con datos reales SENAMHI Punchana · Test set ciego</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div class="chart-wrapper">
-          <canvas id="chartExtrap"></canvas>
-        </div>
-      </div>
+  <section class="slide" data-index="14" data-act="Acto 2 · Extrapolación de Árboles" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P14_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide14"></iframe>
     </div>
   </section>
 """
@@ -273,5 +238,7 @@ def get_slides_part1(branding=None):
         .replace("__B64_ERA4_HTML__", b64_era4_html)
         .replace("__B64_CONO_HTML__", b64_cono_html)
         .replace("__B64_DECISION_HTML__", b64_decision_html)
+        .replace("__B64_P13_HTML__", b64_p13_html)
+        .replace("__B64_P14_HTML__", b64_p14_html)
     )
 
