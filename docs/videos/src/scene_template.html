@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Anatomía de la señal · video 30 s</title>
+<style>
+__FONTS_CSS__
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden;background:#040714}
+#stage{position:relative;width:1600px;height:900px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;color:#e8f4ff}
+.mono{font-family:'IBM Plex Mono',monospace}
+.display{font-family:'Space Grotesk',sans-serif}
+.orb{position:absolute;width:1000px;height:1000px;border-radius:50%;pointer-events:none}
+#orbA{left:-300px;top:-420px;background:radial-gradient(closest-side, rgba(56,239,255,0.11), transparent 70%)}
+#orbB{right:-360px;bottom:-460px;background:radial-gradient(closest-side, rgba(255,192,92,0.09), transparent 70%)}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 95% at 50% 42%, transparent 58%, rgba(0,0,0,0.5) 100%)}
+svg#scene{position:absolute;inset:0}
+.fx{opacity:0}
+#titleBlock{position:absolute;inset:0}
+#titleBlock>div{position:absolute;left:0;right:0;text-align:center;opacity:0}
+#tk{top:238px;font-size:14px;letter-spacing:4px;color:#38efff}
+#th1{top:268px;font-size:64px;font-weight:700;letter-spacing:-0.5px}
+#teq{top:374px;font-size:30px;letter-spacing:1px}
+#teq .tT{color:#ffc05c}#teq .tS{color:#38efff}#teq .tC{color:#6ef0b4}#teq .tE{color:#9aa6c8}
+#tsub{top:436px;font-size:20px;color:#cfe0f5}
+#tmeta{top:478px;font-size:13px;letter-spacing:1px;color:#7f8fb0}
+#headerSmall{position:absolute;left:96px;top:42px;opacity:0}
+#hKick{font-size:12.5px;letter-spacing:2.5px;color:#38efff}
+#hSub{font-size:17px;color:#cfe0f5;margin-top:5px}
+#equation{position:absolute;right:96px;top:46px;font-size:22px;color:#5a6a8a;opacity:0;letter-spacing:1px}
+#equation span{transition:none}
+#chips{position:absolute;left:80px;top:112px;display:flex;gap:16px;opacity:0}
+.chip{width:348px;padding:11px 18px 12px;border-radius:12px;border:1px solid #1c2a44;background:rgba(7,16,34,0.78)}
+.chipTitle{font-size:16.5px;font-weight:600;color:#aabbd8;letter-spacing:0.2px}
+.chipSub{font-size:11.5px;color:#7f8fb0;margin-top:3px;letter-spacing:0.5px}
+#chartLabels{position:absolute;inset:0;opacity:1}
+#chartLabels>div{position:absolute;font-size:12.5px;letter-spacing:0.4px;opacity:0;white-space:nowrap}
+#labT{color:#ffc05c}
+#labS{color:#38efff}
+#labC{color:#6ef0b4}
+#labE{color:#9aa6c8}
+#statsLine{position:absolute;left:96px;top:764px;font-size:15px;color:#8b9ab8;opacity:0;letter-spacing:0.4px}
+#recCard{position:absolute;padding:10px 16px 11px;border-radius:12px;border:1px solid rgba(255,82,119,0.55);background:rgba(255,82,119,0.12);text-align:center;opacity:0}
+#recCard .rcBig{font-size:16px;font-weight:600;color:#ffd7e0;letter-spacing:0.5px}
+#recCard .rcSub{font-size:11.5px;color:#d8a3b2;margin-top:3px;letter-spacing:0.8px}
+#quote{position:absolute;left:330px;top:466px;width:940px;padding:34px 40px 30px;border-radius:18px;border:1px solid rgba(56,239,255,0.28);background:rgba(3,7,18,0.88);text-align:center;opacity:0}
+#q1,#q2{font-size:40px;font-weight:700;letter-spacing:-0.3px}
+#q2{color:#ffc05c;margin-top:4px}
+#q3{font-size:15px;color:#8b9ab8;margin-top:14px;letter-spacing:0.4px}
+#closeWrap{position:absolute;inset:0;opacity:0}
+#closeBg{position:absolute;inset:0;background:#040714}
+#closeWrap>div{position:absolute;left:0;right:0;text-align:center}
+#cKick{top:298px;font-size:14px;letter-spacing:4px;color:#38efff}
+#cH1{top:330px;font-size:56px;font-weight:700;letter-spacing:-0.5px}
+#cSub{top:446px;font-size:22px;color:#cfe0f5}
+#cFoot{top:804px;font-size:13px;letter-spacing:2px;color:#7f8fb0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="orb" id="orbA"></div>
+  <div class="orb" id="orbB"></div>
+  <svg id="scene" viewBox="0 0 1600 900" width="1600" height="900">
+    <defs>
+      <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="3.6" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="2" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#030712" fill-opacity="0.92" stroke="rgba(18,200,252,0.22)" opacity="0"/>
+    <g id="grid" opacity="0"></g>
+    <g id="rivers" opacity="0" fill="none">
+      <path id="riv1" stroke="rgba(56,239,255,0.35)" stroke-width="1.4"/>
+      <path id="riv2" stroke="rgba(255,192,92,0.30)" stroke-width="1.3"/>
+      <path id="riv3" stroke="rgba(110,240,180,0.28)" stroke-width="1.2"/>
+    </g>
+    <g id="traces">
+      <path id="pathY" fill="none" stroke="#eaf6ff" stroke-width="1.3" filter="url(#glowSoft)" opacity="0"/>
+      <path id="bandS" fill="rgba(56,239,255,0.16)" stroke="none" opacity="0"/>
+      <path id="pathT" fill="none" stroke="#ffc05c" stroke-width="1.8" opacity="0"/>
+      <path id="areaC" fill="rgba(110,240,180,0.15)" stroke="none" opacity="0"/>
+      <path id="pathM30" fill="none" stroke="#6ef0b4" stroke-width="1.8" opacity="0"/>
+      <path id="stemsE" fill="none" stroke="#9aa6c8" stroke-width="1" opacity="0"/>
+      <circle id="dotY" r="5" fill="#eaf6ff" filter="url(#glow)" opacity="0"/>
+    </g>
+    <g id="markers">
+      <path id="recLine" stroke="rgba(255,82,119,0.6)" stroke-width="1.4" stroke-dasharray="5 7" fill="none" opacity="0"/>
+      <circle id="recDot" r="5.5" fill="#ff5277" filter="url(#glow)" opacity="0"/>
+    </g>
+  </svg>
+  <div id="titleBlock">
+    <div id="tk" class="mono">ACTO 1 · ANATOMÍA DE LA SEÑAL</div>
+    <div id="th1" class="display">¿Qué es una serie temporal?</div>
+    <div id="teq" class="mono">Y(t) = <span class="tT">T(t)</span> + <span class="tS">S(t)</span> + <span class="tC">C(t)</span> + <span class="tE">ε(t)</span></div>
+    <div id="tsub">El río de la señal · datos reales de Iquitos</div>
+    <div id="tmeta" class="mono">SENAMHI Punchana · 2,557 días · 2019–2025</div>
+  </div>
+  <div id="headerSmall">
+    <div id="hKick" class="mono">ANATOMÍA DE LA SEÑAL · SENAMHI PUNCHANA (IQUITOS)</div>
+    <div id="hSub">Y(t) observada — temperatura máxima diaria (°C)</div>
+  </div>
+  <div id="equation" class="mono">Y = <span id="eqT">T</span> + <span id="eqS">S</span> + <span id="eqC">C</span> + <span id="eqE">ε</span></div>
+  <div id="chips">
+    <div class="chip" id="chipT"><div class="chipTitle" id="chipTT">T · Tendencia</div><div class="chipSub mono">CAUCE · inercia física</div></div>
+    <div class="chip" id="chipS"><div class="chipTitle" id="chipST">S · Estacionalidad</div><div class="chipSub mono">MAREA · ciclo solar anual</div></div>
+    <div class="chip" id="chipC"><div class="chipTitle" id="chipCT">C · Ciclo endógeno</div><div class="chipSub mono">RÉGIMEN · El Niño, sequías</div></div>
+    <div class="chip" id="chipE"><div class="chipTitle" id="chipET">ε · Ruido</div><div class="chipSub mono">ENTROPÍA · irreducible</div></div>
+  </div>
+  <div id="chartLabels">
+    <div id="labT" class="mono"></div>
+    <div id="labS" class="mono"></div>
+    <div id="labC" class="mono"></div>
+    <div id="labE" class="mono"></div>
+  </div>
+  <div id="statsLine" class="mono"></div>
+  <div id="recCard"><div class="rcBig mono"></div><div class="rcSub mono"></div></div>
+  <div id="quote">
+    <div id="q1" class="display">Aísla T + S + C.</div>
+    <div id="q2" class="display">Jamás entrenes sobre ε.</div>
+    <div id="q3" class="mono">La física deja huella; la entropía no se puede memorizar.</div>
+  </div>
+  <div id="closeWrap">
+    <div id="closeBg"></div>
+    <div id="cKick" class="mono">ACTO 1 · CIERRE</div>
+    <div id="cH1" class="display">La naturaleza habla en series temporales</div>
+    <div id="cSub">Ganará el modelo que entienda su física — no el que memorice su ruido.</div>
+    <div id="cFoot" class="mono">IQUITOS DATA FEST 2026 · ¿PUEDE LA IA PREDECIR EL FUTURO? · SENAMHI PUNCHANA (2019–2025)</div>
+  </div>
+  <div id="vignette"></div>
+</div>
+<script>
+const DATA=__DATA_JSON__;
+const DURMS=__DURATION_MS__;
+const W=1600,H=900;
+const CH={x0:96,x1:1548,y0:232,y1:712};
+const YMIN=18.5,YMAX=39;
+const N=DATA.n;
+const X=i=>CH.x0+(i/(N-1))*(CH.x1-CH.x0);
+const yOf=v=>CH.y1-(v-YMIN)/(YMAX-YMIN)*(CH.y1-CH.y0);
+const clamp=x=>Math.max(0,Math.min(1,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eoc=p=>1-Math.pow(1-p,3);
+const eic=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eib=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);};
+const C_T='#ffc05c',C_S='#38efff',C_C='#6ef0b4',C_E='#9aa6c8',BASE_BORDER='#1c2a44',MUTED='#5a6a8a';
+
+const $=id=>document.getElementById(id);
+const ELS={orbA:$('orbA'),orbB:$('orbB'),rivers:$('rivers'),riv1:$('riv1'),riv2:$('riv2'),riv3:$('riv3'),
+panel:$('panel'),grid:$('grid'),traces:$('traces'),markers:$('markers'),
+pathY:$('pathY'),pathT:$('pathT'),bandS:$('bandS'),pathM30:$('pathM30'),areaC:$('areaC'),stemsE:$('stemsE'),dotY:$('dotY'),
+recLine:$('recLine'),recDot:$('recDot'),
+titleBlock:$('titleBlock'),tk:$('tk'),th1:$('th1'),teq:$('teq'),tsub:$('tsub'),tmeta:$('tmeta'),
+headerSmall:$('headerSmall'),hKick:$('hKick'),hSub:$('hSub'),equation:$('equation'),
+eqT:$('eqT'),eqS:$('eqS'),eqC:$('eqC'),eqE:$('eqE'),
+chips:$('chips'),chipT:$('chipT'),chipS:$('chipS'),chipC:$('chipC'),chipE:$('chipE'),
+chipTT:$('chipTT'),chipST:$('chipST'),chipCT:$('chipCT'),chipET:$('chipET'),
+chartLabels:$('chartLabels'),labT:$('labT'),labS:$('labS'),labC:$('labC'),labE:$('labE'),
+statsLine:$('statsLine'),recCard:$('recCard'),quote:$('quote'),q1:$('q1'),q2:$('q2'),q3:$('q3'),
+closeWrap:$('closeWrap'),cKick:$('cKick'),cH1:$('cH1'),cSub:$('cSub'),cFoot:$('cFoot')};
+
+const BASE=DATA.y.map((v,i)=>DATA.t[i]==null?null:DATA.t[i]+DATA.s[i]+DATA.c[i]);
+
+function pathPts(vals,frac){const upto=frac*(N-1);const last=Math.floor(upto);let d='',started=false;
+for(let i=0;i<=last;i++){const v=vals[i];if(v==null){started=false;continue}
+d+=(started?'L':'M')+X(i).toFixed(1)+' '+yOf(v).toFixed(1);started=true}
+if(last<N-1&&upto>last){const a=vals[last],b=vals[last+1];if(a!=null&&b!=null){const v=a+(b-a)*(upto-last);
+d+='L'+X(upto).toFixed(1)+' '+yOf(v).toFixed(1)}}return d}
+
+function bandPath(frac){if(frac<=0.002)return'';const upto=frac*(N-1);const last=Math.floor(upto);
+let d='M'+X(0).toFixed(1)+' '+yOf(DATA.t[0]+DATA.s[0]).toFixed(1);
+for(let i=1;i<=last;i++)d+='L'+X(i).toFixed(1)+' '+yOf(DATA.t[i]+DATA.s[i]).toFixed(1);
+const i2=Math.min(last+1,N-1);
+if(last<N-1)d+='L'+X(upto).toFixed(1)+' '+yOf(lerp(DATA.t[last]+DATA.s[last],DATA.t[i2]+DATA.s[i2],upto-last)).toFixed(1);
+for(let i=last;i>=0;i--)d+='L'+X(i).toFixed(1)+' '+yOf(DATA.t[i]-DATA.s[i]).toFixed(1);
+return d+'Z'}
+
+function areaRuns(frac){const upto=Math.floor(frac*(N-1));let d='',i=0;
+while(i<=upto){const a=DATA.m30[i],b=DATA.t[i];
+if(a!=null&&b!=null&&a>b+0.05){let j=i;while(j<=upto){const a2=DATA.m30[j],b2=DATA.t[j];
+if(a2==null||b2==null||a2<=b2+0.05)break;j++}
+d+='M'+X(i).toFixed(1)+' '+yOf(DATA.m30[i]).toFixed(1);
+for(let k=i+1;k<j;k++)d+='L'+X(k).toFixed(1)+' '+yOf(DATA.m30[k]).toFixed(1);
+for(let k=j-1;k>=i;k--)d+='L'+X(k).toFixed(1)+' '+yOf(DATA.t[k]).toFixed(1);
+d+='Z';i=j+1}else i++}return d}
+
+function stemsPath(frac){const upto=frac*(N-1);let d='';
+for(let i=0;i<=upto;i+=3){const e=DATA.e[i],b=BASE[i];if(e==null||b==null)continue;
+const x=X(i).toFixed(1);d+='M'+x+' '+yOf(b).toFixed(1)+'L'+x+' '+yOf(DATA.y[i]).toFixed(1)}return d}
+
+function riverPath(base,amp,wl,phase){let d='M0 '+base;
+for(let x=16;x<=1600;x+=16)d+='L'+x+' '+(base+Math.sin(x/wl*Math.PI*2+phase)*amp).toFixed(1);
+return d}
+
+(function initStatic(){
+  const NS='http://www.w3.org/2000/svg';
+  [20,25,30,35].forEach(v=>{
+    const ln=document.createElementNS(NS,'line');
+    ln.setAttribute('x1',CH.x0);ln.setAttribute('x2',CH.x1);
+    ln.setAttribute('y1',yOf(v).toFixed(1));ln.setAttribute('y2',yOf(v).toFixed(1));
+    ln.setAttribute('stroke','rgba(140,170,220,0.10)');ELS.grid.appendChild(ln);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',CH.x0-12);tx.setAttribute('y',(yOf(v)+4.5).toFixed(1));
+    tx.setAttribute('text-anchor','end');tx.setAttribute('fill','#66758f');
+    tx.setAttribute('font-size','13');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+    tx.textContent=v+'°';ELS.grid.appendChild(tx)});
+  DATA.yearTicks.forEach(yt=>{
+    const ln=document.createElementNS(NS,'line');
+    ln.setAttribute('x1',X(yt.i).toFixed(1));ln.setAttribute('x2',X(yt.i).toFixed(1));
+    ln.setAttribute('y1',CH.y0);ln.setAttribute('y2',CH.y1);
+    ln.setAttribute('stroke','rgba(140,170,220,0.08)');ln.setAttribute('stroke-dasharray','2 8');
+    ELS.grid.appendChild(ln);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',X(yt.i).toFixed(1));tx.setAttribute('y',CH.y1+28);
+    tx.setAttribute('text-anchor','middle');tx.setAttribute('fill','#66758f');
+    tx.setAttribute('font-size','13');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+    tx.textContent=yt.label;ELS.grid.appendChild(tx)});
+  ELS.riv1.setAttribute('d',riverPath(838,9,300,0));
+  ELS.riv2.setAttribute('d',riverPath(862,7,380,1.9));
+  ELS.riv3.setAttribute('d',riverPath(884,5,460,3.4));
+  const iT=Math.floor(N*0.03),iS=Math.floor(N*0.60),iE=Math.floor(N*0.895);
+  ELS.labT.style.left=X(iT)+'px';ELS.labT.style.top=(yOf(DATA.t[iT])-36)+'px';
+  ELS.labT.textContent='T · cauce: nivel de fondo estable';
+  ELS.labS.style.left=X(iS)+'px';ELS.labS.style.top=(yOf(DATA.t[iS]-2.0)+2)+'px';
+  ELS.labS.textContent='S · marea anual (±'+DATA.sAbs+' °C) — débil en el trópico';
+  ELS.labC.style.left=(X(DATA.idxCMax)-150)+'px';ELS.labC.style.top=(yOf(DATA.m30[DATA.idxCMax])-44)+'px';
+  ELS.labC.textContent='El Niño 2023–24 · régimen cálido';
+  ELS.labE.style.left=(X(iE)-350)+'px';ELS.labE.style.top=(yOf(27.2))+'px';
+  ELS.labE.textContent='ε · entropía irreducible (σ ≈ '+DATA.eStd+' °C)';
+  ELS.statsLine.textContent='n = '+String(DATA.n).replace(/\B(?=(\d{3})+(?!\d))/g,',')+' días · media '+DATA.mean+' °C · récord '+DATA.max.toFixed(1)+' °C ('+DATA.maxDate+')';
+  ELS.recCard.querySelector('.rcBig').textContent=DATA.max.toFixed(1)+' °C · RÉCORD';
+  ELS.recCard.querySelector('.rcSub').textContent=DATA.maxDate+' · régimen cálido';
+  ELS.recCard.style.left=X(DATA.idxMax)+'px';
+  ELS.recCard.style.top=(yOf(DATA.max)-72)+'px';
+  ELS.recLine.setAttribute('x1',X(DATA.idxMax).toFixed(1));
+  ELS.recLine.setAttribute('x2',X(DATA.idxMax).toFixed(1));
+  ELS.recLine.setAttribute('y2',yOf(DATA.max).toFixed(1));
+  ELS.recDot.setAttribute('cx',X(DATA.idxMax).toFixed(1));
+  ELS.recDot.setAttribute('cy',yOf(DATA.max).toFixed(1));
+})();
+
+function enter(el,p,dist){el.style.opacity=p.toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?14:dist)).toFixed(1)+'px)'}
+
+function chipStyle(chip,titleEl,color,tActive,start){const act=seg(tActive,start,start+0.4);
+chip.style.opacity=act.toFixed(3);chip.style.transform='translateY('+((1-act)*12).toFixed(1)+'px)';
+const pulse=1+0.05*Math.sin(Math.PI*clamp((tActive-start)/0.5,0,1));
+chip.style.transform+=' scale('+pulse.toFixed(3)+')';
+if(act>0.15){chip.style.borderColor=color;chip.style.boxShadow='0 0 20px '+color+'2e';
+titleEl.style.color=color;titleEl.style.textShadow='0 0 14px '+color+'55'}
+else{chip.style.borderColor=BASE_BORDER;chip.style.boxShadow='none';titleEl.style.color='#aabbd8';titleEl.style.textShadow='none'}}
+
+function eqTerm(el,color,active){if(active){el.style.color=color;el.style.textShadow='0 0 14px '+color+'88'}
+else{el.style.color=MUTED;el.style.textShadow='none'}}
+
+function render(t){
+  ELS.orbA.style.transform='translate('+(Math.sin(t*0.11)*18).toFixed(1)+'px,'+(Math.cos(t*0.09)*14).toFixed(1)+'px)';
+  ELS.orbB.style.transform='translate('+(Math.sin(t*0.08+2)*20).toFixed(1)+'px,'+(Math.cos(t*0.1+1)*16).toFixed(1)+'px)';
+  const rivO=clamp(seg(t,0.5,1.3)*(1-seg(t,3.4,3.8)),0,1);
+  ELS.rivers.setAttribute('opacity',(rivO*0.85).toFixed(3));
+  ELS.riv1.setAttribute('transform','translate('+(Math.sin(t*0.22)*26).toFixed(1)+',0)');
+  ELS.riv2.setAttribute('transform','translate('+(Math.sin(t*0.17+1.7)*30).toFixed(1)+',0)');
+  ELS.riv3.setAttribute('transform','translate('+(Math.sin(t*0.13+3.1)*34).toFixed(1)+',0)');
+
+  const titleOut=seg(t,3.3,3.75);
+  ELS.titleBlock.style.opacity=(seg(t,0.15,3.4)*(1-titleOut)).toFixed(3);
+  ELS.titleBlock.style.transform='translateY('+(-18*eoc(titleOut)).toFixed(1)+'px)';
+  enter(ELS.tk,eoc(seg(t,0.3,1.05)));
+  enter(ELS.th1,eoc(seg(t,0.5,1.45)));
+  enter(ELS.teq,eoc(seg(t,1.0,1.85)));
+  enter(ELS.tsub,eoc(seg(t,1.25,2.05)));
+  enter(ELS.tmeta,eoc(seg(t,1.45,2.2)));
+
+  const chartIn=seg(t,3.7,4.4);
+  ELS.panel.style.opacity=chartIn.toFixed(3);
+  ELS.grid.setAttribute('opacity',(chartIn*(0.8+0.2*Math.sin(t*0.5))).toFixed(3));
+  ELS.headerSmall.style.opacity=seg(t,3.75,4.3).toFixed(3);
+  enter(ELS.hKick,eoc(seg(t,3.8,4.5)));
+  enter(ELS.hSub,eoc(seg(t,3.95,4.7)));
+  ELS.equation.style.opacity=seg(t,4.0,4.5).toFixed(3);
+
+  eqTerm(ELS.eqT,C_T,t>9.95&&t<13.3);eqTerm(ELS.eqS,C_S,t>13.35&&t<16.5);
+  eqTerm(ELS.eqC,C_C,t>16.55&&t<19.85);eqTerm(ELS.eqE,C_E,t>19.9&&t<23.0);
+
+  const chipsIn=seg(t,4.05,4.6);
+  ELS.chips.style.opacity=chipsIn.toFixed(3);
+  ELS.chips.style.transform='translateY('+((1-eoc(chipsIn))*10).toFixed(1)+'px)';
+  chipStyle(ELS.chipT,ELS.chipTT,C_T,t,10.0);
+  chipStyle(ELS.chipS,ELS.chipST,C_S,t,13.4);
+  chipStyle(ELS.chipC,ELS.chipCT,C_C,t,16.6);
+  chipStyle(ELS.chipE,ELS.chipET,C_E,t,19.9);
+
+  const yFrac=eic(seg(t,4.4,8.6));
+  ELS.pathY.setAttribute('d',pathPts(DATA.y,yFrac));
+  const yBase=1-0.82*seg(t,9.7,10.1);
+  ELS.pathY.style.opacity=(chartIn*yBase).toFixed(3);
+  if(yFrac>0.002){const fi=Math.min(N-1,yFrac*(N-1));const i0=Math.floor(fi);
+    const v=lerp(DATA.y[i0],DATA.y[Math.min(i0+1,N-1)],fi-i0);
+    ELS.dotY.setAttribute('cx',X(fi).toFixed(1));ELS.dotY.setAttribute('cy',yOf(v).toFixed(1));
+    ELS.dotY.setAttribute('r',(5+0.7*Math.sin(t*2.4)).toFixed(2));
+    ELS.dotY.style.opacity=(chartIn*yBase).toFixed(3)}
+
+  const tFrac=eic(seg(t,10.0,12.0));
+  ELS.pathT.setAttribute('d',pathPts(DATA.t,tFrac));
+  ELS.pathT.style.opacity=(seg(t,9.95,10.2)*0.95).toFixed(3);
+  enter(ELS.labT,eoc(seg(t,11.6,12.3)));
+
+  const sGrow=eic(seg(t,13.4,15.6));
+  ELS.bandS.setAttribute('d',bandPath(sGrow));
+  ELS.bandS.style.opacity=seg(t,13.35,13.8).toFixed(3);
+  enter(ELS.labS,eoc(seg(t,15.4,16.1)));
+
+  const cFrac=eic(seg(t,16.6,18.4));
+  ELS.pathM30.setAttribute('d',pathPts(DATA.m30,cFrac));
+  ELS.pathM30.style.opacity=(seg(t,16.55,16.85)*0.95).toFixed(3);
+  ELS.areaC.setAttribute('d',areaRuns(eic(seg(t,17.4,18.4))));
+  ELS.areaC.style.opacity=seg(t,17.35,17.75).toFixed(3);
+  enter(ELS.labC,eoc(seg(t,18.3,19.0)));
+
+  if(t>18.6){const g=seg(t,18.7,19.15);
+    ELS.recLine.setAttribute('y1',lerp(yOf(DATA.max),CH.y0,g).toFixed(1));
+    ELS.recLine.style.opacity=seg(t,18.7,18.95).toFixed(3);
+    ELS.recDot.style.opacity=seg(t,18.95,19.2).toFixed(3);
+    const p=eib(clamp(seg(t,18.8,19.15),0,1));
+    ELS.recCard.style.opacity=seg(t,18.8,19.1).toFixed(3);
+    ELS.recCard.style.transform='translate(-50%,0) scale('+(0.85+0.15*p).toFixed(3)+')'}
+  else{ELS.recLine.style.opacity=0;ELS.recDot.style.opacity=0;ELS.recCard.style.opacity=0}
+
+  const eFrac=eoc(seg(t,19.9,22.2));
+  ELS.stemsE.setAttribute('d',stemsPath(eFrac));
+  ELS.stemsE.style.opacity=(seg(t,19.85,20.15)*0.42).toFixed(3);
+  enter(ELS.labE,eoc(seg(t,22.1,22.7)));
+  ELS.statsLine.style.opacity=seg(t,8.8,9.4).toFixed(3);
+
+  const dim=1-0.75*seg(t,23.0,23.7);
+  ELS.traces.style.opacity=dim.toFixed(3);
+  ELS.markers.style.opacity=dim.toFixed(3);
+  ELS.chartLabels.style.opacity=dim.toFixed(3);
+  ELS.chips.style.opacity=(chipsIn*(0.2+0.8*dim)).toFixed(3);
+  ELS.statsLine.style.opacity=(seg(t,8.8,9.4)*(0.5+0.5*dim)).toFixed(3);
+
+  const qIn=eoc(seg(t,22.95,23.65));
+  ELS.quote.style.opacity=seg(t,22.95,23.6).toFixed(3);
+  ELS.quote.style.transform='translateY('+((1-qIn)*22).toFixed(1)+'px)';
+  enter(ELS.q1,eoc(seg(t,23.3,24.1)),12);
+  enter(ELS.q2,eoc(seg(t,24.4,25.2)),12);
+  enter(ELS.q3,eoc(seg(t,25.0,25.8)),10);
+
+  const cIn=eoc(seg(t,27.2,28.05));
+  ELS.closeWrap.style.opacity=seg(t,27.2,28.0).toFixed(3);
+  ELS.closeWrap.style.transform='translateY('+((1-cIn)*16).toFixed(1)+'px)';
+  enter(ELS.cKick,eoc(seg(t,27.6,28.15)));
+  enter(ELS.cH1,eoc(seg(t,27.75,28.6)));
+  enter(ELS.cSub,eoc(seg(t,28.45,29.15)));
+  enter(ELS.cFoot,eoc(seg(t,28.9,29.5)));
+}
+
+window.__DURATION_MS=DURMS;
+let lastMs=0;
+window.__setTime=ms=>{lastMs=Math.max(0,Math.min(ms,DURMS));render(lastMs/1000)};
+const params=new URLSearchParams(location.search);
+const h=location.hash.match(/t=([\d.]+)/);
+if(h)window.__setTime(parseFloat(h[1])*1000);
+document.fonts.ready.then(()=>{render(lastMs/1000);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{window.__ready=true}))});
+if(params.has('preview')){const loop=()=>{window.__setTime(performance.now()%DURMS);requestAnimationFrame(loop)};loop()}
+</script>
+</body>
+</html>

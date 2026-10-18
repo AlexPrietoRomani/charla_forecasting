@@ -68,3 +68,8 @@ screenshots/
 slide_*.png
 docs/audit_layout/
 docs/plantilla_assets/
+
+# --- harness code ---
+.opencode/
+.claude/
+.gemini/
