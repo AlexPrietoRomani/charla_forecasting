@@ -1,6 +1,6 @@
 # Tablero de Tareas — Charla Forecasting & IA (v2 Real-Data)
 
-> **Estado General:** `[X] F1–F9 Completadas al 100% · Proyecto Verificado y Compilado`  
+> **Estado General:** `[X] F1–F9 Completadas al 100% · [ ] F10 (motor de estilos) pendiente · [/] F11 (videos por diapositiva) en progreso`  
 > **Convenciones:** `[ ]` pendiente · `[/]` en progreso · `[X]` completado y verificado.  
 > **Documento Rector:** [`docs/plan/plan_maestro.md`](../plan/plan_maestro.md)  
 > **Detalle por Fases:** [`docs/task/fases/`](fases/)
@@ -260,3 +260,57 @@
     - [X] A9.4.1.1 Ejecutar `.venv/bin/python back/build_deck.py` y verificar la actualización de los 12 iframes Base64 en `presentacion.html` e `index.html`.
   - [X] **T9.4.2 Auditoría Automatizada DOM + Capturas Chromium (`1366×768` y `1920×1080`)**
     - [X] A9.4.2.1 Crear y ejecutar `scripts/audit_f9_desaturacion.py` y generar las 24 capturas en `screenshots/f9_s{5..11,19..23}_{1366,1920}.png` comprobando 0 scrollbars, 0 solapes y $\le 110$ palabras por etapa.
+
+---
+
+## F10: Motor de Normalización de Estilos en el Compilador y Homologación Visual-Tipográfica de Diapositiva Real (Secciones 1, 2 y 3)
+*Detalle completo con 🧠 Explicación, 💡 Cómo hacerlo (código), AC y Tests en:* [`docs/task/fases/fase_10_motor_estilos_y_homologacion_s1_s2_s3.md`](fases/fase_10_motor_estilos_y_homologacion_s1_s2_s3.md)
+> **Estado:** `[ ] Pendiente de Ejecución`  
+> **Macro-objetivo:** Transformar las 18 diapositivas interactivas de las Secciones 1 (Diapos 5–11), 2 (Diapos 12–17) y 3 (Diapos 19–23) en **diapositivas reales de auditorio** (tipografía amplia y legible a distancia, ocupación exacta del 100% del alto sin franjas ni huecos negros, lienzos derechos con relación de aspecto armónica auto-ajustable en cualquier laptop y formato 100% unificado) mediante un **Motor de Normalización de Prototipos (`front/prototype_engine.py`)** integrado en `back/build_deck.py`.
+
+- [ ] **SF10.1 Creación del Motor de Normalización e Inyección de Estilos en el Compilador (`front/prototype_engine.py` + `back/build_deck.py`)**
+  - [ ] **T10.1.1 Implementar `front/prototype_engine.py` con CSS Maestro de Diapositiva Real, Normalizador DOM y Runtime Responsivo**
+    - [ ] A10.1.1.1 Crear `front/prototype_engine.py` con `ENGINE_OVERRIDE_CSS` (contrato `height: 100%`, tipografía fluida `clamp()` de auditorio, distribución flex anti-vacíos), `ENGINE_RUNTIME_JS` (auto `is-embedded` y `ResizeObserver` universal para `<canvas>`) y funciones `normalize_prototype_html()` / `load_prototype_b64()`.
+  - [ ] **T10.1.2 Conectar `front/prototype_engine.py` en `back/build_deck.py` con Soporte Automático Multi-Sección**
+    - [ ] A10.1.2.1 Refactorizar `back/build_deck.py` para que los 18 prototipos (Secciones 1, 2 y 3) y futuros HTMLs se procesen mediante `load_prototype_b64()`.
+- [ ] **SF10.2 Reparación de Altura, Proporción 2D/3D y Escalado Tipográfico en la Sección 1 (Diapositivas 5 a 11)**
+  - [ ] **T10.2.1 Diapo 05 (`5_Anatomia_de_la_senal_temporal_v3.html`): Corrección del Colapso Vertical (62% → 100%), Proporción 2D/3D y Separación de Etiquetas 3D**
+    - [ ] A10.2.1.1 Añadir `is-embedded` y `height: 100%`, ajustar `.visual-column` a `42% / 58%`, escalar textos de `.layer-row` e implementar algoritmo anti-colisión con pastillas `roundRect` para las 5 etiquetas 3D en `draw3D()`.
+  - [ ] **T10.2.2 Diapos 06, 07, 08, 09, 10 y 11 (`6_Era_1...` a `11_Arquitectura...`): Tipografía de Auditorio, Cero Huecos Negros Izquierdos y Etiquetas de Canvas Más Grandes**
+    - [ ] A10.2.2.1 Aplicar `height: 100%` en `html, body`, distribuir `.narr-blocks` con `flex: 1; justify-content: space-evenly`, escalar fuentes explicativas (`13px–16px`) y agrandar `ctx.font` dentro de los Canvas de las Diapos 6 a 11.
+- [ ] **SF10.3 Homologación Visual, Eliminación de Solapes y Unificación de Formato en la Sección 2 (Diapositivas 12 a 17)**
+  - [ ] **T10.3.1 Diapos 12, 13, 14 y 15 (`12_Caso_1...` a `15_Benchmark...`): Reemplazo de `.speaker-box` por `💡 Idea Clave`, Corrección del Solape `38.0 °C` en Diapo 12 y Tipografía de Auditorio**
+    - [ ] A10.3.1.1 Reemplazar `"🎙️ GUÍA DE EXPOSICIÓN"` por `.executive-takeaway` (`💡 Idea Clave` de 1 línea), separar el badge `"RÉCORD 38.0 °C"` de los puntos en el Canvas de la Diapo 12 y eliminar los huecos vacíos en `.narrative-card`.
+  - [ ] **T10.3.2 Diapos 16 y 17 (`16_Pronostico_7_Dias...` y `17_Pipeline_Codigo...`): Eliminación del 50% de Vacío Derecho, Escalado de Código/KPIs y Homologación Visual**
+    - [ ] A10.3.2.1 Expandir las tarjetas de la columna derecha con `flex: 1; justify-content: space-between`, escalar la fuente del código Python (`13px–15.5px`) y unificar la píldora `💡 Idea Clave` en las Diapos 16 y 17.
+- [ ] **SF10.4 Escalado Tipográfico, Limpieza de Elementos Residuales y Relleno Armónico en la Sección 3 (Diapositivas 19 a 23)**
+  - [ ] **T10.4.1 Diapos 19, 20 y 21 (`19_c_mo_el_agro...`, `20_del_almanaque...`, `21_f_sica_biol_gica...`): Limpieza Inicial de Diapo 19, Escalado Tipográfico y Gráficos a Altura Completa**
+    - [ ] A10.4.1.1 Sincronizar el HTML inicial de `#speakerQuote` (1 línea) y ocultar `.canvas-split-hint` en Diapo 19, activar `height: 100%` y escalar fuentes en `.narrative-card` y Canvas de las Diapos 19, 20 y 21.
+  - [ ] **T10.4.2 Diapos 22 y 23 (`22_reloj_fenol_gico...` y `23_precisi_n_actual...`): Relleno Visual y Tipografía Grande en las Tarjetas Derechas de Diagnóstico y de las 3 Trampas**
+    - [ ] A10.4.2.1 Escalar a `14px–16.5px` y centrar verticalmente las 3 cajas derechas de la Diapo 22 y las 3 tarjetas de trampas de la Diapo 23, eliminando el 70% de hueco negro interno.
+- [ ] **SF10.5 Compilación del Deck Maestro y Auditoría Automatizada Multi-Resolución (`1920×1080` y `1366×768`)**
+  - [ ] **T10.5.1 Crear y Ejecutar `scripts/audit_f10_layout_typography.py` y Capturar las 36 Vistas en Chromium (`1920×1080` y `1366×768`)**
+    - [ ] A10.5.1.1 Implementar `scripts/audit_f10_layout_typography.py`, compilar `presentacion.html` e `index.html` y generar las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png` verificando 0 huecos, 0 solapes y tipografía de diapositiva real.
+
+---
+
+## F11: Videos Deterministas por Diapositiva (Pipeline Offline + Estructura `video/`)
+*Detalle completo en:* [`docs/task/fases/fase_11_videos_por_diapositiva.md`](fases/fase_11_videos_por_diapositiva.md)
+
+- [/] **SF11.1 Pipeline Base Offline (Escena → Captura → Encode)**
+  - [X] **T11.1.1 Escena Determinista con Datos Reales y Fuentes Embebidas**
+    - [X] A11.1.1.1 Crear `scene_template.html` con `window.__setTime(ms)` (animación como función pura del tiempo, sin azar ni reloj) y `build_scene.py` que inyecta la descomposición real $Y = T + S + C + \varepsilon$ y las fuentes woff2 en Base64.
+  - [X] **T11.1.2 Capturador CDP sin Dependencias (`capture.mjs`)**
+    - [X] A11.1.2.1 Capturar frames vía CDP (`Emulation.setDeviceMetricsOverride` 1600×900) con parámetros `fps`, `durationMs`, `startMs` y `timeScale` para recortar/estirar el tramo sin re-editar la escena.
+  - [X] **T11.1.3 Script de Render por Video (`render.sh`)**
+    - [X] A11.1.3.1 Encadenar `build_scene.py` → `capture.mjs` → `ffmpeg` (H.264 CRF 18, `yuv420p`, `+faststart`) en un solo comando reproducible.
+- [/] **SF11.2 Piloto Diapo 5: `video_anatomia_senal`**
+  - [X] **T11.2.1 Render de la Entrada Vigente (34 s · Cinemática · 1920×1080)**
+    - [X] A11.2.1.1 Generar `anatomia_senal.mp4` (1920×1080 @ 30 fps, 1,020 frames) como entrada cinemática: cold-open con la señal dibujándose, cámara, grano y barridos de luz, síntesis de las 4 capas y fundido final al color de fondo de la Diapo 5 (`#040714`); conservar `anatomia_senal_v2_30s.mp4` y `anatomia_senal_v1_completo.mp4` para comparación.
+  - [X] **T11.2.2 Estructura Autocontenida `video/seccion_1/diapo_5/video_anatomia_senal/`**
+    - [X] A11.2.2.1 Mover escena, capturador, fuentes y MP4 fuera de `docs/` a la estructura `video/seccion_{N}/diapo_{M}/video_{nombre}/`.
+  - [ ] **T11.2.3 Decisión de Integración en la Diapo 5 (Entrada desde la Diapo 4)**
+    - [ ] A11.2.3.1 Evaluar la reproducción de la entrada al avanzar de la Diapo 4 a la 5 y verificar el handoff sin costura con el fondo real de la diapositiva (integración a cargo de la fase de rediseño de la diapo).
+- [ ] **SF11.3 Replicación del Proceso (Segundo Video en Otra Sección)**
+  - [ ] **T11.3.1 Validar el Pipeline en un Segundo Video**
+    - [ ] A11.3.1.1 Reutilizar `capture.mjs` + `render.sh` en otra diapositiva para confirmar la replicabilidad de la fase.

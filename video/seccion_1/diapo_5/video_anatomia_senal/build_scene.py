@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera scene.html: escena determinista de 30 s, Acto 1 'Anatomía de la señal'."""
+"""Genera scene.html: entrada cinemática de 34 s para la Diapo 5, Acto 1 'Anatomía de la señal'."""
 
 import base64
 import json
@@ -11,7 +11,7 @@ SRC = pathlib.Path(__file__).resolve().parent
 ROOT = SRC.parents[3]
 
 FPS = 30
-DURATION_MS = 30000
+DURATION_MS = 34000
 
 df = pd.read_csv(ROOT / "data/caso_1/senamhi_diario.csv", parse_dates=["fecha"]).set_index("fecha")
 s = df["tmax"].astype(float)

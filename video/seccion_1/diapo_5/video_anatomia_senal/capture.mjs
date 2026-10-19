@@ -4,9 +4,9 @@ import { mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, readdirSync
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const [sceneArg, outArg, fpsArg, durMsArg, startMsArg, timeScaleArg] = process.argv.slice(2);
+const [sceneArg, outArg, fpsArg, durMsArg, startMsArg, timeScaleArg, dprArg] = process.argv.slice(2);
 if (!sceneArg || !outArg) {
-  console.error("uso: node capture.mjs <scene.html> <framesDir> [fps=30] [durationMs=30000] [startMs=0] [timeScale=1]");
+  console.error("uso: node capture.mjs <scene.html> <framesDir> [fps=30] [durationMs=30000] [startMs=0] [timeScale=1] [dpr=1]");
   process.exit(2);
 }
 const scene = resolve(sceneArg);
@@ -15,6 +15,7 @@ const fps = Number(fpsArg || 30);
 const durMs = Number(durMsArg || 30000);
 const startMs = Number(startMsArg || 0);
 const timeScale = Number(timeScaleArg || 1);
+const dpr = Number(dprArg || 1);
 const totalFrames = Math.round((durMs / 1000) * fps);
 
 mkdirSync(outDir, { recursive: true });
@@ -91,7 +92,7 @@ await cdp("Runtime.enable");
 await cdp("Emulation.setDeviceMetricsOverride", {
   width: 1600,
   height: 900,
-  deviceScaleFactor: 1,
+  deviceScaleFactor: dpr,
   mobile: false,
 });
 
@@ -115,8 +116,9 @@ for (let i = 0; i < totalFrames; i++) {
   const buf = Buffer.from(shot.data, "base64");
   if (i === 0) {
     const w = buf.readUInt32BE(16), h = buf.readUInt32BE(20);
-    if (w !== 1600 || h !== 900) {
-      console.error(`frame inesperado ${w}x${h}`); cleanup(1);
+    const expW = Math.round(1600 * dpr), expH = Math.round(900 * dpr);
+    if (w !== expW || h !== expH) {
+      console.error(`frame inesperado ${w}x${h} (esperado ${expW}x${expH})`); cleanup(1);
     }
   }
   writeFileSync(join(outDir, `f${String(i + 1).padStart(5, "0")}.png`), buf);

@@ -2,18 +2,22 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Anatomía de la señal · video 30 s</title>
+<title>Anatomía de la señal · entrada 34 s (1920×1080)</title>
 <style>
 __FONTS_CSS__
 *{box-sizing:border-box}
 html,body{margin:0;width:1600px;height:900px;overflow:hidden;background:#040714}
 #stage{position:relative;width:1600px;height:900px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;color:#e8f4ff}
+#camera{position:absolute;inset:0;transform-origin:50% 52%}
 .mono{font-family:'IBM Plex Mono',monospace}
 .display{font-family:'Space Grotesk',sans-serif}
 .orb{position:absolute;width:1000px;height:1000px;border-radius:50%;pointer-events:none}
 #orbA{left:-300px;top:-420px;background:radial-gradient(closest-side, rgba(56,239,255,0.11), transparent 70%)}
 #orbB{right:-360px;bottom:-460px;background:radial-gradient(closest-side, rgba(255,192,92,0.09), transparent 70%)}
 #vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 95% at 50% 42%, transparent 58%, rgba(0,0,0,0.5) 100%)}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.055;mix-blend-mode:overlay;background-repeat:repeat;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+#endFade{position:absolute;inset:0;background:#040714;opacity:0;pointer-events:none}
+#sweep{position:absolute;top:150px;left:-560px;width:520px;height:620px;pointer-events:none;opacity:0;transform:skewX(-14deg);background:linear-gradient(100deg, rgba(56,239,255,0) 0%, rgba(56,239,255,.075) 50%, rgba(56,239,255,0) 100%)}
 svg#scene{position:absolute;inset:0}
 .fx{opacity:0}
 #titleBlock{position:absolute;inset:0}
@@ -24,11 +28,12 @@ svg#scene{position:absolute;inset:0}
 #teq .tT{color:#ffc05c}#teq .tS{color:#38efff}#teq .tC{color:#6ef0b4}#teq .tE{color:#9aa6c8}
 #tsub{top:436px;font-size:20px;color:#cfe0f5}
 #tmeta{top:478px;font-size:13px;letter-spacing:1px;color:#7f8fb0}
+#coldCount{position:absolute;left:0;right:0;top:826px;text-align:center;font-size:14px;letter-spacing:3px;color:#8b9ab8;opacity:0}
+#coldTag{position:absolute;padding:4px 11px 5px;border-radius:8px;border:1px solid rgba(234,246,255,0.4);background:rgba(4,10,24,0.85);font-size:14px;color:#eaf6ff;opacity:0}
 #headerSmall{position:absolute;left:96px;top:42px;opacity:0}
 #hKick{font-size:12.5px;letter-spacing:2.5px;color:#38efff}
 #hSub{font-size:17px;color:#cfe0f5;margin-top:5px}
 #equation{position:absolute;right:96px;top:46px;font-size:22px;color:#5a6a8a;opacity:0;letter-spacing:1px}
-#equation span{transition:none}
 #chips{position:absolute;left:80px;top:112px;display:flex;gap:16px;opacity:0}
 .chip{width:348px;padding:11px 18px 12px;border-radius:12px;border:1px solid #1c2a44;background:rgba(7,16,34,0.78)}
 .chipTitle{font-size:16.5px;font-weight:600;color:#aabbd8;letter-spacing:0.2px}
@@ -58,79 +63,93 @@ svg#scene{position:absolute;inset:0}
 </head>
 <body>
 <div id="stage">
-  <div class="orb" id="orbA"></div>
-  <div class="orb" id="orbB"></div>
-  <svg id="scene" viewBox="0 0 1600 900" width="1600" height="900">
-    <defs>
-      <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-        <feGaussianBlur stdDeviation="3.6" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
-        <feGaussianBlur stdDeviation="2" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-    <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#030712" fill-opacity="0.92" stroke="rgba(18,200,252,0.22)" opacity="0"/>
-    <g id="grid" opacity="0"></g>
-    <g id="rivers" opacity="0" fill="none">
-      <path id="riv1" stroke="rgba(56,239,255,0.35)" stroke-width="1.4"/>
-      <path id="riv2" stroke="rgba(255,192,92,0.30)" stroke-width="1.3"/>
-      <path id="riv3" stroke="rgba(110,240,180,0.28)" stroke-width="1.2"/>
-    </g>
-    <g id="traces">
-      <path id="pathY" fill="none" stroke="#eaf6ff" stroke-width="1.3" filter="url(#glowSoft)" opacity="0"/>
-      <path id="bandS" fill="rgba(56,239,255,0.16)" stroke="none" opacity="0"/>
-      <path id="pathT" fill="none" stroke="#ffc05c" stroke-width="1.8" opacity="0"/>
-      <path id="areaC" fill="rgba(110,240,180,0.15)" stroke="none" opacity="0"/>
-      <path id="pathM30" fill="none" stroke="#6ef0b4" stroke-width="1.8" opacity="0"/>
-      <path id="stemsE" fill="none" stroke="#9aa6c8" stroke-width="1" opacity="0"/>
-      <circle id="dotY" r="5" fill="#eaf6ff" filter="url(#glow)" opacity="0"/>
-    </g>
-    <g id="markers">
-      <path id="recLine" stroke="rgba(255,82,119,0.6)" stroke-width="1.4" stroke-dasharray="5 7" fill="none" opacity="0"/>
-      <circle id="recDot" r="5.5" fill="#ff5277" filter="url(#glow)" opacity="0"/>
-    </g>
-  </svg>
-  <div id="titleBlock">
-    <div id="tk" class="mono">ACTO 1 · ANATOMÍA DE LA SEÑAL</div>
-    <div id="th1" class="display">¿Qué es una serie temporal?</div>
-    <div id="teq" class="mono">Y(t) = <span class="tT">T(t)</span> + <span class="tS">S(t)</span> + <span class="tC">C(t)</span> + <span class="tE">ε(t)</span></div>
-    <div id="tsub">El río de la señal · datos reales de Iquitos</div>
-    <div id="tmeta" class="mono">SENAMHI Punchana · 2,557 días · 2019–2025</div>
-  </div>
-  <div id="headerSmall">
-    <div id="hKick" class="mono">ANATOMÍA DE LA SEÑAL · SENAMHI PUNCHANA (IQUITOS)</div>
-    <div id="hSub">Y(t) observada — temperatura máxima diaria (°C)</div>
-  </div>
-  <div id="equation" class="mono">Y = <span id="eqT">T</span> + <span id="eqS">S</span> + <span id="eqC">C</span> + <span id="eqE">ε</span></div>
-  <div id="chips">
-    <div class="chip" id="chipT"><div class="chipTitle" id="chipTT">T · Tendencia</div><div class="chipSub mono">CAUCE · inercia física</div></div>
-    <div class="chip" id="chipS"><div class="chipTitle" id="chipST">S · Estacionalidad</div><div class="chipSub mono">MAREA · ciclo solar anual</div></div>
-    <div class="chip" id="chipC"><div class="chipTitle" id="chipCT">C · Ciclo endógeno</div><div class="chipSub mono">RÉGIMEN · El Niño, sequías</div></div>
-    <div class="chip" id="chipE"><div class="chipTitle" id="chipET">ε · Ruido</div><div class="chipSub mono">ENTROPÍA · irreducible</div></div>
-  </div>
-  <div id="chartLabels">
-    <div id="labT" class="mono"></div>
-    <div id="labS" class="mono"></div>
-    <div id="labC" class="mono"></div>
-    <div id="labE" class="mono"></div>
-  </div>
-  <div id="statsLine" class="mono"></div>
-  <div id="recCard"><div class="rcBig mono"></div><div class="rcSub mono"></div></div>
-  <div id="quote">
-    <div id="q1" class="display">Aísla T + S + C.</div>
-    <div id="q2" class="display">Jamás entrenes sobre ε.</div>
-    <div id="q3" class="mono">La física deja huella; la entropía no se puede memorizar.</div>
-  </div>
-  <div id="closeWrap">
-    <div id="closeBg"></div>
-    <div id="cKick" class="mono">ACTO 1 · CIERRE</div>
-    <div id="cH1" class="display">La naturaleza habla en series temporales</div>
-    <div id="cSub">Ganará el modelo que entienda su física — no el que memorice su ruido.</div>
-    <div id="cFoot" class="mono">IQUITOS DATA FEST 2026 · ¿PUEDE LA IA PREDECIR EL FUTURO? · SENAMHI PUNCHANA (2019–2025)</div>
+  <div id="camera">
+    <div class="orb" id="orbA"></div>
+    <div class="orb" id="orbB"></div>
+    <svg id="scene" viewBox="0 0 1600 900" width="1600" height="900">
+      <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3.6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <radialGradient id="gDot">
+          <stop offset="0" stop-color="#eaf6ff" stop-opacity="0.85"/>
+          <stop offset="0.4" stop-color="#7fdfff" stop-opacity="0.25"/>
+          <stop offset="1" stop-color="#7fdfff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#030712" fill-opacity="0.92" stroke="rgba(18,200,252,0.22)" opacity="0"/>
+      <g id="dust" opacity="0"></g>
+      <g id="grid" opacity="0"></g>
+      <g id="rivers" opacity="0" fill="none">
+        <path id="riv1" stroke="rgba(56,239,255,0.35)" stroke-width="1.4"/>
+        <path id="riv2" stroke="rgba(255,192,92,0.30)" stroke-width="1.3"/>
+        <path id="riv3" stroke="rgba(110,240,180,0.28)" stroke-width="1.2"/>
+      </g>
+      <g id="traces">
+        <path id="pathY" fill="none" stroke="#eaf6ff" stroke-width="1.3" filter="url(#glowSoft)" opacity="0"/>
+        <path id="bandS" fill="rgba(56,239,255,0.16)" stroke="none" opacity="0"/>
+        <path id="pathT" fill="none" stroke="#ffc05c" stroke-width="1.8" opacity="0"/>
+        <path id="areaC" fill="rgba(110,240,180,0.15)" stroke="none" opacity="0"/>
+        <path id="pathM30" fill="none" stroke="#6ef0b4" stroke-width="1.8" opacity="0"/>
+        <path id="stemsE" fill="none" stroke="#9aa6c8" stroke-width="1" opacity="0"/>
+        <circle id="dotGlow" r="30" fill="url(#gDot)" opacity="0"/>
+        <circle id="dotY" r="5" fill="#eaf6ff" filter="url(#glow)" opacity="0"/>
+      </g>
+      <g id="markers">
+        <path id="recLine" stroke="rgba(255,82,119,0.6)" stroke-width="1.4" stroke-dasharray="5 7" fill="none" opacity="0"/>
+        <circle id="recDot" r="5.5" fill="#ff5277" filter="url(#glow)" opacity="0"/>
+      </g>
+    </svg>
+    <div id="titleBlock">
+      <div id="tk" class="mono">ACTO 1 · ANATOMÍA DE LA SEÑAL</div>
+      <div id="th1" class="display">¿Qué es una serie temporal?</div>
+      <div id="teq" class="mono">Y(t) = <span class="tT">T(t)</span> + <span class="tS">S(t)</span> + <span class="tC">C(t)</span> + <span class="tE">ε(t)</span></div>
+      <div id="tsub">El río de la señal · datos reales de Iquitos</div>
+      <div id="tmeta" class="mono">SENAMHI Punchana · 2,557 días · 2019–2025</div>
+    </div>
+    <div id="coldCount" class="mono">0001 DÍAS · SENAMHI PUNCHANA</div>
+    <div id="coldTag" class="mono">Y(t)</div>
+    <div id="headerSmall">
+      <div id="hKick" class="mono">ANATOMÍA DE LA SEÑAL · SENAMHI PUNCHANA (IQUITOS)</div>
+      <div id="hSub">Y(t) observada — temperatura máxima diaria (°C)</div>
+    </div>
+    <div id="equation" class="mono">Y = <span id="eqT">T</span> + <span id="eqS">S</span> + <span id="eqC">C</span> + <span id="eqE">ε</span></div>
+    <div id="chips">
+      <div class="chip" id="chipT"><div class="chipTitle" id="chipTT">T · Tendencia</div><div class="chipSub mono">CAUCE · inercia física</div></div>
+      <div class="chip" id="chipS"><div class="chipTitle" id="chipST">S · Estacionalidad</div><div class="chipSub mono">MAREA · ciclo solar anual</div></div>
+      <div class="chip" id="chipC"><div class="chipTitle" id="chipCT">C · Ciclo endógeno</div><div class="chipSub mono">RÉGIMEN · El Niño, sequías</div></div>
+      <div class="chip" id="chipE"><div class="chipTitle" id="chipET">ε · Ruido</div><div class="chipSub mono">ENTROPÍA · irreducible</div></div>
+    </div>
+    <div id="chartLabels">
+      <div id="labT" class="mono"></div>
+      <div id="labS" class="mono"></div>
+      <div id="labC" class="mono"></div>
+      <div id="labE" class="mono"></div>
+    </div>
+    <div id="statsLine" class="mono"></div>
+    <div id="recCard"><div class="rcBig mono"></div><div class="rcSub mono"></div></div>
+    <div id="quote">
+      <div id="q1" class="display">Aísla T + S + C.</div>
+      <div id="q2" class="display">Jamás entrenes sobre ε.</div>
+      <div id="q3" class="mono">La física deja huella; la entropía no se puede memorizar.</div>
+    </div>
+    <div id="closeWrap">
+      <div id="closeBg"></div>
+      <div id="cKick" class="mono">ACTO 1 · ANATOMÍA DE LA SEÑAL</div>
+      <div id="cH1" class="display">La naturaleza habla en series temporales</div>
+      <div id="cSub">Ganará el modelo que entienda su física — no el que memorice su ruido.</div>
+      <div id="cFoot" class="mono">IQUITOS DATA FEST 2026 · ¿PUEDE LA IA PREDECIR EL FUTURO? · SENAMHI PUNCHANA (2019–2025)</div>
+    </div>
+    <div id="sweep"></div>
   </div>
   <div id="vignette"></div>
+  <div id="grain"></div>
+  <div id="endFade"></div>
 </div>
 <script>
 const DATA=__DATA_JSON__;
@@ -147,14 +166,32 @@ const lerp=(a,b,p)=>a+(b-a)*p;
 const eoc=p=>1-Math.pow(1-p,3);
 const eic=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
 const eib=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);};
+const eac=p=>p*p;
 const C_T='#ffc05c',C_S='#38efff',C_C='#6ef0b4',C_E='#9aa6c8',BASE_BORDER='#1c2a44',MUTED='#5a6a8a';
 
+const TL={
+  coldIn:[0.55,1.1], coldDraw:[0.9,3.3], coldOut:[3.3,3.85],
+  titleBase:[3.45,4.0], tk:[3.55,4.25], th1:[3.72,4.6], teq:[4.05,4.85], tsub:[4.45,5.15], tmeta:[4.75,5.35], titleOut:[6.5,7.05],
+  panel:[6.75,7.6], head:[6.95,7.65], eq:[7.15,7.85],
+  yDraw:[7.85,11.25], stats:[11.0,11.55],
+  tEq:[11.6,15.1], tChip:11.7, tDraw:[11.6,13.5], tLab:[13.9,14.6], tDim:[11.6,12.0],
+  sEq:[15.3,18.9], sChip:15.4, sDraw:[15.3,17.3], sLab:[17.5,18.2],
+  cEq:[19.1,22.7], cChip:19.2, cDraw:[19.1,20.9], cArea:[20.5,21.5], cLab:[21.2,21.9], rec:[21.4,21.85],
+  eEq:[22.9,26.1], eChip:23.0, eDraw:[22.9,25.2], eLab:[25.1,25.7],
+  synch:26.15, synchAll:[27.0,30.2],
+  qIn:[27.3,28.1], q1:[27.7,28.4], q2:[28.15,28.85], q3:[28.7,29.35], qOut:[29.9,30.35], dim:[27.4,28.1],
+  close:[30.05,30.9], cK:[30.2,30.8], cH:[30.35,31.1], cS:[30.85,31.5], cF:[31.15,31.7],
+  fade:[32.8,33.8]
+};
+
 const $=id=>document.getElementById(id);
-const ELS={orbA:$('orbA'),orbB:$('orbB'),rivers:$('rivers'),riv1:$('riv1'),riv2:$('riv2'),riv3:$('riv3'),
+const ELS={camera:$('camera'),grain:$('grain'),endFade:$('endFade'),sweep:$('sweep'),
+orbA:$('orbA'),orbB:$('orbB'),dust:$('dust'),rivers:$('rivers'),riv1:$('riv1'),riv2:$('riv2'),riv3:$('riv3'),
 panel:$('panel'),grid:$('grid'),traces:$('traces'),markers:$('markers'),
-pathY:$('pathY'),pathT:$('pathT'),bandS:$('bandS'),pathM30:$('pathM30'),areaC:$('areaC'),stemsE:$('stemsE'),dotY:$('dotY'),
+pathY:$('pathY'),pathT:$('pathT'),bandS:$('bandS'),pathM30:$('pathM30'),areaC:$('areaC'),stemsE:$('stemsE'),dotY:$('dotY'),dotGlow:$('dotGlow'),
 recLine:$('recLine'),recDot:$('recDot'),
 titleBlock:$('titleBlock'),tk:$('tk'),th1:$('th1'),teq:$('teq'),tsub:$('tsub'),tmeta:$('tmeta'),
+coldCount:$('coldCount'),coldTag:$('coldTag'),
 headerSmall:$('headerSmall'),hKick:$('hKick'),hSub:$('hSub'),equation:$('equation'),
 eqT:$('eqT'),eqS:$('eqS'),eqC:$('eqC'),eqE:$('eqE'),
 chips:$('chips'),chipT:$('chipT'),chipS:$('chipS'),chipC:$('chipC'),chipE:$('chipE'),
@@ -164,6 +201,13 @@ statsLine:$('statsLine'),recCard:$('recCard'),quote:$('quote'),q1:$('q1'),q2:$('
 closeWrap:$('closeWrap'),cKick:$('cKick'),cH1:$('cH1'),cSub:$('cSub'),cFoot:$('cFoot')};
 
 const BASE=DATA.y.map((v,i)=>DATA.t[i]==null?null:DATA.t[i]+DATA.s[i]+DATA.c[i]);
+const DUST=[];
+(function initDust(){const NS='http://www.w3.org/2000/svg';let s=987654321;
+ const r=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+ for(let i=0;i<26;i++){const c=document.createElementNS(NS,'circle');
+  const d={x:80+r()*1440,y:90+r()*780,rad:0.8+r()*1.5,o:0.05+r()*0.13,ph:r()*6.28,ph2:r()*6.28,w:0.08+r()*0.1,rise:r()*0.5};
+  c.setAttribute('r',d.rad.toFixed(2));c.setAttribute('fill','#9fc4ff');
+  ELS.dust.appendChild(c);d.el=c;DUST.push(d)}})();
 
 function pathPts(vals,frac){const upto=frac*(N-1);const last=Math.floor(upto);let d='',started=false;
 for(let i=0;i<=last;i++){const v=vals[i];if(v==null){started=false;continue}
@@ -244,118 +288,162 @@ return d}
 })();
 
 function enter(el,p,dist){el.style.opacity=p.toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?14:dist)).toFixed(1)+'px)'}
+function vib(v){return v.toFixed(1)}
 
-function chipStyle(chip,titleEl,color,tActive,start){const act=seg(tActive,start,start+0.4);
-chip.style.opacity=act.toFixed(3);chip.style.transform='translateY('+((1-act)*12).toFixed(1)+'px)';
-const pulse=1+0.05*Math.sin(Math.PI*clamp((tActive-start)/0.5,0,1));
-chip.style.transform+=' scale('+pulse.toFixed(3)+')';
-if(act>0.15){chip.style.borderColor=color;chip.style.boxShadow='0 0 20px '+color+'2e';
-titleEl.style.color=color;titleEl.style.textShadow='0 0 14px '+color+'55'}
+function chipStyle(chip,titleEl,color,start,boost){const act=seg(tCur,start,start+0.4);
+chip.style.opacity=act.toFixed(3);
+const pulse=1+0.05*Math.sin(Math.PI*clamp((tCur-start)/0.5,0,1))+0.09*boost;
+chip.style.transform='translateY('+((1-act)*12).toFixed(1)+'px) scale('+pulse.toFixed(3)+')';
+if(act>0.15||boost>0.2){chip.style.borderColor=color;chip.style.boxShadow='0 0 '+(20+60*boost).toFixed(0)+'px '+color+'2e';
+titleEl.style.color=color;titleEl.style.textShadow='0 0 '+(14+30*boost).toFixed(0)+'px '+color+'55'}
 else{chip.style.borderColor=BASE_BORDER;chip.style.boxShadow='none';titleEl.style.color='#aabbd8';titleEl.style.textShadow='none'}}
-
-function eqTerm(el,color,active){if(active){el.style.color=color;el.style.textShadow='0 0 14px '+color+'88'}
+function eqTerm(el,color,on){if(on){el.style.color=color;el.style.textShadow='0 0 14px '+color+'88'}
 else{el.style.color=MUTED;el.style.textShadow='none'}}
 
+let tCur=0;
 function render(t){
+  tCur=t;
   ELS.orbA.style.transform='translate('+(Math.sin(t*0.11)*18).toFixed(1)+'px,'+(Math.cos(t*0.09)*14).toFixed(1)+'px)';
   ELS.orbB.style.transform='translate('+(Math.sin(t*0.08+2)*20).toFixed(1)+'px,'+(Math.cos(t*0.1+1)*16).toFixed(1)+'px)';
-  const rivO=clamp(seg(t,0.5,1.3)*(1-seg(t,3.4,3.8)),0,1);
+
+  const camT=seg(t,0.3,27);
+  const cs=1+0.006*seg(t,0.3,3.3)+0.012*camT;
+  ELS.camera.style.transform='translate('+(-8*camT+3*Math.sin(t*0.05)).toFixed(2)+'px,'+(2*Math.sin(t*0.043+1)).toFixed(2)+'px) scale('+cs.toFixed(4)+')';
+  ELS.grain.style.backgroundPosition=((t*57)%160).toFixed(0)+'px '+((t*31)%160).toFixed(0)+'px';
+
+  const sw0=7.6,swP=7.6,swD=2.3;let swO=0,swX=0;
+  if(t>sw0&&t<28.5){const ph=(t-sw0)%swP;if(ph<swD){swO=Math.sin(Math.PI*ph/swD)*0.85;swX=(-560+ph/swD*2500)}}
+  ELS.sweep.style.transform='skewX(-14deg) translateX('+swX.toFixed(0)+'px)';
+  ELS.sweep.style.opacity=swO.toFixed(3);
+
+  DUST.forEach(d=>{d.el.setAttribute('cx',(d.x+18*Math.sin(t*d.w+d.ph)).toFixed(1));
+    d.el.setAttribute('cy',(d.y+10*Math.cos(t*0.09+d.ph2)-t*d.rise).toFixed(1));
+    d.el.setAttribute('opacity',(d.o*(0.55+0.45*Math.sin(t*0.9+d.ph))).toFixed(3))});
+  ELS.dust.setAttribute('opacity','1');
+
+  const rivO=clamp(seg(t,0.4,1.1)*(1-seg(t,3.4,3.9)),0,1);
   ELS.rivers.setAttribute('opacity',(rivO*0.85).toFixed(3));
   ELS.riv1.setAttribute('transform','translate('+(Math.sin(t*0.22)*26).toFixed(1)+',0)');
   ELS.riv2.setAttribute('transform','translate('+(Math.sin(t*0.17+1.7)*30).toFixed(1)+',0)');
   ELS.riv3.setAttribute('transform','translate('+(Math.sin(t*0.13+3.1)*34).toFixed(1)+',0)');
 
-  const titleOut=seg(t,3.3,3.75);
-  ELS.titleBlock.style.opacity=(seg(t,0.15,3.4)*(1-titleOut)).toFixed(3);
-  ELS.titleBlock.style.transform='translateY('+(-18*eoc(titleOut)).toFixed(1)+'px)';
-  enter(ELS.tk,eoc(seg(t,0.3,1.05)));
-  enter(ELS.th1,eoc(seg(t,0.5,1.45)));
-  enter(ELS.teq,eoc(seg(t,1.0,1.85)));
-  enter(ELS.tsub,eoc(seg(t,1.25,2.05)));
-  enter(ELS.tmeta,eoc(seg(t,1.45,2.2)));
+  const coldO=seg(t,TL.coldIn[0],TL.coldIn[1])*(1-seg(t,TL.coldOut[0],TL.coldOut[1]));
+  const coldFrac=eoc(seg(t,TL.coldDraw[0],TL.coldDraw[1]));
+  const cDays=Math.max(1,Math.round(coldFrac*(N-1)));
+  ELS.coldCount.textContent=String(cDays).padStart(4,'0')+' DÍAS · SENAMHI PUNCHANA';
+  ELS.coldCount.style.opacity=(coldO*seg(t,0.9,1.3)).toFixed(3);
 
-  const chartIn=seg(t,3.7,4.4);
+  const titleOut=seg(t,TL.titleOut[0],TL.titleOut[1]);
+  ELS.titleBlock.style.opacity=(seg(t,TL.titleBase[0],TL.titleBase[1])*(1-titleOut)).toFixed(3);
+  ELS.titleBlock.style.transform='translateY('+(-24*eac(titleOut)).toFixed(1)+'px)';
+  enter(ELS.tk,eoc(seg(t,TL.tk[0],TL.tk[1])));
+  enter(ELS.th1,eoc(seg(t,TL.th1[0],TL.th1[1])),22);
+  enter(ELS.teq,eoc(seg(t,TL.teq[0],TL.teq[1])));
+  enter(ELS.tsub,eoc(seg(t,TL.tsub[0],TL.tsub[1])));
+  enter(ELS.tmeta,eoc(seg(t,TL.tmeta[0],TL.tmeta[1])));
+
+  const chartIn=seg(t,TL.panel[0],TL.panel[1]);
   ELS.panel.style.opacity=chartIn.toFixed(3);
+  ELS.panel.setAttribute('stroke','rgba(18,200,252,'+(0.18+0.07*Math.sin(t*0.9)).toFixed(2)+')');
   ELS.grid.setAttribute('opacity',(chartIn*(0.8+0.2*Math.sin(t*0.5))).toFixed(3));
-  ELS.headerSmall.style.opacity=seg(t,3.75,4.3).toFixed(3);
-  enter(ELS.hKick,eoc(seg(t,3.8,4.5)));
-  enter(ELS.hSub,eoc(seg(t,3.95,4.7)));
-  ELS.equation.style.opacity=seg(t,4.0,4.5).toFixed(3);
+  ELS.headerSmall.style.opacity=seg(t,TL.head[0],TL.head[1]).toFixed(3);
+  enter(ELS.hKick,eoc(seg(t,TL.head[0]+0.05,TL.head[1]+0.2)));
+  enter(ELS.hSub,eoc(seg(t,TL.head[0]+0.2,TL.head[1]+0.4)));
+  ELS.equation.style.opacity=seg(t,TL.eq[0],TL.eq[1]).toFixed(3);
 
-  eqTerm(ELS.eqT,C_T,t>9.95&&t<13.3);eqTerm(ELS.eqS,C_S,t>13.35&&t<16.5);
-  eqTerm(ELS.eqC,C_C,t>16.55&&t<19.85);eqTerm(ELS.eqE,C_E,t>19.9&&t<23.0);
+  const fl=k=>{const d=t-(TL.synch+k*0.25);return Math.exp(-(d*d)/0.02)};
+  const f0=fl(0),f1=fl(1),f2=fl(2),f3=fl(3);
+  const allOn=t>TL.synchAll[0]&&t<TL.synchAll[1];
 
-  const chipsIn=seg(t,4.05,4.6);
+  eqTerm(ELS.eqT,C_T,(t>TL.tEq[0]&&t<TL.tEq[1])||f0>0.3||allOn);
+  eqTerm(ELS.eqS,C_S,(t>TL.sEq[0]&&t<TL.sEq[1])||f1>0.3||allOn);
+  eqTerm(ELS.eqC,C_C,(t>TL.cEq[0]&&t<TL.cEq[1])||f2>0.3||allOn);
+  eqTerm(ELS.eqE,C_E,(t>TL.eEq[0]&&t<TL.eEq[1])||f3>0.3||allOn);
+
+  const chipsIn=seg(t,TL.panel[0]+0.4,TL.panel[1]+0.2);
   ELS.chips.style.opacity=chipsIn.toFixed(3);
   ELS.chips.style.transform='translateY('+((1-eoc(chipsIn))*10).toFixed(1)+'px)';
-  chipStyle(ELS.chipT,ELS.chipTT,C_T,t,10.0);
-  chipStyle(ELS.chipS,ELS.chipST,C_S,t,13.4);
-  chipStyle(ELS.chipC,ELS.chipCT,C_C,t,16.6);
-  chipStyle(ELS.chipE,ELS.chipET,C_E,t,19.9);
+  chipStyle(ELS.chipT,ELS.chipTT,C_T,TL.tChip,f0);
+  chipStyle(ELS.chipS,ELS.chipST,C_S,TL.sChip,f1);
+  chipStyle(ELS.chipC,ELS.chipCT,C_C,TL.cChip,f2);
+  chipStyle(ELS.chipE,ELS.chipET,C_E,TL.eChip,f3);
 
-  const yFrac=eic(seg(t,4.4,8.6));
-  ELS.pathY.setAttribute('d',pathPts(DATA.y,yFrac));
-  const yBase=1-0.82*seg(t,9.7,10.1);
-  ELS.pathY.style.opacity=(chartIn*yBase).toFixed(3);
-  if(yFrac>0.002){const fi=Math.min(N-1,yFrac*(N-1));const i0=Math.floor(fi);
+  const yChartFrac=eoc(seg(t,TL.yDraw[0],TL.yDraw[1]));
+  const headFrac=t<4?coldFrac:yChartFrac;
+  const useCold=t<4;
+  if(useCold)ELS.pathY.setAttribute('d',pathPts(DATA.y,coldFrac));
+  else ELS.pathY.setAttribute('d',pathPts(DATA.y,yChartFrac));
+  const yBase=1-0.82*seg(t,TL.tDim[0],TL.tDim[1]);
+  const yChartO=chartIn*yBase*(1+0.2*Math.max(f0,f1,f2,f3));
+  ELS.pathY.style.opacity=clamp(useCold?coldO:yChartO,0,1).toFixed(3);
+
+  if(headFrac>0.002&&headFrac<1.0001){const fi=headFrac*(N-1);const i0=Math.floor(fi);
     const v=lerp(DATA.y[i0],DATA.y[Math.min(i0+1,N-1)],fi-i0);
     ELS.dotY.setAttribute('cx',X(fi).toFixed(1));ELS.dotY.setAttribute('cy',yOf(v).toFixed(1));
     ELS.dotY.setAttribute('r',(5+0.7*Math.sin(t*2.4)).toFixed(2));
-    ELS.dotY.style.opacity=(chartIn*yBase).toFixed(3)}
+    ELS.dotGlow.setAttribute('cx',X(fi).toFixed(1));ELS.dotGlow.setAttribute('cy',yOf(v).toFixed(1));
+    const headChart=chartIn*(1-seg(t,11.0,11.5));
+    ELS.dotY.style.opacity=clamp(Math.max(useCold?coldO:0,headChart),0,1).toFixed(3);
+    ELS.dotGlow.style.opacity=(0.85*(useCold?coldO:0)+0.6*headChart).toFixed(3);
+    ELS.coldTag.style.left=((X(fi)+16)>1516?X(fi)-74:X(fi)+16)+'px';ELS.coldTag.style.top=(yOf(v)-40)+'px';
+  }
+  ELS.coldTag.style.opacity=(seg(t,1.6,2.0)*(1-seg(t,3.2,3.6))*0.95).toFixed(3);
 
-  const tFrac=eic(seg(t,10.0,12.0));
+  const tFrac=eic(seg(t,TL.tDraw[0],TL.tDraw[1]));
   ELS.pathT.setAttribute('d',pathPts(DATA.t,tFrac));
-  ELS.pathT.style.opacity=(seg(t,9.95,10.2)*0.95).toFixed(3);
-  enter(ELS.labT,eoc(seg(t,11.6,12.3)));
+  ELS.pathT.style.opacity=clamp(seg(t,TL.tDraw[0]-0.05,TL.tDraw[0]+0.2)*0.95*(1+0.5*f0),0,1).toFixed(3);
+  enter(ELS.labT,eoc(seg(t,TL.tLab[0],TL.tLab[1])));
 
-  const sGrow=eic(seg(t,13.4,15.6));
+  const sGrow=eic(seg(t,TL.sDraw[0],TL.sDraw[1]));
   ELS.bandS.setAttribute('d',bandPath(sGrow));
-  ELS.bandS.style.opacity=seg(t,13.35,13.8).toFixed(3);
-  enter(ELS.labS,eoc(seg(t,15.4,16.1)));
+  ELS.bandS.style.opacity=clamp(seg(t,TL.sDraw[0]-0.05,TL.sDraw[0]+0.4)*(1+0.5*f1),0,1).toFixed(3);
+  enter(ELS.labS,eoc(seg(t,TL.sLab[0],TL.sLab[1])));
 
-  const cFrac=eic(seg(t,16.6,18.4));
+  const cFrac=eic(seg(t,TL.cDraw[0],TL.cDraw[1]));
   ELS.pathM30.setAttribute('d',pathPts(DATA.m30,cFrac));
-  ELS.pathM30.style.opacity=(seg(t,16.55,16.85)*0.95).toFixed(3);
-  ELS.areaC.setAttribute('d',areaRuns(eic(seg(t,17.4,18.4))));
-  ELS.areaC.style.opacity=seg(t,17.35,17.75).toFixed(3);
-  enter(ELS.labC,eoc(seg(t,18.3,19.0)));
+  ELS.pathM30.style.opacity=clamp(seg(t,TL.cDraw[0]-0.05,TL.cDraw[0]+0.25)*0.95*(1+0.5*f2),0,1).toFixed(3);
+  ELS.areaC.setAttribute('d',areaRuns(eic(seg(t,TL.cArea[0],TL.cArea[1]))));
+  ELS.areaC.style.opacity=clamp(seg(t,TL.cArea[0]-0.05,TL.cArea[0]+0.35)*(1+0.5*f2),0,1).toFixed(3);
+  enter(ELS.labC,eoc(seg(t,TL.cLab[0],TL.cLab[1])));
 
-  if(t>18.6){const g=seg(t,18.7,19.15);
+  if(t>TL.rec[0]-0.4){const g=seg(t,TL.rec[0]+0.3,TL.rec[0]+0.75);
     ELS.recLine.setAttribute('y1',lerp(yOf(DATA.max),CH.y0,g).toFixed(1));
-    ELS.recLine.style.opacity=seg(t,18.7,18.95).toFixed(3);
-    ELS.recDot.style.opacity=seg(t,18.95,19.2).toFixed(3);
-    const p=eib(clamp(seg(t,18.8,19.15),0,1));
-    ELS.recCard.style.opacity=seg(t,18.8,19.1).toFixed(3);
+    ELS.recLine.style.opacity=seg(t,TL.rec[0]+0.3,TL.rec[0]+0.55).toFixed(3);
+    ELS.recDot.style.opacity=seg(t,TL.rec[0]+0.55,TL.rec[0]+0.8).toFixed(3);
+    const p=eib(clamp(seg(t,TL.rec[0]+0.4,TL.rec[0]+0.75),0,1));
+    ELS.recCard.style.opacity=seg(t,TL.rec[0]+0.4,TL.rec[0]+0.7).toFixed(3);
     ELS.recCard.style.transform='translate(-50%,0) scale('+(0.85+0.15*p).toFixed(3)+')'}
   else{ELS.recLine.style.opacity=0;ELS.recDot.style.opacity=0;ELS.recCard.style.opacity=0}
 
-  const eFrac=eoc(seg(t,19.9,22.2));
+  const eFrac=eoc(seg(t,TL.eDraw[0],TL.eDraw[1]));
   ELS.stemsE.setAttribute('d',stemsPath(eFrac));
-  ELS.stemsE.style.opacity=(seg(t,19.85,20.15)*0.42).toFixed(3);
-  enter(ELS.labE,eoc(seg(t,22.1,22.7)));
-  ELS.statsLine.style.opacity=seg(t,8.8,9.4).toFixed(3);
+  ELS.stemsE.style.opacity=clamp(seg(t,TL.eDraw[0]-0.05,TL.eDraw[0]+0.25)*0.42*(1+0.6*f3),0,1).toFixed(3);
+  enter(ELS.labE,eoc(seg(t,TL.eLab[0],TL.eLab[1])));
+  ELS.statsLine.style.opacity=seg(t,TL.stats[0],TL.stats[1]).toFixed(3);
 
-  const dim=1-0.75*seg(t,23.0,23.7);
+  const dim=1-0.75*seg(t,TL.dim[0],TL.dim[1]);
   ELS.traces.style.opacity=dim.toFixed(3);
   ELS.markers.style.opacity=dim.toFixed(3);
   ELS.chartLabels.style.opacity=dim.toFixed(3);
   ELS.chips.style.opacity=(chipsIn*(0.2+0.8*dim)).toFixed(3);
-  ELS.statsLine.style.opacity=(seg(t,8.8,9.4)*(0.5+0.5*dim)).toFixed(3);
+  ELS.statsLine.style.opacity=(seg(t,TL.stats[0],TL.stats[1])*(0.5+0.5*dim)).toFixed(3);
 
-  const qIn=eoc(seg(t,22.95,23.65));
-  ELS.quote.style.opacity=seg(t,22.95,23.6).toFixed(3);
+  const qIn=eoc(seg(t,TL.qIn[0],TL.qIn[1]));
+  ELS.quote.style.opacity=(seg(t,TL.qIn[0],TL.qIn[1])*(1-seg(t,TL.qOut[0],TL.qOut[1]))).toFixed(3);
   ELS.quote.style.transform='translateY('+((1-qIn)*22).toFixed(1)+'px)';
-  enter(ELS.q1,eoc(seg(t,23.3,24.1)),12);
-  enter(ELS.q2,eoc(seg(t,24.4,25.2)),12);
-  enter(ELS.q3,eoc(seg(t,25.0,25.8)),10);
+  enter(ELS.q1,eoc(seg(t,TL.q1[0],TL.q1[1])),12);
+  enter(ELS.q2,eoc(seg(t,TL.q2[0],TL.q2[1])),12);
+  enter(ELS.q3,eoc(seg(t,TL.q3[0],TL.q3[1])),10);
 
-  const cIn=eoc(seg(t,27.2,28.05));
-  ELS.closeWrap.style.opacity=seg(t,27.2,28.0).toFixed(3);
+  const cIn=eoc(seg(t,TL.close[0],TL.close[1]));
+  ELS.closeWrap.style.opacity=seg(t,TL.close[0],TL.close[1]).toFixed(3);
   ELS.closeWrap.style.transform='translateY('+((1-cIn)*16).toFixed(1)+'px)';
-  enter(ELS.cKick,eoc(seg(t,27.6,28.15)));
-  enter(ELS.cH1,eoc(seg(t,27.75,28.6)));
-  enter(ELS.cSub,eoc(seg(t,28.45,29.15)));
-  enter(ELS.cFoot,eoc(seg(t,28.9,29.5)));
+  enter(ELS.cKick,eoc(seg(t,TL.cK[0],TL.cK[1])));
+  enter(ELS.cH1,eoc(seg(t,TL.cH[0],TL.cH[1])));
+  enter(ELS.cSub,eoc(seg(t,TL.cS[0],TL.cS[1])));
+  enter(ELS.cFoot,eoc(seg(t,TL.cF[0],TL.cF[1])));
+
+  ELS.endFade.style.opacity=seg(t,TL.fade[0],TL.fade[1]).toFixed(3);
 }
 
 window.__DURATION_MS=DURMS;
