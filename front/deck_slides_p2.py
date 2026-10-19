@@ -15,6 +15,7 @@ def get_slides_part2(branding=None):
     b64_p21_html = branding.get("b64_p21_html", "")
     b64_p22_html = branding.get("b64_p22_html", "")
     b64_p23_html = branding.get("b64_p23_html", "")
+    cinematic_gates = branding.get("cinematic_gates", {})
 
     html = f"""
   <!-- ============================================================= -->
@@ -62,6 +63,7 @@ def get_slides_part2(branding=None):
   <section class="slide" data-index="19" data-act="Acto 3 · Historia del Agro-Forecasting" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
       <iframe src="data:text/html;base64,__B64_P19_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide19"></iframe>
+      __CINEMATIC_GATE_19__
     </div>
   </section>
 
@@ -80,6 +82,7 @@ def get_slides_part2(branding=None):
   <section class="slide" data-index="21" data-act="Acto 3 · Biofísica &amp; Límites" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
       <iframe src="data:text/html;base64,__B64_P21_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide21"></iframe>
+      __CINEMATIC_GATE_21__
     </div>
   </section>
 
@@ -320,4 +323,6 @@ def get_slides_part2(branding=None):
         .replace("__B64_P21_HTML__", b64_p21_html)
         .replace("__B64_P22_HTML__", b64_p22_html)
         .replace("__B64_P23_HTML__", b64_p23_html)
+        .replace("__CINEMATIC_GATE_19__", cinematic_gates.get(19, ""))
+        .replace("__CINEMATIC_GATE_21__", cinematic_gates.get(21, ""))
     )

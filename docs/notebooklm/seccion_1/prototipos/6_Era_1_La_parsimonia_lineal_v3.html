@@ -27,7 +27,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -166,7 +166,7 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--lab);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -340,7 +340,7 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
    --stage-accent: var(--ockham);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(6px, 0.9vh, 10px);
   padding: clamp(10px, 1.2vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
@@ -349,7 +349,8 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(56, 239, 255, 0.3) rgba(5, 10, 24, 0.4);
@@ -404,13 +405,13 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -421,9 +422,15 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
   flex-direction: column;
   gap: 8px;
   min-height: 0;
+  flex: 1 1 auto;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -435,7 +442,7 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -443,7 +450,7 @@ h1 span.sub { color: #9rb2ce; font-weight: 500; font-size: 0.82em; color: #a3b8d
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -1289,7 +1296,7 @@ input[type="range"] {
     ctx.moveTo(z2x, padT); ctx.lineTo(z2x, padT + ph);
     ctx.stroke();
 
-    ctx.font = '700 8.5px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillStyle = 'rgba(56, 239, 255, 0.7)';
     ctx.textAlign = 'center';
     ctx.fillText('1. Despegue', (padL + z1x) / 2, padT + 14);
@@ -1315,7 +1322,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText(`Capacidad Máxima L = ${state.L} camas (Frontera biológica INS/MINSA)`, padL + pw - 8, yL - 7);
 
@@ -1337,9 +1344,9 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#ff9cb0';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('✕ Modelo no acotado: proyecta “infinitos” casos', X(0.54), padT + 22);
+    ctx.fillText('✕ Modelo no acotado: proyecta “infinitos” casos', X(0.54), padT + 46);
 
     // Curva S de Verhulst
     ctx.save();
@@ -1377,16 +1384,16 @@ input[type="range"] {
     ctx.beginPath(); ctx.arc(x0, y0, 4.5, 0, Math.PI * 2); ctx.fill();
 
     ctx.fillStyle = '#a7f3d0';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText(`Inflexión t₀ (L/2 = ${(state.L / 2).toFixed(0)})`, x0 + 10, y0 - 6);
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.font = '500 12px "JetBrains Mono"';
     ctx.fillText(`Velocidad pico kL/4 = ${(state.k * state.L / 4).toFixed(1)}/sem`, x0 + 10, y0 + 9);
 
     // Fases inferiores
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.font = '600 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('1. Fase exponencial incipiente ▲', padL + 10, padT + ph - 10);
     ctx.textAlign = 'right';
@@ -1416,7 +1423,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('PRONÓSTICO SECUENCIAL (Eco amortiguado hacia la media)', sx + 8, padT + 14);
 
@@ -1485,7 +1492,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#e2eeff';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText(`Ponderación del Pasado (φ = ${state.phi.toFixed(2)})`, bx + 10, by + 16);
 
@@ -1501,7 +1508,7 @@ input[type="range"] {
       ctx.fillStyle = k === 0 ? '#38efff' : 'rgba(56, 239, 255, 0.48)';
       ctx.fillRect(x, y, bw - 6, bh);
       ctx.fillStyle = '#94a3b8';
-      ctx.font = '500 8px "JetBrains Mono"';
+      ctx.font = '500 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(k === 0 ? 't-1' : `-${k + 1}`, x + (bw - 6) / 2, by + boxH - 4);
     }
@@ -1527,7 +1534,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(pad, yTop, halfW, panelH, 10); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('1838 · VERHULST: El Destino Acotado (L, k, t₀)', pad + 12, yTop + 18);
 
@@ -1553,7 +1560,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, yTop, halfW, panelH, 10); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('1970 · ARIMA / HW: El Camino Semanal (p,d,q / α,β,γ)', rx + 12, yTop + 18);
 
@@ -1693,7 +1700,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⚡ RUPTURA NO LINEAL', sx + 6, padT + 16);
     ctx.fillStyle = '#6ef0b4';
@@ -1712,7 +1719,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, ry, rw, rh, 12); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#d8b4fe';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 2', rx + 14, ry + 22);
 
@@ -1731,7 +1738,7 @@ input[type="range"] {
     ctx.fillRect(tx, ty, tw, rowH);
     cols.forEach((cname, ci) => {
       ctx.fillStyle = ci === 4 ? '#6ef0b4' : '#e2e8f0';
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(cname, tx + ci * cw + cw / 2, ty + rowH * 0.68);
     });
@@ -1748,7 +1755,7 @@ input[type="range"] {
       ctx.strokeRect(tx, rY, tw, rowH);
       r.forEach((val, ci) => {
         ctx.fillStyle = ci === 4 ? '#6ef0b4' : (ci >= 2 ? '#ffc05c' : '#cbd5e1');
-        ctx.font = '500 9.5px "JetBrains Mono"';
+        ctx.font = '500 12px "JetBrains Mono"';
         ctx.textAlign = 'center';
         ctx.fillText(val, tx + ci * cw + cw / 2, rY + rowH * 0.68);
       });
@@ -1756,7 +1763,7 @@ input[type="range"] {
 
     // Pie de pase a Era 2
     ctx.fillStyle = '#b8cae0';
-    ctx.font = '500 10.5px Inter, sans-serif';
+    ctx.font = '500 13.5px Inter, sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('• Convierte la serie en matriz supervisada.', rx + 14, ry + rh - 30);
     ctx.fillText('• Domina Walmart M5 con miles de covariables.', rx + 14, ry + rh - 13);

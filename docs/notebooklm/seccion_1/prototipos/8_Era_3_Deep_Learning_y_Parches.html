@@ -27,7 +27,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -166,7 +166,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--purple);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -340,7 +340,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   --stage-accent: var(--phi);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(6px, 0.9vh, 10px);
   padding: clamp(10px, 1.2vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
@@ -349,7 +349,8 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(180, 142, 255, 0.3) rgba(5, 10, 24, 0.4);
@@ -404,13 +405,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -421,9 +422,15 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   flex-direction: column;
   gap: 8px;
   min-height: 0;
+  flex: 1 1 auto;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -435,7 +442,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -443,7 +450,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -1281,7 +1288,7 @@ input[type="range"] {
     }
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('Autopista de Memoria Latente Cₜ₋₁ ──▶ Cₜ (Transporta velocidad y contexto)', boxX + 20, pipeY - 9);
 
@@ -1309,7 +1316,7 @@ input[type="range"] {
       ctx.stroke();
 
       ctx.fillStyle = g.color;
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(g.name, gx + gw / 2, gy + gh * 0.36);
 
@@ -1325,7 +1332,7 @@ input[type="range"] {
       ctx.fillRect(barX, barY, barW * fillRatio, barH);
 
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '500 9px Inter, sans-serif';
+      ctx.font = '500 11.5px Inter, sans-serif';
       ctx.fillText(g.desc, gx + gw / 2, gy + gh * 0.82);
     });
     ctx.restore();
@@ -1371,7 +1378,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.font = '600 12px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('🧱 Árbol Era 2: Meseta Plana Ciega (65 GW)', X(N - 1) - 6, Y(64) + 15);
 
@@ -1392,7 +1399,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('🧠 LSTM / TFT: Extrapola pendiente + ciclo continuo', X(N - 1) - 6, chartY + 16);
   }
@@ -1411,12 +1418,12 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(lx, ly, halfW, boxH, 12); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('1. RECURRENCIA (LSTM): Fila India Gota a Gota O(L)', lx + 14, ly + 22);
 
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 10px Inter, sans-serif';
+    ctx.font = '500 13px Inter, sans-serif';
     ctx.fillText('El paso t=8 NO puede calcularse hasta terminar t=1..7 (GPU bloqueada):', lx + 14, ly + 40);
 
     // Cadena de 8 nodos secuenciales donde el pulso avanza lento uno por uno y se apaga el recuerdo inicial
@@ -1446,7 +1453,7 @@ input[type="range"] {
       ctx.beginPath(); ctx.arc(nx, cy, 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = i === activeIdx ? '#040714' : '#e2e8f0';
-      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(`t${i + 1}`, nx, cy + 3);
     }
@@ -1458,11 +1465,11 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(lx + 14, gradY, halfW - 28, boxH * 0.22, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⚠️ Desvanecimiento de Gradiente + 0% Paralelismo:', lx + 24, gradY + 18);
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 10px Inter, sans-serif';
+    ctx.font = '500 13px Inter, sans-serif';
     ctx.fillText('Al llegar al final de una serie larga, la red ya olvidó el inicio.', lx + 24, gradY + 36);
     ctx.restore();
 
@@ -1474,12 +1481,12 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, ry, halfW, boxH, 12); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText(`2. TRANSFORMER PUNTO A PUNTO: Costo O(L²) = ${(state.seqLen * state.seqLen).toLocaleString()} cruces`, rx + 14, ry + 22);
 
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 10px Inter, sans-serif';
+    ctx.font = '500 13px Inter, sans-serif';
     ctx.fillText('Un punto aislado (“42.3”) no tiene semántica, pero conecta todos contra todos:', rx + 14, ry + 40);
 
     // Malla densa todos-contra-todos que se vuelve más tupida con state.seqLen
@@ -1515,11 +1522,11 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx + 14, gradY, halfW - 28, boxH * 0.22, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🔍 ¿Por qué falla mirar puntos sueltos?', rx + 24, gradY + 18);
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 10px Inter, sans-serif';
+    ctx.font = '500 13px Inter, sans-serif';
     ctx.fillText('Un punto no es una palabra; carece de pendiente y satura la memoria.', rx + 24, gradY + 36);
     ctx.restore();
   }
@@ -1550,7 +1557,7 @@ input[type="range"] {
       ctx.stroke();
 
       ctx.fillStyle = isHighlighted ? '#e9d5ff' : '#94a3b8';
-      ctx.font = '700 8.5px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(`Parche ${p + 1}`, px + patchW / 2, sigY + 14);
       ctx.restore();
@@ -1588,7 +1595,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('🔗 Self-Attention conecta “Palabras Temporales” homólogas a largo plazo', (p1Center + p2Center) / 2, sigY + sigH + 16);
 
@@ -1604,12 +1611,12 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(padL, botY, halfW, botH, 10); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#d8b4fe';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🧬 INDEPENDENCIA DE CANALES + SEMÁNTICA LOCAL', padL + 12, botY + 18);
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 10.5px Inter, sans-serif';
+    ctx.font = '500 13.5px Inter, sans-serif';
     ctx.fillText(`• Cada parche de P=${state.patchSize} pasos guarda pendiente y forma.`, padL + 12, botY + 38);
     ctx.fillText('• Cada sensor/serie se procesa sin contaminación cruzada', padL + 12, botY + 56);
     ctx.fillText('  compartiendo los mismos pesos del Transformer.', padL + 12, botY + 72);
@@ -1627,14 +1634,14 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, botY, halfW, botH, 10); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#6ef0b4';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText(`⚡ REDUCCIÓN DE COSTO (L=512 con Parche P=${state.patchSize})`, rx + 12, botY + 18);
 
     // Barra Punto a Punto
     const barW = halfW - 150;
     ctx.fillStyle = '#fda4af';
-    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.font = '600 12px "JetBrains Mono"';
     ctx.fillText('Punto a Punto:', rx + 12, botY + 40);
     ctx.fillStyle = 'rgba(255, 82, 119, 0.8)';
     ctx.fillRect(rx + 108, botY + 30, barW, 12);
@@ -1676,7 +1683,7 @@ input[type="range"] {
       ctx.beginPath(); ctx.roundRect(padL - 8, cyTop, leftW - padL + 4, chH, 8); ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = ch.color;
-      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText(`${ch.name} · (${state.parksCount} series en GPU)`, padL, cyTop + 14);
 
@@ -1714,7 +1721,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, ry, rw, rh, 12); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#6ef0b4';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 4', rx + 14, ry + 22);
 
@@ -1729,10 +1736,10 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx + 14, b1Y, rw - 28, b1H, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.fillText('⚠️ LÍMITE ERA 3 (PatchTST / TFT Supervisado):', rx + 22, b1Y + 18);
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 10px Inter, sans-serif';
+    ctx.font = '500 13px Inter, sans-serif';
     ctx.fillText('Exige entrenar desde cero con >100,000 datos y GPUs.', rx + 22, b1Y + 36);
 
     // Caja de Modelos Fundacionales Preentrenados
@@ -1742,15 +1749,15 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx + 14, b2Y, rw - 28, b2H, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.fillText('🌐 EL SALTO A LA ERA 4 (TSFMs Pre-entrenados):', rx + 22, b2Y + 18);
 
     ctx.fillStyle = '#e2eeff';
-    ctx.font = '500 10px Inter, sans-serif';
+    ctx.font = '500 13px Inter, sans-serif';
     ctx.fillText('• Parches + 27 Mil Millones de datos (LOTSA).', rx + 22, b2Y + 38);
     ctx.fillText('• TimesFM (Google), Chronos (Amazon), Moirai.', rx + 22, b2Y + 56);
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.fillText('⚡ Predicen en frío (Zero-Shot) con 0% entrenamiento!', rx + 22, b2Y + 76);
     ctx.restore();
   }

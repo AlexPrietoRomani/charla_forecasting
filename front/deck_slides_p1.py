@@ -13,6 +13,7 @@ def get_slides_part1(branding=None):
     b64_p12_html = branding.get("b64_p12_html", "")
     b64_p13_html = branding.get("b64_p13_html", "")
     b64_p14_html = branding.get("b64_p14_html", "")
+    cinematic_gates = branding.get("cinematic_gates", {})
 
     slides = """
   <!-- ========================================== -->
@@ -143,6 +144,7 @@ def get_slides_part1(branding=None):
   <section class="slide" data-index="5" data-act="Acto 1 · Anatomía de la Señal" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
       <iframe src="data:text/html;base64,__B64_SIM_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide5"></iframe>
+      __CINEMATIC_GATE_5__
     </div>
   </section>
 
@@ -161,6 +163,7 @@ def get_slides_part1(branding=None):
   <section class="slide" data-index="7" data-act="Acto 1 · Era 2: El Puente Tabular" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
       <iframe src="data:text/html;base64,__B64_ERA2_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide7"></iframe>
+      __CINEMATIC_GATE_7__
     </div>
   </section>
 
@@ -179,6 +182,7 @@ def get_slides_part1(branding=None):
   <section class="slide" data-index="9" data-act="Acto 1 · Era 4: Foundation Models" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(110, 240, 180, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
       <iframe src="data:text/html;base64,__B64_ERA4_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide9"></iframe>
+      __CINEMATIC_GATE_9__
     </div>
   </section>
 
@@ -188,6 +192,7 @@ def get_slides_part1(branding=None):
   <section class="slide" data-index="10" data-act="Acto 1 · Cono de Incertidumbre" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(255, 107, 107, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
       <iframe src="data:text/html;base64,__B64_CONO_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide10"></iframe>
+      __CINEMATIC_GATE_10__
     </div>
   </section>
 
@@ -240,5 +245,9 @@ def get_slides_part1(branding=None):
         .replace("__B64_P12_HTML__", b64_p12_html)
         .replace("__B64_P13_HTML__", b64_p13_html)
         .replace("__B64_P14_HTML__", b64_p14_html)
+        .replace("__CINEMATIC_GATE_5__", cinematic_gates.get(5, ""))
+        .replace("__CINEMATIC_GATE_7__", cinematic_gates.get(7, ""))
+        .replace("__CINEMATIC_GATE_9__", cinematic_gates.get(9, ""))
+        .replace("__CINEMATIC_GATE_10__", cinematic_gates.get(10, ""))
     )
 

@@ -28,7 +28,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -391,13 +391,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(15.5px, 1.3vw, 19.5px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(11px, 0.9vw, 12.6px)/1.38 var(--sans);
+  font: 400 clamp(13px, 1.02vw, 15.8px)/1.42 var(--sans);
   color: #b8cae0;
 }
 
@@ -476,7 +476,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 }
 
 .layer-name {
-  font: 650 11px/1.15 var(--display);
+  font: 650 clamp(12.5px, 0.94vw, 14.5px)/1.15 var(--display);
   color: #f1f5f9;
   white-space: nowrap;
   overflow: hidden;
@@ -484,13 +484,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 }
 
 .layer-name span {
-  font: 600 9px/1 var(--mono);
+  font: 600 clamp(9.5px, 0.72vw, 11px)/1 var(--mono);
   color: var(--lc);
   margin-left: 5px;
 }
 
 .layer-desc {
-  font: 400 10px/1.25 var(--sans);
+  font: 400 clamp(11px, 0.84vw, 13px)/1.25 var(--sans);
   color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
@@ -526,7 +526,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 }
 
 .info-block-label {
-  font: 700 8.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -535,7 +535,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(10.5px, 0.8vw, 11.5px)/1.32 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.32 var(--sans);
   color: #cedcf0;
 }
 
@@ -577,10 +577,11 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 /* RIGHT COLUMN: 2D RECONSTRUCTION MONITOR + 3D EXPLODED SLABS */
 .visual-column {
   display: grid;
-  grid-template-rows: minmax(132px, 0.34fr) minmax(0, 0.66fr);
+  grid-template-rows: minmax(0, 0.42fr) minmax(0, 0.58fr);
   gap: clamp(8px, 0.9vw, 12px);
   min-width: 0;
   min-height: 0;
+  height: 100%;
 }
 
 .glass-card {
@@ -1553,25 +1554,74 @@ input[type="range"] {
     }
 
     const labelPos = project(width / 2 + 14, 0, elevation + 1);
+    const labelScale = options.scale || 1;
+    return {
+      key: def.key,
+      label: def.label,
+      sub: def.sub,
+      color: active ? def.color : '#73839a',
+      x: labelPos.x,
+      y: labelPos.y,
+      active,
+      selected,
+      labelScale,
+      showSub: labelScale >= 0.96
+    };
+  }
+
+  function drawLayerLabels(ctx, items, canvasH) {
+    if (!items.length) return;
+    const ordered = items.slice().sort((a, b) => a.y - b.y);
+    const minGapY = 18;
+    for (let i = 1; i < ordered.length; i++) {
+      const gap = ordered[i].showSub ? Math.max(minGapY, 26) : minGapY;
+      if (ordered[i].y - ordered[i - 1].y < gap) {
+        ordered[i].y = ordered[i - 1].y + gap;
+      }
+    }
+    const bottomLimit = canvasH - 16;
+    const overflow = ordered[ordered.length - 1].y - bottomLimit;
+    if (overflow > 0) ordered.forEach(item => { item.y -= overflow; });
+    const topLimit = 14;
+    if (ordered[0].y < topLimit) {
+      const shift = topLimit - ordered[0].y;
+      ordered.forEach(item => { item.y += shift; });
+    }
     ctx.save();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.globalAlpha = active ? 1 : 0.38;
-    const labelScale = options.scale || 1;
-    const showSub = labelScale >= 0.96;
-    const titleSize = Math.max(8, Math.min(11, 10.2 * labelScale));
-    const subSize = Math.max(7, Math.min(9, 8.2 * labelScale));
-    ctx.font = `700 ${titleSize}px "Space Grotesk", "Segoe UI", sans-serif`;
-    ctx.fillStyle = active ? def.color : '#73839a';
-    ctx.shadowColor = active ? def.color : 'transparent';
-    ctx.shadowBlur = selected ? 5 : 0;
-    ctx.fillText(def.label, labelPos.x, labelPos.y - (showSub ? 5 * labelScale : 0));
-    if (showSub) {
+    ordered.forEach(item => {
+      ctx.globalAlpha = item.active ? 1 : 0.38;
+      const titleSize = Math.max(8.5, Math.min(11.5, 10.6 * item.labelScale));
+      const subSize = Math.max(7.5, Math.min(9.5, 8.4 * item.labelScale));
+      ctx.font = `700 ${titleSize}px "Space Grotesk", "Segoe UI", sans-serif`;
+      const titleW = ctx.measureText(item.label).width;
+      let subW = 0;
+      if (item.showSub) {
+        ctx.font = `500 ${subSize}px "JetBrains Mono", monospace`;
+        subW = ctx.measureText(item.sub).width;
+      }
+      const padX = 8;
+      const pillW = Math.max(titleW, subW) + padX * 2;
+      const pillH = item.showSub ? 27 : 17;
+      ctx.fillStyle = 'rgba(4, 9, 22, 0.88)';
+      ctx.strokeStyle = item.color;
+      ctx.lineWidth = item.selected ? 1.5 : 0.9;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(item.x - padX, item.y - pillH / 2, pillW, pillH, 5);
+      else ctx.rect(item.x - padX, item.y - pillH / 2, pillW, pillH);
+      ctx.fill();
+      ctx.stroke();
       ctx.shadowBlur = 0;
-      ctx.font = `500 ${subSize}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText(def.sub, labelPos.x, labelPos.y + 7 * labelScale);
-    }
+      ctx.font = `700 ${titleSize}px "Space Grotesk", "Segoe UI", sans-serif`;
+      ctx.fillStyle = item.color;
+      ctx.fillText(item.label, item.x, item.y - (item.showSub ? 5 * item.labelScale : 0));
+      if (item.showSub) {
+        ctx.font = `500 ${subSize}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(item.sub, item.x, item.y + 7 * item.labelScale);
+      }
+    });
     ctx.restore();
   }
 
@@ -1599,17 +1649,18 @@ input[type="range"] {
 
     const label = project(width / 2 + 14, 0, elevation);
     const showSub = labelScale >= 0.96;
-    const titleSize = Math.max(8, Math.min(11, 10.2 * labelScale));
-    ctx.save();
-    ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
-    ctx.fillStyle = COLORS.signal;
-    ctx.fillText('SEÑAL CAUSAL PURA', label.x, label.y - (showSub ? 4 * labelScale : 0));
-    if (showSub) {
-      ctx.font = `500 ${Math.max(7, Math.min(9, 8.2 * labelScale))}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = '#8ef7c7';
-      ctx.fillText('T(t) + S(t) + C(t) [Sin ε]', label.x, label.y + 8 * labelScale);
-    }
-    ctx.restore();
+    return {
+      key: 'SIG',
+      label: 'SEÑAL CAUSAL PURA',
+      sub: 'T(t) + S(t) + C(t) [Sin ε]',
+      color: COLORS.signal,
+      x: label.x,
+      y: label.y,
+      active: true,
+      selected: false,
+      labelScale,
+      showSub
+    };
   }
 
   function draw3D(data) {
@@ -1651,17 +1702,20 @@ input[type="range"] {
       return { x: originX + p.x * scale, y: originY + p.y * scale, depth: p.depth };
     };
 
+    const labelItems = [];
     slabOrder.forEach(def => {
-      drawLayer(isoCtx, P, { ...def, color: COLORS[def.key] }, elevations[def.key], data[def.key], {
+      const item = drawLayer(isoCtx, P, { ...def, color: COLORS[def.key] }, elevations[def.key], data[def.key], {
         active: state.activeLayers[def.key],
         selected: state.selected === def.key,
         scale
       });
+      if (item) labelItems.push(item);
     });
 
     if (state.mode === 'signal') {
       const structural = activeStructural(data);
-      drawSignalAggregate(isoCtx, P, signalElevation, structural, scale);
+      const signalItem = drawSignalAggregate(isoCtx, P, signalElevation, structural, scale);
+      if (signalItem) labelItems.push(signalItem);
     }
 
     if (state.mode === 'overfit' && state.activeLayers.Y) {
@@ -1684,6 +1738,8 @@ input[type="range"] {
       isoCtx.stroke();
       isoCtx.restore();
     }
+
+    drawLayerLabels(isoCtx, labelItems, h);
   }
 
   function renderAll(data) {

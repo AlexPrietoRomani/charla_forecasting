@@ -278,7 +278,7 @@ h1 .n {
   flex-shrink: 0;
 }
 .code-title {
-  font: 600 10.5px/1 var(--mono);
+  font: 600 12.5px/1 var(--mono);
   color: var(--phi);
   display: flex;
   align-items: center;
@@ -298,7 +298,7 @@ h1 .n {
   color: var(--text);
   padding: 3px 8px;
   border-radius: 4px;
-  font: 500 9.5px/1 var(--mono);
+  font: 500 11.5px/1 var(--mono);
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -310,7 +310,7 @@ h1 .n {
 pre.code-content {
   margin: 0;
   padding: 10px 14px;
-  font: 400 clamp(10px, 0.78vw, 12px)/1.55 var(--mono);
+  font: 400 clamp(13px, 1.02vw, 15.5px)/1.58 var(--mono);
   color: #c9d8ec;
   overflow-y: auto;
   flex: 1 1 0;
@@ -330,7 +330,8 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   flex-direction: column;
   gap: 8px;
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   padding-right: 2px;
 }
 .right-panel::-webkit-scrollbar { width: 4px; }
@@ -341,10 +342,14 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   border-radius: 10px;
   border: 1px solid rgba(110, 240, 180, 0.25);
   background: linear-gradient(145deg, rgba(8, 22, 38, 0.8), rgba(4, 10, 22, 0.9));
-  flex-shrink: 0;
+  flex: 1.6 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
 }
 .axioms-header {
-  font: 700 clamp(11.5px, 0.85vw, 13px)/1.2 var(--display);
+  font: 700 clamp(13.5px, 0.95vw, 15.5px)/1.2 var(--display);
   color: #8ef7c7;
   margin-bottom: 7px;
   display: flex;
@@ -355,19 +360,19 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   display: flex;
   gap: 8px;
   margin: 6px 0;
-  font: 400 clamp(10px, 0.75vw, 11.5px)/1.45 var(--sans);
+  font: 400 clamp(12.5px, 0.9vw, 14.5px)/1.45 var(--sans);
   color: #c5d8ed;
 }
 .axiom-num {
   display: grid;
   place-items: center;
-  flex: 0 0 18px;
-  width: 18px;
-  height: 18px;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: rgba(110, 240, 180, 0.15);
   color: #8ef7c7;
-  font: 700 9px/1 var(--mono);
+  font: 700 11px/1 var(--mono);
 }
 .axiom-item b { color: #ffffff; }
 
@@ -376,18 +381,22 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   border-radius: 10px;
   border: 1px solid rgba(255, 192, 92, 0.35);
   background: linear-gradient(135deg, rgba(38, 26, 8, 0.5), rgba(7, 13, 26, 0.9));
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
 }
 .bridge-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font: 700 clamp(11.5px, 0.85vw, 13px)/1.2 var(--display);
+  font: 700 clamp(13.5px, 0.95vw, 15.5px)/1.2 var(--display);
   color: var(--ockham);
   margin-bottom: 6px;
 }
 .bridge-badge {
-  font: 700 9px/1 var(--mono);
+  font: 700 11px/1 var(--mono);
   padding: 2px 7px;
   border-radius: 4px;
   background: rgba(255, 192, 92, 0.18);
@@ -395,7 +404,7 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   border: 1px solid rgba(255, 192, 92, 0.35);
 }
 .bridge-desc {
-  font: 400 clamp(10.5px, 0.78vw, 12px)/1.45 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.45 var(--sans);
   color: #f7e6d2;
 }
 .bridge-comparison {
@@ -412,11 +421,11 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   text-align: center;
 }
 .comp-n {
-  font: 700 14px/1 var(--mono);
+  font: 700 16px/1 var(--mono);
   color: var(--text);
 }
 .comp-lbl {
-  font: 500 8.5px/1.2 var(--mono);
+  font: 500 11px/1.2 var(--mono);
   color: var(--muted);
   margin-top: 3px;
 }
@@ -425,7 +434,9 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  flex-shrink: 0;
+  flex: 0.8 1 auto;
+  align-content: center;
+  min-height: 0;
 }
 .kpi-pill {
   flex: 1 1 calc(50% - 3px);
@@ -433,7 +444,7 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   border-radius: 6px;
   background: rgba(10, 20, 42, 0.65);
   border: 1px solid var(--line);
-  font: 600 clamp(9.5px, 0.7vw, 10.5px)/1 var(--mono);
+  font: 600 clamp(11.5px, 0.8vw, 13px)/1.15 var(--mono);
   color: #c9d8ec;
   text-align: center;
 }

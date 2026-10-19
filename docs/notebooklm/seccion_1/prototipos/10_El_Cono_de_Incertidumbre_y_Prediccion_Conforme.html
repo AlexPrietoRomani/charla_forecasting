@@ -173,7 +173,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--phi);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -347,7 +347,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   --stage-accent: var(--rupture);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(6px, 0.9vh, 10px);
   padding: clamp(10px, 1.2vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
@@ -356,7 +356,8 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 82, 119, 0.3) rgba(5, 10, 24, 0.4);
@@ -411,13 +412,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -428,9 +429,15 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   flex-direction: column;
   gap: 8px;
   min-height: 0;
+  flex: 1 1 auto;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -442,7 +449,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -450,7 +457,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -1253,7 +1260,7 @@ input[type="range"] {
 
   function drawPillLabel(ctx, text, x, y, textColor, borderColor) {
     ctx.save();
-    ctx.font = '700 9px "JetBrains Mono", monospace';
+    ctx.font = '700 11.5px "JetBrains Mono", monospace';
     const padX = 7;
     const tw = ctx.measureText(text).width;
     const rx = x - tw - padX * 2, ry = y - 9, rw = tw + padX * 2, rh = 18;
@@ -1297,7 +1304,7 @@ input[type="range"] {
     ];
     ticks.forEach(tk => {
       ctx.fillStyle = '#94a3b8';
-      ctx.font = '600 9px "JetBrains Mono"';
+      ctx.font = '600 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(tk.label, tk.x, padT + ph - 2);
     });
@@ -1426,7 +1433,7 @@ input[type="range"] {
 
     // Etiquetas claras dentro del lienzo con pastillas de alto contraste
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('Frontera (Hoy)', splitX, padT + 14);
 
@@ -1454,7 +1461,7 @@ input[type="range"] {
     const qVal = (8.5 + (state.coveragePct - 75) * 0.72).toFixed(1);
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText(`PASOS 1–4: Medir errores reales Sᵢ = |f̂(xᵢ) − yᵢ| en Calibración (Cal) y tomar el cuantil ${state.coveragePct}% ➔ q̂ = ${qVal}`, boxX + 12, boxY + 18);
 
@@ -1487,7 +1494,7 @@ input[type="range"] {
         ctx.restore();
 
         ctx.fillStyle = '#ffe1a8';
-        ctx.font = '700 9.5px "JetBrains Mono"';
+        ctx.font = '700 12px "JetBrains Mono"';
         ctx.textAlign = 'right';
         ctx.fillText(`Umbral q̂ (${state.coveragePct}%) = ±${qVal} u.`, bLeft + bW - 4, y - 5);
       }
@@ -1557,7 +1564,7 @@ input[type="range"] {
     }
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText(`PASO 5: Intervalo Garantizado I(x) = [ f̂(x) − ${qVal}, f̂(x) + ${qVal} ] · Cobertura empírica ≥ ${state.coveragePct}%`, sx + 10, chartY + 16);
   }
@@ -1576,7 +1583,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(lx, ly, lw, boxH, 11); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🔀 CUANTIL LOCAL (q̂ⱼ) VS. GLOBAL (q̂_global)', lx + 14, ly + 20);
 
@@ -1587,14 +1594,14 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(lx + 12, s1Y, lw - 24, sH, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText('✅ CUANTIL LOCAL (q̂ⱼ): Traje a medida por serie', lx + 20, s1Y + 16);
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 12px Inter, sans-serif';
     ctx.fillText('• Evita que una serie volátil ensanche artificialmente', lx + 20, s1Y + 34);
     ctx.fillText('  las bandas de tus productos o regiones estables.', lx + 20, s1Y + 50);
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.font = '600 11.5px "JetBrains Mono"';
     ctx.fillText('q̂ⱼ = q₁₋α( S_Cal, j )  [Ideal en varianzas heterogéneas]', lx + 20, s1Y + sH - 12);
 
     // Serie 2: Cuantil Global
@@ -1604,14 +1611,14 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(lx + 12, s2Y, lw - 24, sH, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#d8b4fe';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText('🌐 CUANTIL GLOBAL (q̂_global): Agrupa M series cortas', lx + 20, s2Y + 16);
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 12px Inter, sans-serif';
     ctx.fillText('• Cuando cada serie individual tiene muy pocos puntos', lx + 20, s2Y + 34);
     ctx.fillText('  (|Calⱼ| corto), une los errores para estabilizar q̂.', lx + 20, s2Y + 50);
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.font = '600 11.5px "JetBrains Mono"';
     ctx.fillText('q̂_global = q₁₋α( ⋃ S_Cal, j )  [Ideal en series cortas NN5/M3]', lx + 20, s2Y + sH - 12);
     ctx.restore();
 
@@ -1626,12 +1633,12 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, ry, rw, boxH, 11); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#6ef0b4';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🏆 ESTUDIO ACHOUR ET AL. (2025) · ERCOT 2232 PUNTOS', rx + 14, ry + 20);
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 12px Inter, sans-serif';
     ctx.fillText(`Al asignar ${state.calibShare}% del historial a Calibración (|Cal|), mira qué ocurre con el error (MASE) y el ancho (MSIW):`, rx + 14, ry + 38);
 
     const benchmarks = [
@@ -1671,7 +1678,7 @@ input[type="range"] {
       ctx.beginPath(); ctx.roundRect(rx + 12, by, rw - 24, cardH - 4, 8); ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = b.color;
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText(b.name, rx + 20, by + 16);
 
@@ -1686,12 +1693,12 @@ input[type="range"] {
       ctx.fillRect(rx + 20, by + 24, bw, 11);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText(`MASE: ${b.mase} · Ancho MSIW: ${b.msiw}`, rx + 26 + bw, by + 33);
 
       ctx.fillStyle = '#94a3b8';
-      ctx.font = '500 9px Inter, sans-serif';
+      ctx.font = '500 11.5px Inter, sans-serif';
       ctx.fillText(b.note, rx + 20, by + cardH - 12);
     });
     ctx.restore();
@@ -1711,7 +1718,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(lx, ly, lw, boxH, 11); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⚖️ EL CONO DE LA HONESTIDAD: DECISIÓN ASIMÉTRICA', lx + 14, ly + 20);
 
@@ -1783,7 +1790,7 @@ input[type="range"] {
     ctx.setLineDash([]);
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('P90 (Reserva Antiapagón)', cLeft + cW - 4, cy - maxS - 5);
     ctx.fillStyle = '#a5f3fc';
@@ -1798,11 +1805,11 @@ input[type="range"] {
     // Explicación de los 3 Axiomas al pie de la caja izquierda
     const axY = cTop + cH + 20;
     ctx.fillStyle = '#e2eeff';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('📌 AXIOMA DE CERTIDUMBRE PROBABILÍSTICA:', lx + 14, axY);
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 12px Inter, sans-serif';
     ctx.fillText('Subestimar demanda eléctrica o médica cuesta un colapso;', lx + 14, axY + 18);
     ctx.fillText(`por eso planificamos sobre la banda superior calibrada (P${state.targetQuantile}).`, lx + 14, axY + 34);
     ctx.restore();
@@ -1819,7 +1826,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, ry, rw, boxH, 11); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#38efff';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 11 (EL CIERRE EJECUTIVO)', rx + 14, ry + 20);
 
@@ -1828,7 +1835,7 @@ input[type="range"] {
     ctx.fillText('Arquitectura de Decisión: ¿Qué modelo usar hoy?', rx + 14, ry + 40);
 
     ctx.fillStyle = '#b8cae0';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 12px Inter, sans-serif';
     ctx.fillText('En la siguiente diapositiva cruzaremos las 4 Eras con 3 filtros prácticos:', rx + 14, ry + 58);
 
     const filters = [
@@ -1857,11 +1864,11 @@ input[type="range"] {
       ctx.beginPath(); ctx.roundRect(rx + 12, fy, rw - 24, fH - 4, 8); ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = f.c;
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.fillText(f.q, rx + 20, fy + 18);
 
       ctx.fillStyle = '#e2eeff';
-      ctx.font = '500 9.5px Inter, sans-serif';
+      ctx.font = '500 12px Inter, sans-serif';
       ctx.fillText(f.a, rx + 20, fy + 36);
     });
     ctx.restore();

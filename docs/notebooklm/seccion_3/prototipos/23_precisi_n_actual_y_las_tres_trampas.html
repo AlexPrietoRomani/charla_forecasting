@@ -28,7 +28,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -165,7 +165,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--ancestral);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -336,7 +336,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   --stage-accent: var(--terracotta);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(8px, 1vh, 12px);
   padding: clamp(12px, 1.3vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 38%, rgba(133, 158, 192, 0.16));
@@ -345,7 +345,8 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 13%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   scrollbar-width: thin;
 }
 
@@ -392,13 +393,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -408,10 +409,16 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -423,7 +430,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -431,7 +438,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -451,7 +458,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 }
 
 .math-strip span.hint {
-  font: 500 9.5px/1.2 var(--sans);
+  font: 500 11.5px/1.2 var(--sans);
   color: #94a3b8;
   text-align: right;
 }
@@ -461,14 +468,14 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
   background: rgba(8, 15, 32, 0.88);
   border: 1px solid rgba(56, 239, 255, 0.28);
 }
 
 .takeaway-badge {
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--stage-accent);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -477,7 +484,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .takeaway-text {
   margin: 0;
-  font: italic 500 clamp(10.5px, 0.82vw, 12px)/1.35 var(--sans);
+  font: italic 500 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
   color: #e2eeff;
 }
 
@@ -1435,22 +1442,50 @@ input[type="range"] {
       ctx.roundRect(rxStart, cy, 10, cardH, [8, 0, 0, 8]);
       ctx.fill();
 
-      const tY = cy + (isCardCompact ? 13 : 18);
-      const sY = cy + (isCardCompact ? 25 : 34);
-      const rY = cy + (isCardCompact ? 37 : cardH - 8);
+      const maxTextW = rw - 36;
+      let titleSize = isCardCompact ? 10 : 14.5;
+      let subSize = isCardCompact ? 9 : 12.5;
+      const remSize = isCardCompact ? 9 : 12;
+      const minTitle = isCardCompact ? 9 : 10.5;
+      const minSub = isCardCompact ? 8.5 : 9.5;
+
+      ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
+      while (titleSize > minTitle && ctx.measureText(tr.trapTitle).width > maxTextW) {
+        titleSize -= 0.5;
+        ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
+      }
+      ctx.font = `500 ${subSize}px Inter, sans-serif`;
+      while (subSize > minSub && ctx.measureText(tr.trapSub).width > maxTextW) {
+        subSize -= 0.5;
+        ctx.font = `500 ${subSize}px Inter, sans-serif`;
+      }
+
+      const contentH = titleSize + 8 + subSize + 14 + 22;
+      const topY = cy + Math.max(8, (cardH - contentH) / 2);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = isCardCompact ? '700 9.5px "Space Grotesk", sans-serif' : '700 11px "Space Grotesk", sans-serif';
+      ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
       ctx.textAlign = 'left';
-      ctx.fillText(tr.trapTitle, rxStart + 18, tY);
+      ctx.fillText(tr.trapTitle, rxStart + 18, topY + titleSize);
 
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = isCardCompact ? '500 8.5px Inter, sans-serif' : '500 9.8px Inter, sans-serif';
-      ctx.fillText(tr.trapSub, rxStart + 18, sY);
+      ctx.font = `500 ${subSize}px Inter, sans-serif`;
+      ctx.fillText(tr.trapSub, rxStart + 18, topY + titleSize + 8 + subSize);
 
+      const pillY = cy + cardH - (isCardCompact ? 20 : 30);
+      const pillH = isCardCompact ? 14 : 22;
+      const remText = '✓ ' + tr.remedy;
+      ctx.font = `700 ${remSize}px "JetBrains Mono"`;
+      const pillW = Math.min(ctx.measureText(remText).width + 18, rw - 32);
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+      ctx.strokeStyle = 'rgba(110, 240, 180, 0.32)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(rxStart + 16, pillY, pillW, pillH, 7);
+      ctx.fill();
+      ctx.stroke();
       ctx.fillStyle = tr.color;
-      ctx.font = isCardCompact ? '700 8px "JetBrains Mono"' : '700 9px "JetBrains Mono"';
-      ctx.fillText('✓ ' + tr.remedy, rxStart + 18, rY);
+      ctx.fillText(remText, rxStart + 25, pillY + pillH * 0.5 + remSize * 0.36);
       ctx.restore();
     });
 

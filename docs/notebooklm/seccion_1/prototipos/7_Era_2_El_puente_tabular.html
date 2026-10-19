@@ -27,7 +27,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -166,7 +166,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--phi);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -340,7 +340,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   --stage-accent: var(--phi);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(6px, 0.9vh, 10px);
   padding: clamp(10px, 1.2vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
@@ -349,7 +349,8 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 39, 0.95), rgba(5, 10, 24, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(56, 239, 255, 0.3) rgba(5, 10, 24, 0.4);
@@ -404,13 +405,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -421,9 +422,15 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   flex-direction: column;
   gap: 8px;
   min-height: 0;
+  flex: 1 1 auto;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -435,7 +442,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -443,7 +450,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -1304,7 +1311,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText(`🪟 Ventana de ${state.lagsCount} Lags (Pasado)`, (wx1 + wx2) / 2, padT + 18);
     ctx.restore();
@@ -1334,7 +1341,7 @@ input[type="range"] {
 
       if (isTarget) {
         ctx.fillStyle = '#8ef7c7';
-        ctx.font = '700 9.5px "JetBrains Mono"';
+        ctx.font = '700 12px "JetBrains Mono"';
         ctx.textAlign = 'center';
         ctx.fillText(`Objetivo yₜ=${vals[i]}`, xx, yy - 11);
       }
@@ -1384,7 +1391,7 @@ input[type="range"] {
     ctx.fillRect(tableX, tableY, tableW, rowH);
     cols.forEach((cName, ci) => {
       ctx.fillStyle = ci === 5 ? '#6ef0b4' : (ci >= 1 && ci <= 2 ? '#ffe1a8' : '#e2eeff');
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(cName, tableX + ci * colW + colW / 2, tableY + rowH * 0.65);
     });
@@ -1420,7 +1427,7 @@ input[type="range"] {
 
       rowCells.forEach((cell, ci) => {
         ctx.fillStyle = ci === 5 ? '#6ef0b4' : (isCurrent ? '#ffffff' : '#cbd5e1');
-        ctx.font = (ci === 5 || isCurrent) ? '700 10px "JetBrains Mono"' : '500 9.5px "JetBrains Mono"';
+        ctx.font = (ci === 5 || isCurrent) ? '700 13px "JetBrains Mono"' : '500 12px "JetBrains Mono"';
         ctx.textAlign = 'center';
         ctx.fillText(cell, tableX + ci * colW + colW / 2, ry + rowH * 0.66);
       });
@@ -1486,7 +1493,7 @@ input[type="range"] {
     // Etiquetas explicativas de los picos
     const pDay = 32;
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText(`🏷️ Promo + Fin de Semana (+${state.promoBoost}%)`, X(pDay), Y(realS[pDay]) - 12);
 
@@ -1498,11 +1505,11 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 9); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#6ef0b4';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🌲 REGLA APRENDIDA POR LIGHTGBM:', bx + 10, by + 18);
     ctx.fillStyle = '#e2eeff';
-    ctx.font = '500 10px "JetBrains Mono"';
+    ctx.font = '500 13px "JetBrains Mono"';
     ctx.fillText('SI (Lag_7 > 45) Y (Promo_Activa == SÍ)', bx + 10, by + 38);
     ctx.fillStyle = '#ffe1a8';
     ctx.fillText(`ENTONCES Salto No-Lineal = +${state.promoBoost}% ventas`, bx + 10, by + 56);
@@ -1530,7 +1537,7 @@ input[type="range"] {
     ctx.strokeRect(padL, Y(65), splitX - padL, padT + ph - Y(65));
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('📦 CAJA DE ENTRENAMIENTO HISTÓRICO [X_min, X_máx]', padL + 10, Y(65) + 18);
     ctx.restore();
@@ -1547,7 +1554,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('Frontera X_máx = 65', splitX, padT + 14);
 
@@ -1603,7 +1610,7 @@ input[type="range"] {
       ctx.restore();
 
       ctx.fillStyle = '#fda4af';
-      ctx.font = '700 10.5px "JetBrains Mono"';
+      ctx.font = '700 13.5px "JetBrains Mono"';
       ctx.textAlign = 'right';
       ctx.fillText(`⚠️ Error de No-Extrapolación: -${curU - 65} GW`, padL + pw - 10, pyReal + 16);
     }
@@ -1615,7 +1622,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.arc(px, pyTree, 6, 0, Math.PI * 2); ctx.fill();
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('🧱 Meseta Plana GBDT (y = 65 constante)', padL + pw - 10, Y(65) + 18);
   }
@@ -1640,7 +1647,7 @@ input[type="range"] {
     ctx.strokeRect(padL, Y(65), sx - padL, padT + ph - Y(65));
 
     ctx.fillStyle = '#ffe1a8';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('Historial ERCOT (Techo conocido: 65 GW)', padL + 8, Y(65) - 7);
     ctx.restore();
@@ -1700,7 +1707,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText(`❄️ Récord ${state.uriTemp}°C (+${Math.round(extraGW)} GW no vistos)`, X(peakIdx), peakRealY - 8);
     ctx.fillStyle = '#a5f3fc';
@@ -1719,7 +1726,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx, ry, rw, rh, 12); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#d8b4fe';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 3', rx + 14, ry + 22);
 
@@ -1741,7 +1748,7 @@ input[type="range"] {
       ctx.beginPath(); ctx.roundRect(px, py0, pBoxW, pBoxH, 8); ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = '#e9d5ff';
-      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(`Parche P=${p + 1}`, px + pBoxW / 2, py0 + 14);
 
@@ -1763,12 +1770,12 @@ input[type="range"] {
     // Explicación inferior del salto a Era 3
     const ty = py0 + pBoxH + 22;
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 10.5px Inter, sans-serif';
+    ctx.font = '500 13.5px Inter, sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('• Deja de ver puntos sueltos en cajas cerradas.', rx + 14, ty);
     ctx.fillText('• Agrupa 16 días en “Parches” con pendiente y forma.', rx + 14, ty + 18);
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.fillText('• Reduce costo cuadrático O(L²) a O((L/P)²).', rx + 14, ty + 38);
     ctx.restore();
   }

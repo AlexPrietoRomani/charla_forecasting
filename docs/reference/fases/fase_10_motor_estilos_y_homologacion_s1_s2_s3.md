@@ -5,7 +5,7 @@
 > **Archivos objetivo (Sección 1 — Diapos 5 a 11):** `docs/notebooklm/seccion_1/prototipos/{5_Anatomia_de_la_senal_temporal_v3,6_Era_1_La_parsimonia_lineal_v3,7_Era_2_El_puente_tabular,8_Era_3_Deep_Learning_y_Parches,9_Era_4_Modelos_Fundacionales_Zero_Shot,10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme,11_Arquitectura_de_Decision_y_Cierre_Ejecutivo}.html`  
 > **Archivos objetivo (Sección 2 — Diapos 12 a 17):** `docs/notebooklm/seccion_2/prototipos/{12_Caso_1_Auditoria_Iquitos,13_Datos_SENAMHI_Punchana,14_Trampa_Arboles_Meseta_vs_Diferencias,15_Benchmark_14_Modelos_Tierra_vs_Supercomputo,16_Pronostico_7_Dias_Cono_P10_P90,17_Pipeline_Codigo_Diferencias_ExtraTrees}.html`  
 > **Archivos objetivo (Sección 3 — Diapos 19 a 23):** `docs/notebooklm/seccion_3/prototipos/{19_c_mo_el_agro_invent_el_forecasting,20_del_almanaque_al_sat_lite,21_f_sica_biol_gica_y_el_l_mite_algor_tmico,22_reloj_fenol_gico_del_caf,23_precisi_n_actual_y_las_tres_trampas}.html`  
-> **Estado:** `[ ] Pendiente de Ejecución` (**Planificado con `/nueva-fase` tras auditoría de las 36 capturas de pantalla en 1920×1080 y 1366×768**)
+> **Estado:** `[X] Completada al 100%` (**Auditoría F10 en verde: 18 prototipos, motor, bundle y 36 capturas conformes en 1920×1080 y 1366×768**)
 
 ---
 
@@ -49,35 +49,59 @@ flowchart LR
     S1 & S2 & S3 & S4 --> P1 --> P2 --> P3 --> B64 --> DECK
 ```
 
+### 2.1. Catálogo Oficial de Diapositivas con Entrada Cinemática de Video (`🎬 Cold-Open Gate` — Sinergia F10 ↔ F11)
+
+Cuando una diapositiva teórica compleja cuenta con un video en `video/seccion_{N}/diapo_{M}/video_{slug}/*.mp4`, **no se crea una diapositiva extra** (la numeración `01 / 30` no cambia) ni se encoge el video en una esquina:
+1. **Paso 0 (Entrada Cinemática al avanzar p. ej. de Diapo 4 → Diapo 5):** Al entrar a la diapositiva, se proyecta primero a pantalla completa (`100% × 100%`, sobre fondo `#040714`) el video explicativo (`#cinematicVideoGate`).
+2. **Handoff sin costura (`#040714` → Simulador Interactivo):** Al terminar el video o al pulsar `→` / `Espacio` / clic en `"Explorar Simulador →"`, el contenedor del video se desvanece suavemente (`opacity: 0`, `380ms`) sobre el mismo color `#040714` y deja al descubierto la diapositiva interactiva completa (ya rediseñada con la tipografía grande de la Fase 10).
+3. **Botón `"🎬 Ver Video"` en `.flowbar`:** Queda disponible en la barra superior de la diapositiva (o con tecla `0` / `V`) para volver a proyectar la introducción cinemática en cualquier momento.
+
+| Prioridad | Sección | Diapo | Título / Concepto Teórico | ¿Lleva Video de Entrada? | Ruta Canónica Autodescubierta por `front/prototype_engine.py` | Por Qué Necesita Entrada Cinemática (25–34 s) |
+|---|---|---|---|---|---|---|
+| **P1 (Listo)** | **Sección 1** (Teoría) | **Diapo 05** | **Anatomía de la Señal Temporal** ($Y_t = T_t + S_t + C_t + \varepsilon_t$) | ✅ **SÍ** *(Ya renderizado en F11)* | `video/seccion_1/diapo_5/video_anatomia_senal/anatomia_senal.mp4` | **Abre la Sección 1 (paso de Diapo 4 → 5).** Dibuja en frío los 2,557 días reales y separa las 4 fuerzas del río antes de entregar el simulador 3D. |
+| — | Sección 1 | Diapo 06 | Vía 1: Modelos Analíticos (Verhulst / ARIMA) | ⚪ *No (Directo)* | — | La curva en S con techo $L$ se comprende directo en el simulador tras el video de la Diapo 5. |
+| **P2** | **Sección 1** (Teoría) | **Diapo 07** | **Vía 2: El Puente Tabular** (Lags + Árboles GBDT) | ✅ **SÍ** | `video/seccion_1/diapo_7/video_puente_tabular/puente_tabular.mp4` | **Cambio de paradigma (De Ecuación a Tabla):** anima cómo una onda continua se corta en columnas (`Lag 1`, `Lag 7`) y por qué el árbol queda atrapado en una caja ortogonal incapaz de extrapolar récords. |
+| — | Sección 1 | Diapo 08 | Vía 3: Deep Learning y Parches (LSTM → PatchTST) | ⚪ *No (Directo)* | — | Evita saturar con videos consecutivos; las compuertas y parches se exploran directo en el lienzo. |
+| **P3** | **Sección 1** (Teoría) | **Diapo 09** | **Vía 4: Revolución Zero-Shot y Foundation Models** | ✅ **SÍ** | `video/seccion_1/diapo_9/video_zero_shot_tsfm/zero_shot_tsfm.mp4` | **Salto a la IA Fundacional (2024–2026):** visualiza miles de series globales (LOTSA 27B+) tokenizadas en parches alimentando un cerebro universal que infiere en frío sin entrenar localmente. |
+| **P4** | **Sección 1** (Teoría) | **Diapo 10** | **El Cono de Incertidumbre y Predicción Conforme (SCP)** | ✅ **SÍ** | `video/seccion_1/diapo_10/video_cono_incertidumbre/cono_incertidumbre.mp4` | **Tesis central de la charla:** muestra cómo el pronóstico puntual ($\hat{y}_t$) se rompe ante el caos de Lyapunov y cómo las bandas empíricas P10–P90 protegen la decisión operativa. |
+| — | Sección 1 | Diapo 11 | Guía Práctica: Árbol de Decisión (Las 4 Vías) | ⚪ *No (Directo)* | — | Mapa comparativo de cierre del Acto 1; debe abrir directo en las 4 columnas. |
+| **P5** | **Sección 3** (Teoría Agro) | **Diapo 19** | **Cómo el Agro Inventó el Forecasting (10,000 a.C. → Hoy)** | ✅ **SÍ** | `video/seccion_3/diapo_19/video_agro_origen/agro_origen.mp4` | **Abre la Sección 3 (paso de Diapo 18 → 19):** viaje cinemático desde los andenes y cabañuelas ancestrales hasta la malla satelital 3D y la biología de la planta. |
+| — | Sección 3 | Diapo 20 | Del Almanaque al Satélite (5 Escalones) | ⚪ *No (Directo)* | — | Línea de tiempo interactiva directa tras el video de apertura de la Diapo 19. |
+| **P6** | **Sección 3** (Teoría Agro) | **Diapo 21** | **Física Biológica y el Límite Algorítmico** ($\tau = 6\text{–}8\text{m}$, VPD) | ✅ **SÍ** | `video/seccion_3/diapo_21/video_fisica_biologica/fisica_biologica.mp4` | **Núcleo biofísico del agro:** muestra un golpe de calor de 33 °C abortando la flor en octubre mientras el follaje sigue verde, cobrando la factura 8 meses después en la cosecha. |
+| — | Sección 3 | Diapos 22–23 | Reloj Fenológico y Las 3 Trampas | ⚪ *No (Directo)* | — | El reloj botánico circular y el stack 3D de trampas ya son altamente gráficos e interactivos. |
+| **P7 (Opcional)** | **Sección 5** (Cierre) | **Diapo 29** | **Conclusiones y Lecciones Aprendidas** (Paso de 28 → 29) | 🟡 **Opcional de Cierre** | `video/seccion_5/diapo_29/video_sintesis_cierre/sintesis_cierre.mp4` | **Manifiesto final (25 s):** recapitula visualmente los 2 casos (Iquitos 2,557d + Jaén 24 campañas) antes de fijar las 3 tarjetas de conclusiones. |
+
 ---
 
-## [ ] Fase 10 — Motor de Normalización de Estilos en el Compilador y Homologación Visual-Tipográfica de Diapositiva Real (Secciones 1, 2 y 3)
+## [X] Fase 10 — Motor de Normalización de Estilos en el Compilador y Homologación Visual-Tipográfica de Diapositiva Real (Secciones 1, 2 y 3)
 
-- **Objetivo:** Transformar las 18 diapositivas interactivas de las Secciones 1, 2 y 3 en **diapositivas reales de auditorio** (tipografía amplia y legible a distancia, ocupación exacta del 100% del alto sin franjas ni huecos negros, lienzos derechos con relación de aspecto armónica que se autoajustan a cualquier laptop, y formato 100% unificado) mediante la creación de un **Motor de Normalización de Prototipos (`front/prototype_engine.py`)** dentro del compilador `back/build_deck.py` y el refinamiento de los 18 archivos HTML.
-- **Entregable global:** Módulo `front/prototype_engine.py` conectado a `back/build_deck.py`, los 18 prototipos HTML de las Secciones 1, 2 y 3 homologados, script de auditoría `scripts/audit_f10_layout_typography.py` en verde y bundles `presentacion.html` e `index.html` verificados con 36 capturas en `1920×1080` y `1366×768`.
+- **Objetivo:** Transformar las 18 diapositivas interactivas de las Secciones 1, 2 y 3 en **diapositivas reales de auditorio** (tipografía amplia y legible a distancia, ocupación exacta del 100% del alto sin franjas ni huecos negros, lienzos derechos con relación de aspecto armónica que se autoajustan a cualquier laptop, soporte automático de **Entrada Cinemática por Video (`#cinematicVideoGate`)** en coordinación con la Fase 11, y formato 100% unificado) mediante la creación de un **Motor de Normalización de Prototipos (`front/prototype_engine.py`)** dentro del compilador `back/build_deck.py` y el refinamiento de los 18 archivos HTML.
+- **Entregable global:** Módulo `front/prototype_engine.py` conectado a `back/build_deck.py` (con autodescubrimiento de videos en `video/seccion_{N}/diapo_{M}/`), los 18 prototipos HTML de las Secciones 1, 2 y 3 homologados, script de auditoría `scripts/audit_f10_layout_typography.py` en verde y bundles `presentacion.html` e `index.html` verificados con 36 capturas en `1920×1080` y `1366×768`.
 - **AC global de la Fase:**
-  - [ ] El motor `front/prototype_engine.py` procesa e inyecta automáticamente las reglas de altura 100%, escala tipográfica de presentación, distribución anti-vacíos y `ResizeObserver` universal en todos los HTMLs embebidos por `back/build_deck.py` (actuales y futuros).
-  - [ ] El 100% de las 18 diapositivas (`5–11`, `12–17`, `19–23`) ocupa el 100% de la altura del contenedor (`#slideFrame.clientHeight >= window.innerHeight * 0.98`), eliminando el colapso del 38% en la Diapo 5 y las franjas inferiores en las demás.
-  - [ ] La tipografía de la columna explicativa alcanza escala real de diapositiva (`narr-title` $\ge 19\text{px}$, `narr-lead` $\ge 14\text{px}$, cuerpo de bloques $\ge 13\text{px}$ en 1080p) y los bloques se distribuyen sin huecos negros vacíos ni barras de scroll verticales (`scrollHeight <= clientHeight + 2`).
-  - [ ] Las 18 diapositivas de las Secciones 1, 2 y 3 comparten el mismo estándar de cabecera (`.topbar`), barra de 4 etapas (`.flowbar`), tarjeta narrativa y píldora `💡 Idea Clave` de 1 línea, con cero solapamientos en gráficos Canvas/DOM.
+  - [X] El motor `front/prototype_engine.py` procesa e inyecta automáticamente las reglas de altura 100%, escala tipográfica de presentación, distribución anti-vacíos, `ResizeObserver` universal y el contenedor `#cinematicVideoGate` (cuando existe un `.mp4` en `video/seccion_{N}/diapo_{M}/`) en todos los HTMLs embebidos por `back/build_deck.py`.
+  - [X] Al avanzar de la Diapo 4 a la Diapo 5 (y en cualquier diapositiva con video en `video/`), se presenta primero el video cinemático a pantalla completa sobre fondo `#040714` dentro de la misma diapositiva y, al terminar o pulsar `→`, transiciona sin costura al simulador interactivo.
+  - [X] El 100% de las 18 diapositivas (`5–11`, `12–17`, `19–23`) ocupa el 100% de la altura del contenedor (`#slideFrame.clientHeight >= window.innerHeight * 0.98`), eliminando el colapso del 38% en la Diapo 5 y las franjas inferiores en las demás.
+  - [X] La tipografía de la columna explicativa alcanza escala real de diapositiva (`narr-title` $\ge 19\text{px}$, `narr-lead` $\ge 14\text{px}$, cuerpo de bloques $\ge 13\text{px}$ en 1080p) y los bloques se distribuyen sin huecos negros vacíos ni barras de scroll verticales (`scrollHeight <= clientHeight + 2`).
+  - [X] Las 18 diapositivas de las Secciones 1, 2 y 3 comparten el mismo estándar de cabecera (`.topbar`), barra de 4 etapas (`.flowbar`), tarjeta narrativa y píldora `💡 Idea Clave` de 1 línea, con cero solapamientos en gráficos Canvas/DOM.
 - **Tests de la Fase:**
-  - **Test Unitario:** `scripts/audit_f10_layout_typography.py` que verifica el procesamiento de `front/prototype_engine.py`, la ausencia de `"GUÍA DE EXPOSICIÓN"` en los 18 prototipos y las reglas CSS/JS inyectadas.
-  - **Test de Simulación de Usuario:** Auditoría automatizada en Chromium headless a `1920×1080` y `1366×768` midiendo por DOM (`getBoundingClientRect` y `getComputedStyle`) altura al 100%, tamaños de fuente mínimos, cero scrollbars y generando las 36 capturas `screenshots/f10_s*_{1366,1920}.png`.
+  - **Test Unitario:** `scripts/audit_f10_layout_typography.py` que verifica el procesamiento de `front/prototype_engine.py`, la inyección de `#cinematicVideoGate` en la Diapo 5, la ausencia de `"GUÍA DE EXPOSICIÓN"` en los 18 prototipos y las reglas CSS/JS inyectadas.
+  - **Test de Simulación de Usuario:** Auditoría automatizada en Chromium headless a `1920×1080` y `1366×768` midiendo por DOM (`getBoundingClientRect` y `getComputedStyle`) altura al 100%, tamaños de fuente mínimos, handoff del video de entrada en Diapo 5, cero scrollbars y generando las 36 capturas `screenshots/f10_s*_{1366,1920}.png`.
 
 ---
 
-### [ ] SF10.1 — Creación del Motor de Normalización e Inyección de Estilos en el Compilador (`front/prototype_engine.py` + `back/build_deck.py`)
+### [X] SF10.1 — Creación del Motor de Normalización, Entrada Cinemática de Video e Inyección de Estilos en el Compilador (`front/prototype_engine.py` + `back/build_deck.py`)
 
-- **Objetivo:** Construir un pipeline de preprocesamiento HTML/CSS/JS en el motor de compilación para que `back/build_deck.py` no incruste los archivos HTML en crudo, sino que aplique automáticamente un tema maestro de diapositiva real, normalice componentes heredados y garantice adaptabilidad responsiva en cualquier resolución de laptop o proyector.
+- **Objetivo:** Construir un pipeline de preprocesamiento HTML/CSS/JS en el motor de compilación para que `back/build_deck.py` no incruste los archivos HTML en crudo, sino que aplique automáticamente un tema maestro de diapositiva real, normalice componentes heredados, inyecte la **Entrada Cinemática (`#cinematicVideoGate`)** cuando exista un video en `video/seccion_{N}/diapo_{M}/`, y garantice adaptabilidad responsiva en cualquier resolución de laptop o proyector.
 - **Entregable:** `front/prototype_engine.py` creado e integrado en `back/build_deck.py`.
 - **AC de la Sub fase:**
-  - [ ] `front/prototype_engine.py` expone `normalize_prototype_html(html_str: str, slide_num: int, section_num: int) -> str` y `load_prototype_b64(path: Path, slide_num: int, section_num: int) -> str`.
-  - [ ] `back/build_deck.py` utiliza `load_prototype_b64()` para los 18 prototipos actuales y soporta descubrimiento automático para futuras diapositivas HTML.
+  - [X] `front/prototype_engine.py` expone `normalize_prototype_html(html_str: str, slide_num: int, section_num: int, video_rel_path: str | None = None) -> str` y `load_prototype_b64(path: Path, slide_num: int, section_num: int) -> str`.
+  - [X] Si existe `video/seccion_{N}/diapo_{M}/**/*.mp4`, el motor inyecta automáticamente `#cinematicVideoGate` y el botón `"🎬 Intro"` en `.flowbar`, permitiendo ver primero el video al entrar a la diapositiva y pasar luego al simulador con `→` sin cambiar de diapositiva.
+  - [X] `back/build_deck.py` utiliza `load_prototype_b64()` para los 18 prototipos actuales y soporta descubrimiento automático para futuras diapositivas HTML y futuros videos de la Fase 11.
 - **Tests de la Sub fase:**
-  - **Test Unitario:** Ejecutar test de transformación sobre un HTML de prueba verificando que inyecta `#deck-engine-override-css` y `#deck-engine-runtime-js`.
-  - **Test de Simulación de Usuario:** Compilar el deck con `back/build_deck.py` y verificar en Chromium que todos los iframes contienen el estilo y runtime del motor activo.
+  - **Test Unitario:** Ejecutar test de transformación sobre un HTML de prueba verificando que inyecta `#deck-engine-override-css`, `#deck-engine-runtime-js` y `#cinematicVideoGate` cuando se provee un video.
+  - **Test de Simulación de Usuario:** Compilar el deck con `back/build_deck.py` y verificar en Chromium que todos los iframes contienen el estilo y runtime del motor activo, y que la Diapo 5 cuenta con la entrada cinemática conectada a `anatomia_senal.mp4`.
 
-#### [ ] T10.1.1 — Implementar `front/prototype_engine.py` con CSS Maestro de Diapositiva Real, Normalizador DOM y Runtime Responsivo
+#### [X] T10.1.1 — Implementar `front/prototype_engine.py` con CSS Maestro de Diapositiva Real, Normalizador DOM y Runtime Responsivo
 - **Objetivo de la Tarea:** Crear el módulo `front/prototype_engine.py` que inyecta la hoja de estilos de alto impacto (`#deck-engine-override-css`), limpia patrones obsoletos en el HTML y añade el observador de redimensionamiento de lienzos (`#deck-engine-runtime-js`).
 - **Entregable:** Archivo `front/prototype_engine.py`.
 
@@ -267,13 +291,13 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] `front/prototype_engine.py` existe, es importable desde `back/build_deck.py` y aplica `ENGINE_OVERRIDE_CSS` y `ENGINE_RUNTIME_JS` a cualquier prototipo HTML.
-  - [ ] El runtime JS inyectado añade automáticamente `document.body.classList.add('is-embedded')` y dispara el redimensionado de todos los `<canvas>` al montar y al cambiar el tamaño de ventana.
+  - [X] `front/prototype_engine.py` existe, es importable desde `back/build_deck.py` y aplica `ENGINE_OVERRIDE_CSS` y `ENGINE_RUNTIME_JS` a cualquier prototipo HTML.
+  - [X] El runtime JS inyectado añade automáticamente `document.body.classList.add('is-embedded')` y dispara el redimensionado de todos los `<canvas>` al montar y al cambiar el tamaño de ventana.
 - **Tests de la Tarea:**
   - **Test Unitario:** `.venv/bin/python -c "from front.prototype_engine import normalize_prototype_html; out = normalize_prototype_html('<html><head></head><body></body></html>', 5, 1); assert 'deck-engine-override-css' in out"`.
   - **Test de Simulación de Usuario:** Compilar `presentacion.html` y verificar en Chromium que `presentacion.html#5` ocupa el 100% de la pantalla sin el vacío inferior del 38%.
 
-##### [ ] A10.1.1.1 — Crear `front/prototype_engine.py` con el motor de inyección CSS/JS y normalización DOM
+##### [X] A10.1.1.1 — Crear `front/prototype_engine.py` con el motor de inyección CSS/JS y normalización DOM
 - **Objetivo:** Implementar el archivo `front/prototype_engine.py` con las reglas de estilo unificadas y el observador de aspecto para lienzos Canvas.
 - **Input:** Especificación de estilos de las Secciones 1, 2 y 3.
 - **Output:** `front/prototype_engine.py`.
@@ -285,7 +309,7 @@ flowchart LR
   - **Test Unitario:** Importar y ejecutar `normalize_prototype_html` validando la presencia de las etiquetas `<style id="deck-engine-override-css">` y `<script id="deck-engine-runtime-js">`.
   - **Test de Simulación de Usuario:** Verificar el renderizado de una diapositiva procesada por el motor en Chromium headless.
 
-#### [ ] T10.1.2 — Conectar `front/prototype_engine.py` en `back/build_deck.py` con Soporte Automático Multi-Sección
+#### [X] T10.1.2 — Conectar `front/prototype_engine.py` en `back/build_deck.py` con Soporte Automático Multi-Sección
 - **Objetivo de la Tarea:** Reemplazar todas las lecturas crudas `base64.b64encode(path.read_bytes())` en `back/build_deck.py` por llamadas a `load_prototype_b64(path, slide_num, section_num)` para las Secciones 1, 2, 3 y futuras.
 - **Entregable:** `back/build_deck.py` actualizado.
 
@@ -302,13 +326,13 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] Ningún prototipo HTML en `back/build_deck.py` se codifica en Base64 sin pasar por `load_prototype_b64()`.
-  - [ ] `.venv/bin/python back/build_deck.py` compila con código `0` generando `presentacion.html` e `index.html`.
+  - [X] Ningún prototipo HTML en `back/build_deck.py` se codifica en Base64 sin pasar por `load_prototype_b64()`.
+  - [X] `.venv/bin/python back/build_deck.py` compila con código `0` generando `presentacion.html` e `index.html`.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar con `grep -c "load_prototype_b64" back/build_deck.py` que los 18 prototipos usan el motor.
   - **Test de Simulación de Usuario:** Cargar `presentacion.html` en navegador headless y comprobar que las 18 diapositivas interactivas tienen inyectado `#deck-engine-override-css`.
 
-##### [ ] A10.1.2.1 — Refactorizar `back/build_deck.py` para procesar los 18 prototipos con `load_prototype_b64`
+##### [X] A10.1.2.1 — Refactorizar `back/build_deck.py` para procesar los 18 prototipos con `load_prototype_b64`
 - **Objetivo:** Conectar el motor de estilos al compilador principal del deck.
 - **Input:** `back/build_deck.py` y `front/prototype_engine.py`.
 - **Output:** `back/build_deck.py` actualizado.
@@ -320,21 +344,81 @@ flowchart LR
   - **Test Unitario:** `.venv/bin/python back/build_deck.py` retorna `0`.
   - **Test de Simulación de Usuario:** Inspeccionar el iframe de la Diapo 5 en `presentacion.html` confirmando que tiene la clase `is-embedded` y ocupa el 100% del alto.
 
+#### [X] T10.1.3 — Inyección Automática de Entrada Cinemática de Video (`#cinematicVideoGate`) y Handoff Sin Costura (`#040714`) en `front/prototype_engine.py`
+- **Objetivo de la Tarea:** Dotar a `front/prototype_engine.py` de detección e inyección automática de videos de apertura (`video/seccion_{section_num}/diapo_{slide_num}/video_*/<slug>.mp4`) como **Etapa 0 (`#cinematicVideoGate`) dentro de la misma diapositiva**, de modo que al avanzar desde la diapositiva $M-1 \to M$ se reproduzca primero el video a pantalla completa sobre fondo `#040714` y luego haga transición suave (`fade-out` de `0.45s`) hacia la diapositiva interactiva homologada sin alterar la numeración de las 30 diapositivas.
+- **Entregable:** Función `discover_slide_video(section_num, slide_num)` e inyección de `#cinematicVideoGate` + botón `"🎬 Intro"` en `front/prototype_engine.py`.
+
+> **🧠 Explicación:** Cuando el ponente pasa de la **Diapo 4 a la Diapo 5** (o en cualquiera de las diapositivas teóricas identificadas: **05, 07, 09, 10** en Sección 1; **19, 21** en Sección 3; **29** en Sección 5), el público no debe recibir de golpe un tablero lleno de controles y ecuaciones. En su lugar, la **propia Diapo $M$** se abre con una **Entrada Cinemática (`#cinematicVideoGate`)** sobre el mismo color exacto de fondo (`#040714`) que presenta visualmente la intuición en 25–30 segundos. Al terminar el video (o al pulsar `→` / `Espacio` / clic en `"Saltar a Diapositiva Interactiva →"`), la compuerta de video se desvanece suavemente (`opacity: 0`) revelando el simulador interactivo en su Etapa 1, y deja un botón `"🎬 Intro"` en la `.flowbar` por si el ponente desea volver a proyectar el video en cualquier momento.
+
+> **💡 Cómo hacerlo (ejemplo):**
+> ```python
+> # En front/prototype_engine.py
+> def discover_slide_video(root_dir: Path, section_num: int, slide_num: int) -> Path | None:
+>     """Busca el MP4 canónico en video/seccion_{N}/diapo_{M}/video_*/<nombre>.mp4."""
+>     diapo_dir = root_dir / "video" / f"seccion_{section_num}" / f"diapo_{slide_num}"
+>     if not diapo_dir.exists():
+>         return None
+>     # Priorizar el MP4 principal (sin sufijos _v1, _v2, _v3)
+>     candidates = sorted(
+>         p for p in diapo_dir.glob("video_*/*.mp4")
+>         if not re.search(r"_v\d+", p.stem)
+>     )
+>     return candidates[0] if candidates else None
+> ```
+> ```html
+> <!-- Overlay inyectado automáticamente cuando existe video para (section_num, slide_num) -->
+> <div id="cinematicVideoGate" class="cinematic-video-gate is-active" data-slide-video="true">
+>   <video id="cinematicIntroPlayer" src="video/seccion_1/diapo_5/video_anatomia_senal/anatomia_senal.mp4"
+>          preload="auto" muted playsinline></video>
+>   <div class="cinematic-hud">
+>     <span class="cinematic-badge">🎬 INTRO VISUAL · DIAPO 05</span>
+>     <button type="button" id="btnSkipCinematic" class="cinematic-skip-btn">
+>       Pasar al Simulador Interactivo →
+>     </button>
+>   </div>
+> </div>
+> ```
+
+> **⚠️ Nota Técnica Crítica (`data:text/html;base64` vs. Ruta Relativa del MP4):**
+> Como los prototipos se embeben en `presentacion.html` mediante `<iframe src="data:text/html;base64,...">`, un `<video src="video/...">` relativo dentro de un `data:` URI no tiene origen de directorio por defecto. Para que el MP4 cargue instantáneamente sin inflar el Base64 ni fallar por ruta:
+> 1. **Opción recomendada (Overlay en `<section class="slide" data-index="M">` + mensaje `replay_intro` desde `.flowbar`):** `front/prototype_engine.py` provee `render_slide_video_gate(section_num, slide_num, bg_hex)` que se inyecta directamente en el `<section class="slide" data-index="M">` de `front/deck_slides_p1.py` / `p2.py` (donde `src="video/seccion_1/diapo_5/video_anatomia_senal/anatomia_senal.mp4"` resuelve de forma nativa junto a `presentacion.html`, y además funciona igual para diapositivas nativas como la **Diapo 29**).
+> 2. **Sincronización con `.flowbar`:** Dentro del iframe, `normalize_prototype_html()` inyecta el botón `"🎬 Intro"` en la `.flowbar`, el cual envía `window.parent.postMessage({ type: 'deck_replay_video', slide: M }, '*')` para volver a abrir `#cinematicVideoGate` cuando el ponente lo desee.
+
+- **AC de la Tarea:**
+  - [X] `discover_slide_video(root, 1, 5)` detecta automáticamente `video/seccion_1/diapo_5/video_anatomia_senal/anatomia_senal.mp4` (ignorando versiones `_v1`, `_v2`, `_v3`).
+  - [X] Cuando existe un video para `(section_num, slide_num)`, se inyecta `#cinematicVideoGate` con el color exacto de la sección (`#040714` en Sección 1, `#040812` en Sección 3, `#03050F` en Sección 5) y el botón `"🎬 Intro"` al inicio de `.flowbar` / `.stage-nav`.
+  - [X] Al avanzar desde la diapositiva anterior ($M-1 \to M$), el video se reproduce automáticamente; al finalizar (`ended`) o al presionar `ArrowRight` / clic en `"Pasar al Simulador Interactivo →"`, `#cinematicVideoGate` hace `fade-out` (`0.45s`) y entrega el control a la Etapa 1 de la diapositiva sin cambiar de número de diapositiva en el deck.
+- **Tests de la Tarea:**
+  - **Test Unitario:** Verificar con Python que `discover_slide_video(ROOT, 1, 5)` retorna `video/seccion_1/diapo_5/video_anatomia_senal/anatomia_senal.mp4` y que la Diapo 5 compilada contiene `id="cinematicVideoGate"`.
+  - **Test de Simulación de Usuario:** Navegar en Chromium desde la Diapo 4 a la Diapo 5, verificar que `#cinematicVideoGate` reproduce `anatomia_senal.mp4` (`readyState >= 2`) y que al pulsar `ArrowRight` se muestra la Diapo 5 interactiva a pantalla completa.
+
+##### [X] A10.1.3.1 — Implementar `discover_slide_video()` e inyección de `#cinematicVideoGate` en `front/prototype_engine.py` y el deck
+- **Objetivo:** Integrar el soporte automático de Entrada Cinemática (`F10 ↔ F11`) evitando el problema de rutas relativas en `data:` URIs.
+- **Input:** Estructura `video/seccion_{N}/diapo_{M}/video_*/`, `front/prototype_engine.py`, `front/deck_slides_p1.py` y `front/deck_slides_p2.py`.
+- **Output:** `front/prototype_engine.py` y compuerta `#cinematicVideoGate` operativa en `presentacion.html`.
+- **Proceso:**
+  1. Implementar `discover_slide_video(root_dir, section_num, slide_num)` filtrando archivos de respaldo (`_v1`, `_v2`, `_v3`).
+  2. Generar la compuerta `#cinematicVideoGate` en la diapositiva correspondiente (con fondo `#040714` / `#040812` / `#03050F`, transición `opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1)` y HUD inferior derecho) y añadir el botón `"🎬 Intro"` en `.flowbar` vía `postMessage`.
+  3. Interceptar la primera pulsación de `ArrowRight` / `Space` cuando `#cinematicVideoGate.is-active` está visible para cerrar el video y mostrar la Etapa 1 del simulador antes de avanzar a las etapas `2..4`.
+- **Tests:**
+  - **Test Unitario:** Comprobar que la Diapo 5 compilada incluye `#cinematicVideoGate` apuntando a `video/seccion_1/diapo_5/video_anatomia_senal/anatomia_senal.mp4`.
+  - **Test de Simulación de Usuario:** Verificar en Chromium que el `<video>` carga sin error de red/ruta y realiza el handoff visual sin parpadeo (`#040714`) hacia el simulador de la Diapo 5.
+
 ---
 
-### [ ] SF10.2 — Reparación de Altura, Proporción 2D/3D y Escalado Tipográfico en la Sección 1 (Diapositivas 5 a 11)
+### [X] SF10.2 — Reparación de Altura, Proporción 2D/3D y Escalado Tipográfico en la Sección 1 (Diapositivas 5 a 11)
 
 - **Objetivo:** Corregir de raíz la Diapositiva 5 (que en la imagen del usuario aparecía aplastada en el 62% superior con textos 3D superpuestos y letra minúscula) y homologar las Diapositivas 6 a 11 para que luzcan como diapositivas reales de conferencia, sin huecos negros en la columna izquierda y con gráficos amplios y legibles.
 - **Entregable:** Los 7 prototipos en `docs/notebooklm/seccion_1/prototipos/` (`5` a `11`) actualizados.
 - **AC de la Sub fase:**
-  - [ ] La Diapo 5 ocupa el 100% del alto de la pantalla, sus dos paneles derechos (`Monitor 2D` y `Descomposición 3D`) tienen una proporción vertical equilibrada (`42% / 58%`) y las 5 etiquetas de las placas 3D jamás se superponen.
-  - [ ] Las Diapos 5 a 10 muestran tipografía amplia en la columna izquierda (`narr-title` $\ge 19\text{px}$, `narr-lead` $\ge 14\text{px}$, bloques $\ge 13\text{px}$) ocupando el 100% de la tarjeta sin huecos negros vacíos.
-  - [ ] La Diapo 11 distribuye sus 4 columnas ocupando el 100% de la altura con barras y textos legibles a distancia.
+  - [X] La Diapo 5 ocupa el 100% del alto de la pantalla, sus dos paneles derechos (`Monitor 2D` y `Descomposición 3D`) tienen una proporción vertical equilibrada (`42% / 58%`) y las 5 etiquetas de las placas 3D jamás se superponen.
+  - [X] Las Diapos 5 a 10 muestran tipografía amplia en la columna izquierda (`narr-title` $\ge 19\text{px}$, `narr-lead` $\ge 14\text{px}$, bloques $\ge 13\text{px}$) ocupando el 100% de la tarjeta sin huecos negros vacíos.
+  - [X] La Diapo 11 distribuye sus 4 columnas ocupando el 100% de la altura con barras y textos legibles a distancia.
 - **Tests de la Sub fase:**
   - **Test Unitario:** Verificar en los 7 archivos HTML de la Sección 1 la presencia de `html, body { width: 100%; height: 100%; }` y `is-embedded`.
   - **Test de Simulación de Usuario:** Capturas en Chromium a `1920×1080` y `1366×768` de las Diapos 5 a 11 confirmando cero vacíos inferiores y cero solapamientos 3D en la Diapo 5.
 
-#### [ ] T10.2.1 — Diapo 05 (`5_Anatomia_de_la_senal_temporal_v3.html`): Corrección del Colapso Vertical (62% → 100%), Proporción 2D/3D y Separación de Etiquetas 3D
+#### [X] T10.2.1 — Diapo 05 (`5_Anatomia_de_la_senal_temporal_v3.html`): Corrección del Colapso Vertical (62% → 100%), Proporción 2D/3D y Separación de Etiquetas 3D
 - **Objetivo de la Tarea:** Hacer que la Diapo 5 llene el 100% de la altura de la pantalla, equilibrar la altura de sus dos gráficos derechos (`Monitor 2D` y `Descomposición 3D`), evitar que los rótulos de las 5 placas 3D se pisen entre sí y agrandar las letras del panel izquierdo.
 - **Entregable:** `docs/notebooklm/seccion_1/prototipos/5_Anatomia_de_la_senal_temporal_v3.html` corregido.
 
@@ -380,14 +464,14 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] `5_Anatomia_de_la_senal_temporal_v3.html` incluye `if (window.self !== window.top) document.body.classList.add('is-embedded');` y `html, body { height: 100%; }`.
-  - [ ] En `1920×1080` y `1366×768`, la Diapo 5 llena el 100% de la altura del visor sin el vacío negro inferior del 38%.
-  - [ ] Las 5 etiquetas del gráfico 3D (`Y(t)`, `T(t)`, `S(t)`, `C(t)`, `ε(t)`) tienen pastilla de fondo oscuro y separación mínima de `18px`, sin pisarse nunca.
+  - [X] `5_Anatomia_de_la_senal_temporal_v3.html` incluye `if (window.self !== window.top) document.body.classList.add('is-embedded');` y `html, body { height: 100%; }`.
+  - [X] En `1920×1080` y `1366×768`, la Diapo 5 llena el 100% de la altura del visor sin el vacío negro inferior del 38%.
+  - [X] Las 5 etiquetas del gráfico 3D (`Y(t)`, `T(t)`, `S(t)`, `C(t)`, `ε(t)`) tienen pastilla de fondo oscuro y separación mínima de `18px`, sin pisarse nunca.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar con script que `is-embedded` y el algoritmo anti-colisión `labelItems` existen en `5_Anatomia_de_la_senal_temporal_v3.html`.
   - **Test de Simulación de Usuario:** Capturar `presentacion.html#5` a `1920×1080` y `1366×768` y confirmar visualmente que llena toda la pantalla y los rótulos 3D se ven separados y legibles.
 
-##### [ ] A10.2.1.1 — Corregir `is-embedded`, proporciones `.visual-column`, tipografía de capas y anti-colisión de etiquetas 3D en Diapo 05
+##### [X] A10.2.1.1 — Corregir `is-embedded`, proporciones `.visual-column`, tipografía de capas y anti-colisión de etiquetas 3D en Diapo 05
 - **Objetivo:** Reparar completamente el layout, la tipografía y el renderizado 2D/3D de `5_Anatomia_de_la_senal_temporal_v3.html`.
 - **Input:** `docs/notebooklm/seccion_1/prototipos/5_Anatomia_de_la_senal_temporal_v3.html`.
 - **Output:** `5_Anatomia_de_la_senal_temporal_v3.html` actualizado.
@@ -399,7 +483,7 @@ flowchart LR
   - **Test Unitario:** Comprobar que `grep -c "is-embedded" docs/notebooklm/seccion_1/prototipos/5_Anatomia_de_la_senal_temporal_v3.html` sea $\ge 3$.
   - **Test de Simulación de Usuario:** Inspeccionar las capturas `f10_s5_1920.png` y `f10_s5_1366.png`.
 
-#### [ ] T10.2.2 — Diapos 06, 07, 08, 09, 10 y 11 (`6_Era_1...` a `11_Arquitectura...`): Tipografía de Auditorio, Cero Huecos Negros Izquierdos y Etiquetas de Canvas Más Grandes
+#### [X] T10.2.2 — Diapos 06, 07, 08, 09, 10 y 11 (`6_Era_1...` a `11_Arquitectura...`): Tipografía de Auditorio, Cero Huecos Negros Izquierdos y Etiquetas de Canvas Más Grandes
 - **Objetivo de la Tarea:** Eliminar la franja vacía inferior y el hueco negro del 45% dentro de `.narrative-card` en las Diapos 6 a 10, escalar todas las fuentes de la columna izquierda y de los gráficos Canvas (`ctx.font`), y equilibrar las 4 columnas de la Diapo 11 al 100% de altura.
 - **Entregable:** Archivos `6_Era_1_La_parsimonia_lineal_v3.html` a `11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html` actualizados.
 
@@ -434,14 +518,14 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] Las Diapos 6, 7, 8, 9, 10 y 11 tienen `html, body { height: 100%; }` y llenan el 100% del alto del iframe sin franjas oscuras debajo del pie de página.
-  - [ ] En las Diapos 6 a 10, `.narr-blocks` ocupa todo el espacio central disponible con tarjetas de texto amplias (`13px–15.5px`) y cero huecos vacíos mayores a `20px`.
-  - [ ] En los `<canvas>` de las Diapos 6 a 10, los textos dibujados usan fuentes de `11.5px–14px` nítidas y proporcionadas al alto del lienzo.
+  - [X] Las Diapos 6, 7, 8, 9, 10 y 11 tienen `html, body { height: 100%; }` y llenan el 100% del alto del iframe sin franjas oscuras debajo del pie de página.
+  - [X] En las Diapos 6 a 10, `.narr-blocks` ocupa todo el espacio central disponible con tarjetas de texto amplias (`13px–15.5px`) y cero huecos vacíos mayores a `20px`.
+  - [X] En los `<canvas>` de las Diapos 6 a 10, los textos dibujados usan fuentes de `11.5px–14px` nítidas y proporcionadas al alto del lienzo.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar en el DOM de las Diapos 6 a 11 que `getComputedStyle(narrLead).fontSize >= 13.5px` en 1080p.
   - **Test de Simulación de Usuario:** Capturas `f10_s{6..11}_{1366,1920}.png` confirmando ocupación total y legibilidad a distancia.
 
-##### [ ] A10.2.2.1 — Actualizar CSS, distribución flex y fuentes de Canvas en Diapos 06, 07, 08, 09, 10 y 11
+##### [X] A10.2.2.1 — Actualizar CSS, distribución flex y fuentes de Canvas en Diapos 06, 07, 08, 09, 10 y 11
 - **Objetivo:** Aplicar la escala tipográfica de auditorio y el layout elástico 100% en los prototipos 6 a 11.
 - **Input:** Prototipos `6` a `11` en `docs/notebooklm/seccion_1/prototipos/`.
 - **Output:** Prototipos `6` a `11` actualizados.
@@ -455,19 +539,19 @@ flowchart LR
 
 ---
 
-### [ ] SF10.3 — Homologación Visual, Eliminación de Solapes y Unificación de Formato en la Sección 2 (Diapositivas 12 a 17)
+### [X] SF10.3 — Homologación Visual, Eliminación de Solapes y Unificación de Formato en la Sección 2 (Diapositivas 12 a 17)
 
 - **Objetivo:** Unificar las 6 diapositivas de la Sección 2 (Diapos 12 a 17) con el mismo formato gerencial y tipográfico de las Secciones 1 y 3: reemplazar los bloques antiguos `"🎙️ GUÍA DE EXPOSICIÓN"` en las Diapos 12–15 por la píldora `💡 Idea Clave` de 1 línea, corregir el solapamiento del récord `38.0 °C` en el gráfico de la Diapo 12, eliminar los huecos vacíos en la columna izquierda de las Diapos 12–15 y en la columna derecha de las Diapos 16–17, y escalar todas las fuentes a tamaño de presentación real.
 - **Entregable:** Los 6 prototipos en `docs/notebooklm/seccion_2/prototipos/` (`12` a `17`) homologados.
 - **AC de la Sub fase:**
-  - [ ] Cero apariciones de `"GUÍA DE EXPOSICIÓN (QUÉ DECIR)"` en las Diapos 12, 13, 14 y 15; todas muestran `.executive-takeaway` (`💡 Idea Clave: <máx 15 palabras>`).
-  - [ ] En la Diapo 12, el badge `"RÉCORD 38.0 °C (07-Oct-2023)"` no se superpone con los números `38.0 °C` / `37.8 °C` de los puntos rojos.
-  - [ ] En las Diapos 12–15 (columna izquierda) y 16–17 (columna derecha), las tarjetas y textos se distribuyen ocupando el 100% de la altura sin huecos negros vacíos.
+  - [X] Cero apariciones de `"GUÍA DE EXPOSICIÓN (QUÉ DECIR)"` en las Diapos 12, 13, 14 y 15; todas muestran `.executive-takeaway` (`💡 Idea Clave: <máx 15 palabras>`).
+  - [X] En la Diapo 12, el badge `"RÉCORD 38.0 °C (07-Oct-2023)"` no se superpone con los números `38.0 °C` / `37.8 °C` de los puntos rojos.
+  - [X] En las Diapos 12–15 (columna izquierda) y 16–17 (columna derecha), las tarjetas y textos se distribuyen ocupando el 100% de la altura sin huecos negros vacíos.
 - **Tests de la Sub fase:**
   - **Test Unitario:** `grep -c "GUIA DE EXPOSICION\|GUÍA DE EXPOSICIÓN" docs/notebooklm/seccion_2/prototipos/*.html` retorna `0`.
   - **Test de Simulación de Usuario:** Capturas en Chromium a `1920×1080` y `1366×768` de las Diapos 12 a 17 verificando cero solapamientos y cero vacíos negros.
 
-#### [ ] T10.3.1 — Diapos 12, 13, 14 y 15 (`12_Caso_1...` a `15_Benchmark...`): Reemplazo de `.speaker-box` por `💡 Idea Clave`, Corrección del Solape `38.0 °C` en Diapo 12 y Tipografía de Auditorio
+#### [X] T10.3.1 — Diapos 12, 13, 14 y 15 (`12_Caso_1...` a `15_Benchmark...`): Reemplazo de `.speaker-box` por `💡 Idea Clave`, Corrección del Solape `38.0 °C` en Diapo 12 y Tipografía de Auditorio
 - **Objetivo de la Tarea:** Homologar la columna narrativa de las Diapos 12, 13, 14 y 15 al estándar de la Fase 9/10 (píldora `💡 Idea Clave` de 1 línea, tipografía grande sin huecos negros) y corregir la colisión de etiquetas en el pico estacional de la Diapo 12.
 - **Entregable:** `12_Caso_1_Auditoria_Iquitos.html`, `13_Datos_SENAMHI_Punchana.html`, `14_Trampa_Arboles_Meseta_vs_Diferencias.html` y `15_Benchmark_14_Modelos_Tierra_vs_Supercomputo.html` actualizados.
 
@@ -490,14 +574,14 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] Las Diapos 12, 13, 14 y 15 usan `.executive-takeaway` (`💡 Idea Clave:`) de 1 línea ($\le 15$ palabras).
-  - [ ] En la Diapo 12, las etiquetas de los récords de calor en `Sep–Nov` no se pisan entre sí en ninguna resolución (`1366×768` ni `1920×1080`).
-  - [ ] La columna izquierda de las Diapos 12 a 15 llena el 100% de su altura con tipografía de diapositiva real y cero huecos vacíos.
+  - [X] Las Diapos 12, 13, 14 y 15 usan `.executive-takeaway` (`💡 Idea Clave:`) de 1 línea ($\le 15$ palabras).
+  - [X] En la Diapo 12, las etiquetas de los récords de calor en `Sep–Nov` no se pisan entre sí en ninguna resolución (`1366×768` ni `1920×1080`).
+  - [X] La columna izquierda de las Diapos 12 a 15 llena el 100% de su altura con tipografía de diapositiva real y cero huecos vacíos.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar ausencia de `"GUÍA DE EXPOSICIÓN"` y que todas las citas `quote` de `STAGES` en los prototipos 12–15 tengan $\le 16$ palabras.
   - **Test de Simulación de Usuario:** Inspeccionar `f10_s12_1920.png` a `f10_s15_1920.png` confirmando separación limpia del récord `38.0 °C` y formato unificado.
 
-##### [ ] A10.3.1.1 — Actualizar prototipos 12, 13, 14 y 15 con `.executive-takeaway`, tipografía grande y des-solapamiento del récord en Diapo 12
+##### [X] A10.3.1.1 — Actualizar prototipos 12, 13, 14 y 15 con `.executive-takeaway`, tipografía grande y des-solapamiento del récord en Diapo 12
 - **Objetivo:** Homologar las Diapos 12 a 15 al estándar visual de la Fase 10.
 - **Input:** Prototipos `12`, `13`, `14` y `15` en `docs/notebooklm/seccion_2/prototipos/`.
 - **Output:** Prototipos `12`, `13`, `14` y `15` actualizados.
@@ -509,7 +593,7 @@ flowchart LR
   - **Test Unitario:** `grep -c "GUIA DE EXPOSICION" docs/notebooklm/seccion_2/prototipos/1{2,3,4,5}_*.html` retorna `0`.
   - **Test de Simulación de Usuario:** Verificar capturas `f10_s{12..15}_{1366,1920}.png`.
 
-#### [ ] T10.3.2 — Diapos 16 y 17 (`16_Pronostico_7_Dias...` y `17_Pipeline_Codigo...`): Eliminación del 50% de Vacío Derecho, Escalado de Código/KPIs y Homologación Visual
+#### [X] T10.3.2 — Diapos 16 y 17 (`16_Pronostico_7_Dias...` y `17_Pipeline_Codigo...`): Eliminación del 50% de Vacío Derecho, Escalado de Código/KPIs y Homologación Visual
 - **Objetivo de la Tarea:** Eliminar el vacío negro que ocupa la mitad inferior derecha en las Diapos 16 y 17 (`f9_s16_1920.png` y `f9_s17_1920.png`), agrandar el código Python y las tarjetas KPI/Axiomas para que llenen el 100% de la altura y armonizar sus cabeceras con el resto de las secciones.
 - **Entregable:** `16_Pronostico_7_Dias_Cono_P10_P90.html` y `17_Pipeline_Codigo_Diferencias_ExtraTrees.html` actualizados.
 
@@ -538,13 +622,13 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] En la Diapo 16, las tarjetas derechas (`Cobertura Empírica`, `Tabla del Día Seleccionado`, `Desglose por Horizonte` y `💡 Idea Clave`) llenan el 100% de la altura derecha sin hueco negro inferior.
-  - [ ] En la Diapo 17, la ventana de código Python usa tipografía amplia (`13px–15.5px`) y la columna derecha (`Los 3 Axiomas`, `Puente al Acto 3` y `Métricas de Producción`) ocupa el 100% de la altura.
+  - [X] En la Diapo 16, las tarjetas derechas (`Cobertura Empírica`, `Tabla del Día Seleccionado`, `Desglose por Horizonte` y `💡 Idea Clave`) llenan el 100% de la altura derecha sin hueco negro inferior.
+  - [X] En la Diapo 17, la ventana de código Python usa tipografía amplia (`13px–15.5px`) y la columna derecha (`Los 3 Axiomas`, `Puente al Acto 3` y `Métricas de Producción`) ocupa el 100% de la altura.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar en DOM que el último hijo de la columna derecha en las Diapos 16 y 17 está a menos de `24px` del borde inferior de `.workspace`.
   - **Test de Simulación de Usuario:** Inspeccionar las capturas `f10_s16_{1366,1920}.png` y `f10_s17_{1366,1920}.png`.
 
-##### [ ] A10.3.2.1 — Expandir tarjetas derechas, código Python y cabeceras en Diapos 16 y 17
+##### [X] A10.3.2.1 — Expandir tarjetas derechas, código Python y cabeceras en Diapos 16 y 17
 - **Objetivo:** Eliminar los vacíos inferiores en las Diapos 16 y 17 y homologar su escala tipográfica.
 - **Input:** `16_Pronostico_7_Dias_Cono_P10_P90.html` y `17_Pipeline_Codigo_Diferencias_ExtraTrees.html`.
 - **Output:** Ambos archivos actualizados.
@@ -558,19 +642,19 @@ flowchart LR
 
 ---
 
-### [ ] SF10.4 — Escalado Tipográfico, Limpieza de Elementos Residuales y Relleno Armónico en la Sección 3 (Diapositivas 19 a 23)
+### [X] SF10.4 — Escalado Tipográfico, Limpieza de Elementos Residuales y Relleno Armónico en la Sección 3 (Diapositivas 19 a 23)
 
 - **Objetivo:** Corregir los elementos residuales detectados en las capturas de la Sección 3 (`f9_s19_1920.png` a `f9_s23_1920.png`): limpiar la cita larga y los banners en Diapo 19, eliminar el hueco negro del 45% en la columna izquierda de las Diapos 19 a 23 subiendo el tamaño de letra a escala de diapositiva real, y rellenar con tipografía grande y equilibrada las tarjetas derechas de las Diapos 22 y 23.
 - **Entregable:** Los 5 prototipos en `docs/notebooklm/seccion_3/prototipos/` (`19` a `23`) actualizados.
 - **AC de la Sub fase:**
-  - [ ] En la Diapo 19, `#speakerQuote` muestra una `💡 Idea Clave` de 1 línea ($\le 15$ palabras) desde el primer renderizado y los 2 banners `.canvas-split-hint` están ocultos (`hidden`).
-  - [ ] En las Diapos 19 a 23, la columna izquierda ocupa el 100% de su altura con tipografía de auditorio y sin huecos negros vacíos.
-  - [ ] En las Diapos 22 y 23, las 3 cajas derechas de diagnóstico fenológico y de las 3 trampas muestran texto amplio (`13.5px–16px`), bien distribuido verticalmente y sin vacíos internos.
+  - [X] En la Diapo 19, `#speakerQuote` muestra una `💡 Idea Clave` de 1 línea ($\le 15$ palabras) desde el primer renderizado y los 2 banners `.canvas-split-hint` están ocultos (`hidden`).
+  - [X] En las Diapos 19 a 23, la columna izquierda ocupa el 100% de su altura con tipografía de auditorio y sin huecos negros vacíos.
+  - [X] En las Diapos 22 y 23, las 3 cajas derechas de diagnóstico fenológico y de las 3 trampas muestran texto amplio (`13.5px–16px`), bien distribuido verticalmente y sin vacíos internos.
 - **Tests de la Sub fase:**
   - **Test Unitario:** Comprobar que en `19_c_mo_el_agro_invent_el_forecasting.html` el texto inicial de `#speakerQuote` tiene $\le 15$ palabras y `.canvas-split-hint` tiene `hidden`.
   - **Test de Simulación de Usuario:** Capturas `f10_s{19..23}_{1366,1920}.png` confirmando ausencia de huecos negros y legibilidad de auditorio.
 
-#### [ ] T10.4.1 — Diapos 19, 20 y 21 (`19_c_mo_el_agro...`, `20_del_almanaque...`, `21_f_sica_biol_gica...`): Limpieza Inicial de Diapo 19, Escalado Tipográfico y Gráficos a Altura Completa
+#### [X] T10.4.1 — Diapos 19, 20 y 21 (`19_c_mo_el_agro...`, `20_del_almanaque...`, `21_f_sica_biol_gica...`): Limpieza Inicial de Diapo 19, Escalado Tipográfico y Gráficos a Altura Completa
 - **Objetivo de la Tarea:** Corregir el HTML estático inicial de la Diapo 19 (`#speakerQuote` de 3 líneas y `.canvas-split-hint` visibles), activar `height: 100%` en `html, body` de las Diapos 19, 20 y 21, escalar la tipografía izquierda eliminando los huecos negros y aumentar el tamaño de las etiquetas en los gráficos de los 5 escalones (Diapo 20) y del puente biofísico (Diapo 21).
 - **Entregable:** Prototipos `19`, `20` y `21` en `docs/notebooklm/seccion_3/prototipos/` actualizados.
 
@@ -586,13 +670,13 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] La Diapo 19 renderiza desde el segundo 0 la `💡 Idea Clave` de 1 línea y cero banners `.canvas-split-hint`.
-  - [ ] Las Diapos 19, 20 y 21 llenan el 100% de la altura del iframe sin franjas vacías inferiores ni huecos negros en `.narrative-card`.
+  - [X] La Diapo 19 renderiza desde el segundo 0 la `💡 Idea Clave` de 1 línea y cero banners `.canvas-split-hint`.
+  - [X] Las Diapos 19, 20 y 21 llenan el 100% de la altura del iframe sin franjas vacías inferiores ni huecos negros en `.narrative-card`.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar en `19_c_mo_el_agro_invent_el_forecasting.html` que `#speakerQuote` inicial tiene $\le 15$ palabras.
   - **Test de Simulación de Usuario:** Capturas `f10_s{19,20,21}_{1366,1920}.png`.
 
-##### [ ] A10.4.1.1 — Sincronizar HTML inicial de Diapo 19 y escalar tipografía y lienzos en Diapos 19, 20 y 21
+##### [X] A10.4.1.1 — Sincronizar HTML inicial de Diapo 19 y escalar tipografía y lienzos en Diapos 19, 20 y 21
 - **Objetivo:** Limpiar los elementos residuales de la Diapo 19 y aplicar el layout 100% y tipografía de diapositiva real en las Diapos 19, 20 y 21.
 - **Input:** Prototipos `19`, `20` y `21` en `docs/notebooklm/seccion_3/prototipos/`.
 - **Output:** Prototipos `19`, `20` y `21` actualizados.
@@ -604,7 +688,7 @@ flowchart LR
   - **Test Unitario:** Ejecutar `scripts/audit_f10_layout_typography.py` sobre los prototipos 19, 20 y 21.
   - **Test de Simulación de Usuario:** Inspeccionar `f10_s{19,20,21}_1920.png`.
 
-#### [ ] T10.4.2 — Diapos 22 y 23 (`22_reloj_fenol_gico...` y `23_precisi_n_actual...`): Relleno Visual y Tipografía Grande en las Tarjetas Derechas de Diagnóstico y de las 3 Trampas
+#### [X] T10.4.2 — Diapos 22 y 23 (`22_reloj_fenol_gico...` y `23_precisi_n_actual...`): Relleno Visual y Tipografía Grande en las Tarjetas Derechas de Diagnóstico y de las 3 Trampas
 - **Objetivo de la Tarea:** Eliminar el aspecto vacío de las 3 cajas derechas de diagnóstico en la Diapo 22 (`f9_s22_1920.png`) y de las 3 tarjetas de trampas en la Diapo 23 (`f9_s23_1920.png`), escalando sus títulos, textos y píldoras de remedio a tamaño de diapositiva real y centrando su distribución vertical.
 - **Entregable:** `22_reloj_fenol_gico_del_caf.html` y `23_precisi_n_actual_y_las_tres_trampas.html` actualizados.
 
@@ -655,13 +739,13 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] En la Diapo 22, las 3 cajas del panel de diagnóstico derecho muestran texto de `14px–16.5px` centrado verticalmente sin huecos negros vacíos.
-  - [ ] En la Diapo 23, las 3 tarjetas de trampas muestran el título en `14.5px–17px`, la descripción en `13px–15px` y el `✅ Remedio` en una píldora con fondo esmeralda suave ocupando armónicamente toda la tarjeta.
+  - [X] En la Diapo 22, las 3 cajas del panel de diagnóstico derecho muestran texto de `14px–16.5px` centrado verticalmente sin huecos negros vacíos.
+  - [X] En la Diapo 23, las 3 tarjetas de trampas muestran el título en `14.5px–17px`, la descripción en `13px–15px` y el `✅ Remedio` en una píldora con fondo esmeralda suave ocupando armónicamente toda la tarjeta.
 - **Tests de la Tarea:**
   - **Test Unitario:** Verificar tamaños de fuente computados en `.trap-card` y `.diag-item` en Chromium headless.
   - **Test de Simulación de Usuario:** Inspeccionar las capturas `f10_s22_{1366,1920}.png` y `f10_s23_{1366,1920}.png`.
 
-##### [ ] A10.4.2.1 — Escalar tipografía y diseño de tarjetas derechas en Diapos 22 y 23
+##### [X] A10.4.2.1 — Escalar tipografía y diseño de tarjetas derechas en Diapos 22 y 23
 - **Objetivo:** Eliminar los vacíos internos en los paneles derechos de las Diapos 22 y 23 y aumentar la legibilidad de todos sus textos.
 - **Input:** `22_reloj_fenol_gico_del_caf.html` y `23_precisi_n_actual_y_las_tres_trampas.html`.
 - **Output:** Ambos prototipos actualizados.
@@ -674,19 +758,19 @@ flowchart LR
 
 ---
 
-### [ ] SF10.5 — Compilación del Deck Maestro y Auditoría Automatizada Multi-Resolución (`1920×1080` y `1366×768`)
+### [X] SF10.5 — Compilación del Deck Maestro y Auditoría Automatizada Multi-Resolución (`1920×1080` y `1366×768`)
 
 - **Objetivo:** Compilar `presentacion.html` e `index.html` a través del nuevo motor `front/prototype_engine.py`, ejecutar un script de auditoría geométrica y tipográfica (`scripts/audit_f10_layout_typography.py`) y generar las **36 capturas de pantalla (`18 diapos × 2 resoluciones`)** certificando que cada diapositiva de las Secciones 1, 2 y 3 se ve como una diapositiva real, uniforme y auto-ajustable.
 - **Entregable:** `scripts/audit_f10_layout_typography.py`, `presentacion.html`, `index.html` y las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png`.
 - **AC de la Sub fase:**
-  - [ ] `scripts/audit_f10_layout_typography.py` retorna `exit code 0` validando los 18 prototipos.
-  - [ ] `back/build_deck.py` genera `presentacion.html` e `index.html` sin errores.
-  - [ ] Las 36 capturas PNG en `1920×1080` y `1366×768` confirman 100% de ocupación vertical, letras grandes y legibles, y cero solapamientos.
+  - [X] `scripts/audit_f10_layout_typography.py` retorna `exit code 0` validando los 18 prototipos.
+  - [X] `back/build_deck.py` genera `presentacion.html` e `index.html` sin errores.
+  - [X] Las 36 capturas PNG en `1920×1080` y `1366×768` confirman 100% de ocupación vertical, letras grandes y legibles, y cero solapamientos.
 - **Tests de la Sub fase:**
   - **Test Unitario:** `.venv/bin/python scripts/audit_f10_layout_typography.py`.
   - **Test de Simulación de Usuario:** Generación e inspección de las 36 capturas en Chromium headless.
 
-#### [ ] T10.5.1 — Crear y Ejecutar `scripts/audit_f10_layout_typography.py` y Capturar las 36 Vistas en Chromium (`1920×1080` y `1366×768`)
+#### [X] T10.5.1 — Crear y Ejecutar `scripts/audit_f10_layout_typography.py` y Capturar las 36 Vistas en Chromium (`1920×1080` y `1366×768`)
 - **Objetivo de la Tarea:** Automatizar la verificación del motor `front/prototype_engine.py`, de los 18 prototipos de las Secciones 1, 2 y 3, y generar las 36 capturas de pantalla comparativas.
 - **Entregable:** `scripts/audit_f10_layout_typography.py` y `screenshots/f10_s{5..17,19..23}_{1366,1920}.png`.
 
@@ -706,13 +790,13 @@ flowchart LR
 > ```
 
 - **AC de la Tarea:**
-  - [ ] `scripts/audit_f10_layout_typography.py` valida con éxito los 18 prototipos de las Secciones 1, 2 y 3 y el motor `front/prototype_engine.py`.
-  - [ ] Existen las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png` y todas muestran un diseño uniforme de diapositiva real al 100% de altura.
+  - [X] `scripts/audit_f10_layout_typography.py` valida con éxito los 18 prototipos de las Secciones 1, 2 y 3 y el motor `front/prototype_engine.py`.
+  - [X] Existen las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png` y todas muestran un diseño uniforme de diapositiva real al 100% de altura.
 - **Tests de la Tarea:**
   - **Test Unitario:** `.venv/bin/python scripts/audit_f10_layout_typography.py` termina con código `0`.
   - **Test de Simulación de Usuario:** Inspección visual de las capturas `f10_s5_1920.png`, `f10_s12_1920.png`, `f10_s16_1920.png`, `f10_s19_1920.png`, `f10_s22_1920.png` y `f10_s23_1920.png` en `1920×1080` y `1366×768`.
 
-##### [ ] A10.5.1.1 — Implementar `scripts/audit_f10_layout_typography.py`, compilar deck y generar las 36 capturas PNG
+##### [X] A10.5.1.1 — Implementar `scripts/audit_f10_layout_typography.py`, compilar deck y generar las 36 capturas PNG
 - **Objetivo:** Certificar técnica y visualmente el cierre de la Fase 10.
 - **Input:** `front/prototype_engine.py`, `back/build_deck.py` y los 18 prototipos HTML.
 - **Output:** `scripts/audit_f10_layout_typography.py`, `presentacion.html`, `index.html` y 36 capturas PNG.

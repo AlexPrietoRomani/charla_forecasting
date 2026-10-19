@@ -27,7 +27,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -164,7 +164,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--ancestral);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -336,7 +336,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   --stage-accent: var(--ancestral);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(8px, 1vh, 12px);
   padding: clamp(12px, 1.3vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
@@ -345,7 +345,8 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   scrollbar-width: thin;
 }
 
@@ -392,13 +393,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -408,10 +409,16 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -423,7 +430,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -431,7 +438,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -451,7 +458,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 }
 
 .math-strip span.hint {
-  font: 500 9.5px/1.2 var(--sans);
+  font: 500 11.5px/1.2 var(--sans);
   color: #94a3b8;
   text-align: right;
 }
@@ -464,7 +471,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   border-radius: 8px;
   border: 1px solid rgba(56, 239, 255, 0.28);
   background: linear-gradient(135deg, rgba(14, 116, 144, 0.22), rgba(7, 13, 28, 0.9));
-  font: 600 clamp(10px, 0.76vw, 11.5px)/1.3 var(--sans);
+  font: 600 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
   color: #edf5ff;
   margin-top: auto;
   flex-shrink: 0;
@@ -906,7 +913,7 @@ input[type="range"] {
 
       <div class="canvas-wrap">
         <canvas id="stageCanvas"></canvas>
-        <div class="canvas-overlay-top">
+        <div class="canvas-overlay-top" hidden>
           <span class="ov-badge left" id="ovLeft">☀️ 10,000 a.C. (Almanaque y Bioindicadores)</span>
           <span class="ov-badge right" id="ovRight">🌐 Presente (Malla 3D y Telemetría)</span>
         </div>
@@ -1062,7 +1069,7 @@ input[type="range"] {
       b2Text: 'El almanaque ancestral asumía que el clima era <b>estacionario</b> (que cada década se repetía igual). Ante el cambio climático actual, necesitamos unir ese saber botánico con telemetría en tiempo real.',
       formula: 'Almanaque (Bioindicadores)  ⟷  Gemelo Digital (Sensores + IA)',
       hint: 'Desliza la cortina inferior para cruzar 10,000 años',
-      quote: '“Miren, todos creen que predecir el futuro lo inventó Silicon Valley. Falso. El agricultor lleva diez mil años mirando las nubes para no morir de hambre. La diferencia es que antes usábamos el almanaque y las cabañuelas, y hoy usamos redes neuronales.”',
+      quote: '“El agricultor inventó el forecasting hace 10,000 años; ahora lo hacemos con redes neuronales.”',
       icon: '🌾',
       canvasTitle: 'Espejo Histórico Interactivo: Valle Ancestral (10,000 a.C.) ↔ Gemelo Digital IA',
       ovLeft: '☀️ Izquierda: 10,000 a.C. (Almanaque, Andenes y Bioindicadores)',
@@ -1081,7 +1088,7 @@ input[type="range"] {
       b2Text: 'Alimentar un modelo con el clima de “ayer” (<i>t−1</i>) no sirve. La red neuronal debe mirar hacia atrás en la ventana biológica donde se formó la flor (<b>τ = 6 a 8 meses atrás</b>).',
       formula: 'Cosecha Yₜ = f( Clima en Floración Xₜ₋τ )  con  τ = 6 a 8 meses',
       hint: 'Ajusta el estrés en floración abajo y mira qué pasa 7 meses después',
-      quote: '“Una planta de café no olvida. Si pasa sed dos semanas en septiembre cuando está abriendo la flor, aborta el fruto; y aunque en enero caiga un diluvio y el campo se vea verde, ya perdiste la mitad de la cosecha ocho meses antes de recogerla.”',
+      quote: '“La planta no olvida: una sequía en floración decide la cosecha siete meses después.”',
       icon: '⏳',
       canvasTitle: 'Línea de Tiempo Biológica: Cómo una Sequía en Floración Destruye la Cosecha 7 Meses Después',
       ovLeft: '🌸 Hace 7 Meses (Ago–Oct): Floración y Cuajado Crítico',
@@ -1100,7 +1107,7 @@ input[type="range"] {
       b2Text: '<i>“Pero la regla de oro no ha cambiado: <b>si nuestro código no respeta la biología de la planta, los datos no sirven para nada</b>.”</i>',
       formula: 'IA Pura (100% In-Sample / 0% Botánica) = Fracaso en Campo',
       hint: 'Cambia el lente experto abajo para ver qué sesgo detecta cada uno',
-      quote: '“Podemos tener el Transformer más caro del mundo con 100% de precisión en el laboratorio, pero si nuestro código no respeta la biología de la planta ni entiende cómo se midió el dato, en el campo no sirve para nada.”',
+      quote: '“Sin botánica, el Transformer más caro del mundo no sirve en el campo.”',
       icon: '⚖️',
       canvasTitle: 'Choque de Paradigmas: IA Ciega a la Botánica vs. Pronóstico Guiado por la Física',
       ovLeft: '✕ Izquierda: IA de Caja Negra (Ignora umbrales y retardos τ)',
@@ -1119,7 +1126,7 @@ input[type="range"] {
       b2Text: 'En la siguiente diapositiva recorreremos esta explosión de densidad (de las <i>alcancías de calor GDD</i> al <i>NDVI satelital</i>) y descubriremos por qué tener más datos por segundo no basta si no llegan a tiempo.',
       formula: 'Hito 1 (Almanaque) ➔ Hito 2 (Parcela) ➔ Hito 3 (GDD) ➔ Hito 4 (NDVI) ➔ Hito 5 (IoT/IA)',
       hint: 'Explora los 5 Hitos con el deslizador antes de pasar a la Diapo 20',
-      quote: '“Cada instrumento que inventamos resolvió un problema pero nos dejó un punto ciego: el satélite ve todo el valle pero se satura en verde; el sensor IoT ve el suelo pero no ve el récord histórico. Pasemos a la Diapositiva 20 para ver esta evolución del almanaque al satélite.”',
+      quote: '“Cada instrumento resolvió un problema pero dejó una ceguera nueva: pasemos a la Diapositiva 20.”',
       icon: '🛰️',
       canvasTitle: 'Matriz Genealogía Observacional (Los 5 Hitos): Logros, Supuestos Heredados y Cegueras',
       ovLeft: '📜 Los 5 Escalones de Observación Agrícola (Sección 1)',
@@ -1269,7 +1276,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('☽ ALMANAQUE Y CABAÑUELAS ☀', wheelX, wheelY + wheelR + 16);
 
@@ -1336,11 +1343,11 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(18, h - 86, Math.min(290, splitX - 30), 68, 9); ctx.fill(); ctx.stroke();
     if (splitX > 180) {
       ctx.fillStyle = '#ffc05c';
-      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.font = '700 13px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText('🌾 10,000 a.C.: BIOINDICADORES', 30, h - 66);
       ctx.fillStyle = '#f8fafc';
-      ctx.font = '500 10px Inter, sans-serif';
+      ctx.font = '500 13px Inter, sans-serif';
       ctx.fillText('• Fases lunares, floración nativa y aves.', 30, h - 48);
       ctx.fillText('• El agricultor: 1er científico de datos.', 30, h - 32);
     }
@@ -1393,7 +1400,7 @@ input[type="range"] {
       ctx.stroke();
 
       ctx.fillStyle = '#a7f3d0';
-      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText('📈 TELEMETRÍA MULTIESPECTRAL & IA', chartX + 10, chartY + 15);
     }
@@ -1457,7 +1464,7 @@ input[type="range"] {
         ctx.fillStyle = '#ffc05c';
         ctx.beginPath(); ctx.arc(px, py - 24, 4, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#fde68a';
-        ctx.font = '700 8.5px "JetBrains Mono"';
+        ctx.font = '700 11.5px "JetBrains Mono"';
         ctx.textAlign = 'center';
         ctx.fillText(p.val, px, py - 32);
       }
@@ -1472,11 +1479,11 @@ input[type="range"] {
       ctx.beginPath(); ctx.roundRect(w - rCardW - 18, h - 86, rCardW, 68, 9); ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = '#6ef0b4';
-      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.font = '700 13px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText('🌐 HOY: REDES Y BIOLOGÍA', w - rCardW - 6, h - 66);
       ctx.fillStyle = '#f8fafc';
-      ctx.font = '500 10px Inter, sans-serif';
+      ctx.font = '500 13px Inter, sans-serif';
       ctx.fillText('• Sensores IoT, satélites y redes neuronales.', w - rCardW - 6, h - 48);
       ctx.fillText('• Misma regla: respetar la física botánica.', w - rCardW - 6, h - 32);
     }
@@ -1502,7 +1509,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('↔', splitX, h * 0.50 + 3.5);
     ctx.restore();
@@ -1526,7 +1533,7 @@ input[type="range"] {
     ctx.fillRect(xFeb, padT, padL + pw - xFeb, ph);
 
     // Etiquetas de ventanas
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillStyle = '#fda4af';
     ctx.fillText('1. FLORACIÓN (AGO–OCT)', (padL + xOct) / 2, padT + 16);
@@ -1539,7 +1546,7 @@ input[type="range"] {
     months.forEach((m, i) => {
       const xx = X(i);
       ctx.fillStyle = '#94a3b8';
-      ctx.font = '600 9px "JetBrains Mono"';
+      ctx.font = '600 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(m, xx, padT + ph + 16);
     });
@@ -1557,7 +1564,7 @@ input[type="range"] {
     ctx.restore();
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('⏳ MEMORIA FISIOLÓGICA DE LA PLANTA: τ = 6 a 8 MESES DE RETARDO', (startArcX + endArcX) / 2, padT + 38);
 
@@ -1601,12 +1608,12 @@ input[type="range"] {
 
     if (state.stressLoss > 0) {
       ctx.fillStyle = '#fda4af';
-      ctx.font = '700 10.5px "JetBrains Mono"';
+      ctx.font = '700 13.5px "JetBrains Mono"';
       ctx.textAlign = 'right';
       ctx.fillText(`🥀 -${state.stressLoss}% Pérdida Irreversible (Aborto Floral en Sep)`, padL + pw - 10, yStressed + 18);
     }
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('🍒 Potencial Saludable (100%)', padL + pw - 10, yHealthy - 8);
   }
@@ -1637,7 +1644,7 @@ input[type="range"] {
       ctx.shadowBlur = 0;
 
       ctx.fillStyle = ln.color;
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText(ln.role, cx + 12, padT + 18);
 
@@ -1679,7 +1686,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⚖️ DEMOSTRACIÓN EN CAMPO: ¿QUÉ PASA CUANDO EL ALGORITMO IGNORA LA BOTÁNICA?', pad + 14, botY + 18);
 
@@ -1689,25 +1696,25 @@ input[type="range"] {
     // Fila 1: IA Ciega a la Botánica
     const r1Y = botY + 38;
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.fillText('1. IA Ciega (Sin Fenología):', pad + 14, r1Y + 10);
     ctx.fillStyle = 'rgba(255, 82, 119, 0.28)';
     ctx.fillRect(bLeft, r1Y, bMaxW * 0.98, 13);
     ctx.fillStyle = '#ff5277';
     ctx.fillRect(bLeft, r1Y + 16, bMaxW * 0.22, 13);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.font = '600 11.5px "JetBrains Mono"';
     ctx.fillText('Laboratorio: 99% (Memoriza ruido)  ➔  En Campo Real: 22% (Fracaso estrepitoso)', bLeft + 8, r1Y + 10);
 
     // Fila 2: IA Guiada por la Física y Biología
     const r2Y = botY + 78;
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.fillText('2. IA + Biología (Con τ y VPD):', pad + 14, r2Y + 10);
     ctx.fillStyle = '#6ef0b4';
     ctx.fillRect(bLeft, r2Y, bMaxW * 0.91, 16);
     ctx.fillStyle = '#040812';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText('En Campo Real: Reduce 4× el error (Respeta floración τ, umbrales y suelo)', bLeft + 8, r2Y + 12);
     ctx.restore();
   }
@@ -1740,7 +1747,7 @@ input[type="range"] {
     let accX = pad;
     cols.forEach(c => {
       ctx.fillStyle = '#e9d5ff';
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'left';
       ctx.fillText(c.name, accX + 8, padT + rowH * 0.64);
       accX += usableW * c.w;
@@ -1771,7 +1778,7 @@ input[type="range"] {
       let cx = pad;
       cells.forEach((txt, ci) => {
         ctx.fillStyle = ci === 0 ? m.color : (ci === 3 ? '#fda4af' : (isSel ? '#ffffff' : '#cbd5e1'));
-        ctx.font = (ci === 0 || isSel) ? '700 9px "JetBrains Mono"' : '500 9px Inter, sans-serif';
+        ctx.font = (ci === 0 || isSel) ? '700 11.5px "JetBrains Mono"' : '500 11.5px Inter, sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText(txt, cx + 8, ry + rowH * 0.64);
         cx += usableW * cols[ci].w;
@@ -1790,7 +1797,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#a7f3d0';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 20: “Del Almanaque al Satélite” (De 1 dato/año a 1 dato/día/píxel con GDD y NDVI)', pad + usableW / 2, bannerY + 20);
     ctx.restore();

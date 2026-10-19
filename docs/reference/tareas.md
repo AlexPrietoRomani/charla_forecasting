@@ -1,6 +1,6 @@
 # Tablero de Tareas — Charla Forecasting & IA (v2 Real-Data)
 
-> **Estado General:** `[X] F1–F9 Completadas al 100% · [ ] F10 (motor de estilos) pendiente · [/] F11 (videos por diapositiva) en progreso`  
+> **Estado General:** `[X] F1–F9 Completadas al 100% · [X] F10 (motor de estilos) completada · [/] F11 (videos por diapositiva) en progreso`  
 > **Convenciones:** `[ ]` pendiente · `[/]` en progreso · `[X]` completado y verificado.  
 > **Documento Rector:** [`docs/plan/plan_maestro.md`](../plan/plan_maestro.md)  
 > **Detalle por Fases:** [`docs/task/fases/`](fases/)
@@ -265,37 +265,49 @@
 
 ## F10: Motor de Normalización de Estilos en el Compilador y Homologación Visual-Tipográfica de Diapositiva Real (Secciones 1, 2 y 3)
 *Detalle completo con 🧠 Explicación, 💡 Cómo hacerlo (código), AC y Tests en:* [`docs/task/fases/fase_10_motor_estilos_y_homologacion_s1_s2_s3.md`](fases/fase_10_motor_estilos_y_homologacion_s1_s2_s3.md)
-> **Estado:** `[ ] Pendiente de Ejecución`  
+> **Estado:** `[X] Completada al 100%` (auditoría F10 en verde)  
 > **Macro-objetivo:** Transformar las 18 diapositivas interactivas de las Secciones 1 (Diapos 5–11), 2 (Diapos 12–17) y 3 (Diapos 19–23) en **diapositivas reales de auditorio** (tipografía amplia y legible a distancia, ocupación exacta del 100% del alto sin franjas ni huecos negros, lienzos derechos con relación de aspecto armónica auto-ajustable en cualquier laptop y formato 100% unificado) mediante un **Motor de Normalización de Prototipos (`front/prototype_engine.py`)** integrado en `back/build_deck.py`.
 
-- [ ] **SF10.1 Creación del Motor de Normalización e Inyección de Estilos en el Compilador (`front/prototype_engine.py` + `back/build_deck.py`)**
-  - [ ] **T10.1.1 Implementar `front/prototype_engine.py` con CSS Maestro de Diapositiva Real, Normalizador DOM y Runtime Responsivo**
-    - [ ] A10.1.1.1 Crear `front/prototype_engine.py` con `ENGINE_OVERRIDE_CSS` (contrato `height: 100%`, tipografía fluida `clamp()` de auditorio, distribución flex anti-vacíos), `ENGINE_RUNTIME_JS` (auto `is-embedded` y `ResizeObserver` universal para `<canvas>`) y funciones `normalize_prototype_html()` / `load_prototype_b64()`.
-  - [ ] **T10.1.2 Conectar `front/prototype_engine.py` en `back/build_deck.py` con Soporte Automático Multi-Sección**
-    - [ ] A10.1.2.1 Refactorizar `back/build_deck.py` para que los 18 prototipos (Secciones 1, 2 y 3) y futuros HTMLs se procesen mediante `load_prototype_b64()`.
-- [ ] **SF10.2 Reparación de Altura, Proporción 2D/3D y Escalado Tipográfico en la Sección 1 (Diapositivas 5 a 11)**
-  - [ ] **T10.2.1 Diapo 05 (`5_Anatomia_de_la_senal_temporal_v3.html`): Corrección del Colapso Vertical (62% → 100%), Proporción 2D/3D y Separación de Etiquetas 3D**
-    - [ ] A10.2.1.1 Añadir `is-embedded` y `height: 100%`, ajustar `.visual-column` a `42% / 58%`, escalar textos de `.layer-row` e implementar algoritmo anti-colisión con pastillas `roundRect` para las 5 etiquetas 3D en `draw3D()`.
-  - [ ] **T10.2.2 Diapos 06, 07, 08, 09, 10 y 11 (`6_Era_1...` a `11_Arquitectura...`): Tipografía de Auditorio, Cero Huecos Negros Izquierdos y Etiquetas de Canvas Más Grandes**
-    - [ ] A10.2.2.1 Aplicar `height: 100%` en `html, body`, distribuir `.narr-blocks` con `flex: 1; justify-content: space-evenly`, escalar fuentes explicativas (`13px–16px`) y agrandar `ctx.font` dentro de los Canvas de las Diapos 6 a 11.
-- [ ] **SF10.3 Homologación Visual, Eliminación de Solapes y Unificación de Formato en la Sección 2 (Diapositivas 12 a 17)**
-  - [ ] **T10.3.1 Diapos 12, 13, 14 y 15 (`12_Caso_1...` a `15_Benchmark...`): Reemplazo de `.speaker-box` por `💡 Idea Clave`, Corrección del Solape `38.0 °C` en Diapo 12 y Tipografía de Auditorio**
-    - [ ] A10.3.1.1 Reemplazar `"🎙️ GUÍA DE EXPOSICIÓN"` por `.executive-takeaway` (`💡 Idea Clave` de 1 línea), separar el badge `"RÉCORD 38.0 °C"` de los puntos en el Canvas de la Diapo 12 y eliminar los huecos vacíos en `.narrative-card`.
-  - [ ] **T10.3.2 Diapos 16 y 17 (`16_Pronostico_7_Dias...` y `17_Pipeline_Codigo...`): Eliminación del 50% de Vacío Derecho, Escalado de Código/KPIs y Homologación Visual**
-    - [ ] A10.3.2.1 Expandir las tarjetas de la columna derecha con `flex: 1; justify-content: space-between`, escalar la fuente del código Python (`13px–15.5px`) y unificar la píldora `💡 Idea Clave` en las Diapos 16 y 17.
-- [ ] **SF10.4 Escalado Tipográfico, Limpieza de Elementos Residuales y Relleno Armónico en la Sección 3 (Diapositivas 19 a 23)**
-  - [ ] **T10.4.1 Diapos 19, 20 y 21 (`19_c_mo_el_agro...`, `20_del_almanaque...`, `21_f_sica_biol_gica...`): Limpieza Inicial de Diapo 19, Escalado Tipográfico y Gráficos a Altura Completa**
-    - [ ] A10.4.1.1 Sincronizar el HTML inicial de `#speakerQuote` (1 línea) y ocultar `.canvas-split-hint` en Diapo 19, activar `height: 100%` y escalar fuentes en `.narrative-card` y Canvas de las Diapos 19, 20 y 21.
-  - [ ] **T10.4.2 Diapos 22 y 23 (`22_reloj_fenol_gico...` y `23_precisi_n_actual...`): Relleno Visual y Tipografía Grande en las Tarjetas Derechas de Diagnóstico y de las 3 Trampas**
-    - [ ] A10.4.2.1 Escalar a `14px–16.5px` y centrar verticalmente las 3 cajas derechas de la Diapo 22 y las 3 tarjetas de trampas de la Diapo 23, eliminando el 70% de hueco negro interno.
-- [ ] **SF10.5 Compilación del Deck Maestro y Auditoría Automatizada Multi-Resolución (`1920×1080` y `1366×768`)**
-  - [ ] **T10.5.1 Crear y Ejecutar `scripts/audit_f10_layout_typography.py` y Capturar las 36 Vistas en Chromium (`1920×1080` y `1366×768`)**
-    - [ ] A10.5.1.1 Implementar `scripts/audit_f10_layout_typography.py`, compilar `presentacion.html` e `index.html` y generar las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png` verificando 0 huecos, 0 solapes y tipografía de diapositiva real.
+- [X] **SF10.1 Creación del Motor de Normalización e Inyección de Estilos en el Compilador (`front/prototype_engine.py` + `back/build_deck.py`)**
+  - [X] **T10.1.1 Implementar `front/prototype_engine.py` con CSS Maestro de Diapositiva Real, Normalizador DOM y Runtime Responsivo**
+    - [X] A10.1.1.1 Crear `front/prototype_engine.py` con `ENGINE_OVERRIDE_CSS` (contrato `height: 100%`, tipografía fluida `clamp()` de auditorio, distribución flex anti-vacíos), `ENGINE_RUNTIME_JS` (auto `is-embedded` y `ResizeObserver` universal para `<canvas>`) y funciones `normalize_prototype_html()` / `load_prototype_b64()`.
+  - [X] **T10.1.2 Conectar `front/prototype_engine.py` en `back/build_deck.py` con Soporte Automático Multi-Sección**
+    - [X] A10.1.2.1 Refactorizar `back/build_deck.py` para que los 18 prototipos (Secciones 1, 2 y 3) y futuros HTMLs se procesen mediante `load_prototype_b64()`.
+  - [X] **T10.1.3 Inyección Automática de Entrada Cinemática de Video (`#cinematicVideoGate`) y Handoff Sin Costura (`#040714`) en `front/prototype_engine.py` (Sinergia F10 ↔ F11)**
+    - [X] A10.1.3.1 Implementar `discover_slide_video(root_dir, section_num, slide_num)` e inyectar `#cinematicVideoGate` (Etapa 0 a pantalla completa dentro de la misma diapositiva + botón `"🎬 Intro"` en `.flowbar`) para cualquier video presente en `video/seccion_{N}/diapo_{M}/video_*/`.
+- [X] **SF10.2 Reparación de Altura, Proporción 2D/3D y Escalado Tipográfico en la Sección 1 (Diapositivas 5 a 11)**
+  - [X] **T10.2.1 Diapo 05 (`5_Anatomia_de_la_senal_temporal_v3.html`): Corrección del Colapso Vertical (62% → 100%), Proporción 2D/3D y Separación de Etiquetas 3D**
+    - [X] A10.2.1.1 Añadir `is-embedded` y `height: 100%`, ajustar `.visual-column` a `42% / 58%`, escalar textos de `.layer-row` e implementar algoritmo anti-colisión con pastillas `roundRect` para las 5 etiquetas 3D en `draw3D()`.
+  - [X] **T10.2.2 Diapos 06, 07, 08, 09, 10 y 11 (`6_Era_1...` a `11_Arquitectura...`): Tipografía de Auditorio, Cero Huecos Negros Izquierdos y Etiquetas de Canvas Más Grandes**
+    - [X] A10.2.2.1 Aplicar `height: 100%` en `html, body`, distribuir `.narr-blocks` con `flex: 1; justify-content: space-evenly`, escalar fuentes explicativas (`13px–16px`) y agrandar `ctx.font` dentro de los Canvas de las Diapos 6 a 11.
+- [X] **SF10.3 Homologación Visual, Eliminación de Solapes y Unificación de Formato en la Sección 2 (Diapositivas 12 a 17)**
+  - [X] **T10.3.1 Diapos 12, 13, 14 y 15 (`12_Caso_1...` a `15_Benchmark...`): Reemplazo de `.speaker-box` por `💡 Idea Clave`, Corrección del Solape `38.0 °C` en Diapo 12 y Tipografía de Auditorio**
+    - [X] A10.3.1.1 Reemplazar `"🎙️ GUÍA DE EXPOSICIÓN"` por `.executive-takeaway` (`💡 Idea Clave` de 1 línea), separar el badge `"RÉCORD 38.0 °C"` de los puntos en el Canvas de la Diapo 12 y eliminar los huecos vacíos en `.narrative-card`.
+  - [X] **T10.3.2 Diapos 16 y 17 (`16_Pronostico_7_Dias...` y `17_Pipeline_Codigo...`): Eliminación del 50% de Vacío Derecho, Escalado de Código/KPIs y Homologación Visual**
+    - [X] A10.3.2.1 Expandir las tarjetas de la columna derecha con `flex: 1; justify-content: space-between`, escalar la fuente del código Python (`13px–15.5px`) y unificar la píldora `💡 Idea Clave` en las Diapos 16 y 17.
+- [X] **SF10.4 Escalado Tipográfico, Limpieza de Elementos Residuales y Relleno Armónico en la Sección 3 (Diapositivas 19 a 23)**
+  - [X] **T10.4.1 Diapos 19, 20 y 21 (`19_c_mo_el_agro...`, `20_del_almanaque...`, `21_f_sica_biol_gica...`): Limpieza Inicial de Diapo 19, Escalado Tipográfico y Gráficos a Altura Completa**
+    - [X] A10.4.1.1 Sincronizar el HTML inicial de `#speakerQuote` (1 línea) y ocultar `.canvas-split-hint` en Diapo 19, activar `height: 100%` y escalar fuentes en `.narrative-card` y Canvas de las Diapos 19, 20 y 21.
+  - [X] **T10.4.2 Diapos 22 y 23 (`22_reloj_fenol_gico...` y `23_precisi_n_actual...`): Relleno Visual y Tipografía Grande en las Tarjetas Derechas de Diagnóstico y de las 3 Trampas**
+    - [X] A10.4.2.1 Escalar a `14px–16.5px` y centrar verticalmente las 3 cajas derechas de la Diapo 22 y las 3 tarjetas de trampas de la Diapo 23, eliminando el 70% de hueco negro interno.
+- [X] **SF10.5 Compilación del Deck Maestro y Auditoría Automatizada Multi-Resolución (`1920×1080` y `1366×768`)**
+  - [X] **T10.5.1 Crear y Ejecutar `scripts/audit_f10_layout_typography.py` y Capturar las 36 Vistas en Chromium (`1920×1080` y `1366×768`)**
+    - [X] A10.5.1.1 Implementar `scripts/audit_f10_layout_typography.py`, compilar `presentacion.html` e `index.html` y generar las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png` verificando 0 huecos, 0 solapes y tipografía de diapositiva real.
 
 ---
 
 ## F11: Videos Deterministas por Diapositiva (Pipeline Offline + Estructura `video/`)
-*Detalle completo en:* [`docs/task/fases/fase_11_videos_por_diapositiva.md`](fases/fase_11_videos_por_diapositiva.md)
+*Detalle completo y fichas de producción en:* [`docs/task/fases/fase_11_videos_por_diapositiva.md`](fases/fase_11_videos_por_diapositiva.md)
+
+| Sección | Diapo | Slug | Rol | Duración | Prioridad | Estado |
+| :---: | :---: | :--- | :---: | :---: | :---: | :---: |
+| **Sección 1** *(Acto 1)* | **Diapo 05** | `video_anatomia_senal` | `entrada` *(Diapo 4 → 5)* | `30 s` *(900 f)* | **Alta** *(Piloto #1)* | `completado` *(MP4 listo; pend. integración)* |
+| **Sección 3** *(Acto 3)* | **Diapo 19** | `video_agro_origen` | `entrada` *(Diapo 18 → 19)* | `30 s` *(900 f)* | **Alta** *(Piloto #2 · SF11.3)* | `pendiente` |
+| **Sección 1** *(Acto 1)* | **Diapo 07** | `video_puente_tabular` | `entrada` *(Diapo 6 → 7)* | `30 s` *(900 f)* | **Alta** | `pendiente` |
+| **Sección 3** *(Acto 3)* | **Diapo 21** | `video_fisica_biologica` | `entrada` *(Diapo 20 → 21)* | `30 s` *(900 f)* | **Alta** | `pendiente` |
+| **Sección 1** *(Acto 1)* | **Diapo 09** | `video_zero_shot_tsfm` | `entrada` *(Diapo 8 → 9)* | `30 s` *(900 f)* | **Media** | `pendiente` |
+| **Sección 1** *(Acto 1)* | **Diapo 10** | `video_cono_incertidumbre` | `entrada` *(Diapo 9 → 10)* | `30 s` *(900 f)* | **Media** | `pendiente` |
+| **Sección 5** *(Acto 5)* | **Diapo 29** | `video_sintesis_cierre` | `entrada` *(Diapo 28 → 29)* | `25 s` *(750 f)* | **Baja** *(Opcional)* | `pendiente` |
 
 - [/] **SF11.1 Pipeline Base Offline (Escena → Captura → Encode)**
   - [X] **T11.1.1 Escena Determinista con Datos Reales y Fuentes Embebidas**
@@ -313,4 +325,30 @@
     - [ ] A11.2.3.1 Evaluar la reproducción de la entrada al avanzar de la Diapo 4 a la 5 y verificar el handoff sin costura con el fondo real de la diapositiva (integración a cargo de la fase de rediseño de la diapo).
 - [ ] **SF11.3 Replicación del Proceso (Segundo Video en Otra Sección)**
   - [ ] **T11.3.1 Validar el Pipeline en un Segundo Video**
-    - [ ] A11.3.1.1 Reutilizar `capture.mjs` + `render.sh` en otra diapositiva para confirmar la replicabilidad de la fase.
+    - [ ] A11.3.1.1 Reutilizar `capture.mjs` + `render.sh` en otra diapositiva para confirmar la replicabilidad de la fase (prioridad sugerida: `video_agro_origen` en Sección 3, Diapo 19 — Ficha 9.2).
+- [ ] **SF11.4 Producción de Videos del Inventario (Secciones 1, 3 y 5 — Fichas de Video Listas para Producir)**
+  - [ ] **T11.4.1 Sección 3 · Diapo 19 (`video_agro_origen` — Prioridad Alta · Candidato #1 para SF11.3): `"Cómo el agro inventó el forecasting antes que la IA · De las cabañuelas a la malla neuronal"`**
+    - [ ] A11.4.1.1 Crear `video/seccion_3/diapo_19/video_agro_origen/{build_scene.py,scene_template.html}` con `window.__setTime(ms)`, datos reales de `data/caso_2/cafe_jaen_campanias.csv` (`N = 24 campañas`, `2001–2024`, `τ = 6 a 8 meses`), los 5 hitos (`1950 → 2026`) y la dualidad `"Almanaque (Bioindicadores) ⟷ Gemelo Digital (Sensores + IA)"` sobre fondo `#040812`.
+    - [ ] A11.4.1.2 Configurar `capture.mjs` + `render.sh` y generar `agro_origen.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`) con fade-in de `0.35 s` desde `#040812` y cierre con composición completa encendida.
+    - [ ] A11.4.1.3 Ejecutar QA visual de keyframes (`ffprobe` + extracción con `ffmpeg`) verificando 0 solapes de texto, cifras canónicas exactas y handoff limpio hacia la Diapo 19 (`#040812`).
+  - [ ] **T11.4.2 Sección 1 · Diapo 07 (`video_puente_tabular` — Prioridad Alta): `"VÍA 2: El Puente Tabular · El Truco de los Lags y Árboles (LightGBM, XGBoost)"`**
+    - [ ] A11.4.2.1 Crear `video/seccion_1/diapo_7/video_puente_tabular/{build_scene.py,scene_template.html}` animando la ventana deslizante sobre `data/caso_1/senamhi_diario.csv` hacia la matriz `"Vector Xₜ = [ yₜ₋₁, yₜ₋₇, Media₇, Promoₜ, Climaₜ ] ──▶ yₜ₊ₕ"` y el techo de extrapolación de `data/caso_1/experimento_extrapolacion.csv` (`tope_entrenamiento = 34.0 °C`, `"Meseta Plana"` vs. diferencias $\Delta y_t$) sobre fondo `#040714`.
+    - [ ] A11.4.2.2 Configurar `capture.mjs` + `render.sh` y renderizar `puente_tabular.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
+    - [ ] A11.4.2.3 Validar con `ffprobe` y keyframes que las flechas `yₜ₋₁, yₜ₋₇` hacia la tabla y el muro de `34.0 °C` se leen sin colisiones.
+  - [ ] **T11.4.3 Sección 3 · Diapo 21 (`video_fisica_biologica` — Prioridad Alta): `"Física biológica · Las 3 leyes que obligan a la IA a aprender botánica"`**
+    - [ ] A11.4.3.1 Crear `video/seccion_3/diapo_21/video_fisica_biologica/{build_scene.py,scene_template.html}` con datos de `data/caso_2/cafe_jaen_hipotesis.json` y `cafe_jaen_campanias.csv` mostrando: (1) engranaje `τ = 6–8 meses`, (2) umbral `"VPD = eₛ(T) − eₐ > 1.8 kPa ó T > 32°C ──▶ Cierre Estomático y Aborto Floral"` + ceguera del `NDVI ~0.74` (`+1.4%`) ante el colapso de `-56.0%` (`10.0 qq/ha` en 2014), y (3) `"500 Variables Crudas sobre N=24 = Overfit"` vs. señal hídrica en floración (`r = 0.7564`) sobre `#040812`.
+    - [ ] A11.4.3.2 Configurar `capture.mjs` + `render.sh` y renderizar `fisica_biologica.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040812`).
+    - [ ] A11.4.3.3 Auditar keyframes confirmando placa opaca para `Lag τ = 6–8m` y contraste nítido entre NDVI plano y caída de cosecha.
+  - [ ] **T11.4.4 Sección 1 · Diapo 09 (`video_zero_shot_tsfm` — Prioridad Media): `"VÍA 4: Revolución Zero-Shot y Foundation Models · TimesFM, Chronos, Moirai, Lag-Llama y TimeGPT"`**
+    - [ ] A11.4.4.1 Crear `video/seccion_1/diapo_9/video_zero_shot_tsfm/{build_scene.py,scene_template.html}` con datos de `data/caso_1/benchmark_punchana.csv` animando el preentrenamiento `"27B–100B pts"`, la comparación `"Chronos = 4,096 Tokens (Cross-Entropy) │ TimesFM = Parches Continuos (MSE)"` y la inferencia Zero-Shot en Punchana (`TimesFM RMSE 1.883 °C`, `Chronos RMSE 1.903 °C` vs. `ExtraTrees 1.880 °C`) sobre `#040714`.
+    - [ ] A11.4.4.2 Configurar `capture.mjs` + `render.sh` y renderizar `zero_shot_tsfm.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
+    - [ ] A11.4.4.3 Auditar keyframes verificando legibilidad de tokens vs. parches y exactitud de métricas de `benchmark_punchana.csv`.
+  - [ ] **T11.4.5 Sección 1 · Diapo 10 (`video_cono_incertidumbre` — Prioridad Media): `"DIAPOSITIVA 10: La Ilusión de la Certeza y el Cono de Incertidumbre · Lyapunov ─▶ 5 Pasos SCP ─▶ ERCOT ─▶ Pase a Diapo 11"`**
+    - [ ] A11.4.5.1 Crear `video/seccion_1/diapo_10/video_cono_incertidumbre/{build_scene.py,scene_template.html}` con datos reales de `data/caso_1/senamhi_forecast_7d.csv` (`2025-12-25` a `2025-12-31`, friaje `27.2 °C`, banda `ci_lower_p10` `29.55 °C` a `ci_upper_p90` `37.42 °C`) animando la divergencia `"σ(h) ∝ σ₁ · √h"` y la construcción conformal `"Sᵢ = |f̂(xᵢ) − yᵢ| ──▶ q̂ = cuantil₁₋α(S_Cal) ──▶ I(x) = [ f̂(x) ± q̂ ]"` sobre `#040714`.
+    - [ ] A11.4.5.2 Configurar `capture.mjs` + `render.sh` y renderizar `cono_incertidumbre.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
+    - [ ] A11.4.5.3 Auditar keyframes comprobando que las pastillas `"Núcleo 50%"`, `"Pronóstico Puntual"` y `"Banda 80% (P10–P90)"` no solapan las curvas.
+  - [ ] **T11.4.6 Sección 5 · Diapo 29 (`video_sintesis_cierre` — Prioridad Baja / Opcional): `"Conclusiones"`**
+    - [ ] A11.4.6.1 Crear `video/seccion_5/diapo_29/video_sintesis_cierre/{build_scene.py,scene_template.html}` fusionando Caso 1 (`n = 2,557 días`, `38.0 °C`, `ExtraTrees 0.25 s`) y Caso 2 (`N = 24 campañas`, roya `-56.0%`, `r = 0.7564`) en los 3 axiomas (`"🎯 Respeta la causalidad del tiempo"`, `"🧠 El valor está en la banda, no en el punto"`, `"🚀 Próximo paso: física antes que algoritmo"`) sobre fondo `#03050F`.
+    - [ ] A11.4.6.2 Configurar `capture.mjs` + `render.sh` y renderizar `sintesis_cierre.mp4` (`25 s`, `750 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#03050F`).
+    - [ ] A11.4.6.3 Auditar keyframes confirmando alineación con el grid de 3 columnas de la Diapo 29 y handoff sobre `#03050F`.
+

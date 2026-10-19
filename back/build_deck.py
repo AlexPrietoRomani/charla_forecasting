@@ -60,118 +60,83 @@ def build_deck():
     data_json = json.dumps(data_payload, ensure_ascii=False)
     notes_json = json.dumps(get_speaker_notes(), ensure_ascii=False)
 
-    import base64
-    sim_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/5_Anatomia_de_la_senal_temporal_v3.html"
-    if not sim_path.exists():
-        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/5_Anatomia_de_la_senal_temporal_v3.html"
-    if not sim_path.exists():
-        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/5_anatomia_senal_temporal_mejorada.html"
-    if not sim_path.exists():
-        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/5_anatomia_senal_temporal_mejorada.html"
-    if not sim_path.exists():
-        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/anatomia_senal_temporal_mejorada.html"
-    if not sim_path.exists():
-        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/5_anatom_a_ontol_gica_f_sica_vs_ruido.html"
-    if not sim_path.exists():
-        sim_path = BASE_DIR / "docs/notebooklm/seccion_1/anatom_a_ontol_gica_f_sica_vs_ruido.html"
-    if sim_path.exists():
-        sim_bytes = sim_path.read_bytes()
-        b64_sim_html = base64.b64encode(sim_bytes).decode("ascii")
-    else:
-        b64_sim_html = ""
+    from front.prototype_engine import (
+        ENGINE_DECK_GATE_CSS,
+        ENGINE_DECK_GATE_JS,
+        VIDEO_SLIDE_CANDIDATES,
+        discover_slide_video,
+        load_prototype_b64,
+        render_slide_video_gate,
+    )
 
-    era1_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/6_Era_1_La_parsimonia_lineal_v3.html"
-    if not era1_path.exists():
-        era1_path = BASE_DIR / "docs/notebooklm/seccion_1/6_Era_1_La_parsimonia_lineal_v3.html"
-    if not era1_path.exists():
-        era1_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/6_Era_1_La_parsimonia_lineal.html"
-    if not era1_path.exists():
-        era1_path = BASE_DIR / "docs/notebooklm/seccion_1/6_Era_1_La_parsimonia_lineal.html"
-    if era1_path.exists():
-        era1_bytes = era1_path.read_bytes()
-        b64_era1_html = base64.b64encode(era1_bytes).decode("ascii")
-    else:
-        b64_era1_html = ""
+    # Prototipos Sección 1 (Diapositivas 5 a 11) procesados por el motor F10
+    p5_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/5_Anatomia_de_la_senal_temporal_v3.html"
+    b64_sim_html = load_prototype_b64(p5_path, slide_num=5, section_num=1) if p5_path.exists() else ""
 
-    era2_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/7_Era_2_El_puente_tabular.html"
-    if not era2_path.exists():
-        era2_path = BASE_DIR / "docs/notebooklm/seccion_1/7_Era_2_El_puente_tabular.html"
-    if era2_path.exists():
-        era2_bytes = era2_path.read_bytes()
-        b64_era2_html = base64.b64encode(era2_bytes).decode("ascii")
-    else:
-        b64_era2_html = ""
+    p6_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/6_Era_1_La_parsimonia_lineal_v3.html"
+    b64_era1_html = load_prototype_b64(p6_path, slide_num=6, section_num=1) if p6_path.exists() else ""
 
-    era3_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/8_Era_3_Deep_Learning_y_Parches.html"
-    if not era3_path.exists():
-        era3_path = BASE_DIR / "docs/notebooklm/seccion_1/8_Era_3_Deep_Learning_y_Parches.html"
-    if era3_path.exists():
-        era3_bytes = era3_path.read_bytes()
-        b64_era3_html = base64.b64encode(era3_bytes).decode("ascii")
-    else:
-        b64_era3_html = ""
+    p7_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/7_Era_2_El_puente_tabular.html"
+    b64_era2_html = load_prototype_b64(p7_path, slide_num=7, section_num=1) if p7_path.exists() else ""
 
-    era4_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/9_Era_4_Modelos_Fundacionales_Zero_Shot.html"
-    if not era4_path.exists():
-        era4_path = BASE_DIR / "docs/notebooklm/seccion_1/9_Era_4_Modelos_Fundacionales_Zero_Shot.html"
-    if era4_path.exists():
-        era4_bytes = era4_path.read_bytes()
-        b64_era4_html = base64.b64encode(era4_bytes).decode("ascii")
-    else:
-        b64_era4_html = ""
+    p8_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/8_Era_3_Deep_Learning_y_Parches.html"
+    b64_era3_html = load_prototype_b64(p8_path, slide_num=8, section_num=1) if p8_path.exists() else ""
 
-    cono_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html"
-    if not cono_path.exists():
-        cono_path = BASE_DIR / "docs/notebooklm/seccion_1/10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html"
-    if cono_path.exists():
-        cono_bytes = cono_path.read_bytes()
-        b64_cono_html = base64.b64encode(cono_bytes).decode("ascii")
-    else:
-        b64_cono_html = ""
+    p9_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/9_Era_4_Modelos_Fundacionales_Zero_Shot.html"
+    b64_era4_html = load_prototype_b64(p9_path, slide_num=9, section_num=1) if p9_path.exists() else ""
 
-    decision_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html"
-    if not decision_path.exists():
-        decision_path = BASE_DIR / "docs/notebooklm/seccion_1/11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html"
-    if decision_path.exists():
-        decision_bytes = decision_path.read_bytes()
-        b64_decision_html = base64.b64encode(decision_bytes).decode("ascii")
-    else:
-        b64_decision_html = ""
+    p10_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/10_El_Cono_de_Incertidumbre_y_Prediccion_Conforme.html"
+    b64_cono_html = load_prototype_b64(p10_path, slide_num=10, section_num=1) if p10_path.exists() else ""
+
+    p11_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html"
+    b64_decision_html = load_prototype_b64(p11_path, slide_num=11, section_num=1) if p11_path.exists() else ""
 
     # Prototipos Sección 3 (Diapositivas 19 a 23)
     p19_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/19_c_mo_el_agro_invent_el_forecasting.html"
-    b64_p19_html = base64.b64encode(p19_path.read_bytes()).decode("ascii") if p19_path.exists() else ""
+    b64_p19_html = load_prototype_b64(p19_path, slide_num=19, section_num=3) if p19_path.exists() else ""
 
     p20_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/20_del_almanaque_al_sat_lite.html"
-    b64_p20_html = base64.b64encode(p20_path.read_bytes()).decode("ascii") if p20_path.exists() else ""
+    b64_p20_html = load_prototype_b64(p20_path, slide_num=20, section_num=3) if p20_path.exists() else ""
 
     p21_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/21_f_sica_biol_gica_y_el_l_mite_algor_tmico.html"
-    b64_p21_html = base64.b64encode(p21_path.read_bytes()).decode("ascii") if p21_path.exists() else ""
+    b64_p21_html = load_prototype_b64(p21_path, slide_num=21, section_num=3) if p21_path.exists() else ""
 
     p22_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/22_reloj_fenol_gico_del_caf.html"
-    b64_p22_html = base64.b64encode(p22_path.read_bytes()).decode("ascii") if p22_path.exists() else ""
+    b64_p22_html = load_prototype_b64(p22_path, slide_num=22, section_num=3) if p22_path.exists() else ""
 
     p23_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/23_precisi_n_actual_y_las_tres_trampas.html"
-    b64_p23_html = base64.b64encode(p23_path.read_bytes()).decode("ascii") if p23_path.exists() else ""
+    b64_p23_html = load_prototype_b64(p23_path, slide_num=23, section_num=3) if p23_path.exists() else ""
 
     # Prototipos Sección 2 (Diapositivas 12 a 17)
     p12_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/12_Caso_1_Auditoria_Iquitos.html"
-    b64_p12_html = base64.b64encode(p12_path.read_bytes()).decode("ascii") if p12_path.exists() else ""
+    b64_p12_html = load_prototype_b64(p12_path, slide_num=12, section_num=2) if p12_path.exists() else ""
 
     p13_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/13_Datos_SENAMHI_Punchana.html"
-    b64_p13_html = base64.b64encode(p13_path.read_bytes()).decode("ascii") if p13_path.exists() else ""
+    b64_p13_html = load_prototype_b64(p13_path, slide_num=13, section_num=2) if p13_path.exists() else ""
 
     p14_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/14_Trampa_Arboles_Meseta_vs_Diferencias.html"
-    b64_p14_html = base64.b64encode(p14_path.read_bytes()).decode("ascii") if p14_path.exists() else ""
+    b64_p14_html = load_prototype_b64(p14_path, slide_num=14, section_num=2) if p14_path.exists() else ""
 
     p15_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/15_Benchmark_14_Modelos_Tierra_vs_Supercomputo.html"
-    b64_p15_html = base64.b64encode(p15_path.read_bytes()).decode("ascii") if p15_path.exists() else ""
+    b64_p15_html = load_prototype_b64(p15_path, slide_num=15, section_num=2) if p15_path.exists() else ""
 
     p16_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/16_Pronostico_7_Dias_Cono_P10_P90.html"
-    b64_p16_html = base64.b64encode(p16_path.read_bytes()).decode("ascii") if p16_path.exists() else ""
+    b64_p16_html = load_prototype_b64(p16_path, slide_num=16, section_num=2) if p16_path.exists() else ""
 
     p17_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/17_Pipeline_Codigo_Diferencias_ExtraTrees.html"
-    b64_p17_html = base64.b64encode(p17_path.read_bytes()).decode("ascii") if p17_path.exists() else ""
+    b64_p17_html = load_prototype_b64(p17_path, slide_num=17, section_num=2) if p17_path.exists() else ""
+
+    # Entradas cinemáticas de video (video/seccion_{N}/diapo_{M}/video_*/) descubiertas automáticamente
+    cinematic_gates = {}
+    for section_num, slide_num in VIDEO_SLIDE_CANDIDATES:
+        video_path = discover_slide_video(BASE_DIR, section_num, slide_num)
+        if video_path is None:
+            continue
+        video_rel = video_path.relative_to(BASE_DIR).as_posix()
+        gate_id = "cinematicVideoGate" if slide_num == 5 else f"cinematicVideoGate{slide_num}"
+        cinematic_gates[slide_num] = render_slide_video_gate(
+            section_num, slide_num, video_rel, gate_id=gate_id
+        )
 
     branding = get_branding()
     branding["b64_sim_html"] = b64_sim_html
@@ -192,6 +157,7 @@ def build_deck():
     branding["b64_p15_html"] = b64_p15_html
     branding["b64_p16_html"] = b64_p16_html
     branding["b64_p17_html"] = b64_p17_html
+    branding["cinematic_gates"] = cinematic_gates
     b64_header_logo = branding["b64_header"]
     b64_dw_logo = branding["b64_dw"]
     qr_svg = branding["qr_svg"]
@@ -237,6 +203,7 @@ def build_deck():
 <style>
 {css_content}
 </style>
+{ENGINE_DECK_GATE_CSS}
 </head>
 <body>
 
@@ -298,6 +265,9 @@ def build_deck():
   window.DECK_DATA = {data_json};
 </script>
 
+<!-- COMPUERTA DE ENTRADA CINEMÁTICA DE VIDEO (F10 ↔ F11) -->
+{ENGINE_DECK_GATE_JS}
+
 <!-- SCRIPTS DE NAVEGACIÓN Y VISUALES -->
 <script>
   let currentSlide = 1;
@@ -335,6 +305,9 @@ def build_deck():
       }}
 
       initSlideVisuals(index);
+      if (window.__deckCinematicEnterSlide) {{
+        window.__deckCinematicEnterSlide(index);
+      }}
     }}
   }}
 

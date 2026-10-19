@@ -27,7 +27,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { width: 100%; min-height: 100%; margin: 0; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
 
 body {
   min-height: 100svh;
@@ -164,7 +164,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--water);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -335,7 +335,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   --stage-accent: var(--ancestral);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: clamp(8px, 1vh, 12px);
   padding: clamp(12px, 1.3vw, 18px);
   border: 1px solid color-mix(in srgb, var(--stage-accent) 35%, rgba(133, 158, 192, 0.16));
@@ -344,7 +344,8 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--stage-accent) 12%, transparent), transparent 55%),
     linear-gradient(155deg, rgba(11, 19, 36, 0.95), rgba(5, 10, 22, 0.94));
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   scrollbar-width: thin;
 }
 
@@ -391,13 +392,13 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(17px, 1.45vw, 22px)/1.18 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   color: #f8fbff;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.98vw, 13.8px)/1.45 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #b8cae0;
 }
 
@@ -407,10 +408,16 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  justify-content: space-evenly;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -422,7 +429,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--stage-accent);
@@ -430,7 +437,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text {
   margin: 0;
-  font: 400 clamp(11.5px, 0.92vw, 13px)/1.42 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #cedcf0;
 }
 
@@ -450,7 +457,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 }
 
 .math-strip span.hint {
-  font: 500 9.5px/1.2 var(--sans);
+  font: 500 11.5px/1.2 var(--sans);
   color: #94a3b8;
   text-align: right;
 }
@@ -460,14 +467,14 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
   background: rgba(8, 15, 32, 0.88);
   border: 1px solid rgba(56, 239, 255, 0.28);
 }
 
 .takeaway-badge {
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--stage-accent);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -476,7 +483,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .takeaway-text {
   margin: 0;
-  font: italic 500 clamp(10.5px, 0.82vw, 12px)/1.35 var(--sans);
+  font: italic 500 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
   color: #e2eeff;
 }
 
@@ -1352,7 +1359,7 @@ input[type="range"] {
     ctx.lineWidth = 1.6;
     ctx.beginPath(); ctx.roundRect(bx, by, badgeW, badgeH, 8); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('“De 1 dato/año a 1 dato/día/píxel”', bx + badgeW / 2, by + 18);
     ctx.restore();
@@ -1401,7 +1408,7 @@ input[type="range"] {
       ctx.beginPath(); ctx.arc(cx, cyCurve, isSel ? 6 : 4, 0, Math.PI * 2); ctx.fill();
 
       ctx.fillStyle = isSel ? '#ffffff' : '#94a3b8';
-      ctx.font = isSel ? '700 9.5px "JetBrains Mono"' : '500 8.5px "JetBrains Mono"';
+      ctx.font = isSel ? '700 12px "JetBrains Mono"' : '500 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText(nd.freq, cx, cyCurve - 10);
 
@@ -1427,11 +1434,11 @@ input[type="range"] {
       // Título debajo del círculo
       ctx.textBaseline = 'alphabetic';
       ctx.fillStyle = isSel ? '#ffffff' : '#cbd5e1';
-      ctx.font = '700 10.5px "Space Grotesk", sans-serif';
+      ctx.font = '700 13.5px "Space Grotesk", sans-serif';
       ctx.fillText(nd.title, cx, nodesY + nodeR + 16);
 
       ctx.fillStyle = isSel ? nd.color : '#8da2be';
-      ctx.font = '600 9px "JetBrains Mono"';
+      ctx.font = '600 11.5px "JetBrains Mono"';
       ctx.fillText(nd.sub, cx, nodesY + nodeR + 29);
       ctx.restore();
     });
@@ -1460,7 +1467,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🌡️ ESTACIÓN SENAMHI + ALCANCÍA DE CALOR', pad + 14, padT + 20);
 
@@ -1490,7 +1497,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.moveTo(thX - 18, yTbase); ctx.lineTo(thX + 55, yTbase); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = '#38efff';
-    ctx.font = '700 8.5px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText('T_base=10°C', thX + 16, yTbase - 3);
 
     // Frasco / Alcancía de Calor a la derecha del termómetro
@@ -1527,7 +1534,7 @@ input[type="range"] {
       ctx.fill();
       ctx.stroke();
       ctx.fillStyle = '#040812';
-      ctx.font = '700 8px "JetBrains Mono"';
+      ctx.font = '700 11.5px "JetBrains Mono"';
       ctx.textAlign = 'center';
       ctx.fillText('°C', jarX + jarW / 2, coinY + 3);
     }
@@ -1538,7 +1545,7 @@ input[type="range"] {
     ctx.fillText(`+${gddToday} GDD / día`, jarX + jarW / 2, jarTop + jarH / 2);
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '600 9.5px "JetBrains Mono"';
+    ctx.font = '600 12px "JetBrains Mono"';
     ctx.fillText(`T_media (${state.avgTemp}°C) − T_base (10°C)`, pad + leftW / 2, padT + usableH - 16);
     ctx.restore();
 
@@ -1554,7 +1561,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('📈 SUPUESTO LINEAL GDD VS. REALIDAD BOTÁNICA (CEGUERA > 32°C)', rx + 14, padT + 20);
 
@@ -1573,7 +1580,7 @@ input[type="range"] {
     ctx.setLineDash([]);
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('⚠️ Umbral >32°C: Aborto Floral', gx + gw - 6, gy + 14);
 
@@ -1621,7 +1628,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.arc(curX, curBioY, 6, 0, Math.PI * 2); ctx.fill();
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.font = '500 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('Temperatura Diaria Promedio (°C) ──▶', gx + gw / 2, gy + gh + 24);
     ctx.restore();
@@ -1648,7 +1655,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🛰️ FÍSICA DEL NDVI: CLOROFILA (ROJO) VS. MESÓFILO (NIR)', pad + 14, padT + 20);
 
@@ -1685,7 +1692,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('Rojo (665nm)', redX - 6, (satY + canopyTop) / 2);
     ctx.fillText('Absorbido ~95%', redX - 6, (satY + canopyTop) / 2 + 12);
@@ -1701,13 +1708,13 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#e9d5ff';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('NIR (842nm)', nirX + 6, (satY + canopyTop) / 2);
     ctx.fillText('Rebota fuerte!', nirX + 6, (satY + canopyTop) / 2 + 12);
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '600 9px "JetBrains Mono"';
+    ctx.font = '600 11.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('🌧️ Con nubes: se fusiona CHIRPS (lluvia) + SMAP (suelo 0–5cm)', pad + leftW / 2, padT + usableH - 12);
     ctx.restore();
@@ -1725,7 +1732,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#a5f3fc';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('📉 CEGUERA ÓPTICA: SATURACIÓN DEL NDVI CUANDO LAI > 3', rx + 14, padT + 20);
 
@@ -1744,7 +1751,7 @@ input[type="range"] {
     ctx.setLineDash([]);
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'right';
     ctx.fillText('⚠️ Zona Ciega (LAI > 3): Meseta 0.85', gx + gw - 6, gy + 15);
 
@@ -1768,12 +1775,12 @@ input[type="range"] {
     ctx.beginPath(); ctx.arc(curX, curY, 6.5, 0, Math.PI * 2); ctx.fill();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = lai > 4.2 ? 'right' : 'left';
     ctx.fillText(`LAI=${lai.toFixed(1)} ➔ NDVI=${ndviVal.toFixed(2)}`, curX + (lai > 4.2 ? -10 : 10), curY - 10);
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px "JetBrains Mono"';
+    ctx.font = '500 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('Índice de Área Foliar (LAI: Capas de hojas) ──▶', gx + gw / 2, gy + gh + 24);
     ctx.restore();
@@ -1796,7 +1803,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#e9d5ff';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('🔗 CONVERGENCIA (HITO 5): UNIENDO CIELO Y TIERRA', pad + 14, padT + 20);
 
@@ -1836,11 +1843,11 @@ input[type="range"] {
       ctx.stroke();
 
       ctx.fillStyle = ly.on ? ly.col : '#64748b';
-      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.font = '700 12px "JetBrains Mono"';
       ctx.fillText(`${ly.icon} ${ly.title}`, pad + 22, by + 18);
 
       ctx.fillStyle = ly.on ? '#e2eeff' : '#64748b';
-      ctx.font = '500 9.5px Inter, sans-serif';
+      ctx.font = '500 12px Inter, sans-serif';
       ctx.fillText(ly.desc, pad + 22, by + 36);
     });
     ctx.restore();
@@ -1858,7 +1865,7 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#6ef0b4';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
     ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 21: EL DILEMA DE LAS ESCALAS', rx + 14, padT + 20);
 
@@ -1869,7 +1876,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx + 12, s1Y, rw - 24, sH, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#38efff';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText('🌧️ SERIE CLIMA-DIARIO (SENAMHI Iquitos): N = 2,557 datos (7 años)', rx + 20, s1Y + 15);
 
     ctx.strokeStyle = '#38efff';
@@ -1890,7 +1897,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx + 12, s2Y, rw - 24, sH, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#ffc05c';
-    ctx.font = '700 9px "JetBrains Mono"';
+    ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText('🍒 SERIE COSECHA-ANUAL (Cooperativas Jaén): ¡Solo N = 24 datos!', rx + 20, s2Y + 15);
 
     for (let k = 0; k < 12; k++) {
@@ -1908,7 +1915,7 @@ input[type="range"] {
     ctx.beginPath(); ctx.roundRect(rx + 12, bY, rw - 24, 36, 8); ctx.fill(); ctx.stroke();
 
     ctx.fillStyle = '#fda4af';
-    ctx.font = '700 9.5px "JetBrains Mono"';
+    ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
     ctx.fillText('👉 Siguiente (Diapo 21): Física Biológica (Retrasos τ=6–8m, VPD y N=24)', rx + rw / 2, bY + 22);
     ctx.restore();

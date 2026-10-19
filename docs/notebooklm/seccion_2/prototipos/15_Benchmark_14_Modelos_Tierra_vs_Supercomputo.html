@@ -172,7 +172,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   color: var(--lab);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -335,8 +335,9 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   padding: clamp(10px, 1.3vw, 16px);
   border: 1px solid rgba(133, 158, 192, 0.18);
   border-radius: 14px;
+  height: 100%;
   background: linear-gradient(145deg, rgba(10, 18, 36, 0.95), rgba(5, 10, 24, 0.94));
-  overflow-y: auto;
+  overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(110, 240, 180, 0.3) transparent;
 }
@@ -354,7 +355,7 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   gap: 6px;
   padding: 3px 8px;
   border-radius: 6px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11px/1 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   background: color-mix(in srgb, var(--stage-accent) 15%, transparent);
@@ -366,14 +367,14 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .narr-title {
   margin: 0;
-  font: 700 clamp(15px, 1.25vw, 18.5px)/1.2 var(--display);
+  font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display);
   letter-spacing: -0.015em;
   color: #f8fafc;
 }
 
 .narr-lead {
   margin: 0;
-  font: 400 clamp(12px, 0.9vw, 13.5px)/1.4 var(--sans);
+  font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans);
   color: #cbd5e1;
 }
 
@@ -383,9 +384,16 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   display: flex;
   flex-direction: column;
   gap: 6px;
+  flex: 1 1 auto;
+  justify-content: space-evenly;
+  min-height: 0;
 }
 
 .info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 8px 11px;
   border-radius: 9px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -397,14 +405,14 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   align-items: center;
   gap: 6px;
   margin-bottom: 3px;
-  font: 700 9.5px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--stage-accent);
 }
 
 .info-block-text {
-  font: 400 clamp(11.5px, 0.85vw, 12.8px)/1.35 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans);
   color: #94a3b8;
 }
 
@@ -419,39 +427,34 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
   border-radius: 9px;
   border: 1px solid color-mix(in srgb, var(--stage-accent) 30%, transparent);
   background: rgba(3, 7, 18, 0.88);
-  font: 600 clamp(11px, 0.88vw, 12.5px)/1.2 var(--mono);
+  font: 600 clamp(12.5px, 0.95vw, 14px)/1.2 var(--mono);
   color: #f1f5f9;
 }
 
 .math-strip span.hint {
-  font: 500 9.5px/1.2 var(--sans);
+  font: 500 11.5px/1.2 var(--sans);
   color: #94a3b8;
   text-align: right;
 }
 
-.speaker-box {
+.executive-takeaway {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
+  margin-top: auto;
   padding: 9px 12px;
   border-left: 3px solid var(--stage-accent);
   border-radius: 0 10px 10px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 12%, rgba(8, 15, 32, 0.88)), rgba(8, 15, 32, 0.5));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 14%, rgba(8, 15, 32, 0.9)), rgba(8, 15, 32, 0.55));
+  font: 600 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
+  color: #edf5ff;
 }
 
-.speaker-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  font: 700 9px/1 var(--mono);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+.executive-takeaway strong {
   color: var(--stage-accent);
-}
-
-.speaker-quote {
-  margin: 0;
-  font: italic 500 clamp(11.5px, 0.88vw, 13px)/1.38 var(--sans);
-  color: #e2eeff;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 /* COLUMNA DERECHA */
@@ -629,7 +632,7 @@ canvas { display: block; width: 100%; height: 100%; }
   .via-card { padding: 5px 10px; }
   .proc-node { padding: 5px 8px; }
   .narrative-card { padding: 8px 12px; gap: 5px; }
-  .speaker-box { padding: 6px 9px; }
+  .executive-takeaway { padding: 6px 9px; }
   .stage-card { padding: 8px 10px; }
   .controls-bar { padding: 5px 8px; }
 }
@@ -637,7 +640,7 @@ canvas { display: block; width: 100%; height: 100%; }
 @media (max-height: 620px) and (min-width: 881px) {
   .eyebrow { display: none; }
   .footnote { display: none; }
-  .speaker-box { display: none; }
+  .executive-takeaway { display: none; }
   .narrative-card { gap: 4px; padding: 6px 8px; }
   .topbar { padding-bottom: 4px; }
 }
@@ -755,14 +758,8 @@ canvas { display: block; width: 100%; height: 100%; }
         <span class="hint">Parsimonia = 1 / Costo</span>
       </div>
 
-      <div class="speaker-box">
-        <div class="speaker-head">
-          <span>🎙️ GUÍA DE EXPOSICIÓN (QUÉ DECIR)</span>
-          <span>~20 SEG</span>
-        </div>
-        <p class="speaker-quote" id="speakerQuote">
-          “Miren la tabla: el modelo de 0.25 segundos en un procesador normal empata con el modelo fundacional de Google y aplasta a las supercomputadoras europeas. En producción, quédense con el más barato y parsimonioso.”
-        </p>
+      <div class="executive-takeaway">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Un modelo de 0.25 segundos empata con el fundacional de Google y aplasta supercomputadoras.</span>
       </div>
     </article>
 
@@ -831,7 +828,7 @@ canvas { display: block; width: 100%; height: 100%; }
       ],
       math: 'ExtraTrees 1.880 °C (0.25s) ≈ TimesFM 1.883 °C (p=0.71)',
       hint: 'Parsimonia = 1 / Costo',
-      quote: '“Miren la tabla: el modelo de 0.25 segundos en un procesador normal empata con el modelo fundacional de Google y aplasta a las supercomputadoras europeas. En producción, quédense con el más barato y parsimonioso.”',
+      quote: 'Un modelo de 0.25 segundos empata con el fundacional de Google y aplasta supercomputadoras.',
       filter: 'all'
     },
     nwp: {
@@ -845,7 +842,7 @@ canvas { display: block; width: 100%; height: 100%; }
       ],
       math: 'ECMWF p=0.027 · NOAA GFS p=0.0085 ──▶ Rechazo Estadístico',
       hint: 'Física Global Pierde',
-      quote: '“El supercómputo es admirable para tormentas globales a 5 días, pero en la estación Punchana la memoria inercial local del río y el suelo le gana a la física sin downscaling.”',
+      quote: 'El supercómputo es admirable, pero la memoria inercial local le gana sin downscaling.',
       filter: 'nwp'
     },
     deep: {
@@ -859,7 +856,7 @@ canvas { display: block; width: 100%; height: 100%; }
       ],
       math: 'LSTM: RMSE 2.053 °C (17.03s GPU) vs ARIMA: 1.964 °C (0.01s CPU)',
       hint: 'Sobreparametrización Inútil',
-      quote: '“Gastar presupuesto en clústeres de GPUs para entrenar LSTMs en series de clima local es mala ingeniería: es más lento, más caro y estadísticamente peor que un árbol en CPU.”',
+      quote: 'Entrenar LSTMs climáticos en GPUs es más lento, caro y estadísticamente peor.',
       filter: 'all'
     },
     parsimony: {
@@ -873,7 +870,7 @@ canvas { display: block; width: 100%; height: 100%; }
       ],
       math: 'ExtraTrees CPU 0.25s ──▶ Producción Inmediata a Costo Cero',
       hint: 'Pase a Diapo 16 →',
-      quote: '“La ciencia de datos madura no persigue la moda: implementa el modelo que resuelve el problema con la menor fricción técnica posible. Pasemos a la Diapo 16.”',
+      quote: 'La ciencia madura elige el modelo que resuelve con menor fricción técnica.',
       filter: 'leaders'
     }
   };
@@ -1045,7 +1042,7 @@ canvas { display: block; width: 100%; height: 100%; }
       ctx.stroke();
 
       ctx.fillStyle = '#64748b';
-      ctx.font = '500 10px JetBrains Mono';
+      ctx.font = '500 13px JetBrains Mono';
       ctx.textAlign = 'center';
       ctx.fillText(`${rVal.toFixed(1)}°`, x, h - 8);
     }
@@ -1071,7 +1068,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       // Nombre a la izquierda
       const isHover = (hoverModel && hoverModel.name === m.name);
-      ctx.font = (m.type === 'leader') ? '700 11.5px Space Grotesk' : '500 11px Space Grotesk';
+      ctx.font = (m.type === 'leader') ? '700 14.5px Space Grotesk' : '500 14px Space Grotesk';
       ctx.textAlign = 'right';
       ctx.fillStyle = isHover ? '#ffffff' : (m.type === 'leader') ? '#aff6ff' : (m.cat === 'nwp') ? '#ff9cb0' : '#cbd5e1';
       ctx.fillText(m.name, padL - 10, y + barH / 2 + 4);
@@ -1098,7 +1095,7 @@ canvas { display: block; width: 100%; height: 100%; }
       ctx.fill();
 
       // Valor RMSE al final de la barra
-      ctx.font = '700 10.5px JetBrains Mono';
+      ctx.font = '700 13.5px JetBrains Mono';
       ctx.textAlign = 'left';
       ctx.fillStyle = isHover ? '#ffffff' : (m.type === 'leader') ? '#6ef0b4' : (m.cat === 'nwp') ? '#ff5277' : '#e2e8f0';
       ctx.fillText(`${m.rmse.toFixed(3)} °C`, padL + bW + 8, y + barH / 2 + 3.5);
@@ -1108,14 +1105,14 @@ canvas { display: block; width: 100%; height: 100%; }
         ctx.fillStyle = 'rgba(110, 240, 180, 0.2)';
         ctx.fillRect(w - padR + 5, y + 2, 85, barH - 4);
         ctx.fillStyle = '#6ef0b4';
-        ctx.font = '700 9px JetBrains Mono';
+        ctx.font = '700 11.5px JetBrains Mono';
         ctx.textAlign = 'center';
         ctx.fillText(m.pVal === 1.0 ? 'LÍDER #1' : `p=${m.pVal.toFixed(2)} EMPATE`, w - padR + 47, y + barH / 2 + 3);
       } else if (m.cat === 'nwp') {
         ctx.fillStyle = 'rgba(255, 82, 119, 0.18)';
         ctx.fillRect(w - padR + 5, y + 2, 85, barH - 4);
         ctx.fillStyle = '#ff5277';
-        ctx.font = '700 9px JetBrains Mono';
+        ctx.font = '700 11.5px JetBrains Mono';
         ctx.textAlign = 'center';
         ctx.fillText('PIERDE p<0.05', w - padR + 47, y + barH / 2 + 3);
       }

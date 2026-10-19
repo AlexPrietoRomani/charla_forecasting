@@ -314,7 +314,8 @@ canvas {
   flex-direction: column;
   gap: 8px;
   min-height: 0;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   padding-right: 2px;
 }
 .audit-panel::-webkit-scrollbar { width: 4px; }
@@ -323,10 +324,16 @@ canvas {
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
   gap: 8px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  align-items: stretch;
+  min-height: 0;
 }
 .kpi-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: clamp(8px, 1vh, 12px) clamp(10px, 0.9vw, 14px);
   border-radius: 10px;
   border: 1px solid var(--line);
@@ -348,13 +355,13 @@ canvas {
 .kpi-card.highlight .kpi-val { color: #8ef7c7; }
 .kpi-card.warning .kpi-val { color: var(--rupture); }
 .kpi-lbl {
-  font: 600 clamp(9px, 0.68vw, 10.5px)/1.2 var(--mono);
+  font: 600 clamp(11.5px, 0.82vw, 12.5px)/1.2 var(--mono);
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 .kpi-sub {
-  font: 400 clamp(9.5px, 0.72vw, 11px)/1.3 var(--sans);
+  font: 400 clamp(12.5px, 0.9vw, 14px)/1.3 var(--sans);
   color: var(--muted);
   margin-top: 3px;
 }
@@ -364,7 +371,11 @@ canvas {
   border-radius: 10px;
   border: 1px solid rgba(56, 239, 255, 0.25);
   background: linear-gradient(145deg, rgba(10, 20, 42, 0.9), rgba(4, 9, 20, 0.95));
-  flex-shrink: 0;
+  flex: 1.15 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
 }
 .insp-title {
   display: flex;
@@ -373,7 +384,7 @@ canvas {
   margin-bottom: 6px;
 }
 .insp-badge {
-  font: 700 10px/1 var(--mono);
+  font: 700 11.5px/1 var(--mono);
   padding: 3px 7px;
   border-radius: 4px;
 }
@@ -401,16 +412,16 @@ canvas {
   text-align: center;
 }
 .insp-cell-val {
-  font: 700 12.5px/1 var(--mono);
+  font: 700 14px/1 var(--mono);
   color: var(--text);
   margin-top: 2px;
 }
 .insp-cell-lbl {
-  font: 500 8.5px/1 var(--mono);
+  font: 500 11px/1 var(--mono);
   color: var(--muted);
 }
 .insp-comment {
-  font: 400 clamp(10.5px, 0.78vw, 12px)/1.4 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.4 var(--sans);
   color: #d1e2f7;
   margin-top: 6px;
   padding-top: 6px;
@@ -418,11 +429,16 @@ canvas {
 }
 
 .takeaway-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
   padding: clamp(9px, 1vh, 12px);
   border-radius: 10px;
   border: 1px solid rgba(255, 192, 92, 0.3);
   background: linear-gradient(135deg, rgba(38, 25, 6, 0.4), rgba(7, 13, 26, 0.85));
-  font: 400 clamp(10.5px, 0.78vw, 12px)/1.45 var(--sans);
+  font: 400 clamp(13px, 0.98vw, 15.2px)/1.45 var(--sans);
   color: #fce7cf;
 }
 .takeaway-card b { color: var(--ockham); }
@@ -530,7 +546,7 @@ canvas {
       <!-- DAY INSPECTOR -->
       <div class="day-inspector" id="inspectorBox">
         <div class="insp-title">
-          <span style="font: 700 12.5px/1 var(--display); color: var(--text);" id="inspDate">25-Dic-2025 · h=1</span>
+          <span style="font: 700 14.5px/1 var(--display); color: var(--text);" id="inspDate">25-Dic-2025 · h=1</span>
           <span class="insp-badge ok" id="inspStatus">DENTRO DEL CONO ✅</span>
         </div>
         <div class="insp-grid">
@@ -554,7 +570,7 @@ canvas {
 
       <!-- AXIOM CARD -->
       <div class="takeaway-card">
-        <b>💡 Axioma Gerencial:</b> El pronóstico meteorológico multi-paso nunca debe presentarse a un comité de operaciones como una línea única. La dispersión del cono en <b>h=7 duplica la de h=1</b>. Planificar con la media oculta el riesgo de friajes súbitos que impactan la cadena de frío y cosechas.
+        <b>💡 Idea Clave:</b> El pronóstico meteorológico multi-paso nunca debe presentarse a un comité de operaciones como una línea única. La dispersión del cono en <b>h=7 duplica la de h=1</b>. Planificar con la media oculta el riesgo de friajes súbitos que impactan la cadena de frío y cosechas.
       </div>
     </div>
   </section>
@@ -667,7 +683,7 @@ canvas {
     // Grid lines
     ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
     ctx.lineWidth = 1;
-    ctx.font = '9px "JetBrains Mono", monospace';
+    ctx.font = '11.5px "JetBrains Mono", monospace';
     ctx.fillStyle = '#64748b';
     ctx.textAlign = 'right';
 
@@ -685,10 +701,10 @@ canvas {
     D.forEach((d, i) => {
       const x = getX(i);
       ctx.fillStyle = i < H ? '#edf5ff' : '#475569';
-      ctx.font = i === (H - 1) ? '700 10.5px "JetBrains Mono"' : '500 9.5px "JetBrains Mono"';
+      ctx.font = i === (H - 1) ? '700 13.5px "JetBrains Mono"' : '500 12px "JetBrains Mono"';
       ctx.fillText(d[0], x, h - padBottom + 16);
       ctx.fillStyle = '#64748b';
-      ctx.font = '8px "JetBrains Mono"';
+      ctx.font = '11.5px "JetBrains Mono"';
       ctx.fillText('h=' + (i + 1), x, h - padBottom + 27);
     });
 
@@ -785,7 +801,7 @@ canvas {
       if (i === H - 1) {
         ctx.save();
         ctx.fillStyle = '#ffffff';
-        ctx.font = '700 11px "JetBrains Mono"';
+        ctx.font = '700 14px "JetBrains Mono"';
         ctx.textAlign = 'center';
         ctx.fillText(D[i][1].toFixed(1) + '°', x, y - 10);
         ctx.restore();
