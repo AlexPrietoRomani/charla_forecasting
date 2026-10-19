@@ -302,8 +302,8 @@
 | Sección | Diapo | Slug | Rol | Duración | Prioridad | Estado |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: |
 | **Sección 1** *(Acto 1)* | **Diapo 05** | `video_anatomia_senal` | `entrada` *(Diapo 4 → 5)* | `30 s` *(900 f)* | **Alta** *(Piloto #1)* | `completado` *(MP4 listo; pend. integración)* |
-| **Sección 3** *(Acto 3)* | **Diapo 19** | `video_agro_origen` | `entrada` *(Diapo 18 → 19)* | `30 s` *(900 f)* | **Alta** *(Piloto #2 · SF11.3)* | `pendiente` |
-| **Sección 1** *(Acto 1)* | **Diapo 07** | `video_puente_tabular` | `entrada` *(Diapo 6 → 7)* | `30 s` *(900 f)* | **Alta** | `pendiente` |
+| **Sección 3** *(Acto 3)* | **Diapo 19** | `video_agro_origen` | `entrada` *(Diapo 18 → 19)* | `30 s` *(900 f)* | **Alta** *(Piloto #2 · SF11.3)* | `completado` *(MP4 listo; SF11.3 validado; pend. integración)* |
+| **Sección 1** *(Acto 1)* | **Diapo 07** | `video_puente_tabular` | `entrada` *(Diapo 6 → 7)* | `30 s` *(900 f)* | **Alta** | `completado` *(MP4 listo; pend. integración)* |
 | **Sección 3** *(Acto 3)* | **Diapo 21** | `video_fisica_biologica` | `entrada` *(Diapo 20 → 21)* | `30 s` *(900 f)* | **Alta** | `pendiente` |
 | **Sección 1** *(Acto 1)* | **Diapo 09** | `video_zero_shot_tsfm` | `entrada` *(Diapo 8 → 9)* | `30 s` *(900 f)* | **Media** | `pendiente` |
 | **Sección 1** *(Acto 1)* | **Diapo 10** | `video_cono_incertidumbre` | `entrada` *(Diapo 9 → 10)* | `30 s` *(900 f)* | **Media** | `pendiente` |
@@ -323,18 +323,18 @@
     - [X] A11.2.2.1 Mover escena, capturador, fuentes y MP4 fuera de `docs/` a la estructura `video/seccion_{N}/diapo_{M}/video_{nombre}/`.
   - [ ] **T11.2.3 Decisión de Integración en la Diapo 5 (Entrada desde la Diapo 4)**
     - [ ] A11.2.3.1 Evaluar la reproducción de la entrada al avanzar de la Diapo 4 a la 5 y verificar el handoff sin costura con el fondo real de la diapositiva (integración a cargo de la fase de rediseño de la diapo).
-- [ ] **SF11.3 Replicación del Proceso (Segundo Video en Otra Sección)**
-  - [ ] **T11.3.1 Validar el Pipeline en un Segundo Video**
-    - [ ] A11.3.1.1 Reutilizar `capture.mjs` + `render.sh` en otra diapositiva para confirmar la replicabilidad de la fase (prioridad sugerida: `video_agro_origen` en Sección 3, Diapo 19 — Ficha 9.2).
+- [x] **SF11.3 Replicación del Proceso (Segundo Video en Otra Sección)**
+  - [x] **T11.3.1 Validar el Pipeline en un Segundo Video**
+    - [x] A11.3.1.1 Reutilizar `capture.mjs` + `render.sh` en otra diapositiva para confirmar la replicabilidad de la fase (prioridad sugerida: `video_agro_origen` en Sección 3, Diapo 19 — Ficha 9.2) — validado: `agro_origen.mp4` (30 s · 900 f · 1920×1080 @ 30 fps, H.264 `yuv420p` `+faststart`) generado desde `video/seccion_3/diapo_19/video_agro_origen/`.
 - [ ] **SF11.4 Producción de Videos del Inventario (Secciones 1, 3 y 5 — Fichas de Video Listas para Producir)**
-  - [ ] **T11.4.1 Sección 3 · Diapo 19 (`video_agro_origen` — Prioridad Alta · Candidato #1 para SF11.3): `"Cómo el agro inventó el forecasting antes que la IA · De las cabañuelas a la malla neuronal"`**
-    - [ ] A11.4.1.1 Crear `video/seccion_3/diapo_19/video_agro_origen/{build_scene.py,scene_template.html}` con `window.__setTime(ms)`, datos reales de `data/caso_2/cafe_jaen_campanias.csv` (`N = 24 campañas`, `2001–2024`, `τ = 6 a 8 meses`), los 5 hitos (`1950 → 2026`) y la dualidad `"Almanaque (Bioindicadores) ⟷ Gemelo Digital (Sensores + IA)"` sobre fondo `#040812`.
-    - [ ] A11.4.1.2 Configurar `capture.mjs` + `render.sh` y generar `agro_origen.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`) con fade-in de `0.35 s` desde `#040812` y cierre con composición completa encendida.
-    - [ ] A11.4.1.3 Ejecutar QA visual de keyframes (`ffprobe` + extracción con `ffmpeg`) verificando 0 solapes de texto, cifras canónicas exactas y handoff limpio hacia la Diapo 19 (`#040812`).
-  - [ ] **T11.4.2 Sección 1 · Diapo 07 (`video_puente_tabular` — Prioridad Alta): `"VÍA 2: El Puente Tabular · El Truco de los Lags y Árboles (LightGBM, XGBoost)"`**
-    - [ ] A11.4.2.1 Crear `video/seccion_1/diapo_7/video_puente_tabular/{build_scene.py,scene_template.html}` animando la ventana deslizante sobre `data/caso_1/senamhi_diario.csv` hacia la matriz `"Vector Xₜ = [ yₜ₋₁, yₜ₋₇, Media₇, Promoₜ, Climaₜ ] ──▶ yₜ₊ₕ"` y el techo de extrapolación de `data/caso_1/experimento_extrapolacion.csv` (`tope_entrenamiento = 34.0 °C`, `"Meseta Plana"` vs. diferencias $\Delta y_t$) sobre fondo `#040714`.
-    - [ ] A11.4.2.2 Configurar `capture.mjs` + `render.sh` y renderizar `puente_tabular.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
-    - [ ] A11.4.2.3 Validar con `ffprobe` y keyframes que las flechas `yₜ₋₁, yₜ₋₇` hacia la tabla y el muro de `34.0 °C` se leen sin colisiones.
+  - [x] **T11.4.1 Sección 3 · Diapo 19 (`video_agro_origen` — Prioridad Alta · Candidato #1 para SF11.3): `"Cómo el agro inventó el forecasting antes que la IA · De las cabañuelas a la malla neuronal"`**
+    - [x] A11.4.1.1 Crear `video/seccion_3/diapo_19/video_agro_origen/{build_scene.py,scene_template.html}` con `window.__setTime(ms)`, datos reales de `data/caso_2/cafe_jaen_campanias.csv` (`N = 24 campañas`, `2001–2024`, `τ = 6 a 8 meses`), los 5 hitos (`1950 → 2026`) y la dualidad `"Almanaque (Bioindicadores) ⟷ Gemelo Digital (Sensores + IA)"` sobre fondo `#040812`.
+    - [x] A11.4.1.2 Configurar `capture.mjs` + `render.sh` y generar `agro_origen.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`) con fade-in de `0.35 s` desde `#040812` y cierre con composición completa encendida.
+    - [x] A11.4.1.3 Ejecutar QA visual de keyframes (`ffprobe` + extracción con `ffmpeg`) verificando 0 solapes de texto, cifras canónicas exactas y handoff limpio hacia la Diapo 19 (`#040812`).
+  - [x] **T11.4.2 Sección 1 · Diapo 07 (`video_puente_tabular` — Prioridad Alta): `"VÍA 2: El Puente Tabular · El Truco de los Lags y Árboles (LightGBM, XGBoost)"`**
+    - [x] A11.4.2.1 Crear `video/seccion_1/diapo_7/video_puente_tabular/{build_scene.py,scene_template.html}` animando la ventana deslizante sobre `data/caso_1/senamhi_diario.csv` hacia la matriz `"Vector Xₜ = [ yₜ₋₁, yₜ₋₇, Media₇, Promoₜ, Climaₜ ] ──▶ yₜ₊ₕ"` y el techo de extrapolación de `data/caso_1/experimento_extrapolacion.csv` (`tope_entrenamiento = 34.0 °C`, `"Meseta Plana"` vs. diferencias $\Delta y_t$) sobre fondo `#040714`.
+    - [x] A11.4.2.2 Configurar `capture.mjs` + `render.sh` y renderizar `puente_tabular.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
+    - [x] A11.4.2.3 Validar con `ffprobe` y keyframes que las flechas `yₜ₋₁, yₜ₋₇` hacia la tabla y el muro de `34.0 °C` se leen sin colisiones.
   - [ ] **T11.4.3 Sección 3 · Diapo 21 (`video_fisica_biologica` — Prioridad Alta): `"Física biológica · Las 3 leyes que obligan a la IA a aprender botánica"`**
     - [ ] A11.4.3.1 Crear `video/seccion_3/diapo_21/video_fisica_biologica/{build_scene.py,scene_template.html}` con datos de `data/caso_2/cafe_jaen_hipotesis.json` y `cafe_jaen_campanias.csv` mostrando: (1) engranaje `τ = 6–8 meses`, (2) umbral `"VPD = eₛ(T) − eₐ > 1.8 kPa ó T > 32°C ──▶ Cierre Estomático y Aborto Floral"` + ceguera del `NDVI ~0.74` (`+1.4%`) ante el colapso de `-56.0%` (`10.0 qq/ha` en 2014), y (3) `"500 Variables Crudas sobre N=24 = Overfit"` vs. señal hídrica en floración (`r = 0.7564`) sobre `#040812`.
     - [ ] A11.4.3.2 Configurar `capture.mjs` + `render.sh` y renderizar `fisica_biologica.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040812`).

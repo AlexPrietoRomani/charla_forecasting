@@ -148,6 +148,11 @@ ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
     - *Entregable:* `back/build_deck.py` actualizado.
     - *AC:* `[ ]` Los 18 prototipos pasan por `load_prototype_b64()`; `[ ]` `back/build_deck.py` compila con código `0`.
     - *Tests:* **Unitario:** Verificar con grep que los 18 prototipos usan `load_prototype_b64`. **Simulación de Usuario:** Cargar `presentacion.html` y verificar ausencia de errores de consola.
+  - **T10.1.3 — Inyección Automática de Entrada Cinemática de Video (`#cinematicVideoGate`) y Handoff Sin Costura (`#040714`) en `front/prototype_engine.py` (Sinergia F10 ↔ F11)**
+    - *Objetivo:* Detectar automáticamente cualquier video en `video/seccion_{N}/diapo_{M}/video_*/` e inyectar la compuerta `#cinematicVideoGate` como Etapa 0 dentro de la misma diapositiva (con handoff sobre `#040714` y botón `"🎬 Intro"` en `.flowbar`).
+    - *Entregable:* `discover_slide_video()` e inyección de `#cinematicVideoGate` en `front/prototype_engine.py`.
+    - *AC:* `[ ]` Al avanzar de la Diapo $M-1 \to M$, el video se presenta primero dentro de la misma Diapo $M$ sin alterar el contador de 30 diapositivas y luego da paso al simulador interactivo.
+    - *Tests:* **Unitario:** Validar `discover_slide_video(ROOT, 1, 5)` y presencia de `#cinematicVideoGate`. **Simulación de Usuario:** Comprobar transición Diapo 4 → Diapo 5 (video → simulador) en Chromium.
 
 ### SF10.2 — Reparación de Altura, Proporción 2D/3D y Escalado Tipográfico en la Sección 1 (Diapositivas 5 a 11)
 - **Micro-objetivo:** Corregir la Diapositiva 5 (aplastada al 62% superior con etiquetas 3D superpuestas) y homologar las Diapositivas 6 a 11 con tipografía de auditorio y cero huecos negros izquierdos.
@@ -221,13 +226,16 @@ ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
 ## 8. Detalle de la Fase 11 (F11): Videos Deterministas por Diapositiva (Pipeline Offline + Estructura `video/`)
 
 - **Macro-objetivo:** Producir videos explicativos deterministas (repetición exacta frame a frame) para reemplazar o acompañar zonas visuales de cualquier diapositiva del deck, con un pipeline 100% offline (sin red ni servicios externos) y todo el material fuente versionado junto al MP4 para poder re-renderizarlo en un solo comando.
-- **Entregable global:** Pipeline local (`build_scene.py` → `scene.html` → `capture.mjs` vía CDP → `render.sh` → `ffmpeg` H.264 `yuv420p` `+faststart`) y estructura autocontenida `video/seccion_{N}/diapo_{M}/video_{nombre}/` (escena, capturador, fuentes woff2 y MP4); piloto `video_anatomia_senal` (Diapo 5) con versión vigente de 30 s (tramo `[4 s, 27 s]` estirado ×1.3043, 1920×1080) y versiones anteriores conservadas para comparación.
+- **Entregable global:** Pipeline local (`build_scene.py` → `scene.html` → `capture.mjs` vía CDP → `render.sh` → `ffmpeg` H.264 `yuv420p` `+faststart`), estructura autocontenida `video/seccion_{N}/diapo_{M}/video_{nombre}/` (escena, capturador, fuentes woff2 y MP4), piloto `video_anatomia_senal` (Diapo 5, `30 s`, `900 frames`, `1920×1080`) y backlog planificado en `SF11.4` con 6 fichas de producción adicionales:
+  - **Prioridad Alta:** `video_agro_origen` (Sección 3 · Diapo 19, candidato #1 para `SF11.3`), `video_puente_tabular` (Sección 1 · Diapo 07) y `video_fisica_biologica` (Sección 3 · Diapo 21).
+  - **Prioridad Media:** `video_zero_shot_tsfm` (Sección 1 · Diapo 09) y `video_cono_incertidumbre` (Sección 1 · Diapo 10).
+  - **Prioridad Baja (Opcional):** `video_sintesis_cierre` (Sección 5 · Diapo 29, `25 s` / `750 frames`).
 - **Criterios de Aceptación (AC) globales de F11:**
   - [X] `render.sh` regenera el MP4 sin intervención manual y `ffprobe` valida 1920×1080 @ 30 fps, 900 frames, H.264 `yuv420p` `+faststart`.
   - [X] Los videos no viven en `docs/`; cada video es dueño de sus fuentes y del MP4 final dentro de `video/seccion_{N}/diapo_{M}/video_{nombre}/`.
-  - [X] Cifras canónicas auditadas dentro del video (récord 38.0 °C del 07·10·2023, n = 2,557 días, S ±1.37 °C, σ del residuo 2.18 °C).
-  - [ ] Decisión de integración del piloto en la Diapo 5 (reproducción como entrada al avanzar de la Diapo 4 a la 5) y verificación del handoff con la diapositiva real.
-  - [ ] Segundo video piloto en otra sección que valide la replicabilidad del proceso.
+  - [X] Cifras canónicas auditadas dentro del video (récord 38.0 °C del 07·10·2023, n = 2,557 días, S ±1.37 °C, σ del residuo 2.18 °C, y datos verificados de `data/caso_1/` y `data/caso_2/`).
+  - [ ] Decisión de integración del piloto en la Diapo 5 (reproducción como entrada al avanzar de la Diapo 4 a la 5 mediante `#cinematicVideoGate` en `T10.1.3`) y verificación del handoff con la diapositiva real.
+  - [ ] Segundo video piloto en otra sección (`SF11.3`) y producción del inventario de fichas en `SF11.4` (`T11.4.1` a `T11.4.6`).
 
 ---
 
