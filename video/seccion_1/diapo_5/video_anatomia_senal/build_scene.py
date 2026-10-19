@@ -8,7 +8,7 @@ import pathlib
 import pandas as pd
 
 SRC = pathlib.Path(__file__).resolve().parent
-ROOT = SRC.parents[2]
+ROOT = SRC.parents[3]
 
 FPS = 30
 DURATION_MS = 30000

@@ -4,15 +4,17 @@ import { mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, readdirSync
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const [sceneArg, outArg, fpsArg, durMsArg] = process.argv.slice(2);
+const [sceneArg, outArg, fpsArg, durMsArg, startMsArg, timeScaleArg] = process.argv.slice(2);
 if (!sceneArg || !outArg) {
-  console.error("uso: node capture.mjs <scene.html> <framesDir> [fps=30] [durationMs=30000]");
+  console.error("uso: node capture.mjs <scene.html> <framesDir> [fps=30] [durationMs=30000] [startMs=0] [timeScale=1]");
   process.exit(2);
 }
 const scene = resolve(sceneArg);
 const outDir = resolve(outArg);
 const fps = Number(fpsArg || 30);
 const durMs = Number(durMsArg || 30000);
+const startMs = Number(startMsArg || 0);
+const timeScale = Number(timeScaleArg || 1);
 const totalFrames = Math.round((durMs / 1000) * fps);
 
 mkdirSync(outDir, { recursive: true });
@@ -103,7 +105,7 @@ for (;;) {
 
 const tStart = Date.now();
 for (let i = 0; i < totalFrames; i++) {
-  const ms = Math.round((i * 1000) / fps);
+  const ms = Math.round(startMs + (i * 1000) / fps / timeScale);
   await cdp("Runtime.evaluate", { expression: `window.__setTime(${ms})` });
   const shot = await cdp("Page.captureScreenshot", {
     format: "png",
