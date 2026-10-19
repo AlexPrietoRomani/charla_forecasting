@@ -305,8 +305,8 @@
   - [X] **T11.1.3 Script de Render por Video (`render.sh`)**
     - [X] A11.1.3.1 Encadenar `build_scene.py` → `capture.mjs` → `ffmpeg` (H.264 CRF 18, `yuv420p`, `+faststart`) en un solo comando reproducible.
 - [/] **SF11.2 Piloto Diapo 5: `video_anatomia_senal`**
-  - [X] **T11.2.1 Render de la Entrada Vigente (34 s · Cinemática · 1920×1080)**
-    - [X] A11.2.1.1 Generar `anatomia_senal.mp4` (1920×1080 @ 30 fps, 1,020 frames) como entrada cinemática: cold-open con la señal dibujándose, cámara, grano y barridos de luz, síntesis de las 4 capas y fundido final al color de fondo de la Diapo 5 (`#040714`); conservar `anatomia_senal_v2_30s.mp4` y `anatomia_senal_v1_completo.mp4` para comparación.
+  - [X] **T11.2.1 Render de la Entrada Vigente (30 s · Tramo [4–27 s] ×1.30 · 1920×1080)**
+    - [X] A11.2.1.1 Generar `anatomia_senal.mp4` (1920×1080 @ 30 fps, 900 frames): tramo `[4 s, 27 s]` de la escena cinemática estirado ×1.3043, fade-in de 0.35 s desde `#040714` y cierre con las 4 capas y la ecuación encendidas; conservar `anatomia_senal_v3_34s.mp4`, `anatomia_senal_v2_30s.mp4` y `anatomia_senal_v1_completo.mp4` para comparación.
   - [X] **T11.2.2 Estructura Autocontenida `video/seccion_1/diapo_5/video_anatomia_senal/`**
     - [X] A11.2.2.1 Mover escena, capturador, fuentes y MP4 fuera de `docs/` a la estructura `video/seccion_{N}/diapo_{M}/video_{nombre}/`.
   - [ ] **T11.2.3 Decisión de Integración en la Diapo 5 (Entrada desde la Diapo 4)**

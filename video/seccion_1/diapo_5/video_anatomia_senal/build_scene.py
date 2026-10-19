@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera scene.html: entrada cinemática de 34 s para la Diapo 5, Acto 1 'Anatomía de la señal'."""
+"""Genera scene.html: escena cinemática (34 s) para la Diapo 5, Acto 1 'Anatomía de la señal'. El render usa el tramo [4 s, 27 s] estirado a 30 s."""
 
 import base64
 import json
