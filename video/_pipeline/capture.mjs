@@ -1,8 +1,51 @@
 #!/usr/bin/env node
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, readdirSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+
+// Orden de búsqueda: CHROME_BIN → chromium de playwright (Python) → Edge → chromium/chrome en PATH.
+const EDGE_PATHS = [
+  "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+];
+const PLAYWRIGHT_PROBE =
+  "from playwright.sync_api import sync_playwright; p = sync_playwright().start(); print(p.chromium.executable_path); p.stop()";
+
+function firstExisting(paths) {
+  return paths.find((p) => existsSync(p)) || null;
+}
+
+function fromPlaywright() {
+  // Respeta PYTHON_BIN (render.py lo fija a sys.executable); sin él usa `python` del PATH.
+  const result = spawnSync(process.env.PYTHON_BIN || "python", ["-c", PLAYWRIGHT_PROBE], { encoding: "utf8" });
+  if (result.error || result.status !== 0) return null;
+  const lines = result.stdout.split("\n").map((l) => l.trim()).filter(Boolean);
+  return firstExisting([lines[lines.length - 1] || ""]);
+}
+
+function fromPath(name) {
+  const finder = process.platform === "win32" ? "where" : "which";
+  const result = spawnSync(finder, [name], { encoding: "utf8" });
+  if (result.error || result.status !== 0) return null;
+  return result.stdout.split("\n").map((l) => l.trim()).find(Boolean) || null;
+}
+
+function resolveBrowser() {
+  if (process.env.CHROME_BIN) {
+    if (existsSync(process.env.CHROME_BIN)) return process.env.CHROME_BIN;
+    throw new Error(`CHROME_BIN apunta a un ejecutable inexistente: ${process.env.CHROME_BIN}`);
+  }
+  const found =
+    fromPlaywright() ||
+    firstExisting(EDGE_PATHS) ||
+    fromPath("chromium") ||
+    fromPath("google-chrome");
+  if (!found) {
+    throw new Error("no hay navegador: define CHROME_BIN, instala playwright (chromium) o Edge");
+  }
+  return found;
+}
 
 const [sceneArg, outArg, fpsArg, durMsArg, startMsArg, timeScaleArg, dprArg] = process.argv.slice(2);
 if (!sceneArg || !outArg) {
@@ -25,7 +68,9 @@ const profile = join(tmpdir(), `chrome-cdp-${process.pid}`);
 rmSync(profile, { recursive: true, force: true });
 mkdirSync(profile, { recursive: true });
 
-const chrome = spawn("chromium", [
+const browserBin = resolveBrowser();
+console.log(`navegador: ${browserBin}`);
+const chrome = spawn(browserBin, [
   "--headless",
   "--no-sandbox",
   "--disable-gpu",
