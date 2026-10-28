@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dos casos, tres axiomas, una disciplina · cierre 25 s (1920×1080)</title>
+<style>
+__FONTS_CSS__
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden;background:#03050F}
+#stage{position:relative;width:1600px;height:900px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;color:#e8f2ff}
+#camera{position:absolute;inset:0;transform-origin:50% 52%}
+.mono{font-family:'IBM Plex Mono',monospace}
+.display{font-family:'Space Grotesk',sans-serif}
+.orb{position:absolute;width:1000px;height:1000px;border-radius:50%;pointer-events:none}
+#orbA{left:-320px;top:-440px;background:radial-gradient(closest-side, rgba(56,239,255,0.08), transparent 70%)}
+#orbB{right:-380px;bottom:-460px;background:radial-gradient(closest-side, rgba(110,240,180,0.07), transparent 70%)}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 95% at 50% 42%, transparent 58%, rgba(0,0,0,0.5) 100%)}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.055;mix-blend-mode:overlay;background-repeat:repeat;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+#sweep{position:absolute;top:140px;left:-560px;width:520px;height:660px;pointer-events:none;opacity:0;transform:skewX(-14deg);filter:blur(30px);background:linear-gradient(100deg, rgba(56,239,255,0) 0%, rgba(56,239,255,.06) 50%, rgba(56,239,255,0) 100%)}
+svg#scene{position:absolute;inset:0}
+.pill{position:absolute;padding:8px 16px 9px;border-radius:999px;border:1px solid;font-size:13px;letter-spacing:.4px;opacity:0;white-space:nowrap;background:rgba(3,8,20,0.9)}
+#headerSmall{position:absolute;left:96px;top:42px;opacity:0}
+#hKick{font-size:12.5px;letter-spacing:2.5px;color:#38efff}
+#hSub{font-size:17px;color:#cfe0f5;margin-top:5px}
+#hRight{right:96px;top:52px;border-color:rgba(140,170,220,0.25);color:#8b9ab8;font-size:12px}
+#coldBlock{position:absolute;inset:0}
+#coldBlock>.coldLine{position:absolute;left:0;right:0;text-align:center;opacity:0}
+#ck{top:262px;font-size:14px;letter-spacing:4px;color:#38efff}
+#ch{top:292px;font-size:46px;font-weight:700;letter-spacing:-0.5px}
+#cs{top:364px;font-size:18px;color:#cfe0f5}
+#pcold1{left:530px;top:405px;border-color:rgba(56,239,255,0.45);color:#a8ecff;font-size:12px}
+#pcold2{left:848px;top:405px;border-color:rgba(110,240,180,0.45);color:#bff2d8;font-size:12px}
+#coldSvg{position:absolute;left:400px;top:490px;opacity:0}
+.bt{position:absolute;inset:0;pointer-events:none}
+.bnum{position:absolute;left:140px;top:286px;font-size:52px;font-weight:700;line-height:1;opacity:0}
+.bkick{position:absolute;left:216px;top:300px;font-size:11.5px;letter-spacing:2.4px;color:#8b9ab8;opacity:0}
+.btitle{position:absolute;left:140px;top:330px;width:640px;font-size:38px;font-weight:700;line-height:1.1;letter-spacing:-0.4px;opacity:0}
+.bsub{position:absolute;left:140px;top:432px;width:620px;font-size:14.5px;line-height:1.45;color:#aabbd8;opacity:0}
+.fact{position:absolute;left:140px;width:640px;opacity:0;border-left:2px solid rgba(120,160,220,0.3);padding-left:14px}
+.f1a{top:496px}.f1b{top:548px}
+.fl{font-size:10px;letter-spacing:1.6px;color:#66758f}
+.fv{font-size:15.5px;color:#e8f2ff;margin-top:4px}
+.sumCard{position:absolute;top:330px;width:430px;height:120px;border-radius:14px;opacity:0;background:rgba(5,12,24,0.72)}
+#sum1{left:150px;border:1px solid rgba(56,239,255,0.35)}
+#sum2{left:585px;border:1px solid rgba(255,192,92,0.35)}
+#sum3{left:1020px;border:1px solid rgba(110,240,180,0.35)}
+.sumCard .cn{position:absolute;left:22px;top:14px;font-size:10.5px;letter-spacing:1.6px;color:#8b9ab8}
+.sumCard .cl{position:absolute;left:22px;top:32px;font-size:16px;font-weight:700;letter-spacing:.2px;white-space:nowrap}
+.sumCard .c1{position:absolute;left:22px;top:76px;font-size:11.5px;color:#cfe0f5}
+.sumCard .c2{position:absolute;left:22px;top:96px;font-size:10.5px;color:#7f8fb0}
+#closeWrap{position:absolute;inset:0;opacity:0}
+#closeBg{position:absolute;inset:0;background:#03050F}
+#closeWrap .cline{position:absolute;left:0;right:0;text-align:center}
+#cKick{top:150px;font-size:14px;letter-spacing:4px;color:#38efff}
+#cH1{top:178px;font-size:48px;font-weight:700;letter-spacing:-0.5px}
+#cSub{top:246px;font-size:18px;color:#cfe0f5}
+#punch{top:500px;font-size:20px;color:#e8f2ff;letter-spacing:.2px}
+#sumRule{position:absolute;left:700px;top:542px;width:200px;height:1px;background:linear-gradient(90deg, transparent, rgba(56,239,255,.7), transparent);opacity:0}
+#cFoot{top:570px;font-size:11.5px;letter-spacing:.6px;color:#7f8fb0}
+#cFoot2{top:592px;font-size:10.5px;letter-spacing:1.2px;color:#5c6a83}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="camera">
+    <div class="orb" id="orbA"></div>
+    <div class="orb" id="orbB"></div>
+    <svg id="scene" viewBox="0 0 1600 900" width="1600" height="900">
+      <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3.2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#02050d" fill-opacity="0.92" stroke="rgba(56,239,255,0.24)" opacity="0"/>
+      <g id="dust" opacity="0"></g>
+      <g id="gB1" opacity="0">
+        <text x="880" y="352" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace" letter-spacing="1.5">ORIGEN RODANTE · 6 FOLDS</text>
+        <g id="folds"></g>
+        <g id="years1"></g>
+        <rect x="900" y="660" width="12" height="12" rx="2" fill="rgba(56,239,255,0.45)"/>
+        <text x="918" y="670" fill="#66758f" font-size="10" font-family="IBM Plex Mono, monospace">TRAIN</text>
+        <rect x="990" y="660" width="12" height="12" rx="2" fill="rgba(255,192,92,0.8)"/>
+        <text x="1008" y="670" fill="#66758f" font-size="10" font-family="IBM Plex Mono, monospace">TEST</text>
+        <text x="1120" y="670" fill="#66758f" font-size="10" font-family="IBM Plex Mono, monospace">el test siempre va después</text>
+      </g>
+      <g id="gB2" opacity="0">
+        <text x="880" y="352" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace" letter-spacing="1.5">CONO CALIBRADO · 7 DÍAS</text>
+        <text x="880" y="398" fill="#ffe0aa" font-size="24" font-family="Space Grotesk, sans-serif" font-weight="700">29.55 – 37.42 °C</text>
+        <text x="1440" y="398" text-anchor="end" fill="#8b9ab8" font-size="11" font-family="IBM Plex Mono, monospace">σ = 2.18 °C · q̂ = 3.09 °C</text>
+        <g id="ax2"></g>
+        <path id="b2band" fill="rgba(255,192,92,0.11)" stroke="rgba(255,192,92,0.4)" stroke-width="1" opacity="0"/>
+        <path id="b2line" fill="none" stroke="#ffc05c" stroke-width="2" filter="url(#glow)" opacity="0"/>
+        <g id="b2obs"></g>
+        <circle id="frDot" r="5.5" fill="#ff7b72" filter="url(#glow)" opacity="0"/>
+        <text id="frTxt" x="1180" y="596" fill="#ffb4ad" font-size="9.5" font-family="IBM Plex Mono, monospace" opacity="0">27.2 °C</text>
+      </g>
+      <g id="gB3" opacity="0">
+        <text x="880" y="352" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace" letter-spacing="1.5">SATÉLITE VS. FÍSICA · JAÉN</text>
+        <text x="880" y="384" fill="#8b9ab8" font-size="10" font-family="IBM Plex Mono, monospace">NDVI ANUAL</text>
+        <text x="1160" y="384" fill="#8b9ab8" font-size="10" font-family="IBM Plex Mono, monospace">RENDIMIENTO (qq/ha)</text>
+        <line x1="1142" y1="376" x2="1142" y2="620" stroke="rgba(120,160,220,0.14)"/>
+        <path id="ndviLine" fill="none" stroke="#38efff" stroke-width="1.8" opacity="0"/>
+        <g id="yieldBars"></g>
+        <text x="960" y="478" fill="#a8ecff" font-size="10" font-family="IBM Plex Mono, monospace" opacity="0" id="ndviTag">2014 · +1.4%</text>
+        <text x="1160" y="420" fill="#ffb4ad" font-size="10" font-family="IBM Plex Mono, monospace" opacity="0" id="yieldTag">2014 · −56.0%</text>
+        <text x="1160" y="436" fill="#66758f" font-size="9.5" font-family="IBM Plex Mono, monospace" opacity="0" id="yieldVal">10.0 qq/ha</text>
+        <text x="880" y="666" fill="#66758f" font-size="11" font-family="IBM Plex Sans, sans-serif">El satélite ve la hoja; la física ve el fruto.</text>
+      </g>
+    </svg>
+    <div id="headerSmall">
+      <div id="hKick" class="mono">ACTO 5 · CONCLUSIONES</div>
+      <div id="hSub">La evidencia de dos mundos converge en un mismo método</div>
+    </div>
+    <div id="hRight" class="pill mono">PUNCHANA · n = 2,557 │ JAÉN · N = 24</div>
+    <div id="coldBlock">
+      <div id="ck" class="mono coldLine">ACTO 5 · CONCLUSIONES</div>
+      <div id="ch" class="display coldLine">Dos casos, tres axiomas, una disciplina</div>
+      <div id="cs" class="coldLine">Iquitos atmosférico + Jaén fenológico ──▶ la misma arquitectura</div>
+      <div id="pcold1" class="pill mono">PUNCHANA · n = 2,557 · RÉCORD 38.0 °C</div>
+      <div id="pcold2" class="pill mono">JAÉN · N = 24 · r = 0.7564</div>
+      <svg id="coldSvg" width="800" height="170" viewBox="0 0 800 170">
+        <path id="wL" d="M0 70 C80 70 120 38 180 54 S300 100 360 110 L400 110" fill="none" stroke="#38efff" stroke-width="1.6" stroke-dasharray="1" pathLength="1" opacity="0"/>
+        <path id="wR" d="M800 70 C720 70 680 38 620 54 S500 100 440 110 L400 110" fill="none" stroke="#6ef0b4" stroke-width="1.6" stroke-dasharray="1" pathLength="1" opacity="0"/>
+        <circle id="node" cx="400" cy="110" r="5" fill="#ffc05c" filter="url(#glow)" opacity="0"/>
+        <circle id="nodeRing" cx="400" cy="110" r="11" fill="none" stroke="rgba(255,192,92,0.5)" stroke-width="1" opacity="0"/>
+        <text x="400" y="150" text-anchor="middle" fill="#66758f" font-size="10" font-family="IBM Plex Mono, monospace" letter-spacing="2">MISMA ARQUITECTURA</text>
+      </svg>
+    </div>
+    <div class="bt" id="beat1">
+      <div class="bnum display" id="b1num" style="color:#38efff">01</div>
+      <div class="bkick mono" id="b1kick">AXIOMA · CAUSALIDAD</div>
+      <div class="btitle display" id="b1title">Respeta la causalidad del tiempo</div>
+      <div class="bsub" id="b1sub">Nunca entrenes con el futuro: el test siempre va después del train.</div>
+      <div class="fact f1a" id="b1f1"><div class="fl mono">VALIDACIÓN</div><div class="fv">Split temporal rodante · 6 folds</div></div>
+      <div class="fact f1b" id="b1f2"><div class="fl mono">COSTE</div><div class="fv">ExtraTrees · RMSE 1.88 °C en 0.25 s (CPU)</div></div>
+    </div>
+    <div class="bt" id="beat2">
+      <div class="bnum display" id="b2num" style="color:#ffc05c">02</div>
+      <div class="bkick mono" id="b2kick">AXIOMA · INCERTIDUMBRE</div>
+      <div class="btitle display" id="b2title">El valor está en la banda, no en el punto</div>
+      <div class="bsub" id="b2sub">La incertidumbre no se adivina: se calibra sin suponer normalidad.</div>
+      <div class="fact f1a" id="b2f1"><div class="fl mono">CALIBRACIÓN</div><div class="fv">Split Conformal · q̂ = 3.09 °C</div></div>
+      <div class="fact f1b" id="b2f2"><div class="fl mono">COBERTURA</div><div class="fv">P10–P90 Punchana · 29.55 – 37.42 °C</div></div>
+    </div>
+    <div class="bt" id="beat3">
+      <div class="bnum display" id="b3num" style="color:#6ef0b4">03</div>
+      <div class="bkick mono" id="b3kick">AXIOMA · FÍSICA</div>
+      <div class="btitle display" id="b3title">Próximo paso: física antes que algoritmo</div>
+      <div class="bsub" id="b3sub">Un índice anual saturado no explica lo que el clima de floración sí.</div>
+      <div class="fact f1a" id="b3f1"><div class="fl mono">SEÑAL</div><div class="fv">Balance hídrico en floración · r = 0.7564</div></div>
+      <div class="fact f1b" id="b3f2"><div class="fl mono">CONTRASTE</div><div class="fv">NDVI anual +1.4% vs. rendimiento −56.0% (2014)</div></div>
+    </div>
+    <div id="sweep"></div>
+    <div id="closeWrap">
+      <div id="closeBg"></div>
+      <div id="cKick" class="mono cline">ACTO 5 · CONCLUSIONES</div>
+      <div id="cH1" class="display cline">Dos casos, un mismo método</div>
+      <div id="cSub" class="cline">La causalidad acota el futuro · la banda calibra la duda · la física explica el porqué</div>
+      <div class="sumCard" id="sum1"><div class="cn mono" style="color:#38efff">01 · CAUSALIDAD</div><div class="cl display">🎯 Respeta la causalidad del tiempo</div><div class="c1">Split temporal rodante — el futuro nunca entra al train</div><div class="c2 mono">RMSE 1.88 °C · 0.25 s</div></div>
+      <div class="sumCard" id="sum2"><div class="cn mono" style="color:#ffe0aa">02 · BANDA</div><div class="cl display">🧠 El valor está en la banda, no en el punto</div><div class="c1">Conformal calibrado — la duda se mide, no se supone</div><div class="c2 mono">P10–P90 · 29.55 – 37.42 °C</div></div>
+      <div class="sumCard" id="sum3"><div class="cn mono" style="color:#bff2d8">03 · FÍSICA</div><div class="cl display">🚀 Próximo paso: física antes que algoritmo</div><div class="c1">Mecanismo antes que modelo — el clima de floración manda</div><div class="c2 mono">r = 0.7564 · τ = 6–8 meses</div></div>
+      <div id="punch" class="cline">La evidencia no pide un modelo más grande: pide un método más honesto.</div>
+      <div id="sumRule"></div>
+      <div id="cFoot" class="mono cline">PUNCHANA · n = 2,557 · RÉCORD 38.0 °C │ JAÉN · N = 24 · r = 0.7564 · ROYA −56.0%</div>
+      <div id="cFoot2" class="mono cline">CAUSALIDAD · INCERTIDUMBRE CALIBRADA · FÍSICA</div>
+    </div>
+  </div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+</div>
+<script>
+const DATA=__DATA_JSON__;
+const DURMS=__DURATION_MS__;
+const clamp=x=>Math.max(0,Math.min(1,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const eoc=p=>1-Math.pow(1-p,3);
+const eic=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eib=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2)};
+const eac=p=>p*p;
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+
+const TL={
+ coldIn:[0.15,0.5], ck:[0.35,0.9], ch:[0.5,1.3], cs:[0.85,1.5], cp1:[1.1,1.6], cp2:[1.3,1.8],
+ waves:[1.4,3.2], node:[2.8,3.4], coldOut:[4.1,4.7],
+ head:[4.35,5.0], panel:[4.4,5.1],
+ b1:[4.95,5.45], b1num:[5.0,5.4], b1kick:[5.05,5.45], b1title:[5.1,5.6], b1sub:[5.3,5.8],
+ b1facts:[5.5,5.8], b1viz:[5.6,9.2], b1out:[9.2,9.6],
+ b2:[9.7,10.2], b2facts:[10.2,10.5], b2viz:[10.2,13.5], b2out:[13.5,13.9],
+ b3:[14.0,14.5], b3facts:[14.5,14.8], b3viz:[14.5,17.8], b3out:[17.8,18.2],
+ close:[18.4,19.0], sums:[19.2,19.45,19.7], punch:[20.4,21.0], rule:[20.6,21.2], foot:[21.2,21.7], headOut:[18.3,18.7]
+};
+
+const ELS={camera:$('camera'),grain:$('grain'),sweep:$('sweep'),orbA:$('orbA'),orbB:$('orbB'),
+dust:$('dust'),panel:$('panel'),
+gB1:$('gB1'),gB2:$('gB2'),gB3:$('gB3'),folds:$('folds'),years1:$('years1'),
+ax2:$('ax2'),b2band:$('b2band'),b2line:$('b2line'),b2obs:$('b2obs'),frDot:$('frDot'),frTxt:$('frTxt'),
+ndviLine:$('ndviLine'),yieldBars:$('yieldBars'),ndviTag:$('ndviTag'),yieldTag:$('yieldTag'),yieldVal:$('yieldVal'),
+headerSmall:$('headerSmall'),hKick:$('hKick'),hSub:$('hSub'),hRight:$('hRight'),
+coldBlock:$('coldBlock'),ck:$('ck'),ch:$('ch'),cs:$('cs'),pcold1:$('pcold1'),pcold2:$('pcold2'),
+coldSvg:$('coldSvg'),wL:$('wL'),wR:$('wR'),node:$('node'),nodeRing:$('nodeRing'),
+beats:[$('beat1'),$('beat2'),$('beat3')],
+b1:[$('b1num'),$('b1kick'),$('b1title'),$('b1sub'),$('b1f1'),$('b1f2')],
+b2:[$('b2num'),$('b2kick'),$('b2title'),$('b2sub'),$('b2f1'),$('b2f2')],
+b3:[$('b3num'),$('b3kick'),$('b3title'),$('b3sub'),$('b3f1'),$('b3f2')],
+closeWrap:$('closeWrap'),cKick:$('cKick'),cH1:$('cH1'),cSub:$('cSub'),
+sums:[$('sum1'),$('sum2'),$('sum3')],punch:$('punch'),sumRule:$('sumRule'),cFoot:$('cFoot'),cFoot2:$('cFoot2')};
+
+const DUST=[];
+(function initDust(){let s=975318642;
+ const r=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+ for(let i=0;i<22;i++){const c=document.createElementNS(NS,'circle');
+  const d={x:80+r()*1440,y:90+r()*780,rad:0.8+r()*1.5,o:0.05+r()*0.13,ph:r()*6.28,ph2:r()*6.28,w:0.08+r()*0.1,rise:r()*0.5};
+  c.setAttribute('r',d.rad.toFixed(2));c.setAttribute('fill','#9fc4ff');
+  ELS.dust.appendChild(c);d.el=c;DUST.push(d)}})();
+
+const B2X=i=>900+i*(540/(DATA.days.length-1));
+const y2=v=>620-(v-26)*13.5;
+const PTS2=DATA.et.map((v,i)=>[B2X(i),y2(v)]);
+const TRAIN=[],TEST=[];
+const NDF=[],YLD=[];
+let MAXR=1;
+(function initStatic(){
+ const F=ELS.folds;
+ for(let k=0;k<6;k++){const y=392+k*36;
+  const g=document.createElementNS(NS,'g');g.setAttribute('opacity','0');
+  const split=1080+k*48;
+  const tr=document.createElementNS(NS,'rect');
+  tr.setAttribute('x','900');tr.setAttribute('y',y);tr.setAttribute('height','16');tr.setAttribute('rx','3');
+  tr.setAttribute('fill','rgba(56,239,255,0.32)');tr.setAttribute('width','0');
+  const te=document.createElementNS(NS,'rect');
+  te.setAttribute('x',(split+4).toFixed(1));te.setAttribute('y',y);te.setAttribute('height','16');te.setAttribute('rx','3');
+  te.setAttribute('fill','rgba(255,192,92,0.8)');te.setAttribute('width','0');
+  const lb=document.createElementNS(NS,'text');
+  lb.setAttribute('x','890');lb.setAttribute('y',y+12);lb.setAttribute('text-anchor','end');
+  lb.setAttribute('fill','#66758f');lb.setAttribute('font-size','10');lb.setAttribute('font-family','IBM Plex Mono, monospace');
+  lb.textContent='F'+(k+1);
+  g.appendChild(tr);g.appendChild(te);g.appendChild(lb);F.appendChild(g);
+  TRAIN.push({el:tr,w:split-900});TEST.push({el:te,w:56});}
+ for(let j=0;j<7;j++){const x=900+j*(520/6);
+  const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x',x.toFixed(1));tx.setAttribute('y','632');tx.setAttribute('text-anchor','middle');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','10');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+  tx.textContent=2019+j;ELS.years1.appendChild(tx);
+  const tk=document.createElementNS(NS,'line');
+  tk.setAttribute('x1',x.toFixed(1));tk.setAttribute('x2',x.toFixed(1));tk.setAttribute('y1','378');tk.setAttribute('y2','586');
+  tk.setAttribute('stroke','rgba(120,160,220,0.07)');ELS.years1.insertBefore(tk,ELS.years1.firstChild);}
+
+ const ax=ELS.ax2;
+ [28,32,36].forEach(v=>{const l=document.createElementNS(NS,'line');
+  l.setAttribute('x1','900');l.setAttribute('x2','1440');l.setAttribute('y1',y2(v).toFixed(1));l.setAttribute('y2',y2(v).toFixed(1));
+  l.setAttribute('stroke','rgba(140,170,220,0.09)');ax.appendChild(l);
+  const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x','890');tx.setAttribute('y',(y2(v)+4).toFixed(1));tx.setAttribute('text-anchor','end');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','10');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+  tx.textContent=v+'°';ax.appendChild(tx)});
+ DATA.days.forEach((d,i)=>{const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x',B2X(i).toFixed(1));tx.setAttribute('y','646');tx.setAttribute('text-anchor','middle');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','10');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+  tx.textContent=d;ax.appendChild(tx)});
+ const up=DATA.hi.map((v,i)=>[B2X(i),y2(v)]);
+ const dn=DATA.lo.map((v,i)=>[B2X(i),y2(v)]);
+ ELS.b2band.setAttribute('d','M'+up.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')+'L'+dn.slice().reverse().map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')+'Z');
+ DATA.obs.forEach((v,i)=>{const c=document.createElementNS(NS,'circle');
+  const fr=i===3;
+  c.setAttribute('cx',B2X(i).toFixed(1));c.setAttribute('cy',y2(v).toFixed(1));c.setAttribute('r',fr?'0':'4');
+  c.setAttribute('fill',fr?'#ff7b72':'#dff4ff');c.setAttribute('opacity','0');ELS.b2obs.appendChild(c)});
+ ELS.frDot.setAttribute('cx',B2X(3));ELS.frDot.setAttribute('cy',y2(DATA.obs[3]));
+
+ DATA.years.forEach((yr,i)=>{const v=DATA.ndvi[i];
+  if(v!=null)NDF.push([880+i*(240/23),600-(v-0.69)*1000]);
+  const r=DATA.rend[i];
+  if(r!=null){MAXR=Math.max(MAXR,r)}});
+ DATA.years.forEach((yr,i)=>{const r=DATA.rend[i];
+  if(r==null)return;
+  const x=1160+i*(265/23);
+  const b=document.createElementNS(NS,'rect');
+  b.setAttribute('x',x.toFixed(1));b.setAttribute('y','600');b.setAttribute('width','8');b.setAttribute('height','0');
+  b.setAttribute('rx','2');b.setAttribute('fill',i===DATA.i2014?'rgba(255,123,114,0.9)':'rgba(110,240,180,0.5)');
+  b.setAttribute('opacity','0');ELS.yieldBars.appendChild(b);YLD.push({el:b,x:x,h:r/MAXR*150})});
+
+ ELS.ndviLine.setAttribute('d','M'+NDF.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L'));
+ ELS.yieldTag.textContent='2014 · '+DATA.caidaPct.toFixed(1)+'%';
+ ELS.ndviTag.textContent='2014 · +'+DATA.varNdviPct.toFixed(1)+'%';
+ ELS.yieldVal.textContent=DATA.rend2014.toFixed(1)+' qq/ha';
+})();
+
+function poly(pts,frac){if(frac<=0.002)return'';const upto=frac*(pts.length-1);const last=Math.floor(upto);
+ let d='';for(let i=0;i<=last;i++){d+=(i?'L':'M')+pts[i][0].toFixed(1)+' '+pts[i][1].toFixed(1)}
+ if(last<pts.length-1&&upto>last){const a=pts[last],b=pts[last+1];
+  const x=a[0]+(b[0]-a[0])*(upto-last),y=a[1]+(b[1]-a[1])*(upto-last);
+  d+='L'+x.toFixed(1)+' '+y.toFixed(1)}
+ return d}
+function enterX(el,p,dist,gate,extra){el.style.opacity=(p*gate).toFixed(3);el.style.transform=(extra||'')+' translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function mix(a,b,p){return [Math.round(a[0]+(b[0]-a[0])*p),Math.round(a[1]+(b[1]-a[1])*p),Math.round(a[2]+(b[2]-a[2])*p)]}
+
+let tCur=0;
+function render(t){
+ tCur=t;
+ ELS.orbA.style.transform='translate('+(Math.sin(t*0.11)*18).toFixed(1)+'px,'+(Math.cos(t*0.09)*14).toFixed(1)+'px)';
+ ELS.orbB.style.transform='translate('+(Math.sin(t*0.08+2)*20).toFixed(1)+'px,'+(Math.cos(t*0.1+1)*16).toFixed(1)+'px)';
+ const camT=seg(t,0.3,23.5);
+ const cs=1+0.012*camT;
+ ELS.camera.style.transform='translate('+(-8*camT+3*Math.sin(t*0.05)).toFixed(2)+'px,'+(2*Math.sin(t*0.043+1)).toFixed(2)+'px) scale('+cs.toFixed(4)+')';
+ ELS.grain.style.backgroundPosition=((t*57)%160).toFixed(0)+'px '+((t*31)%160).toFixed(0)+'px';
+
+ const sw0=5.8,swP=8.6,swD=2.2;let swO=0,swX=0;
+ if(t>sw0&&t<24){const ph=(t-sw0)%swP;if(ph<swD){swO=Math.sin(Math.PI*ph/swD)*0.6;swX=(-560+ph/swD*2500)}}
+ ELS.sweep.style.transform='skewX(-14deg) translateX('+swX.toFixed(0)+'px)';
+ ELS.sweep.style.opacity=swO.toFixed(3);
+
+ DUST.forEach(d=>{d.el.setAttribute('cx',(d.x+18*Math.sin(t*d.w+d.ph)).toFixed(1));
+  d.el.setAttribute('cy',(d.y+10*Math.cos(t*0.09+d.ph2)-t*d.rise).toFixed(1));
+  d.el.setAttribute('opacity',(d.o*(0.55+0.45*Math.sin(t*0.9+d.ph))).toFixed(3))});
+ ELS.dust.setAttribute('opacity','1');
+
+ const coldOut=seg(t,TL.coldOut[0],TL.coldOut[1]);
+ const coldO=seg(t,TL.coldIn[0],TL.coldIn[1]);
+ ELS.coldBlock.style.opacity=(coldO*(1-coldOut)).toFixed(3);
+ ELS.coldBlock.style.transform='translateY('+(-24*eac(coldOut)).toFixed(1)+'px)';
+ enterX(ELS.ck,eoc(seg(t,TL.ck[0],TL.ck[1])),14,coldO);
+ enterX(ELS.ch,eoc(seg(t,TL.ch[0],TL.ch[1])),20,coldO);
+ enterX(ELS.cs,eoc(seg(t,TL.cs[0],TL.cs[1])),12,coldO);
+ enterX(ELS.pcold1,eib(seg(t,TL.cp1[0],TL.cp1[1])),10,coldO);
+ enterX(ELS.pcold2,eib(seg(t,TL.cp2[0],TL.cp2[1])),10,coldO);
+ ELS.coldSvg.style.opacity=seg(t,TL.waves[0],TL.waves[0]+0.3).toFixed(3);
+ const wp=eoc(seg(t,TL.waves[0],TL.waves[1]));
+ ELS.wL.style.strokeDashoffset=(1-wp).toFixed(3);
+ ELS.wR.style.strokeDashoffset=(1-wp).toFixed(3);
+ ELS.wL.setAttribute('opacity',seg(t,TL.waves[0],TL.waves[0]+0.2).toFixed(3));
+ ELS.wR.setAttribute('opacity',seg(t,TL.waves[0],TL.waves[0]+0.2).toFixed(3));
+ const np=eoc(seg(t,TL.node[0],TL.node[1]));
+ ELS.node.setAttribute('opacity',np.toFixed(3));
+ ELS.nodeRing.setAttribute('opacity',(np*0.8).toFixed(3));
+ ELS.nodeRing.setAttribute('r',(8+5*np+2*Math.sin(t*2.2)).toFixed(1));
+
+ const headO=seg(t,TL.head[0],TL.head[1])*(1-seg(t,TL.headOut[0],TL.headOut[1]));
+ ELS.headerSmall.style.opacity=headO.toFixed(3);
+ enterX(ELS.hKick,eoc(seg(t,TL.head[0]+0.05,TL.head[1]+0.2)),10,headO);
+ enterX(ELS.hSub,eoc(seg(t,TL.head[0]+0.2,TL.head[1]+0.4)),10,headO);
+ enterX(ELS.hRight,eoc(seg(t,TL.head[0]+0.35,TL.head[1]+0.5)),10,headO);
+
+ const panelO=seg(t,TL.panel[0],TL.panel[1]);
+ ELS.panel.style.opacity=panelO.toFixed(3);
+ const CY=[56,239,255],AM=[255,192,92],GR=[110,240,180];
+ let pc=CY;
+ if(t>=9.3)pc=mix(CY,AM,seg(t,9.3,9.7));
+ if(t>=13.6)pc=mix(AM,GR,seg(t,13.6,14.0));
+ ELS.panel.setAttribute('stroke','rgba('+pc[0]+','+pc[1]+','+pc[2]+','+(0.18+0.06*Math.sin(t*0.9)).toFixed(2)+')');
+
+ const o1=seg(t,TL.b1[0],TL.b1[1])*(1-seg(t,TL.b1out[0],TL.b1out[1]));
+ const bx=ELS.b1;
+ enterX(bx[0],eoc(seg(t,TL.b1num[0],TL.b1num[1])),14,o1);
+ enterX(bx[1],eoc(seg(t,TL.b1kick[0],TL.b1kick[1])),10,o1);
+ enterX(bx[2],eoc(seg(t,TL.b1title[0],TL.b1title[1])),18,o1);
+ enterX(bx[3],eoc(seg(t,TL.b1sub[0],TL.b1sub[1])),10,o1);
+ enterX(bx[4],eoc(seg(t,TL.b1facts[0],TL.b1facts[1])),10,o1);
+ enterX(bx[5],eoc(seg(t,TL.b1facts[0]+0.18,TL.b1facts[1]+0.18)),10,o1);
+ const v1=seg(t,TL.b1viz[0],TL.b1viz[1])*o1;
+ ELS.gB1.setAttribute('opacity',o1.toFixed(3));
+ ELS.folds.childNodes.forEach((g,k)=>{const st=TL.b1viz[0]+k*0.16;
+  g.setAttribute('opacity',seg(t,st,st+0.3).toFixed(3));
+  TRAIN[k].el.setAttribute('width',(TRAIN[k].w*eoc(seg(t,st+0.1,st+0.65))).toFixed(1));
+  TEST[k].el.setAttribute('width',(TEST[k].w*eoc(seg(t,st+0.25,st+0.8))).toFixed(1))});
+
+ const o2=seg(t,TL.b2[0],TL.b2[1])*(1-seg(t,TL.b2out[0],TL.b2out[1]));
+ const b2=ELS.b2;
+ enterX(b2[0],eoc(seg(t,TL.b2[0],TL.b2[1])),14,o2);
+ enterX(b2[1],eoc(seg(t,TL.b2[0]+0.05,TL.b2[1]+0.1)),10,o2);
+ enterX(b2[2],eoc(seg(t,TL.b2[0]+0.1,TL.b2[1]+0.15)),18,o2);
+ enterX(b2[3],eoc(seg(t,TL.b2[0]+0.25,TL.b2[1]+0.25)),10,o2);
+ enterX(b2[4],eoc(seg(t,TL.b2facts[0],TL.b2facts[1])),10,o2);
+ enterX(b2[5],eoc(seg(t,TL.b2facts[0]+0.18,TL.b2facts[1]+0.18)),10,o2);
+ ELS.gB2.setAttribute('opacity',o2.toFixed(3));
+ const v2=seg(t,TL.b2viz[0],TL.b2viz[1])*o2;
+ const bp=seg(t,TL.b2viz[0],TL.b2viz[0]+0.9);
+ ELS.b2band.setAttribute('opacity',(bp*o2).toFixed(3));
+ ELS.b2line.setAttribute('d',poly(PTS2,eoc(seg(t,TL.b2viz[0]+0.1,TL.b2viz[0]+1.5))));
+ ELS.b2line.setAttribute('opacity',(seg(t,TL.b2viz[0]+0.1,TL.b2viz[0]+0.4)*o2).toFixed(3));
+ ELS.b2obs.querySelectorAll('circle').forEach((c,k)=>{const st=TL.b2viz[0]+0.8+k*0.1;
+  c.setAttribute('opacity',(seg(t,st,st+0.3)*o2).toFixed(3))});
+ ELS.frDot.setAttribute('opacity',(seg(t,TL.b2viz[0]+0.9,TL.b2viz[0]+1.3)*o2).toFixed(3));
+ ELS.frTxt.setAttribute('opacity',(seg(t,TL.b2viz[0]+1.0,TL.b2viz[0]+1.4)*o2).toFixed(3));
+
+ const o3=seg(t,TL.b3[0],TL.b3[1])*(1-seg(t,TL.b3out[0],TL.b3out[1]));
+ const b3=ELS.b3;
+ enterX(b3[0],eoc(seg(t,TL.b3[0],TL.b3[1])),14,o3);
+ enterX(b3[1],eoc(seg(t,TL.b3[0]+0.05,TL.b3[1]+0.1)),10,o3);
+ enterX(b3[2],eoc(seg(t,TL.b3[0]+0.1,TL.b3[1]+0.15)),18,o3);
+ enterX(b3[3],eoc(seg(t,TL.b3[0]+0.25,TL.b3[1]+0.25)),10,o3);
+ enterX(b3[4],eoc(seg(t,TL.b3facts[0],TL.b3facts[1])),10,o3);
+ enterX(b3[5],eoc(seg(t,TL.b3facts[0]+0.18,TL.b3facts[1]+0.18)),10,o3);
+ ELS.gB3.setAttribute('opacity',o3.toFixed(3));
+ ELS.ndviLine.setAttribute('d',poly(NDF,eoc(seg(t,TL.b3viz[0]+0.1,TL.b3viz[0]+1.6))));
+ ELS.ndviLine.setAttribute('opacity',(seg(t,TL.b3viz[0]+0.1,TL.b3viz[0]+0.4)*o3).toFixed(3));
+ YLD.forEach((b,k)=>{const st=TL.b3viz[0]+0.2+k*0.09;
+  b.el.setAttribute('opacity',(seg(t,st,st+0.25)*o3).toFixed(3));
+  b.el.setAttribute('height',(b.h*eoc(seg(t,st+0.05,st+0.5))).toFixed(1));
+  b.el.setAttribute('y',(600-b.h*eoc(seg(t,st+0.05,st+0.5))).toFixed(1))});
+ ELS.ndviTag.setAttribute('opacity',(seg(t,TL.b3viz[0]+0.9,TL.b3viz[0]+1.2)*o3).toFixed(3));
+ ELS.yieldTag.setAttribute('opacity',(seg(t,TL.b3viz[0]+1.0,TL.b3viz[0]+1.3)*o3).toFixed(3));
+ ELS.yieldVal.setAttribute('opacity',(seg(t,TL.b3viz[0]+1.1,TL.b3viz[0]+1.4)*o3).toFixed(3));
+
+ const closeO=seg(t,TL.close[0],TL.close[1]);
+ ELS.closeWrap.style.opacity=closeO.toFixed(3);
+ enterX(ELS.cKick,eoc(seg(t,TL.close[0]-0.2,TL.close[1])),12,closeO);
+ enterX(ELS.cH1,eoc(seg(t,TL.close[0]-0.05,TL.close[1]+0.15)),18,closeO);
+ enterX(ELS.cSub,eoc(seg(t,TL.close[0]+0.15,TL.close[1]+0.35)),12,closeO);
+ ELS.sums.forEach((el,k)=>{const st=TL.sums[k];enterX(el,eib(seg(t,st,st+0.55)),20,closeO)});
+ enterX(ELS.punch,eoc(seg(t,TL.punch[0],TL.punch[1])),8,closeO);
+ const rp=eoc(seg(t,TL.rule[0],TL.rule[1]));
+ ELS.sumRule.style.opacity=(rp*closeO).toFixed(3);
+ ELS.sumRule.style.transform='scaleX('+rp.toFixed(3)+')';
+ enterX(ELS.cFoot,eoc(seg(t,TL.foot[0],TL.foot[1])),6,closeO);
+ enterX(ELS.cFoot2,eoc(seg(t,TL.foot[0]+0.2,TL.foot[1]+0.2)),6,closeO);
+}
+window.__DURATION_MS=DURMS;
+let lastMs=0;
+window.__setTime=ms=>{lastMs=Math.max(0,Math.min(ms,DURMS));render(lastMs/1000)};
+const params=new URLSearchParams(location.search);
+const h=location.hash.match(/t=([\d.]+)/);
+if(h)window.__setTime(parseFloat(h[1])*1000);
+document.fonts.ready.then(()=>{render(lastMs/1000);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{window.__ready=true}))});
+if(params.has('preview')){const loop=()=>{window.__setTime(performance.now()%DURMS);requestAnimationFrame(loop)};loop()}
+</script>
+</body>
+</html>

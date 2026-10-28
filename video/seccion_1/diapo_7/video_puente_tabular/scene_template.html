@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El truco de los lags y árboles · entrada 30 s (1920×1080)</title>
+<style>
+__FONTS_CSS__
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden;background:#040714}
+#stage{position:relative;width:1600px;height:900px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;color:#e9f2ff}
+#camera{position:absolute;inset:0;transform-origin:50% 52%}
+.mono{font-family:'IBM Plex Mono',monospace}
+.display{font-family:'Space Grotesk',sans-serif}
+.orb{position:absolute;width:1000px;height:1000px;border-radius:50%;pointer-events:none}
+#orbA{left:-320px;top:-430px;background:radial-gradient(closest-side, rgba(56,239,255,0.10), transparent 70%)}
+#orbB{right:-360px;bottom:-460px;background:radial-gradient(closest-side, rgba(255,192,92,0.09), transparent 70%)}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 95% at 50% 42%, transparent 58%, rgba(0,0,0,0.5) 100%)}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.055;mix-blend-mode:overlay;background-repeat:repeat;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+#sweep{position:absolute;top:150px;left:-560px;width:520px;height:620px;pointer-events:none;opacity:0;transform:skewX(-14deg);background:linear-gradient(100deg, rgba(56,239,255,0) 0%, rgba(56,239,255,.07) 50%, rgba(56,239,255,0) 100%)}
+svg#scene{position:absolute;inset:0}
+.pill{position:absolute;padding:8px 16px 9px;border-radius:999px;border:1px solid;font-size:13px;letter-spacing:.4px;opacity:0;white-space:nowrap;background:rgba(4,9,22,0.85)}
+#headerSmall{position:absolute;left:96px;top:42px;opacity:0}
+#hKick{font-size:12.5px;letter-spacing:2.5px;color:#38efff}
+#hSub{font-size:17px;color:#cfe0f5;margin-top:5px}
+#hRight{right:96px;top:52px;border-color:rgba(140,170,220,0.25);color:#8b9ab8;font-size:12px}
+#coldBlock{position:absolute;inset:0}
+#coldBlock>div{position:absolute;left:0;right:0;text-align:center;opacity:0}
+#ck{top:300px;font-size:14px;letter-spacing:4px;color:#38efff}
+#ch{top:330px;font-size:52px;font-weight:700;letter-spacing:-0.5px}
+#cs{top:410px;font-size:21px;color:#cfe0f5}
+#cmeta{top:450px;font-size:13px;letter-spacing:1.2px;color:#7f8fb0}
+.panelHead{position:absolute;left:140px;top:250px;opacity:0}
+.panelHead .pk{font-size:12.5px;letter-spacing:2.5px;color:#38efff}
+.panelHead .ps{font-size:15px;color:#aabbd8;margin-top:5px}
+#pillVec{left:1150px;top:252px;border-color:rgba(56,239,255,0.45);color:#a8ecff}
+#pillGBDT{left:1120px;top:252px;border-color:rgba(255,192,92,0.5);color:#ffd9a0}
+#pillTecho{left:1130px;top:252px;border-color:rgba(255,123,114,0.5);color:#ffb4ad}
+#tbl{position:absolute;left:1020px;top:330px;width:460px}
+.trow{display:flex;gap:4px;margin-bottom:6px}
+.tcell{width:72px;height:28px;border-radius:7px;border:1px solid rgba(80,120,190,0.35);background:rgba(8,16,34,0.9);display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#cfe0f5}
+.thead{display:flex;gap:4px;margin-bottom:8px}
+.thcell{width:72px;height:30px;border-radius:7px;padding-top:6px;text-align:center;font-size:11.5px;color:#8fb7ff;border:1px solid rgba(80,120,190,0.28);background:rgba(10,20,42,0.85);opacity:0}
+.thcell sub{font-size:9px}
+.trow.star .tcell{border-color:rgba(255,192,92,0.55);background:rgba(24,18,8,0.9);color:#ffe9c0}
+#tblStar{position:absolute;left:1020px;top:528px;font-size:11.5px;color:#ffd9a0;letter-spacing:.3px;opacity:0}
+#eqVec{position:absolute;left:1020px;top:474px;width:470px;font-size:12.5px;color:#a8ecff;line-height:1.75;opacity:0}
+#eqVec .eqSub{color:#7f8fb0;font-size:11px}
+.pillB{position:absolute;border-radius:14px;border:1px solid;padding:14px 18px;opacity:0;background:rgba(6,13,28,0.9)}
+#pillM5{left:880px;top:392px;width:560px;border-color:rgba(255,192,92,0.45);font-size:13px;color:#ffe1b3;line-height:1.7}
+#pillM5 .m5b{color:#ffc05c}
+#pillP{left:880px;top:492px;width:560px;border-color:rgba(56,239,255,0.45);font-size:13px;color:#a8ecff}
+#barLbl{left:190px;top:348px;border-color:rgba(255,123,114,0.55);color:#ffb4ad;font-size:12.5px;background:rgba(4,9,22,0.96)}
+#mesetaLbl{left:1010px;top:536px;border-color:rgba(255,192,92,0.55);color:#ffd9a0;font-size:12.5px;background:rgba(4,9,22,0.96)}
+#recTag{left:930px;top:328px;border-color:rgba(255,192,92,0.6);color:#ffe9c0;font-size:12.5px}
+#ruleBox{position:absolute;left:1040px;top:660px;width:440px;font-size:12.5px;color:#ffd9a0;border:1px solid rgba(255,192,92,0.4);border-radius:12px;padding:11px 16px;background:rgba(24,16,6,0.8);opacity:0;line-height:1.5}
+#chartNote{position:absolute;left:190px;top:664px;font-size:11.5px;color:#7f8fb0;opacity:0;letter-spacing:.3px}
+#closeWrap{position:absolute;inset:0;opacity:0}
+#closeBg{position:absolute;inset:0;background:#040714}
+#closeWrap .cline{position:absolute;left:0;right:0;text-align:center}
+#cKick{top:168px;font-size:14px;letter-spacing:4px;color:#38efff}
+#cH1{top:196px;font-size:52px;font-weight:700;letter-spacing:-0.5px}
+#cSub{top:272px;font-size:19px;color:#cfe0f5}
+.dualCard{position:absolute;width:420px;height:170px;border-radius:16px;padding:20px 26px 18px;text-align:left;opacity:0}
+#dualL{left:280px;top:332px;border:1px solid rgba(255,192,92,0.5);background:rgba(24,16,6,0.75)}
+#dualR{left:900px;top:332px;border:1px solid rgba(56,239,255,0.5);background:rgba(6,18,30,0.75)}
+.dualCard .dcName{font-size:25px;font-weight:700;letter-spacing:-0.3px}
+.dualCard .dcSub{font-size:14px;margin-top:4px;letter-spacing:.5px}
+.dualCard .dcMeta{font-size:12px;color:#8b9ab8;margin-top:12px;letter-spacing:.4px}
+.dualCard .dcFoot{font-size:12.5px;margin-top:7px;letter-spacing:.4px}
+#dArrow{position:absolute;left:0;top:390px;text-align:center;font-size:46px;opacity:0;color:#e9f2ff}
+#eqLine{top:552px;font-size:25px;opacity:0;letter-spacing:.6px}
+#eqLine .eqTau{color:#ffc05c}
+#cFoot{top:702px;font-size:12.5px;letter-spacing:2px;color:#7f8fb0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="camera">
+    <div class="orb" id="orbA"></div>
+    <div class="orb" id="orbB"></div>
+    <svg id="scene" viewBox="0 0 1600 900" width="1600" height="900">
+      <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3.6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#02050e" fill-opacity="0.92" stroke="rgba(90,150,255,0.20)" opacity="0"/>
+      <g id="dust" opacity="0"></g>
+      <g id="gP1" opacity="0">
+        <path id="curveP" fill="none" stroke="#8fb7ff" stroke-width="2"/>
+        <circle id="dot1" r="4.5" fill="#38efff" filter="url(#glow)" opacity="0"/>
+        <circle id="dot7" r="4.5" fill="#38efff" filter="url(#glow)" opacity="0"/>
+        <rect id="dotM" x="0" y="0" width="9" height="9" rx="2" fill="#ffc05c" opacity="0" transform="rotate(45)"/>
+        <rect id="winBox" x="0" y="352" width="10" height="256" rx="12" fill="rgba(255,192,92,0.07)" stroke="rgba(255,192,92,0.55)" stroke-dasharray="6 6" opacity="0"/>
+        <path id="arr1" fill="none" stroke="#38efff" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1" opacity="0"/>
+        <path id="arr2" fill="none" stroke="#38efff" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1" opacity="0"/>
+        <path id="arr3" fill="none" stroke="#ffc05c" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1" opacity="0"/>
+        <g id="yTicks"></g>
+      </g>
+      <g id="gP2" opacity="0">
+        <rect id="scFrame" x="150" y="360" width="680" height="240" rx="14" fill="rgba(6,13,28,0.65)" stroke="rgba(90,150,255,0.22)"/>
+        <g id="scDots"></g>
+        <rect id="sp1" x="170" y="375" width="630" height="205" rx="10" fill="none" stroke="rgba(56,239,255,0.55)" opacity="0"/>
+        <rect id="sp2" x="170" y="375" width="315" height="100" rx="10" fill="none" stroke="rgba(255,192,92,0.5)" opacity="0"/>
+        <rect id="sp3" x="170" y="480" width="315" height="100" rx="10" fill="none" stroke="rgba(255,192,92,0.5)" opacity="0"/>
+        <rect id="sp4" x="500" y="375" width="300" height="100" rx="10" fill="none" stroke="rgba(255,192,92,0.5)" opacity="0"/>
+        <rect id="sp5" x="500" y="480" width="300" height="100" rx="10" fill="none" stroke="rgba(56,239,255,0.5)" opacity="0"/>
+      </g>
+      <g id="gP3" opacity="0">
+        <g id="gridP3"></g>
+        <line id="topeL" x1="180" y1="0" x2="1420" y2="0" stroke="rgba(255,123,114,0.75)" stroke-dasharray="8 7" opacity="0"/>
+        <path id="realP" fill="none" stroke="#eaf4ff" stroke-width="2.4" opacity="0"/>
+        <path id="nivP" fill="none" stroke="#ffc05c" stroke-width="2" opacity="0"/>
+        <path id="difP" fill="none" stroke="#38efff" stroke-width="2" opacity="0"/>
+        <circle id="recDot" r="6" fill="#ffe9c0" filter="url(#glow)" opacity="0"/>
+      </g>
+    </svg>
+    <div id="headerSmall">
+      <div id="hKick" class="mono">VÍA 2 · EL PUENTE TABULAR</div>
+      <div id="hSub">Punchana (Loreto) — la serie diaria y el techo de 34.0 °C (2023)</div>
+    </div>
+    <div id="hRight" class="pill mono">SENAMHI · 15·08 → 15·10·2023 · n = 31</div>
+    <div id="coldBlock">
+      <div id="ck" class="mono">VÍA 2 · EL PUENTE TABULAR</div>
+      <div id="ch" class="display">El truco de los lags y árboles</div>
+      <div id="cs">De la ventana deslizante a la matriz supervisada</div>
+      <div id="cmeta" class="mono">LIGHTGBM · XGBOOST · EXTRATREES · WALMART M5 · PUNCHANA (2023)</div>
+    </div>
+    <div class="panelHead" id="p1Head"><div class="pk mono">PANEL 1 · LA VENTANA DESLIZANTE</div><div class="ps">De la serie continua a la matriz supervisada (t = 06·10·2023)</div></div>
+    <div class="panelHead" id="p2Head"><div class="pk mono">PANEL 2 · EL DOMINIO EN DATOS TABULARES</div><div class="ps">Particiones ortogonales del espacio de features</div></div>
+    <div class="panelHead" id="p3Head"><div class="pk mono">PANEL 3 · LA TRAMPA DEL ÁRBOL (TECHO ORTOGONAL)</div><div class="ps">El récord de 38.0 °C frente a la meseta del árbol en niveles</div></div>
+    <div id="pillVec" class="pill mono">yₜ₋₁ · yₜ₋₇ · Media₇</div>
+    <div id="pillGBDT" class="pill mono">GBDT · LightGBM / XGBoost</div>
+    <div id="pillTecho" class="pill mono">TECHO ORTOGONAL DEL ÁRBOL</div>
+    <div id="tbl"></div>
+    <div id="tblStar" class="mono">★ La fila que contiene el día del récord (yₜ₊ₕ = 38.0 °C)</div>
+    <div id="eqVec" class="mono">Vector X<sub>t</sub> = [ y<sub>t−1</sub>, y<sub>t−7</sub>, Media<sub>7</sub>, Promo<sub>t</sub>, Clima<sub>t</sub> ] ──▶ y<sub>t+h</sub><br><span class="eqSub">Promoₜ · flag 0/1 (patrón M5) — Climaₜ · Tmax del día t</span></div>
+    <div id="pillM5" class="pillB mono"><span class="m5b">LightGBM</span>( Lags + Rolling_Mean + Precio + Promo )<br><span class="m5b">──▶ 30,490 SKUs</span> · Walmart M5</div>
+    <div id="pillP" class="pillB mono">Punchana · ExtraTrees ──▶ RMSE 1.88 °C en 0.25 s</div>
+    <div id="barLbl" class="pill mono">TOPE DE ENTRENAMIENTO · 34.0 °C</div>
+    <div id="mesetaLbl" class="pill mono">pred_arbol_niveles · Meseta Plana</div>
+    <div id="recTag" class="pill mono">38.0 °C · 07·10·2023 · RÉCORD</div>
+    <div id="ruleBox" class="mono">Si X_nuevo &gt; X_máx_histórico ──▶ Árbol devuelve constante (Meseta Plana)</div>
+    <div id="chartNote" class="mono">31 días · 15·09 → 15·10·2023 · fuente: data/caso_1/experimento_extrapolacion.csv</div>
+    <div id="sweep"></div>
+    <div id="closeWrap">
+      <div id="closeBg"></div>
+      <div id="cKick" class="mono cline">VÍA 2 · EL PUENTE TABULAR</div>
+      <div id="cH1" class="display cline">El truco de los lags y árboles</div>
+      <div id="cSub" class="cline">Walmart M5 · 30,490 SKUs │ Punchana 2023: el techo de 34.0 °C</div>
+      <div class="dualCard" id="dualL">
+        <div class="dcName display" style="color:#ffc05c">ÁRBOL EN NIVELES</div>
+        <div class="dcSub mono" style="color:#ffd9a0">(Meseta Plana ≈ 31.4–32.5 °C)</div>
+        <div class="dcMeta">pred_arbol_niveles · no puede superar el techo aprendido</div>
+        <div class="dcFoot mono" style="color:#ffc05c">X_nuevo &gt; X_máx_histórico ──▶ constante</div>
+      </div>
+      <div class="dualCard" id="dualR">
+        <div class="dcName display" style="color:#38efff">ÁRBOL EN DIFERENCIAS</div>
+        <div class="dcSub mono" style="color:#a8ecff">(Δyₜ = yₜ − yₜ₋₁)</div>
+        <div class="dcMeta">pred_arbol_diferencias · escala el récord (hasta 37.46 °C)</div>
+        <div class="dcFoot mono" style="color:#6ef0b4">La señal recupera su nivel · 38.0 °C</div>
+      </div>
+      <div id="dArrow" class="cline">⟷</div>
+      <div id="eqLine" class="mono cline">Δy<sub>t</sub> = y<sub>t</sub> − y<sub>t−1</sub> ──▶ <span class="eqTau">sin techo ortogonal (escala el récord de 38.0 °C)</span></div>
+      <div id="cFoot" class="mono cline">M5 FORECASTING (30,490 SKUs) · PUNCHANA (2023) · TOPE 34.0 °C</div>
+    </div>
+  </div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+</div>
+<script>
+const DATA=__DATA_JSON__;
+const DURMS=__DURATION_MS__;
+const N=DATA.curve.length;
+const clamp=x=>Math.max(0,Math.min(1,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eoc=p=>1-Math.pow(1-p,3);
+const eic=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eib=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);};
+const eac=p=>p*p;
+const $=id=>document.getElementById(id);
+
+const TL={
+ coldIn:[0.15,0.5], ck:[0.35,0.95], ch:[0.5,1.35], cs:[0.85,1.55], cmeta:[1.05,1.7], coldOut:[4.4,4.95],
+ head:[5.1,5.85], panel:[5.3,6.15],
+ p1:[6.15,6.65], curve:[6.6,9.0], winBox:[8.6,9.3], tHead:[9.3,9.8], arrows:9.7, arrowGap:0.45,
+ tRows:[10.9,11.3,11.7], eqVec:[12.1,12.7], star:[12.6,13.0], p1Out:[13.6,14.1],
+ p2:[14.1,14.6], scDots:[14.7,15.5], splits:15.0, splitGap:0.45, pillM5:[17.5,18.0], pillP:[17.9,18.4], p2Out:[20.9,21.4],
+ p3:[21.4,21.9], axes:[21.9,22.5], tope:[22.5,23.1], real:[23.2,24.6], niv:[23.8,25.0], meseta:[24.7,25.2],
+ dif:[24.2,25.6], rec:[25.4,25.9], rule:[25.8,26.4], p3Out:[26.6,27.1],
+ close:[26.85,27.45], dkL:[27.1,27.9], dkR:[27.4,28.2], arr:[28.1,28.7], eq:[28.4,29.1], foot:[29.0,29.5]
+};
+
+const ELS={camera:$('camera'),grain:$('grain'),sweep:$('sweep'),orbA:$('orbA'),orbB:$('orbB'),
+dust:$('dust'),panel:$('panel'),
+gP1:$('gP1'),curveP:$('curveP'),dot1:$('dot1'),dot7:$('dot7'),dotM:$('dotM'),winBox:$('winBox'),
+arrs:[$('arr1'),$('arr2'),$('arr3')],yTicks:$('yTicks'),
+gP2:$('gP2'),scDots:$('scDots'),sps:[$('sp1'),$('sp2'),$('sp3'),$('sp4'),$('sp5')],
+gP3:$('gP3'),gridP3:$('gridP3'),topeL:$('topeL'),realP:$('realP'),nivP:$('nivP'),difP:$('difP'),recDot:$('recDot'),
+headerSmall:$('headerSmall'),hKick:$('hKick'),hSub:$('hSub'),hRight:$('hRight'),
+coldBlock:$('coldBlock'),ck:$('ck'),ch:$('ch'),cs:$('cs'),cmeta:$('cmeta'),
+p1Head:$('p1Head'),p2Head:$('p2Head'),p3Head:$('p3Head'),
+pillVec:$('pillVec'),pillGBDT:$('pillGBDT'),pillTecho:$('pillTecho'),
+tbl:$('tbl'),tblStar:$('tblStar'),eqVec:$('eqVec'),pillM5:$('pillM5'),pillP:$('pillP'),
+barLbl:$('barLbl'),mesetaLbl:$('mesetaLbl'),recTag:$('recTag'),ruleBox:$('ruleBox'),chartNote:$('chartNote'),
+closeWrap:$('closeWrap'),cKick:$('cKick'),cH1:$('cH1'),cSub:$('cSub'),dualL:$('dualL'),dualR:$('dualR'),dArrow:$('dArrow'),eqLine:$('eqLine'),cFoot:$('cFoot')};
+
+const DUST=[];
+(function initDust(){const NS='http://www.w3.org/2000/svg';let s=246813579;
+ const r=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+ for(let i=0;i<22;i++){const c=document.createElementNS(NS,'circle');
+  const d={x:80+r()*1440,y:90+r()*780,rad:0.8+r()*1.5,o:0.05+r()*0.13,ph:r()*6.28,ph2:r()*6.28,w:0.08+r()*0.1,rise:r()*0.5};
+  c.setAttribute('r',d.rad.toFixed(2));c.setAttribute('fill','#9fc4ff');
+  ELS.dust.appendChild(c);d.el=c;DUST.push(d)}})();
+
+const cx=i=>140+i*(820/(N-1));
+const yC=t=>600-(t-27)*(240/11.5);
+const PX0=180,PDX=(1420-180)/(DATA.exp.labels.length-1);
+const px=i=>PX0+i*PDX;
+const yE=t=>620-(t-26.5)*(260/12);
+const COLC=i=>1020+i*76+36;
+
+(function initStatic(){const NS='http://www.w3.org/2000/svg';
+ [30,32,34,36,38].forEach(v=>{const y=yE(v);
+  const l=document.createElementNS(NS,'line');
+  l.setAttribute('x1',180);l.setAttribute('x2',1420);l.setAttribute('y1',y.toFixed(1));l.setAttribute('y2',y.toFixed(1));
+  l.setAttribute('stroke','rgba(140,170,220,0.10)');ELS.gridP3.appendChild(l);
+  const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x',170);tx.setAttribute('y',(y+3.5).toFixed(1));tx.setAttribute('text-anchor','end');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','11');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+  tx.textContent=v;ELS.gridP3.appendChild(tx)});
+ [0,7,14,21,30].forEach(i=>{const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x',px(i));tx.setAttribute('y',636);tx.setAttribute('text-anchor','middle');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','11.5');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+  tx.textContent=DATA.exp.labels[i];ELS.gridP3.appendChild(tx)});
+ DATA.curveTicks.forEach(tk=>{const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x',cx(tk.i));tx.setAttribute('y',640);tx.setAttribute('text-anchor','middle');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','11');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+  tx.textContent=tk.label;ELS.yTicks.appendChild(tx)});
+ const yl=document.createElementNS(NS,'text');
+ yl.setAttribute('x',150);yl.setAttribute('y',352);yl.setAttribute('fill','#66758f');
+ yl.setAttribute('font-size','11');yl.setAttribute('font-family','IBM Plex Mono, monospace');
+ yl.textContent='Tmax diaria · °C';ELS.yTicks.appendChild(yl);
+ ELS.topeL.setAttribute('y1',yE(DATA.exp.tope).toFixed(1));ELS.topeL.setAttribute('y2',yE(DATA.exp.tope).toFixed(1));
+ const d1=[cx(DATA.win.i1),yC(DATA.y1v)],d7=[cx(DATA.win.i7),yC(DATA.y7v)],dm=[cx(DATA.win.im),yC(DATA.mv)];
+ ELS.dot1.setAttribute('cx',d1[0].toFixed(1));ELS.dot1.setAttribute('cy',d1[1].toFixed(1));
+ ELS.dot7.setAttribute('cx',d7[0].toFixed(1));ELS.dot7.setAttribute('cy',d7[1].toFixed(1));
+ ELS.dotM.setAttribute('x',(dm[0]-4.5).toFixed(1));ELS.dotM.setAttribute('y',(dm[1]-4.5).toFixed(1));
+ ELS.winBox.setAttribute('x',(cx(DATA.win.start)-10).toFixed(1));
+ ELS.winBox.setAttribute('width',(cx(DATA.win.end)-cx(DATA.win.start)+20).toFixed(1));
+ ELS.arrs[0].setAttribute('d','M'+d1[0].toFixed(1)+' '+d1[1].toFixed(1)+' C '+(d1[0]+50).toFixed(1)+' '+(d1[1]+30).toFixed(1)+', '+(COLC(0)-70)+' 402, '+COLC(0)+' 404');
+ ELS.arrs[1].setAttribute('d','M'+d7[0].toFixed(1)+' '+d7[1].toFixed(1)+' C '+(d7[0]+30).toFixed(1)+' '+(d7[1]+40).toFixed(1)+', '+(COLC(1)-70)+' 402, '+COLC(1)+' 404');
+ ELS.arrs[2].setAttribute('d','M'+dm[0].toFixed(1)+' '+dm[1].toFixed(1)+' C '+(dm[0]+60).toFixed(1)+' '+(dm[1]+40).toFixed(1)+', '+(COLC(2)-70)+' 402, '+COLC(2)+' 404');
+ let s=987654321;const r=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+ for(let i=0;i<64;i++){const c=document.createElementNS(NS,'circle');
+  c.setAttribute('cx',(175+r()*620).toFixed(1));c.setAttribute('cy',(382+r()*195).toFixed(1));c.setAttribute('r','2.6');
+  c.setAttribute('fill','#8fb7ff');c.setAttribute('opacity','0');ELS.scDots.appendChild(c)}
+ const heads=['y<sub>t−1</sub>','y<sub>t−7</sub>','Media<sub>7</sub>','Promo<sub>t</sub>','Clima<sub>t</sub>','y<sub>t+h</sub>'];
+ const thead=document.createElement('div');thead.className='thead';
+ heads.forEach(h=>{const c=document.createElement('div');c.className='thcell mono';c.innerHTML=h;thead.appendChild(c)});
+ ELS.tbl.appendChild(thead);
+ DATA.rows.forEach((row,ri)=>{const tr=document.createElement('div');tr.className='trow'+(ri===DATA.star?' star':'');
+  [row.y1,row.y7,row.m7,row.promo,row.clima,row.th].forEach(v=>{const c=document.createElement('div');c.className='tcell mono';
+   c.textContent=(ri===DATA.star&&v===row.th)?(v+' ★'):v;tr.appendChild(c)});
+  ELS.tbl.appendChild(tr)});
+})();
+
+function enter(el,p,dist){el.style.opacity=p.toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function enterG(el,p,dist,gate){el.style.opacity=(p*gate).toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function poly(pts,frac){if(frac<=0.002)return'';const upto=frac*(pts.length-1);const last=Math.floor(upto);
+ let d='',started=false;
+ for(let i=0;i<=last;i++){const p=pts[i];if(p[1]==null){started=false;continue}
+  d+=(started?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);started=true}
+ if(last<pts.length-1&&upto>last){const a=pts[last],b=pts[last+1];
+  if(a[1]!=null&&b[1]!=null){const x=a[0]+(b[0]-a[0])*(upto-last),y=a[1]+(b[1]-a[1])*(upto-last);
+   d+=(d?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}}
+ return d}
+const CPTS=DATA.curve.map((v,i)=>[cx(i),v==null?null:yC(v)]);
+const EPTS=(arr)=>arr.map((v,i)=>[px(i),yE(v)]);
+
+let tCur=0;
+function render(t){
+ tCur=t;
+ ELS.orbA.style.transform='translate('+(Math.sin(t*0.11)*18).toFixed(1)+'px,'+(Math.cos(t*0.09)*14).toFixed(1)+'px)';
+ ELS.orbB.style.transform='translate('+(Math.sin(t*0.08+2)*20).toFixed(1)+'px,'+(Math.cos(t*0.1+1)*16).toFixed(1)+'px)';
+ const camT=seg(t,0.3,28);
+ const cs=1+0.012*camT;
+ ELS.camera.style.transform='translate('+(-8*camT+3*Math.sin(t*0.05)).toFixed(2)+'px,'+(2*Math.sin(t*0.043+1)).toFixed(2)+'px) scale('+cs.toFixed(4)+')';
+ ELS.grain.style.backgroundPosition=((t*57)%160).toFixed(0)+'px '+((t*31)%160).toFixed(0)+'px';
+
+ const sw0=5.8,swP=10.5,swD=2.2;let swO=0,swX=0;
+ if(t>sw0&&t<28.8){const ph=(t-sw0)%swP;if(ph<swD){swO=Math.sin(Math.PI*ph/swD)*0.85;swX=(-560+ph/swD*2500)}}
+ ELS.sweep.style.transform='skewX(-14deg) translateX('+swX.toFixed(0)+'px)';
+ ELS.sweep.style.opacity=swO.toFixed(3);
+
+ DUST.forEach(d=>{d.el.setAttribute('cx',(d.x+18*Math.sin(t*d.w+d.ph)).toFixed(1));
+  d.el.setAttribute('cy',(d.y+10*Math.cos(t*0.09+d.ph2)-t*d.rise).toFixed(1));
+  d.el.setAttribute('opacity',(d.o*(0.55+0.45*Math.sin(t*0.9+d.ph))).toFixed(3))});
+ ELS.dust.setAttribute('opacity','1');
+
+ const coldOut=seg(t,TL.coldOut[0],TL.coldOut[1]);
+ const coldO=seg(t,TL.coldIn[0],TL.coldIn[1]);
+ ELS.coldBlock.style.opacity=(coldO*(1-coldOut)).toFixed(3);
+ ELS.coldBlock.style.transform='translateY('+(-24*eac(coldOut)).toFixed(1)+'px)';
+ enterG(ELS.ck,eoc(seg(t,TL.ck[0],TL.ck[1])),14,coldO);
+ enterG(ELS.ch,eoc(seg(t,TL.ch[0],TL.ch[1])),20,coldO);
+ enterG(ELS.cs,eoc(seg(t,TL.cs[0],TL.cs[1])),12,coldO);
+ enterG(ELS.cmeta,eoc(seg(t,TL.cmeta[0],TL.cmeta[1])),10,coldO);
+
+ const headO=seg(t,TL.head[0],TL.head[1])*(1-seg(t,26.9,27.3));
+ ELS.headerSmall.style.opacity=headO.toFixed(3);
+ enterG(ELS.hKick,eoc(seg(t,TL.head[0]+0.05,TL.head[1]+0.2)),10,headO);
+ enterG(ELS.hSub,eoc(seg(t,TL.head[0]+0.2,TL.head[1]+0.4)),10,headO);
+ enterG(ELS.hRight,eoc(seg(t,TL.head[0]+0.35,TL.head[1]+0.5)),10,headO);
+
+ const panelO=seg(t,TL.panel[0],TL.panel[1]);
+ ELS.panel.style.opacity=panelO.toFixed(3);
+ ELS.panel.setAttribute('stroke','rgba(90,150,255,'+(0.16+0.06*Math.sin(t*0.9)).toFixed(2)+')');
+
+ const p1O=seg(t,TL.p1[0],TL.p1[1])*(1-seg(t,TL.p1Out[0],TL.p1Out[1]));
+ ELS.gP1.setAttribute('opacity',p1O.toFixed(3));
+ const p1p=eoc(seg(t,TL.p1[0],TL.p1[1]));
+ ELS.p1Head.style.opacity=(p1p*p1O).toFixed(3);
+ ELS.p1Head.style.transform='translateY('+((1-p1p)*12).toFixed(1)+'px)';
+ enterG(ELS.pillVec,eoc(seg(t,TL.p1[0]+0.25,TL.p1[1]+0.2)),10,p1O);
+ ELS.curveP.setAttribute('d',poly(CPTS,eoc(seg(t,TL.curve[0],TL.curve[1]))));
+ ELS.curveP.setAttribute('opacity',seg(t,TL.curve[0],TL.curve[0]+0.3).toFixed(3));
+ ELS.winBox.setAttribute('opacity',seg(t,TL.winBox[0],TL.winBox[1]).toFixed(3));
+ const wf=eoc(seg(t,TL.winBox[0],TL.winBox[1]));
+ ELS.winBox.setAttribute('transform','translate('+((1-wf)*40).toFixed(1)+',0)');
+ ELS.dot1.setAttribute('opacity',seg(t,TL.winBox[1]-0.1,TL.winBox[1]+0.25).toFixed(3));
+ ELS.dot7.setAttribute('opacity',seg(t,TL.winBox[1]-0.1,TL.winBox[1]+0.25).toFixed(3));
+ ELS.dotM.setAttribute('opacity',seg(t,TL.winBox[1]-0.1,TL.winBox[1]+0.25).toFixed(3));
+ ELS.arrs.forEach((p,k)=>{const st=TL.arrows+k*TL.arrowGap;
+  p.style.strokeDashoffset=(1-eoc(seg(t,st,st+0.45))).toFixed(3);
+  p.setAttribute('opacity',seg(t,st,st+0.25).toFixed(3))});
+ ELS.tbl.querySelectorAll('.thcell').forEach((el,k)=>{
+  enterG(el,eoc(seg(t,TL.tHead[0]+k*0.06,TL.tHead[1]+k*0.06)),10,p1O)});
+ ELS.tbl.querySelectorAll('.trow').forEach((tr,ri)=>{
+  enterG(tr,eoc(seg(t,TL.tRows[ri],TL.tRows[ri]+0.4)),14,p1O)});
+ enterG(ELS.eqVec,eoc(seg(t,TL.eqVec[0],TL.eqVec[1])),10,p1O);
+ enterG(ELS.tblStar,eoc(seg(t,TL.star[0],TL.star[1])),8,p1O);
+
+ const p2O=seg(t,TL.p2[0],TL.p2[1])*(1-seg(t,TL.p2Out[0],TL.p2Out[1]));
+ ELS.gP2.setAttribute('opacity',p2O.toFixed(3));
+ const p2p=eoc(seg(t,TL.p2[0],TL.p2[1]));
+ ELS.p2Head.style.opacity=(p2p*p2O).toFixed(3);
+ ELS.p2Head.style.transform='translateY('+((1-p2p)*12).toFixed(1)+'px)';
+ enterG(ELS.pillGBDT,eoc(seg(t,TL.p2[0]+0.25,TL.p2[1]+0.2)),10,p2O);
+ const scP=seg(t,TL.scDots[0],TL.scDots[1]);
+ ELS.scDots.querySelectorAll('circle').forEach((c,k)=>{c.setAttribute('opacity',(scP*0.85).toFixed(3))});
+ ELS.sps.forEach((sp,k)=>{const st=TL.splits+k*TL.splitGap;
+  sp.setAttribute('opacity',(eoc(seg(t,st,st+0.4))*0.9).toFixed(3))});
+ enterG(ELS.pillM5,eib(seg(t,TL.pillM5[0],TL.pillM5[1])),14,p2O);
+ enterG(ELS.pillP,eib(seg(t,TL.pillP[0],TL.pillP[1])),14,p2O);
+
+ const p3O=seg(t,TL.p3[0],TL.p3[1])*(1-seg(t,TL.p3Out[0],TL.p3Out[1]));
+ ELS.gP3.setAttribute('opacity',p3O.toFixed(3));
+ const p3p=eoc(seg(t,TL.p3[0],TL.p3[1]));
+ ELS.p3Head.style.opacity=(p3p*p3O).toFixed(3);
+ ELS.p3Head.style.transform='translateY('+((1-p3p)*12).toFixed(1)+'px)';
+ enterG(ELS.pillTecho,eoc(seg(t,TL.p3[0]+0.25,TL.p3[1]+0.2)),10,p3O);
+ ELS.gridP3.setAttribute('opacity',seg(t,TL.axes[0],TL.axes[1]).toFixed(3));
+ ELS.topeL.setAttribute('opacity',seg(t,TL.tope[0],TL.tope[1]).toFixed(3));
+ enterG(ELS.barLbl,eoc(seg(t,TL.tope[1]-0.2,TL.tope[1]+0.2)),10,p3O);
+ ELS.realP.setAttribute('d',poly(EPTS(DATA.exp.real),eoc(seg(t,TL.real[0],TL.real[1]))));
+ ELS.realP.setAttribute('opacity',seg(t,TL.real[0],TL.real[0]+0.3).toFixed(3));
+ ELS.nivP.setAttribute('d',poly(EPTS(DATA.exp.niv),eoc(seg(t,TL.niv[0],TL.niv[1]))));
+ ELS.nivP.setAttribute('opacity',seg(t,TL.niv[0],TL.niv[0]+0.3).toFixed(3));
+ ELS.difP.setAttribute('d',poly(EPTS(DATA.exp.dif),eoc(seg(t,TL.dif[0],TL.dif[1]))));
+ ELS.difP.setAttribute('opacity',seg(t,TL.dif[0],TL.dif[0]+0.3).toFixed(3));
+ enterG(ELS.mesetaLbl,eoc(seg(t,TL.meseta[0],TL.meseta[1])),8,p3O);
+ const recP=seg(t,TL.rec[0],TL.rec[1]);
+ ELS.recDot.setAttribute('cx',px(DATA.exp.iRec));ELS.recDot.setAttribute('cy',yE(DATA.exp.rec).toFixed(1));
+ ELS.recDot.setAttribute('r',(5.5+0.9*Math.sin(t*3.2)).toFixed(2));
+ ELS.recDot.setAttribute('opacity',recP.toFixed(3));
+ enterG(ELS.recTag,eib(recP),10,p3O);
+ enterG(ELS.ruleBox,eoc(seg(t,TL.rule[0],TL.rule[1])),12,p3O);
+ enterG(ELS.chartNote,eoc(seg(t,TL.rule[0]+0.2,TL.rule[1]+0.2)),8,p3O);
+
+ const closeO=seg(t,TL.close[0],TL.close[1]);
+ ELS.closeWrap.style.opacity=closeO.toFixed(3);
+ enterG(ELS.cKick,eoc(seg(t,TL.close[0]-0.2,TL.close[1])),12,closeO);
+ enterG(ELS.cH1,eoc(seg(t,TL.close[0]-0.05,TL.close[1]+0.15)),18,closeO);
+ enterG(ELS.cSub,eoc(seg(t,TL.close[0]+0.15,TL.close[1]+0.35)),12,closeO);
+ enterG(ELS.dualL,eib(seg(t,TL.dkL[0],TL.dkL[1])),18,closeO);
+ enterG(ELS.dualR,eib(seg(t,TL.dkR[0],TL.dkR[1])),18,closeO);
+ const arrP=seg(t,TL.arr[0],TL.arr[1]);
+ ELS.dArrow.style.opacity=(arrP*closeO).toFixed(3);
+ ELS.dArrow.style.transform='translateY('+((1-eib(arrP))*(-8)).toFixed(1)+'px) scale('+(0.8+0.2*eib(arrP)+0.03*Math.sin(t*3)).toFixed(3)+')';
+ enterG(ELS.eqLine,eoc(seg(t,TL.eq[0],TL.eq[1])),12,closeO);
+ enterG(ELS.cFoot,eoc(seg(t,TL.foot[0],TL.foot[1])),8,closeO);
+}
+window.__DURATION_MS=DURMS;
+let lastMs=0;
+window.__setTime=ms=>{lastMs=Math.max(0,Math.min(ms,DURMS));render(lastMs/1000)};
+const params=new URLSearchParams(location.search);
+const h=location.hash.match(/t=([\d.]+)/);
+if(h)window.__setTime(parseFloat(h[1])*1000);
+document.fonts.ready.then(()=>{render(lastMs/1000);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{window.__ready=true}))});
+if(params.has('preview')){const loop=()=>{window.__setTime(performance.now()%DURMS);requestAnimationFrame(loop)};loop()}
+</script>
+</body>
+</html>

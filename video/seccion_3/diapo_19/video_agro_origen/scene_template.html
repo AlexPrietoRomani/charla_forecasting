@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El agro inventó el forecasting · entrada 30 s (1920×1080)</title>
+<style>
+__FONTS_CSS__
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden;background:#040812}
+#stage{position:relative;width:1600px;height:900px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;color:#e8f4ff}
+#camera{position:absolute;inset:0;transform-origin:50% 52%}
+.mono{font-family:'IBM Plex Mono',monospace}
+.display{font-family:'Space Grotesk',sans-serif}
+.orb{position:absolute;width:1000px;height:1000px;border-radius:50%;pointer-events:none}
+#orbA{left:-300px;top:-420px;background:radial-gradient(closest-side, rgba(255,192,92,0.10), transparent 70%)}
+#orbB{right:-360px;bottom:-460px;background:radial-gradient(closest-side, rgba(56,239,255,0.10), transparent 70%)}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 95% at 50% 42%, transparent 58%, rgba(0,0,0,0.5) 100%)}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.055;mix-blend-mode:overlay;background-repeat:repeat;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+#sweep{position:absolute;top:150px;left:-560px;width:520px;height:620px;pointer-events:none;opacity:0;transform:skewX(-14deg);background:linear-gradient(100deg, rgba(56,239,255,0) 0%, rgba(56,239,255,.07) 50%, rgba(56,239,255,0) 100%)}
+svg#scene{position:absolute;inset:0}
+.pill{position:absolute;padding:8px 16px 9px;border-radius:999px;border:1px solid;font-size:13px;letter-spacing:.4px;opacity:0;white-space:nowrap;background:rgba(4,10,26,0.85)}
+#headerSmall{position:absolute;left:96px;top:42px;opacity:0}
+#hKick{font-size:12.5px;letter-spacing:2.5px;color:#ffc05c}
+#hSub{font-size:17px;color:#cfe0f5;margin-top:5px}
+#hRight{right:96px;top:52px;border-color:rgba(140,170,220,0.25);color:#8b9ab8;font-size:12px}
+#coldBlock{position:absolute;inset:0}
+#coldBlock>div{position:absolute;left:0;right:0;text-align:center;opacity:0}
+#ck{top:300px;font-size:14px;letter-spacing:4px;color:#ffc05c}
+#ch{top:330px;font-size:54px;font-weight:700;letter-spacing:-0.5px}
+#cs{top:412px;font-size:21px;color:#cfe0f5}
+#cmeta{top:452px;font-size:13px;letter-spacing:1.2px;color:#7f8fb0}
+.panelHead{position:absolute;left:140px;top:250px;opacity:0}
+.panelHead .pk{font-size:12.5px;letter-spacing:2.5px;color:#ffc05c}
+.panelHead .ps{font-size:15px;color:#aabbd8;margin-top:5px}
+#pillAlm{left:1080px;top:252px;border-color:rgba(255,192,92,0.5);color:#ffd9a0}
+#pillRes{left:1030px;top:252px;border-color:rgba(56,239,255,0.45);color:#a8ecff}
+#pillGem{left:1080px;top:252px;border-color:rgba(56,239,255,0.5);color:#a8ecff}
+#pillN{left:150px;top:322px;border-color:rgba(110,240,180,0.45);color:#bff2d8}
+#pillM{right:150px;top:322px;border-color:rgba(56,239,255,0.4);color:#a8ecff}
+.tauLbl{left:0;top:0;border-color:rgba(255,192,92,0.6);color:#ffd9a0;font-size:13.5px;padding:9px 20px 10px}
+.bioChip{position:absolute;width:360px;padding:13px 18px 14px;border-radius:13px;border:1px solid rgba(255,192,92,0.35);background:rgba(20,14,6,0.72);opacity:0}
+.bioChip .bcT{font-size:15.5px;font-weight:600;color:#ffd9a0;letter-spacing:.4px}
+.bioChip .bcS{font-size:11.5px;color:#b09a78;margin-top:4px;letter-spacing:.4px}
+.hitCard{position:absolute;width:236px;padding:9px 14px 10px;border-radius:12px;border:1px solid #23314e;background:rgba(6,14,30,0.82);opacity:0}
+.hitCard .hcK{font-size:10.5px;letter-spacing:1.6px;color:#38efff}
+.hitCard .hcN{font-size:13.5px;font-weight:600;color:#dceaff;margin-top:3px;letter-spacing:.1px}
+.hitCard .hcF{font-size:11px;color:#7f8fb0;margin-top:3px;letter-spacing:.4px}
+#ribbon{left:0;top:0;border-color:rgba(56,239,255,0.5);color:#a8ecff;font-size:13.5px}
+#ndviLbl{position:absolute;left:150px;top:626px;font-size:11.5px;color:#9fe8c8;opacity:0;letter-spacing:.3px}
+#rendLbl{position:absolute;right:150px;top:650px;text-align:right;font-size:11.5px;color:#9fe8c8;opacity:0;letter-spacing:.3px}
+#gemFlux{position:absolute;left:0;right:0;top:662px;text-align:center;font-size:14.5px;opacity:0;letter-spacing:.5px}
+#gemFlux .gfA{color:#ffd9a0}#gemFlux .gfB{color:#bff2d8}#gemFlux .gfArrow{color:#8b9ab8;margin:0 14px}
+#closeWrap{position:absolute;inset:0;opacity:0}
+#closeBg{position:absolute;inset:0;background:#040812}
+#closeWrap .cline{position:absolute;left:0;right:0;text-align:center}
+#cKick{top:168px;font-size:14px;letter-spacing:4px;color:#ffc05c}
+#cH1{top:196px;font-size:52px;font-weight:700;letter-spacing:-0.5px}
+#cSub{top:272px;font-size:19px;color:#cfe0f5}
+.dualCard{position:absolute;width:420px;height:170px;border-radius:16px;padding:20px 26px 18px;text-align:left;opacity:0}
+#dualL{left:280px;top:332px;border:1px solid rgba(255,192,92,0.5);background:rgba(24,16,6,0.75)}
+#dualR{left:900px;top:332px;border:1px solid rgba(56,239,255,0.5);background:rgba(6,18,30,0.75)}
+.dualCard .dcName{font-size:27px;font-weight:700;letter-spacing:-0.3px}
+.dualCard .dcSub{font-size:14px;margin-top:4px;letter-spacing:.5px}
+.dualCard .dcMeta{font-size:12px;color:#8b9ab8;margin-top:12px;letter-spacing:.4px}
+.dualCard .dcFoot{font-size:12.5px;margin-top:7px;letter-spacing:.4px}
+#dArrow{position:absolute;left:0;top:390px;text-align:center;font-size:46px;opacity:0;color:#e8f4ff}
+#eqLine{top:552px;font-size:25px;opacity:0;letter-spacing:.6px}
+#eqLine .eqTau{color:#ffc05c}
+#cFoot{top:702px;font-size:12.5px;letter-spacing:2px;color:#7f8fb0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="camera">
+    <div class="orb" id="orbA"></div>
+    <div class="orb" id="orbB"></div>
+    <svg id="scene" viewBox="0 0 1600 900" width="1600" height="900">
+      <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3.6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#02060f" fill-opacity="0.92" stroke="rgba(90,150,255,0.20)" opacity="0"/>
+      <g id="dust" opacity="0"></g>
+      <g id="gAnc" opacity="0">
+        <g id="axM"></g>
+        <rect id="winF" x="0" y="452" height="44" rx="10" fill="rgba(255,192,92,0.13)" stroke="rgba(255,192,92,0.45)" opacity="0"/>
+        <rect id="winC" x="0" y="452" height="44" rx="10" fill="rgba(110,240,180,0.11)" stroke="rgba(110,240,180,0.38)" opacity="0"/>
+        <circle id="dotWinF" r="4.5" fill="#ffc05c" opacity="0"/>
+        <circle id="dotWinC" r="4.5" fill="#6ef0b4" opacity="0"/>
+        <path id="arcTau" fill="none" stroke="#ffc05c" stroke-width="2" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1" opacity="0"/>
+        <polygon id="arcHead" points="0,0 0,0 0,0" fill="#ffc05c" opacity="0"/>
+      </g>
+      <g id="gHit" opacity="0">
+        <line id="hitBase" x1="190" y1="648" x2="1420" y2="648" stroke="rgba(140,170,220,0.16)"/>
+        <path id="stp1" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.6" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <path id="stp2" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.6" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <path id="stp3" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.6" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <path id="stp4" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.6" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <path id="stp5" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.6" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+      </g>
+      <g id="gGem" opacity="0">
+        <line id="divider" x1="810" y1="322" x2="810" y2="648" stroke="rgba(140,170,220,0.14)" stroke-dasharray="3 9"/>
+        <g id="mesh"></g>
+        <path id="ndviPath" fill="none" stroke="#6ef0b4" stroke-width="1.8" opacity="0"/>
+        <circle id="ndviDot" r="4" fill="#bff2d8" filter="url(#glow)" opacity="0"/>
+        <g id="bars"></g>
+      </g>
+    </svg>
+    <div id="headerSmall">
+      <div id="hKick" class="mono">ACTO 3 · LA FRONTERA AGRÍCOLA</div>
+      <div id="hSub">Café de Jaén (Cajamarca) — 24 campañas, 2001–2024</div>
+    </div>
+    <div id="hRight" class="pill mono">JAÉN · -5.7049°, -79.0104° · 600–1,800 msnm</div>
+    <div id="coldBlock">
+      <div id="ck" class="mono">ACTO 3 · LA FRONTERA AGRÍCOLA</div>
+      <div id="ch" class="display">¿Quién inventó realmente el Forecasting?</div>
+      <div id="cs">De las cabañuelas a la malla neuronal</div>
+      <div id="cmeta" class="mono">SECCIÓN 03 · JAÉN (CAJAMARCA) · CAFÉ · 24 CAMPAÑAS (2001–2024)</div>
+    </div>
+    <div class="panelHead" id="p1Head"><div class="pk mono">PANEL 1 · EL ESPEJO ANCESTRAL</div><div class="ps">Bioindicadores + almanaque: la predicción empírica más antigua</div></div>
+    <div class="panelHead" id="p2Head"><div class="pk mono">PANEL 2 · LA EVOLUCIÓN EN 5 HITOS</div><div class="ps">1950 → 2026 · cada hito multiplica la resolución de lectura</div></div>
+    <div class="panelHead" id="p3Head"><div class="pk mono">PANEL 3 · EL GEMELO DIGITAL</div><div class="ps">Inteligencia satelital + clima sobre el café de Jaén</div></div>
+    <div id="pillAlm" class="pill mono">Almanaque (Bioindicadores)</div>
+    <div id="pillRes" class="pill mono">De 1 dato/año a 1 dato/día/píxel</div>
+    <div id="pillGem" class="pill mono">Gemelo Digital (Sensores + IA)</div>
+    <div id="pillN" class="pill mono">N = 24 campañas (2001–2024)</div>
+    <div id="pillM" class="pill mono">MODIS NDVI/EVI · ERA5</div>
+    <div id="tauLbl" class="pill mono tauLbl">τ = 6 a 8 meses</div>
+    <div id="bioChips"></div>
+    <div id="hitCards"></div>
+    <div id="ndviLbl" class="mono">NDVI anual (MODIS) — línea satelital</div>
+    <div id="rendLbl" class="mono">Rendimiento real (qq/ha) — 2010–2024</div>
+    <div id="gemFlux"><span class="mono gfA">FLORACIÓN (Ago–Oct)</span><span class="gfArrow">⟶</span><span class="mono gfB">COSECHA (Mar–Jul)</span></div>
+    <div id="sweep"></div>
+    <div id="closeWrap">
+      <div id="closeBg"></div>
+      <div id="cKick" class="mono cline">ACTO 3 · LA FRONTERA AGRÍCOLA</div>
+      <div id="cH1" class="display cline">El agro inventó el forecasting</div>
+      <div id="cSub" class="cline">De las cabañuelas a la malla neuronal: 5 hitos de resolución (1950 → 2026)</div>
+      <div class="dualCard" id="dualL">
+        <div class="dcName display" style="color:#ffc05c">ALMANAQUE</div>
+        <div class="dcSub mono" style="color:#ffd9a0">(Bioindicadores)</div>
+        <div class="dcMeta">Floración · lluvias de primavera · lectura del cielo</div>
+        <div class="dcFoot mono" style="color:#ffc05c">τ = 6 a 8 meses → cosecha</div>
+      </div>
+      <div class="dualCard" id="dualR">
+        <div class="dcName display" style="color:#38efff">GEMELO DIGITAL</div>
+        <div class="dcSub mono" style="color:#a8ecff">(Sensores + IA)</div>
+        <div class="dcMeta">MODIS NDVI/EVI · ERA5 · 24 campañas (2001–2024)</div>
+        <div class="dcFoot mono" style="color:#6ef0b4">Floración Ago–Oct ⟶ Cosecha Mar–Jul</div>
+      </div>
+      <div id="dArrow" class="cline">⟷</div>
+      <div id="eqLine" class="mono cline">Cosecha Y<sub>t</sub> = f( Clima en Floración X<sub>t−τ</sub> ) con <span class="eqTau">τ = 6 a 8 meses</span></div>
+      <div id="cFoot" class="mono cline">JAÉN (CAJAMARCA) · 24 CAMPAÑAS (2001–2024) · 600–1,800 MSNM</div>
+    </div>
+  </div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+</div>
+<script>
+const DATA=__DATA_JSON__;
+const DURMS=__DURATION_MS__;
+const N=DATA.n;
+const clamp=x=>Math.max(0,Math.min(1,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eoc=p=>1-Math.pow(1-p,3);
+const eic=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eib=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);};
+const eac=p=>p*p;
+const $=id=>document.getElementById(id);
+
+const TL={
+  coldIn:[0.15,0.5], ck:[0.35,0.95], ch:[0.5,1.35], cs:[0.85,1.55], cmeta:[1.05,1.7], coldOut:[4.4,4.95],
+  head:[5.1,5.85], panel:[5.3,6.15],
+  p1:[6.15,6.65], ring:[6.6,8.2], winF:[8.3,9.0], winC:[9.15,9.85], tau:[10.0,11.5], tauLbl:[11.2,11.75],
+  chips:11.6, ancOut:[13.2,13.8],
+  p2:[13.8,14.3], steps:14.5, stepGap:0.55, climb:[17.4,19.4], hitOut:[20.9,21.5],
+  p3:[21.5,22.0], mesh:[22.2,23.6], ndvi:[23.7,25.1], bars:23.9, barGap:0.07, pills:[25.2,25.8], flux:[26.0,26.6], gemOut:[26.7,27.2],
+  close:[26.9,27.5], dkL:[27.2,28.0], dkR:[27.5,28.3], arr:[28.2,28.8], eq:[28.5,29.2], foot:[29.0,29.5]
+};
+
+const ELS={camera:$('camera'),grain:$('grain'),sweep:$('sweep'),orbA:$('orbA'),orbB:$('orbB'),
+dust:$('dust'),panel:$('panel'),
+gAnc:$('gAnc'),axM:$('axM'),winF:$('winF'),winC:$('winC'),dotWinF:$('dotWinF'),dotWinC:$('dotWinC'),
+arcTau:$('arcTau'),arcHead:$('arcHead'),
+gHit:$('gHit'),hitBase:$('hitBase'),stps:[$('stp1'),$('stp2'),$('stp3'),$('stp4'),$('stp5')],
+gGem:$('gGem'),mesh:$('mesh'),ndviPath:$('ndviPath'),ndviDot:$('ndviDot'),bars:$('bars'),divider:$('divider'),
+headerSmall:$('headerSmall'),hKick:$('hKick'),hSub:$('hSub'),hRight:$('hRight'),
+coldBlock:$('coldBlock'),ck:$('ck'),ch:$('ch'),cs:$('cs'),cmeta:$('cmeta'),
+p1Head:$('p1Head'),p2Head:$('p2Head'),p3Head:$('p3Head'),
+pillAlm:$('pillAlm'),pillRes:$('pillRes'),pillGem:$('pillGem'),pillN:$('pillN'),pillM:$('pillM'),
+tauLbl:$('tauLbl'),bioChips:$('bioChips'),hitCards:$('hitCards'),ndviLbl:$('ndviLbl'),rendLbl:$('rendLbl'),gemFlux:$('gemFlux'),
+closeWrap:$('closeWrap'),cKick:$('cKick'),cH1:$('cH1'),cSub:$('cSub'),dualL:$('dualL'),dualR:$('dualR'),dArrow:$('dArrow'),eqLine:$('eqLine'),cFoot:$('cFoot')};
+
+const DUST=[];
+(function initDust(){const NS='http://www.w3.org/2000/svg';let s=246813579;
+ const r=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+ for(let i=0;i<22;i++){const c=document.createElementNS(NS,'circle');
+  const d={x:80+r()*1440,y:90+r()*780,rad:0.8+r()*1.5,o:0.05+r()*0.13,ph:r()*6.28,ph2:r()*6.28,w:0.08+r()*0.1,rise:r()*0.5};
+  c.setAttribute('r',d.rad.toFixed(2));c.setAttribute('fill','#9fc4ff');
+  ELS.dust.appendChild(c);d.el=c;DUST.push(d)}})();
+
+const MONTHS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const mx=i=>220+i*106;
+const HITN=[[260,570],[500,528],[740,486],[980,444],[1240,402]];
+const MESHX=[],BARX=[];let y2014Lbl=null;
+for(let i=0;i<N;i++){MESHX.push(150+i*(600/(N-1)));BARX.push(858+i*(590/(N-1)))}
+const NE=[];
+for(let i=0;i<N;i++){const x=MESHX[i];
+ NE.push([x,620-(DATA.ndvi[i]-DATA.ndviMin)/(DATA.ndviMax-DATA.ndviMin)*(620-530)])}
+
+(function initStatic(){const NS='http://www.w3.org/2000/svg';
+ const ln=document.createElementNS(NS,'line');
+ ln.setAttribute('x1',mx(0));ln.setAttribute('x2',mx(11));ln.setAttribute('y1',474);ln.setAttribute('y2',474);
+ ln.setAttribute('stroke','rgba(140,170,220,0.20)');ELS.axM.appendChild(ln);
+ MONTHS.forEach((m,i)=>{
+  const tk=document.createElementNS(NS,'line');
+  tk.setAttribute('x1',mx(i));tk.setAttribute('x2',mx(i));tk.setAttribute('y1',468);tk.setAttribute('y2',480);
+  tk.setAttribute('stroke','rgba(140,170,220,0.35)');ELS.axM.appendChild(tk);
+  const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x',mx(i));tx.setAttribute('y',510);tx.setAttribute('text-anchor','middle');
+  tx.setAttribute('fill','#66758f');tx.setAttribute('font-size','12');
+  tx.setAttribute('font-family','IBM Plex Mono, monospace');tx.textContent=m;ELS.axM.appendChild(tx)});
+ ELS.winF.setAttribute('x',(mx(7)-30).toFixed(0));ELS.winF.setAttribute('width',(mx(9)-mx(7)+60).toFixed(0));
+ ELS.winC.setAttribute('x',(mx(2)-30).toFixed(0));ELS.winC.setAttribute('width',(mx(6)-mx(2)+60).toFixed(0));
+ ELS.dotWinF.setAttribute('cx',mx(8));ELS.dotWinF.setAttribute('cy',474);
+ ELS.dotWinC.setAttribute('cx',mx(4));ELS.dotWinC.setAttribute('cy',474);
+ ELS.arcTau.setAttribute('d','M'+mx(8)+' 458 C '+mx(8)+' 316, '+mx(4)+' 316, '+mx(4)+' 458');
+ ELS.arcHead.setAttribute('points',mx(4)+',466 '+(mx(4)-7)+',450 '+(mx(4)+7)+',450');
+ ELS.arcHead.setAttribute('fill','#ffc05c');
+ ELS.tauLbl.style.left='761px';ELS.tauLbl.style.top='312px';
+ const HITOS=[['Calendarios y Almanaques','Estacional'],['Estaciones Experimentales','Semanal / Mensual'],['Agrometeorología Operativa','Diaria'],['Revolución Satelital','Cada 5–12 días'],['Agricultura de Precisión','Tiempo Real']];
+ HITOS.forEach((h,k)=>{const c=document.createElement('div');c.className='hitCard';
+  c.innerHTML='<div class="hcK mono">HITO '+(k+1)+' · '+h[1].toUpperCase()+'</div><div class="hcN">'+h[0]+'</div><div class="hcF mono">'+(k+1===5?'Tiempo Real':h[1])+'</div>';
+  c.style.left=(HITN[k][0]-118)+'px';c.style.top=(HITN[k][1]-98)+'px';ELS.hitCards.appendChild(c)});
+ for(let k=0;k<5;k++){const p=ELS.stps[k];const a=HITN[k];let d='M'+a[0]+' 648 L'+a[0]+' '+a[1];
+  if(k<4)d+=' L'+HITN[k+1][0]+' '+HITN[k+1][1];p.setAttribute('d',d)}
+ const CH=[['FLORACIÓN','ventana Ago–Oct'],['LLUVIAS DE PRIMAVERA','señal del almanaque'],['LECTURA DEL CIELO','observación empírica de siglos']];
+ CH.forEach((c,k)=>{const el=document.createElement('div');el.className='bioChip';
+  el.innerHTML='<div class="bcT">'+c[0]+'</div><div class="bcS mono">'+c[1]+'</div>';
+  el.style.left=(220+k*420)+'px';el.style.top='556px';ELS.bioChips.appendChild(el)});
+ const yl=document.createElementNS(NS,'text');yl.setAttribute('x',150);yl.setAttribute('y',366);
+ yl.setAttribute('fill','#66758f');yl.setAttribute('font-size','11');yl.setAttribute('font-family','IBM Plex Mono, monospace');
+ yl.textContent=DATA.yearStart;ELS.mesh.appendChild(yl);
+ const yr=document.createElementNS(NS,'text');yr.setAttribute('x',750);yr.setAttribute('y',366);
+ yr.setAttribute('text-anchor','end');yr.setAttribute('fill','#66758f');yr.setAttribute('font-size','11');yr.setAttribute('font-family','IBM Plex Mono, monospace');
+ yr.textContent=DATA.yearEnd;ELS.mesh.appendChild(yr);
+ [380,415,450,485].forEach(y=>{for(let i=0;i<N;i++){const c=document.createElementNS(NS,'circle');
+  c.setAttribute('cx',MESHX[i].toFixed(1));c.setAttribute('cy',y);c.setAttribute('r','2.4');
+  c.setAttribute('fill','#38efff');c.setAttribute('opacity','0');ELS.mesh.appendChild(c)}});
+ const yl2=document.createElementNS(NS,'text');yl2.setAttribute('x',190);yl2.setAttribute('y',676);
+ yl2.setAttribute('text-anchor','middle');yl2.setAttribute('fill','#66758f');yl2.setAttribute('font-size','12');yl2.setAttribute('font-family','IBM Plex Mono, monospace');
+ yl2.textContent='1950';ELS.gHit.appendChild(yl2);
+ const yr2=document.createElementNS(NS,'text');yr2.setAttribute('x',1420);yr2.setAttribute('y',676);
+ yr2.setAttribute('text-anchor','middle');yr2.setAttribute('fill','#66758f');yr2.setAttribute('font-size','12');yr2.setAttribute('font-family','IBM Plex Mono, monospace');
+ yr2.textContent='2026';ELS.gHit.appendChild(yr2);
+ for(let i=0;i<N;i++){const g=document.createElementNS(NS,'rect');
+  g.setAttribute('x',(BARX[i]-8).toFixed(1));g.setAttribute('y',639);g.setAttribute('width','16');g.setAttribute('height','3');
+  g.setAttribute('rx','1.5');g.setAttribute('fill','rgba(140,170,220,0.25)');ELS.bars.appendChild(g);
+  if(DATA.rend[i]!=null){const yr=DATA.yearStart+i;const b=document.createElementNS(NS,'rect');
+   b.setAttribute('x',(BARX[i]-8).toFixed(1));b.setAttribute('width','16');b.setAttribute('rx','2');
+   b.setAttribute('fill',yr===2014?'#ff7b72':'rgba(110,240,180,0.55)');
+   b.setAttribute('y',639);b.setAttribute('height','1');ELS.bars.appendChild(b);
+   if(yr===2014){const yl=document.createElementNS(NS,'text');
+    yl.setAttribute('x',BARX[i].toFixed(1));yl.setAttribute('y','572');yl.setAttribute('text-anchor','middle');
+    yl.setAttribute('fill','#ff7b72');yl.setAttribute('font-size','10.5');yl.setAttribute('font-family','IBM Plex Mono, monospace');
+    yl.setAttribute('opacity','0');yl.textContent='2014';ELS.bars.appendChild(yl);y2014Lbl=yl}}}
+})();
+
+const dotStep=k=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+ c.setAttribute('cx',HITN[k][0]);c.setAttribute('cy',HITN[k][1]);c.setAttribute('r','5');
+ c.setAttribute('fill','#38efff');c.setAttribute('filter','url(#glow)');c.setAttribute('opacity','0');
+ ELS.gHit.appendChild(c);return c};
+const STEPDOTS=[dotStep(0),dotStep(1),dotStep(2),dotStep(3),dotStep(4)];
+const climb=document.createElementNS('http://www.w3.org/2000/svg','circle');
+climb.setAttribute('r','6');climb.setAttribute('fill','#eaf6ff');climb.setAttribute('filter','url(#glow)');
+climb.setAttribute('opacity','0');ELS.gHit.appendChild(climb);
+
+const meshDots=[];
+for(let i=0;i<N;i++){const col=[];const els=ELS.mesh.querySelectorAll('circle');
+ for(let r=0;r<4;r++){col.push(els[r*N+i])}meshDots.push(col)}
+const barEls=[];let bidx=0;
+ELS.bars.querySelectorAll('rect').forEach(el=>{if(el.getAttribute('width')==='16'&&parseFloat(el.getAttribute('rx'))===2)barEls.push(el)});
+
+function enter(el,p,dist){el.style.opacity=p.toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function enterG(el,p,dist,gate){el.style.opacity=(p*gate).toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function poly(pts,frac){if(frac<=0.002)return'';const upto=frac*(pts.length-1);const last=Math.floor(upto);
+ let d='',started=false;
+ for(let i=0;i<=last;i++){const p=pts[i];if(p[1]==null){started=false;continue}
+  d+=(started?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);started=true}
+ if(last<pts.length-1&&upto>last){const a=pts[last],b=pts[last+1];
+  if(a[1]!=null&&b[1]!=null){const x=a[0]+(b[0]-a[0])*(upto-last),y=a[1]+(b[1]-a[1])*(upto-last);
+   d+=(d?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);return d}}
+ return d}
+
+let tCur=0;
+function render(t){
+ tCur=t;
+ ELS.orbA.style.transform='translate('+(Math.sin(t*0.11)*18).toFixed(1)+'px,'+(Math.cos(t*0.09)*14).toFixed(1)+'px)';
+ ELS.orbB.style.transform='translate('+(Math.sin(t*0.08+2)*20).toFixed(1)+'px,'+(Math.cos(t*0.1+1)*16).toFixed(1)+'px)';
+ const camT=seg(t,0.3,28);
+ const cs=1+0.012*camT;
+ ELS.camera.style.transform='translate('+(-8*camT+3*Math.sin(t*0.05)).toFixed(2)+'px,'+(2*Math.sin(t*0.043+1)).toFixed(2)+'px) scale('+cs.toFixed(4)+')';
+ ELS.grain.style.backgroundPosition=((t*57)%160).toFixed(0)+'px '+((t*31)%160).toFixed(0)+'px';
+
+ const sw0=5.8,swP=10.5,swD=2.2;let swO=0,swX=0;
+ if(t>sw0&&t<28.8){const ph=(t-sw0)%swP;if(ph<swD){swO=Math.sin(Math.PI*ph/swD)*0.85;swX=(-560+ph/swD*2500)}}
+ ELS.sweep.style.transform='skewX(-14deg) translateX('+swX.toFixed(0)+'px)';
+ ELS.sweep.style.opacity=swO.toFixed(3);
+
+ DUST.forEach(d=>{d.el.setAttribute('cx',(d.x+18*Math.sin(t*d.w+d.ph)).toFixed(1));
+  d.el.setAttribute('cy',(d.y+10*Math.cos(t*0.09+d.ph2)-t*d.rise).toFixed(1));
+  d.el.setAttribute('opacity',(d.o*(0.55+0.45*Math.sin(t*0.9+d.ph))).toFixed(3))});
+ ELS.dust.setAttribute('opacity','1');
+
+ const coldOut=seg(t,TL.coldOut[0],TL.coldOut[1]);
+ const coldO=seg(t,TL.coldIn[0],TL.coldIn[1]);
+ ELS.coldBlock.style.opacity=(coldO*(1-coldOut)).toFixed(3);
+ ELS.coldBlock.style.transform='translateY('+(-24*eac(coldOut)).toFixed(1)+'px)';
+ enterG(ELS.ck,eoc(seg(t,TL.ck[0],TL.ck[1])),14,coldO);
+ enterG(ELS.ch,eoc(seg(t,TL.ch[0],TL.ch[1])),20,coldO);
+ enterG(ELS.cs,eoc(seg(t,TL.cs[0],TL.cs[1])),12,coldO);
+ enterG(ELS.cmeta,eoc(seg(t,TL.cmeta[0],TL.cmeta[1])),10,coldO);
+
+ const headO=seg(t,TL.head[0],TL.head[1])*(1-seg(t,26.9,27.3));
+ ELS.headerSmall.style.opacity=headO.toFixed(3);
+ enterG(ELS.hKick,eoc(seg(t,TL.head[0]+0.05,TL.head[1]+0.2)),10,headO);
+ enterG(ELS.hSub,eoc(seg(t,TL.head[0]+0.2,TL.head[1]+0.4)),10,headO);
+ enterG(ELS.hRight,eoc(seg(t,TL.head[0]+0.35,TL.head[1]+0.5)),10,headO);
+
+ const panelO=seg(t,TL.panel[0],TL.panel[1]);
+ ELS.panel.style.opacity=panelO.toFixed(3);
+ ELS.panel.setAttribute('stroke','rgba(90,150,255,'+(0.16+0.06*Math.sin(t*0.9)).toFixed(2)+')');
+
+ const ancO=seg(t,TL.p1[0],TL.p1[1])*(1-seg(t,TL.ancOut[0],TL.ancOut[1]));
+ ELS.gAnc.setAttribute('opacity',ancO.toFixed(3));
+ const p1p=eoc(seg(t,TL.p1[0],TL.p1[1]));
+ ELS.p1Head.style.opacity=(p1p*ancO).toFixed(3);
+ ELS.p1Head.style.transform='translateY('+((1-p1p)*12).toFixed(1)+'px)';
+ enterG(ELS.pillAlm,eoc(seg(t,TL.p1[0]+0.25,TL.p1[1]+0.2)),10,ancO);
+ const ringP=eoc(seg(t,TL.ring[0],TL.ring[1]));
+ ELS.axM.setAttribute('opacity',ringP.toFixed(3));
+ ELS.axM.setAttribute('transform','translate(0,'+((1-ringP)*10).toFixed(1)+')');
+ ELS.winF.setAttribute('opacity',seg(t,TL.winF[0],TL.winF[1]).toFixed(3));
+ ELS.winC.setAttribute('opacity',seg(t,TL.winC[0],TL.winC[1]).toFixed(3));
+ ELS.dotWinF.setAttribute('opacity',seg(t,TL.winF[1]-0.2,TL.winF[1]+0.2).toFixed(3));
+ ELS.dotWinC.setAttribute('opacity',seg(t,TL.winC[1]-0.2,TL.winC[1]+0.2).toFixed(3));
+ const tauP=eoc(seg(t,TL.tau[0],TL.tau[1]));
+ ELS.arcTau.style.strokeDashoffset=(1-tauP).toFixed(3);
+ ELS.arcTau.setAttribute('opacity',seg(t,TL.tau[0],TL.tau[0]+0.3).toFixed(3));
+ ELS.arcHead.setAttribute('opacity',seg(t,TL.tau[1]-0.25,TL.tau[1]).toFixed(3));
+ enterG(ELS.tauLbl,eib(seg(t,TL.tauLbl[0],TL.tauLbl[1])),10,ancO);
+ ELS.bioChips.querySelectorAll('.bioChip').forEach((el,k)=>{
+  enterG(el,eoc(seg(t,TL.chips+k*0.14,TL.chips+k*0.14+0.5)),14,ancO)});
+
+ const hitO=seg(t,TL.p2[0],TL.p2[1])*(1-seg(t,TL.hitOut[0],TL.hitOut[1]));
+ ELS.gHit.setAttribute('opacity',hitO.toFixed(3));
+ const p2p=eoc(seg(t,TL.p2[0],TL.p2[1]));
+ ELS.p2Head.style.opacity=(p2p*hitO).toFixed(3);
+ ELS.p2Head.style.transform='translateY('+((1-p2p)*12).toFixed(1)+'px)';
+ enterG(ELS.pillRes,eoc(seg(t,TL.p2[1]-0.1,TL.p2[1]+0.35)),10,hitO);
+ ELS.stps.forEach((p,k)=>{const st=TL.steps+k*TL.stepGap;
+  p.style.strokeDashoffset=(1-eoc(seg(t,st,st+0.5))).toFixed(3)});
+ ELS.hitCards.querySelectorAll('.hitCard').forEach((el,k)=>{
+  enterG(el,eoc(seg(t,TL.steps+k*TL.stepGap+0.15,TL.steps+k*TL.stepGap+0.65)),14,hitO)});
+ STEPDOTS.forEach((d,k)=>{const st=TL.steps+k*TL.stepGap+0.3;
+  d.setAttribute('opacity',seg(t,st,st+0.3).toFixed(3))});
+ const cp=eic(seg(t,TL.climb[0],TL.climb[1]));
+ if(cp>0.001&&cp<0.999){const f=cp*4;const k=Math.min(3,Math.floor(f));const q=f-k;
+  climb.setAttribute('cx',lerp(HITN[k][0],HITN[k+1][0],q).toFixed(1));
+  climb.setAttribute('cy',lerp(HITN[k][1],HITN[k+1][1],q).toFixed(1));
+  climb.setAttribute('opacity',seg(t,TL.climb[0]-0.1,TL.climb[0]+0.4).toFixed(3));
+  climb.setAttribute('r',(5.5+0.8*Math.sin(t*3)).toFixed(2))}
+ else if(cp>=0.999){climb.setAttribute('cx',HITN[4][0]);climb.setAttribute('cy',HITN[4][1]);
+  climb.setAttribute('opacity',(1-seg(t,TL.climb[1],TL.climb[1]+0.5)).toFixed(3))}
+ else climb.setAttribute('opacity','0');
+
+ const gemO=seg(t,TL.p3[0],TL.p3[1])*(1-seg(t,TL.gemOut[0],TL.gemOut[1]));
+ ELS.gGem.setAttribute('opacity',gemO.toFixed(3));
+ const p3p=eoc(seg(t,TL.p3[0],TL.p3[1]));
+ ELS.p3Head.style.opacity=(p3p*gemO).toFixed(3);
+ ELS.p3Head.style.transform='translateY('+((1-p3p)*12).toFixed(1)+'px)';
+ enterG(ELS.pillGem,eoc(seg(t,TL.p3[0]+0.25,TL.p3[1]+0.2)),10,gemO);
+ enterG(ELS.pillN,eoc(seg(t,TL.pills[0],TL.pills[1])),10,gemO);
+ enterG(ELS.pillM,eoc(seg(t,TL.pills[0]+0.25,TL.pills[1]+0.25)),10,gemO);
+ ELS.divider.setAttribute('opacity',gemO.toFixed(3));
+ meshDots.forEach((col,i)=>{const st=TL.mesh[0]+i*0.055;if(t<st)return;
+  col.forEach(c=>{c.setAttribute('opacity',(0.65*seg(t,st,st+0.45)*(0.7+0.3*Math.sin(t*1.2+i*0.4))).toFixed(3))})});
+ const ndF=eoc(seg(t,TL.ndvi[0],TL.ndvi[1]));
+ ELS.ndviPath.setAttribute('d',poly(NE,ndF));
+ ELS.ndviPath.style.opacity=seg(t,TL.ndvi[0],TL.ndvi[0]+0.3).toFixed(3);
+ if(ndF>0.002&&ndF<0.9999){const fi=ndF*(N-1);const i0=Math.floor(fi);const q=fi-i0;
+  ELS.ndviDot.setAttribute('cx',lerp(NE[i0][0],NE[Math.min(i0+1,N-1)][0],q).toFixed(1));
+  ELS.ndviDot.setAttribute('cy',lerp(NE[i0][1],NE[Math.min(i0+1,N-1)][1],q).toFixed(1));
+  ELS.ndviDot.setAttribute('opacity',(0.9*(1-seg(t,TL.ndvi[1]-0.2,TL.ndvi[1]))).toFixed(3))}
+ else ELS.ndviDot.setAttribute('opacity','0');
+ enterG(ELS.ndviLbl,eoc(seg(t,TL.bars+1.3,TL.bars+1.8)),8,gemO);
+ enterG(ELS.rendLbl,eoc(seg(t,TL.bars+1.4,TL.bars+1.9)),8,gemO);
+ barEls.forEach((el,i)=>{const st=TL.bars+i*TL.barGap;
+  const v=DATA.rend[LE_idx(i)];const hF=eoc(seg(t,st,st+0.5));
+  const h=3+hF*((v/DATA.rendMax)*200);
+  el.setAttribute('y',(642-h).toFixed(1));el.setAttribute('height',h.toFixed(1));
+  el.setAttribute('opacity',(0.9*hF).toFixed(3));
+  if(y2014Lbl&&DATA.yearStart+LE_idx(i)===2014)y2014Lbl.setAttribute('opacity',(0.95*hF).toFixed(3))});
+ ELS.gemFlux.style.opacity=seg(t,TL.flux[0],TL.flux[1]).toFixed(3);
+ ELS.gemFlux.style.transform='translateY('+((1-eoc(seg(t,TL.flux[0],TL.flux[1])))*8).toFixed(1)+'px)';
+
+ const closeO=seg(t,TL.close[0],TL.close[1]);
+ ELS.closeWrap.style.opacity=closeO.toFixed(3);
+ enterG(ELS.cKick,eoc(seg(t,TL.close[0]-0.2,TL.close[1])),12,closeO);
+ enterG(ELS.cH1,eoc(seg(t,TL.close[0]-0.05,TL.close[1]+0.15)),18,closeO);
+ enterG(ELS.cSub,eoc(seg(t,TL.close[0]+0.15,TL.close[1]+0.35)),12,closeO);
+ enterG(ELS.dualL,eib(seg(t,TL.dkL[0],TL.dkL[1])),18,closeO);
+ enterG(ELS.dualR,eib(seg(t,TL.dkR[0],TL.dkR[1])),18,closeO);
+ const arrP=seg(t,TL.arr[0],TL.arr[1]);
+ ELS.dArrow.style.opacity=(arrP*closeO).toFixed(3);
+ ELS.dArrow.style.transform='translateY('+((1-eib(arrP))*(-8)).toFixed(1)+'px) scale('+(0.8+0.2*eib(arrP)+0.03*Math.sin(t*3)).toFixed(3)+')';
+ enterG(ELS.eqLine,eoc(seg(t,TL.eq[0],TL.eq[1])),12,closeO);
+ enterG(ELS.cFoot,eoc(seg(t,TL.foot[0],TL.foot[1])),8,closeO);
+}
+const LE_idx=i=>{let k=-1,c=0;for(let j=0;j<N;j++){if(DATA.rend[j]!=null)c++;if(c===i+1){k=j;break}}return k};
+
+window.__DURATION_MS=DURMS;
+let lastMs=0;
+window.__setTime=ms=>{lastMs=Math.max(0,Math.min(ms,DURMS));render(lastMs/1000)};
+const params=new URLSearchParams(location.search);
+const h=location.hash.match(/t=([\d.]+)/);
+if(h)window.__setTime(parseFloat(h[1])*1000);
+document.fonts.ready.then(()=>{render(lastMs/1000);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{window.__ready=true}))});
+if(params.has('preview')){const loop=()=>{window.__setTime(performance.now()%DURMS);requestAnimationFrame(loop)};loop()}
+</script>
+</body>
+</html>

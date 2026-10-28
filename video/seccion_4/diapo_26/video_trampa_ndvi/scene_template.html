@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+__FONTS_CSS__
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:900px;overflow:hidden;background:#040812}
+body{font-family:'IBM Plex Sans',sans-serif;color:#e8f2ff}
+.display{font-family:'Space Grotesk',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+#stage{position:absolute;left:0;top:0;width:1600px;height:900px;overflow:hidden}
+#bgGrad{position:absolute;inset:0;background:
+ radial-gradient(1200px 700px at 74% 6%, rgba(24,60,120,0.32), transparent 62%),
+ radial-gradient(900px 620px at 12% 96%, rgba(14,44,90,0.30), transparent 60%),
+ linear-gradient(180deg,#050c1c 0%,#040812 54%,#03060e 100%)}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5}
+#orbA{left:-220px;top:-180px;width:760px;height:760px;background:radial-gradient(circle,rgba(30,90,170,0.45),transparent 65%)}
+#orbB{right:-260px;bottom:-240px;width:840px;height:840px;background:radial-gradient(circle,rgba(20,120,130,0.34),transparent 65%)}
+#camera{position:absolute;inset:0}
+#vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 52%,rgba(2,4,10,0.55) 100%)}
+#grain{position:absolute;inset:-40px;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.55'/></svg>")}
+#sweep{position:absolute;top:-80px;bottom:-80px;left:-700px;width:420px;transform:skewX(-14deg);background:linear-gradient(90deg,transparent,rgba(70,150,255,0.10),rgba(140,220,255,0.16),rgba(70,150,255,0.10),transparent);filter:blur(30px);opacity:0;pointer-events:none}
+#dustWrap{position:absolute;inset:0}
+svg{position:absolute;left:0;top:0;overflow:visible}
+#panel{position:absolute;left:84px;top:206px;width:1476px;height:532px;border-radius:16px;background:rgba(2,6,15,0.92);border:1px solid rgba(90,150,255,0.20);opacity:0}
+.pill{position:absolute;padding:8px 16px 9px;border-radius:999px;border:1px solid;font-size:13px;letter-spacing:.4px;opacity:0;white-space:nowrap;background:rgba(4,10,26,0.88)}
+#hRight{right:96px;top:52px;border-color:rgba(140,170,220,0.25);color:#8b9ab8;font-size:12px}
+#headerSmall{position:absolute;left:96px;top:56px;opacity:0}
+#hKick{font-size:12.5px;letter-spacing:2.6px;color:#38efff}
+#hSub{font-size:14.5px;color:#aabbd8;margin-top:6px}
+#coldBlock{position:absolute;inset:0;text-align:center}
+#coldBlock .cline{position:absolute;left:0;right:0}
+#ck{top:318px;font-size:14px;letter-spacing:4.2px;color:#38efff}
+#ch{top:344px;font-size:46px;font-weight:700;letter-spacing:-0.4px}
+#cs{top:414px;font-size:17px;color:#cfe0f5}
+#cmeta{top:478px;font-size:12px;letter-spacing:2px;color:#7f8fb0}
+.panelHead{position:absolute;left:120px;top:242px;opacity:0}
+.panelHead .pk{font-size:12.5px;letter-spacing:2.4px;color:#38efff}
+.panelHead .ps{font-size:13.5px;color:#8b9ab8;margin-top:5px}
+.aCap{position:absolute;font-size:11.5px;letter-spacing:.3px;opacity:0}
+#aCap1{left:450px;top:486px;color:#9fe8c8}
+#aCap2{left:450px;top:556px;color:#a8ecff}
+#aCap3{left:450px;top:588px;color:#ffb4ad}
+#satPill{left:346px;top:302px;border-color:rgba(56,239,255,0.45);color:#a8ecff;font-size:11.5px}
+#satStat{left:130px;top:660px;font-size:11.5px;letter-spacing:.3px;color:#9fe8c8;opacity:0;position:absolute}
+#ndviCap{position:absolute;left:560px;top:288px;font-size:11.5px;color:#9fe8c8;letter-spacing:.3px;opacity:0}
+#yldCap{position:absolute;left:560px;top:672px;font-size:11.5px;color:#9fe8c8;letter-spacing:.3px;opacity:0}
+#ndviTag{left:1120px;top:278px;border-color:rgba(110,240,180,0.55);color:#bff2d8;font-size:12.5px}
+#yldTag{left:1145px;top:530px;border-color:rgba(255,123,114,0.6);color:#ffb4ad;font-size:12.5px}
+#capL{left:180px;top:684px;border-color:rgba(255,123,114,0.5);color:#ffb4ad;font-size:12px}
+#capR{left:900px;top:684px;border-color:rgba(110,240,180,0.5);color:#bff2d8;font-size:12px}
+#corrNote{position:absolute;left:160px;top:302px;font-size:11.5px;color:#7f8fb0;letter-spacing:.4px;opacity:0}
+#closeWrap{position:absolute;inset:0;opacity:0}
+#closeBg{position:absolute;inset:0;background:#040812}
+#closeWrap .cline{position:absolute;left:0;right:0;text-align:center}
+#cKick{top:158px;font-size:14px;letter-spacing:4px;color:#38efff}
+#cH1{top:188px;font-size:46px;font-weight:700;letter-spacing:-0.4px}
+#cSub{top:256px;font-size:17px;color:#cfe0f5}
+.dualCard{position:absolute;top:330px;width:520px;height:212px;border-radius:16px;background:rgba(5,12,24,0.74);opacity:0}
+#dualL{left:206px;border:1px solid rgba(255,123,114,0.4)}
+#dualR{left:874px;border:1px solid rgba(56,239,255,0.4)}
+.dcName{position:absolute;left:26px;top:22px;font-size:25px;font-weight:700;letter-spacing:.4px}
+.dcSub{position:absolute;left:26px;top:60px;font-size:12.5px;color:#8b9ab8}
+.dcMeta{position:absolute;left:26px;top:96px;width:470px;font-size:14px;color:#cfe0f5;line-height:1.5}
+.dcFoot{position:absolute;left:26px;top:164px;font-size:12.5px;letter-spacing:.5px}
+#dArrow{top:406px;font-size:40px;color:#8fb7ff}
+#cFoot{top:640px;font-size:12.5px;letter-spacing:1.6px;color:#7f8fb0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bgGrad"></div>
+  <div class="orb" id="orbA"></div>
+  <div class="orb" id="orbB"></div>
+  <div id="camera">
+    <div id="panel"></div>
+    <svg width="1600" height="900" viewBox="0 0 1600 900">
+      <defs>
+        <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="4.2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g id="dust" opacity="0"></g>
+      <g id="gP1" opacity="0">
+        <g id="gSat">
+          <polygon id="beam" points="270,350 300,350 420,492 150,492" fill="rgba(56,239,255,0.10)" stroke="rgba(56,239,255,0.28)" stroke-dasharray="2 7"/>
+          <rect x="236" y="326" width="30" height="11" rx="2" fill="rgba(56,239,255,0.22)" stroke="rgba(120,180,255,0.5)" stroke-width="1"/>
+          <rect x="304" y="326" width="30" height="11" rx="2" fill="rgba(56,239,255,0.22)" stroke="rgba(120,180,255,0.5)" stroke-width="1"/>
+          <rect x="268" y="318" width="34" height="26" rx="5" fill="#0a1626" stroke="#8fb7ff" stroke-width="1.4"/>
+          <circle cx="285" cy="348" r="6" fill="#0a1626" stroke="#8fb7ff" stroke-width="1.4"/>
+          <line x1="285" y1="308" x2="285" y2="318" stroke="#8fb7ff" stroke-width="1.6"/>
+          <circle cx="285" cy="305" r="2.6" fill="#38efff"/>
+          <ellipse cx="285" cy="484" rx="150" ry="24" fill="rgba(110,240,180,0.26)" stroke="rgba(110,240,180,0.5)" stroke-width="1.2"/>
+          <ellipse cx="253" cy="468" rx="118" ry="19" fill="rgba(110,240,180,0.20)" stroke="rgba(110,240,180,0.4)" stroke-width="1"/>
+          <ellipse cx="332" cy="472" rx="88" ry="15" fill="rgba(110,240,180,0.16)" stroke="rgba(110,240,180,0.35)" stroke-width="1"/>
+          <line x1="285" y1="508" x2="285" y2="536" stroke="rgba(140,170,220,0.35)" stroke-width="1.6"/>
+          <circle cx="285" cy="540" r="4" fill="rgba(140,170,220,0.5)"/>
+          <circle cx="196" cy="556" r="8" fill="rgba(18,52,38,0.95)" stroke="rgba(110,240,180,0.35)"/>
+          <circle cx="244" cy="562" r="8" fill="rgba(18,52,38,0.95)" stroke="rgba(110,240,180,0.35)"/>
+          <circle cx="292" cy="566" r="8" fill="rgba(18,52,38,0.95)" stroke="rgba(110,240,180,0.35)"/>
+          <circle cx="340" cy="562" r="8" fill="rgba(18,52,38,0.95)" stroke="rgba(110,240,180,0.35)"/>
+          <circle cx="386" cy="556" r="8" fill="rgba(18,52,38,0.95)" stroke="rgba(110,240,180,0.35)"/>
+          <g id="abortDots">
+            <circle cx="200" cy="540" r="2.6" fill="#ff7b72"/><circle cx="250" cy="546" r="2.6" fill="#ff7b72"/>
+            <circle cx="296" cy="550" r="2.6" fill="#ff7b72"/><circle cx="344" cy="546" r="2.6" fill="#ff7b72"/>
+            <circle cx="388" cy="540" r="2.6" fill="#ff7b72"/>
+          </g>
+        </g>
+        <g id="gNdvi">
+          <line x1="560" y1="425" x2="1500" y2="425" stroke="rgba(140,170,220,0.10)"/>
+          <line x1="560" y1="361" x2="1500" y2="361" stroke="rgba(140,170,220,0.10)"/>
+          <path id="ndviPath" fill="none" stroke="#6ef0b4" stroke-width="2.2" opacity="0"/>
+          <g id="ndviDots"></g>
+          <circle id="ndvi14" r="6" fill="#bff2d8" filter="url(#glow)" opacity="0"/>
+          <polyline id="ndviLead" points="1120,308 1091.7,340" fill="none" stroke="rgba(110,240,180,0.6)" stroke-width="1.4" opacity="0"/>
+        </g>
+        <g id="gYield">
+          <line x1="560" y1="640" x2="1500" y2="640" stroke="rgba(140,170,220,0.22)"/>
+          <g id="yBars"></g>
+          <polyline id="yldLead" points="1145,562 1105,562 1091.7,598" fill="none" stroke="rgba(255,123,114,0.6)" stroke-width="1.4" opacity="0"/>
+          <text id="y2014" x="1091.7" y="590" text-anchor="middle" fill="#ff7b72" font-size="10.5" font-family="IBM Plex Mono, monospace" opacity="0">2014</text>
+        </g>
+      </g>
+      <g id="gP2" opacity="0">
+        <line id="divider2" x1="812" y1="312" x2="812" y2="662" stroke="rgba(140,170,220,0.16)" stroke-dasharray="3 9"/>
+        <g id="scatL">
+          <rect x="180" y="320" width="520" height="320" rx="10" fill="rgba(8,16,34,0.55)" stroke="rgba(140,170,220,0.18)"/>
+        </g>
+        <g id="scatR">
+          <rect x="900" y="320" width="520" height="320" rx="10" fill="rgba(8,16,34,0.55)" stroke="rgba(140,170,220,0.18)"/>
+        </g>
+        <path id="trL" d="M200 564 L680 546" fill="none" stroke="rgba(140,170,220,0.5)" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <path id="trR" d="M920 628 L1400 338" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <text x="188" y="312" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">Rendimiento (qq/ha)</text>
+        <text x="692" y="662" text-anchor="end" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">NDVI anual (MODIS)</text>
+        <text x="908" y="312" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">Rendimiento (qq/ha)</text>
+        <text x="1412" y="662" text-anchor="end" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">Déficit hídrico floración (mm)</text>
+        <g id="ptsL"></g>
+        <g id="ptsR"></g>
+        <circle id="d14L" r="7" fill="none" stroke="#ff7b72" stroke-width="2.4" opacity="0"/>
+        <circle id="d14R" r="7" fill="none" stroke="#ff7b72" stroke-width="2.4" opacity="0"/>
+        <text id="tag14L" x="516" y="586" fill="#ffb4ad" font-size="10.5" font-family="IBM Plex Mono, monospace" opacity="0">2014 · 10.0 qq/ha (−56.0%)</text>
+        <text id="tag14R" x="972" y="572" fill="#ffb4ad" font-size="10.5" font-family="IBM Plex Mono, monospace" opacity="0">2014 (−56.0%)</text>
+      </g>
+      <g id="gP3" opacity="0">
+        <g id="corrBars"></g>
+        <g id="corrVals"></g>
+        <g id="corrNames"></g>
+      </g>
+    </svg>
+    <div id="headerSmall">
+      <div id="hKick" class="mono">CASO 2 · CAFÉ DE JAÉN · TELEDETECCIÓN VS. FISIOLOGÍA</div>
+      <div id="hSub">El dosel verde no ve el aborto floral bajo la sombra</div>
+    </div>
+    <div id="hRight" class="pill mono">JAÉN · N = 24 CAMPAÑAS (2001–2024) · MODIS 250 m · ERA5</div>
+    <div id="coldBlock">
+      <div id="ck" class="mono cline">CASO 2 · LA TRAMPA DEL SATÉLITE</div>
+      <div id="ch" class="display cline">La Trampa del Satélite: ¿Por qué el NDVI falla?</div>
+      <div id="cs" class="cline">Un dosel saturado de verde frente al colapso real bajo la sombra</div>
+      <div id="cmeta" class="mono cline">SECCIÓN 04 · JAÉN (CAJAMARCA) · MODIS 250 m vs. ERA5 · CAFÉ</div>
+    </div>
+    <div class="panelHead" id="p1Head"><div class="pk mono">PANEL 1 · EL ESPEJISMO VERDE Y EL COLAPSO REAL</div><div class="ps">Dosel saturado vs. aborto floral bajo la sombra (2010–2024)</div></div>
+    <div class="panelHead" id="p2Head"><div class="pk mono">PANEL 2 · DUELO DE DISPERSIÓN EMPÍRICA</div><div class="ps">Lo óptico no ordena la cosecha; la fisiología de floración sí</div></div>
+    <div class="panelHead" id="p3Head"><div class="pk mono">PANEL 3 · CONTRASTE DE SEÑAL BIOLÓGICA</div><div class="ps">Correlación de cada variable con el rendimiento real</div></div>
+    <div id="corrNote" class="mono">|r| con el rendimiento real (qq/ha) · 14 campañas con cosecha (2010–2024)</div>
+    <div id="satPill" class="pill mono">MODIS Terra/Aqua · 250 m</div>
+    <div id="aCap1" class="aCap mono">Dosel (Inga spp.) + maleza</div>
+    <div id="aCap2" class="aCap mono">Cafeto bajo sombra: botones florales</div>
+    <div id="aCap3" class="aCap mono">Aborto floral 2014 — invisible a 250 m</div>
+    <div id="satStat" class="mono">NDVI dosel ~0.74 · CV = 2.32% (Dosel Saturado)</div>
+    <div id="ndviCap" class="mono">NDVI anual (MODIS) — serie satelital</div>
+    <div id="yldCap" class="mono">Rendimiento real (qq/ha) — 2010–2024</div>
+    <div id="ndviTag" class="pill mono">NDVI 2014 = 0.7483 (+1.4% · Aparente Normalidad)</div>
+    <div id="yldTag" class="pill mono">2014 · 10.0 qq/ha (−56.0%)</div>
+    <div id="capL" class="pill mono">MODIS NDVI Anual: r = 0.1536 (p = 0.600 · Pendiente Nula)</div>
+    <div id="capR" class="pill mono">Déficit Hídrico Floración (Ago–Oct): r = 0.7564 (p = 0.002 · Señal Real)</div>
+    <div id="sweep"></div>
+    <div id="closeWrap">
+      <div id="closeBg"></div>
+      <div id="cKick" class="mono cline">CASO 2 · LA TRAMPA DEL SATÉLITE</div>
+      <div id="cH1" class="display cline">El dosel verde no ve el aborto floral</div>
+      <div id="cSub" class="cline">Lo óptico describe la copa; la fisiología explica la cosecha</div>
+      <div class="dualCard" id="dualL">
+        <div class="dcName display" style="color:#ffb4ad">SATÉLITE ÓPTICO ANUAL</div>
+        <div class="dcSub mono">(NDVI ~0.74 · MODIS 250 m)</div>
+        <div class="dcMeta">r = +0.1536 (p = 0.600) — pendiente nula: el verdor del dosel no ordena la cosecha.</div>
+        <div class="dcFoot mono" style="color:#ffb4ad">Ciego a la roya: −56.0% (2014)</div>
+      </div>
+      <div id="dArrow" class="cline">⟷</div>
+      <div class="dualCard" id="dualR">
+        <div class="dcName display" style="color:#38efff">CLIMA EN FLORACIÓN</div>
+        <div class="dcSub mono">(Ago–Oct · balance hídrico ERA5)</div>
+        <div class="dcMeta">Déficit hídrico r = +0.7564 · Lluvia r = +0.7511 (p = 0.002): la señal fisiológica real.</div>
+        <div class="dcFoot mono" style="color:#6ef0b4">Ordena el colapso y el récord de 2020</div>
+      </div>
+      <div id="cFoot" class="mono cline">JAÉN (CAJAMARCA) · N = 24 CAMPAÑAS (2001–2024) · MODIS 250 m · ERA5</div>
+    </div>
+  </div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+</div>
+<script>
+const DATA=__DATA_JSON__;
+const DURMS=__DURATION_MS__;
+const N=DATA.years.length;
+const clamp=x=>Math.max(0,Math.min(1,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eoc=p=>1-Math.pow(1-p,3);
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+
+const TL={
+ coldIn:[0.15,0.5], ck:[0.35,0.95], ch:[0.5,1.35], cs:[0.85,1.55], cmeta:[1.05,1.7], coldOut:[4.4,4.9],
+ head:[5.05,5.8], panel:[5.25,6.1],
+ p1:[6.1,6.6], sat:[6.7,7.8], satTags:[7.6,8.2], ndvi:[8.4,10.2], ndviTag:[10.3,10.8],
+ bars:[10.6,12.4], yldTag:[12.0,12.5], p1Out:[13.0,13.5],
+ p2:[13.5,14.0], scats:[14.2,16.4], trends:[16.0,17.0], caps:[16.8,17.3], d14:[17.0,17.5], p2Out:[20.6,21.1],
+ p3:[21.1,21.6], corrNote:[21.6,22.0], corr:22.2, corrGap:0.45, p3Out:[25.9,26.4],
+ close:[26.3,26.9], cH1:[26.6,27.2], cards:[27.0,28.0], foot:[28.1,28.6]
+};
+
+const ELS={camera:$('camera'),grain:$('grain'),sweep:$('sweep'),orbA:$('orbA'),orbB:$('orbB'),
+dust:$('dust'),panel:$('panel'),
+gP1:$('gP1'),beam:$('beam'),ndviPath:$('ndviPath'),ndviDots:$('ndviDots'),ndvi14:$('ndvi14'),ndviLead:$('ndviLead'),
+yBars:$('yBars'),yldLead:$('yldLead'),y2014:$('y2014'),
+gP2:$('gP2'),ptsL:$('ptsL'),ptsR:$('ptsR'),trL:$('trL'),trR:$('trR'),d14L:$('d14L'),d14R:$('d14R'),tag14L:$('tag14L'),tag14R:$('tag14R'),divider2:$('divider2'),
+gP3:$('gP3'),corrBars:$('corrBars'),corrVals:$('corrVals'),corrNames:$('corrNames'),
+headerSmall:$('headerSmall'),hKick:$('hKick'),hSub:$('hSub'),hRight:$('hRight'),
+coldBlock:$('coldBlock'),ck:$('ck'),ch:$('ch'),cs:$('cs'),cmeta:$('cmeta'),
+p1Head:$('p1Head'),p2Head:$('p2Head'),p3Head:$('p3Head'),
+satPill:$('satPill'),aCap1:$('aCap1'),aCap2:$('aCap2'),aCap3:$('aCap3'),satStat:$('satStat'),
+ndviCap:$('ndviCap'),yldCap:$('yldCap'),ndviTag:$('ndviTag'),yldTag:$('yldTag'),
+capL:$('capL'),capR:$('capR'),corrNote:$('corrNote'),
+closeWrap:$('closeWrap'),cKick:$('cKick'),cH1:$('cH1'),cSub:$('cSub'),dualL:$('dualL'),dualR:$('dualR'),dArrow:$('dArrow'),cFoot:$('cFoot')};
+
+const DUST=[];
+(function initDust(){let s=135791357;
+ const r=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+ for(let i=0;i<22;i++){const c=document.createElementNS(NS,'circle');
+  const d={x:80+r()*1440,y:90+r()*780,rad:0.8+r()*1.5,o:0.05+r()*0.13,ph:r()*6.28,ph2:r()*6.28,w:0.08+r()*0.1,rise:r()*0.5};
+  c.setAttribute('r',d.rad.toFixed(2));c.setAttribute('fill','#9fc4ff');
+  ELS.dust.appendChild(c);d.el=c;DUST.push(d)}})();
+
+const X0=560,X1=1500,STEP=(X1-X0)/(N-1);
+const yN=v=>425-(v-0.69)/(0.785-0.69)*120;
+const yR=r=>640-(r/38)*160;
+const bx=i=>X0+i*STEP;
+const NPTS=[];
+for(let i=0;i<N;i++){NPTS.push([bx(i),yN(DATA.ndvi[i])])}
+
+const pairsL=[],pairsR=[];
+for(let i=0;i<N;i++){if(DATA.rend[i]==null||DATA.ndvi[i]==null)continue;
+ pairsL.push({i:i,v:DATA.ndvi[i],y:DATA.rend[i]})}
+for(let i=0;i<N;i++){if(DATA.rend[i]==null||DATA.def[i]==null)continue;
+ pairsR.push({i:i,v:DATA.def[i],y:DATA.rend[i]})}
+const ndviMin=Math.min.apply(null,DATA.ndvi),ndviMax=Math.max.apply(null,DATA.ndvi);
+const defMin=Math.min.apply(null,DATA.def),defMax=Math.max.apply(null,DATA.def);
+const sxL=v=>195+(v-ndviMin)/(ndviMax-ndviMin)*490;
+const sxR=v=>915+(v-defMin)/(defMax-defMin)*490;
+const syR=r=>640-(r/38)*320;
+const posL=i=>{const p=pairsL.filter(q=>q.i===i)[0];return p?[sxL(p.v),syR(p.y)]:null};
+const posR=i=>{const p=pairsR.filter(q=>q.i===i)[0];return p?[sxR(p.v),syR(p.y)]:null};
+
+const scatL=[],scatR=[];
+function mkPt(g,x,y,coral){const grp=document.createElementNS(NS,'g');
+ grp.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+') scale(0)');
+ const c=document.createElementNS(NS,'circle');c.setAttribute('r','5.5');
+ c.setAttribute('fill',coral?'#ff7b72':'rgba(56,239,255,0.85)');
+ c.setAttribute('opacity','0.92');grp.appendChild(c);g.appendChild(grp);return grp}
+pairsL.forEach(p=>{scatL.push(mkPt(ELS.ptsL,sxL(p.v),syR(p.y),p.i===DATA.i2014))});
+pairsR.forEach(p=>{scatR.push(mkPt(ELS.ptsR,sxR(p.v),syR(p.y),p.i===DATA.i2014))});
+
+const yBars=[],y2014Bar=[];
+(function initBars(){
+ [2001,2010,2014,2020,2024].forEach(y=>{const i=DATA.years.indexOf(y);if(i<0)return;
+  const tx=document.createElementNS(NS,'text');tx.setAttribute('x',bx(i).toFixed(1));tx.setAttribute('y','656');
+  tx.setAttribute('text-anchor','middle');tx.setAttribute('fill',y===2014?'#ff7b72':'#66758f');
+  tx.setAttribute('font-size','11');tx.setAttribute('font-family','IBM Plex Mono, monospace');tx.textContent=y;
+  ELS.yBars.appendChild(tx)});
+ for(let i=0;i<N;i++){if(DATA.rend[i]==null)continue;
+  const b=document.createElementNS(NS,'rect');
+  b.setAttribute('x',(bx(i)-9).toFixed(1));b.setAttribute('y','639');b.setAttribute('width','18');b.setAttribute('height','1');
+  b.setAttribute('rx','2');b.setAttribute('fill',i===DATA.i2014?'#ff7b72':'rgba(110,240,180,0.6)');
+  b.setAttribute('opacity','0');ELS.yBars.appendChild(b);yBars.push(b);
+  if(i===DATA.i2014){const dl=document.createElementNS(NS,'circle');
+   dl.setAttribute('cx',bx(i).toFixed(1));dl.setAttribute('cy','0');dl.setAttribute('r','3.4');
+   dl.setAttribute('fill','#ff7b72');dl.setAttribute('filter','url(#glowSoft)');dl.setAttribute('opacity','0');
+   ELS.yBars.appendChild(dl);y2014Bar.push(dl)}}})();
+
+const CORR=[
+ {y:350,r:DATA.hip.rDeficit,name:'Balance Hídrico Floración (Ago–Oct)',val:'+0.7564',tag:'Señal Causal',col:'#6ef0b4'},
+ {y:425,r:DATA.hip.rLluvia,name:'Lluvia Floración (Ago–Oct)',val:'+0.7511',tag:'Señal Causal',col:'#38efff'},
+ {y:500,r:DATA.hip.rTmax,name:'Tmax Floración (Ago–Oct)',val:'−0.5606',tag:'Señal inversa',col:'#ffb4ad'},
+ {y:575,r:DATA.hip.rNdvi,name:'MODIS NDVI Anual',val:'+0.1536',tag:'Ruido Saturado',col:'#ff7b72'}
+];
+const CORRX=450,CORRS=1200;
+const corrEls=[],corrValEls=[],corrNameEls=[];
+CORR.forEach(c=>{
+ const b=document.createElementNS(NS,'rect');
+ b.setAttribute('x',CORRX);b.setAttribute('y',c.y-13);b.setAttribute('width','0');b.setAttribute('height','26');
+ b.setAttribute('rx','6');b.setAttribute('fill',c.col);b.setAttribute('fill-opacity','0.72');ELS.corrBars.appendChild(b);
+ const nt=document.createElementNS(NS,'text');
+ nt.setAttribute('x','160');nt.setAttribute('y',(c.y+4).toFixed(1));nt.setAttribute('fill','#cfe0f5');
+ nt.setAttribute('font-size','12.5');nt.setAttribute('font-family','IBM Plex Mono, monospace');nt.setAttribute('opacity','0');nt.textContent=c.name;
+ ELS.corrNames.appendChild(nt);corrNameEls.push(nt);
+ const vt=document.createElementNS(NS,'text');
+ vt.setAttribute('x',(CORRX+10).toFixed(1));vt.setAttribute('y',(c.y+4).toFixed(1));vt.setAttribute('fill',c.col);
+ vt.setAttribute('font-size','12.5');vt.setAttribute('font-family','IBM Plex Mono, monospace');vt.textContent=c.val+' · '+c.tag;
+ ELS.corrVals.appendChild(vt);
+ corrEls.push(b);corrValEls.push(vt)});
+
+function enter(el,p,dist){el.style.opacity=p.toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function enterG(el,p,dist,gate){el.style.opacity=(p*gate).toFixed(3);el.style.transform='translateY('+((1-p)*(dist==null?12:dist)).toFixed(1)+'px)'}
+function poly(pts,frac){if(frac<=0.002)return'';const upto=frac*(pts.length-1);const last=Math.floor(upto);
+ let d='',started=false;
+ for(let i=0;i<=last;i++){const p=pts[i];if(p[1]==null){started=false;continue}
+  d+=(started?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);started=true}
+ if(last<pts.length-1&&upto>last){const a=pts[last],b=pts[last+1];
+  if(a[1]!=null&&b[1]!=null){const x=a[0]+(b[0]-a[0])*(upto-last),y=a[1]+(b[1]-a[1])*(upto-last);
+   d+=(d?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);return d}}
+ return d}
+
+let tCur=0;
+function render(t){
+ tCur=t;
+ ELS.orbA.style.transform='translate('+(Math.sin(t*0.11)*18).toFixed(1)+'px,'+(Math.cos(t*0.09)*14).toFixed(1)+'px)';
+ ELS.orbB.style.transform='translate('+(Math.sin(t*0.08+2)*20).toFixed(1)+'px,'+(Math.cos(t*0.1+1)*16).toFixed(1)+'px)';
+ const camT=seg(t,0.3,28);
+ const cs=1+0.012*camT;
+ ELS.camera.style.transform='translate('+(-8*camT+3*Math.sin(t*0.05)).toFixed(2)+'px,'+(2*Math.sin(t*0.043+1)).toFixed(2)+'px) scale('+cs.toFixed(4)+')';
+ ELS.grain.style.backgroundPosition=((t*57)%160).toFixed(0)+'px '+((t*31)%160).toFixed(0)+'px';
+
+ const sw0=5.6,swP=10.4,swD=2.2;let swO=0,swX=0;
+ if(t>sw0&&t<28.6){const ph=(t-sw0)%swP;if(ph<swD){swO=Math.sin(Math.PI*ph/swD)*0.8;swX=(-560+ph/swD*2500)}}
+ ELS.sweep.style.transform='skewX(-14deg) translateX('+swX.toFixed(0)+'px)';
+ ELS.sweep.style.opacity=swO.toFixed(3);
+
+ DUST.forEach(d=>{d.el.setAttribute('cx',(d.x+18*Math.sin(t*d.w+d.ph)).toFixed(1));
+  d.el.setAttribute('cy',(d.y+10*Math.cos(t*0.09+d.ph2)-t*d.rise).toFixed(1));
+  d.el.setAttribute('opacity',(d.o*(0.55+0.45*Math.sin(t*0.9+d.ph))).toFixed(3))});
+ ELS.dust.setAttribute('opacity','1');
+
+ const coldO=seg(t,TL.coldIn[0],TL.coldIn[1])*(1-seg(t,TL.coldOut[0],TL.coldOut[1]));
+ ELS.coldBlock.style.opacity=coldO.toFixed(3);
+ enter(ELS.ck,eoc(seg(t,TL.ck[0],TL.ck[1])),14);
+ enter(ELS.ch,eoc(seg(t,TL.ch[0],TL.ch[1])),18);
+ enter(ELS.cs,eoc(seg(t,TL.cs[0],TL.cs[1])),14);
+ enter(ELS.cmeta,eoc(seg(t,TL.cmeta[0],TL.cmeta[1])),10);
+
+ const headO=seg(t,TL.head[0],TL.head[1]);
+ ELS.headerSmall.style.opacity=headO.toFixed(3);
+ enter(ELS.hKick,headO,10);enter(ELS.hSub,headO,10);
+ enterG(ELS.hRight,eoc(seg(t,TL.head[0]+0.2,TL.head[1]+0.2)),10,headO);
+
+ const panelO=seg(t,TL.panel[0],TL.panel[1]);
+ ELS.panel.style.opacity=panelO.toFixed(3);
+
+ const p1O=seg(t,TL.p1[0],TL.p1[1])*(1-seg(t,TL.p1Out[0],TL.p1Out[1]));
+ ELS.gP1.setAttribute('opacity',p1O.toFixed(3));
+ enterG(ELS.p1Head,eoc(seg(t,TL.p1[0],TL.p1[1])),12,p1O*(1-seg(t,TL.p1Out[0],TL.p1Out[1])));
+ const satP=eoc(seg(t,TL.sat[0],TL.sat[1]));
+ ELS.gSat=ELS.gSat||$('gSat');ELS.gSat.setAttribute('opacity',satP.toFixed(3));
+ const beamD=eoc(seg(t,TL.sat[0]+0.3,TL.sat[1]));
+ $('beam').setAttribute('opacity',(0.35+0.65*beamD).toFixed(3));
+ $('abortDots').setAttribute('opacity',seg(t,TL.sat[1]-0.4,TL.sat[1]).toFixed(3));
+ enterG(ELS.satPill,eoc(seg(t,TL.satTags[0],TL.satTags[1])),8,p1O);
+ enterG(ELS.aCap1,eoc(seg(t,TL.satTags[0],TL.satTags[1])),8,p1O);
+ enterG(ELS.aCap2,eoc(seg(t,TL.satTags[0]+0.15,TL.satTags[1]+0.15)),8,p1O);
+ enterG(ELS.aCap3,eoc(seg(t,TL.satTags[0]+0.3,TL.satTags[1]+0.3)),8,p1O);
+ enterG(ELS.satStat,eoc(seg(t,TL.satTags[0]+0.4,TL.satTags[1]+0.4)),8,p1O);
+
+ const ndF=eoc(seg(t,TL.ndvi[0],TL.ndvi[1]));
+ ELS.ndviPath.setAttribute('d',poly(NPTS,ndF));
+ ELS.ndviPath.style.opacity=seg(t,TL.ndvi[0],TL.ndvi[0]+0.3).toFixed(3);
+ const dots=ELS.ndviDots.querySelectorAll('circle');
+ dots.forEach((c,i)=>{c.setAttribute('opacity',(0.8*seg(t,TL.ndvi[0]+i*0.055,TL.ndvi[0]+i*0.055+0.4)).toFixed(3))});
+ const p14=posL(DATA.i2014);
+ ELS.ndvi14.setAttribute('cx',p14[0].toFixed(1));ELS.ndvi14.setAttribute('cy',p14[1].toFixed(1));
+ ELS.ndvi14.setAttribute('opacity',(0.9*seg(t,TL.ndviTag[0],TL.ndviTag[0]+0.4)*(1-seg(t,TL.p1Out[0],TL.p1Out[1]))).toFixed(3));
+ enterG(ELS.ndviCap,seg(t,TL.ndvi[0],TL.ndvi[0]+0.4),8,p1O);
+ enterG(ELS.ndviTag,eoc(seg(t,TL.ndviTag[0],TL.ndviTag[1])),8,p1O);
+ ELS.ndviLead.setAttribute('opacity',seg(t,TL.ndviTag[0]+0.2,TL.ndviTag[1]).toFixed(3));
+
+ yBars.forEach((el,i)=>{const st=TL.bars[0]+i*0.06;const v=DATA.rend[i]==null?null:DATA.rend[i];
+  if(v==null)return;const hF=eoc(seg(t,st,st+0.5));
+  const h=2+hF*(v/38)*160;
+  el.setAttribute('y',(640-h).toFixed(1));el.setAttribute('height',h.toFixed(1));
+  el.setAttribute('opacity',(0.92*hF).toFixed(3))});
+ const y14H=eoc(seg(t,TL.bars[0]+DATA.i2014*0.06,TL.bars[0]+DATA.i2014*0.06+0.5));
+ y2014Bar.forEach(d=>{d.setAttribute('cy',(640-(2+y14H*(DATA.rend2014/38)*160)-8).toFixed(1));
+  d.setAttribute('opacity',(0.95*y14H).toFixed(3))});
+ ELS.y2014.setAttribute('opacity',y14H.toFixed(3));
+ enterG(ELS.yldCap,seg(t,TL.bars[1]-0.3,TL.bars[1]+0.2),8,p1O);
+ enterG(ELS.yldTag,eoc(seg(t,TL.yldTag[0],TL.yldTag[1])),8,p1O);
+ ELS.yldLead.setAttribute('opacity',seg(t,TL.yldTag[0]+0.2,TL.yldTag[1]).toFixed(3));
+
+ const p2O=seg(t,TL.p2[0],TL.p2[1])*(1-seg(t,TL.p2Out[0],TL.p2Out[1]));
+ ELS.gP2.setAttribute('opacity',p2O.toFixed(3));
+ enterG(ELS.p2Head,eoc(seg(t,TL.p2[0],TL.p2[1])),12,p2O);
+ ELS.divider2.setAttribute('opacity',p2O.toFixed(3));
+ scatL.forEach((g,i)=>{const s=eoc(seg(t,TL.scats[0]+i*0.07,TL.scats[0]+i*0.07+0.4));
+  const p=pairsL[i];g.setAttribute('transform','translate('+sxL(p.v).toFixed(1)+','+syR(p.y).toFixed(1)+') scale('+s.toFixed(3)+')')});
+ scatR.forEach((g,i)=>{const s=eoc(seg(t,TL.scats[0]+0.3+i*0.07,TL.scats[0]+0.3+i*0.07+0.4));
+  const p=pairsR[i];g.setAttribute('transform','translate('+sxR(p.v).toFixed(1)+','+syR(p.y).toFixed(1)+') scale('+s.toFixed(3)+')')});
+ ELS.trL.style.strokeDashoffset=(1-eoc(seg(t,TL.trends[0],TL.trends[0]+0.8))).toFixed(3);
+ ELS.trR.style.strokeDashoffset=(1-eoc(seg(t,TL.trends[0]+0.2,TL.trends[0]+1.0))).toFixed(3);
+ enterG(ELS.capL,eoc(seg(t,TL.caps[0],TL.caps[1])),8,p2O);
+ enterG(ELS.capR,eoc(seg(t,TL.caps[0]+0.1,TL.caps[1]+0.1)),8,p2O);
+ const d14O=seg(t,TL.d14[0],TL.d14[1]);
+ if(p14){ELS.d14L.setAttribute('cx',p14[0].toFixed(1));ELS.d14L.setAttribute('cy',p14[1].toFixed(1))}
+ const p14R=posR(DATA.i2014);
+ if(p14R){ELS.d14R.setAttribute('cx',p14R[0].toFixed(1));ELS.d14R.setAttribute('cy',p14R[1].toFixed(1))}
+ ELS.d14L.setAttribute('opacity',(d14O*0.95).toFixed(3));
+ ELS.d14R.setAttribute('opacity',(d14O*0.95).toFixed(3));
+ ELS.tag14L.setAttribute('opacity',seg(t,TL.d14[0]+0.2,TL.d14[1]).toFixed(3));
+ ELS.tag14R.setAttribute('opacity',seg(t,TL.d14[0]+0.3,TL.d14[1]+0.1).toFixed(3));
+
+ const p3O=seg(t,TL.p3[0],TL.p3[1])*(1-seg(t,TL.p3Out[0],TL.p3Out[1]));
+ ELS.gP3.setAttribute('opacity',p3O.toFixed(3));
+ enterG(ELS.p3Head,eoc(seg(t,TL.p3[0],TL.p3[1])),12,p3O);
+ enterG(ELS.corrNote,eoc(seg(t,TL.corrNote[0],TL.corrNote[1])),8,p3O);
+ corrEls.forEach((b,i)=>{const st=TL.corr+i*TL.corrGap;const wF=eoc(seg(t,st,st+0.7));
+  const w=Math.abs(CORR[i].r)*CORRS;
+  b.setAttribute('width',(wF*w).toFixed(1));
+  b.setAttribute('opacity',(0.9*seg(t,st,st+0.3)).toFixed(3));
+  corrNameEls[i].setAttribute('opacity',seg(t,st,st+0.3).toFixed(3));
+  corrValEls[i].setAttribute('x',(CORRX+wF*w+14).toFixed(1));
+  corrValEls[i].setAttribute('opacity',seg(t,st+0.5,st+0.9).toFixed(3))});
+
+ const closeO=seg(t,TL.close[0],TL.close[1]);
+ ELS.closeWrap.style.opacity=closeO.toFixed(3);
+ enter(ELS.cKick,eoc(seg(t,TL.close[0],TL.close[1])),10);
+ enter(ELS.cH1,eoc(seg(t,TL.cH1[0],TL.cH1[1])),16);
+ enter(ELS.cSub,eoc(seg(t,TL.cH1[0]+0.2,TL.cH1[1]+0.2)),12);
+ enter(ELS.dualL,eoc(seg(t,TL.cards[0],TL.cards[1])),16);
+ enter(ELS.dualR,eoc(seg(t,TL.cards[0]+0.15,TL.cards[1]+0.15)),16);
+ enter(ELS.dArrow,eoc(seg(t,TL.cards[0]+0.2,TL.cards[1]+0.2)),10);
+ enter(ELS.cFoot,eoc(seg(t,TL.foot[0],TL.foot[1])),8);
+}
+
+for(let i=0;i<N;i++){const c=document.createElementNS(NS,'circle');
+ c.setAttribute('cx',bx(i).toFixed(1));c.setAttribute('cy',yN(DATA.ndvi[i]).toFixed(1));
+ c.setAttribute('r','3.2');c.setAttribute('fill','#6ef0b4');c.setAttribute('opacity','0');
+ ELS.ndviDots.appendChild(c)}
+
+window.__setTime=ms=>{render(Math.max(0,Math.min(ms,DURMS))/1000)};
+window.__setFrame=ms=>window.__setTime(ms);
+window.addEventListener('error',e=>{window.__err=String(e.message)});
+render(0);
+document.fonts.ready.then(()=>{render(0);
+ if(window.__READY_HOOK)window.__READY_HOOK()});
+window.__READY=true;
+window.__ready=true;
+</script>
+</body>
+</html>
