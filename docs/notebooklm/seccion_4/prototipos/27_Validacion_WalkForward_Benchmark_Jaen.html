@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPO 27: Validación Walk-Forward y Benchmark · 16 Modelos · Jaén 2016–2024</title>
+<style>
+:root {
+  --bg: #040812;
+  --panel: rgba(9, 16, 34, 0.92);
+  --panel-soft: rgba(6, 12, 26, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --cyan: #38efff;
+  --emerald: #2ee6a6;
+  --amber: #ffc05c;
+  --rupture: #ff5277;
+  --purple: #b48eff;
+  --stage-accent: var(--purple);
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(120, 80, 220, 0.16), transparent 38%),
+    radial-gradient(ellipse at 12% 90%, rgba(14, 116, 144, 0.14), transparent 40%),
+    #03060f;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(76, 29, 149, 0.16), transparent 48%),
+    linear-gradient(145deg, rgba(7, 12, 28, 0.985), rgba(3, 7, 19, 0.99));
+  border: 1px solid rgba(108, 92, 190, 0.30);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(50, 20, 90, 0.14);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(101, 90, 160, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(101, 90, 160, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+html:has(body.is-embedded) { height: 100% !important; overflow: hidden !important; }
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 1 100% !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--stage-accent); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(180, 142, 255, 0.4);
+  border-radius: 12px;
+  color: var(--purple);
+  background: rgba(180, 142, 255, 0.08);
+}
+.brand-mark svg { width: 22px; height: 22px; }
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--purple);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(19px, 1.75vw, 26px)/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+h1 span.num { color: var(--amber); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 13px;
+  border: 1px solid rgba(180, 142, 255, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.16), rgba(6, 12, 26, 0.9));
+  max-width: 570px;
+}
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 11.5px/1 var(--mono);
+  color: var(--purple);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.via-pills { display: flex; flex-wrap: wrap; gap: 6px; font: 500 10.5px/1.25 var(--mono); color: #d8e6f8; }
+.via-pill { padding: 2px 7px; border-radius: 5px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(148, 163, 184, 0.16); }
+.via-pill strong { color: #fff; }
+
+/* FLOWBAR */
+.flowbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+.proc-node:hover { color: #f1f5f9; background: rgba(30, 41, 59, 0.65); }
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--stage-accent));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--stage-accent)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--stage-accent)) 18%, transparent);
+}
+.proc-node[data-step="ventana"] { --node-color: var(--purple); }
+.proc-node[data-step="torneo"] { --node-color: var(--emerald); }
+.proc-node[data-step="cono"] { --node-color: var(--cyan); }
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+.proc-node[aria-selected="true"] .proc-num { background: var(--node-color, var(--stage-accent)); color: #030712; }
+.proc-text { min-width: 0; display: flex; flex-direction: column; }
+.proc-year { font: 700 11.5px/1.1 var(--display); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.proc-sub { font: 500 9.5px/1.2 var(--mono); color: #64748b; white-space: nowrap; }
+.proc-node[aria-selected="true"] .proc-sub { color: #cbd5e1; }
+.proc-arrow { color: rgba(148, 163, 184, 0.35); font-size: 11px; }
+.flow-controls { display: flex; align-items: center; gap: 8px; }
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.7);
+  font: 600 10px/1 var(--mono);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+.tool-btn:hover { background: rgba(30, 41, 59, 0.9); color: #fff; border-color: rgba(180, 142, 255, 0.4); }
+.tool-btn.active { background: rgba(124, 58, 237, 0.28); border-color: var(--purple); color: var(--purple); }
+
+/* WORKSPACE */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(330px, 34fr) minmax(0, 66fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* COLUMNA IZQUIERDA */
+.narrative-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(6px, 1vh, 10px);
+  padding: clamp(10px, 1.3vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(9, 17, 34, 0.95), rgba(4, 9, 22, 0.94));
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180, 142, 255, 0.3) transparent;
+}
+.stage-pill-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--stage-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 40%, transparent);
+  color: var(--stage-accent);
+}
+.stage-shortcut { font: 500 9.5px/1 var(--mono); color: #64748b; }
+.narr-title { margin: 0; font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display); letter-spacing: -0.015em; color: #f8fafc; }
+.narr-lead { margin: 0; font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans); color: #cbd5e1; }
+.narr-lead strong { color: #ffffff; font-weight: 600; }
+.narr-blocks { display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; justify-content: space-evenly; min-height: 0; }
+.info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+}
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font: 700 11.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+.info-block-text { font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans); color: #94a3b8; }
+.info-block-text strong { color: #e2e8f0; }
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 30%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(12.5px, 0.95vw, 14px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+.math-strip span.hint { font: 500 11.5px/1.2 var(--sans); color: #94a3b8; text-align: right; }
+.executive-takeaway {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 9px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 14%, rgba(8, 15, 32, 0.9)), rgba(8, 15, 32, 0.55));
+  font: 600 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
+  color: #edf5ff;
+}
+.executive-takeaway strong { color: var(--stage-accent); font-weight: 800; white-space: nowrap; }
+
+/* COLUMNA DERECHA */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: clamp(10px, 1.2vw, 14px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(9, 16, 32, 0.95), rgba(4, 9, 20, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.stage-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.stage-title-wrap { display: flex; align-items: center; gap: 8px; }
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(180, 142, 255, 0.12);
+  border: 1px solid rgba(180, 142, 255, 0.35);
+  font-size: 13px;
+}
+.stage-title { margin: 0; font: 700 clamp(13.5px, 1.1vw, 16px)/1.2 var(--display); color: #f0f6ff; }
+.stage-kpis { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kpi-chip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+.kpi-chip strong { color: #f8fafc; font-weight: 700; }
+.kpi-chip.cyan { border-color: rgba(56, 239, 255, 0.4); background: rgba(8, 145, 178, 0.2); color: var(--cyan); }
+.kpi-chip.red { border-color: rgba(255, 82, 119, 0.4); background: rgba(225, 29, 72, 0.2); color: var(--rupture); }
+.kpi-chip.emerald { border-color: rgba(46, 230, 166, 0.45); background: rgba(5, 150, 105, 0.2); color: var(--emerald); }
+.kpi-chip.amber { border-color: rgba(255, 192, 92, 0.45); background: rgba(180, 118, 5, 0.2); color: var(--amber); }
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(76, 29, 149, 0.14), rgba(2, 6, 16, 0.95) 75%);
+  overflow: hidden;
+}
+canvas { display: block; width: 100%; height: 100%; }
+.tip {
+  position: absolute;
+  pointer-events: none;
+  font: 500 10.5px/1.3 var(--mono);
+  background: rgba(3, 8, 22, 0.94);
+  border: 1px solid rgba(180, 142, 255, 0.45);
+  border-radius: 7px;
+  padding: 6px 9px;
+  color: #edf5ff;
+  display: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+.ctrl-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctrl-btn {
+  padding: 5px 10px;
+  border: 1px solid rgba(128, 151, 184, 0.25);
+  border-radius: 6px;
+  background: rgba(18, 28, 48, 0.65);
+  font: 600 10px/1 var(--mono);
+  color: #a8b9cf;
+  transition: all 0.15s ease;
+}
+.ctrl-btn:hover { background: rgba(30, 48, 80, 0.8); color: #fff; border-color: rgba(180, 142, 255, 0.4); }
+.ctrl-btn.active { color: #ded1ff; border-color: rgba(180, 142, 255, 0.55); background: rgba(124, 58, 237, 0.3); }
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 20%, transparent);
+  font: 700 10.5px/1 var(--display);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+.action-btn:hover { background: var(--stage-accent); color: #030712; }
+
+/* FOOTNOTE */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font: 500 10px/1.2 var(--mono);
+  color: #64748b;
+}
+.footnote strong { color: #cbd5e1; }
+.footnote span.link { color: var(--stage-accent); }
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 6px 14px 4px !important; }
+  .topbar { padding-bottom: 5px; }
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .eyebrow { font-size: 9.5px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 5px 10px; }
+  .proc-node { padding: 5px 8px; }
+  .narrative-card { padding: 8px 12px; gap: 5px; }
+  .executive-takeaway { padding: 6px 9px; }
+  .stage-card { padding: 8px 10px; }
+  .controls-bar { padding: 5px 8px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .executive-takeaway { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .topbar { padding-bottom: 4px; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 27: Validación Walk-Forward en Jaén">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19V5M4 19h16"/>
+          <path d="M7 14l4-4 3 3 5-6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ACTO 4 · CASO 2 · VALIDACIÓN WALK-FORWARD</p>
+        <h1><span class="num">27</span> Validación Walk-Forward y benchmark en Jaén <span class="sub">· 16 modelos</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Ficha del torneo walk-forward">
+      <div class="via-title">
+        <span>🏁 TORNEO OUT-OF-SAMPLE SIN FUGA</span>
+        <span>2016 · 2018–2024</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">🥇 <strong>M12 RF (d=2): 3.723 qq/ha</strong></span>
+        <span class="via-pill">🥈 <strong>M08 Déficit: 3.903 qq/ha</strong></span>
+        <span class="via-pill">🛰️ <strong>M05 NDVI: 5.448 qq/ha</strong> (error 2020: 18.25)</span>
+        <span class="via-pill">🏆 <strong>Pico 2020: 35.38 qq/ha</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLOWBAR -->
+  <nav class="flowbar" aria-label="Etapas de la validación walk-forward">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="ventana" id="tab-ventana">
+        <span class="proc-num">1</span>
+        <span class="proc-text">
+          <span class="proc-year">Ventana Expansiva Walk-Forward</span>
+          <span class="proc-sub">Train ≤ t−1 ──▶ Test t · sin fuga</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="torneo" id="tab-torneo">
+        <span class="proc-num">2</span>
+        <span class="proc-text">
+          <span class="proc-year">Torneo de 16 Modelos (M01–M16)</span>
+          <span class="proc-sub">MAE Walk-Forward · 8 test ciegos</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="cono" id="tab-cono">
+        <span class="proc-num">3</span>
+        <span class="proc-text">
+          <span class="proc-year">Cono Split Conformal 80%</span>
+          <span class="proc-sub">Incertidumbre calibrada (q = 8.29 qq/ha)</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flow-controls">
+      <button class="tool-btn active" id="btnLoop" type="button" title="Pausar o reanudar rotación automática">
+        <span>🔁</span> <span id="loopTxt">Auto: ON</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE -->
+  <section class="workspace slide-grid">
+    <!-- COLUMNA IZQUIERDA -->
+    <article class="narrative-card" id="narrCard">
+      <div class="stage-pill-row">
+        <span class="stage-tag" id="stageTag">ETAPA 1 DE 3 · VENTANA EXPANSIVA</span>
+        <span class="stage-shortcut">Teclas 1 · 2 · 3</span>
+      </div>
+
+      <h2 class="narr-title" id="narrTitle">Ventana expansiva: entrenar solo con el pasado, evaluar en el futuro</h2>
+
+      <p class="narr-lead" id="narrLead">
+        Cada campaña de test se predice entrenando <strong>únicamente con las cosechas anteriores</strong> (Train ≤ t−1). El protocolo evalúa <strong>8 campañas ciegas: 2016, 2018–2024</strong>, sin una sola fuga temporal.
+      </p>
+
+      <div class="narr-blocks" id="narrBlocks">
+        <div class="info-block">
+          <div class="info-block-label">📏 El protocolo honesto</div>
+          <div class="info-block-text">La ventana de entrenamiento se expande año a año. Ninguna cosecha futura contamina el modelo: es la única validación admisible en series temporales pequeñas (N = 24).</div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label">🧪 8 test ciegos reales</div>
+          <div class="info-block-text">El periodo 2018–2024 incluye el colapso de recuperación post-roya y el récord histórico de 35.38 qq/ha: el test más duro posible para cualquier predictor.</div>
+        </div>
+      </div>
+
+      <div class="math-strip" id="mathStrip">
+        <span>Train(t−1) ──▶ Test(t) · 8 ventanas: 2016, 2018–2024</span>
+        <span class="hint">Sin Fuga Temporal</span>
+      </div>
+
+      <div class="executive-takeaway">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Si el modelo miró el futuro para entrenar, su error es una ficción.</span>
+      </div>
+    </article>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="stage-card">
+      <header class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">📉</span>
+          <h3 class="stage-title" id="stageVisualTitle">Trayectorias Walk-Forward Out-of-Sample (2016, 2018–2024)</h3>
+        </div>
+
+        <div class="stage-kpis">
+          <span class="kpi-chip emerald" id="kpiM12">🥇 M12 RF d=2 · MAE 3.723</span>
+          <span class="kpi-chip red" id="kpiM05">🛰️ M05 NDVI · error 2020: 18.25</span>
+        </div>
+      </header>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="cv"></canvas>
+        <div class="tip" id="tooltip"></div>
+      </div>
+
+      <footer class="controls-bar">
+        <div class="ctrl-group">
+          <span style="font-size:10px; font-weight:700; color:var(--muted); font-family:var(--mono);">VISTA:</span>
+          <button class="ctrl-btn active" id="btnViewTraj">📉 Trayectorias (2016–2024)</button>
+          <button class="ctrl-btn" id="btnViewBench">🏁 Benchmark 16 Modelos (MAE)</button>
+          <button class="ctrl-btn" id="btnViewCono">🔮 Cono Split Conformal 80%</button>
+        </div>
+
+        <button class="action-btn" id="btnNextAction">
+          <span>Ir a Conclusiones (Diapo 29)</span> <span>→</span>
+        </button>
+      </footer>
+    </div>
+  </section>
+
+  <!-- FOOTNOTE -->
+  <footer class="footnote">
+    <span><strong>Fuente:</strong> data/caso_2/benchmark_cafe.csv + cafe_jaen_predicciones_modelos.csv · validación expansiva ciega (2016, 2018–2024)</span>
+    <span class="link">Pase a Diapo 29: Conclusiones y Cierre →</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['ventana', 'torneo', 'cono'];
+  const LOOP_MS = 9500;
+
+  const STAGE_DATA = {
+    ventana: {
+      accent: '#b48eff',
+      tag: 'ETAPA 1 DE 3 · VENTANA EXPANSIVA',
+      title: 'Ventana expansiva: entrenar solo con el pasado, evaluar en el futuro',
+      lead: 'Cada campaña de test se predice entrenando <strong>únicamente con las cosechas anteriores</strong> (Train ≤ t−1). El protocolo evalúa <strong>8 campañas ciegas: 2016, 2018–2024</strong>, sin una sola fuga temporal.',
+      blocks: [
+        { label: '📏 El protocolo honesto', text: 'La ventana de entrenamiento se expande año a año. Ninguna cosecha futura contamina el modelo: es la única validación admisible en series temporales pequeñas (N = 24).' },
+        { label: '🧪 8 test ciegos reales', text: 'El periodo 2018–2024 incluye el colapso de recuperación post-roya y el récord histórico de 35.38 qq/ha: el test más duro posible para cualquier predictor.' }
+      ],
+      math: 'Train(t−1) ──▶ Test(t) · 8 ventanas: 2016, 2018–2024',
+      hint: 'Sin Fuga Temporal',
+      quote: 'Si el modelo miró el futuro para entrenar, su error es una ficción.',
+      viewMode: 'trajectory'
+    },
+    torneo: {
+      accent: '#2ee6a6',
+      tag: 'ETAPA 2 DE 3 · TORNEO DE 16 MODELOS',
+      title: 'El torneo de 16 modelos: gana la parsimonia fenológica',
+      lead: 'Sobre 8 test ciegos, <strong>M12 Random Forest (d=2) logra MAE = 3.723 qq/ha</strong> y <strong>M08 Solo Déficit Hídrico 3.903</strong>. El satélite óptico anual (<strong>M05: 5.448</strong>) es un 31.7% peor y colapsa en el récord de 2020.',
+      blocks: [
+        { label: '🥇 Árboles parsimoniosos + física', text: 'M12 con profundidad 2 (45.16 ms en CPU) y M08 con una única variable hídrica de floración baten a todos los modelos complejos: menos es más.' },
+        { label: '🛰️ El colapso del satélite anual', text: 'M05 Solo NDVI Anual predijo 17.13 qq/ha para 2020 cuando la cosecha real fue 35.38: un error absoluto de 18.25 qq/ha en el año más importante.' }
+      ],
+      math: 'MAE: M12 = 3.723 < M08 = 3.903 < M16 = 4.116 ≪ M05 = 5.448',
+      hint: 'Parsimonia Fenológica',
+      quote: 'La profundidad de dos y una variable hídrica vencieron a quince rivales.',
+      viewMode: 'benchmark'
+    },
+    cono: {
+      accent: '#38efff',
+      tag: 'ETAPA 3 DE 3 · CONO SPLIT CONFORMAL',
+      title: 'El cono Split Conformal 80%: la duda se mide, no se supone',
+      lead: 'Con n = 8 test, el cuantil conformal de los residuos absolutos de la fusión multimodal es <strong>q = 8.29 qq/ha</strong>. El cono <strong>[ŷ − q, ŷ + q]</strong> cubre 8 de 8 cosechas observadas: incertidumbre calibrada sin supuestos gaussianos.',
+      blocks: [
+        { label: '🧮 La fórmula honesta', text: 'q = cuantil_{(⌈(n+1)(1−α)⌉/n)}(|residuos|), con α = 0.20 y n = 8 → el cuantil conformal empírico es el máximo residual: 8.29 qq/ha.' },
+        { label: '🎯 Cobertura garantizada', text: 'El cono absorbe el colapso de 2016–2017 y el récord de 2020 sin romperse: cobertura empírica 8/8 ≥ 80% prometida en muestra finita.' }
+      ],
+      math: 'I(x) = [ ŷ ± q ] · q = 8.29 qq/ha (SCP 80%, n = 8) ──▶ Cobertura 8/8',
+      hint: 'Cobertura en Muestra Finita',
+      quote: 'Punto sin banda es marketing; banda calibrada es ciencia.',
+      viewMode: 'conformal'
+    }
+  };
+
+  // DATOS REALES: data/caso_2/cafe_jaen_predicciones_modelos.csv (8 test ciegos)
+  const YEARS = [2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+  const OBS  = [16.30, 19.63, 23.69, 35.38, 23.41, 23.94, 24.82, 22.89];
+  const M12  = [16.25, 16.38, 17.96, 22.24, 25.42, 22.94, 21.40, 24.08];
+  const M08  = [17.84, 20.85, 20.42, 25.37, 30.47, 28.74, 23.85, 25.24];
+  const M05  = [18.87, 16.15, 16.82, 17.13, 20.29, 21.15, 20.17, 21.03];
+  const FUS  = [16.13, 26.16, 22.35, 27.36, 31.70, 29.66, 24.58, 28.69];
+  const Q80 = 8.29; // cuantil conformal 80% finito sobre |OBS − FUS| (n = 8)
+
+  // DATOS REALES: data/caso_2/benchmark_cafe.csv (MAE Walk-Forward)
+  const BENCH = [
+    { id: 'M12', name: 'M12: Random Forest Parsimonioso (d=2)', mae: 3.723, color: '#2ee6a6' },
+    { id: 'M08', name: 'M08: Solo Déficit Hídrico Floración', mae: 3.903, color: '#38efff' },
+    { id: 'M16', name: 'M16: Zero-Shot Heurístico (Inercia+Fenología)', mae: 4.116, color: '#94a3b8' },
+    { id: 'M07', name: 'M07: Solo Lluvia en Floración (Ago-Oct)', mae: 4.317, color: '#94a3b8' },
+    { id: 'M11', name: 'M11: ElasticNet Multimodal (L1+L2)', mae: 4.332, color: '#94a3b8' },
+    { id: 'M01', name: 'M01: Persistencia Naive (yt-1)', mae: 4.381, color: '#94a3b8' },
+    { id: 'M06', name: 'M06: Solo EVI Fenológico (Floración)', mae: 4.470, color: '#94a3b8' },
+    { id: 'M10', name: 'M10: Lasso Multimodal L1 (Sparse)', mae: 4.563, color: '#94a3b8' },
+    { id: 'M13', name: 'M13: ExtraTrees Parsimonioso (d=2)', mae: 4.728, color: '#94a3b8' },
+    { id: 'M15', name: 'M15: Gaussian Process Regressor (GPR)', mae: 4.785, color: '#94a3b8' },
+    { id: 'M04', name: 'M04: Holt Lineal Amortiguado', mae: 4.785, color: '#94a3b8' },
+    { id: 'M02', name: 'M02: Media Histórica Acumulada', mae: 4.785, color: '#94a3b8' },
+    { id: 'M09', name: 'M09: Ridge Multimodal L2 (AgroVisión)', mae: 4.892, color: '#94a3b8' },
+    { id: 'M05', name: 'M05: Solo NDVI Anual (Saturado)', mae: 5.448, color: '#ff5277' },
+    { id: 'M03', name: 'M03: Tendencia Secular OLS', mae: 5.691, color: '#94a3b8' },
+    { id: 'M14', name: 'M14: Regresión Bayesiana Ridge', mae: 6.516, color: '#94a3b8' }
+  ];
+
+  let currentStep = 'ventana';
+  let viewMode = 'trajectory'; // 'trajectory' | 'benchmark' | 'conformal'
+  let loopActive = true;
+  let loopTimer = null;
+  let hoverIndex = -1;
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const tip = document.getElementById('tooltip');
+
+  function updateStage(stepKey, manual = false) {
+    if (!STAGE_DATA[stepKey]) return;
+    currentStep = stepKey;
+    const data = STAGE_DATA[stepKey];
+
+    document.documentElement.style.setProperty('--stage-accent', data.accent);
+
+    document.querySelectorAll('.proc-node').forEach(node => {
+      const isSel = node.getAttribute('data-step') === stepKey;
+      node.setAttribute('aria-selected', isSel ? 'true' : 'false');
+    });
+
+    document.getElementById('stageTag').textContent = data.tag;
+    document.getElementById('narrTitle').textContent = data.title;
+    document.getElementById('narrLead').innerHTML = data.lead;
+    document.getElementById('mathStrip').innerHTML = `<span>${data.math}</span><span class="hint">${data.hint}</span>`;
+    document.getElementById('speakerQuote').textContent = data.quote;
+
+    const blocksContainer = document.getElementById('narrBlocks');
+    blocksContainer.innerHTML = '';
+    data.blocks.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'info-block';
+      div.innerHTML = `<div class="info-block-label">${b.label}</div><div class="info-block-text">${b.text}</div>`;
+      blocksContainer.appendChild(div);
+    });
+
+    if (data.viewMode && data.viewMode !== viewMode) {
+      setViewMode(data.viewMode);
+    } else {
+      draw();
+    }
+
+    if (manual) restartLoop();
+  }
+
+  function nextStep() {
+    const idx = STEPS.indexOf(currentStep);
+    const nextIdx = (idx + 1) % STEPS.length;
+    updateStage(STEPS[nextIdx]);
+  }
+
+  function restartLoop() {
+    clearInterval(loopTimer);
+    if (loopActive) {
+      loopTimer = setInterval(nextStep, LOOP_MS);
+    }
+  }
+
+  function setViewMode(mode) {
+    viewMode = mode;
+    document.getElementById('btnViewTraj').classList.toggle('active', mode === 'trajectory');
+    document.getElementById('btnViewBench').classList.toggle('active', mode === 'benchmark');
+    document.getElementById('btnViewCono').classList.toggle('active', mode === 'conformal');
+
+    const titleEl = document.getElementById('stageVisualTitle');
+    const iconEl = document.getElementById('stageIcon');
+    if (mode === 'trajectory') {
+      titleEl.textContent = 'Trayectorias Walk-Forward Out-of-Sample (2016, 2018–2024)';
+      iconEl.textContent = '📉';
+    } else if (mode === 'benchmark') {
+      titleEl.textContent = 'Benchmark de 16 Modelos · MAE Walk-Forward (qq/ha)';
+      iconEl.textContent = '🏁';
+    } else {
+      titleEl.textContent = 'Cono Split Conformal 80% sobre la Fusión Multimodal (q = 8.29 qq/ha)';
+      iconEl.textContent = '🔮';
+    }
+    hoverIndex = -1;
+    tip.style.display = 'none';
+    draw();
+  }
+
+  const btnLoop = document.getElementById('btnLoop');
+  btnLoop.addEventListener('click', () => {
+    loopActive = !loopActive;
+    btnLoop.classList.toggle('active', loopActive);
+    document.getElementById('loopTxt').textContent = loopActive ? 'Auto: ON' : 'Auto: OFF';
+    restartLoop();
+  });
+
+  STEPS.forEach(s => {
+    const btn = document.getElementById(`tab-${s}`);
+    if (btn) btn.addEventListener('click', () => updateStage(s, true));
+  });
+
+  document.getElementById('btnViewTraj').addEventListener('click', () => setViewMode('trajectory'));
+  document.getElementById('btnViewBench').addEventListener('click', () => setViewMode('benchmark'));
+  document.getElementById('btnViewCono').addEventListener('click', () => setViewMode('conformal'));
+
+  document.getElementById('btnNextAction').addEventListener('click', () => {
+    try {
+      window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+    } catch (e) {}
+  });
+
+  function fitCanvas() {
+    const r = cv.getBoundingClientRect();
+    if (r.width < 10) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = r.width * dpr;
+    cv.height = r.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  let hitAreas = [];
+
+  function draw() {
+    const r = cv.getBoundingClientRect();
+    const w = r.width;
+    const h = r.height;
+    if (w < 20 || h < 20) return;
+
+    ctx.clearRect(0, 0, w, h);
+    hitAreas = [];
+
+    if (viewMode === 'trajectory') drawTrajectory(w, h);
+    else if (viewMode === 'benchmark') drawBenchmark(w, h);
+    else drawConformal(w, h);
+  }
+
+  function drawTrajectory(w, h) {
+    const padL = 46;
+    const padR = 150;
+    const padT = 40;
+    const padB = 42;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    const minY = 8;
+    const maxY = 42;
+    const mapY = (v) => padT + plotH - ((v - minY) / (maxY - minY)) * plotH;
+    const mapX = (i) => padL + (i / (YEARS.length - 1)) * plotW;
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let v = 10; v <= 40; v += 5) {
+      const y = mapY(v);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 12.5px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${v}`, padL - 8, y + 3.5);
+    }
+
+    // Banda 2017 sin dato (entre 2016 y 2018)
+    const xGap = (mapX(0) + mapX(1)) / 2;
+    ctx.save();
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba(100, 116, 139, 0.4)';
+    ctx.beginPath();
+    ctx.moveTo(xGap, padT);
+    ctx.lineTo(xGap, padT + plotH);
+    ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 10px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('2017 s.d.', xGap, padT - 8);
+
+    const series = [
+      { name: 'Observado (SIEA)', data: OBS, color: '#ffffff', width: 3.2, dash: [] },
+      { name: 'M12 RF · 3.72', data: M12, color: '#2ee6a6', width: 2.4, dash: [] },
+      { name: 'M08 Déficit · 3.90', data: M08, color: '#38efff', width: 2.2, dash: [6, 3] },
+      { name: 'M05 NDVI · 5.45', data: M05, color: '#ff5277', width: 2.2, dash: [5, 4] }
+    ];
+
+    series.forEach(s => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = s.width;
+      ctx.strokeStyle = s.color;
+      if (s.dash.length) ctx.setLineDash(s.dash);
+      s.data.forEach((v, i) => {
+        const x = mapX(i);
+        const y = mapY(v);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.restore();
+
+      s.data.forEach((v, i) => {
+        const x = mapX(i);
+        const y = mapY(v);
+        ctx.beginPath();
+        ctx.arc(x, y, 3.6, 0, Math.PI * 2);
+        ctx.fillStyle = '#030712';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = s.color;
+        ctx.stroke();
+      });
+
+      // Etiqueta al final de la serie
+      const yEnd = mapY(s.data[s.data.length - 1]);
+      ctx.fillStyle = s.color;
+      ctx.font = '700 10.5px JetBrains Mono';
+      ctx.textAlign = 'left';
+      ctx.fillText(s.name, w - padR + 8, yEnd + 3.5);
+    });
+
+    // Eje X: años
+    YEARS.forEach((yr, i) => {
+      ctx.fillStyle = yr === 2020 ? '#ffc05c' : '#94a3b8';
+      ctx.font = '600 12px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${yr}`, mapX(i), h - 14);
+    });
+
+    // Anotación récord 2020
+    const xr = mapX(3);
+    const yr = mapY(35.38);
+    ctx.beginPath();
+    ctx.roundRect(xr - 88, yr - 44, 176, 22, 11);
+    ctx.fillStyle = 'rgba(3, 8, 22, 0.94)';
+    ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = '#ffc05c';
+    ctx.stroke();
+    ctx.fillStyle = '#ffc05c';
+    ctx.font = '700 10.5px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('🏆 2020 RÉCORD: 35.38 qq/ha', xr, yr - 29);
+
+    // Anotación M05 en 2020
+    const y05 = mapY(17.13);
+    ctx.beginPath();
+    ctx.roundRect(xr - 96, y05 + 10, 192, 22, 11);
+    ctx.fillStyle = 'rgba(3, 8, 22, 0.94)';
+    ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = '#ff5277';
+    ctx.stroke();
+    ctx.fillStyle = '#ff5277';
+    ctx.font = '700 10.5px JetBrains Mono';
+    ctx.fillText('🛰️ M05: 17.13 · error 18.25', xr, y05 + 25);
+
+    hitAreas = YEARS.map((yr, i) => ({ x: mapX(i) - 14, y: padT, w: 28, h: plotH, label: `${yr}`, val: `Observado ${OBS[i].toFixed(2)} · M12 ${M12[i].toFixed(2)} · M08 ${M08[i].toFixed(2)} · M05 ${M05[i].toFixed(2)}` }));
+  }
+
+  function drawBenchmark(w, h) {
+    const rows = BENCH.slice().sort((a, b) => a.mae - b.mae);
+    const padL = Math.min(330, Math.max(260, w * 0.44));
+    const padR = 70;
+    const padT = 30;
+    const padB = 26;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+    const rowH = plotH / rows.length;
+    const maxMae = 7.0;
+
+    rows.forEach((m, i) => {
+      const y = padT + i * rowH;
+      const bH = Math.max(8, rowH - 6);
+      const bW = (m.mae / maxMae) * plotW;
+
+      hitAreas.push({ x: padL, y, w: bW, h: bH, label: m.id, val: `MAE ${m.mae.toFixed(3)} qq/ha` });
+
+      ctx.fillStyle = (hoverIndex === i) ? '#ffffff' : m.color;
+      ctx.globalAlpha = hoverIndex === i ? 1 : 0.9;
+      ctx.beginPath();
+      ctx.roundRect(padL, y + 3, bW, bH, [0, 4, 4, 0]);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = (i < 2) ? m.color : '#cbd5e1';
+      ctx.font = (i < 2 ? '700 ' : '600 ') + '10.5px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(m.name, padL - 10, y + 3 + bH / 2 + 3.5);
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '700 11px JetBrains Mono';
+      ctx.textAlign = 'left';
+      ctx.fillText(m.mae.toFixed(3), padL + bW + 8, y + 3 + bH / 2 + 3.5);
+    });
+
+    // Eje X
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(padL, padT + plotH);
+    ctx.lineTo(padL + plotW, padT + plotH);
+    ctx.stroke();
+    for (let v = 0; v <= maxMae; v += 1) {
+      const x = padL + (v / maxMae) * plotW;
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 10px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${v}`, x, padT + plotH + 16);
+    }
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 10.5px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('MAE Walk-Forward (qq/ha) — menor es mejor', padL + plotW / 2, h - 6);
+
+    ctx.fillStyle = '#2ee6a6';
+    ctx.font = '700 10.5px JetBrains Mono';
+    ctx.textAlign = 'left';
+    ctx.fillText('🥇 M12 lidera · 🥈 M08 físico · 🛰️ M05 satélite saturado (14.º)', padL + 4, padT - 12);
+  }
+
+  function drawConformal(w, h) {
+    const padL = 46;
+    const padR = 24;
+    const padT = 40;
+    const padB = 42;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    const minY = 0;
+    const maxY = 45;
+    const mapY = (v) => padT + plotH - ((v - minY) / (maxY - minY)) * plotH;
+    const mapX = (i) => padL + (i / (YEARS.length - 1)) * plotW;
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let v = 5; v <= 40; v += 5) {
+      const y = mapY(v);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 12.5px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${v}`, padL - 8, y + 3.5);
+    }
+
+    // Banda conformal
+    ctx.beginPath();
+    FUS.forEach((v, i) => {
+      const x = mapX(i);
+      const y = mapY(v + Q80);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    for (let i = FUS.length - 1; i >= 0; i--) {
+      ctx.lineTo(mapX(i), mapY(FUS[i] - Q80));
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(56, 239, 255, 0.13)';
+    ctx.fill();
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = 'rgba(56, 239, 255, 0.55)';
+    ctx.stroke();
+
+    // Línea de predicción
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 2.4;
+    ctx.strokeStyle = '#b48eff';
+    ctx.setLineDash([7, 4]);
+    FUS.forEach((v, i) => {
+      const x = mapX(i);
+      const y = mapY(v);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+
+    // Puntos observados
+    OBS.forEach((v, i) => {
+      const x = mapX(i);
+      const y = mapY(v);
+      const covered = Math.abs(v - FUS[i]) <= Q80;
+      hitAreas.push({ x: x - 12, y: y - 12, w: 24, h: 24, label: `${YEARS[i]}`, val: `Observado ${v.toFixed(2)} · Fusión ${FUS[i].toFixed(2)} · |e| ${Math.abs(v - FUS[i]).toFixed(2)} ${covered ? '✓ dentro de la banda' : '✗ fuera'}` });
+      ctx.beginPath();
+      ctx.arc(x, y, hoverIndex !== -1 && hitAreas[hitAreas.length - 1] === hitAreas[hoverIndex] ? 7.5 : 5.8, 0, Math.PI * 2);
+      ctx.fillStyle = YEARS[i] === 2020 ? '#ffc05c' : '#ffffff';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#030712';
+      ctx.stroke();
+    });
+
+    // Eje X
+    YEARS.forEach((yr, i) => {
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 12px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${yr}`, mapX(i), h - 14);
+    });
+
+    // Caja SCP
+    ctx.beginPath();
+    ctx.roundRect(padL + 8, padT + 4, 286, 48, 9);
+    ctx.fillStyle = 'rgba(3, 8, 22, 0.88)';
+    ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = '#38efff';
+    ctx.globalAlpha = 0.7;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#38efff';
+    ctx.font = '700 13px JetBrains Mono';
+    ctx.textAlign = 'left';
+    ctx.fillText(`q = 8.29 qq/ha · α = 0.20 · n = 8`, padL + 18, padT + 24);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 10.5px JetBrains Mono';
+    ctx.fillText('Split Conformal 80% · cobertura empírica 8/8', padL + 18, padT + 42);
+
+    ctx.fillStyle = 'rgba(180, 142, 255, 0.9)';
+    ctx.font = '700 10.5px JetBrains Mono';
+    ctx.textAlign = 'right';
+    ctx.fillText('— — Fusión multimodal clima + satélite', w - padR - 8, padT + 12);
+  }
+
+  cv.addEventListener('mousemove', (e) => {
+    const rect = cv.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const hit = hitAreas.find(b => mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h);
+    if (hit) {
+      hoverIndex = hitAreas.indexOf(hit);
+      tip.style.display = 'block';
+      tip.style.left = `${Math.min(mx + 12, rect.width - 240)}px`;
+      tip.style.top = `${Math.max(my - 30, 8)}px`;
+      tip.innerHTML = `<strong>${hit.label}</strong>: ${hit.val}`;
+      draw();
+    } else if (hoverIndex !== -1) {
+      hoverIndex = -1;
+      tip.style.display = 'none';
+      draw();
+    }
+  });
+
+  cv.addEventListener('mouseleave', () => {
+    hoverIndex = -1;
+    tip.style.display = 'none';
+    draw();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (['1', '2', '3'].includes(e.key)) {
+      const idx = parseInt(e.key, 10) - 1;
+      updateStage(STEPS[idx], true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    draw();
+  });
+
+  fitCanvas();
+  updateStage('ventana');
+  restartLoop();
+})();
+</script>
+</body>
+</html>

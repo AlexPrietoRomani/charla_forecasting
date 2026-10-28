@@ -1017,7 +1017,13 @@ canvas { display: block; width: 100%; height: 100%; }
     else if (activeFilter === 'nwp') list = MODELS.filter(m => m.cat === 'nwp');
     else if (activeFilter === 'ml') list = MODELS.filter(m => m.cat === 'ml');
 
-    const padL = 185;
+    // padL dinámico: los 14 nombres del eje Y deben leerse completos en 1366 y 1920
+    let labelMaxW = 0;
+    list.forEach(m => {
+      ctx.font = (m.type === 'leader') ? '700 14.5px Space Grotesk' : '500 14px Space Grotesk';
+      labelMaxW = Math.max(labelMaxW, ctx.measureText(m.name).width);
+    });
+    const padL = Math.max(185, Math.ceil(labelMaxW) + 24);
     const padR = 100;
     const padT = 24;
     const padB = 24;

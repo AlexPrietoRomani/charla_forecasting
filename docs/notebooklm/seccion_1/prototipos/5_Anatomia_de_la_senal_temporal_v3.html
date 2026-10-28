@@ -541,6 +541,9 @@ h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
 
 .info-block-text b { color: #fff; }
 
+/* QA F10: la regla operativa no debe crecer; la lista de capas reparte el alto restante */
+#contextBox { flex: 0 0 auto !important; }
+
 .speaker-box, .executive-takeaway {
   display: flex;
   align-items: center;

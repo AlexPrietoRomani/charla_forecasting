@@ -14,6 +14,14 @@ def get_base64_img(rel_path):
             return base64.b64encode(f.read()).decode("utf-8")
     return ""
 
+def get_svg_text(rel_path):
+    p = Path(rel_path)
+    if not p.is_absolute():
+        p = Path(__file__).resolve().parent.parent / rel_path
+    if p.exists():
+        return p.read_text(encoding="utf-8")
+    return ""
+
 def get_branding():
     b64_header = get_base64_img("docs/images/front/logos/official_logos_strip.png")
     b64_dw = get_base64_img("docs/images/front/logos/data_wizard_badge.png")
@@ -22,6 +30,7 @@ def get_branding():
     b64_bg_closing = get_base64_img("docs/images/front/bg_closing_official.png")
     b64_profile = get_base64_img("docs/images/front/profile_alex.jpg")
     b64_qr = get_base64_img("docs/images/front/qr_alex_website.png")
+    qr_svg = get_svg_text("docs/images/front/qr_alex_website.svg")
 
     return {
         "b64_header": b64_header,
@@ -31,5 +40,5 @@ def get_branding():
         "b64_bg_closing": b64_bg_closing,
         "b64_profile": b64_profile,
         "b64_qr": b64_qr,
-        "qr_svg": ""
+        "qr_svg": qr_svg
     }

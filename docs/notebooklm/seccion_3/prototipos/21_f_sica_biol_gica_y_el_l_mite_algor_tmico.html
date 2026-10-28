@@ -1309,11 +1309,17 @@ input[type="range"] {
     ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.fillText(isCollapsed ? 'Aborto (-50%)' : 'Mar–Jul (Sana)', harvX, midY + 61);
 
-    // Nota al pie de la tarjeta izquierda
+    // Nota al pie de la tarjeta izquierda (una línea, auto-ajustada al ancho para no salir de la caja)
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('📅 + Restricción N=24: Solo 1 cosecha/año (Fenología reduce error 4×)', pad + leftW / 2, padT + usableH - 14);
+    const footLine = '📅 N=24: 1 cosecha/año · Fenología: −4× error';
+    let footFs = 12;
+    ctx.font = '500 ' + footFs + 'px "JetBrains Mono"';
+    while (footFs > 9.5 && ctx.measureText(footLine).width > leftW - 24) {
+      footFs -= 0.5;
+      ctx.font = '500 ' + footFs + 'px "JetBrains Mono"';
+    }
+    ctx.fillText(footLine, pad + leftW / 2, padT + usableH - 13);
     ctx.restore();
 
     // 2. MITAD DERECHA: GRÁFICO DE UMBRAL Y COLAPSO BIOLÓGICO (CURVA SIGMOIDE + QUIEBRE EN VPD > 1.8 kPa)
@@ -1329,9 +1335,15 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#8ef7c7';
-    ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('📉 GRÁFICO DE UMBRAL Y COLAPSO BIOLÓGICO (VPD > 1.8 kPa / >32°C)', rx + 14, padT + 20);
+    const titleTxt = '📉 GRÁFICO DE UMBRAL Y COLAPSO BIOLÓGICO (VPD > 1.8 kPa / >32°C)';
+    let titleFs = 13;
+    ctx.font = '700 ' + titleFs + 'px "JetBrains Mono"';
+    while (titleFs > 10.5 && ctx.measureText(titleTxt).width > rw - 30) {
+      titleFs -= 0.5;
+      ctx.font = '700 ' + titleFs + 'px "JetBrains Mono"';
+    }
+    ctx.fillText(titleTxt, rx + 14, padT + 20);
 
     const gx = rx + 42, gy = padT + 38, gw = rw - 64, gh = usableH - 76;
     const X = u => gx + u * gw;         // u de 0 a 1 (Tiempo / Estrés Ambiental)
@@ -1415,11 +1427,21 @@ input[type="range"] {
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      ctx.fillStyle = '#fda4af';
-      ctx.font = '700 13.5px "JetBrains Mono"';
+      ctx.font = '700 12.5px "JetBrains Mono"';
       ctx.textAlign = 'left';
-      ctx.fillText('⚡ Colapso Biológico', X(uSplit + 0.20), Y(0.26));
-      ctx.fillText('   Total (Aborto)', X(uSplit + 0.20), Y(0.16));
+      const colTxt = '⚡ Colapso Biológico Total (Aborto)';
+      const colW = ctx.measureText(colTxt).width;
+      const colX = Math.min(X(uSplit + 0.20), rx + rw - 14 - colW);
+      const colY = Y(0.20);
+      ctx.fillStyle = 'rgba(5, 10, 22, 0.88)';
+      ctx.beginPath();
+      ctx.roundRect(colX - 7, colY - 15, colW + 14, 21, 7);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 82, 119, 0.55)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.fillStyle = '#fda4af';
+      ctx.fillText(colTxt, colX, colY);
     }
 
     // Punto indicador actual según state.stressVpd (0.8 a 2.6 kPa)

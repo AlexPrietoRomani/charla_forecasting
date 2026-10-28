@@ -431,8 +431,9 @@ canvas {
 .takeaway-card {
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   min-height: 0;
   padding: clamp(9px, 1vh, 12px);
   border-radius: 10px;
@@ -440,6 +441,12 @@ canvas {
   background: linear-gradient(135deg, rgba(38, 25, 6, 0.4), rgba(7, 13, 26, 0.85));
   font: 400 clamp(13px, 0.98vw, 15.2px)/1.45 var(--sans);
   color: #fce7cf;
+}
+.takeaway-card strong {
+  color: var(--ockham);
+  font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .takeaway-card b { color: var(--ockham); }
 
@@ -570,7 +577,7 @@ canvas {
 
       <!-- AXIOM CARD -->
       <div class="takeaway-card">
-        <b>💡 Idea Clave:</b> El pronóstico meteorológico multi-paso nunca debe presentarse a un comité de operaciones como una línea única. La dispersión del cono en <b>h=7 duplica la de h=1</b>. Planificar con la media oculta el riesgo de friajes súbitos que impactan la cadena de frío y cosechas.
+        <strong>💡 Idea Clave:</strong> <span id="takeawayText">El cono en h=7 duplica la dispersión de h=1; la media oculta los friajes.</span>
       </div>
     </div>
   </section>

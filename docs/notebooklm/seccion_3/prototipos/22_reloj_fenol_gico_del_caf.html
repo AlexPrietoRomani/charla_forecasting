@@ -1380,7 +1380,18 @@ input[type="range"] {
     // Badges limpios exteriores de las 3 ventanas sin recorte de texto
     drawPhaseBadge(cx - outerR * 0.65, cy - outerR * 0.72, '🌸 Floración (56%)', '#ff7a59', state.winIdx === 0);
     drawPhaseBadge(cx, cy + outerR + 18, '🟢 Llenado (r=0.751)', '#6ef0b4', state.winIdx === 1);
-    drawPhaseBadge(cx + outerR * 0.70, cy - outerR * 0.40, '🍒 Cosecha (Mar–Jul)', '#38efff', state.winIdx === 2);
+    // Badge de Cosecha: fuera del borde del anillo (diagonal superior derecha) con línea guía
+    const cosechaAng = -Math.PI * 0.30;
+    const cosechaDist = outerR + 46;
+    ctx.save();
+    ctx.strokeStyle = '#38efff';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(cosechaAng) * (outerR + 2), cy + Math.sin(cosechaAng) * (outerR + 2));
+    ctx.lineTo(cx + Math.cos(cosechaAng) * (cosechaDist - 10), cy + Math.sin(cosechaAng) * (cosechaDist - 10));
+    ctx.stroke();
+    ctx.restore();
+    drawPhaseBadge(cx + Math.cos(cosechaAng) * cosechaDist, cy + Math.sin(cosechaAng) * cosechaDist, '🍒 Cosecha (Mar–Jul)', '#38efff', state.winIdx === 2);
 
     // PANEL DERECHO: TARJETA DE DIAGNÓSTICO DE LA VENTANA SELECCIONADA + LAS 3 VENTANAS RESUMIDAS
     const rx = pad + clockAreaW + 10;
@@ -1416,7 +1427,7 @@ input[type="range"] {
 
     function drawWrappedBox(title, text, yStart, borderCol, titleCol) {
       const availH = usableH - (isCompact ? 56 : 80);
-      const boxH = Math.max(30, Math.floor((availH - (isCompact ? 10 : 16)) / 3));
+      const boxH = Math.max(40, Math.floor((availH - (isCompact ? 10 : 16)) / 3));
       ctx.fillStyle = 'rgba(4, 9, 20, 0.82)';
       ctx.strokeStyle = borderCol;
       ctx.lineWidth = 1.2;
@@ -1425,28 +1436,35 @@ input[type="range"] {
       ctx.fill();
       ctx.stroke();
 
-      const titleSize = isCompact ? 9.5 : 13;
-      const bodySize = isCompact ? 9.5 : 12.5;
-      const lineStep = isCompact ? 11 : 18;
+      const titleSize = isCompact ? 9.5 : 13.5;
+      const minBody = isCompact ? 9.5 : 11.5;
+      let bodySize = isCompact ? 9.5 : 13.5;
+      const lineStep = isCompact ? 11 : 17.5;
       const maxW = rw - 44;
 
-      ctx.font = `500 ${bodySize}px Inter, sans-serif`;
-      const words = text.split(' ');
-      const lines = [];
-      let line = '';
-      words.forEach((wd, i) => {
-        const test = line + wd + ' ';
-        if (ctx.measureText(test).width > maxW && i > 0) {
-          lines.push(line);
-          line = wd + ' ';
-        } else {
-          line = test;
-        }
-      });
-      lines.push(line);
+      let lines = [];
+      while (true) {
+        ctx.font = `500 ${bodySize}px Inter, sans-serif`;
+        lines = [];
+        let line = '';
+        const words = text.split(' ');
+        words.forEach((wd, i) => {
+          const test = line + wd + ' ';
+          if (ctx.measureText(test).width > maxW && i > 0) {
+            lines.push(line);
+            line = wd + ' ';
+          } else {
+            line = test;
+          }
+        });
+        lines.push(line);
+        const needed = titleSize + 6 + lines.length * lineStep + 12;
+        if (needed <= boxH || bodySize <= minBody) break;
+        bodySize -= 0.5;
+      }
 
       const contentH = titleSize + 6 + lines.length * lineStep;
-      const topY = yStart + Math.max(6, (boxH - contentH) / 2);
+      const topY = yStart + Math.max(isCompact ? 6 : 9, (boxH - contentH) / 2);
 
       ctx.fillStyle = titleCol;
       ctx.font = `700 ${titleSize}px "JetBrains Mono"`;

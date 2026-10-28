@@ -4,7 +4,6 @@ def get_slides_part2(branding=None):
     qr_svg = branding.get("qr_svg", "")
     b64_dw = branding.get("b64_dw", "")
     b64_header = branding.get("b64_header", "")
-    b64_qr = branding.get("b64_qr", "")
     anatomy_c1_svg = branding.get("anatomy_c1_svg", "")
     anatomy_c2_svg = branding.get("anatomy_c2_svg", "")
     b64_p15_html = branding.get("b64_p15_html", "")
@@ -15,6 +14,9 @@ def get_slides_part2(branding=None):
     b64_p21_html = branding.get("b64_p21_html", "")
     b64_p22_html = branding.get("b64_p22_html", "")
     b64_p23_html = branding.get("b64_p23_html", "")
+    b64_p25_html = branding.get("b64_p25_html", "")
+    b64_p26_html = branding.get("b64_p26_html", "")
+    b64_p27_html = branding.get("b64_p27_html", "")
     cinematic_gates = branding.get("cinematic_gates", {})
 
     html = f"""
@@ -116,110 +118,31 @@ def get_slides_part2(branding=None):
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 25: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (page-07.png)  -->
+  <!-- DIAPO 25: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (PROTOTIPO)    -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="25" data-act="Acto 4 · Datos Jaén" data-time="1.5 min">
-    <h2 class="slide-main-title display">Datos que importan: 24 Campañas de Café en Jaén</h2>
-    <p class="kpis-subtitle">Cifras del sistema agroalimentario en la cuenca cafetalera de Jaén (2000–2024).</p>
-    <div class="kpis-3col-grid">
-      <div class="kpi-large-card card-cyan">
-        <div class="kpi-huge-number">24</div>
-        <div class="kpi-card-desc">Campañas agrícolas completas auditadas de café arábica en Jaén (SIEA/MIDAGRI).</div>
-      </div>
-      <div class="kpi-large-card card-blue">
-        <div class="kpi-huge-number">-56%</div>
-        <div class="kpi-card-desc">Colapso histórico de rendimiento en 2013 por la epidemia de roya amarilla (Hemileia vastatrix).</div>
-      </div>
-      <div class="kpi-large-card card-purple">
-        <div class="kpi-huge-number">4.51</div>
-        <div class="kpi-card-desc">MAE mínimo alcanzado (qq/ha) por el modelo de Fusión Fenológica Clima + Tendencia.</div>
-      </div>
-    </div>
-    <div class="graphic-source" style="margin-top:16px;">Fuente: Sistema Integrado de Estadísticas Agrarias (SIEA - MIDAGRI) · Jaén, Cajamarca (2000–2024)</div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- DIAPO 26: LA TRAMPA DEL SATÉLITE NDVI (page-06.png)           -->
-  <!-- ============================================================= -->
-  <section class="slide" data-index="26" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min">
-    <h2 class="slide-main-title display">La trampa del satélite: NDVI vs estrés hídrico</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Saturación de canopia:</strong> El satélite óptico (MODIS NDVI) satura en copas densas de café bajo sombra y presentó R² = 0.08 con el rendimiento real.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Ceguera ante la roya:</strong> En la epidemia de 2013 (-56% de producción), el NDVI se mantuvo en 0.81 por la presencia de malezas y árboles de sombra.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>La verdadera señal:</strong> El déficit hídrico en floración (septiembre-noviembre) explicó el 56% de la varianza biológica real.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Datos NASA MODIS Terra/Aqua (250m) + ERA5-Land Reanalysis vs SIEA MIDAGRI Jaén</div>
-      </div>
-
-      <div class="graphic-card-col">
-        <div class="chart-wrapper">
-          <div class="chart-toolbar">
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">MODO:</span>
-            <button class="chart-filter-btn active" id="btnCafeChart" onclick="switchCafeSystemView('chart')">Dispersión Empírica</button>
-            <button class="chart-filter-btn" id="btnCafeAnatomy" onclick="switchCafeSystemView('anatomy')" style="border-color:var(--fest-cyan); color:var(--fest-cyan);">📐 Anatomía: Dosel vs Satélite</button>
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin:0 4px 0 10px;" class="mono">VARIABLE:</span>
-            <button class="chart-filter-btn active" id="btnScatterNdvi" onclick="switchScatterVariable('ndvi')">MODIS NDVI (r=0.154)</button>
-            <button class="chart-filter-btn" id="btnScatterDef" onclick="switchScatterVariable('deficit')">Déficit Hídrico (r=0.756)</button>
-            <button class="chart-filter-btn" id="btnScatterLluvia" onclick="switchScatterVariable('lluvia')">Lluvia Floración (r=0.751)</button>
-          </div>
-          <div id="cafeChartContainer" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:flex;">
-            <canvas id="chartScatterNdvi"></canvas>
-          </div>
-          <div id="cafeAnatomyContainer" class="iso" style="flex:1; min-height:0; position:relative; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:var(--bg-dark-card); border-radius:8px; overflow:hidden;">
-            {anatomy_c2_svg}
-          </div>
-        </div>
-      </div>
+  <section class="slide" data-index="25" data-act="Acto 4 · Datos Jaén" data-time="1.5 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(46, 230, 166, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P25_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide25"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 27: VALIDACIÓN WALK-FORWARD Y FUSIÓN (page-06.png)     -->
+  <!-- DIAPO 26: LA TRAMPA DEL SATÉLITE NDVI (PROTOTIPO)             -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="27" data-act="Acto 4 · Validación Jaén" data-time="2.0 min">
-    <h2 class="slide-main-title display">Demostración: validación Walk-Forward en Jaén</h2>
-    <div class="graphic-layout">
-      <div class="graphic-info-col">
-        <ul class="standard-bullet-list">
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Sin fuga temporal:</strong> Validación expansiva año a año (2016, 2018–2024) entrenando únicamente con la historia previa de cosechas.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Liderazgo de fenología y árboles:</strong> Random Forest parsimonioso (MAE 3.72 qq/ha) y Solo Déficit Hídrico de floración (MAE 3.90 qq/ha) logran los menores errores out-of-sample.</div>
-          </li>
-          <li class="standard-bullet-item">
-            <span class="standard-bullet-dot"></span>
-            <div><strong>Fallo del Satélite Óptico:</strong> El modelo alimentado solo con NDVI anual (MAE 5.45 qq/ha) es un 31.7% peor, colapsando ante el récord de 2020 con un error de 18.25 qq/ha.</div>
-          </li>
-        </ul>
-        <div class="graphic-source">Evaluación Walk-Forward ciego sobre 8 campañas de test (2016, 2018–2024)</div>
-      </div>
+  <section class="slide" data-index="26" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P26_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide26"></iframe>
+      __CINEMATIC_GATE_26__
+    </div>
+  </section>
 
-      <div class="graphic-card-col">
-        <div class="chart-wrapper">
-          <div class="chart-toolbar">
-            <span style="font-size:11px; font-weight:700; color:var(--text-faint); margin-right:4px;" class="mono">MODO:</span>
-            <button class="chart-filter-btn active" id="btnJaenTraj" onclick="switchJaenViewMode('trajectory')">Trayectorias Walk-Forward (2016–2024)</button>
-            <button class="chart-filter-btn" id="btnJaenBench" onclick="switchJaenViewMode('benchmark')">Benchmark de 16 Modelos (MAE)</button>
-          </div>
-          <div style="flex:1; min-height:0; position:relative; width:100%; height:100%;">
-            <canvas id="chartDemoJaen"></canvas>
-          </div>
-        </div>
-      </div>
+  <!-- ============================================================= -->
+  <!-- DIAPO 27: VALIDACIÓN WALK-FORWARD Y FUSIÓN (PROTOTIPO)       -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="27" data-act="Acto 4 · Validación Jaén" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P27_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide27"></iframe>
+      __CINEMATIC_GATE_27__
     </div>
   </section>
 
@@ -238,32 +161,85 @@ def get_slides_part2(branding=None):
   <!-- DIAPO 29: CONCLUSIONES (page-09.png)                         -->
   <!-- ============================================================= -->
   <section class="slide" data-index="29" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
-    <h2 class="slide-main-title display">Conclusiones</h2>
+    <h2 class="slide-main-title display">Conclusiones y lecciones aprendidas</h2>
+    <button type="button" id="btnCinematicIntro29"
+            onclick="window.postMessage({{type:'deck_replay_video', slide:29}}, '*')"
+            title="Reproyectar la introducción cinemática"
+            style="position:absolute; top:6px; right:6px; z-index:20; display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid rgba(56,239,255,0.42); border-radius:10px; background:linear-gradient(120deg, rgba(8,47,73,0.9), rgba(8,15,32,0.92)); color:#7dd3fc; font:700 12px/1 'IBM Plex Mono', monospace; letter-spacing:0.06em; cursor:pointer; white-space:nowrap;">🎬 Repetir Intro</button>
     <div class="conclusions-3col-grid">
       <div class="conclusion-card card-1">
-        <div class="conclusion-icon-box">🎯</div>
-        <div class="conclusion-title display">Respeta la causalidad del tiempo</div>
-        <p class="conclusion-desc">
-          Nunca utilices validación cruzada aleatoria en series temporales. Entrena siempre en el pasado y evalúa en el futuro con ventanas rodantes para evitar fuga de información. La navaja de Ockham es ley: en Punchana, ExtraTrees en CPU (0.25s) empató con redes neuronales complejas.
-        </p>
+        <div class="conclusion-card-head">
+          <div class="conclusion-pill-tag mono">AXIOMA 01 · CAUSALIDAD TEMPORAL</div>
+          <div class="conclusion-card-title-row">
+            <div class="conclusion-icon-box">🎯</div>
+            <div class="conclusion-title display">Respeta la causalidad del tiempo</div>
+          </div>
+          <p class="conclusion-desc">
+            En series temporales el orden cronológico es sagrado. Entrenar mirando el futuro o usar particiones aleatorias produce métricas de laboratorio que colapsan en producción.
+          </p>
+        </div>
+        <div class="conclusion-trap-box">
+          <strong>⚠️ La Trampa Habitual:</strong> K-Fold aleatorio y shuffle mezclan pasado y futuro, creando una ilusión de alta precisión por fuga temporal (data leakage).
+        </div>
+        <div class="conclusion-evidence">
+          <div class="conclusion-evidence-title">📊 Evidencia Empírica · Caso 1 Punchana</div>
+          <ul class="conclusion-evidence-list">
+            <li><strong>2,557 días SENAMHI:</strong> evaluación estricta en el futuro real con split temporal continuo sin contaminación.</li>
+            <li><strong>ExtraTrees en CPU (0.25 s):</strong> igualó a Foundation Models masivos al modelar incrementos causales (Δy<sub>t</sub>).</li>
+          </ul>
+        </div>
+        <div class="conclusion-takeaway">💡 <strong>Regla Operativa:</strong> si el modelo vio el futuro para entrenar, su error es ficción; valida siempre con Walk-Forward expansivo.</div>
       </div>
 
       <div class="conclusion-card card-2">
-        <div class="conclusion-icon-box">🧠</div>
-        <div class="conclusion-title display">El valor está en la banda, no en el punto</div>
-        <p class="conclusion-desc">
-          Un pronóstico puntual (ŷ_{{t+h}}) es una ficción matemática que oculta el riesgo operacional. En horizontes más allá de 7 días, la entropía atmosférica domina la física: comunica siempre conos de incertidumbre calibrados con cuantiles empíricos (P10–P90).
-        </p>
+        <div class="conclusion-card-head">
+          <div class="conclusion-pill-tag mono">AXIOMA 02 · GESTIÓN DE RIESGO</div>
+          <div class="conclusion-card-title-row">
+            <div class="conclusion-icon-box">🧠</div>
+            <div class="conclusion-title display">El valor está en la banda, no en el punto</div>
+          </div>
+          <p class="conclusion-desc">
+            Un pronóstico puntual (ŷ<sub>t+h</sub>) es una ficción matemática que oculta el riesgo operacional. Con entropía y ruido irreductible, la única métrica honesta es el cono calibrado.
+          </p>
+        </div>
+        <div class="conclusion-trap-box">
+          <strong>⚠️ La Trampa Habitual:</strong> comprometer un escalar único ante el decisor: ante shocks extremos, el error puntual destruye la credibilidad del modelo.
+        </div>
+        <div class="conclusion-evidence">
+          <div class="conclusion-evidence-title">📊 Evidencia Empírica · Ambos Casos</div>
+          <ul class="conclusion-evidence-list">
+            <li><strong>Cono P10–P90 (Iquitos):</strong> contuvo la ola de calor histórica de 38.0 °C dentro de la banda calibrada sin sobreajustar.</li>
+            <li><strong>Split Conformal 80% (Jaén):</strong> garantizó cobertura out-of-sample en 8/8 campañas con q̂ = 6.23 qq/ha.</li>
+          </ul>
+        </div>
+        <div class="conclusion-takeaway">💡 <strong>Regla Operativa:</strong> punto sin banda es marketing; banda conformal calibrada al 80%–90% es gestión de riesgo real.</div>
       </div>
 
       <div class="conclusion-card card-3">
-        <div class="conclusion-icon-box">🚀</div>
-        <div class="conclusion-title display">Próximo paso: física antes que algoritmo</div>
-        <p class="conclusion-desc">
-          Entiende los mecanismos del dominio antes de elegir la arquitectura. El satélite óptico saturó y fue ciego a la roya (-56%), mientras que el estrés hídrico en floración explicó el 56% de la varianza. La física manda antes que el hiperparámetro.
-        </p>
+        <div class="conclusion-card-head">
+          <div class="conclusion-pill-tag mono">AXIOMA 03 · BIOLOGÍA &amp; DOMINIO</div>
+          <div class="conclusion-card-title-row">
+            <div class="conclusion-icon-box">🚀</div>
+            <div class="conclusion-title display">Próximo paso: física antes que algoritmo</div>
+          </div>
+          <p class="conclusion-desc">
+            Entiende los mecanismos del dominio antes de elegir la arquitectura. La IA no sustituye a la fisiología ni a la física causal: la complejidad ciega fracasa ante muestras pequeñas.
+          </p>
+        </div>
+        <div class="conclusion-trap-box">
+          <strong>⚠️ La Trampa Habitual:</strong> confiar ciegamente en datos satelitales brutos: el MODIS NDVI saturó en árboles de sombra (Inga) y no vio la epidemia floral.
+        </div>
+        <div class="conclusion-evidence">
+          <div class="conclusion-evidence-title">📊 Evidencia Empírica · Caso 2 Jaén</div>
+          <ul class="conclusion-evidence-list">
+            <li><strong>24 campañas cafetaleras:</strong> el déficit hídrico en floración (r = 0.7564) domina ampliamente sobre el NDVI ciego (r = 0.1536).</li>
+            <li><strong>Random Forest parsimonioso (d=2):</strong> ganó el torneo con MAE 3.72 qq/ha tras el desplome de −56.0% en la roya 2014.</li>
+          </ul>
+        </div>
+        <div class="conclusion-takeaway">💡 <strong>Regla Operativa:</strong> la física del dominio manda antes que el hiperparámetro; modela el cuello de botella biológico.</div>
       </div>
     </div>
+    __CINEMATIC_GATE_29__
   </section>
 
   <!-- ============================================================= -->
@@ -272,38 +248,58 @@ def get_slides_part2(branding=None):
   <section class="slide slide-archetype-closing" data-index="30" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
     <div>
       <div class="cover-tag mono">
-        IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span>
+        IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span> · CHARLA MAGISTRAL
       </div>
       <div class="closing-title display">¡GRACIAS!</div>
       <div class="closing-subtitle display">
-        <span>💬</span> ¿Preguntas?
+        <span>💬</span> ¿Preguntas o reflexiones?
       </div>
 
       <div class="closing-cards-wrap">
         <div class="closing-contact-card">
-          <div style="font-size:20px; font-weight:700; color:#FFFFFF; margin-bottom:6px;">Alex Prieto Romani</div>
-          <div style="font-size:14px; color:#CBD5E1; display:flex; flex-direction:column; gap:8px;" class="mono">
-            <div style="display:flex; align-items:center; gap:8px;">
+          <div>
+            <div class="closing-name">Alex Prieto Romani</div>
+            <div class="closing-role-tag mono"><span>⚡</span> Investigación Aplicada en Series Temporales &amp; Machine Learning</div>
+          </div>
+          <div class="closing-contact-list mono">
+            <div class="closing-contact-item">
               <span style="color:#12C8FC;">🔗</span>
-              <a href="https://linkedin.com/in/alex-prieto-romani" target="_blank" style="color:inherit; text-decoration:none;">linkedin.com/in/alex-prieto-romani</a>
+              <a href="https://linkedin.com/in/alex-prieto-romani" target="_blank">linkedin.com/in/alex-prieto-romani</a>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
+            <div class="closing-contact-item">
               <span style="color:#12C8FC;">✉️</span>
-              <a href="mailto:alexprieto1997@gmail.com" style="color:inherit; text-decoration:none;">alexprieto1997@gmail.com</a>
+              <a href="mailto:alexprieto1997@gmail.com">alexprieto1997@gmail.com</a>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
+            <div class="closing-contact-item">
               <span style="color:#12C8FC;">🌐</span>
-              <a href="https://alexprietoromani.github.io/" target="_blank" style="color:inherit; text-decoration:none;">alexprietoromani.github.io/</a>
+              <a href="https://alexprietoromani.github.io/" target="_blank">alexprietoromani.github.io/</a>
             </div>
+            <div class="closing-contact-item">
+              <span style="color:#12C8FC;">🐙</span>
+              <a href="https://github.com/alexprietor/charla_forecasting" target="_blank">github.com/alexprietor/charla_forecasting</a>
+            </div>
+          </div>
+          <div class="closing-card-footer mono">
+            💡 Código fuente, simuladores interactivos, diapositivas y datasets reales 100% reproducibles.
           </div>
         </div>
 
         <div class="closing-qr-card">
-          <div class="closing-qr-box">
-            <img src="data:image/png;base64,{b64_qr}" alt="QR alexprietoromani.github.io" style="width:100%; height:100%; object-fit:contain; border-radius:6px;">
+          <div class="closing-qr-box" aria-label="QR a alexprietoromani.github.io">
+            {qr_svg}
           </div>
-          <div style="font-size:11px; color:#12C8FC; text-align:center; font-weight:600;" class="mono">Tu QR (opcional)</div>
+          <div class="closing-qr-caption mono" title="alexprietoromani.github.io">
+            <div class="closing-qr-title">ESCANEA EL QR</div>
+            <div class="closing-qr-sub">Slides · Datos · Repo</div>
+          </div>
         </div>
+      </div>
+
+      <div class="closing-badges mono">
+        <span class="closing-badge">📡 2,557 Días SENAMHI + 24 Campañas SIEA</span>
+        <span class="closing-badge">🏁 Benchmark de 16 Modelos Auditados</span>
+        <span class="closing-badge">🛡️ Validación Walk-Forward + Conformal 80%</span>
+        <span class="closing-badge">💻 Pipeline 100% Libre y Reproducible</span>
       </div>
     </div>
 
@@ -323,6 +319,12 @@ def get_slides_part2(branding=None):
         .replace("__B64_P21_HTML__", b64_p21_html)
         .replace("__B64_P22_HTML__", b64_p22_html)
         .replace("__B64_P23_HTML__", b64_p23_html)
+        .replace("__B64_P25_HTML__", b64_p25_html)
+        .replace("__B64_P26_HTML__", b64_p26_html)
+        .replace("__B64_P27_HTML__", b64_p27_html)
         .replace("__CINEMATIC_GATE_19__", cinematic_gates.get(19, ""))
         .replace("__CINEMATIC_GATE_21__", cinematic_gates.get(21, ""))
+        .replace("__CINEMATIC_GATE_26__", cinematic_gates.get(26, ""))
+        .replace("__CINEMATIC_GATE_27__", cinematic_gates.get(27, ""))
+        .replace("__CINEMATIC_GATE_29__", cinematic_gates.get(29, ""))
     )

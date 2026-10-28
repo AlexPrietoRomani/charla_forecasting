@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>DIAPO 25: Datos que Importan · 24 Campañas de Café en Jaén · Fenología, 4 Variables y Roya 2014</title>
+<style>
+:root {
+  --bg: #040812;
+  --panel: rgba(9, 16, 34, 0.92);
+  --panel-soft: rgba(6, 12, 26, 0.82);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-bright: rgba(56, 239, 255, 0.38);
+  --text: #edf5ff;
+  --muted: #94a3b8;
+  --dim: #64748b;
+  --cyan: #38efff;
+  --emerald: #2ee6a6;
+  --amber: #ffc05c;
+  --rupture: #ff5277;
+  --purple: #b48eff;
+  --stage-accent: var(--emerald);
+  --mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+  --display: "Space Grotesk", Inter, "Segoe UI", sans-serif;
+  --sans: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(5, 150, 105, 0.16), transparent 38%),
+    radial-gradient(ellipse at 12% 90%, rgba(14, 116, 144, 0.16), transparent 40%),
+    #03060f;
+  font-family: var(--sans);
+}
+
+#slideFrame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1vw, 14px);
+  width: min(100vw, 1600px, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  padding: clamp(14px, 1.5vw, 24px) clamp(16px, 1.8vw, 28px) clamp(10px, 1.1vw, 16px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 72% 32%, rgba(5, 96, 76, 0.14), transparent 48%),
+    linear-gradient(145deg, rgba(6, 12, 27, 0.985), rgba(3, 6, 16, 0.99));
+  border: 1px solid rgba(74, 128, 170, 0.28);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(4, 40, 60, 0.12);
+}
+
+#slideFrame::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(78, 111, 153, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 111, 153, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black 10%, transparent 95%);
+}
+
+html:has(body.is-embedded) { height: 100% !important; overflow: hidden !important; }
+body.is-embedded {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+body.is-embedded #slideFrame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: clamp(6px, 1.2vh, 14px) clamp(10px, 1.4vw, 20px) clamp(4px, 0.9vh, 10px) !important;
+  flex: 1 1 100% !important;
+}
+
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--stage-accent); outline-offset: 2px; }
+
+/* TOPBAR */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(46, 230, 166, 0.4);
+  border-radius: 12px;
+  color: var(--emerald);
+  background: rgba(46, 230, 166, 0.08);
+}
+.brand-mark svg { width: 22px; height: 22px; }
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--emerald);
+  font: 600 10.5px/1.2 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+h1 {
+  margin: 0;
+  color: #f8fbff;
+  font: 700 clamp(19px, 1.75vw, 26px)/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+h1 span.num { color: var(--amber); }
+h1 span.sub { font-weight: 500; font-size: 0.82em; color: #a3b8d4; }
+
+.via-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 13px;
+  border: 1px solid rgba(46, 230, 166, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(6, 12, 26, 0.9));
+  max-width: 560px;
+}
+.via-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 11.5px/1 var(--mono);
+  color: var(--emerald);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.via-pills { display: flex; flex-wrap: wrap; gap: 6px; font: 500 10.5px/1.25 var(--mono); color: #d8e6f8; }
+.via-pill { padding: 2px 7px; border-radius: 5px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(148, 163, 184, 0.16); }
+.via-pill strong { color: #fff; }
+
+/* FLOWBAR */
+.flowbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.process-track {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(5, 10, 24, 0.85);
+}
+.proc-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  text-align: left;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+.proc-node:hover { color: #f1f5f9; background: rgba(30, 41, 59, 0.65); }
+.proc-node[aria-selected="true"] {
+  color: #ffffff;
+  border-color: var(--node-color, var(--stage-accent));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--node-color, var(--stage-accent)) 18%, rgba(10, 18, 38, 0.95)), rgba(8, 14, 30, 0.95));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--node-color, var(--stage-accent)) 18%, transparent);
+}
+.proc-node[data-step="feno"] { --node-color: var(--cyan); }
+.proc-node[data-step="vars"] { --node-color: var(--emerald); }
+.proc-node[data-step="roya"] { --node-color: var(--rupture); }
+.proc-num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+.proc-node[aria-selected="true"] .proc-num { background: var(--node-color, var(--stage-accent)); color: #030712; }
+.proc-text { min-width: 0; display: flex; flex-direction: column; }
+.proc-year { font: 700 11.5px/1.1 var(--display); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.proc-sub { font: 500 9.5px/1.2 var(--mono); color: #64748b; white-space: nowrap; }
+.proc-node[aria-selected="true"] .proc-sub { color: #cbd5e1; }
+.proc-arrow { color: rgba(148, 163, 184, 0.35); font-size: 11px; }
+.flow-controls { display: flex; align-items: center; gap: 8px; }
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.7);
+  font: 600 10px/1 var(--mono);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+.tool-btn:hover { background: rgba(30, 41, 59, 0.9); color: #fff; border-color: rgba(46, 230, 166, 0.4); }
+.tool-btn.active { background: rgba(5, 150, 105, 0.25); border-color: var(--emerald); color: var(--emerald); }
+
+/* WORKSPACE */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(330px, 34fr) minmax(0, 66fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* COLUMNA IZQUIERDA */
+.narrative-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(6px, 1vh, 10px);
+  padding: clamp(10px, 1.3vw, 16px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(9, 17, 34, 0.95), rgba(4, 9, 22, 0.94));
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 230, 166, 0.3) transparent;
+}
+.stage-pill-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 700 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--stage-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 40%, transparent);
+  color: var(--stage-accent);
+}
+.stage-shortcut { font: 500 9.5px/1 var(--mono); color: #64748b; }
+.narr-title { margin: 0; font: 700 clamp(18px, 1.45vw, 22.5px)/1.18 var(--display); letter-spacing: -0.015em; color: #f8fafc; }
+.narr-lead { margin: 0; font: 400 clamp(13.5px, 1.02vw, 15.8px)/1.45 var(--sans); color: #cbd5e1; }
+.narr-lead strong { color: #ffffff; font-weight: 600; }
+.narr-blocks { display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; justify-content: space-evenly; min-height: 0; }
+.info-block {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+}
+.info-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font: 700 11.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+}
+.info-block-text { font: 400 clamp(13px, 0.98vw, 15.2px)/1.42 var(--sans); color: #94a3b8; }
+.info-block-text strong { color: #e2e8f0; }
+.math-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent) 30%, transparent);
+  background: rgba(3, 7, 18, 0.88);
+  font: 600 clamp(12.5px, 0.95vw, 14px)/1.2 var(--mono);
+  color: #f1f5f9;
+}
+.math-strip span.hint { font: 500 11.5px/1.2 var(--sans); color: #94a3b8; text-align: right; }
+.executive-takeaway {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 9px 12px;
+  border-left: 3px solid var(--stage-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent) 14%, rgba(8, 15, 32, 0.9)), rgba(8, 15, 32, 0.55));
+  font: 600 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
+  color: #edf5ff;
+}
+.executive-takeaway strong { color: var(--stage-accent); font-weight: 800; white-space: nowrap; }
+
+/* COLUMNA DERECHA */
+.stage-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: clamp(10px, 1.2vw, 14px);
+  border: 1px solid rgba(133, 158, 192, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(9, 16, 32, 0.95), rgba(4, 9, 20, 0.94));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.stage-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.stage-title-wrap { display: flex; align-items: center; gap: 8px; }
+.stage-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(46, 230, 166, 0.12);
+  border: 1px solid rgba(46, 230, 166, 0.35);
+  font-size: 13px;
+}
+.stage-title { margin: 0; font: 700 clamp(13.5px, 1.1vw, 16px)/1.2 var(--display); color: #f0f6ff; }
+.stage-kpis { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kpi-chip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(6, 11, 25, 0.82);
+  font: 500 10px/1.1 var(--mono);
+  color: #94a3b8;
+}
+.kpi-chip strong { color: #f8fafc; font-weight: 700; }
+.kpi-chip.cyan { border-color: rgba(56, 239, 255, 0.4); background: rgba(8, 145, 178, 0.2); color: var(--cyan); }
+.kpi-chip.red { border-color: rgba(255, 82, 119, 0.4); background: rgba(225, 29, 72, 0.2); color: var(--rupture); }
+.kpi-chip.amber { border-color: rgba(255, 192, 92, 0.45); background: rgba(180, 118, 5, 0.2); color: var(--amber); }
+.kpi-chip.emerald { border-color: rgba(46, 230, 166, 0.45); background: rgba(5, 150, 105, 0.2); color: var(--emerald); }
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(119, 151, 191, 0.18);
+  border-radius: 11px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(5, 96, 90, 0.12), rgba(2, 6, 16, 0.95) 75%);
+  overflow: hidden;
+}
+canvas { display: block; width: 100%; height: 100%; }
+.tip {
+  position: absolute;
+  pointer-events: none;
+  font: 500 10.5px/1.3 var(--mono);
+  background: rgba(3, 8, 22, 0.94);
+  border: 1px solid rgba(46, 230, 166, 0.4);
+  border-radius: 7px;
+  padding: 6px 9px;
+  color: #edf5ff;
+  display: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(5, 10, 24, 0.75);
+}
+.ctrl-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctrl-btn {
+  padding: 5px 10px;
+  border: 1px solid rgba(128, 151, 184, 0.25);
+  border-radius: 6px;
+  background: rgba(18, 28, 48, 0.65);
+  font: 600 10px/1 var(--mono);
+  color: #a8b9cf;
+  transition: all 0.15s ease;
+}
+.ctrl-btn:hover { background: rgba(30, 48, 80, 0.8); color: #fff; border-color: rgba(46, 230, 166, 0.4); }
+.ctrl-btn.active { color: #b9ffe7; border-color: rgba(46, 230, 166, 0.5); background: rgba(5, 150, 105, 0.3); }
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--stage-accent);
+  background: color-mix(in srgb, var(--stage-accent) 20%, transparent);
+  font: 700 10.5px/1 var(--display);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+.action-btn:hover { background: var(--stage-accent); color: #030712; }
+
+/* FOOTNOTE */
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font: 500 10px/1.2 var(--mono);
+  color: #64748b;
+}
+.footnote strong { color: #cbd5e1; }
+.footnote span.link { color: var(--stage-accent); }
+
+@media (max-height: 760px) and (min-width: 881px) {
+  #slideFrame { gap: 6px; padding: 6px 14px 4px !important; }
+  .topbar { padding-bottom: 5px; }
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .eyebrow { font-size: 9.5px; }
+  h1 { font-size: clamp(16px, 1.4vw, 21px); }
+  .via-card { padding: 5px 10px; }
+  .proc-node { padding: 5px 8px; }
+  .narrative-card { padding: 8px 12px; gap: 5px; }
+  .executive-takeaway { padding: 6px 9px; }
+  .stage-card { padding: 8px 10px; }
+  .controls-bar { padding: 5px 8px; }
+}
+
+@media (max-height: 620px) and (min-width: 881px) {
+  .eyebrow { display: none; }
+  .footnote { display: none; }
+  .executive-takeaway { display: none; }
+  .narrative-card { gap: 4px; padding: 6px 8px; }
+  .topbar { padding-bottom: 4px; }
+}
+</style>
+</head>
+<body>
+<main id="slideFrame" aria-label="Diapositiva 25: 24 Campañas de Café en Jaén">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
+          <circle cx="12" cy="12" r="4.5"/>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">ACTO 4 · CASO 2 · DATOS &amp; FENOLOGÍA DEL CAFÉ</p>
+        <h1><span class="num">25</span> Datos que importan: 24 campañas de café en Jaén <span class="sub">· 2001–2024</span></h1>
+      </div>
+    </div>
+
+    <div class="via-card" aria-label="Ficha del caso 2">
+      <div class="via-title">
+        <span>☕ AUDITORÍA AGROMETEOROLÓGICA</span>
+        <span>SIEA · MODIS · ERA5</span>
+      </div>
+      <div class="via-pills">
+        <span class="via-pill">📅 <strong>N = 24 campañas</strong> (2001–2024)</span>
+        <span class="via-pill">⏳ <strong>τ = 6–8 meses</strong> (flor → cosecha)</span>
+        <span class="via-pill">🦠 <strong>2014: 10.0 qq/ha (−56.0%)</strong></span>
+        <span class="via-pill">🏆 <strong>MAE 3.72 qq/ha</strong> (RF d=2)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLOWBAR -->
+  <nav class="flowbar" aria-label="Etapas de los datos del café">
+    <div class="process-track" role="tablist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="feno" id="tab-feno">
+        <span class="proc-num">1</span>
+        <span class="proc-text">
+          <span class="proc-year">Fenología y Retardo τ = 6–8m</span>
+          <span class="proc-sub">Flor (Ago–Oct) → Cosecha (Mar–Jul)</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="vars" id="tab-vars">
+        <span class="proc-num">2</span>
+        <span class="proc-text">
+          <span class="proc-year">Las 4 Variables Agrometeorológicas</span>
+          <span class="proc-sub">NDVI · Lluvia · Tmax · Déficit hídrico</span>
+        </span>
+      </button>
+
+      <span class="proc-arrow" aria-hidden="true">→</span>
+
+      <button class="proc-node" role="tab" aria-selected="false" data-step="roya" id="tab-roya">
+        <span class="proc-num">3</span>
+        <span class="proc-text">
+          <span class="proc-year">Choque Estructural: Roya 2013–2014</span>
+          <span class="proc-sub">10.0 qq/ha · −56.0%</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flow-controls">
+      <button class="tool-btn active" id="btnLoop" type="button" title="Pausar o reanudar rotación automática">
+        <span>🔁</span> <span id="loopTxt">Auto: ON</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE -->
+  <section class="workspace slide-grid">
+    <!-- COLUMNA IZQUIERDA -->
+    <article class="narrative-card" id="narrCard">
+      <div class="stage-pill-row">
+        <span class="stage-tag" id="stageTag">ETAPA 1 DE 3 · FENOLOGÍA Y RETARDO</span>
+        <span class="stage-shortcut">Teclas 1 · 2 · 3</span>
+      </div>
+
+      <h2 class="narr-title" id="narrTitle">La fenología manda: la cosecha de hoy se decidió hace 8 meses</h2>
+
+      <p class="narr-lead" id="narrLead">
+        En el café arábica de Jaén, lo que ocurre en la <strong>floración (Ago–Oct)</strong> condiciona la cosecha con un retardo biológico de <strong>τ = 6–8 meses</strong>. Auditamos las <strong>24 campañas (2001–2024)</strong> con las 4 variables agrometeorológicas que entran a la ventana crítica.
+      </p>
+
+      <div class="narr-blocks" id="narrBlocks">
+        <div class="info-block">
+          <div class="info-block-label">⏳ El retardo biológico τ = 6–8 meses</div>
+          <div class="info-block-text">La lluvia y el balance hídrico de Ago–Oct activan la floración; el fruto se llena Nov–Feb y se cosecha Mar–Jul. Ninguna señal posterior salva una floración fallida.</div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-label">☕ La ventana crítica del cafeto</div>
+          <div class="info-block-text">El rendimiento depende de eventos que ocurrieron meses atrás. Por eso todo predictor honesto debe respetar el orden temporal del ciclo biológico.</div>
+        </div>
+      </div>
+
+      <div class="math-strip" id="mathStrip">
+        <span>Flor (Ago–Oct) + τ = 6–8m ──▶ Cosecha (Mar–Jul) · N = 24</span>
+        <span class="hint">Retardo Biológico</span>
+      </div>
+
+      <div class="executive-takeaway">
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La cosecha de hoy ya estaba escrita en la floración de hace ocho meses.</span>
+      </div>
+    </article>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="stage-card">
+      <header class="stage-header">
+        <div class="stage-title-wrap">
+          <span class="stage-icon" id="stageIcon">📈</span>
+          <h3 class="stage-title" id="stageVisualTitle">Serie Histórica del Rendimiento (qq/ha) · 2001–2024</h3>
+        </div>
+
+        <div class="stage-kpis">
+          <span class="kpi-chip red" id="kpiRoya">🦠 2014: 10.0 qq/ha (−56.0%)</span>
+          <span class="kpi-chip amber" id="kpiRecord">🏆 Récord 2020: 35.38 qq/ha</span>
+        </div>
+      </header>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="cv"></canvas>
+        <div class="tip" id="tooltip"></div>
+      </div>
+
+      <footer class="controls-bar">
+        <div class="ctrl-group">
+          <span style="font-size:10px; font-weight:700; color:var(--muted); font-family:var(--mono);">VISTA:</span>
+          <button class="ctrl-btn active" id="btnViewSerie">📈 Serie 2001–2024</button>
+          <button class="ctrl-btn" id="btnViewVars">🧬 4 Variables (z-score)</button>
+          <button class="ctrl-btn" id="btnViewRoya">🦠 Roya 2012–2016</button>
+        </div>
+
+        <button class="action-btn" id="btnNextAction">
+          <span>Ver la Trampa del NDVI (Diapo 26)</span> <span>→</span>
+        </button>
+      </footer>
+    </div>
+  </section>
+
+  <!-- FOOTNOTE -->
+  <footer class="footnote">
+    <span><strong>Fuente:</strong> SIEA/MIDAGRI + INEI (Compendios Cajamarca) · NASA MODIS 250 m + ERA5-Land (ventana Ago–Oct) · Jaén, Cajamarca</span>
+    <span class="link">Pase a Diapo 26: El Espejismo Satelital del NDVI →</span>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (window.self !== window.top) {
+    document.body.classList.add('is-embedded');
+  }
+
+  const STEPS = ['feno', 'vars', 'roya'];
+  const LOOP_MS = 9500;
+
+  const STAGE_DATA = {
+    feno: {
+      accent: '#38efff',
+      tag: 'ETAPA 1 DE 3 · FENOLOGÍA Y RETARDO',
+      title: 'La fenología manda: la cosecha de hoy se decidió hace 8 meses',
+      lead: 'En el café arábigo de Jaén, lo que ocurre en la <strong>floración (Ago–Oct)</strong> condiciona la cosecha con un retardo biológico de <strong>τ = 6–8 meses</strong>. Auditamos las <strong>24 campañas (2001–2024)</strong> con las 4 variables agrometeorológicas que entran a la ventana crítica.',
+      blocks: [
+        { label: '⏳ El retardo biológico τ = 6–8 meses', text: 'La lluvia y el balance hídrico de Ago–Oct activan la floración; el fruto se llena Nov–Feb y se cosecha Mar–Jul. Ninguna señal posterior salva una floración fallida.' },
+        { label: '☕ La ventana crítica del cafeto', text: 'El rendimiento depende de eventos que ocurrieron meses atrás. Por eso todo predictor honesto debe respetar el orden temporal del ciclo biológico.' }
+      ],
+      math: 'Flor (Ago–Oct) + τ = 6–8m ──▶ Cosecha (Mar–Jul) · N = 24',
+      hint: 'Retardo Biológico',
+      quote: 'La cosecha de hoy ya estaba escrita en la floración de hace ocho meses.',
+      viewMode: 'serie'
+    },
+    vars: {
+      accent: '#2ee6a6',
+      tag: 'ETAPA 2 DE 3 · LAS 4 VARIABLES',
+      title: 'Cuatro miradas a la misma floración: satélite, lluvia, calor y balance',
+      lead: 'Sobre la ventana Ago–Oct medimos <strong>NDVI de floración</strong>, <strong>lluvia_flor_mm</strong>, <strong>tmax_flor_c</strong> y <strong>déficit hídrico</strong> (lluvia − evapotranspiración). Cada señal cuenta una historia distinta de la misma campaña.',
+      blocks: [
+        { label: '🛰️ NDVI de floración (el espejismo verde)', text: 'El índice óptico se mueve en una banda estrecha (~0.63–0.75) sin seguir los colapsos ni los récords: es la variable que parece informar y no informa.' },
+        { label: '💧 Lluvia, calor y balance hídrico', text: 'La lluvia de Ago–Oct y el déficit hídrico se desploman en 2014 y explotan en 2020: la física del agua ordena la producción real.' }
+      ],
+      math: 'Variables (Ago–Oct): NDVI_flor · lluvia_mm · tmax °C · déficit (P − PET)',
+      hint: 'Ventana Fisiológica Única',
+      quote: 'El satélite ve hojas; la lluvia y el balance hídrico ven frutos.',
+      viewMode: 'vars'
+    },
+    roya: {
+      accent: '#ff5277',
+      tag: 'ETAPA 3 DE 3 · CHOQUE ESTRUCTURAL',
+      title: '2013–2014: la roya colapsó la cosecha a 10.0 qq/ha (−56.0%)',
+      lead: 'La epidemia de roya amarilla (Hemileia vastatrix) rompió la serie: el rendimiento cayó de una media pre-roya de <strong>22.67 qq/ha</strong> (2010–2011) a <strong>10.0 qq/ha en 2014 (−56.0%)</strong>, con la recuperación y el récord de 35.38 qq/ha recién en 2020.',
+      blocks: [
+        { label: '🦠 El colapso (2012–2014)', text: '19.13 → 16.39 → 10.0 qq/ha: tres cosechas consecutivas de caída. La enfermedad atacó el fruto bajo un dosel que se veía sano desde el satélite.' },
+        { label: '🌱 La recuperación lenta (2015–2019)', text: 'Renovación de plantaciones y control fitosanitario: la serie no vuelve a la media pre-roya hasta 2019 (23.69 qq/ha). El récord llega en 2020.' }
+      ],
+      math: '2011: 22.71 ──▶ 2014: 10.0 qq/ha = −56.0% vs media pre-roya',
+      hint: 'Quiebre de Régimen',
+      quote: 'La mayor epidemia del siglo: 10.0 qq/ha en 2014, cincuenta y seis por ciento menos.',
+      viewMode: 'roya'
+    }
+  };
+
+  // DATOS REALES: data/caso_2/cafe_jaen_campanias.csv (2001–2024)
+  const CAMP = [
+    { y: 2001, r: null,  ndvi: 0.7202, lluvia: 153.0, tmax: 20.57, def: -168.9 },
+    { y: 2002, r: null,  ndvi: 0.6293, lluvia: 125.7, tmax: 21.08, def: -209.1 },
+    { y: 2003, r: null,  ndvi: 0.6215, lluvia: 102.5, tmax: 20.95, def: -225.7 },
+    { y: 2004, r: null,  ndvi: 0.6318, lluvia: 141.0, tmax: 20.92, def: -184.0 },
+    { y: 2005, r: null,  ndvi: 0.6463, lluvia: 114.7, tmax: 21.14, def: -216.5 },
+    { y: 2006, r: null,  ndvi: 0.6417, lluvia: 118.7, tmax: 21.82, def: -229.6 },
+    { y: 2007, r: null,  ndvi: 0.6452, lluvia:  77.8, tmax: 21.88, def: -278.4 },
+    { y: 2008, r: null,  ndvi: 0.6685, lluvia:  97.3, tmax: 21.28, def: -243.4 },
+    { y: 2009, r: null,  ndvi: 0.6582, lluvia: 103.6, tmax: 21.93, def: -245.4 },
+    { y: 2010, r: 22.63, ndvi: 0.6661, lluvia: 168.8, tmax: 21.54, def: -172.9 },
+    { y: 2011, r: 22.71, ndvi: 0.6184, lluvia:  89.7, tmax: 22.08, def: -265.3 },
+    { y: 2012, r: 19.13, ndvi: 0.6517, lluvia:  89.1, tmax: 21.60, def: -256.5 },
+    { y: 2013, r: 16.39, ndvi: 0.6392, lluvia: 182.8, tmax: 20.96, def: -146.6 },
+    { y: 2014, r: 10.00, ndvi: 0.6786, lluvia:  88.1, tmax: 21.30, def: -250.4 },
+    { y: 2015, r: 16.96, ndvi: 0.6918, lluvia: 110.5, tmax: 21.21, def: -227.2 },
+    { y: 2016, r: 16.30, ndvi: 0.6775, lluvia: 106.4, tmax: 21.34, def: -236.3 },
+    { y: 2017, r: null,  ndvi: 0.6840, lluvia: 115.8, tmax: 21.92, def: -242.5 },
+    { y: 2018, r: 19.63, ndvi: 0.6560, lluvia: 404.0, tmax: 20.62, def:   96.4 },
+    { y: 2019, r: 23.69, ndvi: 0.6620, lluvia: 518.5, tmax: 20.58, def:  198.7 },
+    { y: 2020, r: 35.38, ndvi: 0.6985, lluvia: 782.4, tmax: 20.27, def:  462.0 },
+    { y: 2021, r: 23.41, ndvi: 0.6590, lluvia: 734.1, tmax: 20.47, def:  405.6 },
+    { y: 2022, r: 23.94, ndvi: 0.7238, lluvia: 776.9, tmax: 20.62, def:  446.6 },
+    { y: 2023, r: 24.82, ndvi: 0.7497, lluvia: 556.6, tmax: 21.03, def:  207.8 },
+    { y: 2024, r: 22.89, ndvi: 0.6989, lluvia: 655.9, tmax: 21.76, def:  293.4 }
+  ];
+
+  let currentStep = 'feno';
+  let viewMode = 'serie'; // 'serie' | 'vars' | 'roya'
+  let loopActive = true;
+  let loopTimer = null;
+  let hoverIndex = -1;
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const tip = document.getElementById('tooltip');
+
+  function updateStage(stepKey, manual = false) {
+    if (!STAGE_DATA[stepKey]) return;
+    currentStep = stepKey;
+    const data = STAGE_DATA[stepKey];
+
+    document.documentElement.style.setProperty('--stage-accent', data.accent);
+
+    document.querySelectorAll('.proc-node').forEach(node => {
+      const isSel = node.getAttribute('data-step') === stepKey;
+      node.setAttribute('aria-selected', isSel ? 'true' : 'false');
+    });
+
+    document.getElementById('stageTag').textContent = data.tag;
+    document.getElementById('narrTitle').textContent = data.title;
+    document.getElementById('narrLead').innerHTML = data.lead;
+    document.getElementById('mathStrip').innerHTML = `<span>${data.math}</span><span class="hint">${data.hint}</span>`;
+    document.getElementById('speakerQuote').textContent = data.quote;
+
+    const blocksContainer = document.getElementById('narrBlocks');
+    blocksContainer.innerHTML = '';
+    data.blocks.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'info-block';
+      div.innerHTML = `<div class="info-block-label">${b.label}</div><div class="info-block-text">${b.text}</div>`;
+      blocksContainer.appendChild(div);
+    });
+
+    if (data.viewMode && data.viewMode !== viewMode) {
+      setViewMode(data.viewMode);
+    } else {
+      draw();
+    }
+
+    if (manual) restartLoop();
+  }
+
+  function nextStep() {
+    const idx = STEPS.indexOf(currentStep);
+    const nextIdx = (idx + 1) % STEPS.length;
+    updateStage(STEPS[nextIdx]);
+  }
+
+  function restartLoop() {
+    clearInterval(loopTimer);
+    if (loopActive) {
+      loopTimer = setInterval(nextStep, LOOP_MS);
+    }
+  }
+
+  function setViewMode(mode) {
+    viewMode = mode;
+    document.getElementById('btnViewSerie').classList.toggle('active', mode === 'serie');
+    document.getElementById('btnViewVars').classList.toggle('active', mode === 'vars');
+    document.getElementById('btnViewRoya').classList.toggle('active', mode === 'roya');
+
+    const titleEl = document.getElementById('stageVisualTitle');
+    const iconEl = document.getElementById('stageIcon');
+    if (mode === 'serie') {
+      titleEl.textContent = 'Serie Histórica del Rendimiento (qq/ha) · 2001–2024';
+      iconEl.textContent = '📈';
+    } else if (mode === 'vars') {
+      titleEl.textContent = 'Las 4 Variables Agrometeorológicas (z-score de ventana Ago–Oct)';
+      iconEl.textContent = '🧬';
+    } else {
+      titleEl.textContent = 'Choque de la Roya: 2012–2016 · Caída y Recuperación';
+      iconEl.textContent = '🦠';
+    }
+    hoverIndex = -1;
+    tip.style.display = 'none';
+    draw();
+  }
+
+  const btnLoop = document.getElementById('btnLoop');
+  btnLoop.addEventListener('click', () => {
+    loopActive = !loopActive;
+    btnLoop.classList.toggle('active', loopActive);
+    document.getElementById('loopTxt').textContent = loopActive ? 'Auto: ON' : 'Auto: OFF';
+    restartLoop();
+  });
+
+  STEPS.forEach(s => {
+    const btn = document.getElementById(`tab-${s}`);
+    if (btn) btn.addEventListener('click', () => updateStage(s, true));
+  });
+
+  document.getElementById('btnViewSerie').addEventListener('click', () => setViewMode('serie'));
+  document.getElementById('btnViewVars').addEventListener('click', () => setViewMode('vars'));
+  document.getElementById('btnViewRoya').addEventListener('click', () => setViewMode('roya'));
+
+  document.getElementById('btnNextAction').addEventListener('click', () => {
+    try {
+      window.parent.postMessage({ type: 'deck_key', key: 'ArrowRight' }, '*');
+    } catch (e) {}
+  });
+
+  function fitCanvas() {
+    const r = cv.getBoundingClientRect();
+    if (r.width < 10) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = r.width * dpr;
+    cv.height = r.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  let hitAreas = [];
+
+  const COLOR = {
+    emerald: '#2ee6a6',
+    cyan: '#38efff',
+    amber: '#ffc05c',
+    red: '#ff5277',
+    purple: '#b48eff',
+    slate: '#94a3b8'
+  };
+
+  function draw() {
+    const r = cv.getBoundingClientRect();
+    const w = r.width;
+    const h = r.height;
+    if (w < 20 || h < 20) return;
+
+    ctx.clearRect(0, 0, w, h);
+    hitAreas = [];
+
+    const padL = 48;
+    const padR = 22;
+    const padT = 34;
+    const padB = 32;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    if (viewMode === 'serie') drawSerie(padL, padR, padT, padB, plotW, plotH, w, h);
+    else if (viewMode === 'vars') drawVars(padL, padR, padT, padB, plotW, plotH, w, h);
+    else drawRoya(padL, padR, padT, padB, plotW, plotH, w, h);
+  }
+
+  function drawSerie(padL, padR, padT, padB, plotW, plotH, w, h) {
+    const minV = 0;
+    const maxV = 38;
+    const mapY = (t) => padT + plotH - ((t - minV) / (maxV - minV)) * plotH;
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let v = 0; v <= 38; v += 6) {
+      const y = mapY(v);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 13px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${v}`, padL - 8, y + 3.5);
+    }
+
+    // Media pre-roya 22.67
+    const yMean = mapY(22.67);
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)';
+    ctx.beginPath();
+    ctx.moveTo(padL, yMean);
+    ctx.lineTo(w - padR, yMean);
+    ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = 'rgba(148, 163, 184, 0.85)';
+    ctx.font = '600 10.5px JetBrains Mono';
+    ctx.textAlign = 'left';
+    ctx.fillText('Media pre-roya 22.67', padL + 8, yMean - 5);
+
+    const barW = plotW / CAMP.length;
+    CAMP.forEach((c, i) => {
+      const x = padL + i * barW + 2.5;
+      const bW = Math.max(3, barW - 5);
+      if (c.r === null) {
+        ctx.fillStyle = 'rgba(100, 116, 139, 0.25)';
+        ctx.fillRect(x, h - padB - 3, bW, 3);
+        if (i % 2 === 1) {
+          ctx.fillStyle = '#475569';
+          ctx.font = '600 10.5px JetBrains Mono';
+          ctx.textAlign = 'center';
+          ctx.fillText(`${c.y}`, x + bW / 2, h - 12);
+        }
+        return;
+      }
+      const bH = ((c.r - minV) / (maxV - minV)) * plotH;
+      const y = padT + plotH - bH;
+
+      let top = '#0e7490';
+      let bot = 'rgba(8, 145, 178, 0.35)';
+      if (c.y === 2014) { top = COLOR.red; bot = 'rgba(255, 82, 119, 0.4)'; }
+      else if (c.y === 2013) { top = '#f97316'; bot = 'rgba(249, 115, 22, 0.35)'; }
+      else if (c.y === 2020) { top = COLOR.amber; bot = 'rgba(255, 192, 92, 0.4)'; }
+      else if (c.y >= 2015) { top = COLOR.emerald; bot = 'rgba(46, 230, 166, 0.28)'; }
+
+      hitAreas.push({ x, y, w: bW, h: bH, label: `${c.y}`, val: `${c.r.toFixed(2)} qq/ha` + (c.y === 2014 ? ' (−56.0% vs pre-roya)' : c.y === 2020 ? ' (récord)' : '') });
+
+      const grad = ctx.createLinearGradient(0, y, 0, y + bH);
+      grad.addColorStop(0, top);
+      grad.addColorStop(1, bot);
+      ctx.fillStyle = (hoverIndex === i) ? '#ffffff' : grad;
+      ctx.beginPath();
+      ctx.roundRect(x, y, bW, bH, [4, 4, 0, 0]);
+      ctx.fill();
+
+      // Valor sobre barras clave
+      if (c.y === 2014 || c.y === 2020) {
+        ctx.fillStyle = (c.y === 2014) ? COLOR.red : COLOR.amber;
+        ctx.font = '700 12px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${c.r.toFixed(c.y === 2020 ? 2 : 1)}`, x + bW / 2, y - 6);
+      }
+
+      if (i % 2 === 1) {
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 10.5px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${c.y}`, x + bW / 2, h - 12);
+      }
+    });
+
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.9)';
+    ctx.font = '700 12.5px JetBrains Mono';
+    ctx.textAlign = 'left';
+    ctx.fillText('🦠 ROYA 2013–2014', padL + 8, padT + 14);
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.9)';
+    ctx.textAlign = 'right';
+    ctx.fillText('🏆 2020: 35.38 qq/ha', w - padR - 8, padT + 14);
+  }
+
+  function drawVars(padL, padR, padT, padB, plotW, plotH, w, h) {
+    const keys = [
+      { id: 'ndvi', label: 'NDVI floración', color: COLOR.cyan, data: CAMP.map(c => c.ndvi) },
+      { id: 'lluvia', label: 'Lluvia floración (mm)', color: COLOR.emerald, data: CAMP.map(c => c.lluvia) },
+      { id: 'tmax', label: 'Tmax floración (°C)', color: COLOR.amber, data: CAMP.map(c => c.tmax) },
+      { id: 'def', label: 'Déficit hídrico (mm)', color: COLOR.purple, data: CAMP.map(c => c.def) }
+    ];
+    const zData = keys.map(k => {
+      const vals = k.data;
+      const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+      const sd = Math.sqrt(vals.reduce((a, b) => a + (b - mean) * (b - mean), 0) / vals.length) || 1;
+      return { ...k, z: vals.map(v => (v - mean) / sd) };
+    });
+
+    const minZ = -2.4;
+    const maxZ = 2.4;
+    const mapY = (z) => padT + plotH - ((z - minZ) / (maxZ - minZ)) * plotH;
+    const mapX = (i) => padL + (i / (CAMP.length - 1)) * plotW;
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let z = -2; z <= 2; z += 1) {
+      const y = mapY(z);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 12.5px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${z >= 0 ? '+' : ''}${z}σ`, padL - 8, y + 3.5);
+    }
+
+    // Banda 2014 y 2020
+    [[13, 13, 'rgba(255, 82, 119, 0.10)'], [19, 19, 'rgba(255, 192, 92, 0.10)']].forEach(([a, b, fill]) => {
+      const x1 = mapX(a) - plotW / CAMP.length / 2;
+      const x2 = mapX(b) + plotW / CAMP.length / 2;
+      ctx.fillStyle = fill;
+      ctx.fillRect(x1, padT, x2 - x1, plotH);
+    });
+    ctx.fillStyle = 'rgba(255, 82, 119, 0.8)';
+    ctx.font = '700 11px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('2014', mapX(13), padT + 12);
+    ctx.fillStyle = 'rgba(255, 192, 92, 0.8)';
+    ctx.fillText('2020', mapX(19), padT + 12);
+
+    zData.forEach(k => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = k.color;
+      ctx.shadowColor = k.color;
+      ctx.shadowBlur = 6;
+      k.z.forEach((v, i) => {
+        const x = mapX(i);
+        const y = mapY(Math.max(minZ, Math.min(maxZ, v)));
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.restore();
+
+      k.z.forEach((v, i) => {
+        const x = mapX(i);
+        const y = mapY(Math.max(minZ, Math.min(maxZ, v)));
+        ctx.beginPath();
+        ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+        ctx.fillStyle = k.color;
+        ctx.fill();
+      });
+    });
+
+    // Leyenda
+    let lx = padL + 10;
+    zData.forEach(k => {
+      ctx.fillStyle = k.color;
+      ctx.fillRect(lx, padT + 4, 10, 4);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '600 10.5px JetBrains Mono';
+      ctx.textAlign = 'left';
+      ctx.fillText(k.label, lx + 14, padT + 9.5);
+      lx += ctx.measureText(k.label).width + 34;
+    });
+
+    // Ejes X cada 2 años
+    CAMP.forEach((c, i) => {
+      if (i % 2 === 1) {
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 10.5px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${c.y}`, mapX(i), h - 12);
+      }
+    });
+
+    hitAreas = CAMP.map((c, i) => ({ x: mapX(i) - 8, y: padT, w: 16, h: plotH, label: `${c.y}`, val: `NDVI ${c.ndvi.toFixed(4)} · Lluvia ${c.lluvia.toFixed(0)} mm · Tmax ${c.tmax.toFixed(2)} °C · Déficit ${c.def.toFixed(0)} mm` }));
+  }
+
+  function drawRoya(padL, padR, padT, padB, plotW, plotH, w, h) {
+    const years = CAMP.filter(c => c.y >= 2012 && c.y <= 2016);
+    const minV = 0;
+    const maxV = 26;
+    const mapY = (t) => padT + plotH - ((t - minV) / (maxV - minV)) * plotH;
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth = 1;
+    for (let v = 0; v <= 26; v += 5) {
+      const y = mapY(v);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 13px JetBrains Mono';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${v}`, padL - 8, y + 3.5);
+    }
+
+    const barW = plotW / years.length;
+    const preRoya = 22.71;
+    years.forEach((c, i) => {
+      const x = padL + i * barW + barW * 0.16;
+      const bW = barW * 0.68;
+      const bH = ((c.r - minV) / (maxV - minV)) * plotH;
+      const y = padT + plotH - bH;
+      const delta = ((c.r / preRoya) - 1) * 100;
+
+      let top = '#0e7490';
+      let bot = 'rgba(8, 145, 178, 0.35)';
+      if (c.y === 2014) { top = COLOR.red; bot = 'rgba(255, 82, 119, 0.4)'; }
+      else if (c.y === 2013) { top = '#f97316'; bot = 'rgba(249, 115, 22, 0.35)'; }
+      else if (c.y >= 2015) { top = COLOR.emerald; bot = 'rgba(46, 230, 166, 0.28)'; }
+
+      hitAreas.push({ x, y, w: bW, h: bH, label: `${c.y}`, val: `${c.r.toFixed(2)} qq/ha (${delta >= 0 ? '+' : ''}${delta.toFixed(1)}% vs pre-roya)` });
+
+      const grad = ctx.createLinearGradient(0, y, 0, y + bH);
+      grad.addColorStop(0, top);
+      grad.addColorStop(1, bot);
+      ctx.fillStyle = (hoverIndex === i) ? '#ffffff' : grad;
+      ctx.beginPath();
+      ctx.roundRect(x, y, bW, bH, [6, 6, 0, 0]);
+      ctx.fill();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '700 14px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${c.r.toFixed(c.y === 2014 ? 1 : 2)}`, x + bW / 2, y - 22);
+
+      ctx.fillStyle = delta <= -20 ? COLOR.red : (delta < 0 ? COLOR.amber : COLOR.emerald);
+      ctx.font = '700 11.5px JetBrains Mono';
+      ctx.fillText(`${delta >= 0 ? '+' : ''}${delta.toFixed(1)}%`, x + bW / 2, y - 8);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 12.5px JetBrains Mono';
+      ctx.fillText(`${c.y}`, x + bW / 2, h - 34);
+    });
+
+    // NDVI floración plano (eje derecho 0.60–0.72)
+    const mapN = (v) => padT + plotH - ((v - 0.60) / (0.72 - 0.60)) * plotH;
+    ctx.save();
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = COLOR.cyan;
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    years.forEach((c, i) => {
+      const x = padL + i * barW + barW / 2;
+      const y = mapN(c.ndvi);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+    years.forEach((c, i) => {
+      const x = padL + i * barW + barW / 2;
+      const y = mapN(c.ndvi);
+      ctx.beginPath();
+      ctx.arc(x, y, 3.4, 0, Math.PI * 2);
+      ctx.fillStyle = '#030712';
+      ctx.fill();
+      ctx.strokeStyle = COLOR.cyan;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+
+    ctx.fillStyle = 'rgba(56, 239, 255, 0.92)';
+    ctx.font = '700 12px JetBrains Mono';
+    ctx.textAlign = 'left';
+    ctx.fillText('🛰️ NDVI floración 0.6392 → 0.6918 (escala 0.60–0.72)', padL + 8, padT + 14);
+  }
+
+  cv.addEventListener('mousemove', (e) => {
+    const rect = cv.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const hit = hitAreas.find(b => mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h);
+    if (hit) {
+      hoverIndex = hitAreas.indexOf(hit);
+      tip.style.display = 'block';
+      tip.style.left = `${Math.min(mx + 12, rect.width - 230)}px`;
+      tip.style.top = `${Math.max(my - 30, 8)}px`;
+      tip.innerHTML = `<strong>${hit.label}</strong>: ${hit.val}`;
+      draw();
+    } else if (hoverIndex !== -1) {
+      hoverIndex = -1;
+      tip.style.display = 'none';
+      draw();
+    }
+  });
+
+  cv.addEventListener('mouseleave', () => {
+    hoverIndex = -1;
+    tip.style.display = 'none';
+    draw();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (['1', '2', '3'].includes(e.key)) {
+      const idx = parseInt(e.key, 10) - 1;
+      updateStage(STEPS[idx], true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    fitCanvas();
+    draw();
+  });
+
+  fitCanvas();
+  updateStage('feno');
+  restartLoop();
+})();
+</script>
+</body>
+</html>

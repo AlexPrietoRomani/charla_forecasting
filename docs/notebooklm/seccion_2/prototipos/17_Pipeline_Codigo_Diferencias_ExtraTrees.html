@@ -313,6 +313,7 @@ pre.code-content {
   font: 400 clamp(13px, 1.02vw, 15.5px)/1.58 var(--mono);
   color: #c9d8ec;
   overflow-y: auto;
+  overflow-x: hidden;
   flex: 1 1 0;
 }
 pre.code-content::-webkit-scrollbar { width: 4px; }
@@ -430,6 +431,24 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   margin-top: 3px;
 }
 
+.executive-takeaway {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--ockham);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, rgba(255, 192, 92, 0.12), rgba(13, 20, 36, 0.6));
+  font: 400 clamp(12.5px, 0.95vw, 14.5px)/1.35 var(--sans);
+  color: #e2edf8;
+}
+.executive-takeaway strong {
+  color: var(--ockham);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .kpi-row {
   display: flex;
   gap: 6px;
@@ -538,27 +557,29 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
           <span class="code-title">senamhi_forecaster.py · Pipeline de Producción</span>
           <button class="btn-copy" id="btnCopyCode">📋 Copiar Código</button>
         </div>
-        <pre class="code-content" id="codeContent"><span class="c-comment"># =====================================================================
-# SENAMHI OPERATIONAL PIPELINE (IQUITOS PUNCHANA - EXTRACTION)
-# =====================================================================</span>
+        <pre class="code-content" id="codeContent"><span class="c-comment"># ==================================================
+# SENAMHI PIPELINE (IQUITOS PUNCHANA · EXTRACCIÓN)
+# ==================================================</span>
 <span class="c-keyword">import</span> pandas <span class="c-keyword">as</span> pd
 <span class="c-keyword">from</span> sklearn.ensemble <span class="c-keyword">import</span> <span class="c-func">ExtraTreesRegressor</span>
 
-<span class="c-comment"># 1. Transformación: eliminar el sesgo de meseta no extrapolativa</span>
-df[<span class="c-str">'delta_tmax'</span>] = df[<span class="c-str">'tmax'</span>].<span class="c-func">diff</span>()  <span class="c-comment"># Δy = y_t − y_{t-1}</span>
+<span class="c-comment"># 1. Quitar sesgo de meseta: no extrapola al alza</span>
+df[<span class="c-str">'delta_tmax'</span>] = df[<span class="c-str">'tmax'</span>].<span class="c-func">diff</span>()  <span class="c-comment"># Δy</span>
 
-<span class="c-comment"># 2. Ingeniería de características: memoria inercial sin redes recurrentes</span>
+<span class="c-comment"># 2. Lags de memoria inercial (sin redes recurrentes)</span>
 <span class="c-keyword">for</span> k <span class="c-keyword">in</span> [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, <span class="c-num">7</span>, <span class="c-num">14</span>]:
     df[<span class="c-str">f'lag_{k}'</span>] = df[<span class="c-str">'delta_tmax'</span>].<span class="c-func">shift</span>(k)
 
-<span class="c-comment"># 3. Ajuste ultra-rápido sobre aceleraciones en CPU doméstica</span>
-model = <span class="c-func">ExtraTreesRegressor</span>(n_estimators=<span class="c-num">100</span>, random_state=<span class="c-num">42</span>)
+<span class="c-comment"># 3. Ajuste rápido sobre diferencias (CPU doméstica)</span>
+model = <span class="c-func">ExtraTreesRegressor</span>(
+    n_estimators=<span class="c-num">100</span>, random_state=<span class="c-num">42</span>)
 model.<span class="c-func">fit</span>(X_train, y_train_delta)
 
-<span class="c-comment"># 4. Inferencia recursiva multi-paso y reconstrucción de nivel</span>
+<span class="c-comment"># 4. Inferencia recursiva y reconstrucción</span>
 pred_delta = model.<span class="c-func">predict</span>(X_test)
-y_forecast = y_last + pred_delta.<span class="c-func">cumsum</span>()  <span class="c-comment"># Reintegración de nivel</span>
-y_p10, y_p90 = y_forecast + q10_res, y_forecast + q90_res  <span class="c-comment"># Cono P10-P90</span></pre>
+y_forecast = y_last + pred_delta.<span class="c-func">cumsum</span>()  <span class="c-comment"># Nivel</span>
+y_p10 = y_forecast + q10_res
+y_p90 = y_forecast + q90_res  <span class="c-comment"># Cono P10-P90</span></pre>
       </div>
     </div>
 
@@ -603,6 +624,8 @@ y_p10, y_p90 = y_forecast + q10_res, y_forecast + q90_res  <span class="c-commen
           </div>
         </div>
       </div>
+
+      <div class="executive-takeaway"><strong>💡 Idea Clave:</strong> <span id="takeawayText">ExtraTrees sobre diferencias en CPU doméstica iguala al supercómputo climático.</span></div>
 
       <!-- AUDIT METRICS PILLS -->
       <div class="kpi-row">

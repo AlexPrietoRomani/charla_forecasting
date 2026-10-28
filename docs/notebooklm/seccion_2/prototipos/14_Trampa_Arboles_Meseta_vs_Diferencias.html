@@ -1046,10 +1046,22 @@ input[type="range"] {
     ctx.stroke();
     ctx.restore();
 
-    ctx.fillStyle = 'rgba(255, 82, 119, 0.8)';
+    // Etiqueta TOPE TRAIN con pastilla oscura (las curvas no tachan el texto)
+    const topeText = `TOPE TRAIN: ${topeTrain.toFixed(1)} °C`;
     ctx.font = '700 11.5px JetBrains Mono';
     ctx.textAlign = 'right';
-    ctx.fillText(`TOPE TRAIN: ${topeTrain.toFixed(1)} °C`, w - padR - 8, yTope - 5);
+    const topeTextW = ctx.measureText(topeText).width;
+    const topeTx = w - padR - 8;
+    const topeTy = yTope - 5;
+    ctx.beginPath();
+    ctx.roundRect(topeTx - topeTextW - 9, topeTy - 13, topeTextW + 18, 20, 6);
+    ctx.fillStyle = 'rgba(5, 10, 22, 0.88)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.38)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 120, 152, 0.95)';
+    ctx.fillText(topeText, topeTx, topeTy);
 
     // Fechas en eje X (cada 4 días)
     ctx.fillStyle = '#94a3b8';
@@ -1116,10 +1128,36 @@ input[type="range"] {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.fillStyle = '#ff5277';
+    // Etiqueta récord con pastilla oscura debajo/izquierda del pico (no pisa la leyenda superior)
+    const recordText = 'RÉCORD 38.0 °C (07-Oct)';
     ctx.font = '700 13.5px JetBrains Mono';
-    ctx.textAlign = 'center';
-    ctx.fillText('RÉCORD 38.0 °C (07-Oct)', xRecord, yRecord - 10);
+    const recordTextW = ctx.measureText(recordText).width;
+    const recordBoxW = recordTextW + 22;
+    const recordBoxH = 25;
+    let recordBoxX = xRecord - 16 - recordBoxW;
+    if (recordBoxX < padL + 6) recordBoxX = padL + 6;
+    const recordBoxY = yRecord + 12;
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.55)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(recordBoxX + recordBoxW, recordBoxY + recordBoxH / 2);
+    ctx.lineTo(xRecord - 7, yRecord + 7);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.roundRect(recordBoxX, recordBoxY, recordBoxW, recordBoxH, 8);
+    ctx.fillStyle = 'rgba(5, 10, 22, 0.9)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 82, 119, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ff5277';
+    ctx.textAlign = 'left';
+    ctx.fillText(recordText, recordBoxX + 11, recordBoxY + 17);
 
     // Leyenda de curvas superior
     ctx.font = '700 13px JetBrains Mono';

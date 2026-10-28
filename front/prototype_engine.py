@@ -29,6 +29,8 @@ VIDEO_SLIDE_CANDIDATES = (
     (1, 10),
     (3, 19),
     (3, 21),
+    (4, 26),
+    (4, 27),
     (5, 29),
 )
 
@@ -261,6 +263,31 @@ ENGINE_RUNTIME_JS = """<script id="deck-engine-runtime-js">
     });
   }
 
+  function normalizeTakeawayFragments() {
+    var boxes = document.querySelectorAll(".executive-takeaway, .takeaway-card");
+    Array.prototype.forEach.call(boxes, function (box) {
+      var label = box.firstElementChild;
+      while (label && label.tagName !== "STRONG" && label.tagName !== "B") {
+        label = label.nextElementSibling;
+      }
+      if (!label) return;
+      var nodes = [];
+      var node = label.nextSibling;
+      while (node) {
+        nodes.push(node);
+        node = node.nextSibling;
+      }
+      if (!nodes.length) return;
+      var hasUnwrappedElement = nodes.some(function (n) {
+        return n.nodeType === 1 && n.tagName !== "SPAN";
+      });
+      if (!hasUnwrappedElement) return;
+      var wrapper = document.createElement("span");
+      nodes.forEach(function (n) { wrapper.appendChild(n); });
+      box.appendChild(wrapper);
+    });
+  }
+
   var resizeTimer = null;
   function requestResize() {
     if (resizeTimer) clearTimeout(resizeTimer);
@@ -331,6 +358,7 @@ ENGINE_RUNTIME_JS = """<script id="deck-engine-runtime-js">
   function boot() {
     ensureEmbedded();
     normalizeLegacySpeakerBoxes();
+    normalizeTakeawayFragments();
     observeCanvases();
     bootstrapCanvasSizes();
     wireCinematicIntroButton();

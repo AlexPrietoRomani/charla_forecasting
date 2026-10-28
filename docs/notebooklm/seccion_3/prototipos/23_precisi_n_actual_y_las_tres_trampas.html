@@ -1277,11 +1277,24 @@ input[type="range"] {
     const leftW = usableW * 0.44;
     const cx = pad + leftW * 0.46;
 
+    // Ancho máximo de las etiquetas laterales: reserva zona para que nunca pisen las placas
+    ctx.save();
+    ctx.font = '700 11.5px "Space Grotesk", sans-serif';
+    let labelMaxW = ctx.measureText('Satélite').width;
+    ctx.font = '600 8.5px "JetBrains Mono"';
+    labelMaxW = Math.max(
+      labelMaxW,
+      ctx.measureText('Sonda + Chip').width,
+      ctx.measureText('YOLO / SAM 2').width,
+      ctx.measureText('Sentinel 10m').width
+    );
+    ctx.restore();
+
     // Eje vertical punteado que atraviesa las 3 capas (como en image5.png)
     const topY = padT + usableH * 0.20;
     const midY = padT + usableH * 0.50;
     const botY = padT + usableH * 0.80;
-    const rx = Math.min(leftW * 0.40, 125);
+    const rx = Math.min(leftW * 0.40, 125, (pad + leftW - 8) - cx - labelMaxW - 18);
     const ry = rx * 0.44;
 
     ctx.save();
@@ -1392,9 +1405,14 @@ input[type="range"] {
       { y: midY, txt: 'Dron', sub: 'YOLO / SAM 2', col: '#38efff' },
       { y: botY, txt: 'Satélite', sub: 'Sentinel 10m', col: '#e06d53' }
     ];
+    const lxMax = pad + leftW - 8;
+    const lxText = Math.max(
+      cx + rx + 12,
+      Math.min(pad + leftW - 58 + 23, lxMax - labelMaxW)
+    );
     layerLabels.forEach(lb => {
-      const lxStart = cx + rx * 0.72;
-      const lxEnd = pad + leftW - 58;
+      const lxStart = cx + rx + 2;
+      const lxEnd = lxText - 6;
       ctx.save();
       ctx.strokeStyle = lb.col;
       ctx.lineWidth = 1.5;
@@ -1406,10 +1424,10 @@ input[type="range"] {
       ctx.fillStyle = '#ffffff';
       ctx.font = '700 11.5px "Space Grotesk", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(lb.txt, lxEnd + 5, lb.y + 1);
+      ctx.fillText(lb.txt, lxText, lb.y + 1);
       ctx.fillStyle = lb.col;
       ctx.font = '600 8.5px "JetBrains Mono"';
-      ctx.fillText(lb.sub, lxEnd + 5, lb.y + 13);
+      ctx.fillText(lb.sub, lxText, lb.y + 13);
       ctx.restore();
     });
 
@@ -1445,9 +1463,10 @@ input[type="range"] {
       const maxTextW = rw - 36;
       let titleSize = isCardCompact ? 10 : 14.5;
       let subSize = isCardCompact ? 9 : 12.5;
-      const remSize = isCardCompact ? 9 : 12;
+      let remSize = isCardCompact ? 9 : 12;
       const minTitle = isCardCompact ? 9 : 10.5;
       const minSub = isCardCompact ? 8.5 : 9.5;
+      const minRem = isCardCompact ? 8 : 9;
 
       ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
       while (titleSize > minTitle && ctx.measureText(tr.trapTitle).width > maxTextW) {
@@ -1460,21 +1479,32 @@ input[type="range"] {
         ctx.font = `500 ${subSize}px Inter, sans-serif`;
       }
 
-      const contentH = titleSize + 8 + subSize + 14 + 22;
-      const topY = cy + Math.max(8, (cardH - contentH) / 2);
+      const remText = tr.remedy;
+      ctx.font = `700 ${remSize}px "JetBrains Mono"`;
+      while (remSize > minRem && ctx.measureText(remText).width + 30 > rw - 32) {
+        remSize -= 0.5;
+        ctx.font = `700 ${remSize}px "JetBrains Mono"`;
+      }
+
+      const pillH = isCardCompact ? 14 : 20;
+      const blockH = titleSize + 5 + subSize + 7 + pillH;
+      const startY = Math.min(
+        cy + Math.max(6, (cardH - blockH) / 2),
+        cy + cardH - blockH - 4
+      );
+      const titleBaseY = startY + titleSize;
+      const subBaseY = titleBaseY + 5 + subSize;
+      const pillY = subBaseY + 7;
 
       ctx.fillStyle = '#ffffff';
       ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
       ctx.textAlign = 'left';
-      ctx.fillText(tr.trapTitle, rxStart + 18, topY + titleSize);
+      ctx.fillText(tr.trapTitle, rxStart + 18, titleBaseY);
 
       ctx.fillStyle = '#cbd5e1';
       ctx.font = `500 ${subSize}px Inter, sans-serif`;
-      ctx.fillText(tr.trapSub, rxStart + 18, topY + titleSize + 8 + subSize);
+      ctx.fillText(tr.trapSub, rxStart + 18, subBaseY);
 
-      const pillY = cy + cardH - (isCardCompact ? 20 : 30);
-      const pillH = isCardCompact ? 14 : 22;
-      const remText = '✓ ' + tr.remedy;
       ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       const pillW = Math.min(ctx.measureText(remText).width + 18, rw - 32);
       ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';

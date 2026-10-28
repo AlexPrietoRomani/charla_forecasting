@@ -687,50 +687,173 @@ def get_deck_css(branding=None):
   }}
 
   /* ======================================================== */
+  /* ======================================================== */
   /* ARQUETIPO 9: CONCLUSIONES (page-09.png)                  */
   /* ======================================================== */
   .conclusions-3col-grid {{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: clamp(18px, 2vw, 28px);
+    gap: clamp(16px, 1.8vw, 26px);
     flex: 1;
+    min-height: 0;
     align-items: stretch;
   }}
   .conclusion-card {{
-    background: rgba(11, 22, 56, 0.85);
-    backdrop-filter: blur(14px);
+    background: rgba(11, 22, 56, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-radius: var(--card-radius);
-    padding: clamp(24px, 2.5vw, 36px);
+    padding: clamp(20px, 2.0vw, 28px);
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+    justify-content: space-between;
+    gap: clamp(12px, 1.3vw, 16px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
   }}
-  .conclusion-card.card-1 {{ border: 1.5px solid var(--fest-cyan); box-shadow: 0 8px 30px rgba(18, 200, 252, 0.12); }}
-  .conclusion-card.card-2 {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 30px rgba(155, 92, 255, 0.12); }}
-  .conclusion-card.card-3 {{ border: 1.5px solid var(--fest-magenta); box-shadow: 0 8px 30px rgba(224, 64, 251, 0.12); }}
+  .conclusion-card.card-1 {{ border: 1.5px solid var(--fest-cyan); box-shadow: 0 10px 32px rgba(18, 200, 252, 0.16); }}
+  .conclusion-card.card-2 {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 10px 32px rgba(155, 92, 255, 0.16); }}
+  .conclusion-card.card-3 {{ border: 1.5px solid var(--fest-magenta); box-shadow: 0 10px 32px rgba(224, 64, 251, 0.16); }}
 
-  .conclusion-icon-box {{
-    width: 48px;
-    height: 48px;
-    font-size: 32px;
+  .conclusion-card-head {{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }}
+  .conclusion-pill-tag {{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 4px 11px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }}
+  .conclusion-card.card-1 .conclusion-pill-tag {{
+    background: rgba(18, 200, 252, 0.12);
+    border: 1px solid rgba(18, 200, 252, 0.45);
+    color: var(--fest-cyan);
+  }}
+  .conclusion-card.card-2 .conclusion-pill-tag {{
+    background: rgba(155, 92, 255, 0.12);
+    border: 1px solid rgba(155, 92, 255, 0.45);
+    color: var(--fest-purple);
+  }}
+  .conclusion-card.card-3 .conclusion-pill-tag {{
+    background: rgba(224, 64, 251, 0.12);
+    border: 1px solid rgba(224, 64, 251, 0.45);
+    color: var(--fest-magenta);
+  }}
+
+  .conclusion-card-title-row {{
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    gap: 12px;
   }}
-  .conclusion-card.card-1 .conclusion-icon-box {{ color: var(--fest-cyan); }}
-  .conclusion-card.card-2 .conclusion-icon-box {{ color: var(--fest-purple); }}
-  .conclusion-card.card-3 .conclusion-icon-box {{ color: var(--fest-magenta); }}
+  .conclusion-icon-box {{
+    width: 46px;
+    height: 46px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+  }}
+  .conclusion-card.card-1 .conclusion-icon-box {{ color: var(--fest-cyan); border: 1px solid rgba(18, 200, 252, 0.35); }}
+  .conclusion-card.card-2 .conclusion-icon-box {{ color: var(--fest-purple); border: 1px solid rgba(155, 92, 255, 0.35); }}
+  .conclusion-card.card-3 .conclusion-icon-box {{ color: var(--fest-magenta); border: 1px solid rgba(224, 64, 251, 0.35); }}
 
   .conclusion-title {{
-    font-size: clamp(17px, 1.3vw, 20px);
-    font-weight: 700;
+    font-size: clamp(19px, 1.48vw, 23px);
+    font-weight: 800;
     color: var(--text-main);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
   }}
   .conclusion-desc {{
-    font-size: clamp(13px, 1.0vw, 15px);
+    font-size: clamp(13.5px, 1.02vw, 15px);
     color: var(--text-sub);
-    line-height: 1.5;
+    line-height: 1.48;
+  }}
+
+  .conclusion-trap-box {{
+    padding: 11px 15px;
+    border-radius: 9px;
+    background: rgba(239, 68, 68, 0.08);
+    border-left: 3px solid #f43f5e;
+    font-size: clamp(12.5px, 0.94vw, 13.8px);
+    color: #fecdd3;
+    line-height: 1.42;
+  }}
+  .conclusion-trap-box strong {{
+    color: #ffe4e6;
+    font-weight: 700;
+  }}
+
+  .conclusion-evidence {{
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 13px 16px;
+    border-radius: 11px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+  }}
+  .conclusion-evidence-title {{
+    font-size: clamp(11.5px, 0.88vw, 13px);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }}
+  .conclusion-card.card-1 .conclusion-evidence-title {{ color: var(--fest-cyan); }}
+  .conclusion-card.card-2 .conclusion-evidence-title {{ color: var(--fest-purple); }}
+  .conclusion-card.card-3 .conclusion-evidence-title {{ color: var(--fest-magenta); }}
+  .conclusion-evidence-list {{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: clamp(12.5px, 0.94vw, 14px);
+    color: var(--text-sub);
+    line-height: 1.42;
+  }}
+  .conclusion-evidence-list li {{
+    position: relative;
+    padding-left: 15px;
+  }}
+  .conclusion-evidence-list li::before {{
+    content: "▸";
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }}
+  .conclusion-card.card-1 .conclusion-evidence-list li::before {{ color: var(--fest-cyan); }}
+  .conclusion-card.card-2 .conclusion-evidence-list li::before {{ color: var(--fest-purple); }}
+  .conclusion-card.card-3 .conclusion-evidence-list li::before {{ color: var(--fest-magenta); }}
+  .conclusion-evidence-list strong {{ color: var(--text-main); font-weight: 700; }}
+
+  .conclusion-takeaway {{
+    padding: 11px 15px;
+    border-left: 3.5px solid var(--fest-cyan);
+    border-radius: 0 10px 10px 0;
+    background: rgba(18, 200, 252, 0.10);
+    font-size: clamp(13px, 0.96vw, 14.5px);
+    color: var(--text-main);
+    line-height: 1.42;
+  }}
+  .conclusion-card.card-2 .conclusion-takeaway {{
+    border-left-color: var(--fest-purple);
+    background: rgba(155, 92, 255, 0.10);
+  }}
+  .conclusion-card.card-3 .conclusion-takeaway {{
+    border-left-color: var(--fest-magenta);
+    background: rgba(224, 64, 251, 0.10);
   }}
 
   /* ======================================================== */
@@ -740,7 +863,7 @@ def get_deck_css(branding=None):
     background-image: {bg_closing_css};
     background-size: cover;
     background-position: center;
-    padding: clamp(36px, 4vw, 64px) clamp(48px, 5.5vw, 90px);
+    padding: clamp(34px, 3.8vw, 60px) clamp(44px, 5vw, 84px);
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -751,7 +874,7 @@ def get_deck_css(branding=None):
     font-weight: 800;
     color: var(--text-main);
     line-height: 1;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     letter-spacing: -0.02em;
   }}
   .closing-subtitle {{
@@ -761,69 +884,155 @@ def get_deck_css(branding=None):
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }}
   .closing-cards-wrap {{
     display: flex;
-    gap: 20px;
+    gap: 30px;
     align-items: stretch;
-    max-width: 720px;
+    max-width: 1040px;
   }}
   .closing-contact-card {{
-    background: rgba(11, 22, 56, 0.75);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(11, 22, 56, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1.5px solid var(--fest-cyan);
-    border-radius: 16px;
-    padding: 20px 28px;
+    border-radius: 20px;
+    padding: 26px 36px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.65), 0 0 30px rgba(18, 200, 252, 0.12);
+  }}
+  .closing-name {{
+    font-size: clamp(30px, 2.6vw, 40px);
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }}
+  .closing-role-tag {{
+    font-size: 14.5px;
+    color: var(--fest-cyan);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 6px;
+  }}
+  .closing-contact-list {{
+    font-size: clamp(15.5px, 1.14vw, 17.5px);
+    color: #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }}
+  .closing-contact-item {{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }}
+  .closing-contact-item a {{
+    color: #E2E8F0;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }}
+  .closing-contact-item a:hover {{
+    color: var(--fest-cyan);
+    text-decoration: underline;
+  }}
+  .closing-card-footer {{
+    padding-top: 14px;
+    border-top: 1px solid rgba(148, 163, 184, 0.22);
+    font-size: 13.5px;
+    color: #94A3B8;
+    line-height: 1.4;
   }}
   .closing-qr-card {{
-    background: rgba(11, 22, 56, 0.75);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1.5px dashed var(--fest-cyan);
-    border-radius: 16px;
-    padding: 16px 20px;
-    width: 170px;
+    background: rgba(11, 22, 56, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid var(--fest-cyan);
+    border-radius: 20px;
+    padding: 24px 26px;
+    width: 275px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    gap: 14px;
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.65), 0 0 32px rgba(18, 200, 252, 0.18);
   }}
   .closing-qr-box {{
-    width: 120px;
-    height: 120px;
+    width: 220px;
+    height: 220px;
+    padding: 12px;
+    border-radius: 16px;
+    background: radial-gradient(circle at 50% 40%, rgba(18, 200, 252, 0.18), rgba(3, 7, 18, 0.98) 72%);
+    border: 1.5px solid rgba(18, 200, 252, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0 28px rgba(18, 200, 252, 0.25);
   }}
-  .closing-qr-box img {{
+  .closing-qr-box svg {{
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    display: block;
+  }}
+  .closing-qr-caption {{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }}
+  .closing-qr-title {{
+    font-size: 14px;
+    color: var(--fest-cyan);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }}
+  .closing-qr-sub {{
+    font-size: 12.5px;
+    color: #94A3B8;
+  }}
+  .closing-badges {{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-top: 20px;
+    max-width: 1040px;
+  }}
+  .closing-badge {{
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(18, 200, 252, 0.4);
+    background: rgba(11, 22, 56, 0.75);
+    font-size: 13.5px;
+    color: #E2E8F0;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
   }}
   .closing-bottom-logos {{
     display: flex;
     align-items: center;
-    gap: 24px;
-    margin-top: 16px;
+    gap: 28px;
+    margin-top: 18px;
   }}
   .closing-bottom-logos img:first-child {{
-    height: clamp(52px, 4.8vw, 64px);
+    height: clamp(62px, 5.2vw, 76px);
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
   }}
   .closing-bottom-logos img:last-child {{
-    height: clamp(44px, 4.0vw, 54px);
+    height: clamp(52px, 4.4vw, 64px);
     width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+  }}
     object-fit: contain;
     border-radius: 6px;
   }}

@@ -1448,6 +1448,9 @@ input[type="range"] {
     ctx.stroke();
     ctx.shadowBlur = 0;
 
+    // Tarjeta flotante derecha: Gemelo Digital
+    const rCardW = Math.min(300, w - splitX - 30);
+
     // Pines de Sensores IoT sobre la malla derecha
     const pins = [
       { u: 0.62, r: 0, val: 'VPD: 1.4 kPa' },
@@ -1458,20 +1461,22 @@ input[type="range"] {
       const px = w * p.u;
       if (px > splitX + 20) {
         const py = mountainY(px, p.r);
+        const overCard = rCardW > 160 && px > w - rCardW - 26;
+        const dotY = overCard ? Math.min(py - 24, h - 86 - 16) : py - 24;
+        const labelY = overCard ? Math.min(dotY - 8, h - 86 - 16) : dotY - 8;
         ctx.strokeStyle = '#ffc05c';
         ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py - 24); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, dotY); ctx.stroke();
         ctx.fillStyle = '#ffc05c';
-        ctx.beginPath(); ctx.arc(px, py - 24, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(px, dotY, 4, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#fde68a';
         ctx.font = '700 11.5px "JetBrains Mono"';
         ctx.textAlign = 'center';
-        ctx.fillText(p.val, px, py - 32);
+        ctx.fillText(p.val, px, labelY);
       }
     });
 
     // Tarjeta flotante derecha: Gemelo Digital
-    const rCardW = Math.min(300, w - splitX - 30);
     if (rCardW > 160) {
       ctx.fillStyle = 'rgba(6, 20, 28, 0.9)';
       ctx.strokeStyle = 'rgba(110, 240, 180, 0.6)';
