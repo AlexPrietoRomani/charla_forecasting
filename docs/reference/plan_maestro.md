@@ -103,6 +103,7 @@ ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
 9. **F9: Desaturación Cognitiva y Rediseño Pedagógico-Visual de Secciones 1 y 3** (`docs/task/fases/fase_9_desaturacion_visual_s1_s3.md`) — Reducción del 45% de carga textual en paneles narrativos, eliminación de teleprompters redundantes en pantalla y transformación de los lienzos de Diapos 5–11 y 19–23 en infografías auto-explicativas sin barras de scroll ni solapamientos.
 10. **F10: Motor de Normalización de Estilos en el Compilador y Homologación Visual-Tipográfica de Diapositiva Real (Secciones 1, 2 y 3)** (`docs/task/fases/fase_10_motor_estilos_y_homologacion_s1_s2_s3.md`) — Creación de `front/prototype_engine.py` en `back/build_deck.py` para inyectar contrato de altura 100%, tipografía fluida de auditorio (`clamp()`), distribución anti-vacíos y `ResizeObserver` universal en los 18 prototipos (Diapos 5–17 y 19–23) y futuros HTMLs.
 11. **F11: Videos Deterministas por Diapositiva (Pipeline Offline + Estructura `video/`)** (`docs/task/fases/fase_11_videos_por_diapositiva.md`) — Pipeline offline reproducible (skill `motion-design` → escena HTML determinista → captura CDP frame a frame → `ffmpeg` H.264) con estructura autocontenida `video/seccion_{N}/diapo_{M}/video_{nombre}/`; piloto `video_anatomia_senal` (Diapo 5) completado como entrada de 30 s (tramo `[4 s, 27 s]` de la escena cinemática estirado ×1.30) a 1920×1080 con fade-in al fondo exacto del slide.
+12. **F12: Claridad Pedagógica para Audiencia No Estadística y Pulido Profesional de Deck y Videos** (`docs/reference/fases/fase_12_claridad_no_estadistica_deck_videos.md`) — Glosario emergente + analogías inyectado por el compilador, cifras con significado cotidiano (1 decimal + frase llana), Idea Clave como titular (≥ 34 px) con taxonomía única `Acto N · Diapo M`, ruta corta (≤ 3 etapas) / ruta experta (tecla `D`), apertura y cierre rediseñados, 9 videos re-renderizados con tipografía ≥ 22 px y subtítulos (`beats.json` → `narration.vtt`), pipeline único y portable `video/_pipeline/render.py`, validador `scripts/audit_f12_claridad.py` y prueba de comprensión con 3 personas no estadísticas.
 
 ---
 
@@ -239,7 +240,25 @@ ACTO 5: LA DECISIÓN (Diapos 18–20, ~5 min)
 
 ---
 
-## 9. Apéndice A — Definition of Done (DoD) Global
+## 9. Detalle de la Fase 12 (F12): Claridad Pedagógica para Audiencia No Estadística y Pulido Profesional de Deck y Videos
+
+- **Macro-objetivo:** Convertir el deck y los 9 videos en una charla que una persona **sin formación estadística** entienda y recuerde: una idea por pantalla, jerga traducida en el momento (glosario emergente + analogías), cifras con significado cotidiano, jerarquía visual donde el mensaje es el titular, videos legibles a 5 m con subtítulos, y un pipeline de video reproducible en Windows/Linux con un solo comando.
+- **Diagnóstico (auditoría 28-10-2026):** hasta 161 términos técnicos sin definición por prototipo (Diapo 21) y glosario de `T5.2.2` inexistente (0 tooltips); 72 pantallas (18 prototipos × 4 etapas) en ~35 min; cifras con 3–4 decimales sin traducción; Idea Clave al pie en 12 px y 5 taxonomías mezcladas (`VÍA`, `Era`, `Pilar`, `Etapa`, `Acto`); videos con tipografía de 9–13 px, mudos y sin subtítulos; `capture.mjs` duplicado ×9 y `render.sh` solo-Linux; fondo de portada repetido en 6 diapos. Detalle en `docs/reference/fases/fase_12_claridad_no_estadistica_deck_videos.md` §1.
+- **Entregable global:** `front/deck_glossary.py` + `front/deck_plain_numbers.py` + inyectores en `front/prototype_engine.py` (`inject_glossary`, `promote_takeaway_to_hero`, `strip_internal_nav`, filtro `data-route`), 21 prototipos reescritos en lenguaje llano, Diapos 1–4/18/24/28–30 rediseñadas, 9 videos re-renderizados con subtítulos y `narration.vtt`, `video/_pipeline/{capture.mjs,render.py}`, validador `scripts/audit_f12_claridad.py` en verde y bundles recompilados.
+- **Criterios de Aceptación (AC) globales de F12:**
+  - [ ] ≤ 25 términos técnicos sin tooltip por prototipo; cada término del glosario muestra definición ≤ 15 palabras + analogía.
+  - [ ] 0 cifras visibles con ≥ 2 decimales fuera de `data-expert`; cada cifra de error/correlación/p-valor con frase llana.
+  - [ ] Titular = Idea Clave (≤ 12 palabras, ≥ 34 px en 1080p) en los 18 prototipos; ≤ 3 etapas en ruta corta; 0 botones *"Pase a Diapo"*; una sola taxonomía.
+  - [ ] 9 videos con tipografía ≥ 22 px, gráfico ≥ 60 % del lienzo, subtítulos por beat y `.vtt`; `python video/_pipeline/render.py <carpeta>` funciona en Windows y Linux.
+  - [ ] 3 personas no estadísticas con ≥ 4/5 en el cuestionario; ensayo de la ruta corta ≤ 35 min.
+- **Estrategia de Pruebas de F12:**
+  - **Test Unitario:** `scripts/audit_f12_claridad.py --all` (jerga/glosario, titulares, cifras, jerarquía, video, pipeline).
+  - **Test de Simulación de Usuario:** Recorrido Chromium 1920×1080 y 1366×768 (tooltips en hover, titular ≥ 34 px, cero scroll, cero errores), reproducción de gates con `<track>`, keyframes al 25 % legibles y cuestionario presencial.
+- **Sub fases:** `SF12.1` Capa de traducción (glosario, tooltips, titulares llanos, cifras con significado) · `SF12.2` Jerarquía visual y ritmo (hero, ruta corta/experta, apertura/secciones, cierre en 3 frases) · `SF12.3` Videos legibles, subtitulados y pipeline portable · `SF12.4` Validación con audiencia, compilación y cierre.
+
+---
+
+## 10. Apéndice A — Definition of Done (DoD) Global
 
 Toda Tarea de este Plan Maestro se considera completada (`[X]`) única y exclusivamente cuando cumple todos los requisitos siguientes:
 1. **Tests Unitarios en verde:** Validación aislada de la estructura HTML/CSS/JS, inyección del motor `front/prototype_engine.py`, límites de palabras y compilación de `back/build_deck.py` sin errores.

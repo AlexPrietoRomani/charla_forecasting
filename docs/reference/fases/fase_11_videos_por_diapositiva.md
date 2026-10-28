@@ -42,7 +42,7 @@ video/
             ├── render.sh             # un comando: build + capture + encode
             ├── fonts/                # woff2 embebidas en la escena
             ├── anatomia_senal.mp4            # versión vigente
-            └── anatomia_senal_v1_completo.mp4 # versión anterior (comparación)
+            └── (versiones anteriores retiradas en F12; ver sección 5)
 ```
 
 Reglas: **ningún video vive en `docs/`**; cada video es dueño de sus fuentes; el MP4 final queda al lado de su escena, no en un directorio global.
@@ -60,7 +60,7 @@ Reglas: **ningún video vive en `docs/`**; cada video es dueño de sus fuentes; 
 
 - **Contenido:** descomposición ontológica con datos reales SENAMHI Punchana (2019–2025): `Y = T + S + C + ε` con la metáfora del río (cauce, marea, régimen El Niño 2023–24, entropía); récord 38.0 °C (07·10·2023); `n = 2,557`.
 - **Versión vigente:** `anatomia_senal.mp4` — **entrada de 30 s** (1920×1080 @ 30 fps, 900 frames): tramo `[4 s, 27 s]` de la escena cinemática (34 s) estirado ×1.3043 para dar más tiempo de lectura a la anatomía (`Y = T + S + C + ε`), con fade-in de 0.35 s desde el color exacto del fondo de la Diapo 5 (`#040714`) y cierre con las 4 capas y la ecuación encendidas; pensada para reproducirse al avanzar de la Diapo 4 a la 5 (después aparece la diapositiva con su explicación). El cold-open, la cita y el cierre del corte de 34 s quedan fuera.
-- **Versiones anteriores:** `anatomia_senal_v3_34s.mp4` (entrada cinemática completa: cold-open, cita y cierre), `anatomia_senal_v2_30s.mp4` (tramo `[2 s, 22 s]` ×1.5, 1600×900) y `anatomia_senal_v1_completo.mp4` (primer corte de 30 s), conservadas para comparación.
+- **Versiones anteriores:** `anatomia_senal_v3_34s.mp4` (entrada cinemática completa: cold-open, cita y cierre), `anatomia_senal_v2_30s.mp4` (tramo `[2 s, 22 s]` ×1.5, 1600×900) y `anatomia_senal_v1_completo.mp4` (primer corte de 30 s). **Retiradas del repo en F12** (`git rm`); el patrón `video/**/*_v[0-9]*.mp4` queda en `.gitignore` para que no vuelvan a versionarse.
 - **Uso previsto:** entrada de la Diapo 5; tras el video aparece la diapositiva con su explicación (integración pendiente de decisión).
 
 ## 6. Criterios de Aceptación (Fase)
