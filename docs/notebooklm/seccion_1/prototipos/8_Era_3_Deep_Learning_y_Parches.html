@@ -867,7 +867,7 @@ input[type="range"] {
 
     <div class="via-card" aria-label="Condiciones operativas de la Vía 3">
       <div class="via-title">
-        <span>⚡ FICHA OPERATIVA VÍA 3</span>
+        <span>⚡ FICHA OPERATIVA</span>
         <span>REPRESENTACIONES LATENTES + PARCHES</span>
       </div>
       <div class="via-pills">
@@ -882,7 +882,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. LSTM/TFT ─▶ 2. Quiebre O(L²) ─▶ 3. PatchTST ─▶ 4. CAISO/Enel & Pase a Era 4 -->
   <nav class="flowbar" aria-label="Proceso evolutivo de la Era 3">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="lstm" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="lstm" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">Memoria Fluida (LSTM/TFT)</span>
@@ -893,7 +893,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="bottleneck" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="bottleneck" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">El Doble Quiebre: O(L²)</span>
@@ -904,7 +904,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="patchtst" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="patchtst" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">2023 · Revolución PatchTST</span>
@@ -915,11 +915,11 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="era4" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="era4" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">CAISO / Enel ─▶ Era 4</span>
-          <span class="proc-sub">Renovables y pase a Zero-Shot</span>
+          <span class="proc-year">CAISO / Enel ─▶ Modelos preentrenados</span>
+          <span class="proc-sub">Parques eólicos y solares</span>
         </div>
         <div class="proc-progress" id="prog-era4"></div>
       </button>
@@ -1118,7 +1118,7 @@ input[type="range"] {
       ovLeft: '🧱 Empaquetado en Parches (P=16)',
       ovRight: '⚡ Autoatención Eficiente O((L/P)²)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Señal Cruda (L=512)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Parches Temporales (Tamaño P)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Atención de Largo Alcance</span>',
-      nextLabel: 'Ver Caso CAISO/Enel y Pase a Era 4 ─▶'
+      nextLabel: 'Ver Caso CAISO/Enel ─▶'
     },
     era4: {
       accent: 'var(--lab)',
@@ -1135,7 +1135,7 @@ input[type="range"] {
       icon: '🚀',
       canvasTitle: 'Pronóstico Eólico/Solar Multi-Parque (CAISO / Enel) y Puente a la Era 4 (Zero-Shot)',
       ovLeft: '🌬️ Red Eléctrica CAISO / Enel',
-      ovRight: '⏭️ Salto a Modelos Fundacionales',
+      ovRight: '⏭️ Siguiente: Modelos Fundacionales',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Pronóstico Multi-Horizonte PatchTST</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Canales Independientes (Turbinas)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Salto a Era 4 (Zero-Shot)</span>',
       nextLabel: 'Reiniciar bucle (LSTM/TFT) ↺'
     }
@@ -1717,7 +1717,7 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 4', rx + 14, ry + 22);
+    ctx.fillText('⏭️ SIGUIENTE: MODELOS PREENTRENADOS', rx + 14, ry + 22);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 13px "Space Grotesk", sans-serif';

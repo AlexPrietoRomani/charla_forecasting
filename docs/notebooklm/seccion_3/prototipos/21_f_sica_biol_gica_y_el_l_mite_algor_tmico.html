@@ -802,7 +802,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. Diagrama General (Engranaje + Colapso) ─▶ 2. Retrasos (τ = 6–8m) ─▶ 3. Umbrales Fatales (VPD) ─▶ 4. N=24 No Perdona & Pase a Diapo 22 -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 21">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="overview" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="overview" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">Engranaje τ + Colapso</span>
@@ -813,7 +813,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="delay" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="delay" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Retrasos (τ = 6–8 meses)</span>
@@ -824,7 +824,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="vpd" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="vpd" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Umbrales Fatales (VPD)</span>
@@ -835,10 +835,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="n24" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="n24" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">N=24 No Perdona ─▶ Diapo 22</span>
+          <span class="proc-year">N=24 No Perdona</span>
           <span class="proc-sub">Fenología reduce el error 4×</span>
         </div>
         <div class="proc-progress" id="prog-n24"></div>
@@ -1040,7 +1040,7 @@ input[type="range"] {
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Entrada de CO₂ / Transpiración</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Colapso Real por Cierre Estomático</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Meseta Plana Ciega (Árbol GBDT)</span>',
-      nextLabel: 'Ver N=24 No Perdona y Pase a Diapo 22 ─▶'
+      nextLabel: 'Ver N=24 No Perdona ─▶'
     },
     n24: {
       accent: 'var(--purple)',
@@ -1052,7 +1052,7 @@ input[type="range"] {
       b2Label: '🚀 La fenología como ancla',
       b2Text: 'Comprimir las señales en 3 ventanas fenológicas y usar el techo de Verhulst reduce el error 4×.',
       formula: '500 Variables Crudas sobre N=24 = Overfit  │  Restricción Fenológica = Error ÷ 4',
-      hint: 'Alterna entre IA Cruda y IA con Fenología abajo antes de ir a la Diapo 22',
+      hint: 'Alterna entre IA Cruda y IA con Fenología abajo antes de seguir',
       quote: 'Con 24 cosechas, ordenar por fenología reduce el error 4×.',
       icon: '📅',
       canvasTitle: 'El Dilema N=24 (p ≫ N): Memorización de Ruido vs. Reducción 4× del Error con Fenología',
@@ -1853,7 +1853,7 @@ input[type="range"] {
 
     ctx.fillStyle = '#ffc05c';
     ctx.font = '700 12px "JetBrains Mono"';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 22: EL RELOJ FENOLÓGICO DEL CAFÉ', rx + 22, cardY + 18);
+    ctx.fillText('⏭️ SIGUIENTE: EL RELOJ FENOLÓGICO DEL CAFÉ', rx + 22, cardY + 18);
 
     ctx.fillStyle = '#e2eeff';
     ctx.font = '500 12px Inter, sans-serif';

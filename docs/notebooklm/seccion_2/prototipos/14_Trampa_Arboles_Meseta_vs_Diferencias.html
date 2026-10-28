@@ -657,7 +657,7 @@ input[type="range"] {
   <!-- FLOWBAR -->
   <nav class="flowbar" aria-label="Etapas del experimento">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="hull" id="tab-hull">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="hull" id="tab-hull" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">El Loro Sabio</span>
@@ -667,7 +667,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="wave" id="tab-wave">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="wave" id="tab-wave" data-route="corta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Ola Sep-Oct 2023</span>
@@ -677,7 +677,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="diff" id="tab-diff">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="diff" id="tab-diff" data-route="experta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Solución Δy</span>
@@ -687,10 +687,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="error" id="tab-error">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="error" id="tab-error" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
-          <span class="proc-year">Pase a Diapo 15</span>
+          <span class="proc-year">Siguiente: Benchmark</span>
           <span class="proc-sub">El Gran Benchmark</span>
         </span>
       </button>
@@ -775,7 +775,7 @@ input[type="range"] {
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>Experimento Canónico:</strong> Datos reales SENAMHI Punchana · 32 días de ola extrema (15-sep a 16-oct 2023) · Test ciego</span>
-    <span class="link">Pase a Diapo 15: Benchmark de 14 Modelos (Tierra vs Supercómputo) →</span>
+    <span class="link">Siguiente: Benchmark de 14 Modelos (Tierra vs Supercómputo)</span>
   </footer>
 
 </main>
@@ -840,7 +840,7 @@ input[type="range"] {
         { label: '➡️ Siguiente: el gran benchmark', text: '¿Empata esta solución con supercomputadoras de 9 km y modelos de Google? Vamos al podio.' }
       ],
       math: 'MAE: 4.12 °C ──▶ 1.39 °C (−66.3% de Error)',
-      hint: 'Pase a Diapo 15 →',
+      hint: 'Siguiente: el gran benchmark',
       quote: 'Siguiente: CPU en 0.25 segundos contra supercomputadoras globales.'
     }
   };

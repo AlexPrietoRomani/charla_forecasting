@@ -946,7 +946,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. Anatomía y Metáfora del Río ─▶ 2. Método STL (COES/RTE) ─▶ 3. Señal vs Ruido ─▶ 4. Overfitting y Pase a Era 1 -->
   <nav class="flowbar" aria-label="Secuencia explicativa en 4 etapas">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="anatomy" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="anatomy" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">Las 4 Capas y el Río</span>
@@ -957,7 +957,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="stl" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="stl" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Método STL en Vivo</span>
@@ -968,7 +968,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="signal" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="signal" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Señal Causal vs. Ruido</span>
@@ -979,11 +979,11 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="overfit" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="overfit" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Overfitting ─▶ Era 1</span>
-          <span class="proc-sub">Trampa del ruido y pase a 1838</span>
+          <span class="proc-year">Overfitting ─▶ Fórmulas simples</span>
+          <span class="proc-sub">Trampa del ruido; lo simple gana</span>
         </div>
         <div class="proc-progress" id="prog-overfit"></div>
       </button>
@@ -1163,7 +1163,7 @@ input[type="range"] {
 
   <!-- FOOTER -->
   <footer class="footnote">
-    <span><strong>Puente a la Diapositiva 6 (Era 1):</strong> Una vez aislada la señal causal (Tₜ + Sₜ) del ruido (εₜ), en 1838 nació la Era 1 (Verhulst, Holt-Winters, ARIMA) para modelar esa ley física con parsimonia.</span>
+    <span><strong>Siguiente: la parsimonia lineal.</strong> Una vez aislada la señal causal (Tₜ + Sₜ) del ruido (εₜ), en 1838 nació la Era 1 (Verhulst, Holt-Winters, ARIMA) para modelar esa ley física con parsimonia.</span>
     <span>Referencias: Cleveland et al. (1990) STL · Operaciones COES (Perú) &amp; RTE (Francia)</span>
   </footer>
 
@@ -1245,7 +1245,7 @@ input[type="range"] {
       ctxLabel: '💥 Por qué nacieron las fórmulas simples',
       ctxText: 'Desde 1838, modelos simples como Verhulst y ARIMA capturan las leyes sin memorizar ruido.',
       quote: 'Memorizar el ruido condena; lo simple sobrevive.',
-      caption: 'COLAPSO FUERA DE MUESTRA (OVERFITTING) ──▶ PASE A DIAPO 6: ERA 1 (1838)'
+      caption: 'COLAPSO FUERA DE MUESTRA (OVERFITTING) ──▶ SIGUIENTE: LAS FÓRMULAS SIMPLES (1838)'
     }
   };
 

@@ -805,7 +805,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. El Reloj Completo (Ago→Jul) ─▶ 2. Floración (56%) y Jaén 2024 ─▶ 3. Llenado (r=0.751) y Maceta Verhulst ─▶ 4. Cosecha y Pase a Diapo 23 -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 22">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="clock" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="clock" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Reloj Completo (Ago→Jul)</span>
@@ -816,7 +816,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="flor" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="flor" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Floración (56%) y Jaén 2024</span>
@@ -827,7 +827,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="llenado" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="llenado" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Llenado (relación fuerte <span data-expert>r=0.751</span>) + Verhulst</span>
@@ -838,10 +838,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="cosecha" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="cosecha" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Cosecha y Broca ─▶ Diapo 23</span>
+          <span class="proc-year">Cosecha y Broca</span>
           <span class="proc-sub">Lluvia en corte y Las 3 Trampas</span>
         </div>
         <div class="proc-progress" id="prog-cosecha"></div>
@@ -1077,7 +1077,7 @@ input[type="range"] {
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Fotosíntesis Neta / Grano Denso</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Respiración >32°C (Grano Vano)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#b48eff"></i> Inflexión t₀ (kL/4: Fuerza de Vertedero)</span>',
-      nextLabel: 'Explorar Cosecha, Broca y Pase a Diapo 23 ─▶'
+      nextLabel: 'Explorar Cosecha, Broca ─▶'
     },
     cosecha: {
       accent: 'var(--water)',
@@ -1089,10 +1089,10 @@ input[type="range"] {
       b2Label: '⏭️ Siguiente: las 3 trampas',
       b2Text: 'Las tres trampas de la tecnología: NDVI ciego en verde, ignorar el retardo y sobreajustar.',
       formula: 'Lluvia en Ago–Oct = +Cosecha ✅ │ Lluvia en Mar–Jul = Caída + Broca (H. hampei) ✕',
-      hint: 'Alterna el clima en cosecha abajo antes de pasar a la Diapo 23',
+      hint: 'Alterna el clima en cosecha abajo antes de seguir',
       quote: 'La lluvia crea fruto en floración, pero lo tira en cosecha.',
       icon: '🍒',
-      canvasTitle: 'La Paradoja Estacional del Agua (Broca Hypothenemus hampei) y Puente a la Diapositiva 23',
+      canvasTitle: 'La Paradoja Estacional del Agua (Broca Hypothenemus hampei)',
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Clima Seco en Cosecha (Óptimo en Taza)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Lluvia en Cosecha (Pudrición + Broca)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Pase a Diapo 23 (Las 3 Trampas)</span>',
@@ -1174,7 +1174,7 @@ input[type="range"] {
     } else {
       $('kpi1').innerHTML = `Ventana 3: <strong>Marzo a Julio</strong>`;
       $('kpi2').innerHTML = `Estado: <strong style="color:${state.rainHarv ? 'var(--danger)' : 'var(--water)'}">${state.rainHarv ? '⚠️ Broca + Pudrición' : '✅ Cosecha Sana'}</strong>`;
-      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--ancestral)">Diapo 23 (3 Trampas)</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--ancestral)">3 Trampas</strong>`;
     }
 
     document.querySelectorAll('.proc-node').forEach(btn => {
@@ -1855,7 +1855,7 @@ input[type="range"] {
     ctx.fillStyle = '#ffc05c';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 23: PRECISIÓN ACTUAL Y LAS 3 TRAMPAS', rx + 14, padT + 20);
+    ctx.fillText('⏭️ SIGUIENTE: PRECISIÓN ACTUAL Y LAS 3 TRAMPAS', rx + 14, padT + 20);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 9.5px Inter, sans-serif';

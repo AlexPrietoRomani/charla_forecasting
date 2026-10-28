@@ -681,7 +681,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FLOWBAR -->
   <nav class="flowbar" aria-label="Etapas de los datos">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="dist" id="tab-dist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="dist" id="tab-dist" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">Histograma Tmax</span>
@@ -691,7 +691,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="season" id="tab-season">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="season" id="tab-season" data-route="experta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Ciclo Estacional</span>
@@ -701,7 +701,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="tails" id="tab-tails">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="tails" id="tab-tails" data-route="corta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Colas Asimétricas</span>
@@ -711,7 +711,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="horizon" id="tab-horizon">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="horizon" id="tab-horizon" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
           <span class="proc-year">Ruptura h &gt; 7d</span>
@@ -798,7 +798,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>SENAMHI Punchana (103015):</strong> 2019-01-01 → 2025-12-31 · Tmin con vacíos iniciales, precipitación con control de ceros</span>
-    <span class="link">Pase a Diapo 14: La Trampa de No-Extrapolación de los Árboles →</span>
+    <span class="link">Siguiente: La Trampa de No-Extrapolación de los Árboles</span>
   </footer>
 
 </main>
@@ -866,7 +866,7 @@ canvas { display: block; width: 100%; height: 100%; }
         { label: '🚪 Siguiente: la trampa del árbol', text: 'Para aprovechar esa memoria se usan árboles de decisión, pero tienen una trampa mortal en olas récord.' }
       ],
       math: 'h > 7 días ──▶ Error(Modelo) ≈ Varianza(Clima)',
-      hint: 'Pase a Diapo 14 →',
+      hint: 'Siguiente: los árboles y la meseta plana',
       quote: 'Siguiente: qué pasa al alimentar un Random Forest comercial.',
       viewMode: 'season'
     }

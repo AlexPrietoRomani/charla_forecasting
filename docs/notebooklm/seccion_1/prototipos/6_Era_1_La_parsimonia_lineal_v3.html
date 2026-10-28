@@ -867,7 +867,7 @@ input[type="range"] {
 
     <div class="via-card" aria-label="Condiciones operativas de la Vía 1">
       <div class="via-title">
-        <span>⚡ FICHA OPERATIVA VÍA 1</span>
+        <span>⚡ FICHA OPERATIVA</span>
         <span>PARSIMONIA LINEAL</span>
       </div>
       <div class="via-pills">
@@ -882,7 +882,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO CRONOLÓGICO EN BUCLE: 1838 ─▶ 1970 ─▶ puente ─▶ Era 2 -->
   <nav class="flowbar" aria-label="Proceso evolutivo 1838 a Era 2">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="verhulst" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="verhulst" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">1838 · Verhulst</span>
@@ -893,7 +893,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="arima" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="arima" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">1970 · ARIMA / HW</span>
@@ -904,7 +904,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="bridge" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="bridge" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">El Puente Analítico</span>
@@ -915,11 +915,11 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="era2" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="era2" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Quiebre ─▶ Era 2</span>
-          <span class="proc-sub">Pase a Lags + GBDT</span>
+          <span class="proc-year">Quiebre ─▶ Tablas y árboles</span>
+          <span class="proc-sub">Siguiente: Lags y árboles</span>
         </div>
         <div class="proc-progress" id="prog-era2"></div>
       </button>
@@ -1118,7 +1118,7 @@ input[type="range"] {
       ovLeft: '✅ Fortaleza: Interpretabilidad + CPU (µs)',
       ovRight: '📌 Regla de uso: N < 500 y serie estable',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> 1838: Techo Físico (L, k, t₀)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> 1970: Eco Estacional (p,d,q / α,β,γ)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Zona Óptima Vía 1 (N &lt; 500)</span>',
-      nextLabel: 'Ver Quiebre y Pase a Era 2 ─▶'
+      nextLabel: 'Ver Quiebre ─▶'
     },
     era2: {
       accent: 'var(--rupture)',
@@ -1135,7 +1135,7 @@ input[type="range"] {
       icon: '🚀',
       canvasTitle: 'Quiebre por No-Linealidad y Transformación hacia la Era 2 (Matriz de Lags + GBDT)',
       ovLeft: '💥 Fallo Era 1: Extrapolación lineal ciega ante shocks',
-      ovRight: '⏭️ Pase a Era 2: Matriz Supervisada (Lags + LightGBM)',
+      ovRight: '⏭️ Siguiente: Matriz Supervisada (Lags + LightGBM)',
       legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#6ef0b4"></i> Proyección ciega Era 1</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Realidad con Shock Multivariado</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Salto a Era 2 (Lags + GBDT)</span>',
       nextLabel: 'Reiniciar bucle (1838) ↺'
     }
@@ -1716,7 +1716,7 @@ input[type="range"] {
     ctx.fillStyle = '#d8b4fe';
     ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 2', rx + 14, ry + 22);
+    ctx.fillText('⏭️ SIGUIENTE: TABLAS Y ÁRBOLES', rx + 14, ry + 22);
 
     ctx.fillStyle = '#f8fafc';
     ctx.font = '700 13px "Space Grotesk", sans-serif';

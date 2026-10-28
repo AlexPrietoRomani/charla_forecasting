@@ -706,7 +706,7 @@ canvas {
   <!-- FLOWBAR: 4 ETAPAS DEL CASO -->
   <nav class="flowbar" aria-label="Etapas del Caso 1">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="lab" id="tab-lab">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="lab" id="tab-lab" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">El Laboratorio</span>
@@ -716,7 +716,7 @@ canvas {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="audit" id="tab-audit">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="audit" id="tab-audit" data-route="corta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">3 Preguntas</span>
@@ -726,7 +726,7 @@ canvas {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="climate" id="tab-climate">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="climate" id="tab-climate" data-route="experta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Microclima</span>
@@ -736,10 +736,10 @@ canvas {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="bridge13" id="tab-bridge13">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="bridge13" id="tab-bridge13" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
-          <span class="proc-year">Pase a Diapo 13</span>
+          <span class="proc-year">Siguiente: Distribución</span>
           <span class="proc-sub">Distribución &amp; Ciclo</span>
         </span>
       </button>
@@ -830,7 +830,7 @@ canvas {
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>Fuente:</strong> Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI) · Estación Punchana 103015</span>
-    <span class="link">Pase a Diapo 13: Anatomía de la Distribución y Ciclo Estacional →</span>
+    <span class="link">Siguiente: Anatomía de la Distribución y Ciclo Estacional</span>
   </footer>
 
 </main>
@@ -896,7 +896,7 @@ canvas {
         { label: '➡️ Siguiente diapositiva', text: 'Exploramos la distribución real de Punchana y el horizonte donde el pronóstico se rompe.' }
       ],
       math: 'P(Tmax ≥ 36 °C) ≈ 3.05% · Eventos de Alto Costo',
-      hint: 'Pase a Diapo 13 →',
+      hint: 'Siguiente: la distribución de los datos',
       quote: 'Los datos de SENAMHI esconden el riesgo real.'
     }
   };

@@ -822,7 +822,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. El Stack 3D y las 3 Trampas ─▶ 2. Trampa 1: NDVI vs Red Edge (NDRE) ─▶ 3. Trampas 2 y 3: Retraso τ y N=24 (Zero-Shot + SCP) ─▶ 4. 3 Axiomas e Ir al Caso Jaén -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 23">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="stack" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="stack" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Stack 3D y las 3 Trampas</span>
@@ -833,7 +833,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Trampa 1: NDVI vs. NDRE</span>
@@ -844,7 +844,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="tau_n24" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="tau_n24" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Trampas 2 y 3: τ y N=24</span>
@@ -855,10 +855,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="jaen" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="jaen" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">3 Axiomas ─▶ Ir al Caso Jaén</span>
+          <span class="proc-year">3 Axiomas y el caso Jaén</span>
           <span class="proc-sub">La prueba de fuego en tiempo real</span>
         </div>
         <div class="proc-progress" id="prog-jaen"></div>
@@ -1108,7 +1108,7 @@ input[type="range"] {
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Split Clásico en N=24 (Destruye Tr y Cal)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> TSFM Zero-Shot (|Tr|=0, |Cal|=24 íntegro)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Banda Conforme P10–P90</span>',
-      nextLabel: 'Ver Los 3 Axiomas e Ir al Caso Jaén ─▶'
+      nextLabel: 'Ver Los 3 Axiomas ─▶'
     },
     jaen: {
       accent: 'var(--ancestral)',

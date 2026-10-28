@@ -865,7 +865,7 @@ input[type="range"] {
 
     <div class="via-card" aria-label="Condiciones operativas de la Vía 4">
       <div class="via-title">
-        <span>⚡ FICHA OPERATIVA VÍA 4</span>
+        <span>⚡ FICHA OPERATIVA</span>
         <span>PREENTRENAMIENTO UNIVERSAL (TSFMs)</span>
       </div>
       <div class="via-pills">
@@ -880,7 +880,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. Paradigma Zero-Shot ─▶ 2. Chronos vs TimesFM ─▶ 3. Los 5 Grandes ─▶ 4. Límites & Pase a Conformal -->
   <nav class="flowbar" aria-label="Proceso evolutivo de la Era 4">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="zeroshot" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="zeroshot" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Paradigma Zero-Shot</span>
@@ -891,7 +891,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="duel" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="duel" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Chronos vs. TimesFM</span>
@@ -902,7 +902,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="models" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="models" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Los 5 Grandes TSFMs</span>
@@ -913,7 +913,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="limits" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="limits" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
           <span class="proc-year">Quiebre ─▶ Conformal</span>
@@ -1169,7 +1169,7 @@ input[type="range"] {
       ovLeft: '📋 Ficha Técnica de las 5 Arquitecturas',
       ovRight: '📉 Ley de Escala Empírica (Menor MASE)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> TimesFM (500M)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Chronos-Bolt (48M)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Moirai (LOTSA 27B)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Lag-Llama (2.5M)</span>',
-      nextLabel: 'Ver Límites y Pase a Conformal ─▶'
+      nextLabel: 'Ver Límites ─▶'
     },
     limits: {
       accent: 'var(--ockham)',
@@ -1186,7 +1186,7 @@ input[type="range"] {
       icon: '🛡️',
       canvasTitle: 'Disparidad Exógena y Sinergia Zero-Shot + Predicción Conforme (Achour et al., 2025)',
       ovLeft: '⚠️ Límites Operativos de los TSFMs',
-      ovRight: '⏭️ Pase a Predicción Conforme (SCP)',
+      ovRight: '⏭️ Siguiente: Predicción Conforme (SCP)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Zero-Shot + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM con pocos datos (Colapso 1.195)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Garantía Conforme ≥ 90%</span>',
       nextLabel: 'Reiniciar bucle (Zero-Shot) ↺'
     }
@@ -1821,7 +1821,7 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: PREDICCIÓN CONFORME (SCP)', rx + 14, ry + 20);
+    ctx.fillText('⏭️ SIGUIENTE: RANGOS HONESTOS (PREDICCIÓN CONFORME)', rx + 14, ry + 20);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 12.5px "Space Grotesk", sans-serif';

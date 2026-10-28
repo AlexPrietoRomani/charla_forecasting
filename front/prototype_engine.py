@@ -140,7 +140,8 @@ h1 {
   min-height: 0 !important;
 }
 .narr-block, .info-block {
-  flex: 1 1 auto !important;
+  flex: 0 0 auto !important;
+  max-height: 34% !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
@@ -153,7 +154,7 @@ h1 {
   letter-spacing: 0.08em !important;
 }
 .narr-block p, .narr-block-body, .info-block-text {
-  font-size: clamp(12.5px, 0.96vw, 15px) !important;
+  font-size: clamp(15px, 1.05vw, 19px) !important;
   line-height: 1.38 !important;
   color: #e2edf8 !important;
   margin: 0 !important;
@@ -357,6 +358,14 @@ ENGINE_RUNTIME_JS = """<script id="deck-engine-runtime-js">
       }
     });
   }
+
+  // Tecla D (modo experto): varios prototipos no la reenvían al deck; se unifica aquí
+  document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.key !== "d" && event.key !== "D") return;
+    event.stopImmediatePropagation();
+    window.parent.postMessage({ type: "deck_key", key: "d" }, "*");
+  }, true);
 
   function boot() {
     ensureEmbedded();
@@ -716,7 +725,7 @@ _GLOSSARY_VOID_TAGS = frozenset(
     {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 )
 _GLOSSARY_STAGE_CLASSES = frozenset({"stage-card"})
-_GLOSSARY_PROTECTED_CLASSES = frozenset({"hero-title", "eyebrow", "gl-term"})
+_GLOSSARY_PROTECTED_CLASSES = frozenset({"hero-title", "hero-kicker", "eyebrow", "gl-term"})
 # ponytail: título y head no son texto de la diapositiva; option se muestra en un desplegable nativo
 _GLOSSARY_PROTECTED_TAGS = frozenset({"h1", "title", "head", "option"})
 
@@ -866,6 +875,239 @@ def _normalize_dom(html_str: str) -> str:
     return html_str
 
 
+ENGINE_HERO_CSS = """<style id="deck-hero-css">
+/* === TITULAR HÉROE: EL MENSAJE ES LO PRIMERO QUE SE LEE (F12) === */
+.hero-kicker {
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  font-size: clamp(11px, 0.8vw, 13px) !important;
+  font-weight: 700 !important;
+  color: #38efff !important;
+  margin: 0 0 3px !important;
+}
+.hero-title {
+  font-size: clamp(28px, 2.4vw, 44px) !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  max-width: 30ch !important;
+  text-wrap: balance !important;
+  margin: 0 !important;
+  color: #f8fbff !important;
+}
+.hero-sub {
+  font-size: clamp(13px, 1vw, 16px) !important;
+  opacity: 0.75 !important;
+  margin: 3px 0 0 !important;
+  line-height: 1.2 !important;
+}
+.has-hero .topbar .sub {
+  display: none !important;
+}
+.has-hero .brand-mark {
+  display: none !important;
+}
+/* La píldora "Idea Clave" duplicaría el titular: queda en el DOM (el JS la actualiza) pero oculta. */
+.has-hero .executive-takeaway,
+.has-hero .takeaway-card {
+  display: none !important;
+}
+</style>"""
+
+ENGINE_HERO_JS = """<script id="deck-hero-js">
+(function () {
+  var title = document.querySelector('.hero-title[data-hero-src]');
+  if (!title) return;
+  var source = document.getElementById(title.getAttribute('data-hero-src'));
+  if (!source) return;
+  var sync = function () {
+    var text = (source.textContent || '').replace(/\\s+/g, ' ').trim();
+    if (text && title.textContent !== text) title.textContent = text;
+  };
+  new MutationObserver(sync).observe(source, { childList: true, characterData: true, subtree: true });
+})();
+</script>"""
+
+ENGINE_ROUTES_CSS = """<style id="deck-routes-css">
+/* === RUTAS CORTA / EXPERTA (F12): la etapa experta solo se ve con la tecla D === */
+html:not([data-expert]) [data-route="experta"] { display: none !important; }
+html:not([data-expert]) .proc-arrow:has(+ [data-route="experta"]) { display: none !important; }
+html:not([data-expert]) body:has([data-route="experta"]) #stageKeyHint { visibility: hidden !important; }
+</style>"""
+
+ENGINE_ROUTES_JS = """<script id="deck-routes-js">
+// ponytail: salta etapas expertas sin tocar el JS de cada prototipo; solo clics sobre los nodos
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(".proc-node[data-route]"));
+  if (!nodes.length) return;
+  var expert = function () { return root.hasAttribute("data-expert"); };
+  var current = function () {
+    return nodes.findIndex(function (n) { return n.getAttribute("aria-selected") === "true"; });
+  };
+  function hop(from, dir) {
+    for (var i = from + dir; i >= 0 && i < nodes.length; i += dir) {
+      if (nodes[i].dataset.route !== "experta") return i;
+    }
+    return -1;
+  }
+  function step(dir, key) {
+    var target = hop(current(), dir);
+    if (target >= 0) nodes[target].click();
+    else window.parent.postMessage({ type: "deck_key", key: key }, "*");
+  }
+  var observer = new MutationObserver(function () {
+    var idx = current();
+    if (expert() || idx < 0 || nodes[idx].dataset.route !== "experta") return;
+    var next = hop(idx, 1);
+    nodes[next < 0 ? hop(-1, 1) : next].click();
+  });
+  nodes.forEach(function (n) { observer.observe(n, { attributes: true, attributeFilter: ["aria-selected"] }); });
+  document.addEventListener("keydown", function (e) {
+    if (expert() || (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) return;
+    e.stopImmediatePropagation();
+    step(e.key === "ArrowRight" ? 1 : -1, e.key);
+  }, true);
+  document.addEventListener("click", function (e) {
+    if (expert() || !e.target.closest("#nextStepBtn, #btnNextAction")) return;
+    e.stopImmediatePropagation();
+    step(1, "ArrowRight");
+  }, true);
+  window.addEventListener("message", function (e) {
+    if (e.data && e.data.type === "expert") root.toggleAttribute("data-expert", !!e.data.on);
+  });
+  window.parent.postMessage({ type: "expert_query" }, "*");
+})();
+</script>"""
+
+_NAV_TARGET_PATTERN = re.compile(
+    r"^\W*(?:Pase a|Ir al|Ir a|Ver)\b.*\b(?:Diapo\w*|Caso\w*|Secci\wn)\b", re.IGNORECASE
+)
+_NAV_TEXT_PATTERNS = (
+    re.compile(r"[ \t]*(?:Pase a|Puente a|Ir a|Salto a)[ \t]+(?:la[ \t]+)?Diapo(?:sitiva)?[ \t]+\d+[ \t]*(?:→|─▶)?", re.IGNORECASE),
+    re.compile(r"[ \t]*─▶[ \t]*Diapo[ \t]+\d+", re.IGNORECASE),
+)
+_NAV_ELEMENT_PATTERN = re.compile(r"<(button|a)\b([^>]*)>(.*?)</\1\s*>", re.IGNORECASE | re.DOTALL)
+_TAXONOMY_PATTERN = re.compile(r"\b(?:V[ÍI]A|Era|Pilar|Etapa|Acto)\s+\d+(?:\s+de\s+\d+)?\b", re.IGNORECASE)
+_TAXONOMY_CONTAINER_PATTERN = re.compile(
+    r"(<(\w+)\b[^>]*class\s*=\s*[\"'][^\"']*\b(?:eyebrow|stage-tag|proc-year|step-title|via-title)\b"
+    r"[^\"']*[\"'][^>]*>)(.*?)(</\2\s*>)",
+    re.IGNORECASE | re.DOTALL,
+)
+_SEPARATORS = "·─▶\\-–—:|"
+_TAG_PATTERN = re.compile(r"<[^>]+>")
+_HERO_SOURCE_IDS = ("speakerQuote", "takeawayText")
+_GOLDEN_RULE_PATTERN = re.compile(r"Regla de Oro:\s*</strong>\s*([^<]+)", re.IGNORECASE)
+_PREFIX_TOPIC_PATTERN = re.compile(r"^\s*(?:ACTO|SECCI[ÓO]N)\s+\d+\s*[·\-–—]?\s*", re.IGNORECASE)
+_KICKER_TOPIC_MAX_CHARS = 40
+_HERO_HEADING_PATTERN = re.compile(
+    r"(?:<p\b[^>]*>(?P<eyebrow>[^<]*)</p>\s*)?<h1\b[^>]*>(?P<h1>.*?)</h1>",
+    re.IGNORECASE | re.DOTALL,
+)
+_NUMBER_SPAN_PATTERN = re.compile(
+    r"<span\b[^>]*class\s*=\s*[\"'](?:num|n)[\"'][^>]*>\s*\d+\s*</span>", re.IGNORECASE
+)
+
+
+def _visible_text(fragment: str) -> str:
+    """Devuelve el texto visible de un fragmento HTML con espacios colapsados."""
+    return re.sub(r"\s+", " ", html.unescape(_TAG_PATTERN.sub("", fragment))).strip()
+
+
+def strip_internal_nav(doc: str) -> str:
+    """Elimina botones y enlaces que saltan a otra diapositiva o caso del deck.
+
+    Si el JS del prototipo referencia el id del elemento, deja un marcador oculto y vacío
+    para que los listeners no fallen; sin id referenciado, borra el elemento.
+    """
+
+    def _replace(match: re.Match) -> str:
+        tag, attrs, inner = match.group(1), match.group(2), match.group(3)
+        if not _NAV_TARGET_PATTERN.match(_visible_text(inner)):
+            return match.group(0)
+        id_match = re.search(r"""\bid\s*=\s*["']([^"']+)["']""", attrs)
+        if id_match and doc.count(id_match.group(1)) > 1:
+            return f'<{tag} id="{id_match.group(1)}" hidden></{tag}>'
+        return ""
+
+    doc = _NAV_ELEMENT_PATTERN.sub(_replace, doc)
+    for pattern in _NAV_TEXT_PATTERNS:  # respaldo: rótulos de texto que ya no son clicables
+        doc = pattern.sub("", doc)
+    return doc
+
+
+def _clean_separators(text: str) -> str:
+    """Quita separadores huérfanos (· ─▶ -) que quedan tras eliminar una taxonomía."""
+    text = re.sub(
+        rf"[\s{_SEPARATORS}]*[{_SEPARATORS}][\s{_SEPARATORS}]*[{_SEPARATORS}][\s{_SEPARATORS}]*",
+        lambda m: f" {m.group(0).strip()[0]} ",
+        text,
+    )
+    text = re.sub(r"\s{2,}", " ", text)
+    return re.sub(rf"^[\s{_SEPARATORS}]+|[\s{_SEPARATORS}]+$", "", text)
+
+
+def unify_taxonomy(doc: str) -> str:
+    """Elimina 'VÍA N', 'Era N', 'Pilar N', 'Etapa N de 4' y 'Acto N de 4' de cabeceras y fichas."""
+
+    def _clean(match: re.Match) -> str:
+        inner = match.group(3)
+        if not _TAXONOMY_PATTERN.search(inner):
+            return match.group(0)
+        parts = re.split(r"(<[^>]+>)", inner)
+        cleaned = [part if part.startswith("<") else _TAXONOMY_PATTERN.sub("", part) for part in parts]
+        return match.group(1) + _clean_separators("".join(cleaned)) + match.group(4)
+
+    return _TAXONOMY_CONTAINER_PATTERN.sub(_clean, doc)
+
+
+def _find_hero_message(doc: str) -> tuple[str, str] | None:
+    """Localiza el texto de la Idea Clave y el id del nodo que lo actualiza (si existe)."""
+    for element_id in _HERO_SOURCE_IDS:
+        match = re.search(
+            rf"""<(\w+)\b[^>]*\bid\s*=\s*["']{element_id}["'][^>]*>(.*?)</\1\s*>""",
+            doc,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if match and _visible_text(match.group(2)):
+            return _visible_text(match.group(2)), element_id
+    golden = _GOLDEN_RULE_PATTERN.search(doc)
+    if golden:
+        return _visible_text(golden.group(1)), ""
+    return None
+
+
+def _add_has_hero_class(match: re.Match) -> str:
+    """Añade la clase `has-hero` al <body> para activar las reglas CSS del titular."""
+    attrs = match.group(1)
+    if re.search(r"class\s*=", attrs):
+        return "<body" + re.sub(r"class\s*=\s*([\"'])", r"class=\1has-hero ", attrs, count=1) + ">"
+    return f'<body{attrs} class="has-hero">'
+
+
+def promote_takeaway_to_hero(doc: str, acto: int, diapo: int) -> str:
+    """Convierte la Idea Clave en titular grande y degrada el título técnico a subtítulo."""
+    message = _find_hero_message(doc)
+    heading = _HERO_HEADING_PATTERN.search(doc)
+    if message is None or heading is None:
+        return doc
+    text, source_id = message
+    technical_title = _visible_text(_NUMBER_SPAN_PATTERN.sub("", heading.group("h1")))
+    kicker = f"Acto {int(acto)} · Diapo {int(diapo)}"
+    eyebrow = _PREFIX_TOPIC_PATTERN.sub("", _visible_text(heading.group("eyebrow") or ""))
+    if eyebrow and len(eyebrow) <= _KICKER_TOPIC_MAX_CHARS and not _TAXONOMY_PATTERN.search(eyebrow):
+        kicker = f"{kicker} · {eyebrow}"
+    src_attr = f' data-hero-src="{source_id}"' if source_id else ""
+    hero = (
+        f'<div class="hero-kicker">{html.escape(kicker)}</div>'
+        f'<h1 class="hero-title"{src_attr}>{html.escape(text)}</h1>'
+        f'<div class="hero-sub">{html.escape(technical_title)}</div>'
+    )
+    doc = doc[: heading.start()] + hero + doc[heading.end() :]
+    doc = re.sub(r'<header\b([^>]*\bclass=")([^"]*)"', r'<header\1\2 hero"', doc, count=1)
+    return re.sub(r"<body\b([^>]*)>", _add_has_hero_class, doc, count=1)
+
+
 def normalize_prototype_html(
     html_str: str,
     slide_num: int,
@@ -873,10 +1115,16 @@ def normalize_prototype_html(
     video_rel_path: str | None = None,
 ) -> str:
     """Aplica al prototipo el CSS maestro, el runtime responsivo y la Entrada Cinemática."""
-    normalized = _normalize_dom(html_str)
+    normalized = unify_taxonomy(strip_internal_nav(html_str))
+    normalized = promote_takeaway_to_hero(normalized, acto=section_num, diapo=slide_num)
+    normalized = _normalize_dom(normalized)
     normalized = _inject_before(normalized, "</head>", ENGINE_OVERRIDE_CSS)
     normalized = _inject_before(normalized, "</head>", ENGINE_GLOSSARY_CSS)
+    normalized = _inject_before(normalized, "</head>", ENGINE_HERO_CSS)
     normalized = inject_glossary(normalized)
+    has_routes = 'data-route="' in normalized
+    if has_routes:
+        normalized = _inject_before(normalized, "</head>", ENGINE_ROUTES_CSS)
     runtime = (
         ENGINE_RUNTIME_JS
         .replace("__DECK_SLIDE_NUM__", str(int(slide_num)))
@@ -884,6 +1132,9 @@ def normalize_prototype_html(
     )
     normalized = _inject_before(normalized, "</body>", runtime)
     normalized = _inject_before(normalized, "</body>", ENGINE_GLOSSARY_JS)
+    normalized = _inject_before(normalized, "</body>", ENGINE_HERO_JS)
+    if has_routes:
+        normalized = _inject_before(normalized, "</body>", ENGINE_ROUTES_JS)
     return normalized
 
 

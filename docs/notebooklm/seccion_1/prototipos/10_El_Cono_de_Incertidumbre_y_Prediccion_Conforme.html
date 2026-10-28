@@ -886,7 +886,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. El Cono y Lyapunov ─▶ 2. Los 5 Pasos SCP ─▶ 3. Local vs Global & ERCOT ─▶ 4. Riesgo Asimétrico y Pase a Diapo 11 -->
   <nav class="flowbar" aria-label="Secuencia explicativa del Cono de Incertidumbre y Predicción Conforme">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="cone" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="cone" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">La Mentira del Punto Fijo</span>
@@ -897,7 +897,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="scp" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="scp" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Receta Conforme (5 Pasos)</span>
@@ -908,7 +908,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Local vs. Global &amp; ERCOT</span>
@@ -919,10 +919,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="bridge11" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="bridge11" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Asimetría ─▶ Diapo 11</span>
+          <span class="proc-year">Asimetría del riesgo</span>
           <span class="proc-sub">P10–P90 y ¿Cómo saber cuál elegir?</span>
         </div>
         <div class="proc-progress" id="prog-bridge11"></div>
@@ -1039,7 +1039,7 @@ input[type="range"] {
 
   <!-- FOOTER -->
   <footer class="footnote">
-    <span><strong>Síntesis Sección 3:</strong> La Mentira del Punto Fijo (Lyapunov σ(h) ∝ √h) ─▶ Split Conformal Prediction (5 pasos con garantía finita MCR ≥ 1−α) ─▶ Sinergia Zero-Shot + 80% Calibración en ERCOT ─▶ <strong>Pase a Diapo 11: ¿Cómo elegir tu modelo?</strong></span>
+    <span><strong>Síntesis Sección 3:</strong> La Mentira del Punto Fijo (Lyapunov σ(h) ∝ √h) ─▶ Split Conformal Prediction (5 pasos con garantía finita MCR ≥ 1−α) ─▶ Sinergia Zero-Shot + 80% Calibración en ERCOT ─▶ <strong>Siguiente: ¿Cómo elegir tu modelo?</strong></span>
     <span>Referencias: Lei et al. (2017) Split Conformal Prediction · Lorenz (1963) · Achour et al. (2025) ERCOT/NN5/M3</span>
   </footer>
 
@@ -1122,24 +1122,24 @@ input[type="range"] {
       ovLeft: '🔀 Cuantil Local vs Global',
       ovRight: '🏆 Benchmark ERCOT (Achour et al., 2025)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Chronos-Bolt + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> LightGBM 80/20 (0.659)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM 20/80 Colapso (1.195)</span>',
-      nextLabel: 'Ver Asimetría y Pase a Diapo 11 ─▶'
+      nextLabel: 'Ver Asimetría ─▶'
     },
     bridge11: {
       accent: 'var(--ockham)',
       tag: 'DECIDIR CON RANGOS',
       title: 'Decidir con el rango P10–P90 protege del peor caso',
-      lead: 'Las bandas permiten decisiones distintas según el riesgo y abren paso al árbol de decisión de la diapositiva 11.',
+      lead: 'Las bandas permiten decisiones distintas según el riesgo y abren paso al árbol de decisión que sigue.',
       b1Label: '⚖️ Decidir según el riesgo',
       b1Text: 'P90 para riesgos fatales (energía, salud), P50 como valor esperado y P10 como presupuesto mínimo.',
       b2Label: '🧭 Siguiente: elegir modelo',
       b2Text: 'Con las cuatro familias y el cono conforme claros, pasamos al árbol de decisión ejecutiva.',
-      formula: '4 Eras + Cono Conforme (P10–P90) ──▶ Diapo 11: Árbol de Decisión en 3 Preguntas',
+      formula: '4 Eras + Cono Conforme (P10–P90) ──▶ Siguiente: Árbol de Decisión en 3 Preguntas',
       hint: 'Siguiente Diapo (Cierre Final) · Matriz Ejecutiva y Árbol de Decisión Sectorial',
       quote: 'Decidir con rangos protege de la ruina.',
       icon: '🧭',
-      canvasTitle: 'Toma de Decisiones Asimétrica (P10 / P50 / P90) y Puente a la Diapositiva 11',
+      canvasTitle: 'Toma de Decisiones Asimétrica (P10 / P50 / P90)',
       ovLeft: '⚖️ Toma de Decisiones Asimétrica (P10/P90)',
-      ovRight: '⏭️ Pase a Diapo 11 (Árbol de Decisión)',
+      ovRight: '⏭️ Siguiente: Árbol de Decisión',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> P90 (Cobertura Antiapagón / Stock Crítico)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> P50 (Valor Esperado)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> P10 (Escenario Conservador)</span>',
       nextLabel: 'Reiniciar bucle (Cono) ↺'
     }
@@ -1213,7 +1213,7 @@ input[type="range"] {
     } else {
       $('kpi1').innerHTML = `Decisión Elegida: <strong style="color:var(--ockham)">Cuantil P${state.targetQuantile}</strong>`;
       $('kpi2').innerHTML = `Riesgo Apagón: <strong style="color:var(--lab)">Blindado</strong>`;
-      $('kpi3').innerHTML = `Siguiente Diapo: <strong style="color:var(--phi)">11. Árbol de Decisión</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--phi)">Árbol de Decisión</strong>`;
     }
 
     document.querySelectorAll('.proc-node').forEach(btn => {
@@ -1823,7 +1823,7 @@ input[type="range"] {
     ctx.fillStyle = '#38efff';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 11 (EL CIERRE EJECUTIVO)', rx + 14, ry + 20);
+    ctx.fillText('⏭️ SIGUIENTE: EL CIERRE EJECUTIVO', rx + 14, ry + 20);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 13px "Space Grotesk", sans-serif';

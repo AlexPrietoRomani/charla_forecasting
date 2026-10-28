@@ -865,7 +865,7 @@ input[type="range"] {
 
     <div class="via-card" aria-label="Condiciones operativas de la Vía 2">
       <div class="via-title">
-        <span>⚡ FICHA OPERATIVA VÍA 2</span>
+        <span>⚡ FICHA OPERATIVA</span>
         <span>MATRIZ SUPERVISADA + GBDT</span>
       </div>
       <div class="via-pills">
@@ -880,7 +880,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: Lags ─▶ Walmart M5 ─▶ Trampa del Árbol ─▶ Crisis Texas & Pase a Era 3 -->
   <nav class="flowbar" aria-label="Proceso evolutivo de la Era 2">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="lags" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="lags" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Truco de los Lags</span>
@@ -891,7 +891,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="m5" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="m5" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Reinado Walmart M5</span>
@@ -902,7 +902,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="trap" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="trap" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Trampa de los Árboles</span>
@@ -913,11 +913,11 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Texas 2021 ─▶ Era 3</span>
-          <span class="proc-sub">Apagón ERCOT y pase a Parches</span>
+          <span class="proc-year">Texas 2021 ─▶ Redes neuronales</span>
+          <span class="proc-sub">Apagón de Texas 2021</span>
         </div>
         <div class="proc-progress" id="prog-ercot"></div>
       </button>
@@ -1116,7 +1116,7 @@ input[type="range"] {
       ovLeft: '📦 Rango Histórico de Entrenamiento',
       ovRight: '🧱 Meseta Plana fuera de rango (y = cte)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Escalones del Árbol (GBDT)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Realidad Física Continua</span><span class="leg-item"><i class="leg-line dashed" style="--c:#38efff"></i> Frontera Histórica X_máx</span>',
-      nextLabel: 'Ver Crisis Texas y Pase a Era 3 ─▶'
+      nextLabel: 'Ver Crisis Texas ─▶'
     },
     ercot: {
       accent: 'var(--rupture)',
@@ -1133,7 +1133,7 @@ input[type="range"] {
       icon: '❄️',
       canvasTitle: 'Crisis ERCOT Texas 2021 (+20 GW de Error) y Transición a la Era 3 (Parches)',
       ovLeft: '❄️ Crisis ERCOT Texas 2021 (+20 GW)',
-      ovRight: '⏭️ Salto a Era 3 (Parches PatchTST)',
+      ovRight: '⏭️ Siguiente: Parches PatchTST',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Demanda Real ERCOT (85 GW)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Meseta Plana GBDT (65 GW)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Salto a Era 3 (Parches)</span>',
       nextLabel: 'Reiniciar bucle (Lags) ↺'
     }
@@ -1722,7 +1722,7 @@ input[type="range"] {
     ctx.fillStyle = '#d8b4fe';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: ERA 3', rx + 14, ry + 22);
+    ctx.fillText('⏭️ SIGUIENTE: REDES NEURONALES', rx + 14, ry + 22);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 13px "Space Grotesk", sans-serif';
