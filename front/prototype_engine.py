@@ -9,8 +9,11 @@ en los prototipos HTML embebidos por back/build_deck.py.
 from __future__ import annotations
 
 import base64
+import html
 import re
 from pathlib import Path
+
+from front.deck_glossary import GLOSSARY
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
@@ -601,6 +604,247 @@ def render_slide_video_gate(
 </div>"""
 
 
+ENGINE_GLOSSARY_CSS = """<style id="deck-glossary-css">
+/* === GLOSARIO VISUAL DE TÉRMINOS PARA PÚBLICO NO ESTADÍSTICO (F12) === */
+.gl-term {
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+  outline: none;
+}
+.gl-term:focus-visible {
+  outline: 2px solid #38efff;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+/* Un solo tooltip fijo en body: no lo recortan los contenedores con overflow:hidden */
+#gl-tip {
+  position: fixed;
+  z-index: 2147483647;
+  max-width: 38ch;
+  width: max-content;
+  white-space: normal;
+  pointer-events: none;
+  display: none;
+  font: 400 clamp(12px, 0.95vw, 15px)/1.35 "IBM Plex Sans", system-ui, sans-serif;
+  color: #e6f4ff;
+  background: #071425;
+  border: 1px solid rgba(56, 239, 255, 0.45);
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+#gl-tip b { color: #7dd3fc; font-weight: 700; }
+</style>"""
+
+ENGINE_GLOSSARY_JS = """<script id="deck-glossary-js">
+/* === TOOLTIP FIJO DEL GLOSARIO (F12): un elemento, posicionado con getBoundingClientRect === */
+(function () {
+  "use strict";
+  var GAP = 8;
+  var MARGIN = 8;
+  var tip = null;
+  var current = null;
+
+  function ensureTip() {
+    if (tip) return tip;
+    tip = document.createElement("div");
+    tip.id = "gl-tip";
+    tip.setAttribute("role", "tooltip");
+    document.body.appendChild(tip);
+    return tip;
+  }
+
+  function termFrom(target) {
+    return target && target.closest ? target.closest(".gl-term") : null;
+  }
+
+  function show(term) {
+    var box = ensureTip();
+    current = term;
+    box.textContent = "";
+    var strong = document.createElement("b");
+    strong.textContent = term.getAttribute("data-def") || "";
+    box.appendChild(strong);
+    box.appendChild(document.createTextNode(" · " + (term.getAttribute("data-analogia") || "")));
+    box.style.display = "block";
+    place(term, box);
+  }
+
+  function place(term, box) {
+    var r = term.getBoundingClientRect();
+    var w = box.offsetWidth;
+    var h = box.offsetHeight;
+    var top = r.bottom + GAP;
+    if (top + h > window.innerHeight - MARGIN) top = r.top - h - GAP;
+    var left = Math.max(MARGIN, Math.min(r.left, window.innerWidth - w - MARGIN));
+    box.style.left = Math.round(left) + "px";
+    box.style.top = Math.round(Math.max(MARGIN, top)) + "px";
+  }
+
+  function hide() {
+    current = null;
+    if (tip) tip.style.display = "none";
+  }
+
+  document.addEventListener("mouseover", function (event) {
+    var term = termFrom(event.target);
+    if (term) {
+      if (term !== current) show(term);
+    } else if (current && !termFrom(document.activeElement)) {
+      hide();
+    }
+  });
+  document.addEventListener("focusin", function (event) {
+    var term = termFrom(event.target);
+    if (term) show(term);
+  });
+  document.addEventListener("focusout", function (event) {
+    if (termFrom(event.target)) hide();
+  });
+  window.addEventListener("scroll", hide, true);
+  window.addEventListener("resize", hide);
+})();
+</script>"""
+
+_GLOSSARY_SPLIT_PATTERN = re.compile(
+    r"(<script.*?</script>|<style.*?</style>|<!--.*?-->|<pre.*?</pre>|<code.*?</code>|<[^>]+>)",
+    re.DOTALL | re.IGNORECASE,
+)
+_GLOSSARY_TAG_PATTERN = re.compile(r"<(/?)([a-zA-Z][\w-]*)([^>]*)>")
+_GLOSSARY_CLASS_PATTERN = re.compile(r"""class\s*=\s*["']([^"']*)["']""", re.IGNORECASE)
+_GLOSSARY_VOID_TAGS = frozenset(
+    {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+)
+_GLOSSARY_STAGE_CLASSES = frozenset({"stage-card"})
+_GLOSSARY_PROTECTED_CLASSES = frozenset({"hero-title", "eyebrow", "gl-term"})
+# ponytail: título y head no son texto de la diapositiva; option se muestra en un desplegable nativo
+_GLOSSARY_PROTECTED_TAGS = frozenset({"h1", "title", "head", "option"})
+
+
+def _build_term_index(glossary: dict) -> tuple[dict[str, str], re.Pattern]:
+    """Indexa términos y alias en minúscula y compila el patrón de búsqueda.
+
+    Args:
+        glossary (dict): Glosario con claves canónicas y alias opcionales.
+
+    Returns:
+        tuple[dict[str, str], re.Pattern]: Índice alias->clave canónica y patrón
+        con alternativas ordenadas de la más larga a la más corta.
+    """
+    index: dict[str, str] = {}
+    for key, entry in glossary.items():
+        for candidate in [key, *entry.get("alias", [])]:
+            index.setdefault(str(candidate).casefold(), key)
+    alternatives = sorted(index, key=len, reverse=True)
+    # ponytail: límites de palabra con \w; no cubre términos que empiecen o terminen en símbolos
+    pattern = re.compile(
+        r"(?<!\w)(" + "|".join(re.escape(alt) for alt in alternatives) + r")(?!\w)",
+        re.IGNORECASE,
+    )
+    return index, pattern
+
+
+def _mark_text(
+    text: str,
+    index: dict[str, str],
+    pattern: re.Pattern,
+    glossary: dict,
+    seen_keys: set[tuple[int, str]],
+    block_id: int,
+) -> str:
+    """Envuelve la primera aparición de cada término en un bloque de texto visible.
+
+    Args:
+        text (str): Fragmento de texto visible, sin etiquetas.
+        index (dict[str, str]): Índice alias->clave canónica.
+        pattern (re.Pattern): Patrón que localiza términos y alias.
+        glossary (dict): Glosario fuente de definiciones y analogías.
+        seen_keys (set[tuple[int, str]]): Pares (bloque, clave) ya marcados; se modifica.
+        block_id (int): Identificador del bloque de etapa actual.
+
+    Returns:
+        str: Texto con los términos nuevos envueltos en `<span class="gl-term">`.
+    """
+
+    def _replace(match: re.Match) -> str:
+        original = match.group(0)
+        key = index[original.casefold()]
+        marker = (block_id, key)
+        if marker in seen_keys:
+            return original
+        seen_keys.add(marker)
+        entry = glossary[key]
+        definition = html.escape(str(entry.get("def", "")), quote=True)
+        analogy = html.escape(str(entry.get("analogia", "")), quote=True)
+        return (
+            f'<span class="gl-term" tabindex="0" data-def="{definition}" '
+            f'data-analogia="{analogy}">{original}</span>'
+        )
+
+    return pattern.sub(_replace, text)
+
+
+def inject_glossary(doc: str, glossary: dict | None = None) -> str:
+    """Marca la primera mención visible de cada término del glosario por bloque de etapa.
+
+    Recorre el HTML por tokens: solo modifica texto visible. Omite `<script>`,
+    `<style>`, comentarios, `<pre>`/`<code>`, atributos y el contenido de `<h1>`,
+    `.hero-title`, `.eyebrow` y `.gl-term`. Un bloque de etapa comienza en cada
+    tarjeta `.stage-card`; sin tarjetas, todo el documento es un solo bloque.
+
+    Args:
+        doc (str): HTML del prototipo ya normalizado.
+        glossary (dict | None): Glosario alternativo. Por defecto usa GLOSSARY.
+
+    Returns:
+        str: HTML con los términos envueltos en `<span class="gl-term">`.
+    """
+    source = GLOSSARY if glossary is None else glossary
+    index, pattern = _build_term_index(source)
+    tokens = _GLOSSARY_SPLIT_PATTERN.split(doc)
+    seen_keys: set[tuple[int, str]] = set()
+    # ponytail: pila de etiquetas abiertas; sin soporte para spans anidados (el HTML fuente no los trae)
+    # Cada entrada: (nombre de etiqueta, zona protegida, es_gl-term). Así la idempotencia
+    # reconoce términos ya marcados y no los vuelve a marcar.
+    stack: list[tuple[str, bool, bool]] = []
+    block_id = 0
+    output: list[str] = []
+    for position, token in enumerate(tokens):
+        if position % 2 == 0:
+            if stack and stack[-1][2]:
+                # Texto de un término ya marcado: registra su clave como vista en este bloque
+                term_key = index.get(token.strip().casefold())
+                if term_key is not None:
+                    seen_keys.add((block_id, term_key))
+                output.append(token)
+            elif any(protected for _, protected, _ in stack):
+                output.append(token)
+            else:
+                output.append(_mark_text(token, index, pattern, source, seen_keys, block_id))
+            continue
+        output.append(token)
+        tag = _GLOSSARY_TAG_PATTERN.fullmatch(token)
+        if tag is None:
+            continue
+        closing, name, attrs = tag.group(1), tag.group(2).lower(), tag.group(3)
+        if closing:
+            for depth in range(len(stack) - 1, -1, -1):
+                if stack[depth][0] == name:
+                    del stack[depth:]
+                    break
+            continue
+        if attrs.rstrip().endswith("/") or name in _GLOSSARY_VOID_TAGS:
+            continue
+        class_match = _GLOSSARY_CLASS_PATTERN.search(attrs)
+        classes = set(class_match.group(1).split()) if class_match else set()
+        if classes & _GLOSSARY_STAGE_CLASSES:
+            block_id += 1
+        is_term = "gl-term" in classes
+        protected = name in _GLOSSARY_PROTECTED_TAGS or bool(classes & _GLOSSARY_PROTECTED_CLASSES)
+        stack.append((name, protected, is_term))
+    return "".join(output)
+
+
 def _inject_before(html_str: str, closing_tag: str, payload: str) -> str:
     if closing_tag in html_str:
         return html_str.replace(closing_tag, payload + "\n" + closing_tag, 1)
@@ -631,12 +875,15 @@ def normalize_prototype_html(
     """Aplica al prototipo el CSS maestro, el runtime responsivo y la Entrada Cinemática."""
     normalized = _normalize_dom(html_str)
     normalized = _inject_before(normalized, "</head>", ENGINE_OVERRIDE_CSS)
+    normalized = _inject_before(normalized, "</head>", ENGINE_GLOSSARY_CSS)
+    normalized = inject_glossary(normalized)
     runtime = (
         ENGINE_RUNTIME_JS
         .replace("__DECK_SLIDE_NUM__", str(int(slide_num)))
         .replace("__DECK_HAS_VIDEO__", "true" if video_rel_path else "false")
     )
     normalized = _inject_before(normalized, "</body>", runtime)
+    normalized = _inject_before(normalized, "</body>", ENGINE_GLOSSARY_JS)
     return normalized
 
 
