@@ -1196,6 +1196,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1474,6 +1505,23 @@ input[type="range"] {
     ctx.restore();
   }
 
+  // Dibuja texto dentro de maxW: prueba alternativas más cortas y, si hace falta, reduce la fuente (mín. 11 px)
+  function fitFill(text, x, y, maxW, alts) {
+    const cands = [text].concat(alts || []);
+    let pick = cands.find(t => ctx.measureText(t).width <= maxW);
+    if (!pick) {
+      pick = cands[cands.length - 1];
+      const m = /(\d+(?:\.\d+)?)px/.exec(ctx.font);
+      let px = m ? parseFloat(m[1]) : 13;
+      const base = ctx.font;
+      while (px > 11 && ctx.measureText(pick).width > maxW) {
+        px -= 0.5;
+        ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+      }
+    }
+    ctx.fillText(pick, x, y);
+  }
+
   // ACTO 2: DUELO DE ESCUELAS: CHRONOS (4096 TOKENS DISCRETOS) VS TIMESFM (PARCHES CONTINUOS)
   function drawDuelStage(w, h) {
     const pad = 18, padT = 46;
@@ -1490,10 +1538,10 @@ input[type="range"] {
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🔤 CHRONOS (Amazon): Cuantización a 4,096 Tokens', lx + 14, ly + 22);
+    fitFill('🔤 CHRONOS (Amazon): Cuantización a 4,096 Tokens', lx + 14, ly + 22, halfW - 28, ['🔤 CHRONOS (Amazon): 4,096 Tokens']);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '500 13px Inter, sans-serif';
-    ctx.fillText('Escala y corta valores continuos en “palabras” discretas para un modelo T5:', lx + 14, ly + 40);
+    fitFill('Escala y corta valores continuos en “palabras” discretas para un modelo T5:', lx + 14, ly + 40, halfW - 28, ['Convierte valores continuos en “palabras” discretas:']);
 
     // Gráfico de onda cuantizada en escalones + bloques de tokens [ID]
     const cTop = ly + 54, cH = boxH * 0.44;
@@ -1554,8 +1602,8 @@ input[type="range"] {
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 13px Inter, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('• Arquitectura T5 (46M / 48M en Chronos-Bolt).', cLeft, ly + boxH - 32);
-    ctx.fillText('• Entrena con Cross-Entropy y muestrea tokens futuros.', cLeft, ly + boxH - 14);
+    fitFill('• Arquitectura T5 (46M / 48M en Chronos-Bolt).', cLeft, ly + boxH - 32, cW, ['• Arquitectura T5 (46M / 48M).']);
+    fitFill('• Entrena con Cross-Entropy y muestrea tokens futuros.', cLeft, ly + boxH - 14, cW, ['• Entrena con Cross-Entropy; muestrea tokens.']);
     ctx.restore();
 
     // DERECHA: TIMESFM DE GOOGLE ("GEOMETRÍA CONTINUA POR PARCHES")
@@ -1568,10 +1616,10 @@ input[type="range"] {
     ctx.fillStyle = '#a5f3fc';
     ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText(`📐 TIMESFM (Google): Bloques de Parches Continuos (P=${state.patchBins})`, rx + 14, ry + 22);
+    fitFill(`📐 TIMESFM (Google): Bloques de Parches Continuos (P=${state.patchBins})`, rx + 14, ry + 22, halfW - 28, [`📐 TIMESFM (Google): Parches Continuos (P=${state.patchBins})`]);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '500 13px Inter, sans-serif';
-    ctx.fillText('Sin cuantizar: proyecta parches continuos y predice bloques largos de golpe:', rx + 14, ry + 40);
+    fitFill('Sin cuantizar: proyecta parches continuos y predice bloques largos de golpe:', rx + 14, ry + 40, halfW - 28, ['Sin cuantizar: predice bloques largos de golpe:']);
 
     const rLeft = rx + 16, rW = halfW - 32;
     const pCount = 4; // 3 parches de entrada -> 1 mega-bloque de salida
@@ -1612,13 +1660,13 @@ input[type="range"] {
     ctx.fillStyle = '#e2eeff';
     ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('Decoder-Only (200M / 500M) · Optimiza MSE directo en 1 pasada forward', rLeft + rW / 2, tokY + 15);
+    fitFill('Decoder-Only (200M / 500M) · Optimiza MSE directo en 1 pasada forward', rLeft + rW / 2, tokY + 15, rW - 12, ['Decoder-Only (200M / 500M) · MSE directo en 1 pasada']);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 13px Inter, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('• Conserva los valores reales exactos sin discretizar.', rLeft, ry + boxH - 32);
-    ctx.fillText('• Evita acumular error paso a paso en horizontes largos.', rLeft, ry + boxH - 14);
+    fitFill('• Conserva los valores reales exactos sin discretizar.', rLeft, ry + boxH - 32, rW, ['• Conserva los valores reales sin discretizar.']);
+    fitFill('• Evita acumular error paso a paso en horizontes largos.', rLeft, ry + boxH - 14, rW, ['• Evita acumular error en horizontes largos.']);
     ctx.restore();
   }
 

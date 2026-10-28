@@ -1211,7 +1211,7 @@ input[type="range"] {
     ctx.textAlign = 'left';
     ctx.fillText('⚙️ MECÁNICA DEL RETRASO (τ = 6 A 8 MESES)', pad + 14, padT + 20);
 
-    const midY = padT + usableH * 0.52;
+    const midY = padT + usableH * 0.46;
     const stimX = pad + leftW * 0.17;
     const gearX = pad + leftW * 0.50;
     const harvX = pad + leftW * 0.83;
@@ -1316,7 +1316,7 @@ input[type="range"] {
       footFs -= 0.5;
       ctx.font = '500 ' + footFs + 'px "JetBrains Mono"';
     }
-    ctx.fillText(footLine, pad + leftW / 2, padT + usableH - 13);
+    ctx.fillText(footLine, pad + leftW / 2, padT + usableH - 8);
     ctx.restore();
 
     // 2. MITAD DERECHA: GRÁFICO DE UMBRAL Y COLAPSO BIOLÓGICO (CURVA SIGMOIDE + QUIEBRE EN VPD > 1.8 kPa)

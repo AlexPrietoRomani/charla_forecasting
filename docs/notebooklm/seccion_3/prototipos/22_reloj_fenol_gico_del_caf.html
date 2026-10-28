@@ -1104,6 +1104,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1201,11 +1232,15 @@ input[type="range"] {
     const usableW = w - pad * 2;
     const usableH = h - padT - 12;
 
-    const clockAreaW = usableW * 0.50;
-    const cx = pad + clockAreaW * 0.48;
+    const compactLayout = usableH < 340;
+    const clockAreaW = usableW * (compactLayout ? 0.42 : 0.50);
     const cy = padT + usableH * 0.50;
-    const outerR = Math.min(clockAreaW * 0.42, usableH * 0.42);
-    const midR = outerR * 0.77;
+    // Pantalla baja: la rueda ocupa toda la altura útil y los rótulos de ventana van en columna a su izquierda
+    const outerR = compactLayout
+      ? Math.min(clockAreaW * 0.36, usableH / 2 - 4)
+      : Math.min(clockAreaW * 0.42, usableH * 0.42);
+    const cx = compactLayout ? pad + clockAreaW - outerR - 4 : pad + clockAreaW * 0.48;
+    const midR = outerR * (compactLayout ? 0.68 : 0.77);
     const innerR = outerR * 0.40;
 
     // 12 meses del año cafetero comenzando en AGOSTO arriba a la izquierda (como en image4.png)
@@ -1296,7 +1331,7 @@ input[type="range"] {
       const tx = cx + Math.cos(aMid) * ((outerR + midR) / 2);
       const ty = cy + Math.sin(aMid) * ((outerR + midR) / 2);
       ctx.fillStyle = isWinSel ? '#040812' : '#e2eeff';
-      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.font = `700 ${Math.max(10, Math.min(13, (outerR - midR) * 0.62))}px "JetBrains Mono"`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(item.m, tx, ty);
@@ -1356,7 +1391,7 @@ input[type="range"] {
     // Función helper para badges limpios con pastilla de fondo
     function drawPhaseBadge(bx, by, text, borderColor, isActive) {
       ctx.save();
-      ctx.font = (isActive ? '700 ' : '600 ') + '10px "JetBrains Mono", monospace';
+      ctx.font = (isActive ? '700 ' : '600 ') + (compactLayout ? '11px' : '10px') + ' "JetBrains Mono", monospace';
       const tw = ctx.measureText(text).width + 16;
       const th = 22;
       ctx.fillStyle = isActive ? 'rgba(10, 22, 44, 0.96)' : 'rgba(4, 9, 22, 0.88)';
@@ -1374,6 +1409,13 @@ input[type="range"] {
     }
 
     // Badges limpios exteriores de las 3 ventanas sin recorte de texto
+    if (compactLayout) {
+      // Pantalla baja: badges apilados a la izquierda de la rueda, fuera del anillo
+      const colX = pad + 4 + (cx - outerR - 8 - pad - 4) / 2;
+      drawPhaseBadge(colX, cy - 34, '🌸 Floración', '#ff7a59', state.winIdx === 0);
+      drawPhaseBadge(colX, cy, '🟢 Llenado', '#6ef0b4', state.winIdx === 1);
+      drawPhaseBadge(colX, cy + 34, '🍒 Cosecha', '#38efff', state.winIdx === 2);
+    } else {
     drawPhaseBadge(cx - outerR * 0.65, cy - outerR * 0.72, '🌸 Floración (56%)', '#ff7a59', state.winIdx === 0);
     drawPhaseBadge(cx, cy + outerR + 18, '🟢 Llenado (relación fuerte)', '#6ef0b4', state.winIdx === 1);
     // Badge de Cosecha: fuera del borde del anillo (diagonal superior derecha) con línea guía
@@ -1388,6 +1430,7 @@ input[type="range"] {
     ctx.stroke();
     ctx.restore();
     drawPhaseBadge(cx + Math.cos(cosechaAng) * cosechaDist, cy + Math.sin(cosechaAng) * cosechaDist, '🍒 Cosecha (Mar–Jul)', '#38efff', state.winIdx === 2);
+    }
 
     // PANEL DERECHO: TARJETA DE DIAGNÓSTICO DE LA VENTANA SELECCIONADA + LAS 3 VENTANAS RESUMIDAS
     const rx = pad + clockAreaW + 10;
@@ -1408,22 +1451,30 @@ input[type="range"] {
     const topY2 = padT + (isCompact ? 33 : 46);
     const topY3 = padT + (isCompact ? 48 : 66);
 
-    ctx.fillStyle = wInfo.color;
-    ctx.font = isCompact ? '700 9px "JetBrains Mono"' : '700 10.5px "JetBrains Mono"';
+    // En pantallas bajas (1366×768) la ventana activa y su impacto ya están en las píldoras
+    // superiores: se deja solo el nombre para dar altura legible a las 3 tarjetas.
     ctx.textAlign = 'left';
-    ctx.fillText(`${wInfo.icon} VENTANA ACTIVA · ${wInfo.months}`, rx + 16, topY1);
+    if (isCompact) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 13px "Space Grotesk", sans-serif';
+      ctx.fillText(`${wInfo.icon} ${wInfo.name}`, rx + 16, padT + 19);
+    } else {
+      ctx.fillStyle = wInfo.color;
+      ctx.font = '700 10.5px "JetBrains Mono"';
+      ctx.fillText(`${wInfo.icon} VENTANA ACTIVA · ${wInfo.months}`, rx + 16, topY1);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = isCompact ? '700 13px "Space Grotesk", sans-serif' : '700 15px "Space Grotesk", sans-serif';
-    ctx.fillText(wInfo.name, rx + 16, topY2);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 15px "Space Grotesk", sans-serif';
+      ctx.fillText(wInfo.name, rx + 16, topY2);
 
-    ctx.fillStyle = '#fde68a';
-    ctx.font = isCompact ? '700 9.5px "JetBrains Mono"' : '700 11px "JetBrains Mono"';
-    ctx.fillText(`Impacto Estadístico: ${wInfo.metric}`, rx + 16, topY3);
+      ctx.fillStyle = '#fde68a';
+      ctx.font = '700 11px "JetBrains Mono"';
+      ctx.fillText(`Impacto Estadístico: ${wInfo.metric}`, rx + 16, topY3);
+    }
 
     function drawWrappedBox(title, text, yStart, borderCol, titleCol) {
-      const availH = usableH - (isCompact ? 56 : 80);
-      const boxH = Math.max(40, Math.floor((availH - (isCompact ? 10 : 16)) / 3));
+      const availH = usableH - (isCompact ? 32 : 80);
+      const boxH = Math.max(40, Math.floor((availH - (isCompact ? 8 : 16)) / 3));
       ctx.fillStyle = 'rgba(4, 9, 20, 0.82)';
       ctx.strokeStyle = borderCol;
       ctx.lineWidth = 1.2;
@@ -1432,10 +1483,10 @@ input[type="range"] {
       ctx.fill();
       ctx.stroke();
 
-      const titleSize = isCompact ? 9.5 : 13.5;
-      const minBody = isCompact ? 9.5 : 11.5;
-      let bodySize = isCompact ? 9.5 : 13.5;
-      const lineStep = isCompact ? 11 : 17.5;
+      const titleSize = isCompact ? 10 : 13.5;
+      const minBody = isCompact ? 11 : 11.5;
+      let bodySize = isCompact ? 11.5 : 13.5;
+      const lineStep = isCompact ? 12.5 : 17.5;
       const maxW = rw - 44;
 
       let lines = [];
@@ -1454,13 +1505,13 @@ input[type="range"] {
           }
         });
         lines.push(line);
-        const needed = titleSize + 6 + lines.length * lineStep + 12;
+        const needed = titleSize + 6 + lines.length * lineStep + (isCompact ? 6 : 12);
         if (needed <= boxH || bodySize <= minBody) break;
         bodySize -= 0.5;
       }
 
       const contentH = titleSize + 6 + lines.length * lineStep;
-      const topY = yStart + Math.max(isCompact ? 6 : 9, (boxH - contentH) / 2);
+      const topY = yStart + Math.max(isCompact ? 3 : 9, (boxH - contentH) / 2);
 
       ctx.fillStyle = titleCol;
       ctx.font = `700 ${titleSize}px "JetBrains Mono"`;
@@ -1473,7 +1524,7 @@ input[type="range"] {
       return yStart + boxH + (isCompact ? 5 : 8);
     }
 
-    let nextY = padT + (isCompact ? 58 : 80);
+    let nextY = padT + (isCompact ? 30 : 80);
     nextY = drawWrappedBox('🌿 PROCESO FISIOLÓGICO EN LA PLANTA:', wInfo.bio, nextY, 'rgba(148,163,184,0.22)', '#a5f3fc');
     nextY = drawWrappedBox('🔥 UMBRAL CRÍTICO Y RIESGO DE QUIEBRE:', wInfo.hazard, nextY, 'rgba(255,82,119,0.35)', '#fda4af');
     drawWrappedBox('🧠 TRADUCCIÓN PARA EL MODELO DE IA:', wInfo.aiRule, nextY, 'rgba(110,240,180,0.35)', '#8ef7c7');
@@ -1803,7 +1854,7 @@ input[type="range"] {
     ctx.fillStyle = '#a5f3fc';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🍒 VENTANA 3 (MAR–JUL): ¿POR QUÉ EL EXCESO DE LLUVIA DAÑA AQUÍ?', pad + 14, padT + 20);
+    ctx.fillText('🍒 VENTANA 3 (MAR–JUL): ¿POR QUÉ DAÑA LA LLUVIA?', pad + 14, padT + 20);
 
     // Comparación visual de dos escenarios en Cosecha (Seco Óptimo vs Lluvioso con Broca)
     const c1Y = padT + 34, cH = (usableH - 54) / 2;
@@ -1833,7 +1884,7 @@ input[type="range"] {
 
     ctx.fillStyle = '#fda4af';
     ctx.font = '700 10px "JetBrains Mono"';
-    ctx.fillText('🌧️🪲 LLUVIA INTENSA EN COSECHA · ¡DESASTRE FITOSANITARIO!', pad + 22, c2Y + 20);
+    ctx.fillText('🌧️🪲 LLUVIA EN COSECHA · ¡DESASTRE!', pad + 22, c2Y + 20);
     ctx.fillStyle = '#e2eeff';
     ctx.font = '500 9.5px Inter, sans-serif';
     ctx.fillText('• Golpe mecánico tira las cerezas maduras al suelo y las pudre.', pad + 22, c2Y + 38);

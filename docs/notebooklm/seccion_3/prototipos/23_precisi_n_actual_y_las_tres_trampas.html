@@ -1135,6 +1135,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1428,15 +1459,24 @@ input[type="range"] {
     const rxStart = pad + leftW + 8;
     const rw = usableW - leftW - 8;
     const isCompactH = usableH < 310;
-    const bannerH = isCompactH ? 36 : 44;
+    const bannerH = isCompactH ? 28 : 44;
     const gap = isCompactH ? 5 : 8;
     const cardsAreaH = usableH - bannerH - (isCompactH ? 6 : 10);
-    const cardH = (cardsAreaH - gap * 2) / 3;
+    const cardH0 = (cardsAreaH - gap * 2) / 3;
+    // Pantalla baja: la tarjeta activa se expande (título + descripción + remedio) y las otras
+    // se reducen a título + remedio, para que nunca se superpongan líneas.
+    const accordion = cardH0 < 62;
+    const selH = accordion ? 64 : cardH0;
+    const otherH = accordion ? (cardsAreaH - gap * 2 - selH) / 2 : cardH0;
+    let cyAcc = padT;
 
     STACK_TRAPS.forEach((tr, idx) => {
-      const cy = padT + idx * (cardH + gap);
       const isSel = (idx === state.trapIdx);
+      const cardH = accordion ? (isSel ? selH : otherH) : cardH0;
+      const cy = cyAcc;
+      cyAcc += cardH + gap;
       const isCardCompact = cardH < 62;
+      const showSub = !accordion || isSel;
 
       ctx.save();
       ctx.fillStyle = isSel ? 'rgba(15, 25, 45, 0.96)' : 'rgba(8, 15, 30, 0.86)';
@@ -1454,12 +1494,12 @@ input[type="range"] {
       ctx.fill();
 
       const maxTextW = rw - 36;
-      let titleSize = isCardCompact ? 10 : 14.5;
-      let subSize = isCardCompact ? 9 : 12.5;
-      let remSize = isCardCompact ? 9 : 12;
-      const minTitle = isCardCompact ? 9 : 10.5;
-      const minSub = isCardCompact ? 8.5 : 9.5;
-      const minRem = isCardCompact ? 8 : 9;
+      let titleSize = accordion ? 12 : (isCardCompact ? 10 : 14.5);
+      let subSize = accordion ? 11 : (isCardCompact ? 9 : 12.5);
+      let remSize = accordion ? 10 : (isCardCompact ? 9 : 12);
+      const minTitle = accordion ? 10.5 : (isCardCompact ? 9 : 10.5);
+      const minSub = accordion ? 10 : (isCardCompact ? 8.5 : 9.5);
+      const minRem = accordion ? 9.5 : (isCardCompact ? 8 : 9);
 
       ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
       while (titleSize > minTitle && ctx.measureText(tr.trapTitle).width > maxTextW) {
@@ -1472,22 +1512,22 @@ input[type="range"] {
         ctx.font = `500 ${subSize}px Inter, sans-serif`;
       }
 
-      const remText = tr.remedy;
+      const remText = accordion ? tr.remedy.replace('(|Tr|=0) ', '') : tr.remedy;
       ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       while (remSize > minRem && ctx.measureText(remText).width + 30 > rw - 32) {
         remSize -= 0.5;
         ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       }
 
-      const pillH = isCardCompact ? 14 : 20;
-      const blockH = titleSize + 5 + subSize + 7 + pillH;
+      const pillH = accordion ? 16 : (isCardCompact ? 14 : 20);
+      const blockH = titleSize + 5 + (showSub ? subSize + 7 : 2) + pillH;
       const startY = Math.min(
         cy + Math.max(6, (cardH - blockH) / 2),
         cy + cardH - blockH - 4
       );
       const titleBaseY = startY + titleSize;
       const subBaseY = titleBaseY + 5 + subSize;
-      const pillY = subBaseY + 7;
+      const pillY = showSub ? subBaseY + 7 : titleBaseY + 7;
 
       ctx.fillStyle = '#ffffff';
       ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
@@ -1496,7 +1536,7 @@ input[type="range"] {
 
       ctx.fillStyle = '#cbd5e1';
       ctx.font = `500 ${subSize}px Inter, sans-serif`;
-      ctx.fillText(tr.trapSub, rxStart + 18, subBaseY);
+      if (showSub) ctx.fillText(tr.trapSub, rxStart + 18, subBaseY);
 
       ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       const pillW = Math.min(ctx.measureText(remText).width + 18, rw - 32);
@@ -1524,15 +1564,19 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 10.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🔥 LA PRUEBA DE FUEGO:', rxStart + 14, by + 17);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '500 9px Inter, sans-serif';
-    ctx.fillText('Medición real en Jaén (2024)', rxStart + 14, by + 32);
+    if (isCompactH) {
+      ctx.fillText('🔥 LA PRUEBA DE FUEGO · Jaén 2024', rxStart + 14, by + bannerH / 2 + 4);
+    } else {
+      ctx.fillText('🔥 LA PRUEBA DE FUEGO:', rxStart + 14, by + 17);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '500 9px Inter, sans-serif';
+      ctx.fillText('Medición real en Jaén (2024)', rxStart + 14, by + 32);
+    }
 
     // Botón flecha "Ir al Caso Jaén →"
-    const btnW = 124, btnH = 26;
+    const btnW = 124, btnH = isCompactH ? 22 : 26;
     const bx = rxStart + rw - btnW - 10, bby = by + (bannerH - btnH) / 2;
     ctx.fillStyle = '#e06d53';
     ctx.beginPath();
@@ -1763,17 +1807,17 @@ input[type="range"] {
     ctx.fillStyle = '#e9d5ff';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('💀 TRAMPA 3 (N=24): ¿CÓMO CALIBRAR INCERTIDUMBRE CON 24 DATOS?', rx + 14, padT + 20);
+    ctx.fillText('💀 TRAMPA 3 (N=24): ¿CÓMO CALIBRAR CON 24 DATOS?', rx + 14, padT + 20);
 
     // Visualización de las 24 monedas/iteraciones anuales (N=24)
     const gridX = rx + 16, gridY = padT + 34, gridW = rw - 32;
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 10.5px Inter, sans-serif';
     ctx.fillText(
       state.useZeroShot
-        ? '✅ TSFM Zero-Shot (TimesFM 2.0 / Chronos-Bolt): |Tr| = 0 ➔ ¡100% de los 24 años van a Calibrar |Cal| = 24!'
-        : '✕ Split Conformal Clásico: Gastar 18 años en entrenar |Tr| deja solo |Cal| = 6 años (Cuantil q̂ inestable)',
+        ? '✅ TSFM Zero-Shot: |Tr| = 0 ➔ ¡los 24 años van a Calibrar |Cal| = 24!'
+        : '✕ Split clásico: entrenar con 18 años deja |Cal| = 6 (cuantil q̂ inestable)',
       gridX,
       gridY + 10
     );

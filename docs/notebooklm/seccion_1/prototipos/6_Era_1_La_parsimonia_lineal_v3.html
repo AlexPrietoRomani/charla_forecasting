@@ -1145,6 +1145,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1420,7 +1451,13 @@ input[type="range"] {
     ctx.fillStyle = '#8ef7c7';
     ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('PRONÓSTICO SECUENCIAL (Eco amortiguado hacia la media)', sx + 8, padT + 14);
+    const lblFull = 'PRONÓSTICO SECUENCIAL (Eco amortiguado hacia la media)';
+    if (ctx.measureText(lblFull).width <= padL + pw - sx - 12) {
+      ctx.fillText(lblFull, sx + 8, padT + 14);
+    } else {
+      ctx.fillText('PRONÓSTICO SECUENCIAL', sx + 8, padT + 14);
+      ctx.fillText('(Eco amortiguado hacia la media)', sx + 8, padT + 29);
+    }
 
     // Media histórica
     const baseMean = 54;

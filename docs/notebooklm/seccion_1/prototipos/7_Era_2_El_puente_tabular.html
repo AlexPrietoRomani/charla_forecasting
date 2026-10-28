@@ -1143,6 +1143,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1488,11 +1519,17 @@ input[type="range"] {
     const pDay = 32;
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '700 13px "JetBrains Mono"';
-    ctx.textAlign = 'center';
-    ctx.fillText(`🏷️ Promo + Fin de Semana (+${state.promoBoost}%)`, X(pDay), Y(realS[pDay]) - 12);
+    // Recuadro de Regla de Árbol GBDT en la esquina (ancho adaptable)
+    const bx = padL + 10, by = padT + 8, bh = 74;
+    const bw = 295;
 
-    // Recuadro de Regla de Árbol GBDT en la esquina
-    const bx = padL + 10, by = padT + 8, bw = 295, bh = 74;
+    // La etiqueta nunca invade el recuadro: se alinea a la derecha de su borde si hace falta
+    const promoLbl = `🏷️ Promo + Fin de Semana (+${state.promoBoost}%)`;
+    const promoW = ctx.measureText(promoLbl).width;
+    const promoX = Math.min(Math.max(X(pDay) - promoW / 2, bx + bw + 12), padL + pw - promoW - 4);
+    ctx.textAlign = 'left';
+    ctx.fillText(promoLbl, promoX, Math.max(Y(realS[pDay]) - 12, padT + 14));
+
     ctx.save();
     ctx.fillStyle = 'rgba(6, 12, 28, 0.9)';
     ctx.strokeStyle = 'rgba(110, 240, 180, 0.38)';

@@ -1145,6 +1145,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1525,6 +1556,19 @@ input[type="range"] {
     ctx.restore();
   }
 
+  // Texto que se ajusta al ancho disponible: envuelve palabras y devuelve la siguiente y
+  function wrapFill(text, x, y, maxW, lh) {
+    const words = text.split(' ');
+    let line = '';
+    words.forEach(wd => {
+      const t = line ? line + ' ' + wd : wd;
+      if (line && ctx.measureText(t).width > maxW) { ctx.fillText(line, x, y); y += lh; line = wd; }
+      else line = t;
+    });
+    if (line) { ctx.fillText(line, x, y); y += lh; }
+    return y;
+  }
+
   // ACTO 3: LA REVOLUCIÓN PATCHTST (SEÑAL CRUDA -> EMPAQUETADO EN PARCHES P -> MATRIZ DE AUTOATENCIÓN LIGERA O((L/P)²))
   function drawPatchTSTStage(w, h) {
     const padL = 28, padR = 24, padT = 44;
@@ -1591,7 +1635,14 @@ input[type="range"] {
     ctx.fillStyle = '#8ef7c7';
     ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('🔗 Self-Attention conecta “Palabras Temporales” homólogas a largo plazo', (p1Center + p2Center) / 2, sigY + sigH + 16);
+    const attnFull = '🔗 Self-Attention conecta “Palabras Temporales” homólogas a largo plazo';
+    const attnTxt = ctx.measureText(attnFull).width <= pw - 20 ? attnFull : '🔗 Self-Attention conecta parches homólogos';
+    const attnW = ctx.measureText(attnTxt).width + 12;
+    ctx.save();
+    ctx.fillStyle = 'rgba(6, 12, 28, 0.92)';
+    ctx.fillRect((p1Center + p2Center) / 2 - attnW / 2, sigY + sigH + 3, attnW, 17);
+    ctx.restore();
+    ctx.fillText(attnTxt, (p1Center + p2Center) / 2, sigY + sigH + 16);
 
     // MITAD INFERIOR: 2 CAJAS EXPLICATIVAS (INDEPENDENCIA DE CANALES + BARRA DE REDUCCIÓN CUADRÁTICA O((L/P)²))
     const botY = sigY + sigH + 26;
@@ -1607,13 +1658,15 @@ input[type="range"] {
     ctx.fillStyle = '#d8b4fe';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🧬 INDEPENDENCIA DE CANALES + SEMÁNTICA LOCAL', padL + 12, botY + 18);
+    const indTitle = '🧬 INDEPENDENCIA DE CANALES + SEMÁNTICA LOCAL';
+    ctx.fillText(ctx.measureText(indTitle).width <= halfW - 20 ? indTitle : '🧬 CANALES INDEPENDIENTES', padL + 12, botY + 18);
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 13.5px Inter, sans-serif';
-    ctx.fillText(`• Cada parche de P=${state.patchSize} pasos guarda pendiente y forma.`, padL + 12, botY + 38);
-    ctx.fillText('• Cada sensor/serie se procesa sin contaminación cruzada', padL + 12, botY + 56);
-    ctx.fillText('  compartiendo los mismos pesos del Transformer.', padL + 12, botY + 72);
+    ctx.font = '500 13px Inter, sans-serif';
+    const narrowBox = halfW < 420;
+    let ty = botY + 37;
+    ty = wrapFill(`• Cada parche de P=${state.patchSize} pasos guarda pendiente y forma.`, padL + 12, ty, halfW - 24, 16);
+    wrapFill(narrowBox ? '• Cada serie se procesa por separado, con los mismos pesos del Transformer.' : '• Cada sensor/serie se procesa sin contaminación cruzada compartiendo los mismos pesos del Transformer.', padL + 12, ty, halfW - 24, 16);
     ctx.restore();
 
     // Caja Derecha: Comparador en vivo de Complejidad O(L²) vs O((L/P)²)
@@ -1630,7 +1683,8 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText(`⚡ REDUCCIÓN DE COSTO (L=512 con Parche P=${state.patchSize})`, rx + 12, botY + 18);
+    const redTitle = `⚡ REDUCCIÓN DE COSTO (L=512 con Parche P=${state.patchSize})`;
+    ctx.fillText(ctx.measureText(redTitle).width <= halfW - 20 ? redTitle : `⚡ REDUCCIÓN DE COSTO (P=${state.patchSize})`, rx + 12, botY + 18);
 
     // Barra Punto a Punto
     const barW = halfW - 150;

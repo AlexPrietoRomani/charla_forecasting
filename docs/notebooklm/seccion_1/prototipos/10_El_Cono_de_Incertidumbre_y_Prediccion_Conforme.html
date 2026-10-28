@@ -1149,6 +1149,37 @@ input[type="range"] {
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
+
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return;
@@ -1580,7 +1611,7 @@ input[type="range"] {
     ctx.fillStyle = '#a5f3fc';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🔀 CUANTIL LOCAL (q̂ⱼ) VS. GLOBAL (q̂_global)', lx + 14, ly + 20);
+    fitFill('🔀 CUANTIL LOCAL (q̂ⱼ) VS. GLOBAL (q̂_global)', lx + 14, ly + 20, lw - 28);
 
     // Serie 1: Estable (Con Cuantil Local estrecho vs Global inflado)
     const s1Y = ly + 36, sH = (boxH - 60) / 2;
@@ -1590,14 +1621,14 @@ input[type="range"] {
 
     ctx.fillStyle = '#8ef7c7';
     ctx.font = '700 11.5px "JetBrains Mono"';
-    ctx.fillText('✅ CUANTIL LOCAL (q̂ⱼ): Traje a medida por serie', lx + 20, s1Y + 16);
+    fitFill('✅ CUANTIL LOCAL (q̂ⱼ): Traje a medida por serie', lx + 20, s1Y + 16, lw - 40);
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 12px Inter, sans-serif';
-    ctx.fillText('• Evita que una serie volátil ensanche artificialmente', lx + 20, s1Y + 34);
-    ctx.fillText('  las bandas de tus productos o regiones estables.', lx + 20, s1Y + 50);
+    fitFill('• Evita que una serie volátil ensanche artificialmente', lx + 20, s1Y + 34, lw - 40);
+    fitFill('  las bandas de tus productos o regiones estables.', lx + 20, s1Y + 50, lw - 40);
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '600 11.5px "JetBrains Mono"';
-    ctx.fillText('q̂ⱼ = q₁₋α( S_Cal, j )  [Ideal en varianzas heterogéneas]', lx + 20, s1Y + sH - 12);
+    fitFill('q̂ⱼ = q₁₋α( S_Cal, j )  [Ideal en varianzas heterogéneas]', lx + 20, s1Y + sH - 12, lw - 40);
 
     // Serie 2: Cuantil Global
     const s2Y = s1Y + sH + 10;
@@ -1607,14 +1638,14 @@ input[type="range"] {
 
     ctx.fillStyle = '#d8b4fe';
     ctx.font = '700 11.5px "JetBrains Mono"';
-    ctx.fillText('🌐 CUANTIL GLOBAL (q̂_global): Agrupa M series cortas', lx + 20, s2Y + 16);
+    fitFill('🌐 CUANTIL GLOBAL (q̂_global): Agrupa M series cortas', lx + 20, s2Y + 16, lw - 40);
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 12px Inter, sans-serif';
-    ctx.fillText('• Cuando cada serie individual tiene muy pocos puntos', lx + 20, s2Y + 34);
-    ctx.fillText('  (|Calⱼ| corto), une los errores para estabilizar q̂.', lx + 20, s2Y + 50);
+    fitFill('• Cuando cada serie individual tiene muy pocos puntos', lx + 20, s2Y + 34, lw - 40);
+    fitFill('  (|Calⱼ| corto), une los errores para estabilizar q̂.', lx + 20, s2Y + 50, lw - 40);
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '600 11.5px "JetBrains Mono"';
-    ctx.fillText('q̂_global = q₁₋α( ⋃ S_Cal, j )  [Ideal en series cortas NN5/M3]', lx + 20, s2Y + sH - 12);
+    fitFill('q̂_global = q₁₋α( ⋃ S_Cal, j )  [Ideal en series cortas NN5/M3]', lx + 20, s2Y + sH - 12, lw - 40);
     ctx.restore();
 
     // DERECHA: EVIDENCIA NUMÉRICA EN ERCOT 2232 (ACHOUR ET AL., 2025)
@@ -1630,11 +1661,11 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🏆 ESTUDIO ACHOUR ET AL. (2025) · ERCOT 2232 PUNTOS', rx + 14, ry + 20);
+    fitFill('🏆 ESTUDIO ACHOUR ET AL. (2025) · ERCOT 2232 PUNTOS', rx + 14, ry + 20, rw - 28, ['🏆 ACHOUR ET AL. (2025) · ERCOT 2232']);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 12px Inter, sans-serif';
-    ctx.fillText(`Al asignar ${state.calibShare}% del historial a Calibración (|Cal|), mira qué ocurre con el error (MASE) y el ancho (MSIW):`, rx + 14, ry + 38);
+    fitFill(`Al asignar ${state.calibShare}% del historial a Calibración (|Cal|), mira qué ocurre con el error (MASE) y el ancho (MSIW):`, rx + 14, ry + 38, rw - 28, [`Con ${state.calibShare}% del historial en Calibración (|Cal|):`]);
 
     const benchmarks = [
       {
@@ -1675,14 +1706,18 @@ input[type="range"] {
       ctx.fillStyle = b.color;
       ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'left';
-      ctx.fillText(b.name, rx + 20, by + 16);
+      const mcrTxt = `Cobertura MCR: ${b.mcr}`;
+      const mcrW = ctx.measureText(mcrTxt).width;
+      const nameMax = rw - 44 - mcrW - 12;
+      const shortName = b.name.replace(/ · [^)]*\)/, ')');
+      fitFill(b.name, rx + 20, by + 16, nameMax, [shortName, shortName.replace(/(\d+)% Train \/ (\d+)% Cal/, '$1/$2'), b.name.split(' (')[0]]);
 
       ctx.fillStyle = '#e2eeff';
       ctx.textAlign = 'right';
-      ctx.fillText(`Cobertura MCR: ${b.mcr}`, rx + rw - 22, by + 16);
+      ctx.fillText(mcrTxt, rx + rw - 22, by + 16);
 
       // Barra de MASE
-      const barMaxW = rw - 210;
+      const barMaxW = Math.max(60, rw - 260);
       const bw = (b.mase / maxMase) * barMaxW;
       ctx.fillStyle = b.color;
       ctx.fillRect(rx + 20, by + 24, bw, 11);
@@ -1694,9 +1729,26 @@ input[type="range"] {
 
       ctx.fillStyle = '#94a3b8';
       ctx.font = '500 11.5px Inter, sans-serif';
-      ctx.fillText(b.note, rx + 20, by + cardH - 12);
+      fitFill(b.note, rx + 20, by + cardH - 12, rw - 44, [b.note.split(':')[0]]);
     });
     ctx.restore();
+  }
+
+  // Dibuja texto dentro de maxW: prueba alternativas más cortas y, si hace falta, reduce la fuente (mín. 11 px)
+  function fitFill(text, x, y, maxW, alts) {
+    const cands = [text].concat(alts || []);
+    let pick = cands.find(t => ctx.measureText(t).width <= maxW);
+    if (!pick) {
+      pick = cands[cands.length - 1];
+      const m = /(\d+(?:\.\d+)?)px/.exec(ctx.font);
+      let px = m ? parseFloat(m[1]) : 13;
+      const base = ctx.font;
+      while (px > 11 && ctx.measureText(pick).width > maxW) {
+        px -= 0.5;
+        ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+      }
+    }
+    ctx.fillText(pick, x, y);
   }
 
   // ACTO 4: ASIMETRÍA DEL RIESGO (P10 / P50 / P90) Y PASE A LA DIAPOSITIVA 11 (ÁRBOL DE DECISIÓN)
