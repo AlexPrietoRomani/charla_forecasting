@@ -1,0 +1,27 @@
+[
+ {
+  "t": 0.5,
+  "dur": 4.0,
+  "text": "Modelos que predicen sin haber visto estos datos"
+ },
+ {
+  "t": 6.3,
+  "dur": 7.0,
+  "text": "Aprenden de miles de millones de datos de todo tipo"
+ },
+ {
+  "t": 14.2,
+  "dur": 7.0,
+  "text": "Leen la serie por tramos, como si fueran palabras"
+ },
+ {
+  "t": 22.0,
+  "dur": 4.5,
+  "text": "En Iquitos empatan con el mejor modelo local"
+ },
+ {
+  "t": 27.1,
+  "dur": 2.7,
+  "text": "Cinco modelos, cero entrenamiento local"
+ }
+]

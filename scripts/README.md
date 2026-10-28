@@ -32,6 +32,9 @@ scripts/
 │   ├── inspect_slides.py              # Inspección sintáctica de títulos y slides
 │   ├── generate_notebooks.py          # Generador de notebooks Jupyter en notebooks/
 │   └── README.md                      # Documentación de herramientas de la página
+├── audit_f9_desaturacion.py  # Validador F9: desaturación de color
+├── audit_f10_layout_typography.py # Validador F10: layout y tipografía de los 21 prototipos y el bundle
+├── audit_f12_claridad.py     # Validador F12: claridad no estadística (`--all`, `--bundle`; tests en test_audit_f12_claridad.py)
 ├── build_deck.py             # Proxy de compatibilidad hacia back/build_deck.py
 └── README.md                 # Este documento
 ```
@@ -39,3 +42,13 @@ scripts/
 ## Estructura de Front y Back
 * **Frontend:** El código de estilos, diapositivas y marcas se encuentra en [`front/`](file:///home/aprietor/github/charla_forecasting/front/).
 * **Backend:** El motor de compilación y enlace de datos se encuentra en [`back/`](file:///home/aprietor/github/charla_forecasting/back/).
+
+## Validadores de fase
+
+```bash
+python scripts/audit_f12_claridad.py --all      # glosario, cifras, hero, rutas, videos (0 fallos esperados)
+python scripts/audit_f12_claridad.py --bundle   # glosario presente en presentacion.html compilado
+PYTHONIOENCODING=utf-8 python scripts/audit_f10_layout_typography.py
+```
+
+`audit_f10_layout_typography.py` conserva dos avisos heredados que no son de F12: faltan las 46 capturas `f10_*` y el marcador S5 `ŷ<sub>t+h</sub>` (texto del cierre anterior, reemplazado en F12 por el cierre en 3 frases de la diapo 29).

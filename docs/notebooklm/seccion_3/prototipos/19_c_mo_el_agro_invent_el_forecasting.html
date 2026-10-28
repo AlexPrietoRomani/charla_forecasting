@@ -782,8 +782,8 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">ACTO 3 · SECCIÓN 3 · 10,000 a.C. ──▶ PRESENTE · GENEALOGÍA OBSERVACIONAL</p>
-        <h1>Cómo el agro inventó el <span class="era">forecasting antes que la IA</span> <span class="sub">· De las cabañuelas a la malla neuronal</span></h1>
+        <p class="eyebrow">SECCIÓN 3 · 10,000 a.C. ──▶ PRESENTE · CÓMO OBSERVAMOS EL CAMPO</p>
+        <h1>Cómo el agro inventó el <span class="era">forecasting antes que la IA</span></h1>
       </div>
     </div>
 
@@ -804,7 +804,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. 10,000 a.C. vs IA ─▶ 2. Memoria de Meses (τ) ─▶ 3. Física > Algoritmo ─▶ 4. Los 5 Hitos & Pase a Diapo 20 -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 19">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="origins" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="origins" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">10,000 a.C. ↔ Hoy</span>
@@ -815,7 +815,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="memory" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="memory" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Memoria de Meses (τ)</span>
@@ -826,7 +826,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="physics" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="physics" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">La Física Manda</span>
@@ -837,10 +837,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="bridge20" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="bridge20" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Supuestos ─▶ Diapo 20</span>
+          <span class="proc-year">Supuestos ocultos</span>
           <span class="proc-sub">Del almanaque al satélite</span>
         </div>
         <div class="proc-progress" id="prog-bridge20"></div>
@@ -862,28 +862,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">PILAR 1 DE 4 · 10,000 a.C. → PRESENTE</span>
+          <span class="stage-tag" id="stageTag">10,000 AÑOS DE PRONÓSTICO</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. El campo pronostica desde siempre: el primer científico de datos</h2>
-        <p class="narr-lead" id="narrLead">
-          Mucho antes de Silicon Valley, hace <b>10,000 años</b> la supervivencia humana dependía de anticipar ciclos de lluvia y heladas: <b>el agricultor fue el primer científico de datos de la historia</b>.
-        </p>
+        <h2 class="narr-title" id="narrTitle">El agricultor fue el primer científico de datos</h2>
+        <p class="narr-lead" id="narrLead">Hace 10,000 años, sobrevivir exigía anticipar lluvias y heladas: el agricultor fue el primer científico de datos.</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🌕 DEL ALMANAQUE Y LAS CABAÑUELAS A LA RED NEURONAL</div>
-          <p class="info-block-text" id="block1Text">
-            Las comunidades andinas y amazónicas cruzaban <b>bioindicadores ecológicos</b> (fases lunares, floración de árboles nativos, aves) con las lluvias. Hoy medimos ese mismo valle con <b>mallas topográficas 3D, satélites y redes neuronales</b>.
-          </p>
+          <div class="info-block-label" id="block1Label">🌕 De las cabañuelas a la IA</div>
+          <p class="info-block-text" id="block1Text">Comunidades andinas y amazónicas cruzaban lunas, flores y aves con las lluvias; hoy usamos satélites y redes neuronales.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">⚠️ LA CEGUERA HEREDADA SI CAMBIA EL CLIMA</div>
-          <p class="info-block-text" id="block2Text">
-            El almanaque ancestral asumía que el clima era <b>estacionario</b> (que cada década se repetía igual). Ante el cambio climático actual, necesitamos unir ese saber botánico con telemetría en tiempo real.
-          </p>
+          <div class="info-block-label" id="block2Label">⚠️ La ceguera heredada</div>
+          <p class="info-block-text" id="block2Text">El almanaque asumía clima estable; hoy hay que unir ese saber con sensores en tiempo real.</p>
         </div>
 
         <div class="math-strip">
@@ -893,7 +887,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway" id="speakerBox">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La agricultura inventó el forecasting hace 10,000 años para asegurar la supervivencia.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La agricultura inventó el pronóstico hace 10,000 años.</span>
       </div>
     </aside>
 
@@ -1060,16 +1054,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     origins: {
       accent: 'var(--ancestral)',
-      tag: 'PILAR 1 DE 4 · 10,000 a.C. → PRESENTE',
-      title: '1. El campo pronostica desde siempre: el primer científico de datos',
-      lead: 'Mucho antes de Silicon Valley, hace <b>10,000 años</b> la supervivencia humana dependía de anticipar ciclos de lluvia y heladas: <b>el agricultor fue el primer científico de datos de la historia</b>.',
-      b1Label: '🌕 DEL ALMANAQUE Y LAS CABAÑUELAS A LA RED NEURONAL',
-      b1Text: 'Las comunidades andinas y amazónicas cruzaban <b>bioindicadores ecológicos</b> (fases lunares, floración de árboles nativos, aves) con las lluvias. Hoy medimos ese mismo valle con <b>mallas topográficas 3D, satélites y redes neuronales</b>.',
-      b2Label: '⚠️ LA CEGUERA HEREDADA SI CAMBIA EL CLIMA',
-      b2Text: 'El almanaque ancestral asumía que el clima era <b>estacionario</b> (que cada década se repetía igual). Ante el cambio climático actual, necesitamos unir ese saber botánico con telemetría en tiempo real.',
+      tag: '10,000 AÑOS DE PRONÓSTICO',
+      title: 'El agricultor fue el primer científico de datos',
+      lead: 'Hace 10,000 años, sobrevivir exigía anticipar lluvias y heladas: el agricultor fue el primer científico de datos.',
+      b1Label: '🌕 De las cabañuelas a la IA',
+      b1Text: 'Comunidades andinas y amazónicas cruzaban lunas, flores y aves con las lluvias; hoy usamos satélites y redes neuronales.',
+      b2Label: '⚠️ La ceguera heredada',
+      b2Text: 'El almanaque asumía clima estable; hoy hay que unir ese saber con sensores en tiempo real.',
       formula: 'Almanaque (Bioindicadores)  ⟷  Gemelo Digital (Sensores + IA)',
       hint: 'Desliza la cortina inferior para cruzar 10,000 años',
-      quote: '“El agricultor inventó el forecasting hace 10,000 años; ahora lo hacemos con redes neuronales.”',
+      quote: 'La agricultura inventó el pronóstico hace 10,000 años.',
       icon: '🌾',
       canvasTitle: 'Espejo Histórico Interactivo: Valle Ancestral (10,000 a.C.) ↔ Gemelo Digital IA',
       ovLeft: '☀️ Izquierda: 10,000 a.C. (Almanaque, Andenes y Bioindicadores)',
@@ -1079,16 +1073,16 @@ input[type="range"] {
     },
     memory: {
       accent: 'var(--water)',
-      tag: 'PILAR 2 DE 4 · LA TESIS CENTRAL DE LA BIOLOGÍA',
-      title: '2. La planta tiene memoria de meses: el tiempo no es un reloj simple',
-      lead: 'A diferencia de la bolsa de valores o el retail donde un cambio impacta hoy mismo, en el agro <b>el tiempo es biología acumulada con una memoria fisiológica de 6 a 8 meses</b>.',
-      b1Label: '🥀 UN ESTRÉS HÍDRICO HOY DICTA EL FUTURO MESES DESPUÉS',
-      b1Text: 'En el café, si falta lluvia o golpea una ola de calor durante la <b>floración (agosto–octubre)</b>, la flor aborta. <b>El 50% de la producción puede perderse 7 meses antes de cosechar</b>, aunque luego llueva perfecto en enero.',
-      b2Label: '📐 TRADUCCIÓN PARA LA IA: RETARDO EXPLÍCITO Yₜ = f(Xₜ₋τ)',
-      b2Text: 'Alimentar un modelo con el clima de “ayer” (<i>t−1</i>) no sirve. La red neuronal debe mirar hacia atrás en la ventana biológica donde se formó la flor (<b>τ = 6 a 8 meses atrás</b>).',
+      tag: 'LA PLANTA TIENE MEMORIA',
+      title: 'La planta guarda memoria: hoy decide la cosecha de meses después',
+      lead: 'En el agro, el tiempo es biología acumulada: la planta recuerda lo vivido durante 6 a 8 meses.',
+      b1Label: '🥀 Estrés hoy, cosecha perdida mañana',
+      b1Text: 'Sin lluvia en la floración (agosto–octubre), la flor aborta: se puede perder el 50% de la cosecha.',
+      b2Label: '📐 Cómo lo entiende la IA',
+      b2Text: 'El clima de ayer no sirve: la IA debe mirar la floración, τ = 6 a 8 meses atrás.',
       formula: 'Cosecha Yₜ = f( Clima en Floración Xₜ₋τ )  con  τ = 6 a 8 meses',
       hint: 'Ajusta el estrés en floración abajo y mira qué pasa 7 meses después',
-      quote: '“La planta no olvida: una sequía en floración decide la cosecha siete meses después.”',
+      quote: 'Una sequía en floración decide la cosecha siete meses después.',
       icon: '⏳',
       canvasTitle: 'Línea de Tiempo Biológica: Cómo una Sequía en Floración Destruye la Cosecha 7 Meses Después',
       ovLeft: '🌸 Hace 7 Meses (Ago–Oct): Floración y Cuajado Crítico',
@@ -1098,39 +1092,39 @@ input[type="range"] {
     },
     physics: {
       accent: 'var(--agro)',
-      tag: 'PILAR 3 DE 4 · EL DIÁLOGO INTERDISCIPLINARIO',
-      title: '3. La física manda sobre el algoritmo: ¿Por qué falla la IA pura?',
-      lead: 'Modelos de Inteligencia Artificial con <b>100% de precisión teórica en computadora</b> fallan estrepitosamente en el campo cuando ignoran la botánica real.',
-      b1Label: '🔬 LOS 3 LENTES EXPERTOS (SECCIÓN 1 DEL INFORME)',
-      b1Text: '• <b>El Fisiólogo Vegetal:</b> La planta tiene umbrales térmicos e hídricos irreversibles.<br>• <b>El Agrometeorólogo:</b> Cada instrumento tiene sesgos físicos.<br>• <b>El Data Scientist:</b> Tratar la tabla como números puros lleva a memorizar ruido.',
-      b2Label: '⚖️ LA REGLA DE ORO INQUEBRANTABLE',
-      b2Text: '<i>“Pero la regla de oro no ha cambiado: <b>si nuestro código no respeta la biología de la planta, los datos no sirven para nada</b>.”</i>',
+      tag: 'LA FÍSICA MANDA',
+      title: 'Sin conocer la planta, la IA pura falla en el campo',
+      lead: 'Modelos con 100% de precisión en computadora fallan en el campo cuando ignoran la botánica real.',
+      b1Label: '🔬 Tres miradas expertas',
+      b1Text: '• <b>Fisiólogo:</b> umbrales irreversibles.<br>• <b>Agrometeorólogo:</b> sesgos de cada instrumento.<br>• <b>Científico de datos:</b> no memorizar ruido.',
+      b2Label: '⚖️ La regla de oro',
+      b2Text: 'Si el código no respeta la biología de la planta, los datos no sirven de nada.',
       formula: 'IA Pura (100% In-Sample / 0% Botánica) = Fracaso en Campo',
       hint: 'Cambia el lente experto abajo para ver qué sesgo detecta cada uno',
-      quote: '“Sin botánica, el Transformer más caro del mundo no sirve en el campo.”',
+      quote: 'Sin botánica, el modelo más caro no sirve en el campo.',
       icon: '⚖️',
       canvasTitle: 'Choque de Paradigmas: IA Ciega a la Botánica vs. Pronóstico Guiado por la Física',
       ovLeft: '✕ Izquierda: IA de Caja Negra (Ignora umbrales y retardos τ)',
       ovRight: '✅ Derecha: IA + Biología (Fisiólogo + Agrometeorólogo + Data Scientist)',
       legend: '<span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> IA sin Botánica (Falla en campo)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> IA Guiada por la Física (Acierto)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Lentes Expertos</span>',
-      nextLabel: 'Ver Los 5 Hitos y Pase a Diapo 20 ─▶'
+      nextLabel: 'Ver Los 5 Hitos ─▶'
     },
     bridge20: {
       accent: 'var(--purple)',
-      tag: 'PILAR 4 DE 4 · GENEALOGÍA Y PASE A LA DIAPOSITIVA 20',
-      title: '4. La Genealogía Observacional: Qué resolvió y qué ceguera dejó cada era',
-      lead: 'Cada época inventó un instrumento mejor para observar el campo, pero <b>heredó un supuesto oculto y dejó una nueva ceguera biofísica</b> que veremos en la <b>Diapositiva 20</b>.',
-      b1Label: '📜 DE 1 DATO CUALITATIVO AL AÑO A 1 DATO POR DÍA Y PÍXEL',
-      b1Text: 'Pasamos de los <b>Almanaques ancestrales (Hito 1)</b> y las <b>Parcelas de ensayo (Hito 2)</b> a las <b>Estaciones SENAMHI con Grados-Día GDD (Hito 3)</b>, los <b>Satélites NDVI (Hito 4)</b> y los <b>Drones + IoT + Modelos Fundacionales (Hito 5)</b>.',
-      b2Label: '⏭️ PASE A LA DIAPOSITIVA 20: “DEL ALMANAQUE AL SATÉLITE”',
-      b2Text: 'En la siguiente diapositiva recorreremos esta explosión de densidad (de las <i>alcancías de calor GDD</i> al <i>NDVI satelital</i>) y descubriremos por qué tener más datos por segundo no basta si no llegan a tiempo.',
+      tag: 'QUÉ RESOLVIÓ CADA ERA',
+      title: 'Cada era vio mejor el campo, pero dejó un punto ciego',
+      lead: 'Cada época inventó un mejor instrumento, pero heredó un supuesto oculto y una nueva ceguera, que veremos enseguida.',
+      b1Label: '📜 Cinco hitos de observación',
+      b1Text: 'Almanaques, parcelas de ensayo, estaciones SENAMHI, satélites NDVI y drones con sensores: cada hito mide mejor el campo.',
+      b2Label: '⏭️ Siguiente: del almanaque al satélite',
+      b2Text: 'Veremos de las alcancías de calor al NDVI satelital: más datos no bastan si llegan tarde.',
       formula: 'Hito 1 (Almanaque) ➔ Hito 2 (Parcela) ➔ Hito 3 (GDD) ➔ Hito 4 (NDVI) ➔ Hito 5 (IoT/IA)',
-      hint: 'Explora los 5 Hitos con el deslizador antes de pasar a la Diapo 20',
-      quote: '“Cada instrumento resolvió un problema pero dejó una ceguera nueva: pasemos a la Diapositiva 20.”',
+      hint: 'Explora los 5 Hitos con el deslizador antes de seguir',
+      quote: 'Cada instrumento dejó un punto ciego: el siguiente tema los revela.',
       icon: '🛰️',
       canvasTitle: 'Matriz Genealogía Observacional (Los 5 Hitos): Logros, Supuestos Heredados y Cegueras',
       ovLeft: '📜 Los 5 Escalones de Observación Agrícola (Sección 1)',
-      ovRight: '⏭️ Siguiente Diapo (20): Del Almanaque al Satélite (1 dato/día/píxel)',
+      ovRight: '⏭️ Siguiente: Del Almanaque al Satélite (1 dato/día/píxel)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> (i) Qué problema resolvió</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> (ii) Qué supuesto heredó</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> (iii) Qué ceguera dejó</span>',
       nextLabel: 'Reiniciar bucle (10,000 a.C.) ↺'
     }
@@ -1204,7 +1198,7 @@ input[type="range"] {
       const ml = MILESTONES_PREVIEW[state.milestoneIdx];
       $('kpi1').innerHTML = `Hito: <strong style="color:${ml.color}">${ml.short}</strong>`;
       $('kpi2').innerHTML = `Evolución: <strong>1 dato/año ➔ 1 dato/día/píxel</strong>`;
-      $('kpi3').innerHTML = `Pase: <strong style="color:var(--purple)">Diapositiva 20</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--purple)">Del almanaque al satélite</strong>`;
     }
 
     document.querySelectorAll('.proc-node').forEach(btn => {
@@ -1804,7 +1798,7 @@ input[type="range"] {
     ctx.fillStyle = '#a7f3d0';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 20: “Del Almanaque al Satélite” (De 1 dato/año a 1 dato/día/píxel con GDD y NDVI)', pad + usableW / 2, bannerY + 20);
+    ctx.fillText('⏭️ SIGUIENTE: “Del Almanaque al Satélite” (De 1 dato/año a 1 dato/día/píxel con GDD y NDVI)', pad + usableW / 2, bannerY + 20);
     ctx.restore();
   }
 

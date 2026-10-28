@@ -681,7 +681,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FLOWBAR -->
   <nav class="flowbar" aria-label="Etapas de los datos">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="dist" id="tab-dist">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="dist" id="tab-dist" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">Histograma Tmax</span>
@@ -691,7 +691,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="season" id="tab-season">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="season" id="tab-season" data-route="experta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Ciclo Estacional</span>
@@ -701,7 +701,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="tails" id="tab-tails">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="tails" id="tab-tails" data-route="corta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Colas Asimétricas</span>
@@ -711,7 +711,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="horizon" id="tab-horizon">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="horizon" id="tab-horizon" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
           <span class="proc-year">Ruptura h &gt; 7d</span>
@@ -732,25 +732,23 @@ canvas { display: block; width: 100%; height: 100%; }
     <!-- COLUMNA IZQUIERDA -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · DISTRIBUCIÓN DIARIA</span>
+        <span class="stage-tag" id="stageTag">DISTRIBUCIÓN DIARIA</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">La ilusión gaussiana: la moda esconde el verdadero riesgo</h2>
+      <h2 class="narr-title" id="narrTitle">El riesgo no está en lo común, sino en los extremos</h2>
       
-      <p class="narr-lead" id="narrLead">
-        A primera vista, la temperatura en Iquitos parece ultra predecible: <strong>925 días (36.2%)</strong> se concentran rígidamente entre 31 y 32 °C. Sin embargo, los modelos lineales e ingenuos son destruidos cuando el sistema salta a la cola derecha.
-      </p>
+      <p class="narr-lead" id="narrLead">925 días (36.2%) se agrupan entre 31 y 32 °C, pero los modelos simples fallan cuando salta la cola derecha.</p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
-          <div class="info-block-label">🎯 Hiperconcentración en la Media</div>
-          <div class="info-block-text">1,271 días (casi el 50% del historial) caen en solo dos grados centígrados (31 a 33 °C). Esto seduce a los algoritmos a memorizar un valor promedio fijo.</div>
+          <div class="info-block-label">🎯 Casi todo cerca del promedio</div>
+          <div class="info-block-text">1,271 días (casi 50%) caen entre 31 y 33 °C: tentador memorizar un valor fijo.</div>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label">⚠️ La Cola Roja Destructiva</div>
-          <div class="info-block-text">78 días registraron temperaturas de ola ≥ 36 °C (con récords de 38.0 °C). Un modelo comercial que minimiza MSE promedio falla catastróficamente en estos shocks.</div>
+          <div class="info-block-label">⚠️ La cola roja destructiva</div>
+          <div class="info-block-text">78 días llegaron a 36 °C o más (récord 38.0 °C); promediar el error falla ahí.</div>
         </div>
       </div>
 
@@ -760,7 +758,7 @@ canvas { display: block; width: 100%; height: 100%; }
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Nueve de cada diez días parecen fáciles; el valor está en predecir la cola extrema.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Nueve días de diez son fáciles; el valor está en los extremos.</span>
       </div>
     </article>
 
@@ -800,7 +798,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>SENAMHI Punchana (103015):</strong> 2019-01-01 → 2025-12-31 · Tmin con vacíos iniciales, precipitación con control de ceros</span>
-    <span class="link">Pase a Diapo 14: La Trampa de No-Extrapolación de los Árboles →</span>
+    <span class="link">Siguiente: La Trampa de No-Extrapolación de los Árboles</span>
   </footer>
 
 </main>
@@ -818,58 +816,58 @@ canvas { display: block; width: 100%; height: 100%; }
   const STAGE_DATA = {
     dist: {
       accent: '#38efff',
-      tag: 'ETAPA 1 DE 4 · DISTRIBUCIÓN DIARIA',
-      title: 'La ilusión gaussiana: la moda esconde el verdadero riesgo',
-      lead: 'A primera vista, la temperatura en Iquitos parece ultra predecible: <strong>925 días (36.2%)</strong> se concentran rígidamente entre 31 y 32 °C. Sin embargo, los modelos lineales e ingenuos son destruidos cuando el sistema salta a la cola derecha.',
+      tag: 'DISTRIBUCIÓN DIARIA',
+      title: 'El riesgo no está en lo común, sino en los extremos',
+      lead: '925 días (36.2%) se agrupan entre 31 y 32 °C, pero los modelos simples fallan cuando salta la cola derecha.',
       blocks: [
-        { label: '🎯 Hiperconcentración en la Media', text: '1,271 días (casi el 50% del historial) caen en solo dos grados centígrados (31 a 33 °C). Esto seduce a los algoritmos a memorizar un valor promedio fijo.' },
-        { label: '⚠️ La Cola Roja Destructiva', text: '78 días registraron temperaturas de ola ≥ 36 °C (con récords de 38.0 °C). Un modelo comercial que minimiza MSE promedio falla catastróficamente en estos shocks.' }
+        { label: '🎯 Casi todo cerca del promedio', text: '1,271 días (casi 50%) caen entre 31 y 33 °C: tentador memorizar un valor fijo.' },
+        { label: '⚠️ La cola roja destructiva', text: '78 días llegaron a 36 °C o más (récord 38.0 °C); promediar el error falla ahí.' }
       ],
       math: 'Moda = [31.0, 32.0] °C (925 d) ──▶ Cola ≥ 36 °C (78 d)',
       hint: 'Asimetría Positiva',
-      quote: 'Nueve de cada diez días parecen fáciles; el valor está en predecir la cola extrema.',
+      quote: 'Nueve días de diez son fáciles; el valor está en los extremos.',
       viewMode: 'hist'
     },
     season: {
       accent: '#6ef0b4',
-      tag: 'ETAPA 2 DE 4 · CICLO ESTACIONAL REAL',
-      title: 'El reloj estacional amazónico: fresco en junio, pico en octubre',
-      lead: 'En el ecuador térmico amazónico las estaciones no se rigen por solsticios boreales. El régimen se divide en dos fases bien definidas: <strong>temporada fresca (mayo–julio ≈30.5 °C)</strong> y <strong>pico térmico (septiembre–noviembre ≈33.1 °C)</strong>.',
+      tag: 'CICLO ESTACIONAL',
+      title: 'Fresco en junio, caliente en octubre: el reloj de la selva',
+      lead: 'Aquí las estaciones no siguen los solsticios: hay una temporada fresca (mayo–julio, ≈30.5 °C) y un pico (septiembre–noviembre, ≈33.1 °C).',
       blocks: [
-        { label: '🌿 Temporada Fresca (Mayo–Julio)', text: 'Promedio mensual de 30.41 a 30.67 °C. Dominan las lluvias continuas y la nubosidad densa que actúa como escudo térmico.' },
-        { label: '☀️ Pico Térmico (Septiembre–Noviembre)', text: 'Promedio mensual salta a 33.12 °C. La radiación cenital y el cese momentáneo de lluvias incuban las olas récord.' }
+        { label: '🌿 Temporada fresca (mayo–julio)', text: 'Promedio de 30.41 a 30.67 °C: lluvias continuas y nubes que actúan de escudo térmico.' },
+        { label: '☀️ Pico térmico (sep–nov)', text: 'El promedio sube a 33.12 °C: más radiación y menos lluvia incuban las olas récord.' }
       ],
       math: 'Δ Tmax(Octubre − Junio) = 33.12 − 30.41 = 2.71 °C',
       hint: 'Amplitud Estacional Mínima',
-      quote: 'El delta estacional es mínimo, pero modula la probabilidad de una ola extrema.',
+      quote: 'La diferencia entre estaciones es pequeña, pero cambia el riesgo de ola.',
       viewMode: 'season'
     },
     tails: {
       accent: '#ff5277',
-      tag: 'ETAPA 3 DE 4 · COLAS ASIMÉTRICAS',
-      title: 'El choque térmico: 18.8 °C entre friajes polares y olas récord',
-      lead: 'La Amazonía no tiene una distribución simétrica. En la cola izquierda, <strong>las intrusiones polares antárticas (friajes)</strong> bajan el termómetro a 19.2 °C; en la cola derecha, <strong>las olas de calor</strong> alcanzan 38.0 °C.',
+      tag: 'COLAS ASIMÉTRICAS',
+      title: 'El choque térmico: 18.8 °C entre friaje y ola récord',
+      lead: 'La distribución no es simétrica: los friajes polares bajan a 19.2 °C y las olas de calor llegan a 38.0 °C.',
       blocks: [
-        { label: '🧊 Cola Izquierda (Friajes Rápidos)', text: 'Vientos del sur canalizados por la cordillera desploman la temperatura en 24h. No hay memoria inercial que avise.' },
-        { label: '🔥 Cola Derecha (Olas Récord Sostenidas)', text: 'Olas de 38.0 °C el 7 de octubre de 2023 y 18 de octubre de 2024. Los modelos en niveles quedan ciegos ante lo nunca visto.' }
+        { label: '🧊 Friajes rápidos', text: 'Vientos del sur desploman la temperatura en 24 horas; ninguna memoria avisa.' },
+        { label: '🔥 Olas récord sostenidas', text: '38.0 °C el 7 de octubre de 2023 y el 18 de octubre de 2024: lo nunca visto.' }
       ],
       math: 'Rango Absoluto = 38.0 °C (Máx) − 19.2 °C (Mín) = 18.8 °C',
       hint: 'Distribución de Colas Pesadas',
-      quote: 'El promedio es una abstracción: el hospital atiende golpes de calor y friajes.',
+      quote: 'El promedio engaña: el hospital atiende golpes de calor y friajes.',
       viewMode: 'hist'
     },
     horizon: {
       accent: '#ffc05c',
-      tag: 'ETAPA 4 DE 4 · RUPTURA ENTRÓPICA',
-      title: 'El horizonte de 7 días: donde el pronóstico pierde la física',
-      lead: 'En meteorología tropical convective, la predictibilidad numérica colapsa velozmente. A partir de <strong>h &gt; 7 días</strong>, el error de pronóstico iguala a la varianza natural de la serie climatológica.',
+      tag: 'EL HORIZONTE DE 7 DÍAS',
+      title: 'A más de 7 días, el pronóstico pierde la física',
+      lead: 'En el trópico, la predictibilidad cae rápido: pasados 7 días el error iguala la variación natural del clima.',
       blocks: [
-        { label: '⚡ Memoria Inercial de Corto Plazo (1 a 3 días)', text: 'La humedad del suelo y la atmósfera local retienen inercia: los modelos locales de ML y persistencia dominan.' },
-        { label: '🚪 La Puerta a la Diapositiva 14 (La Trampa del Árbol)', text: 'Para aprovechar esa memoria con Machine Learning, se usan árboles de decisión. Pero los árboles tienen una trampa mortal en olas récord.' }
+        { label: '⚡ Memoria corta (1 a 3 días)', text: 'La humedad del suelo y del aire conserva inercia: dominan los modelos locales de aprendizaje automático.' },
+        { label: '🚪 Siguiente: la trampa del árbol', text: 'Para aprovechar esa memoria se usan árboles de decisión, pero tienen una trampa mortal en olas récord.' }
       ],
       math: 'h > 7 días ──▶ Error(Modelo) ≈ Varianza(Clima)',
-      hint: 'Pase a Diapo 14 →',
-      quote: 'Pasemos a la Diapo 14: qué pasa al alimentar un Random Forest comercial.',
+      hint: 'Siguiente: los árboles y la meseta plana',
+      quote: 'Siguiente: qué pasa al alimentar un Random Forest comercial.',
       viewMode: 'season'
     }
   };

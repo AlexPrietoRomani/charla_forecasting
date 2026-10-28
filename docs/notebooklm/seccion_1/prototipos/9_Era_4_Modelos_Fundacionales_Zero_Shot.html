@@ -858,14 +858,14 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">Continuación de Era 3 (Parches como Tokens) · Saga Evolutiva (Era 4 de 4)</p>
-        <h1>VÍA 4: <span class="era">Revolución Zero-Shot y Foundation Models</span> <span class="sub">· TimesFM, Chronos, Moirai, Lag-Llama y TimeGPT</span></h1>
+        <p class="eyebrow">La nueva generación de pronosticadores</p>
+        <h1>Modelos ya entrenados: <span class="era">pronostican sin practicar</span></h1>
       </div>
     </div>
 
     <div class="via-card" aria-label="Condiciones operativas de la Vía 4">
       <div class="via-title">
-        <span>⚡ FICHA OPERATIVA VÍA 4</span>
+        <span>⚡ FICHA OPERATIVA</span>
         <span>PREENTRENAMIENTO UNIVERSAL (TSFMs)</span>
       </div>
       <div class="via-pills">
@@ -880,7 +880,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. Paradigma Zero-Shot ─▶ 2. Chronos vs TimesFM ─▶ 3. Los 5 Grandes ─▶ 4. Límites & Pase a Conformal -->
   <nav class="flowbar" aria-label="Proceso evolutivo de la Era 4">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="zeroshot" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="zeroshot" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Paradigma Zero-Shot</span>
@@ -891,7 +891,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="duel" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="duel" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Chronos vs. TimesFM</span>
@@ -902,7 +902,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="models" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="models" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Los 5 Grandes TSFMs</span>
@@ -913,7 +913,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="limits" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="limits" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
           <span class="proc-year">Quiebre ─▶ Conformal</span>
@@ -938,28 +938,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · EL CEREBRO UNIVERSAL</span>
+          <span class="stage-tag" id="stageTag">EL CEREBRO UNIVERSAL</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. ¿Qué es Zero-Shot? El “ChatGPT” de las Series Temporales</h2>
-        <p class="narr-lead" id="narrLead">
-          En las Eras 1, 2 y 3 teníamos que entrenar un modelo desde cero para cada problema. La <b>Era 4</b> cambia las reglas: un único modelo aprende primero <b>todas las formas posibles del tiempo</b> sobre billones de datos globales.
-        </p>
+        <h2 class="narr-title" id="narrTitle">Un modelo entrenado con todo: el ChatGPT de las series</h2>
+        <p class="narr-lead" id="narrLead">En vez de crear un modelo por problema, uno solo se preentrena con billones de datos de todo el mundo.</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🌐 PREENTRENAMIENTO MASIVO (LOTSA: 27 MIL MILLONES DE PUNTOS)</div>
-          <p class="info-block-text" id="block1Text">
-            Así como un LLM lee todo internet para aprender a hablar, los <b>TSFMs</b> absorben <b>clima satelital, latidos ECG, redes eléctricas, tráfico web y finanzas</b>. Cuando ven tu serie nueva, ya reconocen su ritmo físico sin ajustar ni un solo peso local.
-          </p>
+          <div class="info-block-label" id="block1Label">🌐 Aprende de todo un poco</div>
+          <p class="info-block-text" id="block1Text">Absorbe clima, energía, tráfico y finanzas: 27 mil millones de puntos. Reconoce ritmos sin ajustes locales.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">⚡ SUPERPODER EN PRODUCCIÓN: PREDICCIÓN EN FRÍO (COLD-START)</div>
-          <p class="info-block-text" id="block2Text">
-            Ideal cuando lanzas un <b>producto nuevo sin historial</b> o tienes pocos datos: entregas una pequeña ventana de contexto (<b>C = 32 a 512 puntos</b>) y obtienes pronósticos inmediatos <b>out-of-the-box (0 épocas, 0 reentrenamiento)</b>.
-          </p>
+          <div class="info-block-label" id="block2Label">⚡ Pronostica en frío</div>
+          <p class="info-block-text" id="block2Text">Le das una ventana de datos y pronostica de inmediato, sin reentrenar localmente (Zero-Shot).</p>
         </div>
 
         <div class="math-strip">
@@ -969,7 +963,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway" id="speakerBox">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Preentrenar sobre 27B+ observaciones permite inferir en frío sin reentrenamiento local.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Un modelo preentrenado pronostica sin reentrenar: así funciona Zero-Shot.</span>
       </div>
     </aside>
 
@@ -1122,16 +1116,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     zeroshot: {
       accent: 'var(--lab)',
-      tag: 'ETAPA 1 DE 4 · EL CEREBRO UNIVERSAL',
-      title: '1. ¿Qué es Zero-Shot? El “ChatGPT” de las Series Temporales',
-      lead: 'La Era 4 rompe el paradigma artesanal: un único modelo preentrenado sobre billones de observaciones globales.',
-      b1Label: '🌐 PREENTRENAMIENTO MULTIDOMINIO (LOTSA)',
-      b1Text: 'Absorbe clima satelital, energía, tráfico y finanzas. Reconoce ritmos físicos sin ajustar pesos locales.',
-      b2Label: '⚡ PREDICCIÓN EN FRÍO (ZERO-SHOT)',
-      b2Text: 'Al ingresar una ventana de contexto (C=32–512 pts), pronostica de inmediato <b>sin reentrenamiento local</b>.',
+      tag: 'EL CEREBRO UNIVERSAL',
+      title: 'Un modelo entrenado con todo: el ChatGPT de las series',
+      lead: 'En vez de crear un modelo por problema, uno solo se preentrena con billones de datos de todo el mundo.',
+      b1Label: '🌐 Aprende de todo un poco',
+      b1Text: 'Absorbe clima, energía, tráfico y finanzas: 27 mil millones de puntos. Reconoce ritmos sin ajustes locales.',
+      b2Label: '⚡ Pronostica en frío',
+      b2Text: 'Le das una ventana de datos y pronostica de inmediato, sin reentrenar localmente (Zero-Shot).',
       formula: 'Preentreno (27B–100B pts) + Contexto C ──▶ Inferencia Zero-Shot',
       hint: '0% Entrenamiento Local · Listo al instante',
-      quote: 'Preentrenar sobre 27B+ observaciones permite inferir en frío sin reentrenamiento local.',
+      quote: 'Un modelo preentrenado pronostica sin reentrenar: así funciona Zero-Shot.',
       icon: '🌐',
       canvasTitle: 'Ingesta Multidominio (100B+ Puntos) e Inferencia Zero-Shot Instantánea',
       ovLeft: '🌐 5 Dominios Globales (Preentreno)',
@@ -1141,16 +1135,16 @@ input[type="range"] {
     },
     duel: {
       accent: 'var(--phi)',
-      tag: 'ETAPA 2 DE 4 · DOS ESCUELAS DE TRADUCCIÓN',
-      title: '2. ¿Cómo lee números un modelo fundacional? Chronos vs. TimesFM',
-      lead: 'Para modelar secuencias temporales surgieron dos filosofías: discretización a tokens vs parches continuos directos.',
-      b1Label: '🔤 CHRONOS (AMAZON T5)',
-      b1Text: 'Escala la serie a un vocabulario de <b>4,096 tokens discretos</b> y predice la siguiente palabra con Cross-Entropy.',
-      b2Label: '📐 TIMESFM (GOOGLE DECODER-ONLY)',
-      b2Text: 'Evita la cuantización: lee <b>parches continuos</b> y proyecta el horizonte futuro en una pasada optimizando MSE.',
+      tag: 'DOS FORMAS DE LEER NÚMEROS',
+      title: 'Dos formas de leer números: palabras o parches',
+      lead: 'Surgieron dos ideas: convertir los números en palabras de un vocabulario, o leerlos en trozos continuos.',
+      b1Label: '🔤 Chronos: números como palabras',
+      b1Text: 'Convierte la serie a un vocabulario de 4,096 símbolos y predice el siguiente, como un texto.',
+      b2Label: '📐 TimesFM: trozos continuos',
+      b2Text: 'No redondea: lee la serie en parches continuos y proyecta el futuro de una sola pasada.',
       formula: 'Chronos = 4,096 Tokens (Cross-Entropy)  │  TimesFM = Parches Continuos (MSE)',
       hint: 'Discretización tipo texto (T5) vs. Bloques continuos (Decoder-Only)',
-      quote: 'Chronos discretiza en 4,096 tokens mientras TimesFM proyecta parches continuos directos.',
+      quote: 'Chronos usa 4,096 palabras; TimesFM lee parches continuos.',
       icon: '⚖️',
       canvasTitle: 'Comparativa de Mecanismos: Cuantización en 4,096 Tokens (Chronos) vs. Parches Continuos (TimesFM)',
       ovLeft: '🔤 Chronos: 4,096 Tokens Discretos',
@@ -1160,39 +1154,39 @@ input[type="range"] {
     },
     models: {
       accent: 'var(--purple)',
-      tag: 'ETAPA 3 DE 4 · EL ECOSISTEMA Y LA LEY DE ESCALA',
-      title: '3. Las 5 Arquitecturas Estrella y la Ley de Escala Temporal',
-      lead: 'Cinco arquitecturas compiten en producción gobernadas por la ley de escala temporal.',
-      b1Label: '🏛️ LOS 5 GRANDES MODELOS',
-      b1Text: 'TimesFM (500M, parches), Chronos-Bolt (48M), Lag-Llama (2.5M, Student-t), Moirai (LOTSA 27B) y TimeGPT-1 en API.',
-      b2Label: '📈 LEY DE ESCALA TEMPORAL',
-      b2Text: 'Mayor escala reduce el error (MASE) y afina la incertidumbre: <b>TimesFM y Chronos superan a modelos pequeños</b>.',
+      tag: 'LOS CINCO GRANDES',
+      title: 'Cinco modelos estrella compiten: más grande, mejor',
+      lead: 'Cinco arquitecturas compiten en producción y todas muestran que a mayor tamaño, menor error.',
+      b1Label: '🏛️ Los 5 grandes',
+      b1Text: 'TimesFM (500M), Chronos-Bolt (48M), Lag-Llama (2.5M), Moirai (27B) y TimeGPT-1 por API.',
+      b2Label: '📈 Más grande, menos error',
+      b2Text: 'Mayor escala reduce el error y afina la incertidumbre: TimesFM y Chronos superan a los pequeños.',
       formula: 'Rendimiento (MASE / MSIW) ∝ Escala del Modelo (# Parámetros y Datos)',
       hint: 'Mueve el deslizador inferior para auditar cada uno de los 5 modelos',
-      quote: 'La ley de escala temporal confirma: mayor tamaño de modelo reduce MASE y varianza.',
+      quote: 'Modelos más grandes cometen menos error.',
       icon: '🏛️',
       canvasTitle: 'Mapa de las 5 Arquitecturas Fundacionales y Ley de Escala (MASE en ERCOT)',
       ovLeft: '📋 Ficha Técnica de las 5 Arquitecturas',
       ovRight: '📉 Ley de Escala Empírica (Menor MASE)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> TimesFM (500M)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Chronos-Bolt (48M)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Moirai (LOTSA 27B)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Lag-Llama (2.5M)</span>',
-      nextLabel: 'Ver Límites y Pase a Conformal ─▶'
+      nextLabel: 'Ver Límites ─▶'
     },
     limits: {
       accent: 'var(--ockham)',
-      tag: 'ETAPA 4 DE 4 · QUIEBRE OPERATIVO Y PASE A SECCIÓN 3',
-      title: '4. Los 3 Límites de los TSFMs y el Salto a Predicción Conforme',
-      lead: 'Los modelos fundacionales presentan 3 límites operativos que exigen calibración conforme rigurosa.',
-      b1Label: '⚠️ 3 LÍMITES EN PRODUCCIÓN',
-      b1Text: '1. Latencia en edge. 2. Opacidad técnica. 3. Brecha de exógenas (Chronos base no ingiere covariables futuras).',
-      b2Label: '🛡️ SINERGIA CON CONFORMAL PREDICTION',
-      b2Text: 'Al no gastar datos entrenando (0% train), destinamos el <b>80% del historial a calibrar intervalos SCP garantizados</b>.',
+      tag: 'SUS LÍMITES',
+      title: 'Estos modelos tienen tres límites y se calibran con intervalos',
+      lead: 'Los modelos preentrenados fallan en tres puntos prácticos; calibrar sus rangos de duda compensa esos límites.',
+      b1Label: '⚠️ Tres límites reales',
+      b1Text: '1. Lentos en equipos pequeños. 2. Cajas negras. 3. No aceptan variables extra del futuro (Chronos base).',
+      b2Label: '🛡️ Rango de duda garantizado',
+      b2Text: 'Al no gastar datos entrenando (0% train), usamos el 80% del historial para calibrar intervalos garantizados.',
       formula: 'Zero-Shot (0% Train) + 80% Datos en Calibración (SCP) ──▶ Garantía MCR ≥ 90%',
       hint: 'Siguiente Diapo · Sección 3: El Cono de Incertidumbre y Split Conformal Prediction',
-      quote: 'Zero-Shot libera datos de entrenamiento para calibrar intervalos conformes con garantía matemática.',
+      quote: 'Sin entrenar, el 80% de los datos calibra la duda.',
       icon: '🛡️',
       canvasTitle: 'Disparidad Exógena y Sinergia Zero-Shot + Predicción Conforme (Achour et al., 2025)',
       ovLeft: '⚠️ Límites Operativos de los TSFMs',
-      ovRight: '⏭️ Pase a Predicción Conforme (SCP)',
+      ovRight: '⏭️ Siguiente: Predicción Conforme (SCP)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Zero-Shot + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM con pocos datos (Colapso 1.195)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ffc05c"></i> Garantía Conforme ≥ 90%</span>',
       nextLabel: 'Reiniciar bucle (Zero-Shot) ↺'
     }
@@ -1201,6 +1195,37 @@ input[type="range"] {
   const $ = id => document.getElementById(id);
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
+
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
 
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
@@ -1480,6 +1505,23 @@ input[type="range"] {
     ctx.restore();
   }
 
+  // Dibuja texto dentro de maxW: prueba alternativas más cortas y, si hace falta, reduce la fuente (mín. 11 px)
+  function fitFill(text, x, y, maxW, alts) {
+    const cands = [text].concat(alts || []);
+    let pick = cands.find(t => ctx.measureText(t).width <= maxW);
+    if (!pick) {
+      pick = cands[cands.length - 1];
+      const m = /(\d+(?:\.\d+)?)px/.exec(ctx.font);
+      let px = m ? parseFloat(m[1]) : 13;
+      const base = ctx.font;
+      while (px > 11 && ctx.measureText(pick).width > maxW) {
+        px -= 0.5;
+        ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+      }
+    }
+    ctx.fillText(pick, x, y);
+  }
+
   // ACTO 2: DUELO DE ESCUELAS: CHRONOS (4096 TOKENS DISCRETOS) VS TIMESFM (PARCHES CONTINUOS)
   function drawDuelStage(w, h) {
     const pad = 18, padT = 46;
@@ -1496,10 +1538,10 @@ input[type="range"] {
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🔤 CHRONOS (Amazon): Cuantización a 4,096 Tokens', lx + 14, ly + 22);
+    fitFill('🔤 CHRONOS (Amazon): Cuantización a 4,096 Tokens', lx + 14, ly + 22, halfW - 28, ['🔤 CHRONOS (Amazon): 4,096 Tokens']);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '500 13px Inter, sans-serif';
-    ctx.fillText('Escala y corta valores continuos en “palabras” discretas para un modelo T5:', lx + 14, ly + 40);
+    fitFill('Escala y corta valores continuos en “palabras” discretas para un modelo T5:', lx + 14, ly + 40, halfW - 28, ['Convierte valores continuos en “palabras” discretas:']);
 
     // Gráfico de onda cuantizada en escalones + bloques de tokens [ID]
     const cTop = ly + 54, cH = boxH * 0.44;
@@ -1560,8 +1602,8 @@ input[type="range"] {
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 13px Inter, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('• Arquitectura T5 (46M / 48M en Chronos-Bolt).', cLeft, ly + boxH - 32);
-    ctx.fillText('• Entrena con Cross-Entropy y muestrea tokens futuros.', cLeft, ly + boxH - 14);
+    fitFill('• Arquitectura T5 (46M / 48M en Chronos-Bolt).', cLeft, ly + boxH - 32, cW, ['• Arquitectura T5 (46M / 48M).']);
+    fitFill('• Entrena con Cross-Entropy y muestrea tokens futuros.', cLeft, ly + boxH - 14, cW, ['• Entrena con Cross-Entropy; muestrea tokens.']);
     ctx.restore();
 
     // DERECHA: TIMESFM DE GOOGLE ("GEOMETRÍA CONTINUA POR PARCHES")
@@ -1574,10 +1616,10 @@ input[type="range"] {
     ctx.fillStyle = '#a5f3fc';
     ctx.font = '700 13.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText(`📐 TIMESFM (Google): Bloques de Parches Continuos (P=${state.patchBins})`, rx + 14, ry + 22);
+    fitFill(`📐 TIMESFM (Google): Bloques de Parches Continuos (P=${state.patchBins})`, rx + 14, ry + 22, halfW - 28, [`📐 TIMESFM (Google): Parches Continuos (P=${state.patchBins})`]);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '500 13px Inter, sans-serif';
-    ctx.fillText('Sin cuantizar: proyecta parches continuos y predice bloques largos de golpe:', rx + 14, ry + 40);
+    fitFill('Sin cuantizar: proyecta parches continuos y predice bloques largos de golpe:', rx + 14, ry + 40, halfW - 28, ['Sin cuantizar: predice bloques largos de golpe:']);
 
     const rLeft = rx + 16, rW = halfW - 32;
     const pCount = 4; // 3 parches de entrada -> 1 mega-bloque de salida
@@ -1618,13 +1660,13 @@ input[type="range"] {
     ctx.fillStyle = '#e2eeff';
     ctx.font = '700 11.5px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('Decoder-Only (200M / 500M) · Optimiza MSE directo en 1 pasada forward', rLeft + rW / 2, tokY + 15);
+    fitFill('Decoder-Only (200M / 500M) · Optimiza MSE directo en 1 pasada forward', rLeft + rW / 2, tokY + 15, rW - 12, ['Decoder-Only (200M / 500M) · MSE directo en 1 pasada']);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 13px Inter, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('• Conserva los valores reales exactos sin discretizar.', rLeft, ry + boxH - 32);
-    ctx.fillText('• Evita acumular error paso a paso en horizontes largos.', rLeft, ry + boxH - 14);
+    fitFill('• Conserva los valores reales exactos sin discretizar.', rLeft, ry + boxH - 32, rW, ['• Conserva los valores reales sin discretizar.']);
+    fitFill('• Evita acumular error paso a paso en horizontes largos.', rLeft, ry + boxH - 14, rW, ['• Evita acumular error en horizontes largos.']);
     ctx.restore();
   }
 
@@ -1827,7 +1869,7 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA SIGUIENTE DIAPO: PREDICCIÓN CONFORME (SCP)', rx + 14, ry + 20);
+    ctx.fillText('⏭️ SIGUIENTE: RANGOS HONESTOS (PREDICCIÓN CONFORME)', rx + 14, ry + 20);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 12.5px "Space Grotesk", sans-serif';

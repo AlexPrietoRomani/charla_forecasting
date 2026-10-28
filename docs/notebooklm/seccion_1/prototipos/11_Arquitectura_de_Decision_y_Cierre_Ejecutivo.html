@@ -581,13 +581,13 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
   <!-- 1. CABECERA -->
   <header class="topbar">
     <div class="title-group">
-      <p>Cierre Ejecutivo · Árbol de Decisión en 3 Filtros: Datos (N), Latencia (CPU/GPU) y Riesgo</p>
-      <h1>Guía práctica: <span>¿Qué arquitectura elegir hoy?</span></h1>
+      <p>Cierre ejecutivo · Tres preguntas: cuántos datos, qué velocidad y qué riesgo</p>
+      <h1>Guía práctica: <span>¿Qué modelo elegir hoy?</span></h1>
     </div>
 
     <div class="top-controls">
       <button class="ctrl-btn" type="button" id="showAllBtn" title="Ver las 4 vías iluminadas a la vez">
-        ✨ Ver Todas
+        ✨ Todas
       </button>
       <button class="ctrl-btn active" type="button" id="loopBtn" title="Recorrido automático paso a paso">
         <span id="loopIcon">🔁</span> <span id="loopText">Recorrido Auto: ON</span>
@@ -630,7 +630,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
           <span class="via-icon">⚡</span>
           <span class="via-tag">CPU &lt; 2 µs · $0 GPU</span>
         </div>
-        <h2 class="via-title">Vía 1: Analíticos</h2>
+        <h2 class="via-title">Pocos datos: fórmulas clásicas</h2>
         <div class="model-chips">
           <span class="m-chip">Verhulst <small>Techo S</small></span>
           <span class="m-chip">Holt-Winters <small>α,β,γ</small></span>
@@ -685,7 +685,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
           <span class="via-icon">📊</span>
           <span class="via-tag">CPU Multihilo (ms)</span>
         </div>
-        <h2 class="via-title">Vía 2: Tabular con Lags</h2>
+        <h2 class="via-title">Tablas estables: árboles con rezagos</h2>
         <div class="model-chips">
           <span class="m-chip">LightGBM <small>Rey M5</small></span>
           <span class="m-chip">XGBoost</span>
@@ -740,7 +740,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
           <span class="via-icon">🧠</span>
           <span class="via-tag">GPU Dedicada · O((L/P)²)</span>
         </div>
-        <h2 class="via-title">Vía 3: Deep Learning</h2>
+        <h2 class="via-title">Gran escala: redes neuronales</h2>
         <div class="model-chips">
           <span class="m-chip">RNN / LSTM <small>Flujo</small></span>
           <span class="m-chip">N-BEATS</span>
@@ -796,7 +796,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
           <span class="via-icon">🔮</span>
           <span class="via-tag">0% Entreno Local</span>
         </div>
-        <h2 class="via-title">Vía 4: Foundation Zero-Shot</h2>
+        <h2 class="via-title">Sin historial: modelos ya entrenados</h2>
         <div class="model-chips">
           <span class="m-chip">TimesFM <small>Google</small></span>
           <span class="m-chip">Chronos-Bolt <small>Amazon</small></span>
@@ -850,7 +850,7 @@ button:focus-visible { outline: 2px solid var(--v2); outline-offset: 2px; }
   <footer class="golden-banner">
     <div class="golden-left">
       <span style="font-size:20px">💡</span>
-      <span><strong>Regla de Oro:</strong> La IA no reemplaza el criterio experto, lo escala. No busques adivinar el punto exacto: <strong>domina la incertidumbre con Conformal Prediction (P10–P90)</strong>.</span>
+      <span><strong>Regla de Oro:</strong> La IA escala tu criterio; entrega un rango, no un número.</span>
     </div>
 
     <div class="axiom-pills">

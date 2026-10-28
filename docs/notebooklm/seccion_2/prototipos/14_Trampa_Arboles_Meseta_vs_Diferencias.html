@@ -636,7 +636,7 @@ input[type="range"] {
       </div>
       <div>
         <p class="eyebrow">ACTO 2 · EXPERIMENTO REAL · OLA SEP–OCT 2023</p>
-        <h1><span class="num">14</span> La trampa de los árboles: <span class="sub">meseta plana vs. diferencias (Δy)</span></h1>
+        <h1><span class="num">14</span> La trampa de los árboles: <span class="sub">meseta plana vs. diferencias</span></h1>
       </div>
     </div>
 
@@ -657,7 +657,7 @@ input[type="range"] {
   <!-- FLOWBAR -->
   <nav class="flowbar" aria-label="Etapas del experimento">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="hull" id="tab-hull">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="hull" id="tab-hull" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">El Loro Sabio</span>
@@ -667,7 +667,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="wave" id="tab-wave">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="wave" id="tab-wave" data-route="corta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Ola Sep-Oct 2023</span>
@@ -677,7 +677,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="diff" id="tab-diff">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="diff" id="tab-diff" data-route="experta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Solución Δy</span>
@@ -687,10 +687,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="error" id="tab-error">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="error" id="tab-error" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
-          <span class="proc-year">Pase a Diapo 15</span>
+          <span class="proc-year">Siguiente: Benchmark</span>
           <span class="proc-sub">El Gran Benchmark</span>
         </span>
       </button>
@@ -708,25 +708,23 @@ input[type="range"] {
     <!-- COLUMNA IZQUIERDA -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · TEOREMA DE GEOMETRÍA</span>
+        <span class="stage-tag" id="stageTag">LA GEOMETRÍA DEL ÁRBOL</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">Por qué los árboles no imaginan lo que nunca han visto</h2>
+      <h2 class="narr-title" id="narrTitle">Los árboles no imaginan lo que nunca han visto</h2>
       
-      <p class="narr-lead" id="narrLead">
-        Los árboles de decisión (Random Forest, XGBoost, LightGBM) dividen el espacio de variables en <strong>hiperrectángulos ortogonales cerrados</strong>. Su salida es el promedio de las observaciones históricas en cada hoja. <strong>Es matemáticamente imposible que extrapolen por encima del máximo visto en entrenamiento.</strong>
-      </p>
+      <p class="narr-lead" id="narrLead">Los árboles de decisión dividen los datos en cajas fijas y promedian lo ya visto: no pueden superar su máximo histórico.</p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
-          <div class="info-block-label">🦜 La Metáfora del Loro Sabio</div>
-          <div class="info-block-text">El árbol es como un loro erudito: repite a la perfección cualquier palabra escuchada en el pasado, pero jamás podrá pronunciar una palabra nueva. Ante 38 °C con tope de 34 °C, repite 31.5 °C.</div>
+          <div class="info-block-label">🦜 El loro erudito</div>
+          <div class="info-block-text">Como un loro: repite lo oído. Con tope de 34 °C, ante 38 °C repite 31.5 °C.</div>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label">⚡ La Solución Matemática en Producción</div>
-          <div class="info-block-text">No alimentes niveles absolutos (y_t). Entrena sobre la tasa de aceleración (Δy = y_t − y_{t−1}) con lags de memoria inercial y reconstruye el nivel por suma acumulativa.</div>
+          <div class="info-block-label">⚡ La solución: restar</div>
+          <div class="info-block-text">No uses niveles absolutos: entrena con la diferencia diaria (Δy) y reconstruye el nivel sumando.</div>
         </div>
       </div>
 
@@ -736,7 +734,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La línea roja no es un bug: es un teorema; sin diferenciar, el sistema colapsa.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La línea roja es un teorema: sin diferenciar, el árbol colapsa.</span>
       </div>
     </article>
 
@@ -777,7 +775,7 @@ input[type="range"] {
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>Experimento Canónico:</strong> Datos reales SENAMHI Punchana · 32 días de ola extrema (15-sep a 16-oct 2023) · Test ciego</span>
-    <span class="link">Pase a Diapo 15: Benchmark de 14 Modelos (Tierra vs Supercómputo) →</span>
+    <span class="link">Siguiente: Benchmark de 14 Modelos (Tierra vs Supercómputo)</span>
   </footer>
 
 </main>
@@ -795,55 +793,55 @@ input[type="range"] {
   const STAGE_DATA = {
     hull: {
       accent: '#ff5277',
-      tag: 'ETAPA 1 DE 4 · TEOREMA DE GEOMETRÍA',
-      title: 'Por qué los árboles no imaginan lo que nunca han visto',
-      lead: 'Los árboles de decisión (Random Forest, XGBoost, LightGBM) dividen el espacio de variables en <strong>hiperrectángulos ortogonales cerrados</strong>. Su salida es el promedio de las observaciones históricas en cada hoja. <strong>Es matemáticamente imposible que extrapolen por encima del máximo visto en entrenamiento.</strong>',
+      tag: 'LA GEOMETRÍA DEL ÁRBOL',
+      title: 'Los árboles no imaginan lo que nunca han visto',
+      lead: 'Los árboles de decisión dividen los datos en cajas fijas y promedian lo ya visto: no pueden superar su máximo histórico.',
       blocks: [
-        { label: '🦜 La Metáfora del Loro Sabio', text: 'El árbol es como un loro erudito: repite a la perfección cualquier palabra escuchada en el pasado, pero jamás podrá pronunciar una palabra nueva. Ante 38 °C con tope de 34 °C, repite 31.5 °C.' },
-        { label: '⚡ La Solución Matemática en Producción', text: 'No alimentes niveles absolutos (y_t). Entrena sobre la tasa de aceleración (Δy = y_t − y_{t−1}) con lags de memoria inercial y reconstruye el nivel por suma acumulativa.' }
+        { label: '🦜 El loro erudito', text: 'Como un loro: repite lo oído. Con tope de 34 °C, ante 38 °C repite 31.5 °C.' },
+        { label: '⚡ La solución: restar', text: 'No uses niveles absolutos: entrena con la diferencia diaria (Δy) y reconstruye el nivel sumando.' }
       ],
       math: 'ŷ_nivel ≤ max(y_train) = 34.0 °C ──▶ ŷ_diff = 37.46 °C',
       hint: 'Δy = y_t − y_{t-1}',
-      quote: 'La línea roja no es un bug: es un teorema; sin diferenciar, el sistema colapsa.'
+      quote: 'La línea roja es un teorema: sin diferenciar, el árbol colapsa.'
     },
     wave: {
       accent: '#ffc05c',
-      tag: 'ETAPA 2 DE 4 · LA OLA DE CALOR DE 2023',
-      title: 'El récord de 38.0 °C que rompió los modelos en niveles',
-      lead: 'Durante 32 días de septiembre y octubre de 2023, una ola de calor histórica azotó Iquitos. Con el <strong>tope artificial de entrenamiento en 34.0 °C</strong>, el modelo en niveles quedó ciego y produjo una meseta plana de 31.5 °C.',
+      tag: 'LA OLA DE 2023',
+      title: 'El récord de 38.0 °C rompió a los modelos en niveles',
+      lead: 'Con tope de entrenamiento de 34.0 °C, el modelo quedó ciego en la ola de 2023 y dibujó 31.5 °C planos.',
       blocks: [
-        { label: '🔥 El Pico Récord del 7 de Octubre', text: 'La temperatura escaló a 38.0 °C. La línea cian muestra la realidad física de la selva; la línea roja muestra la impotencia del árbol tradicional.' },
-        { label: '📉 El Costo Operacional del Error', text: 'Un error de casi 7 °C en el pico descalibra generadores eléctricos, sistemas de refrigeración de vacunas y alarmas de salud pública.' }
+        { label: '🔥 El pico del 7 de octubre', text: 'La temperatura subió a 38.0 °C. La línea cian es la realidad; la roja, la impotencia del árbol.' },
+        { label: '📉 El costo del error', text: 'Casi 7 °C de error en el pico descalibra generadores, refrigeración de vacunas y alarmas de salud.' }
       ],
       math: 'Error Pico = 38.0 °C (Real) − 31.5 °C (Meseta) = 6.5 °C',
       hint: 'Colapso de Niveles',
-      quote: 'El árbol reportaba 31.5 °C mientras la calle marcaba 38.0 °C.'
+      quote: 'El árbol decía 31.5 °C mientras la calle marcaba 38.0 °C.'
     },
     diff: {
       accent: '#6ef0b4',
-      tag: 'ETAPA 3 DE 4 · SOLUCIÓN EN DIFERENCIAS',
-      title: 'Diferenciación: cómo liberar a los árboles del tope histórico',
-      lead: 'Al modelar la diferencia <strong>Δy = y_t − y_{t−1}</strong>, el árbol ya no aprende temperaturas absolutas: aprende <strong>aceleración y desaceleración térmica</strong>. Esto le permite trepar escalón por escalón hasta alcanzar 37.46 °C.',
+      tag: 'LA SOLUCIÓN: DIFERENCIAS',
+      title: 'Restar días libera a los árboles de su tope',
+      lead: 'Al modelar la diferencia diaria (Δy), el árbol aprende aceleraciones térmicas y escala escalón a escalón hasta 37.46 °C.',
       blocks: [
-        { label: '🪜 La Reconstrucción por Integración', text: 'El árbol predice si mañana subirá +1.2 °C o bajará −0.8 °C. La suma acumulativa (cumsum) reconstruye el nivel récord sin violar el convex hull.' },
-        { label: '🧠 Lags de Memoria Inercial', text: 'Con lags [1, 2, 3, 7, 14] el modelo captura tanto la inercia inmediata como el ritmo semanal de la atmósfera amazónica.' }
+        { label: '🪜 Reconstruir sumando', text: 'Predice si mañana sube +1.2 °C o baja −0.8 °C; sumando reconstruye el nivel récord.' },
+        { label: '🧠 Memoria de días pasados', text: 'Con rezagos de 1, 2, 3, 7 y 14 días captura la inercia inmediata y el ritmo semanal.' }
       ],
       math: 'y_t = y_{t-1} + Δŷ_t ──▶ Extrapola libremente',
       hint: 'Ingeniería Parsimoniosa',
-      quote: 'La solución no es una GPU: una resta matemática hace escalar al árbol.'
+      quote: 'Una simple resta hace escalar al árbol; no hace falta GPU.'
     },
     error: {
       accent: '#38efff',
-      tag: 'ETAPA 4 DE 4 · REDUCCIÓN DEL 66% DEL ERROR',
-      title: 'De MAE 4.12 °C a 1.39 °C: la prueba empírica auditada',
-      lead: 'El resultado experimental es inapelable: <strong>RF en diferencias reduce el error absoluto medio en un 66.3%</strong> durante la ola de calor récord, dejándonos listos para el gran benchmark de 14 modelos.',
+      tag: 'LA PRUEBA AUDITADA',
+      title: 'De 4.12 °C a 1.39 °C de error: la prueba auditada',
+      lead: 'En la ola récord, restar diferencias redujo el error promedio un 66.3%; listos para el gran benchmark de 14 modelos.',
       blocks: [
-        { label: '🎯 Auditoría de Rendimiento en Ola', text: 'RF Niveles: MAE 4.12 °C (ciego ante la ola). RF Diferencias: MAE 1.39 °C (sigue la física real).' },
-        { label: '➡️ Pase a Diapositiva 15 (Gran Benchmark)', text: '¿Empata esta solución con supercomputadoras globales de 9 km y modelos fundacionales de Google? Vamos al podio.' }
+        { label: '🎯 Resultado en la ola', text: 'Random Forest en niveles: error 4.12 °C (ciego a la ola). En diferencias: 1.39 °C (sigue la física).' },
+        { label: '➡️ Siguiente: el gran benchmark', text: '¿Empata esta solución con supercomputadoras de 9 km y modelos de Google? Vamos al podio.' }
       ],
       math: 'MAE: 4.12 °C ──▶ 1.39 °C (−66.3% de Error)',
-      hint: 'Pase a Diapo 15 →',
-      quote: 'Pasemos a la Diapo 15: CPU en 0.25 segundos contra supercomputadoras globales.'
+      hint: 'Siguiente: el gran benchmark',
+      quote: 'Siguiente: CPU en 0.25 segundos contra supercomputadoras globales.'
     }
   };
 

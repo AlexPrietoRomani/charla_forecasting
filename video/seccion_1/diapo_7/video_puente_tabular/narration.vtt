@@ -1,0 +1,21 @@
+WEBVTT
+
+1
+00:00:00.600 --> 00:00:04.600
+El truco: convertir la serie en una tabla
+
+2
+00:00:06.300 --> 00:00:13.300
+Una ventana desliza sobre los días y arma una tabla
+
+3
+00:00:14.300 --> 00:00:20.700
+El árbol corta los datos en cajas simples
+
+4
+00:00:21.600 --> 00:00:26.600
+Si el récord supera el techo, el árbol se aplana
+
+5
+00:00:27.000 --> 00:00:29.800
+Predecir el cambio, no el nivel, rompe el techo

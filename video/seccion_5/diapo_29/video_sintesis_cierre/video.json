@@ -1,0 +1,9 @@
+{
+  "fps": 30,
+  "dur_ms": 25000,
+  "start_ms": 0,
+  "time_scale": 1,
+  "dpr": 1.2,
+  "bg": "03050F",
+  "out": "sintesis_cierre.mp4"
+}

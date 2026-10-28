@@ -1,6 +1,6 @@
 # Tablero de Tareas — Charla Forecasting & IA (v2 Real-Data)
 
-> **Estado General:** `[X] F1–F11 Completadas al 100% (Motor de estilos, 21 prototipos homologados, 9 videos offline generados e integrados)`  
+> **Estado General:** `[X] F1–F11 Completadas al 100%` · `[ ] F12 Planificada (claridad para audiencia no estadística + pulido de deck y videos)`  
 > **Convenciones:** `[ ]` pendiente · `[/]` en progreso · `[X]` completado y verificado.  
 > **Documento Rector:** [`docs/plan/plan_maestro.md`](../plan/plan_maestro.md)  
 > **Detalle por Fases:** [`docs/task/fases/`](fases/)
@@ -373,4 +373,28 @@
     - [x] A11.5.2.2 Configurar `capture.mjs` + `render.sh` y renderizar `walkforward_jaen.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`, fade-in `0.35 s` desde `#040812`) e integrarlo en `cinematicVideoGate27` (Diapo 27).
     - [x] A11.5.2.3 Auditar con `ffprobe` y extracción de keyframes (`t = 3 s, 9 s, 16 s, 23 s, 29.5 s`) verificando que las barras horizontales de `RMSE` y la banda `Split Conformal 80%` no colisionan con los textos y respetan el fondo `#040812`.
 
+---
 
+## F12: Claridad Pedagógica para Audiencia No Estadística y Pulido Profesional de Deck y Videos
+*Detalle completo en:* [`docs/reference/fases/fase_12_claridad_no_estadistica_deck_videos.md`](fases/fase_12_claridad_no_estadistica_deck_videos.md)
+> **Estado:** `[/] En progreso` (auditoría 28-10-2026: jerga sin glosario hasta 161 términos/prototipo, 72 pantallas en 35 min, cifras sin traducción, Idea Clave al pie, videos de 9–13 px mudos, pipeline solo-Linux duplicado ×9).
+> **Objetivo:** Que una persona sin estadística entienda y recuerde la charla: una idea por pantalla, glosario emergente + analogías, cifras con significado, titular = mensaje, videos legibles y subtitulados, pipeline de video de un comando en Windows/Linux.
+
+- [X] **SF12.1 Capa de Traducción: Glosario Emergente, Analogías y Cifras con Significado**
+  - [X] T12.1.1 Inventario de jerga de los 21 prototipos y glosario central `front/deck_glossary.py` (≤ 40 entradas, definición ≤ 15 palabras + analogía).
+  - [X] T12.1.2 Inyector automático de tooltips `inject_glossary()` en `front/prototype_engine.py` (CSS puro, hover + teclado).
+  - [X] T12.1.3 Reescritura en lenguaje llano de titulares (≤ 12 palabras), leads (≤ 22) e Ideas Clave de los 21 prototipos; versión técnica a `front/deck_notes.py`.
+  - [X] T12.1.4 Tabla cifra → frase `front/deck_plain_numbers.py` (1 decimal visible + frase cotidiana, trazada a CSV/JSON fuente).
+- [X] **SF12.2 Jerarquía Visual y Ritmo: Una Idea por Pantalla**
+  - [X] T12.2.1 Cabecera "hero": Idea Clave como titular ≥ 34 px y taxonomía única `Acto N · Diapo M` (`promote_takeaway_to_hero`).
+  - [X] T12.2.2 Ruta corta (≤ 3 etapas, ≤ 66 pantallas) y ruta experta con tecla `D` (`data-route`).
+  - [X] T12.2.3 Apertura y secciones profesionales: 5 fondos por acto, Diapo 2 sin vacíos, agenda con pregunta + minutos (Diapos 1–4, 18, 24, 28, 30).
+  - [X] T12.2.4 Retiro de botones *"Pase a Diapo"* (`strip_internal_nav`) y cierre en 3 frases (Diapo 29).
+- [X] **SF12.3 Videos Legibles a 5 m, Subtitulados y Pipeline Reproducible**
+  - [X] T12.3.1 Escala tipográfica de video (≥ 22 / 30 / 64 px) y gráfico ≥ 60 % del lienzo en los 9 `scene_template.html`; re-render.
+  - [X] T12.3.2 Subtítulos por beat (`beats.json` → banda en escena + `narration.vtt`) y `<track>` en los 9 `<video>` del deck.
+  - [X] T12.3.3 Pipeline único y portable `video/_pipeline/{capture.mjs,render.py}` (Playwright Chromium + ffmpeg), 0 `render.sh`, MP4 legacy fuera del repo.
+- [/] **SF12.4 Validación con Audiencia No Estadística, Compilación y Cierre**
+  - [X] T12.4.1 Validador `scripts/audit_f12_claridad.py` (`--inventario --glosario --titulares --jerarquia --cifras --video --all`).
+  - [ ] T12.4.2 Prueba de comprensión con 3 personas no estadísticas (≥ 4/5) y ensayo cronometrado de la ruta corta (≤ 35 min).
+  - [X] T12.4.3 Compilación final, auditoría multi-resolución (`f10` + `f12`), capturas `screenshots/f12_*` y bitácora.

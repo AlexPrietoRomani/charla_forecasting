@@ -76,3 +76,6 @@ docs/plantilla_assets/
 
 # Guia de exposicion de 40 minutos (local)
 guia_exposicion_40min.md
+
+# --- Versiones MP4 retiradas del repo en F12 (conservar solo el vigente) ---
+video/**/*_v[0-9]*.mp4

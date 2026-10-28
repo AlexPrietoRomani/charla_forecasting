@@ -1,7 +1,8 @@
+import json
 import os
 import sys
-import json
 from pathlib import Path
+
 import pandas as pd
 
 # Resolver directorios base y front
@@ -12,14 +13,15 @@ if str(FRONT_DIR) not in sys.path:
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from deck_styles import get_deck_css
+from deck_branding import get_branding
+from deck_notes import get_speaker_notes
 from deck_slides_p1 import get_slides_part1
 from deck_slides_p2 import get_slides_part2
-from deck_notes import get_speaker_notes
-from deck_branding import get_branding
+from deck_styles import get_deck_css
+
 
 def clean_nans(obj):
-    if isinstance(obj, float) and (pd.isna(obj) or obj != obj):
+    if isinstance(obj, float) and pd.isna(obj):
         return None
     elif isinstance(obj, dict):
         return {k: clean_nans(v) for k, v in obj.items()}
@@ -145,7 +147,8 @@ def build_deck():
         video_rel = video_path.relative_to(BASE_DIR).as_posix()
         gate_id = "cinematicVideoGate" if slide_num == 5 else f"cinematicVideoGate{slide_num}"
         cinematic_gates[slide_num] = render_slide_video_gate(
-            section_num, slide_num, video_rel, gate_id=gate_id
+            section_num, slide_num, video_rel, gate_id=gate_id,
+            vtt_path=video_path.parent / "narration.vtt",
         )
 
     branding = get_branding()
@@ -172,8 +175,6 @@ def build_deck():
     branding["b64_p27_html"] = b64_p27_html
     branding["cinematic_gates"] = cinematic_gates
     b64_header_logo = branding["b64_header"]
-    b64_dw_logo = branding["b64_dw"]
-    qr_svg = branding["qr_svg"]
 
     css_content = get_deck_css(branding=branding)
 
@@ -248,6 +249,7 @@ def build_deck():
 
   <div style="display:flex; align-items:center; gap:8px;">
     <button class="nav-btn" onclick="toggleSpeakerNotes()" title="Ver notas y guion del orador (N)">[N] Notas</button>
+    <button class="nav-btn" onclick="toggleExpertMode()" title="Modo experto: muestra las etapas técnicas (D)">[D] Experto</button>
     <button class="nav-btn" onclick="prevSlide()" title="Diapositiva anterior (&larr; / PageUp)">&larr; Prev</button>
     <button class="nav-btn" onclick="nextSlide()" title="Siguiente diapositiva (&rarr; / Espacio)">Next &rarr;</button>
   </div>
@@ -316,6 +318,7 @@ def build_deck():
           ifr.contentWindow.postMessage({{ type: "activate" }}, "*");
         }} catch (err) {{}}
       }}
+      postExpertState();
 
       initSlideVisuals(index);
       if (window.__deckCinematicEnterSlide) {{
@@ -335,6 +338,33 @@ def build_deck():
     document.body.classList.toggle("dark-mode");
   }}
 
+  // Modo experto (tecla D): muestra las etapas técnicas ocultas de los prototipos
+  function postExpertState() {{
+    const on = document.documentElement.hasAttribute("data-expert");
+    document.querySelectorAll(".slide iframe").forEach(ifr => {{
+      try {{
+        ifr.contentWindow.postMessage({{ type: "expert", on: on }}, "*");
+      }} catch (err) {{}}
+    }});
+    return on;
+  }}
+
+  function toggleExpertMode() {{
+    document.documentElement.toggleAttribute("data-expert");
+    const on = postExpertState();
+    let toast = document.getElementById("expertToast");
+    if (!toast) {{
+      toast = document.createElement("div");
+      toast.id = "expertToast";
+      toast.style.cssText = "position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:9999;padding:8px 18px;border-radius:8px;background:rgba(10,18,40,.92);color:#12C8FC;font:700 14px 'IBM Plex Mono',monospace;border:1px solid rgba(18,200,252,.4);pointer-events:none;";
+      document.body.appendChild(toast);
+    }}
+    toast.textContent = "Modo experto: " + (on ? "ON" : "OFF");
+    toast.style.display = "block";
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {{ toast.style.display = "none"; }}, 1500);
+  }}
+
   function openLightbox(src) {{
     const modal = document.getElementById("lightboxModal");
     const img = document.getElementById("lightboxImg");
@@ -352,6 +382,10 @@ def build_deck():
   }}
 
   window.addEventListener("message", (e) => {{
+    if (e.data && e.data.type === "expert_query") {{
+      postExpertState();
+      return;
+    }}
     if (e.data && e.data.type === "deck_key") {{
       const key = e.data.key;
       if (key === "ArrowRight" || key === "PageDown") {{
@@ -365,6 +399,8 @@ def build_deck():
       }} else if (key.toLowerCase() === "n") {{
         toggleSpeakerNotes();
       }} else if (key.toLowerCase() === "d") {{
+        toggleExpertMode();
+      }} else if (key.toLowerCase() === "m") {{
         toggleDarkMode();
       }} else if (key.toLowerCase() === "f") {{
         if (!document.fullscreenElement) {{
@@ -407,6 +443,9 @@ def build_deck():
       e.preventDefault();
       toggleSpeakerNotes();
     }} else if (e.key.toLowerCase() === "d") {{
+      e.preventDefault();
+      toggleExpertMode();
+    }} else if (e.key.toLowerCase() === "m") {{
       e.preventDefault();
       toggleDarkMode();
     }} else if (e.key.toLowerCase() === "f") {{

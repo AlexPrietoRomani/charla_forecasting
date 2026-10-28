@@ -784,6 +784,7 @@ input[type="range"] {
     padding: 4px 8px !important;
   }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -801,7 +802,7 @@ input[type="range"] {
       </div>
       <div>
         <p class="eyebrow">DIAGNÓSTICO · ALERTAS DEL STACK TECNOLÓGICO · SECCIÓN 3</p>
-        <h1>Precisión actual y <span class="era">las tres trampas</span> <span class="sub">· Por qué la tecnología fracasa si ignora la botánica</span></h1>
+        <h1>Precisión y <span class="era">las tres trampas</span> <span class="sub">· si se ignora la botánica</span></h1>
       </div>
     </div>
 
@@ -811,7 +812,7 @@ input[type="range"] {
         <span>STACK: IOT + DRON + SATÉLITE</span>
       </div>
       <div class="via-pills">
-        <span class="via-pill">🛰️ <strong>1. Trampa NDVI:</strong> Miente en verde (&gt;0.85)</span>
+        <span class="via-pill">🛰️ <strong>1. Trampa NDVI:</strong> Miente en verde <span data-expert>(&gt;0.85)</span></span>
         <span class="via-pill">⏳ <strong>2. Trampa τ:</strong> Clima de ayer ≠ Cosecha</span>
         <span class="via-pill">💀 <strong>3. Trampa N=24:</strong> Overfit financiero</span>
       </div>
@@ -821,7 +822,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. El Stack 3D y las 3 Trampas ─▶ 2. Trampa 1: NDVI vs Red Edge (NDRE) ─▶ 3. Trampas 2 y 3: Retraso τ y N=24 (Zero-Shot + SCP) ─▶ 4. 3 Axiomas e Ir al Caso Jaén -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 23">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="stack" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="stack" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Stack 3D y las 3 Trampas</span>
@@ -832,18 +833,18 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Trampa 1: NDVI vs. NDRE</span>
-          <span class="proc-sub">Saturación &gt;0.85 y Borde Rojo</span>
+          <span class="proc-sub">Saturación y Borde Rojo <span data-expert>(NDVI &gt; 0.85)</span></span>
         </div>
         <div class="proc-progress" id="prog-ndvi"></div>
       </button>
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="tau_n24" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="tau_n24" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Trampas 2 y 3: τ y N=24</span>
@@ -854,10 +855,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="jaen" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="jaen" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">3 Axiomas ─▶ Ir al Caso Jaén</span>
+          <span class="proc-year">3 Axiomas y el caso Jaén</span>
           <span class="proc-sub">La prueba de fuego en tiempo real</span>
         </div>
         <div class="proc-progress" id="prog-jaen"></div>
@@ -879,30 +880,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · DIAGNÓSTICO DEL STACK MODERNO</span>
+          <span class="stage-tag" id="stageTag">DIAGNÓSTICO DEL STACK</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. El Stack de Precisión Actual y sus 3 Trampas Mortales</h2>
-        <p class="narr-lead" id="narrLead">
-          Hoy combinamos <b>3 capas tecnológicas (IoT en planta/suelo, Drones UAV y Satélites)</b>. Pero cuando optimizamos algoritmos sin botánica, caemos en <b>3 trampas que llevan al suicidio financiero</b>:
-        </p>
+        <h2 class="narr-title" id="narrTitle">Tres trampas mortales amenazan la tecnología agrícola actual</h2>
+        <p class="narr-lead" id="narrLead">Sensores, drones y satélites caen en 3 trampas si ignoran la botánica:</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🛰️ TRAMPA 1 (NDVI) Y ⏳ TRAMPA 2 (RETRASO τ)</div>
-          <p class="info-block-text" id="block1Text">
-            • <b>Trampa NDVI:</b> El índice de verdor engañoso (NDVI saturado &gt;0.85). El satélite ve hojas verdes, pero la planta ya abortó la flor.<br>
-            • <b>Trampa τ:</b> Ignorar el retraso botánico. El daño térmico de hoy en floración se refleja en el rendimiento <b>8 meses después</b>.
-          </p>
+          <div class="info-block-label" id="block1Label">🛰️ Verde ciego y retraso</div>
+          <p class="info-block-text" id="block1Text">❌ NDVI se satura sin ver el fruto <span data-expert>(tope ≈ 0.85)</span>. ❌ El retraso (τ) esconde daños de hace 8 meses.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">💀 TRAMPA 3 (N=24) Y LA PRUEBA DE FUEGO EN JAÉN</div>
-          <p class="info-block-text" id="block2Text">
-            • <b>Trampa N=24:</b> Escasez estadística. Tenemos solo <b>24 iteraciones anuales</b>; entrenar redes profundas crudas memoriza ruido.<br>
-            • <b>La prueba de fuego:</b> La teoría es hermosa en el laboratorio, pero ahora la mediremos contra la <b>crisis real en Jaén</b>.
-          </p>
+          <div class="info-block-label" id="block2Label">💀 Pocos datos y caso Jaén</div>
+          <p class="info-block-text" id="block2Text">❌ Las redes complejas memorizan 24 filas anuales. ✅ Fenología y calibración conformal reducen el error.</p>
         </div>
 
         <div class="math-strip">
@@ -913,7 +906,7 @@ input[type="range"] {
 
       <div class="executive-takeaway" id="executiveTakeaway">
         <span class="takeaway-badge">💡 Idea Clave</span>
-        <span class="takeaway-text" id="speakerQuote">La tecnología sin botánica cae en 3 trampas: verdor ciego, lag τ y N=24.</span>
+        <span class="takeaway-text" id="speakerQuote">Sin botánica, la tecnología cae en tres trampas.</span>
       </div>
     </aside>
 
@@ -925,7 +918,7 @@ input[type="range"] {
           <h3 class="stage-title" id="canvasTitle">Arquitectura Multicapa (IoT · Dron · Satélite) y Diagnóstico de las 3 Trampas</h3>
         </div>
         <div class="stage-kpis" id="stageKpis">
-          <span class="kpi-chip" id="kpi1">Trampa 1: <strong style="color:var(--agro)">NDVI &gt; 0.85</strong></span>
+          <span class="kpi-chip" id="kpi1">Trampa 1: <strong style="color:var(--agro)">NDVI saturado</strong> <span data-expert>&gt; 0.85</span></span>
           <span class="kpi-chip" id="kpi2">Trampa 2: <strong style="color:var(--ancestral)">Lag τ = 8m</strong></span>
           <span class="kpi-chip" id="kpi3">Trampa 3: <strong style="color:var(--danger)">N = 24 años</strong></span>
         </div>
@@ -981,7 +974,7 @@ input[type="range"] {
 
   <!-- FOOTER -->
   <footer class="footnote">
-    <span><strong>La Prueba de Fuego (Caso de Estudio 2 — Jaén):</strong> “La teoría es hermosa en el laboratorio, pero mañana la mediremos contra la crisis real en Jaén (24.0 vs. 18.46 vs. 18.20 qq/ha).”</span>
+    <span><strong>La Prueba de Fuego (Caso de Estudio 2 — Jaén):</strong> “La teoría es hermosa en el laboratorio, pero mañana la mediremos contra la crisis real en Jaén (24 vs. 18.5 vs. 18.2 qq/ha <span data-expert>24.0 · 18.46 · 18.20</span>).”</span>
     <span>Fuente: Huete et al. (2002) · Barnes et al. (2000) · Achour et al. (2025) · AgroVisión Perú · Sección 3</span>
   </footer>
 
@@ -1034,7 +1027,7 @@ input[type="range"] {
     },
     {
       num: 'AXIOMA II',
-      title: 'Un NDVI > 0.85 es ciego; la fisiología ocurre en el Red Edge',
+      title: 'Un NDVI saturado es ciego; la fisiología ocurre en el Red Edge',
       rule: '“No confundas la verdura estática del dosel con frutos reales; con LAI > 3 la clorofila satura el Rojo al 100%.”',
       fix: 'Sustituye o complementa el NDVI con el índice NDRE (Banda 5 Red Edge 705–740 nm de Sentinel-2) o EVI.',
       color: '#6ef0b4'
@@ -1062,16 +1055,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     stack: {
       accent: 'var(--terracotta)',
-      tag: 'ACTO 1 DE 4 · DIAGNÓSTICO DEL STACK TECNOLÓGICO',
-      title: '1. El Stack de Precisión Actual y sus 3 Trampas Mortales',
-      lead: 'Stack de 3 capas (IoT, Drones, Satélites) vulnerable a 3 trampas mortales sin botánica:',
-      b1Label: '🛰️ 1. NDVI CIEGO Y ⏳ 2. RETARDO τ',
-      b1Text: '❌ NDVI satura en 0.85 con hojas verdes sin fruto. ❌ Ignorar τ olvida daño de hace 8 meses.',
-      b2Label: '💀 3. N = 24 Y CASO JAÉN',
-      b2Text: '❌ Redes complejas memorizan 24 filas anuales. ✅ Fenología y Conformal reducen el error.',
+      tag: 'DIAGNÓSTICO DEL STACK',
+      title: 'Tres trampas mortales amenazan la tecnología agrícola actual',
+      lead: 'Sensores, drones y satélites caen en 3 trampas si ignoran la botánica:',
+      b1Label: '🛰️ Verde ciego y retraso',
+      b1Text: '❌ NDVI se satura sin ver el fruto <span data-expert>(tope ≈ 0.85)</span>. ❌ El retraso (τ) esconde daños de hace 8 meses.',
+      b2Label: '💀 Pocos datos y caso Jaén',
+      b2Text: '❌ Las redes complejas memorizan 24 filas anuales. ✅ Fenología y calibración conformal reducen el error.',
       formula: 'Stack: 1. IoT (Suelo/Hoja) + 2. Dron (YOLO/SAM 2) + 3. Satélite (10m)',
       hint: 'Haz clic en las capas 3D o en las 3 Trampas para inspeccionar',
-      quote: 'La tecnología sin botánica cae en 3 trampas: verdor ciego, lag τ y N=24.',
+      quote: 'Sin botánica, la tecnología cae en tres trampas.',
       icon: '📡',
       canvasTitle: 'Arquitectura Multicapa (IoT · Dron · Satélite) y Diagnóstico de las 3 Trampas',
       ovLeft: '',
@@ -1081,16 +1074,16 @@ input[type="range"] {
     },
     ndvi: {
       accent: 'var(--agro)',
-      tag: 'ACTO 2 DE 4 · TRAMPA 1: “EL NDVI MIENTE EN VERDE”',
-      title: '2. Trampa NDVI: Por qué el satélite ve hojas verdes cuando no hay café',
-      lead: 'Con más de 3 capas de hojas (LAI > 3), el NDVI se aplana en una meseta de 0.85–0.90.',
-      b1Label: '❌ TRAMPA DE SATURACIÓN VERDE',
-      b1Text: 'El satélite ve dosel verde en enero ignorando que la flor abortó en septiembre.',
-      b2Label: '✅ REMEDIO: BORDE ROJO (NDRE / EVI)',
-      b2Text: 'La banda Red Edge (705–740 nm, Sentinel-2 B5) penetra el follaje sin saturarse.',
-      formula: 'NDVI se satura en ~0.85 si LAI > 3  │  Remedio: NDRE (Red Edge 705–740 nm)',
+      tag: 'TRAMPA 1: EL NDVI MIENTE',
+      title: 'El satélite ve hojas verdes aunque no haya café',
+      lead: 'Con más de 3 capas de hojas (LAI > 3), el NDVI se aplana en una meseta, su tope <span data-expert>0.85–0.90</span>.',
+      b1Label: '❌ Trampa del verde ciego',
+      b1Text: 'El satélite ve dosel verde en enero e ignora que la flor abortó en septiembre.',
+      b2Label: '✅ Remedio: el borde rojo',
+      b2Text: 'La banda Red Edge (705–740 nm) penetra el follaje sin saturarse.',
+      formula: 'NDVI se aplana en su tope si LAI > 3  │  Remedio: NDRE (Red Edge 705–740 nm)',
       hint: 'Mueve la frondosidad (LAI) abajo para comparar NDVI vs. NDRE',
-      quote: 'Con LAI > 3 el NDVI se encandila en 0.85; el Borde Rojo NDRE penetra el dosel.',
+      quote: 'Con hojas densas el NDVI se ciega; el borde rojo sí ve.',
       icon: '🛰️',
       canvasTitle: 'Trampa 1 (“El NDVI Miente en Verde”): Meseta del NDVI (>0.85) vs. Linealidad del Red Edge (NDRE)',
       ovLeft: '',
@@ -1100,35 +1093,35 @@ input[type="range"] {
     },
     tau_n24: {
       accent: 'var(--purple)',
-      tag: 'ACTO 3 DE 4 · TRAMPAS 2 Y 3: RETRASO τ Y ESCASEZ N=24',
-      title: '3. Trampa τ y Trampa N=24: El Remedio Zero-Shot + Conformal (100% Cal)',
-      lead: 'Dos errores comunes: usar clima de ayer (t−1) y partir una muestra de solo N = 24 filas.',
-      b1Label: '⏳ REMEDIO A TRAMPA τ',
-      b1Text: '❌ t−1 da R² falso. ✅ Bloquear variables contemporáneas y usar ventanas de floración (τ = 6–8m).',
-      b2Label: '🛡️ REMEDIO A N=24: ZERO-SHOT + CONFORMAL',
-      b2Text: 'Modelos pre-entrenados fijan |Tr|=0 y asignan el 100% (|Cal|=24) a calibrar bandas P10–P90.',
+      tag: 'TRAMPAS 2 Y 3',
+      title: 'Dos trampas más: el retraso y los pocos datos',
+      lead: 'Dos errores comunes: usar el clima de ayer (t−1) y partir una muestra de solo 24 filas.',
+      b1Label: '⏳ Remedio al retraso',
+      b1Text: '❌ El clima de ayer da un acierto falso. ✅ Usar ventanas de floración (τ = 6–8 meses).',
+      b2Label: '🛡️ Remedio a los pocos datos',
+      b2Text: 'Un modelo preentrenado no usa datos para entrenar (|Tr|=0) y dedica las 24 cosechas a calibrar bandas P10–P90.',
       formula: 'Zero-Shot (|Tr| = 0) ──▶ |Cal| = 24 (100%) ──▶ I(x) = [ f̂(x) − q̂ , f̂(x) + q̂ ]',
       hint: 'Alterna abajo entre Split Clásico y Zero-Shot + 100% SCP',
-      quote: 'Zero-shot deja |Tr|=0 y dedica las 24 cosechas completas a calibrar Conformal al 90%.',
+      quote: 'Sin entrenar, las 24 cosechas sirven para calibrar la duda.',
       icon: '🛡️',
       canvasTitle: 'Remedio Matemático a las Trampas 2 y 3: Feature Engineering Fenológico + 100% Calibración SCP en N=24',
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Split Clásico en N=24 (Destruye Tr y Cal)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> TSFM Zero-Shot (|Tr|=0, |Cal|=24 íntegro)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Banda Conforme P10–P90</span>',
-      nextLabel: 'Ver Los 3 Axiomas e Ir al Caso Jaén ─▶'
+      nextLabel: 'Ver Los 3 Axiomas ─▶'
     },
     jaen: {
       accent: 'var(--ancestral)',
-      tag: 'ACTO 4 DE 4 · LOS 3 AXIOMAS DEL AGRO Y PUENTE AL CASO JAÉN',
-      title: '4. Los 3 Axiomas del Agro y “La Prueba de Fuego: Ir al Caso Jaén →”',
-      lead: 'Tres axiomas cuantitativos listos para validarse en el Caso de Estudio 2 (Jaén 2024):',
-      b1Label: '📜 LOS 3 AXIOMAS INVIOLABLES',
-      b1Text: '1. N=24 exige física. 2. NDVI > 0.85 exige Red Edge. 3. El tiempo agrícola es fenología.',
-      b2Label: '🔥 PRUEBA DE FUEGO EN JAÉN',
-      b2Text: 'Comprobaremos el duelo: 24.00 (NDVI ciego) vs 18.46 (Fusión) contra 18.20 qq/ha reales.',
-      formula: 'Teoría + 3 Axiomas ──▶ [ Ir al Caso Jaén → ] (24.0 vs 18.46 vs 18.20 qq/ha)',
+      tag: 'LOS 3 AXIOMAS',
+      title: 'Tres axiomas listos para probarse en Jaén',
+      lead: 'Tres reglas cuantitativas que validaremos en el Caso 2 (Jaén 2024).',
+      b1Label: '📜 Tres axiomas inviolables',
+      b1Text: 'Con 24 datos, usa física. Con NDVI saturado <span data-expert>(> 0.85)</span>, usa borde rojo. El tiempo agrícola es fenología.',
+      b2Label: '🔥 Prueba de fuego en Jaén',
+      b2Text: 'Comprobaremos el duelo: 24 (NDVI ciego) vs 18.5 (Fusión) contra 18.2 qq/ha reales. <span data-expert>24.00 · 18.46 · 18.20</span>',
+      formula: 'Teoría + 3 Axiomas ──▶ [ Ir al Caso Jaén → ] (24 vs 18.5 vs 18.2 qq/ha)',
       hint: 'Recorre los 3 Axiomas con el deslizador antes de pasar al Caso Jaén',
-      quote: 'Tres axiomas cierran la teoría: ahora comprobemos el modelo ante la sequía de Jaén.',
+      quote: 'Tres axiomas cierran la teoría; ahora, la prueba en Jaén.',
       icon: '🔥',
       canvasTitle: 'Los 3 Axiomas del Forecasting Agrícola y Puente Explícito al Caso de Estudio 2 (Jaén)',
       ovLeft: '',
@@ -1141,6 +1134,37 @@ input[type="range"] {
   const $ = id => document.getElementById(id);
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
+
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
 
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
@@ -1212,7 +1236,7 @@ input[type="range"] {
     } else {
       const ax = AXIOMS_AGRO[state.axiomIdx];
       $('kpi1').innerHTML = `Activo: <strong style="color:${ax.color}">${ax.num}</strong>`;
-      $('kpi2').innerHTML = `Jaén 2024: <strong style="color:var(--agro)">18.46 vs 18.20 Real</strong>`;
+      $('kpi2').innerHTML = `Jaén 2024: <strong style="color:var(--agro)">18.5 vs 18.2 Real</strong> <span data-expert>18.46 vs 18.20</span>`;
       $('kpi3').innerHTML = `Cobertura SCP: <strong style="color:var(--purple)">90% (α = 0.10)</strong>`;
     }
 
@@ -1435,15 +1459,24 @@ input[type="range"] {
     const rxStart = pad + leftW + 8;
     const rw = usableW - leftW - 8;
     const isCompactH = usableH < 310;
-    const bannerH = isCompactH ? 36 : 44;
+    const bannerH = isCompactH ? 28 : 44;
     const gap = isCompactH ? 5 : 8;
     const cardsAreaH = usableH - bannerH - (isCompactH ? 6 : 10);
-    const cardH = (cardsAreaH - gap * 2) / 3;
+    const cardH0 = (cardsAreaH - gap * 2) / 3;
+    // Pantalla baja: la tarjeta activa se expande (título + descripción + remedio) y las otras
+    // se reducen a título + remedio, para que nunca se superpongan líneas.
+    const accordion = cardH0 < 62;
+    const selH = accordion ? 64 : cardH0;
+    const otherH = accordion ? (cardsAreaH - gap * 2 - selH) / 2 : cardH0;
+    let cyAcc = padT;
 
     STACK_TRAPS.forEach((tr, idx) => {
-      const cy = padT + idx * (cardH + gap);
       const isSel = (idx === state.trapIdx);
+      const cardH = accordion ? (isSel ? selH : otherH) : cardH0;
+      const cy = cyAcc;
+      cyAcc += cardH + gap;
       const isCardCompact = cardH < 62;
+      const showSub = !accordion || isSel;
 
       ctx.save();
       ctx.fillStyle = isSel ? 'rgba(15, 25, 45, 0.96)' : 'rgba(8, 15, 30, 0.86)';
@@ -1461,12 +1494,12 @@ input[type="range"] {
       ctx.fill();
 
       const maxTextW = rw - 36;
-      let titleSize = isCardCompact ? 10 : 14.5;
-      let subSize = isCardCompact ? 9 : 12.5;
-      let remSize = isCardCompact ? 9 : 12;
-      const minTitle = isCardCompact ? 9 : 10.5;
-      const minSub = isCardCompact ? 8.5 : 9.5;
-      const minRem = isCardCompact ? 8 : 9;
+      let titleSize = accordion ? 12 : (isCardCompact ? 10 : 14.5);
+      let subSize = accordion ? 11 : (isCardCompact ? 9 : 12.5);
+      let remSize = accordion ? 10 : (isCardCompact ? 9 : 12);
+      const minTitle = accordion ? 10.5 : (isCardCompact ? 9 : 10.5);
+      const minSub = accordion ? 10 : (isCardCompact ? 8.5 : 9.5);
+      const minRem = accordion ? 9.5 : (isCardCompact ? 8 : 9);
 
       ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
       while (titleSize > minTitle && ctx.measureText(tr.trapTitle).width > maxTextW) {
@@ -1479,22 +1512,22 @@ input[type="range"] {
         ctx.font = `500 ${subSize}px Inter, sans-serif`;
       }
 
-      const remText = tr.remedy;
+      const remText = accordion ? tr.remedy.replace('(|Tr|=0) ', '') : tr.remedy;
       ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       while (remSize > minRem && ctx.measureText(remText).width + 30 > rw - 32) {
         remSize -= 0.5;
         ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       }
 
-      const pillH = isCardCompact ? 14 : 20;
-      const blockH = titleSize + 5 + subSize + 7 + pillH;
+      const pillH = accordion ? 16 : (isCardCompact ? 14 : 20);
+      const blockH = titleSize + 5 + (showSub ? subSize + 7 : 2) + pillH;
       const startY = Math.min(
         cy + Math.max(6, (cardH - blockH) / 2),
         cy + cardH - blockH - 4
       );
       const titleBaseY = startY + titleSize;
       const subBaseY = titleBaseY + 5 + subSize;
-      const pillY = subBaseY + 7;
+      const pillY = showSub ? subBaseY + 7 : titleBaseY + 7;
 
       ctx.fillStyle = '#ffffff';
       ctx.font = `700 ${titleSize}px "Space Grotesk", sans-serif`;
@@ -1503,7 +1536,7 @@ input[type="range"] {
 
       ctx.fillStyle = '#cbd5e1';
       ctx.font = `500 ${subSize}px Inter, sans-serif`;
-      ctx.fillText(tr.trapSub, rxStart + 18, subBaseY);
+      if (showSub) ctx.fillText(tr.trapSub, rxStart + 18, subBaseY);
 
       ctx.font = `700 ${remSize}px "JetBrains Mono"`;
       const pillW = Math.min(ctx.measureText(remText).width + 18, rw - 32);
@@ -1531,15 +1564,19 @@ input[type="range"] {
     ctx.stroke();
 
     ctx.fillStyle = '#fde68a';
-    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.font = '700 10.5px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🔥 LA PRUEBA DE FUEGO:', rxStart + 14, by + 17);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '500 9px Inter, sans-serif';
-    ctx.fillText('Medición real en Jaén (2024)', rxStart + 14, by + 32);
+    if (isCompactH) {
+      ctx.fillText('🔥 LA PRUEBA DE FUEGO · Jaén 2024', rxStart + 14, by + bannerH / 2 + 4);
+    } else {
+      ctx.fillText('🔥 LA PRUEBA DE FUEGO:', rxStart + 14, by + 17);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '500 9px Inter, sans-serif';
+      ctx.fillText('Medición real en Jaén (2024)', rxStart + 14, by + 32);
+    }
 
     // Botón flecha "Ir al Caso Jaén →"
-    const btnW = 124, btnH = 26;
+    const btnW = 124, btnH = isCompactH ? 22 : 26;
     const bx = rxStart + rw - btnW - 10, bby = by + (bannerH - btnH) / 2;
     ctx.fillStyle = '#e06d53';
     ctx.beginPath();
@@ -1770,17 +1807,17 @@ input[type="range"] {
     ctx.fillStyle = '#e9d5ff';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('💀 TRAMPA 3 (N=24): ¿CÓMO CALIBRAR INCERTIDUMBRE CON 24 DATOS?', rx + 14, padT + 20);
+    ctx.fillText('💀 TRAMPA 3 (N=24): ¿CÓMO CALIBRAR CON 24 DATOS?', rx + 14, padT + 20);
 
     // Visualización de las 24 monedas/iteraciones anuales (N=24)
     const gridX = rx + 16, gridY = padT + 34, gridW = rw - 32;
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '500 9.5px Inter, sans-serif';
+    ctx.font = '500 10.5px Inter, sans-serif';
     ctx.fillText(
       state.useZeroShot
-        ? '✅ TSFM Zero-Shot (TimesFM 2.0 / Chronos-Bolt): |Tr| = 0 ➔ ¡100% de los 24 años van a Calibrar |Cal| = 24!'
-        : '✕ Split Conformal Clásico: Gastar 18 años en entrenar |Tr| deja solo |Cal| = 6 años (Cuantil q̂ inestable)',
+        ? '✅ TSFM Zero-Shot: |Tr| = 0 ➔ ¡los 24 años van a Calibrar |Cal| = 24!'
+        : '✕ Split clásico: entrenar con 18 años deja |Cal| = 6 (cuantil q̂ inestable)',
       gridX,
       gridY + 10
     );

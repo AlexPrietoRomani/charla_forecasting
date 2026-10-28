@@ -840,7 +840,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. Los 5 Escalones ─▶ 2. Alcancías de Calor (GDD) ─▶ 3. Satélite NDVI ─▶ 4. Convergencia IoT y Pase a Diapo 21 -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 20">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="density" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="density" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">1950 → 2026 (5 Hitos)</span>
@@ -851,7 +851,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="gdd" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="gdd" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Alcancías de Calor (GDD)</span>
@@ -862,7 +862,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="ndvi" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Satélite NDVI y Nubes</span>
@@ -873,10 +873,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="bridge21" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="bridge21" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Convergencia ─▶ Diapo 21</span>
+          <span class="proc-year">Convergencia</span>
           <span class="proc-sub">Drones + IoT y Física Biológica</span>
         </div>
         <div class="proc-progress" id="prog-bridge21"></div>
@@ -897,10 +897,10 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · LA CADENA DEL SENSOR (1950–2026)</span>
+          <span class="stage-tag" id="stageTag">LA CADENA DEL SENSOR (1950–2026)</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. Explosión de densidad: De 1 dato al año a 1 dato por día y píxel</h2>
+        <h2 class="narr-title" id="narrTitle">De 1 dato al año a 1 dato por día y píxel</h2>
         <p class="narr-lead" id="narrLead">
           La diferencia entre la libreta del abuelo y la agricultura moderna es el <b>volumen y la velocidad</b>: pasamos de anotar <b>1 cosecha al año</b> a medir cada rincón de la finca desde el espacio.
         </p>
@@ -933,7 +933,7 @@ input[type="range"] {
 
       <div class="executive-takeaway" id="executiveTakeaway">
         <span class="takeaway-badge">💡 Idea Clave</span>
-        <span class="takeaway-text" id="speakerQuote">La revolución no es acumular datos, sino tenerlos a tiempo para prevenir.</span>
+        <span class="takeaway-text" id="speakerQuote">No basta acumular datos: hay que tenerlos a tiempo.</span>
       </div>
     </aside>
 
@@ -1115,8 +1115,8 @@ input[type="range"] {
   const STAGE_CONTENT = {
     density: {
       accent: 'var(--ancestral)',
-      tag: 'ACTO 1 DE 4 · LA CADENA DEL SENSOR (1950–2026)',
-      title: '1. Explosión de densidad: De 1 dato al año a 1 dato por día y píxel',
+      tag: 'LA CADENA DEL SENSOR (1950–2026)',
+      title: 'De 1 dato al año a 1 dato por día y píxel',
       lead: 'De la libreta del abuelo con <b>1 dato anual</b> al satélite con <b>1 dato diario por píxel</b>.',
       b1Label: '📡 LOS 5 ESCALONES (1950 → 2026)',
       b1Text: 'Saberes locales → Estaciones meteorológicas → Satélites multiespectrales → Drones/IoT → Modelos acoplados.',
@@ -1124,7 +1124,7 @@ input[type="range"] {
       b2Text: 'Tener telemetría a tiempo para detectar estrés fisiológico antes de la pérdida de cosecha.',
       formula: '1 dato/año (Libreta) ──▶ 365 datos/año (Estación) ──▶ 1 dato/día/píxel',
       hint: 'Mueve el deslizador o haz clic en los 5 círculos para auditar cada hito',
-      quote: 'La revolución tecnológica no es acumular datos, sino tenerlos a tiempo para prevenir.',
+      quote: 'No basta acumular datos: hay que tenerlos a tiempo.',
       icon: '📈',
       canvasTitle: 'Curva de Densidad de Datos (1950–2026): Los 5 Escalones Tecnológicos',
       ovLeft: '',
@@ -1134,9 +1134,9 @@ input[type="range"] {
     },
     gdd: {
       accent: 'var(--water)',
-      tag: 'ACTO 2 DE 4 · HITO 3: ESTACIONES SENAMHI Y GRADOS-DÍA (GDD)',
-      title: '2. Las “Alcancías de Calor” (GDD): El reloj térmico de la planta',
-      lead: 'El café avanza de fase acumulando calor en Grados-Día de Desarrollo sobre <b>T_base = 10 °C</b>.',
+      tag: 'ALCANCÍAS DE CALOR',
+      title: 'Las alcancías de calor: el reloj térmico de la planta',
+      lead: 'El café avanza de fase acumulando calor, medido en Grados-Día de Desarrollo sobre una base de 10 °C.',
       b1Label: '🌡️ ALCANCÍA TÉRMICA (GDD)',
       b1Text: 'Cada día con T > 10 °C suma monedas térmicas hasta abrir flor o madurar fruto.',
       b2Label: '⚠️ UMBRAL FATAL (>32 °C)',
@@ -1153,37 +1153,37 @@ input[type="range"] {
     },
     ndvi: {
       accent: 'var(--agro)',
-      tag: 'ACTO 3 DE 4 · HITO 4: REVOLUCIÓN SATELITAL (NDVI, CHIRPS Y SMAP)',
-      title: '3. El Ojo Satelital (NDVI): Cómo medir la fotosíntesis desde el espacio',
-      lead: 'Sentinel-2 mide cómo la clorofila absorbe luz Roja (665 nm) y refleja Infrarrojo Cercano (842 nm).',
-      b1Label: '🛰️ FÍSICA RADIATIVA',
-      b1Text: 'NDVI = (NIR − Red) / (NIR + Red). Estima vigor foliar y fotosíntesis activa.',
-      b2Label: '🌫️ SATURACIÓN ÓPTICA (LAI > 3)',
-      b2Text: 'Con follaje denso el NDVI se estanca en 0.85 y no detecta aborto floral.',
+      tag: 'EL OJO SATELITAL',
+      title: 'El ojo satelital mide la fotosíntesis desde el espacio',
+      lead: 'El satélite Sentinel-2 mide cuánta luz absorben y reflejan las hojas verdes para estimar su vigor.',
+      b1Label: '🛰️ FÍSICA DE LA LUZ',
+      b1Text: 'NDVI = (NIR − Red) / (NIR + Red): estima el vigor de las hojas y la fotosíntesis activa.',
+      b2Label: '🌫️ SATURACIÓN CON FOLLAJE DENSO',
+      b2Text: 'Con follaje denso (LAI > 3) el NDVI se estanca en 0.85 y no detecta el aborto floral.',
       formula: 'NDVI = ( NIR − Rojo ) / ( NIR + Rojo )   │   Se satura si LAI > 3',
       hint: 'Aumenta la frondosidad (LAI) abajo y mira cómo el NDVI se aplana',
-      quote: 'El satélite mide luz reflejada; con follaje denso se satura y enceguece.',
+      quote: 'Con follaje denso el satélite se satura y queda ciego.',
       icon: '🛰️',
       canvasTitle: 'Física Radiativa del Satélite (NIR vs. Rojo) y Saturación Óptica del NDVI (LAI > 3)',
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Luz Roja Absorbida (665 nm)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Infrarrojo Reflejado NIR (842 nm)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Curva NDVI (Techo en 0.85)</span>',
-      nextLabel: 'Ver Convergencia y Pase a Diapo 21 ─▶'
+      nextLabel: 'Ver Convergencia ─▶'
     },
     bridge21: {
       accent: 'var(--purple)',
-      tag: 'ACTO 4 DE 4 · CONVERGENCIA IOT Y PASE A LA DIAPOSITIVA 21',
-      title: '4. La Convergencia Cielo-Tierra y el Choque de Escalas (N=2557 vs N=24)',
-      lead: 'Convergencia de satélites, drones y sensores de suelo frente al dilema de dimensionalidad (p ≫ N).',
+      tag: 'CIELO Y TIERRA SE UNEN',
+      title: 'Cielo y tierra se unen, pero chocan las escalas',
+      lead: 'Satélites, drones y sensores de suelo convergen, pero chocan con el dilema de tener muchas más variables que datos.',
       b1Label: '⚖️ CHOQUE DE FRECUENCIAS',
       b1Text: 'Clima diario continuo (N = 2,557 días) vs cosecha anual única (N = 24 campañas).',
-      b2Label: '⏭️ PASE A DIAPO 21',
+      b2Label: '⏭️ SIGUIENTE TEMA',
       b2Text: 'Exige modelos biofísicos con retardos biológicos (τ = 6–8 meses) y calibración conformal.',
       formula: 'Clima Diario (N=2,557) ──[ Reloj Fenológico ]──▶ Cosecha Anual (N=24)',
-      hint: 'Explora los niveles de acoplamiento antes de pasar a la Diapo 21',
-      quote: 'El clima da miles de datos diarios pero el cafetal solo una cosecha anual.',
+      hint: 'Explora los niveles de acoplamiento antes de seguir',
+      quote: 'El clima da miles de datos; el cafetal, una cosecha al año.',
       icon: '🧠',
-      canvasTitle: 'Convergencia Cielo-Tierra (Drones + IoT + Satélite) y Puente a la Diapositiva 21',
+      canvasTitle: 'Convergencia Cielo-Tierra (Drones + IoT + Satélite)',
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Clima Diario (N=2,557)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Cosecha Anual (N=24)</span><span class="leg-item"><i class="leg-line" style="--c:#b48eff"></i> Modelo Acoplado Biofísico</span>',
@@ -1272,7 +1272,7 @@ input[type="range"] {
     } else {
       $('kpi1').innerHTML = `Clima Iquitos: <strong style="color:var(--water)">N = 2,557 días</strong>`;
       $('kpi2').innerHTML = `Cosecha Jaén: <strong style="color:var(--ancestral)">N = 24 años</strong>`;
-      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--purple)">Diapo 21 (Física)</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--purple)">Física biológica</strong>`;
     }
 
     document.querySelectorAll('.proc-node').forEach(btn => {
@@ -1867,7 +1867,7 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 21: EL DILEMA DE LAS ESCALAS', rx + 14, padT + 20);
+    ctx.fillText('⏭️ SIGUIENTE: EL DILEMA DE LAS ESCALAS', rx + 14, padT + 20);
 
     // Serie 1: Clima Diario SENAMHI Iquitos (N = 2,557)
     const s1Y = padT + 34, sH = (usableH - 96) / 2;
@@ -1917,7 +1917,7 @@ input[type="range"] {
     ctx.fillStyle = '#fda4af';
     ctx.font = '700 12px "JetBrains Mono"';
     ctx.textAlign = 'center';
-    ctx.fillText('👉 Siguiente (Diapo 21): Física Biológica (Retrasos τ=6–8m, VPD y N=24)', rx + rw / 2, bY + 22);
+    ctx.fillText('👉 Siguiente: Física Biológica (Retrasos τ=6–8m, VPD y N=24)', rx + rw / 2, bY + 22);
     ctx.restore();
   }
 

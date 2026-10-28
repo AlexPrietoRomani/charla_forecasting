@@ -9,6 +9,12 @@ def get_deck_css(branding=None):
     bg_portada_css = f"url('data:image/png;base64,{b64_bg_portada}')" if b64_bg_portada else "#03050F"
     bg_closing_css = f"url('data:image/png;base64,{b64_bg_closing}')" if b64_bg_closing else bg_portada_css
     bg_section_css = bg_portada_css
+    b64_act_bg = branding.get("b64_act_bg", {})
+    act_bg_css = "".join(
+        f"\n  .slide.act-bg-{act} {{{{ background-image: url('data:image/jpeg;base64,{b64}'); "
+        f"background-size: cover; background-position: center; }}}}"
+        for act, b64 in b64_act_bg.items() if b64
+    )
 
     return f"""
   :root {{
@@ -138,6 +144,9 @@ def get_deck_css(branding=None):
     z-index: 10;
   }}
 
+  /* FONDOS POR ACTO (separadores y cierre) */
+  {act_bg_css}
+
   /* TÍTULO ESTÁNDAR SUPERIOR */
   .slide-main-title {{
     font-size: clamp(26px, 2.5vw, 36px);
@@ -227,25 +236,19 @@ def get_deck_css(branding=None):
   /* ======================================================== */
   /* ARQUETIPO 2: SOBRE EL PONENTE (page-02.png)             */
   /* ======================================================== */
-  .speaker-layout {{
-    display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: clamp(24px, 3.5vw, 60px);
-    align-items: center;
-    flex: 1;
-  }}
-  .speaker-avatar-wrap {{
+  .speaker-hero {{
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: clamp(24px, 3vw, 48px);
   }}
   .speaker-avatar {{
-    width: clamp(220px, 20vw, 290px);
-    height: clamp(220px, 20vw, 290px);
+    width: clamp(150px, 14vw, 200px);
+    height: clamp(150px, 14vw, 200px);
+    flex-shrink: 0;
     border-radius: 50%;
-    padding: 8px;
-    border: 3.5px solid var(--fest-cyan);
-    box-shadow: 0 0 35px rgba(18, 200, 252, 0.4), inset 0 0 20px rgba(18, 200, 252, 0.25);
+    padding: 6px;
+    border: 3px solid var(--fest-cyan);
+    box-shadow: 0 0 30px rgba(18, 200, 252, 0.35), inset 0 0 18px rgba(18, 200, 252, 0.25);
     background: rgba(11, 22, 56, 0.9);
   }}
   .speaker-avatar img {{
@@ -255,57 +258,81 @@ def get_deck_css(branding=None):
     object-fit: cover;
     display: block;
   }}
-  .speaker-info {{
+  .speaker-hero-text {{
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
   }}
   .speaker-name {{
-    font-size: clamp(26px, 2.5vw, 36px);
+    font-size: clamp(30px, 3vw, 44px);
     font-weight: 700;
     color: var(--text-main);
+    line-height: 1.1;
   }}
   .speaker-role {{
-    font-size: clamp(14px, 1.1vw, 16.5px);
+    font-size: clamp(14px, 1.1vw, 17px);
     color: var(--fest-cyan);
     font-weight: 600;
-    margin-bottom: 8px;
     font-family: "IBM Plex Mono", monospace;
   }}
-  .speaker-bullets {{
-    list-style: none;
+  .speaker-body {{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-height: 0;
+    padding: 24px 0;
+  }}
+  .speaker-cards {{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 1.8vw, 28px);
+    width: 100%;
+  }}
+  .speaker-card {{
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 16px;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: clamp(24px, 2.8vw, 40px) clamp(18px, 2vw, 28px);
+    background: rgba(11, 22, 56, 0.82);
+    border-radius: var(--card-radius);
+    border: 1.5px solid rgba(18, 200, 252, 0.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
   }}
-  .speaker-bullet-item {{
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: clamp(13.5px, 0.95vw, 15px);
-    line-height: 1.45;
+  .speaker-card-icon {{
+    font-size: clamp(40px, 5vh, 56px);
+    line-height: 1;
+  }}
+  .speaker-card-title {{
+    font-size: clamp(24px, 2.2vw, 32px);
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.2;
+  }}
+  .speaker-card-sub {{
+    font-size: 18px;
     color: var(--text-sub);
+    line-height: 1.35;
   }}
-  .speaker-bullet-dot {{
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--fest-cyan);
-    margin-top: 8px;
+  .speaker-footer {{
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(20px, 3vw, 48px);
     flex-shrink: 0;
   }}
   .speaker-socials {{
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 6px;
+    gap: 10px;
   }}
   .speaker-social-link {{
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: 13.5px;
+    font-size: 14px;
     color: var(--fest-cyan);
     text-decoration: none;
     font-family: "IBM Plex Mono", monospace;
@@ -314,82 +341,93 @@ def get_deck_css(branding=None):
   .speaker-social-link:hover {{
     opacity: 0.8;
   }}
+  .speaker-qr {{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13.5px;
+    color: var(--text-sub);
+  }}
+  .speaker-qr-box {{
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 8px;
+    line-height: 0;
+  }}
+  .speaker-qr-box svg {{
+    width: clamp(110px, 9vw, 140px);
+    height: auto;
+  }}
 
   /* ======================================================== */
   /* ARQUETIPO 3: AGENDA (page-03.png)                       */
   /* ======================================================== */
-  .agenda-grid {{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: clamp(18px, 2vw, 28px);
-    flex: 1;
-  }}
-  .agenda-card {{
-    background: rgba(11, 22, 56, 0.82);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: var(--card-radius);
-    padding: clamp(20px, 2.2vw, 32px);
+  .agenda-list {{
     display: flex;
-    align-items: center;
-    gap: clamp(18px, 2.2vw, 32px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }}
-  .agenda-card:hover {{
-    transform: translateY(-3px);
-  }}
-  .agenda-card.item-1 {{ border: 1.5px solid var(--fest-cyan); box-shadow: 0 8px 25px rgba(18, 200, 252, 0.12); }}
-  .agenda-card.item-2 {{ border: 1.5px solid var(--fest-blue); box-shadow: 0 8px 25px rgba(30, 123, 255, 0.12); }}
-  .agenda-card.item-3 {{ border: 1.5px solid var(--fest-purple); box-shadow: 0 8px 25px rgba(155, 92, 255, 0.12); }}
-  .agenda-card.item-4 {{ border: 1.5px solid var(--fest-magenta); box-shadow: 0 8px 25px rgba(224, 64, 251, 0.12); }}
-  .agenda-card.item-5 {{ border: 1.5px solid #2EE6A6; box-shadow: 0 8px 25px rgba(46, 230, 166, 0.12); }}
-
-  .agenda-grid-5 {{
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 1fr 1fr;
-    gap: clamp(14px, 1.6vw, 22px);
+    flex-direction: column;
+    gap: clamp(10px, 1.4vh, 16px);
     flex: 1;
     min-height: 0;
   }}
-  .agenda-grid-5 .agenda-card {{
-    padding: clamp(14px, 1.4vw, 20px) clamp(16px, 1.8vw, 26px);
-    gap: clamp(14px, 1.6vw, 24px);
+  .agenda-row {{
+    flex: 1;
+    display: grid;
+    grid-template-columns: clamp(64px, 5.5vw, 96px) clamp(44px, 3.6vw, 60px) 1fr auto;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 26px);
+    padding: 0 clamp(18px, 2vw, 30px);
+    background: rgba(11, 22, 56, 0.82);
+    border-radius: var(--card-radius);
+    border-left: 6px solid var(--row-accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   }}
-  .agenda-grid-5 .agenda-card.item-1 {{ grid-column: span 2; }}
-  .agenda-grid-5 .agenda-card.item-2 {{ grid-column: span 2; }}
-  .agenda-grid-5 .agenda-card.item-3 {{ grid-column: span 2; }}
-  .agenda-grid-5 .agenda-card.item-4 {{ grid-column: 1 / span 3; }}
-  .agenda-grid-5 .agenda-card.item-5 {{ grid-column: 4 / span 3; }}
-
+  .agenda-row.item-1 {{ --row-accent: var(--fest-cyan); }}
+  .agenda-row.item-2 {{ --row-accent: var(--fest-blue); }}
+  .agenda-row.item-3 {{ --row-accent: var(--fest-purple); }}
+  .agenda-row.item-4 {{ --row-accent: var(--fest-magenta); }}
+  .agenda-row.item-5 {{ --row-accent: #2EE6A6; }}
   .agenda-num {{
-    font-size: clamp(38px, 3.4vw, 52px);
+    font-size: clamp(40px, 3.6vw, 56px);
     font-weight: 700;
     line-height: 1;
     font-family: "Space Grotesk", sans-serif;
+    color: var(--row-accent);
   }}
-  .agenda-card.item-1 .agenda-num {{ color: var(--fest-cyan); }}
-  .agenda-card.item-2 .agenda-num {{ color: var(--fest-blue); }}
-  .agenda-card.item-3 .agenda-num {{ color: var(--fest-purple); }}
-  .agenda-card.item-4 .agenda-num {{ color: var(--fest-magenta); }}
-  .agenda-card.item-5 .agenda-num {{ color: #2EE6A6; }}
-
-  .agenda-text-wrap {{
+  .agenda-icon {{
+    font-size: clamp(30px, 2.6vw, 40px);
+    line-height: 1;
+  }}
+  .agenda-text {{
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+    min-width: 0;
   }}
-  .agenda-card-title {{
-    font-size: clamp(16px, 1.25vw, 19px);
+  .agenda-question {{
+    font-size: clamp(26px, 1.6vw, 34px);
     font-weight: 700;
     color: var(--text-main);
+    line-height: 1.2;
   }}
-  .agenda-card-desc {{
-    font-size: clamp(12.5px, 0.95vw, 14px);
+  .agenda-takeaway {{
+    font-size: 18px;
     color: var(--text-faint);
-    line-height: 1.4;
+    line-height: 1.35;
+  }}
+  .agenda-minutes {{
+    font-family: var(--font-mono);
+    font-size: 22px;
+    color: var(--text-sub);
+    white-space: nowrap;
+  }}
+  .agenda-total {{
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-faint);
+    text-align: right;
+    margin-top: 12px;
+    flex-shrink: 0;
   }}
 
   /* ======================================================== */
@@ -1304,4 +1342,61 @@ def get_deck_css(branding=None):
     font-family: var(--anatomy-mono);
   }}
   .iso-face-text[data-tone="hi"] {{ fill: var(--anatomy-strong); }}
+
+  /* ======================================================== */
+  /* DIAPO 29: TRES LECCIONES (frases grandes, sin tarjetas)  */
+  /* ======================================================== */
+  .slide-lessons {{
+    justify-content: center;
+  }}
+  .slide-lessons > .slide-main-title {{
+    padding: clamp(24px, 4vh, 40px) clamp(24px, 4vw, 90px) 0;
+    margin-bottom: 0;
+  }}
+  .lessons-stack {{
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(22px, 4.2vh, 52px);
+    padding: 0 clamp(24px, 4vw, 90px) clamp(24px, 4vh, 48px);
+  }}
+  .lesson-row {{
+    display: grid;
+    grid-template-columns: clamp(72px, 6vw, 112px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(18px, 2vw, 36px);
+    padding: clamp(16px, 2.4vh, 30px) clamp(18px, 1.8vw, 30px);
+    border-left: 5px solid var(--fest-cyan);
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(90deg, rgba(18, 200, 252, 0.10), rgba(18, 200, 252, 0) 70%);
+  }}
+  .lesson-row-2 {{
+    border-left-color: var(--fest-purple);
+    background: linear-gradient(90deg, rgba(155, 92, 255, 0.12), rgba(155, 92, 255, 0) 70%);
+  }}
+  .lesson-row-3 {{
+    border-left-color: var(--fest-emerald);
+    background: linear-gradient(90deg, rgba(46, 230, 166, 0.10), rgba(46, 230, 166, 0) 70%);
+  }}
+  .lesson-icon {{
+    font-size: clamp(56px, 5vw, 84px);
+    line-height: 1;
+    text-align: center;
+  }}
+  .lesson-title {{
+    margin: 0;
+    font-size: clamp(32px, 3vw, 52px);
+    line-height: 1.12;
+    color: var(--text-main);
+  }}
+  .lesson-evidence {{
+    margin: clamp(6px, 0.8vh, 12px) 0 0;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.4;
+    color: var(--text-sub);
+  }}
 """

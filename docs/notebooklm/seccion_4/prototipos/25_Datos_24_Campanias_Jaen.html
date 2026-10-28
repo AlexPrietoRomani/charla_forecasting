@@ -462,6 +462,7 @@ canvas { display: block; width: 100%; height: 100%; }
   .narrative-card { gap: 4px; padding: 6px 8px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -478,7 +479,7 @@ canvas { display: block; width: 100%; height: 100%; }
       </div>
       <div>
         <p class="eyebrow">ACTO 4 · CASO 2 · DATOS &amp; FENOLOGÍA DEL CAFÉ</p>
-        <h1><span class="num">25</span> Datos que importan: 24 campañas de café en Jaén <span class="sub">· 2001–2024</span></h1>
+        <h1><span class="num">25</span> Datos que importan: 24 campañas de café en Jaén</h1>
       </div>
     </div>
 
@@ -491,7 +492,7 @@ canvas { display: block; width: 100%; height: 100%; }
         <span class="via-pill">📅 <strong>N = 24 campañas</strong> (2001–2024)</span>
         <span class="via-pill">⏳ <strong>τ = 6–8 meses</strong> (flor → cosecha)</span>
         <span class="via-pill">🦠 <strong>2014: 10.0 qq/ha (−56.0%)</strong></span>
-        <span class="via-pill">🏆 <strong>MAE 3.72 qq/ha</strong> (RF d=2)</span>
+        <span class="via-pill">🏆 <strong>Error ≈ 3.7 qq/ha</strong> (unos 170 kg) <span data-expert>MAE 3.723</span></span>
       </div>
     </div>
   </header>
@@ -499,7 +500,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FLOWBAR -->
   <nav class="flowbar" aria-label="Etapas de los datos del café">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="feno" id="tab-feno">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="feno" id="tab-feno" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">Fenología y Retardo τ = 6–8m</span>
@@ -509,7 +510,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="vars" id="tab-vars">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="vars" id="tab-vars" data-route="corta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Las 4 Variables Agrometeorológicas</span>
@@ -519,7 +520,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="roya" id="tab-roya">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="roya" id="tab-roya" data-route="corta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Choque Estructural: Roya 2013–2014</span>
@@ -540,25 +541,23 @@ canvas { display: block; width: 100%; height: 100%; }
     <!-- COLUMNA IZQUIERDA -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 3 · FENOLOGÍA Y RETARDO</span>
+        <span class="stage-tag" id="stageTag">FENOLOGÍA Y RETARDO</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">La fenología manda: la cosecha de hoy se decidió hace 8 meses</h2>
+      <h2 class="narr-title" id="narrTitle">La cosecha de hoy se decidió hace 8 meses</h2>
 
-      <p class="narr-lead" id="narrLead">
-        En el café arábica de Jaén, lo que ocurre en la <strong>floración (Ago–Oct)</strong> condiciona la cosecha con un retardo biológico de <strong>τ = 6–8 meses</strong>. Auditamos las <strong>24 campañas (2001–2024)</strong> con las 4 variables agrometeorológicas que entran a la ventana crítica.
-      </p>
+      <p class="narr-lead" id="narrLead">En el café de Jaén, la floración (agosto–octubre) condiciona la cosecha con un retardo de 6 a 8 meses (24 campañas, 2001–2024).</p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
-          <div class="info-block-label">⏳ El retardo biológico τ = 6–8 meses</div>
-          <div class="info-block-text">La lluvia y el balance hídrico de Ago–Oct activan la floración; el fruto se llena Nov–Feb y se cosecha Mar–Jul. Ninguna señal posterior salva una floración fallida.</div>
+          <div class="info-block-label">⏳ Retardo biológico: 6–8 meses</div>
+          <div class="info-block-text">La lluvia de ago–oct activa la flor; el fruto se llena en nov–feb y se cosecha en mar–jul.</div>
         </div>
 
         <div class="info-block">
           <div class="info-block-label">☕ La ventana crítica del cafeto</div>
-          <div class="info-block-text">El rendimiento depende de eventos que ocurrieron meses atrás. Por eso todo predictor honesto debe respetar el orden temporal del ciclo biológico.</div>
+          <div class="info-block-text">El rendimiento depende de lo ocurrido meses atrás: un buen predictor respeta el orden del ciclo biológico.</div>
         </div>
       </div>
 
@@ -568,7 +567,7 @@ canvas { display: block; width: 100%; height: 100%; }
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La cosecha de hoy ya estaba escrita en la floración de hace ocho meses.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">La cosecha de hoy ya estaba escrita en la floración.</span>
       </div>
     </article>
 
@@ -582,7 +581,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
         <div class="stage-kpis">
           <span class="kpi-chip red" id="kpiRoya">🦠 2014: 10.0 qq/ha (−56.0%)</span>
-          <span class="kpi-chip amber" id="kpiRecord">🏆 Récord 2020: 35.38 qq/ha</span>
+          <span class="kpi-chip amber" id="kpiRecord">🏆 Récord 2020: 35.4 qq/ha <span data-expert>35.38</span></span>
         </div>
       </header>
 
@@ -609,7 +608,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>Fuente:</strong> SIEA/MIDAGRI + INEI (Compendios Cajamarca) · NASA MODIS 250 m + ERA5-Land (ventana Ago–Oct) · Jaén, Cajamarca</span>
-    <span class="link">Pase a Diapo 26: El Espejismo Satelital del NDVI →</span>
+    <span class="link">Siguiente: El Espejismo Satelital del NDVI</span>
   </footer>
 
 </main>
@@ -627,44 +626,44 @@ canvas { display: block; width: 100%; height: 100%; }
   const STAGE_DATA = {
     feno: {
       accent: '#38efff',
-      tag: 'ETAPA 1 DE 3 · FENOLOGÍA Y RETARDO',
-      title: 'La fenología manda: la cosecha de hoy se decidió hace 8 meses',
-      lead: 'En el café arábigo de Jaén, lo que ocurre en la <strong>floración (Ago–Oct)</strong> condiciona la cosecha con un retardo biológico de <strong>τ = 6–8 meses</strong>. Auditamos las <strong>24 campañas (2001–2024)</strong> con las 4 variables agrometeorológicas que entran a la ventana crítica.',
+      tag: 'FENOLOGÍA Y RETARDO',
+      title: 'La cosecha de hoy se decidió hace 8 meses',
+      lead: 'En el café de Jaén, la floración (agosto–octubre) condiciona la cosecha con un retardo de 6 a 8 meses (24 campañas, 2001–2024).',
       blocks: [
-        { label: '⏳ El retardo biológico τ = 6–8 meses', text: 'La lluvia y el balance hídrico de Ago–Oct activan la floración; el fruto se llena Nov–Feb y se cosecha Mar–Jul. Ninguna señal posterior salva una floración fallida.' },
-        { label: '☕ La ventana crítica del cafeto', text: 'El rendimiento depende de eventos que ocurrieron meses atrás. Por eso todo predictor honesto debe respetar el orden temporal del ciclo biológico.' }
+        { label: '⏳ Retardo biológico: 6–8 meses', text: 'La lluvia de ago–oct activa la flor; el fruto se llena en nov–feb y se cosecha en mar–jul.' },
+        { label: '☕ La ventana crítica del cafeto', text: 'El rendimiento depende de lo ocurrido meses atrás: un buen predictor respeta el orden del ciclo biológico.' }
       ],
       math: 'Flor (Ago–Oct) + τ = 6–8m ──▶ Cosecha (Mar–Jul) · N = 24',
       hint: 'Retardo Biológico',
-      quote: 'La cosecha de hoy ya estaba escrita en la floración de hace ocho meses.',
+      quote: 'La cosecha de hoy ya estaba escrita en la floración.',
       viewMode: 'serie'
     },
     vars: {
       accent: '#2ee6a6',
-      tag: 'ETAPA 2 DE 3 · LAS 4 VARIABLES',
-      title: 'Cuatro miradas a la misma floración: satélite, lluvia, calor y balance',
-      lead: 'Sobre la ventana Ago–Oct medimos <strong>NDVI de floración</strong>, <strong>lluvia_flor_mm</strong>, <strong>tmax_flor_c</strong> y <strong>déficit hídrico</strong> (lluvia − evapotranspiración). Cada señal cuenta una historia distinta de la misma campaña.',
+      tag: 'LAS 4 VARIABLES',
+      title: 'Cuatro miradas a la floración: satélite, lluvia, calor y agua',
+      lead: 'En la ventana ago–oct medimos NDVI de floración, lluvia, temperatura máxima y déficit hídrico (lluvia menos evapotranspiración). Cada señal cuenta algo distinto.',
       blocks: [
-        { label: '🛰️ NDVI de floración (el espejismo verde)', text: 'El índice óptico se mueve en una banda estrecha (~0.63–0.75) sin seguir los colapsos ni los récords: es la variable que parece informar y no informa.' },
-        { label: '💧 Lluvia, calor y balance hídrico', text: 'La lluvia de Ago–Oct y el déficit hídrico se desploman en 2014 y explotan en 2020: la física del agua ordena la producción real.' }
+        { label: '🛰️ NDVI: el espejismo verde', text: 'El índice óptico varía poco (~0.63–0.75) y no sigue colapsos ni récords: parece informar y no informa.' },
+        { label: '💧 Lluvia, calor y balance hídrico', text: 'La lluvia y el agua disponible se hunden en 2014 y se disparan en 2020.' }
       ],
       math: 'Variables (Ago–Oct): NDVI_flor · lluvia_mm · tmax °C · déficit (P − PET)',
       hint: 'Ventana Fisiológica Única',
-      quote: 'El satélite ve hojas; la lluvia y el balance hídrico ven frutos.',
+      quote: 'El satélite ve hojas; la lluvia y el agua ven frutos.',
       viewMode: 'vars'
     },
     roya: {
       accent: '#ff5277',
-      tag: 'ETAPA 3 DE 3 · CHOQUE ESTRUCTURAL',
-      title: '2013–2014: la roya colapsó la cosecha a 10.0 qq/ha (−56.0%)',
-      lead: 'La epidemia de roya amarilla (Hemileia vastatrix) rompió la serie: el rendimiento cayó de una media pre-roya de <strong>22.67 qq/ha</strong> (2010–2011) a <strong>10.0 qq/ha en 2014 (−56.0%)</strong>, con la recuperación y el récord de 35.38 qq/ha recién en 2020.',
+      tag: 'EL CHOQUE DE LA ROYA',
+      title: 'La roya hundió la cosecha de 2014 a 10 qq/ha (−56%)',
+      lead: 'La roya rompió la serie: de 22.7 qq/ha a 10 en 2014 (−56%); el récord de 35.4 llegó en 2020. <span data-expert>22.67 → 10.0 · −56.0% · 35.38</span>',
       blocks: [
-        { label: '🦠 El colapso (2012–2014)', text: '19.13 → 16.39 → 10.0 qq/ha: tres cosechas consecutivas de caída. La enfermedad atacó el fruto bajo un dosel que se veía sano desde el satélite.' },
-        { label: '🌱 La recuperación lenta (2015–2019)', text: 'Renovación de plantaciones y control fitosanitario: la serie no vuelve a la media pre-roya hasta 2019 (23.69 qq/ha). El récord llega en 2020.' }
+        { label: '🦠 El colapso (2012–2014)', text: '19.1 → 16.4 → 10 qq/ha <span data-expert>19.13 → 16.39 → 10.0</span>: tres caídas seguidas. La enfermedad atacó el fruto bajo un dosel que parecía sano.' },
+        { label: '🌱 Recuperación lenta (2015–2019)', text: 'Plantaciones renovadas: la serie recién iguala su media pre-roya en 2019 (23.7 qq/ha <span data-expert>23.69</span>); récord en 2020.' }
       ],
-      math: '2011: 22.71 ──▶ 2014: 10.0 qq/ha = −56.0% vs media pre-roya',
+      math: '2011: 22.7 ──▶ 2014: 10 qq/ha = −56% vs media pre-roya <span data-expert>22.71 · 10.0 · −56.0%</span>',
       hint: 'Quiebre de Régimen',
-      quote: 'La mayor epidemia del siglo: 10.0 qq/ha en 2014, cincuenta y seis por ciento menos.',
+      quote: 'La roya hundió la cosecha un 56%; el satélite no lo vio.',
       viewMode: 'roya'
     }
   };

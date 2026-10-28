@@ -669,6 +669,7 @@ canvas {
   .narrative-card { gap: 4px; padding: 6px 8px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -684,7 +685,7 @@ canvas {
       </div>
       <div>
         <p class="eyebrow">ACTO 2 · CASO 1 · SENAMHI PUNCHANA · IQUITOS</p>
-        <h1><span class="num">02</span> Caso 1: predicción de temperatura en Iquitos <span class="sub">· 2,557 Días contra 14 Modelos</span></h1>
+        <h1><span class="num">02</span> Caso 1: pronosticar la temperatura en Iquitos <span class="sub">· 14 modelos</span></h1>
       </div>
     </div>
 
@@ -696,7 +697,7 @@ canvas {
       <div class="via-pills">
         <span class="via-pill">🌐 <strong>−3.6903°, −73.2556°</strong> (91 msnm)</span>
         <span class="via-pill">📅 <strong>2,557 días</strong> sin huecos</span>
-        <span class="via-pill">🌡️ <strong>Media 31.79 °C</strong></span>
+        <span class="via-pill">🌡️ <strong>Media 31.8 °C</strong></span>
         <span class="via-pill">🔥 <strong>Récord 38.0 °C</strong></span>
       </div>
     </div>
@@ -705,7 +706,7 @@ canvas {
   <!-- FLOWBAR: 4 ETAPAS DEL CASO -->
   <nav class="flowbar" aria-label="Etapas del Caso 1">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="lab" id="tab-lab">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="lab" id="tab-lab" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">El Laboratorio</span>
@@ -715,7 +716,7 @@ canvas {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="audit" id="tab-audit">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="audit" id="tab-audit" data-route="corta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">3 Preguntas</span>
@@ -725,7 +726,7 @@ canvas {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="climate" id="tab-climate">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="climate" id="tab-climate" data-route="experta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Microclima</span>
@@ -735,10 +736,10 @@ canvas {
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="bridge13" id="tab-bridge13">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="bridge13" id="tab-bridge13" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
-          <span class="proc-year">Pase a Diapo 13</span>
+          <span class="proc-year">Siguiente: Distribución</span>
           <span class="proc-sub">Distribución &amp; Ciclo</span>
         </span>
       </button>
@@ -756,35 +757,33 @@ canvas {
     <!-- COLUMNA IZQUIERDA: NARRATIVA GERENCIAL -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · BANCO DE PRUEBAS</span>
+        <span class="stage-tag" id="stageTag">BANCO DE PRUEBAS</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">Punchana como banco de pruebas extremo de forecasting</h2>
+      <h2 class="narr-title" id="narrTitle">Punchana, Iquitos: un banco de pruebas extremo</h2>
       
-      <p class="narr-lead" id="narrLead">
-        La Amazonía peruana es el entorno más exigente para la inteligencia artificial: un régimen hiperhúmedo con <strong>aparente baja varianza anual (2.7 °C)</strong> pero sacudido por <strong>olas de calor récord e intrusiones de friajes</strong> que rompen cualquier suposición gaussiana.
-      </p>
+      <p class="narr-lead" id="narrLead">Siete años de temperatura diaria con olas de calor récord y friajes que desafían a cualquier modelo.</p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
-          <div class="info-block-label">📡 Serie Diaria Continua</div>
-          <div class="info-block-text">2,557 días ininterrumpidos (2019–2025) con mediciones sincronizadas de temperatura máxima, mínima, precipitación y humedad relativa.</div>
+          <div class="info-block-label">📡 Serie diaria continua</div>
+          <div class="info-block-text">2,557 días seguidos (2019–2025): temperatura máxima, mínima, lluvia y humedad.</div>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label">⚖️ Auditoría Empírica Ciega</div>
-          <div class="info-block-text">14 arquitecturas enfrentadas bajo el mismo protocolo: 2,467 días de entrenamiento y 90 días de holdout ciego (Q4 2025).</div>
+          <div class="info-block-label">⚖️ Prueba ciega y justa</div>
+          <div class="info-block-text">14 modelos, mismas reglas: 2,467 días para entrenar y 90 días ocultos para evaluar.</div>
         </div>
       </div>
 
       <div class="math-strip" id="mathStrip">
-        <span>N = 2,557 días · Tmax = 31.79 ± 1.88 °C</span>
+        <span>2,557 días · Tmax media 31.8 °C, ±1.9 °C como un termómetro de casa <span data-expert>31.79 ± 1.88 °C</span></span>
         <span class="hint">Moda 31–32 °C (925 días)</span>
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Siete años de termómetro real: auditemos 14 modelos con datos, no marketing.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Siete años de datos reales: 14 modelos a prueba.</span>
       </div>
     </article>
 
@@ -798,7 +797,7 @@ canvas {
 
         <div class="stage-kpis">
           <span class="kpi-chip highlight" id="kpiYearBadge">Estacional Medio</span>
-          <span class="kpi-chip">Tmax Media: <strong id="kpiValMean">31.79 °C</strong></span>
+          <span class="kpi-chip">Tmax Media: <strong id="kpiValMean">31.8 °C</strong> <span data-expert>31.79 °C</span></span>
           <span class="kpi-chip">Récord: <strong id="kpiValMax">38.0 °C</strong></span>
         </div>
       </header>
@@ -831,7 +830,7 @@ canvas {
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>Fuente:</strong> Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI) · Estación Punchana 103015</span>
-    <span class="link">Pase a Diapo 13: Anatomía de la Distribución y Ciclo Estacional →</span>
+    <span class="link">Siguiente: Anatomía de la Distribución y Ciclo Estacional</span>
   </footer>
 
 </main>
@@ -849,56 +848,56 @@ canvas {
   const STAGE_DATA = {
     lab: {
       accent: '#38efff',
-      tag: 'ETAPA 1 DE 4 · BANCO DE PRUEBAS',
-      title: 'Punchana como banco de pruebas extremo de forecasting',
-      lead: 'La Amazonía peruana es el entorno más exigente para la inteligencia artificial: un régimen hiperhúmedo con <strong>aparente baja varianza anual (2.7 °C)</strong> pero sacudido por <strong>olas de calor récord e intrusiones de friajes</strong> que rompen cualquier suposición gaussiana.',
+      tag: 'BANCO DE PRUEBAS',
+      title: 'Punchana, Iquitos: un banco de pruebas extremo',
+      lead: 'Siete años de temperatura diaria con olas de calor récord y friajes que desafían a cualquier modelo.',
       blocks: [
-        { label: '📡 Serie Diaria Continua', text: '2,557 días ininterrumpidos (2019–2025) con mediciones sincronizadas de temperatura máxima, mínima, precipitación y humedad relativa.' },
-        { label: '⚖️ Auditoría Empírica Ciega', text: '14 arquitecturas enfrentadas bajo el mismo protocolo: 2,467 días de entrenamiento y 90 días de holdout ciego (Q4 2025).' }
+        { label: '📡 Serie diaria continua', text: '2,557 días seguidos (2019–2025): temperatura máxima, mínima, lluvia y humedad.' },
+        { label: '⚖️ Prueba ciega y justa', text: '14 modelos, mismas reglas: 2,467 días para entrenar y 90 días ocultos para evaluar.' }
       ],
-      math: 'N = 2,557 días · Tmax = 31.79 ± 1.88 °C',
+      math: '2,557 días · Tmax media 31.8 °C, ±1.9 °C como un termómetro de casa <span data-expert>31.79 ± 1.88 °C</span>',
       hint: 'Moda 31–32 °C (925 días)',
-      quote: 'Siete años de termómetro real: auditemos 14 modelos con datos, no marketing.'
+      quote: 'Siete años de datos reales: 14 modelos a prueba.'
     },
     audit: {
       accent: '#ffc05c',
-      tag: 'ETAPA 2 DE 4 · 3 PREGUNTAS GERENCIALES',
-      title: 'Las 3 preguntas críticas que este benchmark responde',
-      lead: 'La literatura académica y el marketing de software venden que más parámetros garantizan mejor pronóstico. Esta auditoría sobre Iquitos <strong>evalúa la parsimonia contra la física real</strong>.',
+      tag: 'TRES PREGUNTAS CLAVE',
+      title: 'Tres preguntas que este duelo de modelos responde',
+      lead: 'Más parámetros no garantizan mejor pronóstico. Esta auditoría en Iquitos compara la sencillez contra la física real.',
       blocks: [
-        { label: '1️⃣ ¿Por qué fallan los árboles en olas récord?', text: 'Demostración matemática de la meseta plana en Random Forest y XGBoost, y cómo solucionarlo en producción.' },
-        { label: '2️⃣ ¿Tierra en CPU o supercómputo global?', text: 'Por qué un algoritmo de 0.25s en CPU derrota a supercomputadoras de 9 km (ECMWF) y GPUs de 7.87s.' },
-        { label: '3️⃣ ¿Cómo gobernar la incertidumbre a 7 días?', text: 'Reemplazo del punto fijo determinista por bandas de predicción conforme (P10–P90) con garantía finita.' }
+        { label: '1️⃣ ¿Por qué fallan los árboles?', text: 'Demostración de la meseta plana en Random Forest y XGBoost, y cómo solucionarla.' },
+        { label: '2️⃣ ¿CPU común o supercómputo?', text: 'Un algoritmo de 0.25 s en CPU vence a un supercomputador y a GPUs de 7.87 s.' },
+        { label: '3️⃣ ¿Cuánta duda a 7 días?', text: 'Cambiamos el punto fijo por bandas P10–P90 con garantía.' }
       ],
       math: 'Decisión = f(Riesgo, Latencia, Costo Computacional)',
       hint: 'Regla de Parsimonia Operacional',
-      quote: 'En producción no pagan por redes gigantes: pagan por no fallar cuando llega la ola.'
+      quote: 'Pagan por no fallar cuando llega la ola, no por redes gigantes.'
     },
     climate: {
       accent: '#ff5277',
-      tag: 'ETAPA 3 DE 4 · MICROCLIMA TROPICAL',
-      title: 'Baja varianza aparente con shocks récord no gaussianos',
-      lead: 'El ciclo estacional medio oscila solo entre <strong>30.4 °C (junio) y 33.1 °C (octubre)</strong>. Sin embargo, en octubre de 2023 y 2024 el termómetro golpeó <strong>38.0 °C</strong>, pulverizando los modelos en niveles.',
+      tag: 'MICROCLIMA TROPICAL',
+      title: 'La selva engaña: calma casi todo el año, shocks récord',
+      lead: 'El promedio oscila entre 30.4 °C (junio) y 33.1 °C (octubre), pero en 2023 y 2024 se llegó a 38.0 °C.',
       blocks: [
-        { label: '🔥 Olas de Calor SEP–OCT', text: 'La radiación cenital y el retraso de lluvias provocan olas sostenidas por encima de 35 °C donde los árboles colapsan.' },
-        { label: '❄️ Shocks de Friaje Amazónico', text: 'Intrusiones polares antárticas derrumban la temperatura hasta 19.2 °C en menos de 24 horas, desafiando a los modelos inerciales.' }
+        { label: '🔥 Olas de calor sep–oct', text: 'Radiación fuerte y lluvias tardías provocan olas sobre 35 °C donde los árboles fallan.' },
+        { label: '❄️ Friajes amazónicos', text: 'Aire polar baja la temperatura hasta 19.2 °C en menos de 24 horas.' }
       ],
       math: 'Δt = 38.0 °C (Récord) − 19.2 °C (Friaje) = 18.8 °C rango real',
       hint: 'Física local > Malla global',
-      quote: 'La selva engaña nueve meses; el algoritmo ingenuo quiebra cuando llega el friaje.'
+      quote: 'La selva engaña nueve meses; el friaje desnuda al modelo ingenuo.'
     },
     bridge13: {
       accent: '#6ef0b4',
-      tag: 'ETAPA 4 DE 4 · PASE A DIAPOSITIVA 13',
-      title: 'De la serie continua a la anatomía de la distribución',
-      lead: 'Para entender el fracaso de los modelos tradicionales, debemos inspeccionar <strong>el histograma diario y el ciclo estacional</strong>: por qué la moda es engañosa y qué ocurre en las colas.',
+      tag: 'DE LA SERIE A LA DISTRIBUCIÓN',
+      title: 'Antes de modelar, miremos cómo se reparten los datos',
+      lead: 'Para entender por qué fallan los modelos tradicionales, miramos el histograma diario y el ciclo de estaciones.',
       blocks: [
-        { label: '📊 Histograma de 2,557 Días', text: '925 días concentrados en 31–32 °C; 78 días críticos en la cola extrema ≥ 36 °C.' },
-        { label: '➡️ Siguiente Diapositiva (Diapo 13)', text: 'Inspección interactiva de la distribución empírica de Punchana y horizonte de ruptura entrópica.' }
+        { label: '📊 Histograma de 2,557 días', text: '925 días se concentran en 31–32 °C; 78 días llegan a la cola extrema (≥ 36 °C).' },
+        { label: '➡️ Siguiente diapositiva', text: 'Exploramos la distribución real de Punchana y el horizonte donde el pronóstico se rompe.' }
       ],
       math: 'P(Tmax ≥ 36 °C) ≈ 3.05% · Eventos de Alto Costo',
-      hint: 'Pase a Diapo 13 →',
-      quote: 'Pasemos a la Diapo 13: los datos puros de SENAMHI esconden el riesgo real.'
+      hint: 'Siguiente: la distribución de los datos',
+      quote: 'Los datos de SENAMHI esconden el riesgo real.'
     }
   };
 
@@ -1015,7 +1014,7 @@ canvas {
 
       if (selectedYear === 'all') {
         badge.textContent = 'Estacional Medio';
-        meanEl.textContent = '31.79 °C';
+        meanEl.textContent = '31.8 °C';
         maxEl.textContent = '38.0 °C';
       } else {
         const yData = YY[selectedYear];

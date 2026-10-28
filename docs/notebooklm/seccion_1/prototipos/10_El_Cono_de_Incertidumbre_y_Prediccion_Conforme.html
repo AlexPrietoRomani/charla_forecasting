@@ -848,6 +848,7 @@ input[type="range"] {
   h1 { font-size: 15px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -863,8 +864,8 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">Sección 3 · Continuación de Era 4 (Intervalos Garantizados) · El Cono de la Honestidad</p>
-        <h1>LA ILUSIÓN DE LA CERTEZA: <span class="era">El Cono de Incertidumbre</span> <span class="sub">· Lyapunov y Predicción Conforme (SCP)</span></h1>
+        <p class="eyebrow">Por qué un pronóstico honesto es un rango</p>
+        <h1>La ilusión de la certeza: <span class="era">el cono de incertidumbre</span></h1>
       </div>
     </div>
 
@@ -885,7 +886,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. El Cono y Lyapunov ─▶ 2. Los 5 Pasos SCP ─▶ 3. Local vs Global & ERCOT ─▶ 4. Riesgo Asimétrico y Pase a Diapo 11 -->
   <nav class="flowbar" aria-label="Secuencia explicativa del Cono de Incertidumbre y Predicción Conforme">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="cone" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="cone" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">La Mentira del Punto Fijo</span>
@@ -896,7 +897,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="scp" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="scp" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Receta Conforme (5 Pasos)</span>
@@ -907,7 +908,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="ercot" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Local vs. Global &amp; ERCOT</span>
@@ -918,10 +919,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="bridge11" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="bridge11" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Asimetría ─▶ Diapo 11</span>
+          <span class="proc-year">Asimetría del riesgo</span>
           <span class="proc-sub">P10–P90 y ¿Cómo saber cuál elegir?</span>
         </div>
         <div class="proc-progress" id="prog-bridge11"></div>
@@ -943,28 +944,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · LA MENTIRA DETERMINISTA</span>
+          <span class="stage-tag" id="stageTag">LA MENTIRA DE UN SOLO NÚMERO</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. La Ilusión de la Certeza: ¿Por qué un número único (ŷₜ) siempre miente?</h2>
-        <p class="narr-lead" id="narrLead">
-          Quien te prometa adivinar el punto exacto del próximo mes te está mintiendo. En cualquier sistema real, <b>pequeñas variaciones hoy se multiplican mañana como un abanico que se abre</b>.
-        </p>
+        <h2 class="narr-title" id="narrTitle">Un solo número siempre miente: el futuro es un cono</h2>
+        <p class="narr-lead" id="narrLead">Pequeños errores de hoy crecen con el tiempo, así que el pronóstico honesto es un rango, no un punto.</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🌪️ EFECTO MARIPOSA Y EL LÍMITE DE LYAPUNOV</div>
-          <p class="info-block-text" id="block1Text">
-            Igual que en el pronóstico del clima, las posibles trayectorias futuras (<b>Monte Carlo</b>) divergen con la distancia: <b>σ(h) ∝ σ₁·√h</b>. Más allá del <b>Límite de Lyapunov</b>, una línea recta puntual pierde toda relación con la realidad.
-          </p>
+          <div class="info-block-label" id="block1Label">🌪️ Efecto mariposa</div>
+          <p class="info-block-text" id="block1Text">Las trayectorias posibles se abren con el tiempo; más lejos, un punto fijo pierde sentido.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">⚠️ LAS 3 TRAMPAS DE EXIGIR UN PUNTO FIJO EN PRODUCCIÓN</div>
-          <p class="info-block-text" id="block2Text">
-            1. <b>Oculta la asimetría del riesgo:</b> quedarse sin energía (apagón) cuesta 100 veces más que guardar reserva.<br>2. <b>Falsa sensación de control</b> ante directivos.<br>3. <b>Degradación exponencial</b> al alejar el horizonte <b>h</b>.
-          </p>
+          <div class="info-block-label" id="block2Label">⚠️ El riesgo no es simétrico</div>
+          <p class="info-block-text" id="block2Text">Quedarse sin energía cuesta 100 veces más que sobreprepararse. El valor está en el rango P10–P90.</p>
         </div>
 
         <div class="math-strip">
@@ -974,7 +969,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway" id="speakerBox">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">El pronóstico puntual es una mentira matemática; la decisión vive en el cono calibrado.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Un pronóstico honesto da un rango, no un número.</span>
       </div>
     </aside>
 
@@ -1019,7 +1014,7 @@ input[type="range"] {
           <div class="ctrl-item" id="ctrlAlphaWrap" hidden>
             <label for="sliderAlpha">🛡️ Nivel Cobertura (1−α):</label>
             <input id="sliderAlpha" type="range" min="75" max="98" step="1" value="90" style="accent-color:var(--phi)">
-            <output id="outAlpha">90% (α=0.10)</output>
+            <output id="outAlpha">90% <span data-expert>(α=0.10)</span></output>
           </div>
           <div class="ctrl-item" id="ctrlCalPctWrap" hidden>
             <label for="sliderCalPct">📊 % Historial a Calibración:</label>
@@ -1044,7 +1039,7 @@ input[type="range"] {
 
   <!-- FOOTER -->
   <footer class="footnote">
-    <span><strong>Síntesis Sección 3:</strong> La Mentira del Punto Fijo (Lyapunov σ(h) ∝ √h) ─▶ Split Conformal Prediction (5 pasos con garantía finita MCR ≥ 1−α) ─▶ Sinergia Zero-Shot + 80% Calibración en ERCOT ─▶ <strong>Pase a Diapo 11: ¿Cómo elegir tu modelo?</strong></span>
+    <span><strong>Síntesis Sección 3:</strong> La Mentira del Punto Fijo (Lyapunov σ(h) ∝ √h) ─▶ Split Conformal Prediction (5 pasos con garantía finita MCR ≥ 1−α) ─▶ Sinergia Zero-Shot + 80% Calibración en ERCOT ─▶ <strong>Siguiente: ¿Cómo elegir tu modelo?</strong></span>
     <span>Referencias: Lei et al. (2017) Split Conformal Prediction · Lorenz (1963) · Achour et al. (2025) ERCOT/NN5/M3</span>
   </footer>
 
@@ -1074,16 +1069,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     cone: {
       accent: 'var(--rupture)',
-      tag: 'ETAPA 1 DE 4 · LA MENTIRA DETERMINISTA',
-      title: '1. La Ilusión de la Certeza: ¿Por qué un número único (ŷₜ) siempre miente?',
-      lead: 'Un pronóstico puntual es una mentira matemática: perturbaciones mínimas hoy divergen en un cono estocástico.',
-      b1Label: '🌪️ EFECTO MARIPOSA Y LYAPUNOV',
-      b1Text: 'Las trayectorias Monte Carlo se dispersan como <b>σ(h) ∝ σ₁·√h</b>; más allá de Lyapunov, el punto fijo pierde sentido.',
-      b2Label: '⚠️ RIESGO ASIMÉTRICO',
-      b2Text: 'Quedarse sin energía cuesta 100 veces más que sobreprepararse. El valor reside en las bandas <b>P10–P90</b>.',
+      tag: 'LA MENTIRA DE UN SOLO NÚMERO',
+      title: 'Un solo número siempre miente: el futuro es un cono',
+      lead: 'Pequeños errores de hoy crecen con el tiempo, así que el pronóstico honesto es un rango, no un punto.',
+      b1Label: '🌪️ Efecto mariposa',
+      b1Text: 'Las trayectorias posibles se abren con el tiempo; más lejos, un punto fijo pierde sentido.',
+      b2Label: '⚠️ El riesgo no es simétrico',
+      b2Text: 'Quedarse sin energía cuesta 100 veces más que sobreprepararse. El valor está en el rango P10–P90.',
       formula: 'σ(h) ∝ σ₁ · √h  ──▶  Bandas P25–P75 (50%) y P10–P90 (80%)',
       hint: 'La única decisión ejecutable vive en el abanico',
-      quote: 'El pronóstico puntual es una mentira matemática; la decisión vive en el cono calibrado.',
+      quote: 'Un pronóstico honesto da un rango, no un número.',
       icon: '🌪️',
       canvasTitle: 'El Cono de Incertidumbre: Divergencia de Monte Carlo y Límite de Lyapunov',
       ovLeft: '⬜ Realidad Observada (Historial)',
@@ -1093,16 +1088,16 @@ input[type="range"] {
     },
     scp: {
       accent: 'var(--phi)',
-      tag: 'ETAPA 2 DE 4 · SPLIT CONFORMAL PREDICTION (LEI ET AL., 2017)',
-      title: '2. Predicción Conforme (SCP): El Escudo Matemático en 5 Pasos',
-      lead: 'Split Conformal Prediction (SCP) construye intervalos rigurosos sin asumir normalidad gaussiana.',
-      b1Label: '📏 LOS 5 PASOS CONFORMES',
-      b1Text: '1. Dividir train/cal. 2. Entrenar f̂. 3. Medir residuos Sᵢ=|f̂−y|. 4. Cuantil q̂ al 1−α. 5. Blindar [f̂ ± q̂].',
-      b2Label: '✅ GARANTÍA EN MUESTRAS FINITAS',
-      b2Text: 'Garantiza cobertura matemática <b>≥ 1−α (90%)</b> para cualquier modelo de caja negra sin supuestos teóricos.',
+      tag: 'EL ESCUDO EN 5 PASOS',
+      title: 'Un escudo en 5 pasos garantiza el rango',
+      lead: 'La predicción conforme crea intervalos confiables sin suponer que los errores siguen una campana.',
+      b1Label: '📏 Los 5 pasos',
+      b1Text: 'Separar datos, entrenar, medir errores recientes, tomar su margen y sumarlo y restarlo.',
+      b2Label: '✅ Garantía real',
+      b2Text: 'Cubre al menos el 90% de los casos con cualquier modelo, sin suposiciones teóricas.',
       formula: 'Sᵢ = |f̂(xᵢ) − yᵢ|  ──▶  q̂ = cuantil₁₋α(S_Cal)  ──▶  I(x) = [ f̂(x) ± q̂ ]',
       hint: 'Corrección finita: (1−α̂) = ⌈(|Cal|+1)(1−α)⌉ / |Cal|',
-      quote: 'La predicción conforme garantiza cobertura finita midiendo honestamente los errores recientes.',
+      quote: 'Medir los errores recientes garantiza un rango honesto.',
       icon: '📏',
       canvasTitle: 'Los 5 Pasos de Split Conformal Prediction: De Errores Históricos (Sᵢ) al Escudo ±q̂',
       ovLeft: '📊 Residuos de Calibración Sᵢ',
@@ -1112,39 +1107,39 @@ input[type="range"] {
     },
     ercot: {
       accent: 'var(--lab)',
-      tag: 'ETAPA 3 DE 4 · EVIDENCIA EMPÍRICA (ACHOUR ET AL., 2025)',
-      title: '3. Cuantil Local vs. Global y la Victoria Zero-Shot en ERCOT',
-      lead: 'En ERCOT 2232, la sinergia Zero-Shot + Calibración Conforme superó rotundamente a los árboles tabulares.',
-      b1Label: '🔀 CUANTIL LOCAL VS GLOBAL',
-      b1Text: 'El local calibra por serie aislada; el global agrega errores cuando cada serie tiene historial corto.',
-      b2Label: '🏆 PARADOJA EN ERCOT 2232',
-      b2Text: 'LightGBM colapsa con pocos datos (MASE 1.195). Chronos-Bolt Zero-Shot usa 80% en calibrar logrando <b>MASE 0.362</b>.',
+      tag: 'PRUEBA EN TEXAS',
+      title: 'En Texas, el modelo sin entrenar y calibrado ganó',
+      lead: 'En ERCOT 2232, combinar un modelo preentrenado con calibración superó con claridad a los árboles de tabla.',
+      b1Label: '🔀 Local frente a global',
+      b1Text: 'El local calibra cada serie por separado; el global junta errores cuando cada historial es corto.',
+      b2Label: '🏆 La paradoja de Texas',
+      b2Text: 'LightGBM falla con pocos datos (MASE 1.195); Chronos-Bolt usa 80% para calibrar y logra 0.362.',
       formula: 'ERCOT-2232: Chronos-Bolt (MASE 0.362, MSIW 0.312) vs. LightGBM (1.195)',
       hint: 'Zero-Shot no destruye filas con lags y maximiza la muestra |Cal|',
-      quote: 'Zero-Shot regala el 80% de la historia a la calibración conforme para blindar intervalos.',
+      quote: 'Entrenar menos y calibrar más blinda los intervalos.',
       icon: '🏆',
       canvasTitle: 'Cuantil Local vs. Global y Benchmark en ERCOT-2232 (Chronos-Bolt vs. LightGBM)',
       ovLeft: '🔀 Cuantil Local vs Global',
       ovRight: '🏆 Benchmark ERCOT (Achour et al., 2025)',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Chronos-Bolt + 80% Cal (MASE 0.362)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> LightGBM 80/20 (0.659)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> LightGBM 20/80 Colapso (1.195)</span>',
-      nextLabel: 'Ver Asimetría y Pase a Diapo 11 ─▶'
+      nextLabel: 'Ver Asimetría ─▶'
     },
     bridge11: {
       accent: 'var(--ockham)',
-      tag: 'ETAPA 4 DE 4 · DECISIÓN BAJO RIESGO Y PASE A DIAPO 11',
-      title: '4. Decidir con P10–P90 y el Pase al Árbol de Decisión (Diapo 11)',
-      lead: 'Las bandas P10–P90 habilitan decisiones gerenciales asimétricas y abren el paso a la Diapositiva 11.',
-      b1Label: '⚖️ DECISIÓN ASIMÉTRICA',
-      b1Text: 'P90 para riesgo fatal (energía, salud), P50 para valor esperado y P10 para presupuesto piso conservador.',
-      b2Label: '🧭 PASE A LA DIAPOSITIVA 11',
-      b2Text: 'Con las 4 Eras y el Cono Conforme dominados, pasamos al árbol de decisión ejecutiva de las 4 Vías.',
-      formula: '4 Eras + Cono Conforme (P10–P90) ──▶ Diapo 11: Árbol de Decisión en 3 Preguntas',
+      tag: 'DECIDIR CON RANGOS',
+      title: 'Decidir con el rango P10–P90 protege del peor caso',
+      lead: 'Las bandas permiten decisiones distintas según el riesgo y abren paso al árbol de decisión que sigue.',
+      b1Label: '⚖️ Decidir según el riesgo',
+      b1Text: 'P90 para riesgos fatales (energía, salud), P50 como valor esperado y P10 como presupuesto mínimo.',
+      b2Label: '🧭 Siguiente: elegir modelo',
+      b2Text: 'Con las cuatro familias y el cono conforme claros, pasamos al árbol de decisión ejecutiva.',
+      formula: '4 Eras + Cono Conforme (P10–P90) ──▶ Siguiente: Árbol de Decisión en 3 Preguntas',
       hint: 'Siguiente Diapo (Cierre Final) · Matriz Ejecutiva y Árbol de Decisión Sectorial',
-      quote: 'Decidir con P10-P90 protege contra la ruina en escenarios asimétricos del mundo real.',
+      quote: 'Decidir con rangos protege de la ruina.',
       icon: '🧭',
-      canvasTitle: 'Toma de Decisiones Asimétrica (P10 / P50 / P90) y Puente a la Diapositiva 11',
+      canvasTitle: 'Toma de Decisiones Asimétrica (P10 / P50 / P90)',
       ovLeft: '⚖️ Toma de Decisiones Asimétrica (P10/P90)',
-      ovRight: '⏭️ Pase a Diapo 11 (Árbol de Decisión)',
+      ovRight: '⏭️ Siguiente: Árbol de Decisión',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> P90 (Cobertura Antiapagón / Stock Crítico)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> P50 (Valor Esperado)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> P10 (Escenario Conservador)</span>',
       nextLabel: 'Reiniciar bucle (Cono) ↺'
     }
@@ -1153,6 +1148,37 @@ input[type="range"] {
   const $ = id => document.getElementById(id);
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
+
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
 
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
@@ -1218,7 +1244,7 @@ input[type="range"] {
     } else {
       $('kpi1').innerHTML = `Decisión Elegida: <strong style="color:var(--ockham)">Cuantil P${state.targetQuantile}</strong>`;
       $('kpi2').innerHTML = `Riesgo Apagón: <strong style="color:var(--lab)">Blindado</strong>`;
-      $('kpi3').innerHTML = `Siguiente Diapo: <strong style="color:var(--phi)">11. Árbol de Decisión</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--phi)">Árbol de Decisión</strong>`;
     }
 
     document.querySelectorAll('.proc-node').forEach(btn => {
@@ -1585,7 +1611,7 @@ input[type="range"] {
     ctx.fillStyle = '#a5f3fc';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🔀 CUANTIL LOCAL (q̂ⱼ) VS. GLOBAL (q̂_global)', lx + 14, ly + 20);
+    fitFill('🔀 CUANTIL LOCAL (q̂ⱼ) VS. GLOBAL (q̂_global)', lx + 14, ly + 20, lw - 28);
 
     // Serie 1: Estable (Con Cuantil Local estrecho vs Global inflado)
     const s1Y = ly + 36, sH = (boxH - 60) / 2;
@@ -1595,14 +1621,14 @@ input[type="range"] {
 
     ctx.fillStyle = '#8ef7c7';
     ctx.font = '700 11.5px "JetBrains Mono"';
-    ctx.fillText('✅ CUANTIL LOCAL (q̂ⱼ): Traje a medida por serie', lx + 20, s1Y + 16);
+    fitFill('✅ CUANTIL LOCAL (q̂ⱼ): Traje a medida por serie', lx + 20, s1Y + 16, lw - 40);
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 12px Inter, sans-serif';
-    ctx.fillText('• Evita que una serie volátil ensanche artificialmente', lx + 20, s1Y + 34);
-    ctx.fillText('  las bandas de tus productos o regiones estables.', lx + 20, s1Y + 50);
+    fitFill('• Evita que una serie volátil ensanche artificialmente', lx + 20, s1Y + 34, lw - 40);
+    fitFill('  las bandas de tus productos o regiones estables.', lx + 20, s1Y + 50, lw - 40);
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '600 11.5px "JetBrains Mono"';
-    ctx.fillText('q̂ⱼ = q₁₋α( S_Cal, j )  [Ideal en varianzas heterogéneas]', lx + 20, s1Y + sH - 12);
+    fitFill('q̂ⱼ = q₁₋α( S_Cal, j )  [Ideal en varianzas heterogéneas]', lx + 20, s1Y + sH - 12, lw - 40);
 
     // Serie 2: Cuantil Global
     const s2Y = s1Y + sH + 10;
@@ -1612,14 +1638,14 @@ input[type="range"] {
 
     ctx.fillStyle = '#d8b4fe';
     ctx.font = '700 11.5px "JetBrains Mono"';
-    ctx.fillText('🌐 CUANTIL GLOBAL (q̂_global): Agrupa M series cortas', lx + 20, s2Y + 16);
+    fitFill('🌐 CUANTIL GLOBAL (q̂_global): Agrupa M series cortas', lx + 20, s2Y + 16, lw - 40);
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 12px Inter, sans-serif';
-    ctx.fillText('• Cuando cada serie individual tiene muy pocos puntos', lx + 20, s2Y + 34);
-    ctx.fillText('  (|Calⱼ| corto), une los errores para estabilizar q̂.', lx + 20, s2Y + 50);
+    fitFill('• Cuando cada serie individual tiene muy pocos puntos', lx + 20, s2Y + 34, lw - 40);
+    fitFill('  (|Calⱼ| corto), une los errores para estabilizar q̂.', lx + 20, s2Y + 50, lw - 40);
     ctx.fillStyle = '#ffe1a8';
     ctx.font = '600 11.5px "JetBrains Mono"';
-    ctx.fillText('q̂_global = q₁₋α( ⋃ S_Cal, j )  [Ideal en series cortas NN5/M3]', lx + 20, s2Y + sH - 12);
+    fitFill('q̂_global = q₁₋α( ⋃ S_Cal, j )  [Ideal en series cortas NN5/M3]', lx + 20, s2Y + sH - 12, lw - 40);
     ctx.restore();
 
     // DERECHA: EVIDENCIA NUMÉRICA EN ERCOT 2232 (ACHOUR ET AL., 2025)
@@ -1635,11 +1661,11 @@ input[type="range"] {
     ctx.fillStyle = '#6ef0b4';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🏆 ESTUDIO ACHOUR ET AL. (2025) · ERCOT 2232 PUNTOS', rx + 14, ry + 20);
+    fitFill('🏆 ESTUDIO ACHOUR ET AL. (2025) · ERCOT 2232 PUNTOS', rx + 14, ry + 20, rw - 28, ['🏆 ACHOUR ET AL. (2025) · ERCOT 2232']);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 12px Inter, sans-serif';
-    ctx.fillText(`Al asignar ${state.calibShare}% del historial a Calibración (|Cal|), mira qué ocurre con el error (MASE) y el ancho (MSIW):`, rx + 14, ry + 38);
+    fitFill(`Al asignar ${state.calibShare}% del historial a Calibración (|Cal|), mira qué ocurre con el error (MASE) y el ancho (MSIW):`, rx + 14, ry + 38, rw - 28, [`Con ${state.calibShare}% del historial en Calibración (|Cal|):`]);
 
     const benchmarks = [
       {
@@ -1680,14 +1706,18 @@ input[type="range"] {
       ctx.fillStyle = b.color;
       ctx.font = '700 12px "JetBrains Mono"';
       ctx.textAlign = 'left';
-      ctx.fillText(b.name, rx + 20, by + 16);
+      const mcrTxt = `Cobertura MCR: ${b.mcr}`;
+      const mcrW = ctx.measureText(mcrTxt).width;
+      const nameMax = rw - 44 - mcrW - 12;
+      const shortName = b.name.replace(/ · [^)]*\)/, ')');
+      fitFill(b.name, rx + 20, by + 16, nameMax, [shortName, shortName.replace(/(\d+)% Train \/ (\d+)% Cal/, '$1/$2'), b.name.split(' (')[0]]);
 
       ctx.fillStyle = '#e2eeff';
       ctx.textAlign = 'right';
-      ctx.fillText(`Cobertura MCR: ${b.mcr}`, rx + rw - 22, by + 16);
+      ctx.fillText(mcrTxt, rx + rw - 22, by + 16);
 
       // Barra de MASE
-      const barMaxW = rw - 210;
+      const barMaxW = Math.max(60, rw - 260);
       const bw = (b.mase / maxMase) * barMaxW;
       ctx.fillStyle = b.color;
       ctx.fillRect(rx + 20, by + 24, bw, 11);
@@ -1699,9 +1729,26 @@ input[type="range"] {
 
       ctx.fillStyle = '#94a3b8';
       ctx.font = '500 11.5px Inter, sans-serif';
-      ctx.fillText(b.note, rx + 20, by + cardH - 12);
+      fitFill(b.note, rx + 20, by + cardH - 12, rw - 44, [b.note.split(':')[0]]);
     });
     ctx.restore();
+  }
+
+  // Dibuja texto dentro de maxW: prueba alternativas más cortas y, si hace falta, reduce la fuente (mín. 11 px)
+  function fitFill(text, x, y, maxW, alts) {
+    const cands = [text].concat(alts || []);
+    let pick = cands.find(t => ctx.measureText(t).width <= maxW);
+    if (!pick) {
+      pick = cands[cands.length - 1];
+      const m = /(\d+(?:\.\d+)?)px/.exec(ctx.font);
+      let px = m ? parseFloat(m[1]) : 13;
+      const base = ctx.font;
+      while (px > 11 && ctx.measureText(pick).width > maxW) {
+        px -= 0.5;
+        ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+      }
+    }
+    ctx.fillText(pick, x, y);
   }
 
   // ACTO 4: ASIMETRÍA DEL RIESGO (P10 / P50 / P90) Y PASE A LA DIAPOSITIVA 11 (ÁRBOL DE DECISIÓN)
@@ -1828,7 +1875,7 @@ input[type="range"] {
     ctx.fillStyle = '#38efff';
     ctx.font = '700 13px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 11 (EL CIERRE EJECUTIVO)', rx + 14, ry + 20);
+    ctx.fillText('⏭️ SIGUIENTE: EL CIERRE EJECUTIVO', rx + 14, ry + 20);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 13px "Space Grotesk", sans-serif';

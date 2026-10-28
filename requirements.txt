@@ -20,3 +20,5 @@ nbformat>=5.9.0
 
 # Tooling y visual QA
 playwright>=1.40.0
+# Render de video (video/_pipeline): ffmpeg de respaldo si no está en PATH
+imageio-ffmpeg>=0.4.9

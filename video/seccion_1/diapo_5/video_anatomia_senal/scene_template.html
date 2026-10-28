@@ -6,6 +6,8 @@
 <style>
 __FONTS_CSS__
 *{box-sizing:border-box}
+:root{--fs-label:22px;--fs-sub:30px;--fs-title:64px;--fs-kicker:24px}
+sub{font-size:inherit;vertical-align:-.22em;line-height:0}
 html,body{margin:0;width:1600px;height:900px;overflow:hidden;background:#040714}
 #stage{position:relative;width:1600px;height:900px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;color:#e8f4ff}
 #camera{position:absolute;inset:0;transform-origin:50% 52%}
@@ -22,43 +24,44 @@ svg#scene{position:absolute;inset:0}
 .fx{opacity:0}
 #titleBlock{position:absolute;inset:0}
 #titleBlock>div{position:absolute;left:0;right:0;text-align:center;opacity:0}
-#tk{top:238px;font-size:14px;letter-spacing:4px;color:#38efff}
-#th1{top:268px;font-size:64px;font-weight:700;letter-spacing:-0.5px}
-#teq{top:374px;font-size:30px;letter-spacing:1px}
+#tk{top:210px;font-size:var(--fs-kicker);letter-spacing:4px;color:#38efff}
+#th1{top:250px;font-size:var(--fs-title);font-weight:700;letter-spacing:-0.5px}
+#teq{top:366px;font-size:var(--fs-sub);letter-spacing:1px}
 #teq .tT{color:#ffc05c}#teq .tS{color:#38efff}#teq .tC{color:#6ef0b4}#teq .tE{color:#9aa6c8}
-#tsub{top:436px;font-size:20px;color:#cfe0f5}
-#tmeta{top:478px;font-size:13px;letter-spacing:1px;color:#7f8fb0}
-#coldCount{position:absolute;left:0;right:0;top:826px;text-align:center;font-size:14px;letter-spacing:3px;color:#8b9ab8;opacity:0}
-#coldTag{position:absolute;padding:4px 11px 5px;border-radius:8px;border:1px solid rgba(234,246,255,0.4);background:rgba(4,10,24,0.85);font-size:14px;color:#eaf6ff;opacity:0}
-#headerSmall{position:absolute;left:96px;top:42px;opacity:0}
-#hKick{font-size:12.5px;letter-spacing:2.5px;color:#38efff}
-#hSub{font-size:17px;color:#cfe0f5;margin-top:5px}
-#equation{position:absolute;right:96px;top:46px;font-size:22px;color:#5a6a8a;opacity:0;letter-spacing:1px}
-#chips{position:absolute;left:80px;top:112px;display:flex;gap:16px;opacity:0}
-.chip{width:348px;padding:11px 18px 12px;border-radius:12px;border:1px solid #1c2a44;background:rgba(7,16,34,0.78)}
-.chipTitle{font-size:16.5px;font-weight:600;color:#aabbd8;letter-spacing:0.2px}
-.chipSub{font-size:11.5px;color:#7f8fb0;margin-top:3px;letter-spacing:0.5px}
+#tsub{top:436px;font-size:var(--fs-sub);color:#cfe0f5}
+#tmeta{top:492px;font-size:var(--fs-label);letter-spacing:1px;color:#7f8fb0}
+#coldCount{position:absolute;left:0;right:0;top:836px;text-align:center;font-size:var(--fs-label);letter-spacing:2px;color:#8b9ab8;opacity:0}
+#coldTag{position:absolute;padding:5px 14px 6px;border-radius:8px;border:1px solid rgba(234,246,255,0.4);background:rgba(4,10,24,0.85);font-size:var(--fs-label);color:#eaf6ff;opacity:0}
+#headerSmall{position:absolute;left:80px;top:24px;opacity:0}
+#hKick{font-size:var(--fs-kicker);letter-spacing:2px;color:#38efff}
+#hSub{font-size:var(--fs-sub);color:#cfe0f5;margin-top:2px}
+#equation{position:absolute;right:80px;top:36px;font-size:var(--fs-sub);color:#5a6a8a;opacity:0;letter-spacing:1px}
+#chips{position:absolute;left:80px;top:108px;display:flex;gap:16px;opacity:0}
+.chip{width:348px;padding:8px 14px 9px;border-radius:12px;border:1px solid #1c2a44;background:rgba(7,16,34,0.78)}
+.chipTitle{font-size:28px;font-weight:600;color:#aabbd8;letter-spacing:0.2px}
+.chipSub{font-size:var(--fs-label);color:#9aabc8;margin-top:2px;letter-spacing:0;white-space:nowrap}
 #chartLabels{position:absolute;inset:0;opacity:1}
-#chartLabels>div{position:absolute;font-size:12.5px;letter-spacing:0.4px;opacity:0;white-space:nowrap}
+#chartLabels>div{position:absolute;font-size:var(--fs-label);letter-spacing:0;opacity:0;white-space:nowrap;padding:3px 10px 4px;border-radius:8px;background:rgba(3,7,18,0.82)}
 #labT{color:#ffc05c}
 #labS{color:#38efff}
 #labC{color:#6ef0b4}
 #labE{color:#9aa6c8}
-#statsLine{position:absolute;left:96px;top:764px;font-size:15px;color:#8b9ab8;opacity:0;letter-spacing:0.4px}
-#recCard{position:absolute;padding:10px 16px 11px;border-radius:12px;border:1px solid rgba(255,82,119,0.55);background:rgba(255,82,119,0.12);text-align:center;opacity:0}
-#recCard .rcBig{font-size:16px;font-weight:600;color:#ffd7e0;letter-spacing:0.5px}
-#recCard .rcSub{font-size:11.5px;color:#d8a3b2;margin-top:3px;letter-spacing:0.8px}
-#quote{position:absolute;left:330px;top:466px;width:940px;padding:34px 40px 30px;border-radius:18px;border:1px solid rgba(56,239,255,0.28);background:rgba(3,7,18,0.88);text-align:center;opacity:0}
-#q1,#q2{font-size:40px;font-weight:700;letter-spacing:-0.3px}
+#statsLine{position:absolute;left:110px;top:218px;width:640px;line-height:1.2;font-size:var(--fs-label);color:#9aabc8;opacity:0;letter-spacing:0}
+#recCard{position:absolute;padding:8px 18px 9px;border-radius:12px;border:1px solid rgba(255,82,119,0.55);background:rgba(255,82,119,0.12);text-align:center;opacity:0}
+#recCard .rcBig{font-size:28px;font-weight:600;color:#ffd7e0;letter-spacing:0}
+#recCard .rcSub{font-size:var(--fs-label);color:#e8b8c6;margin-top:2px;letter-spacing:0}
+#quote{position:absolute;left:200px;top:340px;width:1200px;padding:40px 40px 36px;border-radius:18px;border:1px solid rgba(56,239,255,0.28);background:rgba(3,7,18,0.88);text-align:center;opacity:0}
+#q1,#q2{font-size:var(--fs-title);font-weight:700;letter-spacing:-0.3px}
 #q2{color:#ffc05c;margin-top:4px}
-#q3{font-size:15px;color:#8b9ab8;margin-top:14px;letter-spacing:0.4px}
+#q3{font-size:var(--fs-sub);color:#aabbd8;margin-top:18px;letter-spacing:0}
 #closeWrap{position:absolute;inset:0;opacity:0}
 #closeBg{position:absolute;inset:0;background:#040714}
 #closeWrap>div{position:absolute;left:0;right:0;text-align:center}
-#cKick{top:298px;font-size:14px;letter-spacing:4px;color:#38efff}
-#cH1{top:330px;font-size:56px;font-weight:700;letter-spacing:-0.5px}
-#cSub{top:446px;font-size:22px;color:#cfe0f5}
-#cFoot{top:804px;font-size:13px;letter-spacing:2px;color:#7f8fb0}
+#cKick{top:290px;font-size:var(--fs-kicker);letter-spacing:4px;color:#38efff}
+#cH1{top:332px;font-size:var(--fs-title);font-weight:700;letter-spacing:-0.5px}
+#cSub{top:450px;font-size:var(--fs-sub);color:#cfe0f5}
+#cFoot{top:820px;font-size:var(--fs-label);letter-spacing:1px;color:#7f8fb0}
+#subs{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:max-content;max-width:1120px;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:var(--fs-sub);line-height:1.25;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.28);border-radius:12px;padding:10px 22px;opacity:0;z-index:50;pointer-events:none}
 </style>
 </head>
 <body>
@@ -82,7 +85,7 @@ svg#scene{position:absolute;inset:0}
           <stop offset="1" stop-color="#7fdfff" stop-opacity="0"/>
         </radialGradient>
       </defs>
-      <rect id="panel" x="84" y="206" width="1476" height="532" rx="16" fill="#030712" fill-opacity="0.92" stroke="rgba(18,200,252,0.22)" opacity="0"/>
+      <rect id="panel" x="80" y="206" width="1440" height="620" rx="16" fill="#030712" fill-opacity="0.92" stroke="rgba(18,200,252,0.22)" opacity="0"/>
       <g id="dust" opacity="0"></g>
       <g id="grid" opacity="0"></g>
       <g id="rivers" opacity="0" fill="none">
@@ -121,8 +124,8 @@ svg#scene{position:absolute;inset:0}
     <div id="equation" class="mono">Y = <span id="eqT">T</span> + <span id="eqS">S</span> + <span id="eqC">C</span> + <span id="eqE">ε</span></div>
     <div id="chips">
       <div class="chip" id="chipT"><div class="chipTitle" id="chipTT">T · Tendencia</div><div class="chipSub mono">CAUCE · inercia física</div></div>
-      <div class="chip" id="chipS"><div class="chipTitle" id="chipST">S · Estacionalidad</div><div class="chipSub mono">MAREA · ciclo solar anual</div></div>
-      <div class="chip" id="chipC"><div class="chipTitle" id="chipCT">C · Ciclo endógeno</div><div class="chipSub mono">RÉGIMEN · El Niño, sequías</div></div>
+      <div class="chip" id="chipS"><div class="chipTitle" id="chipST">S · Estacionalidad</div><div class="chipSub mono">MAREA · ciclo anual</div></div>
+      <div class="chip" id="chipC"><div class="chipTitle" id="chipCT">C · Ciclo endógeno</div><div class="chipSub mono">RÉGIMEN · El Niño</div></div>
       <div class="chip" id="chipE"><div class="chipTitle" id="chipET">ε · Ruido</div><div class="chipSub mono">ENTROPÍA · irreducible</div></div>
     </div>
     <div id="chartLabels">
@@ -149,13 +152,14 @@ svg#scene{position:absolute;inset:0}
   </div>
   <div id="vignette"></div>
   <div id="grain"></div>
+  <div id="subs"></div>
   <div id="endFade"></div>
 </div>
 <script>
 const DATA=__DATA_JSON__;
 const DURMS=__DURATION_MS__;
 const W=1600,H=900;
-const CH={x0:96,x1:1548,y0:232,y1:712};
+const CH={x0:150,x1:1490,y0:285,y1:765};
 const YMIN=18.5,YMAX=39;
 const N=DATA.n;
 const X=i=>CH.x0+(i/(N-1))*(CH.x1-CH.x0);
@@ -248,9 +252,9 @@ return d}
     ln.setAttribute('y1',yOf(v).toFixed(1));ln.setAttribute('y2',yOf(v).toFixed(1));
     ln.setAttribute('stroke','rgba(140,170,220,0.10)');ELS.grid.appendChild(ln);
     const tx=document.createElementNS(NS,'text');
-    tx.setAttribute('x',CH.x0-12);tx.setAttribute('y',(yOf(v)+4.5).toFixed(1));
+    tx.setAttribute('x',CH.x0-12);tx.setAttribute('y',(yOf(v)+7.5).toFixed(1));
     tx.setAttribute('text-anchor','end');tx.setAttribute('fill','#66758f');
-    tx.setAttribute('font-size','13');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+    tx.setAttribute('font-size','22');tx.setAttribute('font-family','IBM Plex Mono, monospace');
     tx.textContent=v+'°';ELS.grid.appendChild(tx)});
   DATA.yearTicks.forEach(yt=>{
     const ln=document.createElementNS(NS,'line');
@@ -259,27 +263,27 @@ return d}
     ln.setAttribute('stroke','rgba(140,170,220,0.08)');ln.setAttribute('stroke-dasharray','2 8');
     ELS.grid.appendChild(ln);
     const tx=document.createElementNS(NS,'text');
-    tx.setAttribute('x',X(yt.i).toFixed(1));tx.setAttribute('y',CH.y1+28);
+    tx.setAttribute('x',X(yt.i).toFixed(1));tx.setAttribute('y',CH.y1+32);
     tx.setAttribute('text-anchor','middle');tx.setAttribute('fill','#66758f');
-    tx.setAttribute('font-size','13');tx.setAttribute('font-family','IBM Plex Mono, monospace');
+    tx.setAttribute('font-size','22');tx.setAttribute('font-family','IBM Plex Mono, monospace');
     tx.textContent=yt.label;ELS.grid.appendChild(tx)});
   ELS.riv1.setAttribute('d',riverPath(838,9,300,0));
   ELS.riv2.setAttribute('d',riverPath(862,7,380,1.9));
   ELS.riv3.setAttribute('d',riverPath(884,5,460,3.4));
   const iT=Math.floor(N*0.03),iS=Math.floor(N*0.60),iE=Math.floor(N*0.895);
-  ELS.labT.style.left=X(iT)+'px';ELS.labT.style.top=(yOf(DATA.t[iT])-36)+'px';
+  ELS.labT.style.left=X(iT)+'px';ELS.labT.style.top=(yOf(DATA.t[iT])-125)+'px';
   ELS.labT.textContent='T · cauce: nivel de fondo estable';
-  ELS.labS.style.left=X(iS)+'px';ELS.labS.style.top=(yOf(DATA.t[iS]-2.0)+2)+'px';
+  ELS.labS.style.left=(X(iS)-470)+'px';ELS.labS.style.top=(yOf(DATA.t[iS]-2.0)+40)+'px';
   ELS.labS.textContent='S · marea anual (±'+DATA.sAbs+' °C) — débil en el trópico';
-  ELS.labC.style.left=(X(DATA.idxCMax)-150)+'px';ELS.labC.style.top=(yOf(DATA.m30[DATA.idxCMax])-44)+'px';
+  ELS.labC.style.left='auto';ELS.labC.style.right='100px';ELS.labC.style.top=(yOf(DATA.max)+8)+'px';
   ELS.labC.textContent='El Niño 2023–24 · régimen cálido';
-  ELS.labE.style.left=(X(iE)-350)+'px';ELS.labE.style.top=(yOf(27.2))+'px';
+  ELS.labE.style.left=(X(iE)-560)+'px';ELS.labE.style.top=(yOf(24.2))+'px';
   ELS.labE.textContent='ε · entropía irreducible (σ ≈ '+DATA.eStd+' °C)';
   ELS.statsLine.textContent='n = '+String(DATA.n).replace(/\B(?=(\d{3})+(?!\d))/g,',')+' días · media '+DATA.mean+' °C · récord '+DATA.max.toFixed(1)+' °C ('+DATA.maxDate+')';
   ELS.recCard.querySelector('.rcBig').textContent=DATA.max.toFixed(1)+' °C · RÉCORD';
   ELS.recCard.querySelector('.rcSub').textContent=DATA.maxDate+' · régimen cálido';
   ELS.recCard.style.left=X(DATA.idxMax)+'px';
-  ELS.recCard.style.top=(yOf(DATA.max)-72)+'px';
+  ELS.recCard.style.top=(yOf(DATA.max)-92)+'px';
   ELS.recLine.setAttribute('x1',X(DATA.idxMax).toFixed(1));
   ELS.recLine.setAttribute('x2',X(DATA.idxMax).toFixed(1));
   ELS.recLine.setAttribute('y2',yOf(DATA.max).toFixed(1));
@@ -455,6 +459,18 @@ if(h)window.__setTime(parseFloat(h[1])*1000);
 document.fonts.ready.then(()=>{render(lastMs/1000);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{window.__ready=true}))});
 if(params.has('preview')){const loop=()=>{window.__setTime(performance.now()%DURMS);requestAnimationFrame(loop)};loop()}
+</script>
+<script>
+/* Subtítulos quemados: función pura del tiempo de escena sobre BEATS (mismo origen que narration.vtt). */
+const BEATS=__BEATS_JSON__;
+(function(){
+ const el=document.getElementById('subs'),FADE=0.25,dur=window.__DURATION_MS||1e9;
+ function renderSubs(t){let text='',o=0;
+  for(const b of BEATS){if(t>=b.t&&t<b.t+b.dur){o=Math.min(1,(t-b.t)/FADE,(b.t+b.dur-t)/FADE);text=b.text;break}}
+  if(el.textContent!==text)el.textContent=text;el.style.opacity=o.toFixed(3)}
+ const base=window.__setTime;
+ window.__setTime=ms=>{base(ms);renderSubs(Math.max(0,Math.min(ms,dur))/1000)};
+ renderSubs(0)})();
 </script>
 </body>
 </html>

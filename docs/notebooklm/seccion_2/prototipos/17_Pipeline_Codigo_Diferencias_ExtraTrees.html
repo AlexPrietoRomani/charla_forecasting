@@ -481,6 +481,7 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
   padding-top: clamp(4px, 0.6vh, 8px);
 }
 .foot strong { color: var(--muted); }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -491,10 +492,10 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
     <div>
       <p class="eyebrow">ACTO 2 · ARQUITECTURA DE PRODUCCIÓN · CPU SIN GPUS</p>
       <h1><span class="n">17</span> Pipeline: <span style="font-family:var(--mono); font-size:0.85em; color:var(--phi)">senamhi_forecaster.py</span></h1>
-      <p class="sub">El truco en <b>8 líneas de código</b>: diferenciar la serie (Δy) → lags inerciales → ExtraTrees → reconstrucción acumulativa con cono empírico.</p>
+      <p class="sub">El truco en <b>8 líneas</b>: restar días vecinos, añadir memoria, usar árboles y reconstruir con un cono de duda.</p>
     </div>
     <div class="topbar-meta">
-      <span class="badge-tag">⚡ 0.25s EN CPU</span>
+      <span class="badge-tag">⚡ ¼ DE SEGUNDO EN CPU <span data-expert>0.25 s</span></span>
       <span class="badge-tag" style="border-color: rgba(56,239,255,0.35); background: rgba(14,116,144,0.18); color: var(--phi)">RMSE: 1.880 °C</span>
       <span class="badge-tag" style="border-color: rgba(255,192,92,0.35); background: rgba(255,192,92,0.12); color: var(--ockham)">CERO GPUS</span>
     </div>
@@ -509,7 +510,7 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
     </button>
     <button class="flow-step" data-step="2" id="fStep2">
       <div class="flow-head"><span class="flow-num">PASO 2</span><span class="flow-tag">INFRAESTRUCTURA</span></div>
-      <div class="flow-title">0.25s en CPU Doméstica</div>
+      <div class="flow-title">Un cuarto de segundo en CPU doméstica <span data-expert>0.25 s</span></div>
       <div class="flow-desc">ExtraTrees entrena en un cuarto de segundo sin PyTorch, sin CUDA y sin facturas cloud.</div>
     </button>
     <button class="flow-step" data-step="3" id="fStep3">
@@ -542,7 +543,7 @@ pre.code-content::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25
         <div class="pipe-arrow">➔</div>
         <div class="pipe-node highlight" id="pNode3">
           <span class="pipe-node-title">3. ExtraTrees</span>
-          <span class="pipe-node-sub">100 árboles (0.25s)</span>
+          <span class="pipe-node-sub">100 árboles <span data-expert>(0.25 s)</span></span>
         </div>
         <div class="pipe-arrow">➔</div>
         <div class="pipe-node" id="pNode4">
@@ -588,19 +589,19 @@ y_p90 = y_forecast + q90_res  <span class="c-comment"># Cono P10-P90</span></pre
       <!-- 3 AXIOMS -->
       <div class="axioms-card">
         <div class="axioms-header">
-          <span>🧠 Los 3 Axiomas del Pronóstico Climático</span>
+          <span>🧠 Tres reglas del pronóstico del clima</span>
         </div>
         <div class="axiom-item">
           <span class="axiom-num">1</span>
-          <div><b>La Inercia Vence a la Complejidad:</b> En horizontes cortos (1 a 3 días), la memoria autorregresiva de 14 días explica el 85% de la varianza. No se requiere supercómputo.</div>
+          <div><b>La inercia vence a la complejidad:</b> A 1–3 días, 14 días de memoria explican el 85% de la variación; sobra el supercómputo.</div>
         </div>
         <div class="axiom-item">
           <span class="axiom-num">2</span>
-          <div><b>La Diferenciación Salva a los Árboles:</b> Entrenar árboles sobre nivel condena al fracaso ante récords históricos; entrenar sobre diferencias permite proyectar olas de calor sin techo.</div>
+          <div><b>Restar salva a los árboles:</b> Entrenar con niveles falla ante récords; con diferencias se proyectan olas de calor sin techo.</div>
         </div>
         <div class="axiom-item">
           <span class="axiom-num">3</span>
-          <div><b>El Cono como Escudo Decisional:</b> La probabilidad calibrada P10–P90 protege presupuestos y cadenas de suministro frente a eventos extremos como los friajes.</div>
+          <div><b>El cono protege las decisiones:</b> Un rango P10–P90 calibrado protege presupuestos y cadenas de suministro ante friajes.</div>
         </div>
       </div>
 
@@ -625,14 +626,14 @@ y_p90 = y_forecast + q90_res  <span class="c-comment"># Cono P10-P90</span></pre
         </div>
       </div>
 
-      <div class="executive-takeaway"><strong>💡 Idea Clave:</strong> <span id="takeawayText">ExtraTrees sobre diferencias en CPU doméstica iguala al supercómputo climático.</span></div>
+      <div class="executive-takeaway"><strong>💡 Idea Clave:</strong> <span id="takeawayText">Árboles sobre diferencias, en un PC común, igualan al supercómputo.</span></div>
 
       <!-- AUDIT METRICS PILLS -->
       <div class="kpi-row">
         <div class="kpi-pill">Entrenamiento: <b>2,467 días</b></div>
         <div class="kpi-pill">Holdout Test: <b>90 días</b></div>
-        <div class="kpi-pill">Inferencia: <b>0.25 segundos</b></div>
-        <div class="kpi-pill">DM Test vs TimesFM: <b>p = 0.71 (Empate)</b></div>
+        <div class="kpi-pill">Inferencia: <b>un cuarto de segundo</b> <span data-expert>0.25 s</span></div>
+        <div class="kpi-pill">DM Test vs TimesFM: <b>empate técnico</b> <span data-expert>p = 0.71</span></div>
       </div>
     </div>
   </section>

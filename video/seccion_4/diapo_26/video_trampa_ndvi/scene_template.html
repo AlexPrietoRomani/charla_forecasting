@@ -5,6 +5,8 @@
 <style>
 __FONTS_CSS__
 *{box-sizing:border-box;margin:0;padding:0}
+:root{--fs-label:22px;--fs-sub:30px;--fs-title:64px;--fs-kicker:24px}
+sub{font-size:inherit;vertical-align:-.22em;line-height:0}
 html,body{width:1600px;height:900px;overflow:hidden;background:#040812}
 body{font-family:'IBM Plex Sans',sans-serif;color:#e8f2ff}
 .display{font-family:'Space Grotesk',sans-serif}
@@ -23,49 +25,50 @@ body{font-family:'IBM Plex Sans',sans-serif;color:#e8f2ff}
 #sweep{position:absolute;top:-80px;bottom:-80px;left:-700px;width:420px;transform:skewX(-14deg);background:linear-gradient(90deg,transparent,rgba(70,150,255,0.10),rgba(140,220,255,0.16),rgba(70,150,255,0.10),transparent);filter:blur(30px);opacity:0;pointer-events:none}
 #dustWrap{position:absolute;inset:0}
 svg{position:absolute;left:0;top:0;overflow:visible}
-#panel{position:absolute;left:84px;top:206px;width:1476px;height:532px;border-radius:16px;background:rgba(2,6,15,0.92);border:1px solid rgba(90,150,255,0.20);opacity:0}
-.pill{position:absolute;padding:8px 16px 9px;border-radius:999px;border:1px solid;font-size:13px;letter-spacing:.4px;opacity:0;white-space:nowrap;background:rgba(4,10,26,0.88)}
-#hRight{right:96px;top:52px;border-color:rgba(140,170,220,0.25);color:#8b9ab8;font-size:12px}
-#headerSmall{position:absolute;left:96px;top:56px;opacity:0}
-#hKick{font-size:12.5px;letter-spacing:2.6px;color:#38efff}
-#hSub{font-size:14.5px;color:#aabbd8;margin-top:6px}
+#panel{position:absolute;left:80px;top:122px;width:1440px;height:698px;border-radius:16px;background:rgba(2,6,15,0.92);border:1px solid rgba(90,150,255,0.20);opacity:0}
+.pill{position:absolute;padding:6px 16px 7px;border-radius:999px;border:1px solid;font-size:var(--fs-label);letter-spacing:0;opacity:0;white-space:nowrap;background:rgba(4,10,26,0.88)}
+#hRight{right:80px;top:18px;width:540px;white-space:normal;text-align:center;line-height:1.2;border-radius:22px;padding:5px 14px 6px;border-color:rgba(140,170,220,0.35);color:#aabbd8;font-size:var(--fs-label)}
+#headerSmall{position:absolute;left:80px;top:24px;opacity:0}
+#hKick{font-size:var(--fs-kicker);letter-spacing:1px;color:#38efff}
+#hSub{font-size:var(--fs-sub);color:#cfe0f5;margin-top:2px}
 #coldBlock{position:absolute;inset:0;text-align:center}
 #coldBlock .cline{position:absolute;left:0;right:0}
-#ck{top:318px;font-size:14px;letter-spacing:4.2px;color:#38efff}
-#ch{top:344px;font-size:46px;font-weight:700;letter-spacing:-0.4px}
-#cs{top:414px;font-size:17px;color:#cfe0f5}
-#cmeta{top:478px;font-size:12px;letter-spacing:2px;color:#7f8fb0}
-.panelHead{position:absolute;left:120px;top:242px;opacity:0}
-.panelHead .pk{font-size:12.5px;letter-spacing:2.4px;color:#38efff}
-.panelHead .ps{font-size:13.5px;color:#8b9ab8;margin-top:5px}
-.aCap{position:absolute;font-size:11.5px;letter-spacing:.3px;opacity:0}
-#aCap1{left:450px;top:486px;color:#9fe8c8}
-#aCap2{left:450px;top:556px;color:#a8ecff}
-#aCap3{left:450px;top:588px;color:#ffb4ad}
-#satPill{left:346px;top:302px;border-color:rgba(56,239,255,0.45);color:#a8ecff;font-size:11.5px}
-#satStat{left:130px;top:660px;font-size:11.5px;letter-spacing:.3px;color:#9fe8c8;opacity:0;position:absolute}
-#ndviCap{position:absolute;left:560px;top:288px;font-size:11.5px;color:#9fe8c8;letter-spacing:.3px;opacity:0}
-#yldCap{position:absolute;left:560px;top:672px;font-size:11.5px;color:#9fe8c8;letter-spacing:.3px;opacity:0}
-#ndviTag{left:1120px;top:278px;border-color:rgba(110,240,180,0.55);color:#bff2d8;font-size:12.5px}
-#yldTag{left:1145px;top:530px;border-color:rgba(255,123,114,0.6);color:#ffb4ad;font-size:12.5px}
-#capL{left:180px;top:684px;border-color:rgba(255,123,114,0.5);color:#ffb4ad;font-size:12px}
-#capR{left:900px;top:684px;border-color:rgba(110,240,180,0.5);color:#bff2d8;font-size:12px}
-#corrNote{position:absolute;left:160px;top:302px;font-size:11.5px;color:#7f8fb0;letter-spacing:.4px;opacity:0}
+#ck{top:200px;font-size:var(--fs-kicker);letter-spacing:4px;color:#38efff}
+#coldBlock #ch{top:238px;left:180px;right:180px;font-size:var(--fs-title);line-height:1.18;font-weight:700;letter-spacing:-0.4px}
+#cs{top:430px;font-size:var(--fs-sub);color:#cfe0f5}
+#cmeta{top:494px;font-size:var(--fs-label);letter-spacing:0.5px;color:#9aabc8}
+.panelHead{position:absolute;left:120px;top:146px;opacity:0}
+.panelHead .pk{font-size:var(--fs-kicker);letter-spacing:1.5px;color:#38efff}
+.panelHead .ps{font-size:26px;color:#c4d3ea;margin-top:3px}
+.aCap{position:absolute;font-size:var(--fs-label);letter-spacing:0;opacity:0}
+#aCap1{left:110px;top:630px;color:#9fe8c8}
+#aCap2{left:110px;top:666px;color:#a8ecff}
+#aCap3{left:110px;top:702px;color:#ffb4ad}
+#satPill{left:440px;top:268px;border-color:rgba(56,239,255,0.45);color:#a8ecff}
+#satStat{left:110px;top:744px;width:580px;font-size:var(--fs-label);line-height:1.2;letter-spacing:0;color:#9fe8c8;opacity:0;position:absolute}
+#ndviCap{position:absolute;left:720px;top:232px;font-size:var(--fs-label);color:#9fe8c8;letter-spacing:0;opacity:0}
+#yldCap{position:absolute;left:720px;top:536px;font-size:var(--fs-label);color:#9fe8c8;letter-spacing:0;opacity:0}
+#ndviTag{left:800px;top:276px;border-color:rgba(110,240,180,0.55);color:#bff2d8}
+#yldTag{left:740px;top:586px;border-color:rgba(255,123,114,0.6);color:#ffb4ad}
+#capL{left:110px;top:744px;width:650px;white-space:normal;text-align:center;line-height:1.2;border-radius:20px;border-color:rgba(255,123,114,0.5);color:#ffb4ad}
+#capR{left:840px;top:744px;width:650px;white-space:normal;text-align:center;line-height:1.2;border-radius:20px;border-color:rgba(110,240,180,0.5);color:#bff2d8}
+#corrNote{position:absolute;left:120px;top:236px;font-size:var(--fs-label);color:#9aabc8;letter-spacing:0;opacity:0}
 #closeWrap{position:absolute;inset:0;opacity:0}
 #closeBg{position:absolute;inset:0;background:#040812}
 #closeWrap .cline{position:absolute;left:0;right:0;text-align:center}
-#cKick{top:158px;font-size:14px;letter-spacing:4px;color:#38efff}
-#cH1{top:188px;font-size:46px;font-weight:700;letter-spacing:-0.4px}
-#cSub{top:256px;font-size:17px;color:#cfe0f5}
-.dualCard{position:absolute;top:330px;width:520px;height:212px;border-radius:16px;background:rgba(5,12,24,0.74);opacity:0}
-#dualL{left:206px;border:1px solid rgba(255,123,114,0.4)}
-#dualR{left:874px;border:1px solid rgba(56,239,255,0.4)}
-.dcName{position:absolute;left:26px;top:22px;font-size:25px;font-weight:700;letter-spacing:.4px}
-.dcSub{position:absolute;left:26px;top:60px;font-size:12.5px;color:#8b9ab8}
-.dcMeta{position:absolute;left:26px;top:96px;width:470px;font-size:14px;color:#cfe0f5;line-height:1.5}
-.dcFoot{position:absolute;left:26px;top:164px;font-size:12.5px;letter-spacing:.5px}
-#dArrow{top:406px;font-size:40px;color:#8fb7ff}
-#cFoot{top:640px;font-size:12.5px;letter-spacing:1.6px;color:#7f8fb0}
+#cKick{top:132px;font-size:var(--fs-kicker);letter-spacing:4px;color:#38efff}
+#cH1{top:170px;font-size:var(--fs-title);font-weight:700;letter-spacing:-0.4px}
+#cSub{top:258px;font-size:var(--fs-sub);color:#cfe0f5}
+.dualCard{position:absolute;top:332px;width:580px;height:290px;border-radius:16px;background:rgba(5,12,24,0.74);opacity:0}
+#dualL{left:120px;border:1px solid rgba(255,123,114,0.4)}
+#dualR{left:900px;border:1px solid rgba(56,239,255,0.4)}
+.dcName{position:absolute;left:28px;top:20px;font-size:36px;font-weight:700;letter-spacing:0}
+.dcSub{position:absolute;left:28px;top:70px;font-size:var(--fs-label);color:#aabbd8}
+.dcMeta{position:absolute;left:28px;top:110px;width:524px;font-size:var(--fs-label);color:#cfe0f5;line-height:1.35}
+.dcFoot{position:absolute;left:28px;top:226px;font-size:var(--fs-label);letter-spacing:0}
+#dArrow{top:430px;font-size:64px;color:#8fb7ff}
+#cFoot{top:690px;font-size:var(--fs-label);letter-spacing:1px;color:#9aabc8}
+#subs{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:max-content;max-width:1120px;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:var(--fs-sub);line-height:1.25;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.28);border-radius:12px;padding:10px 22px;opacity:0;z-index:50;pointer-events:none}
 </style>
 </head>
 <body>
@@ -88,7 +91,7 @@ svg{position:absolute;left:0;top:0;overflow:visible}
       </defs>
       <g id="dust" opacity="0"></g>
       <g id="gP1" opacity="0">
-        <g id="gSat">
+        <g id="gSat" transform="translate(-55 -150) scale(1.35)">
           <polygon id="beam" points="270,350 300,350 420,492 150,492" fill="rgba(56,239,255,0.10)" stroke="rgba(56,239,255,0.28)" stroke-dasharray="2 7"/>
           <rect x="236" y="326" width="30" height="11" rx="2" fill="rgba(56,239,255,0.22)" stroke="rgba(120,180,255,0.5)" stroke-width="1"/>
           <rect x="304" y="326" width="30" height="11" rx="2" fill="rgba(56,239,255,0.22)" stroke="rgba(120,180,255,0.5)" stroke-width="1"/>
@@ -113,40 +116,40 @@ svg{position:absolute;left:0;top:0;overflow:visible}
           </g>
         </g>
         <g id="gNdvi">
-          <line x1="560" y1="425" x2="1500" y2="425" stroke="rgba(140,170,220,0.10)"/>
-          <line x1="560" y1="361" x2="1500" y2="361" stroke="rgba(140,170,220,0.10)"/>
+          <line x1="720" y1="470" x2="1480" y2="470" stroke="rgba(140,170,220,0.10)"/>
+          <line x1="720" y1="395" x2="1480" y2="395" stroke="rgba(140,170,220,0.10)"/>
           <path id="ndviPath" fill="none" stroke="#6ef0b4" stroke-width="2.2" opacity="0"/>
           <g id="ndviDots"></g>
           <circle id="ndvi14" r="6" fill="#bff2d8" filter="url(#glow)" opacity="0"/>
-          <polyline id="ndviLead" points="1120,308 1091.7,340" fill="none" stroke="rgba(110,240,180,0.6)" stroke-width="1.4" opacity="0"/>
+          <polyline id="ndviLead" points="1149,320 1149,376" fill="none" stroke="rgba(110,240,180,0.6)" stroke-width="1.4" opacity="0"/>
         </g>
         <g id="gYield">
-          <line x1="560" y1="640" x2="1500" y2="640" stroke="rgba(140,170,220,0.22)"/>
+          <line x1="720" y1="760" x2="1480" y2="760" stroke="rgba(140,170,220,0.22)"/>
           <g id="yBars"></g>
-          <polyline id="yldLead" points="1145,562 1105,562 1091.7,598" fill="none" stroke="rgba(255,123,114,0.6)" stroke-width="1.4" opacity="0"/>
-          <text id="y2014" x="1091.7" y="590" text-anchor="middle" fill="#ff7b72" font-size="10.5" font-family="IBM Plex Mono, monospace" opacity="0">2014</text>
+          <polyline id="yldLead" points="1117,628 1149,650 1149,690" fill="none" stroke="rgba(255,123,114,0.6)" stroke-width="1.4" opacity="0"/>
+          <text id="y2014" x="1149" y="700" text-anchor="middle" fill="#ff7b72" font-size="22" font-family="IBM Plex Mono, monospace" opacity="0">2014</text>
         </g>
       </g>
       <g id="gP2" opacity="0">
-        <line id="divider2" x1="812" y1="312" x2="812" y2="662" stroke="rgba(140,170,220,0.16)" stroke-dasharray="3 9"/>
+        <line id="divider2" x1="800" y1="250" x2="800" y2="700" stroke="rgba(140,170,220,0.16)" stroke-dasharray="3 9"/>
         <g id="scatL">
-          <rect x="180" y="320" width="520" height="320" rx="10" fill="rgba(8,16,34,0.55)" stroke="rgba(140,170,220,0.18)"/>
+          <rect x="110" y="250" width="650" height="450" rx="10" fill="rgba(8,16,34,0.55)" stroke="rgba(140,170,220,0.18)"/>
         </g>
         <g id="scatR">
-          <rect x="900" y="320" width="520" height="320" rx="10" fill="rgba(8,16,34,0.55)" stroke="rgba(140,170,220,0.18)"/>
+          <rect x="840" y="250" width="650" height="450" rx="10" fill="rgba(8,16,34,0.55)" stroke="rgba(140,170,220,0.18)"/>
         </g>
-        <path id="trL" d="M200 564 L680 546" fill="none" stroke="rgba(140,170,220,0.5)" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
-        <path id="trR" d="M920 628 L1400 338" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
-        <text x="188" y="312" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">Rendimiento (qq/ha)</text>
-        <text x="692" y="662" text-anchor="end" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">NDVI anual (MODIS)</text>
-        <text x="908" y="312" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">Rendimiento (qq/ha)</text>
-        <text x="1412" y="662" text-anchor="end" fill="#66758f" font-size="10.5" font-family="IBM Plex Mono, monospace">Déficit hídrico floración (mm)</text>
+        <path id="trL" d="M135 583 L735 559" fill="none" stroke="rgba(140,170,220,0.5)" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <path id="trR" d="M865 665 L1465 293" fill="none" stroke="rgba(56,239,255,0.55)" stroke-width="1.8" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+        <text x="118" y="242" fill="#9aabc8" font-size="22" font-family="IBM Plex Mono, monospace">Rendimiento (qq/ha)</text>
+        <text x="752" y="726" text-anchor="end" fill="#9aabc8" font-size="22" font-family="IBM Plex Mono, monospace">NDVI anual (MODIS)</text>
+        <text x="848" y="242" fill="#9aabc8" font-size="22" font-family="IBM Plex Mono, monospace">Rendimiento (qq/ha)</text>
+        <text x="1482" y="726" text-anchor="end" fill="#9aabc8" font-size="22" font-family="IBM Plex Mono, monospace">Déficit hídrico floración (mm)</text>
         <g id="ptsL"></g>
         <g id="ptsR"></g>
         <circle id="d14L" r="7" fill="none" stroke="#ff7b72" stroke-width="2.4" opacity="0"/>
         <circle id="d14R" r="7" fill="none" stroke="#ff7b72" stroke-width="2.4" opacity="0"/>
-        <text id="tag14L" x="516" y="586" fill="#ffb4ad" font-size="10.5" font-family="IBM Plex Mono, monospace" opacity="0">2014 · 10.0 qq/ha (−56.0%)</text>
-        <text id="tag14R" x="972" y="572" fill="#ffb4ad" font-size="10.5" font-family="IBM Plex Mono, monospace" opacity="0">2014 (−56.0%)</text>
+        <text id="tag14L" x="516" y="586" fill="#ffb4ad" font-size="22" font-family="IBM Plex Mono, monospace" opacity="0">2014 · 10.0 qq/ha (−56.0%)</text>
+        <text id="tag14R" x="972" y="572" fill="#ffb4ad" font-size="22" font-family="IBM Plex Mono, monospace" opacity="0">2014 (−56.0%)</text>
       </g>
       <g id="gP3" opacity="0">
         <g id="corrBars"></g>
@@ -204,6 +207,7 @@ svg{position:absolute;left:0;top:0;overflow:visible}
   </div>
   <div id="vignette"></div>
   <div id="grain"></div>
+  <div id="subs"></div>
 </div>
 <script>
 const DATA=__DATA_JSON__;
@@ -248,9 +252,9 @@ const DUST=[];
   c.setAttribute('r',d.rad.toFixed(2));c.setAttribute('fill','#9fc4ff');
   ELS.dust.appendChild(c);d.el=c;DUST.push(d)}})();
 
-const X0=560,X1=1500,STEP=(X1-X0)/(N-1);
-const yN=v=>425-(v-0.69)/(0.785-0.69)*120;
-const yR=r=>640-(r/38)*160;
+const X0=720,X1=1480,STEP=(X1-X0)/(N-1);
+const yN=v=>470-(v-0.69)/(0.785-0.69)*140;
+const yR=r=>760-(r/38)*200;
 const bx=i=>X0+i*STEP;
 const NPTS=[];
 for(let i=0;i<N;i++){NPTS.push([bx(i),yN(DATA.ndvi[i])])}
@@ -262,16 +266,20 @@ for(let i=0;i<N;i++){if(DATA.rend[i]==null||DATA.def[i]==null)continue;
  pairsR.push({i:i,v:DATA.def[i],y:DATA.rend[i]})}
 const ndviMin=Math.min.apply(null,DATA.ndvi),ndviMax=Math.max.apply(null,DATA.ndvi);
 const defMin=Math.min.apply(null,DATA.def),defMax=Math.max.apply(null,DATA.def);
-const sxL=v=>195+(v-ndviMin)/(ndviMax-ndviMin)*490;
-const sxR=v=>915+(v-defMin)/(defMax-defMin)*490;
-const syR=r=>640-(r/38)*320;
+const sxL=v=>135+(v-ndviMin)/(ndviMax-ndviMin)*600;
+const sxR=v=>865+(v-defMin)/(defMax-defMin)*600;
+const syR=r=>680-(r/38)*400;
 const posL=i=>{const p=pairsL.filter(q=>q.i===i)[0];return p?[sxL(p.v),syR(p.y)]:null};
 const posR=i=>{const p=pairsR.filter(q=>q.i===i)[0];return p?[sxR(p.v),syR(p.y)]:null};
+(function(){const a=posL(DATA.i2014),b=posR(DATA.i2014);const L=document.getElementById('tag14L'),R=document.getElementById('tag14R');
+ if(a){L.setAttribute('text-anchor','end');L.setAttribute('x',(a[0]-18).toFixed(1));L.setAttribute('y',(a[1]+34).toFixed(1))}
+ if(b){R.setAttribute('x',(b[0]+18).toFixed(1));R.setAttribute('y',(b[1]+34).toFixed(1))}
+ const yl=document.getElementById('y2014');yl.setAttribute('x',bx(DATA.i2014).toFixed(1));yl.setAttribute('y',(760-(2+DATA.rend2014/38*200)-28).toFixed(1))})();
 
 const scatL=[],scatR=[];
 function mkPt(g,x,y,coral){const grp=document.createElementNS(NS,'g');
  grp.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+') scale(0)');
- const c=document.createElementNS(NS,'circle');c.setAttribute('r','5.5');
+ const c=document.createElementNS(NS,'circle');c.setAttribute('r','8');
  c.setAttribute('fill',coral?'#ff7b72':'rgba(56,239,255,0.85)');
  c.setAttribute('opacity','0.92');grp.appendChild(c);g.appendChild(grp);return grp}
 pairsL.forEach(p=>{scatL.push(mkPt(ELS.ptsL,sxL(p.v),syR(p.y),p.i===DATA.i2014))});
@@ -280,13 +288,13 @@ pairsR.forEach(p=>{scatR.push(mkPt(ELS.ptsR,sxR(p.v),syR(p.y),p.i===DATA.i2014))
 const yBars=[],y2014Bar=[];
 (function initBars(){
  [2001,2010,2014,2020,2024].forEach(y=>{const i=DATA.years.indexOf(y);if(i<0)return;
-  const tx=document.createElementNS(NS,'text');tx.setAttribute('x',bx(i).toFixed(1));tx.setAttribute('y','656');
-  tx.setAttribute('text-anchor','middle');tx.setAttribute('fill',y===2014?'#ff7b72':'#66758f');
-  tx.setAttribute('font-size','11');tx.setAttribute('font-family','IBM Plex Mono, monospace');tx.textContent=y;
+  const tx=document.createElementNS(NS,'text');tx.setAttribute('x',bx(i).toFixed(1));tx.setAttribute('y','792');
+  tx.setAttribute('text-anchor','middle');tx.setAttribute('fill',y===2014?'#ff7b72':'#9aabc8');
+  tx.setAttribute('font-size','22');tx.setAttribute('font-family','IBM Plex Mono, monospace');tx.textContent=y;
   ELS.yBars.appendChild(tx)});
  for(let i=0;i<N;i++){if(DATA.rend[i]==null)continue;
   const b=document.createElementNS(NS,'rect');
-  b.setAttribute('x',(bx(i)-9).toFixed(1));b.setAttribute('y','639');b.setAttribute('width','18');b.setAttribute('height','1');
+  b.setAttribute('x',(bx(i)-11).toFixed(1));b.setAttribute('y','759');b.setAttribute('width','22');b.setAttribute('height','1');
   b.setAttribute('rx','2');b.setAttribute('fill',i===DATA.i2014?'#ff7b72':'rgba(110,240,180,0.6)');
   b.setAttribute('opacity','0');ELS.yBars.appendChild(b);yBars.push(b);
   if(i===DATA.i2014){const dl=document.createElementNS(NS,'circle');
@@ -296,23 +304,23 @@ const yBars=[],y2014Bar=[];
 
 const CORR=[
  {y:350,r:DATA.hip.rDeficit,name:'Balance Hídrico Floración (Ago–Oct)',val:'+0.7564',tag:'Señal Causal',col:'#6ef0b4'},
- {y:425,r:DATA.hip.rLluvia,name:'Lluvia Floración (Ago–Oct)',val:'+0.7511',tag:'Señal Causal',col:'#38efff'},
- {y:500,r:DATA.hip.rTmax,name:'Tmax Floración (Ago–Oct)',val:'−0.5606',tag:'Señal inversa',col:'#ffb4ad'},
- {y:575,r:DATA.hip.rNdvi,name:'MODIS NDVI Anual',val:'+0.1536',tag:'Ruido Saturado',col:'#ff7b72'}
+ {y:460,r:DATA.hip.rLluvia,name:'Lluvia Floración (Ago–Oct)',val:'+0.7511',tag:'Señal Causal',col:'#38efff'},
+ {y:570,r:DATA.hip.rTmax,name:'Tmax Floración (Ago–Oct)',val:'−0.5606',tag:'Señal inversa',col:'#ffb4ad'},
+ {y:680,r:DATA.hip.rNdvi,name:'MODIS NDVI Anual',val:'+0.1536',tag:'Ruido Saturado',col:'#ff7b72'}
 ];
-const CORRX=450,CORRS=1200;
+const CORRX=120,CORRS=1000;
 const corrEls=[],corrValEls=[],corrNameEls=[];
 CORR.forEach(c=>{
  const b=document.createElementNS(NS,'rect');
- b.setAttribute('x',CORRX);b.setAttribute('y',c.y-13);b.setAttribute('width','0');b.setAttribute('height','26');
- b.setAttribute('rx','6');b.setAttribute('fill',c.col);b.setAttribute('fill-opacity','0.72');ELS.corrBars.appendChild(b);
+ b.setAttribute('x',CORRX);b.setAttribute('y',c.y-17);b.setAttribute('width','0');b.setAttribute('height','34');
+ b.setAttribute('rx','8');b.setAttribute('fill',c.col);b.setAttribute('fill-opacity','0.72');ELS.corrBars.appendChild(b);
  const nt=document.createElementNS(NS,'text');
- nt.setAttribute('x','160');nt.setAttribute('y',(c.y+4).toFixed(1));nt.setAttribute('fill','#cfe0f5');
- nt.setAttribute('font-size','12.5');nt.setAttribute('font-family','IBM Plex Mono, monospace');nt.setAttribute('opacity','0');nt.textContent=c.name;
+ nt.setAttribute('x','120');nt.setAttribute('y',(c.y-26).toFixed(1));nt.setAttribute('fill','#cfe0f5');
+ nt.setAttribute('font-size','22');nt.setAttribute('font-family','IBM Plex Mono, monospace');nt.setAttribute('opacity','0');nt.textContent=c.name;
  ELS.corrNames.appendChild(nt);corrNameEls.push(nt);
  const vt=document.createElementNS(NS,'text');
- vt.setAttribute('x',(CORRX+10).toFixed(1));vt.setAttribute('y',(c.y+4).toFixed(1));vt.setAttribute('fill',c.col);
- vt.setAttribute('font-size','12.5');vt.setAttribute('font-family','IBM Plex Mono, monospace');vt.textContent=c.val+' · '+c.tag;
+ vt.setAttribute('x',(CORRX+10).toFixed(1));vt.setAttribute('y',(c.y+9).toFixed(1));vt.setAttribute('fill',c.col);
+ vt.setAttribute('font-size','26');vt.setAttribute('font-family','IBM Plex Mono, monospace');vt.textContent=c.val+' · '+c.tag;
  ELS.corrVals.appendChild(vt);
  corrEls.push(b);corrValEls.push(vt)});
 
@@ -390,11 +398,11 @@ function render(t){
 
  yBars.forEach((el,i)=>{const st=TL.bars[0]+i*0.06;const v=DATA.rend[i]==null?null:DATA.rend[i];
   if(v==null)return;const hF=eoc(seg(t,st,st+0.5));
-  const h=2+hF*(v/38)*160;
-  el.setAttribute('y',(640-h).toFixed(1));el.setAttribute('height',h.toFixed(1));
+  const h=2+hF*(v/38)*200;
+  el.setAttribute('y',(760-h).toFixed(1));el.setAttribute('height',h.toFixed(1));
   el.setAttribute('opacity',(0.92*hF).toFixed(3))});
  const y14H=eoc(seg(t,TL.bars[0]+DATA.i2014*0.06,TL.bars[0]+DATA.i2014*0.06+0.5));
- y2014Bar.forEach(d=>{d.setAttribute('cy',(640-(2+y14H*(DATA.rend2014/38)*160)-8).toFixed(1));
+ y2014Bar.forEach(d=>{d.setAttribute('cy',(760-(2+y14H*(DATA.rend2014/38)*200)-8).toFixed(1));
   d.setAttribute('opacity',(0.95*y14H).toFixed(3))});
  ELS.y2014.setAttribute('opacity',y14H.toFixed(3));
  enterG(ELS.yldCap,seg(t,TL.bars[1]-0.3,TL.bars[1]+0.2),8,p1O);
@@ -447,7 +455,7 @@ function render(t){
 
 for(let i=0;i<N;i++){const c=document.createElementNS(NS,'circle');
  c.setAttribute('cx',bx(i).toFixed(1));c.setAttribute('cy',yN(DATA.ndvi[i]).toFixed(1));
- c.setAttribute('r','3.2');c.setAttribute('fill','#6ef0b4');c.setAttribute('opacity','0');
+ c.setAttribute('r','4.4');c.setAttribute('fill','#6ef0b4');c.setAttribute('opacity','0');
  ELS.ndviDots.appendChild(c)}
 
 window.__setTime=ms=>{render(Math.max(0,Math.min(ms,DURMS))/1000)};
@@ -458,6 +466,18 @@ document.fonts.ready.then(()=>{render(0);
  if(window.__READY_HOOK)window.__READY_HOOK()});
 window.__READY=true;
 window.__ready=true;
+</script>
+<script>
+/* Subtítulos quemados: función pura del tiempo de escena sobre BEATS (mismo origen que narration.vtt). */
+const BEATS=__BEATS_JSON__;
+(function(){
+ const el=document.getElementById('subs'),FADE=0.25,dur=window.__DURATION_MS||1e9;
+ function renderSubs(t){let text='',o=0;
+  for(const b of BEATS){if(t>=b.t&&t<b.t+b.dur){o=Math.min(1,(t-b.t)/FADE,(b.t+b.dur-t)/FADE);text=b.text;break}}
+  if(el.textContent!==text)el.textContent=text;el.style.opacity=o.toFixed(3)}
+ const base=window.__setTime;
+ window.__setTime=ms=>{base(ms);renderSubs(Math.max(0,Math.min(ms,dur))/1000)};
+ renderSubs(0)})();
 </script>
 </body>
 </html>

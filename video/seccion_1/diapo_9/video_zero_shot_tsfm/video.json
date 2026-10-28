@@ -1,0 +1,9 @@
+{
+  "fps": 30,
+  "dur_ms": 30000,
+  "start_ms": 0,
+  "time_scale": 1,
+  "dpr": 1.2,
+  "bg": "040714",
+  "out": "zero_shot_tsfm.mp4"
+}

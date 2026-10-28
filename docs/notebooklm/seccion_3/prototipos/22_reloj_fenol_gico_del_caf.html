@@ -767,6 +767,7 @@ input[type="range"] {
     padding: 4px 8px !important;
   }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -784,7 +785,7 @@ input[type="range"] {
       </div>
       <div>
         <p class="eyebrow">ECOSISTEMAS · VENTANAS CRÍTICAS (AGO → JUL) · SECCIÓN 3</p>
-        <h1>Reloj <span class="era">fenológico del café</span> <span class="sub">· Cómo predecir quintales exactos meses antes del corte</span></h1>
+        <h1>Reloj <span class="era">fenológico del café</span> <span class="sub">· Predecir la cosecha meses antes</span></h1>
       </div>
     </div>
 
@@ -795,7 +796,7 @@ input[type="range"] {
       </div>
       <div class="via-pills">
         <span class="via-pill">🌸 <strong>Ago–Oct:</strong> 56% varianza (&lt;140 mm aborta)</span>
-        <span class="via-pill">🟢 <strong>Nov–Feb:</strong> Peso físico (r = 0.751)</span>
+        <span class="via-pill">🟢 <strong>Nov–Feb:</strong> Peso físico: relación fuerte <span data-expert>r = 0.751</span></span>
         <span class="via-pill">🍒 <strong>Mar–Jul:</strong> Cosecha y taza</span>
       </div>
     </div>
@@ -804,7 +805,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. El Reloj Completo (Ago→Jul) ─▶ 2. Floración (56%) y Jaén 2024 ─▶ 3. Llenado (r=0.751) y Maceta Verhulst ─▶ 4. Cosecha y Pase a Diapo 23 -->
   <nav class="flowbar" aria-label="Recorrido interactivo de la Diapositiva 22">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="clock" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="clock" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">El Reloj Completo (Ago→Jul)</span>
@@ -815,21 +816,21 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="flor" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="flor" aria-selected="false" data-route="corta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Floración (56%) y Jaén 2024</span>
-          <span class="proc-sub">Sequía &lt;140 mm · 18.46 vs 24 qq/ha</span>
+          <span class="proc-sub">Sequía &lt;140 mm · 18.5 vs 24 qq/ha <span data-expert>18.46</span></span>
         </div>
         <div class="proc-progress" id="prog-flor"></div>
       </button>
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="llenado" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="llenado" aria-selected="false" data-route="experta">
         <span class="proc-num">3</span>
         <div class="proc-text">
-          <span class="proc-year">Llenado (r=0.751) + Verhulst</span>
+          <span class="proc-year">Llenado (relación fuerte <span data-expert>r=0.751</span>) + Verhulst</span>
           <span class="proc-sub">Alcancía de calor y Maceta (kL/4)</span>
         </div>
         <div class="proc-progress" id="prog-llenado"></div>
@@ -837,10 +838,10 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="cosecha" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="cosecha" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Cosecha y Broca ─▶ Diapo 23</span>
+          <span class="proc-year">Cosecha y Broca</span>
           <span class="proc-sub">Lluvia en corte y Las 3 Trampas</span>
         </div>
         <div class="proc-progress" id="prog-cosecha"></div>
@@ -861,10 +862,10 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · ECOSISTEMAS Y VENTANAS CRÍTICAS</span>
+          <span class="stage-tag" id="stageTag">UN CALENDARIO DE 12 MESES</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. El Reloj Fenológico del Café: Un calendario biológico de 12 meses</h2>
+        <h2 class="narr-title" id="narrTitle">El café sigue un calendario biológico de 12 meses</h2>
         <p class="narr-lead" id="narrLead">
           No es lo mismo una sequía en marzo que una en septiembre. Un índice satelital que promedie el año entero sin separar estas <b>3 ventanas fisiológicas (Ago → Jul)</b> fracasará siempre:
         </p>
@@ -872,29 +873,24 @@ input[type="range"] {
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🌸 1. FLORACIÓN (AGO–OCT: 56%) Y 🟢 2. LLENADO (NOV–FEB: r=0.751)</div>
-          <p class="info-block-text" id="block1Text">
-            • <b>Floración Crítica (Ago–Oct):</b> El clima aquí dicta el cuajado; predecir esta fase aislada explica el <b>56% de la variabilidad final</b> (si llueve &lt;140 mm la flor aborta).<br>
-            • <b>Llenado de Grano (Nov–Feb):</b> Define el tamaño y peso físico del grano (<i>“alcancía de calor”</i>); su correlación de impacto es <b>r = 0.751</b>.
-          </p>
+          <div class="info-block-label" id="block1Label">🌸 Floración y llenado</div>
+          <p class="info-block-text" id="block1Text">Floración: 56% de la variación de la cosecha. Llenado: define peso del grano: relación fuerte <span data-expert>r = 0.751</span>.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">🍒 3. COSECHA Y CORTE (MAR–JUL: RECOLECCIÓN Y TAZA)</div>
-          <p class="info-block-text" id="block2Text">
-            De <b>marzo a julio</b> es la recolección: aquí la lluvia ya no crea más café; al contrario, un exceso de agua pudre la cereza madura y dispara la plaga de la <b>broca (<i>Hypothenemus hampei</i>)</b>, mientras que el clima seco optimiza la calidad en taza.
-          </p>
+          <div class="info-block-label" id="block2Label">🍒 Cosecha (marzo–julio)</div>
+          <p class="info-block-text" id="block2Text">Recolección selectiva; el clima seco mejora la calidad y evita la broca.</p>
         </div>
 
         <div class="math-strip">
-          <span id="mathFormula">Ago–Oct (56% Varianza) ──▶ Nov–Feb (r = 0.751) ──▶ Mar–Jul (Corte)</span>
+          <span id="mathFormula">Ago–Oct (56% Varianza) ──▶ Nov–Feb (relación fuerte) ──▶ Mar–Jul (Corte)</span>
           <span class="hint" id="mathHint">Haz clic en el reloj o mueve el deslizador inferior</span>
         </div>
       </div>
 
       <div class="executive-takeaway" id="executiveTakeaway">
         <span class="takeaway-badge">💡 Idea Clave</span>
-        <span class="takeaway-text" id="speakerQuote">El café tiene un reloj estricto: la sequía en floración destruye media cosecha.</span>
+        <span class="takeaway-text" id="speakerQuote">Una sequía en floración destruye media cosecha de café.</span>
       </div>
     </aside>
 
@@ -907,7 +903,7 @@ input[type="range"] {
         </div>
         <div class="stage-kpis" id="stageKpis">
           <span class="kpi-chip" id="kpi1">Floración: <strong style="color:var(--flor)">56% Varianza</strong></span>
-          <span class="kpi-chip" id="kpi2">Llenado: <strong style="color:var(--agro)">r = 0.751</strong></span>
+          <span class="kpi-chip" id="kpi2">Llenado: <strong style="color:var(--agro)">relación fuerte</strong> <span data-expert>r = 0.751</span></span>
           <span class="kpi-chip" id="kpi3">Cosecha: <strong style="color:var(--water)">Mar–Jul</strong></span>
         </div>
       </div>
@@ -921,7 +917,7 @@ input[type="range"] {
       <div class="legend-bar">
         <div class="legend-items" id="legendItems">
           <span class="leg-item"><i class="leg-line" style="--c:#ff7a59"></i> Ventana 1: Floración (Ago–Oct · 56%)</span>
-          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Ventana 2: Llenado (Nov–Feb · r=0.751)</span>
+          <span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Ventana 2: Llenado (Nov–Feb · relación fuerte <span data-expert>r=0.751</span>)</span>
           <span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Ventana 3: Cosecha y Corte (Mar–Jul)</span>
         </div>
         <span id="legendTip">HAZ CLIC EN LA RUEDA O USA EL DESLIZADOR</span>
@@ -962,7 +958,7 @@ input[type="range"] {
 
   <!-- FOOTER -->
   <footer class="footnote">
-    <span><strong>Superpoder Fenológico (Jaén 2024):</strong> “El modelo NDVI ingenuo predijo 24.0 qq/ha viendo hojas verdes; la Fusión Fenológica capturó la sequía de floración y acertó con 18.46 qq/ha frente a los 18.20 qq/ha reales.”</span>
+    <span><strong>Superpoder Fenológico (Jaén 2024):</strong> “El modelo NDVI ingenuo predijo 24.0 qq/ha viendo hojas verdes; la Fusión Fenológica capturó la sequía de floración y acertó con 18.5 qq/ha frente a los 18.2 qq/ha reales <span data-expert>(exactos: 18.46 y 18.20)</span>.”</span>
     <span>Fuente: Barbosa et al. (2021) / Cenicafé / Ramos et al. (2020) / Cooperativas CENFROCAFE Jaén · Sección 3</span>
   </footer>
 
@@ -994,7 +990,7 @@ input[type="range"] {
       id: 1,
       name: '2. Llenado de Grano (Nov–Feb)',
       months: 'NOV · DIC · ENE · FEB',
-      metric: 'Correlación r = 0.751',
+      metric: 'Relación fuerte con la cosecha',
       icon: '🟢',
       color: '#6ef0b4',
       bio: 'Expansión celular y materia seca gobernada por radiación PAR y GDD acumulado.',
@@ -1028,75 +1024,75 @@ input[type="range"] {
   const STAGE_CONTENT = {
     clock: {
       accent: 'var(--ancestral)',
-      tag: 'ACTO 1 DE 4 · ECOSISTEMAS Y VENTANAS CRÍTICAS',
-      title: '1. El Reloj Fenológico del Café: Un calendario biológico de 12 meses',
+      tag: 'UN CALENDARIO DE 12 MESES',
+      title: 'El café sigue un calendario biológico de 12 meses',
       lead: 'El café obedece a un calendario biológico estricto de 3 ventanas fisiológicas clave.',
-      b1Label: '🌸 FLORACIÓN (56%) Y 🟢 LLENADO (r = 0.751)',
-      b1Text: 'Floración dicta el cuajado (56% de varianza); llenado define peso y densidad del grano.',
-      b2Label: '🍒 COSECHA (MAR–JUL)',
-      b2Text: 'Recolección selectiva; clima seco optimiza la calidad y evita broca.',
-      formula: 'Ago–Oct (56% Varianza) ──▶ Nov–Feb (r = 0.751) ──▶ Mar–Jul (Corte)',
+      b1Label: '🌸 Floración y llenado',
+      b1Text: 'Floración: 56% de la variación de la cosecha. Llenado: define peso del grano: relación fuerte <span data-expert>r = 0.751</span>.',
+      b2Label: '🍒 Cosecha (marzo–julio)',
+      b2Text: 'Recolección selectiva; el clima seco mejora la calidad y evita la broca.',
+      formula: 'Ago–Oct (56% Varianza) ──▶ Nov–Feb (relación fuerte) ──▶ Mar–Jul (Corte)',
       hint: 'Haz clic en los sectores del reloj o mueve el deslizador inferior',
-      quote: 'El café tiene un reloj interno estricto: la sequía en floración destruye media cosecha.',
+      quote: 'Una sequía en floración destruye media cosecha de café.',
       icon: '🕰️',
       canvasTitle: 'Reloj Fenológico Interactivo (Ago → Jul) y Diagnóstico por Ventana',
       ovLeft: '',
       ovRight: '',
-      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff7a59"></i> Ventana 1: Floración (Ago–Oct · 56%)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Ventana 2: Llenado (Nov–Feb · r=0.751)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Ventana 3: Cosecha y Corte (Mar–Jul)</span>',
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#ff7a59"></i> Ventana 1: Floración (Ago–Oct · 56%)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Ventana 2: Llenado (Nov–Feb · relación fuerte <span data-expert>r=0.751</span>)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Ventana 3: Cosecha y Corte (Mar–Jul)</span>',
       nextLabel: 'Explorar Floración y Caso Jaén 2024 ─▶'
     },
     flor: {
       accent: 'var(--flor)',
-      tag: 'ACTO 2 DE 4 · VENTANA 1 (AGO–OCT) Y PRUEBA REAL EN JAÉN 2024',
-      title: '2. Floración Crítica (56% Varianza): El acierto en la crisis de Jaén 2024',
-      lead: 'Entre agosto y octubre se decide el techo de la campaña; bajo 140 mm ocurre aborto floral.',
-      b1Label: '🥀 CASO REAL JAÉN 2024',
-      b1Text: 'Sequía en floración redujo la cosecha a 18.20 qq/ha (caída del 24% vs histórico).',
-      b2Label: '🏆 VICTORIA FENOLÓGICA VS NDVI',
-      b2Text: 'Modelo fenológico predijo 18.46 qq/ha (error +0.26) vs NDVI ciego 24.00 (error +5.80).',
-      formula: 'Jaén 2024: Real = 18.20 qq/ha │ Fusión Fenológica = 18.46 │ NDVI Ciego = 24.00',
+      tag: 'FLORACIÓN: LA VENTANA CLAVE',
+      title: 'La floración decide 56% de la cosecha; Jaén 2024 lo mostró',
+      lead: 'Entre agosto y octubre se decide el techo de la campaña; con menos de 140 mm de lluvia la flor aborta.',
+      b1Label: '🥀 Caso real: Jaén 2024',
+      b1Text: 'La sequía en floración bajó la cosecha a 18.2 qq/ha (24% menos que lo histórico). <span data-expert>18.20</span>',
+      b2Label: '🏆 La fenología vence al satélite',
+      b2Text: 'El modelo fenológico predijo 18.5 qq/ha (casi acertó); el NDVI ciego, 24 (se pasó por 5.8). <span data-expert>18.46 · +0.26 · 24.00 · +5.80</span>',
+      formula: 'Jaén 2024: Real = 18.2 qq/ha │ Fusión Fenológica = 18.5 │ NDVI Ciego = 24',
       hint: 'Mueve la lluvia de floración abajo para ver el aborto floral (<140 mm)',
-      quote: 'En Jaén 2024 el modelo fenológico predijo 18.46 qq/ha frente a 18.20 reales.',
+      quote: 'En Jaén 2024 el modelo predijo 18.5 qq/ha; la realidad fue 18.2.',
       icon: '🌸',
       canvasTitle: 'Simulador de Ventana 1 (Umbral < 140 mm) y Benchmark Real Campaña Jaén 2024',
       ovLeft: '',
       ovRight: '',
-      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Fusión Fenológica (18.46 qq/ha · Error +0.26)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> NDVI Ingenuo (24.00 qq/ha · Error +5.80)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Cosecha Real (18.20 qq/ha)</span>',
-      nextLabel: 'Explorar Llenado (r=0.751) y Maceta Verhulst ─▶'
+      legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Fusión Fenológica (18.5 qq/ha <span data-expert>18.46 · +0.26</span>)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#ff5277"></i> NDVI Ingenuo (24 qq/ha <span data-expert>24.00 · +5.80</span>)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Cosecha Real (18.2 qq/ha <span data-expert>18.20</span>)</span>',
+      nextLabel: 'Explorar Llenado y Maceta Verhulst ─▶'
     },
     llenado: {
       accent: 'var(--agro)',
-      tag: 'ACTO 3 DE 4 · VENTANA 2 (NOV–FEB: r=0.751) Y MACETA DE VERHULST',
-      title: '3. Llenado de Grano (r = 0.751) y la “Maceta Agrícola” de Verhulst',
-      lead: 'Entre noviembre y febrero el fruto llena masa seca; sobre 32 °C se generan granos vanos.',
-      b1Label: '🌡️ RIESGO DE CALOR EXTREMO',
+      tag: 'LLENADO DEL GRANO',
+      title: 'En el llenado, el calor sobre 32 °C deja granos vacíos',
+      lead: 'Entre noviembre y febrero el fruto gana masa seca; sobre 32 °C aparecen granos vanos.',
+      b1Label: '🌡️ Riesgo de calor extremo',
       b1Text: 'Sobre 32 °C la respiración supera a la fotosíntesis y el grano queda vacío.',
-      b2Label: '🪴 INFLEXIÓN t₀ DE VERHULST',
-      b2Text: 'Máxima velocidad kL/4 marca el desvío de energía vegetativa hacia el fruto.',
+      b2Label: '🪴 La curva de Verhulst',
+      b2Text: 'La máxima velocidad de crecimiento marca cuándo la planta desvía energía hacia el fruto.',
       formula: 'dy/dt = k·y·(1 − y/L)  │  Inflexión t₀: dy/dt = kL/4 (Salto de Rama a Fruto)',
       hint: 'Sube la temperatura abajo (>32°C) para ver cómo aparece el grano vano',
-      quote: 'En llenado el grano acumula masa; sobre 32°C la planta respira y genera grano vano.',
+      quote: 'Sobre 32 °C la planta respira más de lo que fabrica.',
       icon: '🟢',
       canvasTitle: 'Ventana 2 (Nov–Feb): Balance Fotosíntesis vs. Respiración (>32°C) y Maceta de Verhulst (kL/4)',
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Fotosíntesis Neta / Grano Denso</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Respiración >32°C (Grano Vano)</span><span class="leg-item"><i class="leg-line dashed" style="--c:#b48eff"></i> Inflexión t₀ (kL/4: Fuerza de Vertedero)</span>',
-      nextLabel: 'Explorar Cosecha, Broca y Pase a Diapo 23 ─▶'
+      nextLabel: 'Explorar Cosecha, Broca ─▶'
     },
     cosecha: {
       accent: 'var(--water)',
-      tag: 'ACTO 4 DE 4 · VENTANA 3 (MAR–JUL) Y PASE A LA DIAPOSITIVA 23',
-      title: '4. Cosecha y Corte (Mar–Jul): La Paradoja del Agua y Pase a las 3 Trampas',
-      lead: 'La regla del agua se invierte: lluvias en cosecha desprenden fruto maduro y propagan broca.',
-      b1Label: '🪲 PARADOJA DEL AGUA',
+      tag: 'COSECHA Y CORTE',
+      title: 'La lluvia que ayuda en la floración daña en la cosecha',
+      lead: 'La regla del agua se invierte: la lluvia en cosecha desprende fruto maduro y propaga la broca.',
+      b1Label: '🪲 La paradoja del agua',
       b1Text: 'La lluvia que da vida en floración, en cosecha pudre fruto y disemina plagas.',
-      b2Label: '⏭️ PASE A DIAPO 23',
-      b2Text: 'Las 3 trampas de la tecnología: NDVI ciego en verde, ignorar retardo y sobreajuste.',
+      b2Label: '⏭️ Siguiente: las 3 trampas',
+      b2Text: 'Las tres trampas de la tecnología: NDVI ciego en verde, ignorar el retardo y sobreajustar.',
       formula: 'Lluvia en Ago–Oct = +Cosecha ✅ │ Lluvia en Mar–Jul = Caída + Broca (H. hampei) ✕',
-      hint: 'Alterna el clima en cosecha abajo antes de pasar a la Diapo 23',
-      quote: 'La lluvia en floración crea fruto; en cosecha tira el grano y propaga broca.',
+      hint: 'Alterna el clima en cosecha abajo antes de seguir',
+      quote: 'La lluvia crea fruto en floración, pero lo tira en cosecha.',
       icon: '🍒',
-      canvasTitle: 'La Paradoja Estacional del Agua (Broca Hypothenemus hampei) y Puente a la Diapositiva 23',
+      canvasTitle: 'La Paradoja Estacional del Agua (Broca Hypothenemus hampei)',
       ovLeft: '',
       ovRight: '',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> Clima Seco en Cosecha (Óptimo en Taza)</span><span class="leg-item"><i class="leg-line" style="--c:#ff5277"></i> Lluvia en Cosecha (Pudrición + Broca)</span><span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> Pase a Diapo 23 (Las 3 Trampas)</span>',
@@ -1107,6 +1103,37 @@ input[type="range"] {
   const $ = id => document.getElementById(id);
   const canvas = $('stageCanvas');
   const ctx = canvas.getContext('2d');
+
+  // Red de seguridad F12 (1366×768): ningún texto del lienzo se sale del borde; si no cabe se reduce
+  // la fuente (mín. 11 px) y, como último recurso, se comprime con maxWidth.
+  (function guardCanvasText() {
+    const rawFill = ctx.fillText.bind(ctx);
+    ctx.fillText = function (text, x, y, maxW) {
+      const W = canvas.clientWidth || 0;
+      const t = String(text);
+      if (W > 0 && maxW === undefined) {
+        const tw = ctx.measureText(t).width;
+        const a = ctx.textAlign;
+        const avail = (a === 'right' || a === 'end') ? x - 12
+          : (a === 'center') ? 2 * Math.min(x, W - x) - 24
+          : W - x - 12;
+        if (tw > avail && avail > 40) {
+          const base = ctx.font;
+          const m = /(\d+(?:\.\d+)?)px/.exec(base);
+          let px = m ? parseFloat(m[1]) : 0;
+          while (m && px > 11 && ctx.measureText(t).width > avail) {
+            px -= 0.5;
+            ctx.font = base.replace(/(\d+(?:\.\d+)?)px/, px + 'px');
+          }
+          const fits = ctx.measureText(t).width <= avail;
+          fits ? rawFill(t, x, y) : rawFill(t, x, y, avail);
+          ctx.font = base;
+          return;
+        }
+      }
+      if (maxW === undefined) rawFill(text, x, y); else rawFill(text, x, y, maxW);
+    };
+  })();
 
   function fitCanvas() {
     const r = canvas.getBoundingClientRect();
@@ -1170,15 +1197,15 @@ input[type="range"] {
         : (22.5 + ((state.rainFlor - 140) / 170) * 2.0).toFixed(1);
       $('kpi1').innerHTML = `Lluvia Ago–Oct: <strong style="color:${isDrought ? 'var(--danger)' : 'var(--agro)'}">${state.rainFlor} mm</strong>`;
       $('kpi2').innerHTML = `Techo Cosecha: <strong>${simYield} qq/ha</strong>`;
-      $('kpi3').innerHTML = `Jaén 2024: <strong style="color:var(--agro)">18.46 vs 18.20 Real</strong>`;
+      $('kpi3').innerHTML = `Jaén 2024: <strong style="color:var(--agro)">18.5 vs 18.2 Real</strong> <span data-expert>18.46 vs 18.20</span>`;
     } else if (state.step === 'llenado') {
       $('kpi1').innerHTML = `Temp Nov–Feb: <strong style="color:${isHeat ? 'var(--danger)' : 'var(--agro)'}">${state.tempFill} °C</strong>`;
-      $('kpi2').innerHTML = `Correlación: <strong style="color:var(--agro)">r = 0.751</strong>`;
+      $('kpi2').innerHTML = `Correlación: <strong style="color:var(--agro)">fuerte</strong> <span data-expert>r = 0.751</span>`;
       $('kpi3').innerHTML = `Inflexión t₀: <strong style="color:var(--purple)">dy/dt = kL/4</strong>`;
     } else {
       $('kpi1').innerHTML = `Ventana 3: <strong>Marzo a Julio</strong>`;
       $('kpi2').innerHTML = `Estado: <strong style="color:${state.rainHarv ? 'var(--danger)' : 'var(--water)'}">${state.rainHarv ? '⚠️ Broca + Pudrición' : '✅ Cosecha Sana'}</strong>`;
-      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--ancestral)">Diapo 23 (3 Trampas)</strong>`;
+      $('kpi3').innerHTML = `Siguiente: <strong style="color:var(--ancestral)">3 Trampas</strong>`;
     }
 
     document.querySelectorAll('.proc-node').forEach(btn => {
@@ -1205,11 +1232,15 @@ input[type="range"] {
     const usableW = w - pad * 2;
     const usableH = h - padT - 12;
 
-    const clockAreaW = usableW * 0.50;
-    const cx = pad + clockAreaW * 0.48;
+    const compactLayout = usableH < 340;
+    const clockAreaW = usableW * (compactLayout ? 0.42 : 0.50);
     const cy = padT + usableH * 0.50;
-    const outerR = Math.min(clockAreaW * 0.42, usableH * 0.42);
-    const midR = outerR * 0.77;
+    // Pantalla baja: la rueda ocupa toda la altura útil y los rótulos de ventana van en columna a su izquierda
+    const outerR = compactLayout
+      ? Math.min(clockAreaW * 0.36, usableH / 2 - 4)
+      : Math.min(clockAreaW * 0.42, usableH * 0.42);
+    const cx = compactLayout ? pad + clockAreaW - outerR - 4 : pad + clockAreaW * 0.48;
+    const midR = outerR * (compactLayout ? 0.68 : 0.77);
     const innerR = outerR * 0.40;
 
     // 12 meses del año cafetero comenzando en AGOSTO arriba a la izquierda (como en image4.png)
@@ -1247,7 +1278,7 @@ input[type="range"] {
     // Sentido horario estándar es muy intuitivo: AGO (-150°), SEP (-120°), OCT (-90°),
     // pero en image4.png:
     // Arriba-Izquierda está AGO, SEP, OCT (Floración 56%)
-    // Abajo está NOV, DIC, ENE, FEB (Llenado r=0.751)
+    // Abajo está NOV, DIC, ENE, FEB (Llenado, correlación fuerte)
     // Arriba-Derecha está MAR, ABR, MAY, JUN, JUL (Cosecha)
     // ¡Exacto! Si recorremos en sentido ANTIHORARIO desde arriba (-90°):
     // i=0 (AGO): -90° a -120°
@@ -1300,7 +1331,7 @@ input[type="range"] {
       const tx = cx + Math.cos(aMid) * ((outerR + midR) / 2);
       const ty = cy + Math.sin(aMid) * ((outerR + midR) / 2);
       ctx.fillStyle = isWinSel ? '#040812' : '#e2eeff';
-      ctx.font = '700 10px "JetBrains Mono"';
+      ctx.font = `700 ${Math.max(10, Math.min(13, (outerR - midR) * 0.62))}px "JetBrains Mono"`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(item.m, tx, ty);
@@ -1360,7 +1391,7 @@ input[type="range"] {
     // Función helper para badges limpios con pastilla de fondo
     function drawPhaseBadge(bx, by, text, borderColor, isActive) {
       ctx.save();
-      ctx.font = (isActive ? '700 ' : '600 ') + '10px "JetBrains Mono", monospace';
+      ctx.font = (isActive ? '700 ' : '600 ') + (compactLayout ? '11px' : '10px') + ' "JetBrains Mono", monospace';
       const tw = ctx.measureText(text).width + 16;
       const th = 22;
       ctx.fillStyle = isActive ? 'rgba(10, 22, 44, 0.96)' : 'rgba(4, 9, 22, 0.88)';
@@ -1378,8 +1409,15 @@ input[type="range"] {
     }
 
     // Badges limpios exteriores de las 3 ventanas sin recorte de texto
+    if (compactLayout) {
+      // Pantalla baja: badges apilados a la izquierda de la rueda, fuera del anillo
+      const colX = pad + 4 + (cx - outerR - 8 - pad - 4) / 2;
+      drawPhaseBadge(colX, cy - 34, '🌸 Floración', '#ff7a59', state.winIdx === 0);
+      drawPhaseBadge(colX, cy, '🟢 Llenado', '#6ef0b4', state.winIdx === 1);
+      drawPhaseBadge(colX, cy + 34, '🍒 Cosecha', '#38efff', state.winIdx === 2);
+    } else {
     drawPhaseBadge(cx - outerR * 0.65, cy - outerR * 0.72, '🌸 Floración (56%)', '#ff7a59', state.winIdx === 0);
-    drawPhaseBadge(cx, cy + outerR + 18, '🟢 Llenado (r=0.751)', '#6ef0b4', state.winIdx === 1);
+    drawPhaseBadge(cx, cy + outerR + 18, '🟢 Llenado (relación fuerte)', '#6ef0b4', state.winIdx === 1);
     // Badge de Cosecha: fuera del borde del anillo (diagonal superior derecha) con línea guía
     const cosechaAng = -Math.PI * 0.30;
     const cosechaDist = outerR + 46;
@@ -1392,6 +1430,7 @@ input[type="range"] {
     ctx.stroke();
     ctx.restore();
     drawPhaseBadge(cx + Math.cos(cosechaAng) * cosechaDist, cy + Math.sin(cosechaAng) * cosechaDist, '🍒 Cosecha (Mar–Jul)', '#38efff', state.winIdx === 2);
+    }
 
     // PANEL DERECHO: TARJETA DE DIAGNÓSTICO DE LA VENTANA SELECCIONADA + LAS 3 VENTANAS RESUMIDAS
     const rx = pad + clockAreaW + 10;
@@ -1412,22 +1451,30 @@ input[type="range"] {
     const topY2 = padT + (isCompact ? 33 : 46);
     const topY3 = padT + (isCompact ? 48 : 66);
 
-    ctx.fillStyle = wInfo.color;
-    ctx.font = isCompact ? '700 9px "JetBrains Mono"' : '700 10.5px "JetBrains Mono"';
+    // En pantallas bajas (1366×768) la ventana activa y su impacto ya están en las píldoras
+    // superiores: se deja solo el nombre para dar altura legible a las 3 tarjetas.
     ctx.textAlign = 'left';
-    ctx.fillText(`${wInfo.icon} VENTANA ACTIVA · ${wInfo.months}`, rx + 16, topY1);
+    if (isCompact) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 13px "Space Grotesk", sans-serif';
+      ctx.fillText(`${wInfo.icon} ${wInfo.name}`, rx + 16, padT + 19);
+    } else {
+      ctx.fillStyle = wInfo.color;
+      ctx.font = '700 10.5px "JetBrains Mono"';
+      ctx.fillText(`${wInfo.icon} VENTANA ACTIVA · ${wInfo.months}`, rx + 16, topY1);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = isCompact ? '700 13px "Space Grotesk", sans-serif' : '700 15px "Space Grotesk", sans-serif';
-    ctx.fillText(wInfo.name, rx + 16, topY2);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 15px "Space Grotesk", sans-serif';
+      ctx.fillText(wInfo.name, rx + 16, topY2);
 
-    ctx.fillStyle = '#fde68a';
-    ctx.font = isCompact ? '700 9.5px "JetBrains Mono"' : '700 11px "JetBrains Mono"';
-    ctx.fillText(`Impacto Estadístico: ${wInfo.metric}`, rx + 16, topY3);
+      ctx.fillStyle = '#fde68a';
+      ctx.font = '700 11px "JetBrains Mono"';
+      ctx.fillText(`Impacto Estadístico: ${wInfo.metric}`, rx + 16, topY3);
+    }
 
     function drawWrappedBox(title, text, yStart, borderCol, titleCol) {
-      const availH = usableH - (isCompact ? 56 : 80);
-      const boxH = Math.max(40, Math.floor((availH - (isCompact ? 10 : 16)) / 3));
+      const availH = usableH - (isCompact ? 32 : 80);
+      const boxH = Math.max(40, Math.floor((availH - (isCompact ? 8 : 16)) / 3));
       ctx.fillStyle = 'rgba(4, 9, 20, 0.82)';
       ctx.strokeStyle = borderCol;
       ctx.lineWidth = 1.2;
@@ -1436,10 +1483,10 @@ input[type="range"] {
       ctx.fill();
       ctx.stroke();
 
-      const titleSize = isCompact ? 9.5 : 13.5;
-      const minBody = isCompact ? 9.5 : 11.5;
-      let bodySize = isCompact ? 9.5 : 13.5;
-      const lineStep = isCompact ? 11 : 17.5;
+      const titleSize = isCompact ? 10 : 13.5;
+      const minBody = isCompact ? 11 : 11.5;
+      let bodySize = isCompact ? 11.5 : 13.5;
+      const lineStep = isCompact ? 12.5 : 17.5;
       const maxW = rw - 44;
 
       let lines = [];
@@ -1458,13 +1505,13 @@ input[type="range"] {
           }
         });
         lines.push(line);
-        const needed = titleSize + 6 + lines.length * lineStep + 12;
+        const needed = titleSize + 6 + lines.length * lineStep + (isCompact ? 6 : 12);
         if (needed <= boxH || bodySize <= minBody) break;
         bodySize -= 0.5;
       }
 
       const contentH = titleSize + 6 + lines.length * lineStep;
-      const topY = yStart + Math.max(isCompact ? 6 : 9, (boxH - contentH) / 2);
+      const topY = yStart + Math.max(isCompact ? 3 : 9, (boxH - contentH) / 2);
 
       ctx.fillStyle = titleCol;
       ctx.font = `700 ${titleSize}px "JetBrains Mono"`;
@@ -1477,7 +1524,7 @@ input[type="range"] {
       return yStart + boxH + (isCompact ? 5 : 8);
     }
 
-    let nextY = padT + (isCompact ? 58 : 80);
+    let nextY = padT + (isCompact ? 30 : 80);
     nextY = drawWrappedBox('🌿 PROCESO FISIOLÓGICO EN LA PLANTA:', wInfo.bio, nextY, 'rgba(148,163,184,0.22)', '#a5f3fc');
     nextY = drawWrappedBox('🔥 UMBRAL CRÍTICO Y RIESGO DE QUIEBRE:', wInfo.hazard, nextY, 'rgba(255,82,119,0.35)', '#fda4af');
     drawWrappedBox('🧠 TRADUCCIÓN PARA EL MODELO DE IA:', wInfo.aiRule, nextY, 'rgba(110,240,180,0.35)', '#8ef7c7');
@@ -1663,7 +1710,7 @@ input[type="range"] {
     ctx.fillStyle = '#8ef7c7';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🟢 VENTANA 2 (NOV–FEB): PESO FÍSICO (r = 0.751)', pad + 14, padT + 20);
+    ctx.fillText('🟢 VENTANA 2 (NOV–FEB): PESO FÍSICO (RELACIÓN FUERTE)', pad + 14, padT + 20);
 
     // Visualización del grano de café (Lleno y denso vs. Grano Vano / Hueco a >32°C)
     const bx = pad + leftW * 0.5, by = padT + usableH * 0.43;
@@ -1807,7 +1854,7 @@ input[type="range"] {
     ctx.fillStyle = '#a5f3fc';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('🍒 VENTANA 3 (MAR–JUL): ¿POR QUÉ EL EXCESO DE LLUVIA DAÑA AQUÍ?', pad + 14, padT + 20);
+    ctx.fillText('🍒 VENTANA 3 (MAR–JUL): ¿POR QUÉ DAÑA LA LLUVIA?', pad + 14, padT + 20);
 
     // Comparación visual de dos escenarios en Cosecha (Seco Óptimo vs Lluvioso con Broca)
     const c1Y = padT + 34, cH = (usableH - 54) / 2;
@@ -1837,7 +1884,7 @@ input[type="range"] {
 
     ctx.fillStyle = '#fda4af';
     ctx.font = '700 10px "JetBrains Mono"';
-    ctx.fillText('🌧️🪲 LLUVIA INTENSA EN COSECHA · ¡DESASTRE FITOSANITARIO!', pad + 22, c2Y + 20);
+    ctx.fillText('🌧️🪲 LLUVIA EN COSECHA · ¡DESASTRE!', pad + 22, c2Y + 20);
     ctx.fillStyle = '#e2eeff';
     ctx.font = '500 9.5px Inter, sans-serif';
     ctx.fillText('• Golpe mecánico tira las cerezas maduras al suelo y las pudre.', pad + 22, c2Y + 38);
@@ -1859,7 +1906,7 @@ input[type="range"] {
     ctx.fillStyle = '#ffc05c';
     ctx.font = '700 10px "JetBrains Mono"';
     ctx.textAlign = 'left';
-    ctx.fillText('⏭️ PASE A LA DIAPOSITIVA 23: PRECISIÓN ACTUAL Y LAS 3 TRAMPAS', rx + 14, padT + 20);
+    ctx.fillText('⏭️ SIGUIENTE: PRECISIÓN ACTUAL Y LAS 3 TRAMPAS', rx + 14, padT + 20);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '500 9.5px Inter, sans-serif';

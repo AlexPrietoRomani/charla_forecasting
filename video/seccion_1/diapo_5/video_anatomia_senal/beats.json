@@ -1,0 +1,27 @@
+[
+ {
+  "t": 4.0,
+  "dur": 7.2,
+  "text": "Una serie temporal: la temperatura de Iquitos, día tras día"
+ },
+ {
+  "t": 11.6,
+  "dur": 3.5,
+  "text": "Primero, la tendencia: hacia dónde va todo"
+ },
+ {
+  "t": 15.3,
+  "dur": 3.6,
+  "text": "Luego, el ciclo de las estaciones, cada año"
+ },
+ {
+  "t": 19.1,
+  "dur": 3.6,
+  "text": "Después, ciclos largos, como El Niño"
+ },
+ {
+  "t": 22.9,
+  "dur": 4.0,
+  "text": "Al final, el ruido: lo que nadie puede predecir"
+ }
+]

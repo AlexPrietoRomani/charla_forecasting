@@ -644,6 +644,7 @@ canvas { display: block; width: 100%; height: 100%; }
   .narrative-card { gap: 4px; padding: 6px 8px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -669,9 +670,9 @@ canvas { display: block; width: 100%; height: 100%; }
         <span>DIEBOLD-MARIANO + HLN 1997</span>
       </div>
       <div class="via-pills">
-        <span class="via-pill">🏆 <strong>ExtraTrees 1.88 °C</strong> (0.25s CPU)</span>
-        <span class="via-pill">🤝 <strong>TimesFM 1.88 °C</strong> (p=0.71)</span>
-        <span class="via-pill">❌ <strong>ECMWF 2.46 °C</strong> (p=0.027)</span>
+        <span class="via-pill">🏆 <strong>ExtraTrees ±1.9 °C</strong> (un cuarto de segundo) <span data-expert>1.880 °C · 0.25 s</span></span>
+        <span class="via-pill">🤝 <strong>TimesFM ±1.9 °C</strong> (empate técnico) <span data-expert>p = 0.71</span></span>
+        <span class="via-pill">❌ <strong>ECMWF ±2.5 °C</strong> (diferencia real) <span data-expert>p = 0.027</span></span>
         <span class="via-pill">⚡ <strong>Parsimonia gana</strong></span>
       </div>
     </div>
@@ -680,17 +681,17 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FLOWBAR -->
   <nav class="flowbar" aria-label="Etapas del benchmark">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" aria-selected="true" data-step="podium" id="tab-podium">
+      <button class="proc-node" role="tab" aria-selected="true" data-step="podium" id="tab-podium" data-route="corta">
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">Los 5 Líderes</span>
-          <span class="proc-sub">Empate p &gt; 0.05</span>
+          <span class="proc-sub">Empate técnico <span data-expert>p &gt; 0.05</span></span>
         </span>
       </button>
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="nwp" id="tab-nwp">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="nwp" id="tab-nwp" data-route="corta">
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Física Global</span>
@@ -700,7 +701,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="deep" id="tab-deep">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="deep" id="tab-deep" data-route="experta">
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Deep Learning</span>
@@ -710,10 +711,10 @@ canvas { display: block; width: 100%; height: 100%; }
 
       <span class="proc-arrow" aria-hidden="true">→</span>
 
-      <button class="proc-node" role="tab" aria-selected="false" data-step="parsimony" id="tab-parsimony">
+      <button class="proc-node" role="tab" aria-selected="false" data-step="parsimony" id="tab-parsimony" data-route="corta">
         <span class="proc-num">4</span>
         <span class="proc-text">
-          <span class="proc-year">Pase a Diapo 16</span>
+          <span class="proc-year">Siguiente: Cono 7 días</span>
           <span class="proc-sub">El Cono a 7 Días</span>
         </span>
       </button>
@@ -731,35 +732,33 @@ canvas { display: block; width: 100%; height: 100%; }
     <!-- COLUMNA IZQUIERDA -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · EL PODIO ESTADÍSTICO</span>
+        <span class="stage-tag" id="stageTag">EL PODIO</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3 · 4</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">Microfísica local vs. supercómputo: 5 modelos empatados</h2>
+      <h2 class="narr-title" id="narrTitle">14 modelos compitieron: ganó el más simple y barato</h2>
       
-      <p class="narr-lead" id="narrLead">
-        El test formal de <strong>Diebold-Mariano con corrección HLN (1997)</strong> revela un empate técnico entre los 5 modelos de punta: <strong>ExtraTrees (1.880 °C)</strong>, <strong>TimesFM Zero-Shot (1.883 °C, p=0.71)</strong>, <strong>Random Forest (1.888 °C, p=0.88)</strong>, <strong>Chronos-Bolt (1.903 °C, p=0.65)</strong> y <strong>LightGBM (1.926 °C, p=0.41)</strong>.
-      </p>
+      <p class="narr-lead" id="narrLead">Cinco modelos empataron con error de unos 1.9 °C, como el termómetro de casa. <span data-expert>Exactos: ExtraTrees 1.880, TimesFM 1.883, Random Forest 1.888, Chronos-Bolt 1.903, LightGBM 1.926.</span></p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
-          <div class="info-block-label">🌍 Derrota del Supercómputo Numérico</div>
-          <div class="info-block-text">ECMWF IFS (~9 km, 2.458 °C, p=0.027) y NOAA GFS (~28 km, 2.583 °C, p=0.0085) pierden estadísticamente: su malla no captura el dosel amazónico ni el río Amazonas sin downscaling.</div>
+          <div class="info-block-label">🌍 Perdió el supercómputo</div>
+          <div class="info-block-text">ECMWF (±2.5 °C) y NOAA GFS (±2.6 °C) pierden con diferencia real: su malla no capta el dosel amazónico. <span data-expert>2.458 °C, p = 0.027 · 2.583 °C, p = 0.0085</span></div>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label">⚡ Regla de Oro de Parsimonia</div>
-          <div class="info-block-text">ExtraTrees corre en 0.25 segundos en CPU ordinaria; TimesFM requiere GPU y tarda 7.87s. Estadísticamente idénticos: el negocio debe elegir la solución de costo cero.</div>
+          <div class="info-block-label">⚡ Regla de oro: lo simple</div>
+          <div class="info-block-text">ExtraTrees: un cuarto de segundo en CPU común. TimesFM: GPU y 8 segundos. Empatan: elige el de costo cero. <span data-expert>0.25 s · 7.87 s</span></div>
         </div>
       </div>
 
       <div class="math-strip" id="mathStrip">
-        <span>ExtraTrees 1.880 °C (0.25s) ≈ TimesFM 1.883 °C (p=0.71)</span>
+        <span>ExtraTrees ±1.9 °C ≈ TimesFM ±1.9 °C: empate técnico <span data-expert>1.880 °C · 0.25 s · 1.883 °C · p = 0.71</span></span>
         <span class="hint">Parsimonia = 1 / Costo</span>
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Un modelo de 0.25 segundos empata con el fundacional de Google y aplasta supercomputadoras.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Un modelo de un cuarto de segundo empata con Google y vence al supercómputo.</span>
       </div>
     </article>
 
@@ -772,8 +771,8 @@ canvas { display: block; width: 100%; height: 100%; }
         </div>
 
         <div class="stage-kpis">
-          <span class="kpi-chip green">5 Líderes (p &gt; 0.05)</span>
-          <span class="kpi-chip gold">ExtraTrees: <strong>0.25s CPU</strong></span>
+          <span class="kpi-chip green">5 Líderes <span data-expert>(p &gt; 0.05)</span></span>
+          <span class="kpi-chip gold">ExtraTrees: <strong>¼ de segundo en CPU</strong> <span data-expert>0.25 s</span></span>
         </div>
       </header>
 
@@ -801,7 +800,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <!-- FOOTNOTE -->
   <footer class="footnote">
     <span><strong>Auditoría Rigurosa:</strong> 2,467 días train + 90 días test ciego · Test Diebold-Mariano con corrección Harvey-Leybourne-Newbold (1997)</span>
-    <span class="link">Pase a Diapo 16: Demostración Operacional del Pronóstico a 7 Días →</span>
+    <span class="link">Siguiente: Demostración Operacional del Pronóstico a 7 Días</span>
   </footer>
 
 </main>
@@ -819,58 +818,58 @@ canvas { display: block; width: 100%; height: 100%; }
   const STAGE_DATA = {
     podium: {
       accent: '#6ef0b4',
-      tag: 'ETAPA 1 DE 4 · EL PODIO ESTADÍSTICO',
-      title: 'Microfísica local vs. supercómputo: 5 modelos empatados',
-      lead: 'El test formal de <strong>Diebold-Mariano con corrección HLN (1997)</strong> revela un empate técnico entre los 5 modelos de punta: <strong>ExtraTrees (1.880 °C)</strong>, <strong>TimesFM Zero-Shot (1.883 °C, p=0.71)</strong>, <strong>Random Forest (1.888 °C, p=0.88)</strong>, <strong>Chronos-Bolt (1.903 °C, p=0.65)</strong> y <strong>LightGBM (1.926 °C, p=0.41)</strong>.',
+      tag: 'EL PODIO',
+      title: '14 modelos compitieron: ganó el más simple y barato',
+      lead: 'Cinco modelos empataron con error de unos 1.9 °C, como el termómetro de casa. <span data-expert>Exactos: ExtraTrees 1.880, TimesFM 1.883, Random Forest 1.888, Chronos-Bolt 1.903, LightGBM 1.926.</span>',
       blocks: [
-        { label: '🌍 Derrota del Supercómputo Numérico', text: 'ECMWF IFS (~9 km, 2.458 °C, p=0.027) y NOAA GFS (~28 km, 2.583 °C, p=0.0085) pierden estadísticamente: su malla no captura el dosel amazónico ni el río Amazonas sin downscaling.' },
-        { label: '⚡ Regla de Oro de Parsimonia', text: 'ExtraTrees corre en 0.25 segundos en CPU ordinaria; TimesFM requiere GPU y tarda 7.87s. Estadísticamente idénticos: el negocio debe elegir la solución de costo cero.' }
+        { label: '🌍 Perdió el supercómputo', text: 'ECMWF (±2.5 °C) y NOAA GFS (±2.6 °C) pierden con diferencia real: su malla no capta el dosel amazónico. <span data-expert>2.458 °C, p = 0.027 · 2.583 °C, p = 0.0085</span>' },
+        { label: '⚡ Regla de oro: lo simple', text: 'ExtraTrees: un cuarto de segundo en CPU común. TimesFM: GPU y 8 segundos. Empatan: elige el de costo cero. <span data-expert>0.25 s · 7.87 s</span>' }
       ],
-      math: 'ExtraTrees 1.880 °C (0.25s) ≈ TimesFM 1.883 °C (p=0.71)',
+      math: 'ExtraTrees ±1.9 °C ≈ TimesFM ±1.9 °C: empate técnico <span data-expert>1.880 °C · 0.25 s · 1.883 °C · p = 0.71</span>',
       hint: 'Parsimonia = 1 / Costo',
-      quote: 'Un modelo de 0.25 segundos empata con el fundacional de Google y aplasta supercomputadoras.',
+      quote: 'Un modelo de un cuarto de segundo empata con Google y vence al supercómputo.',
       filter: 'all'
     },
     nwp: {
       accent: '#ff5277',
-      tag: 'ETAPA 2 DE 4 · EL COLAPSO DEL SUPERCÓMPUTO',
-      title: 'Por qué ECMWF y GFS fallan en el trópico sin downscaling',
-      lead: 'Las supercomputadoras de Reading (Reino Unido) y Maryland (EE.UU.) resuelven las ecuaciones de Navier-Stokes en mallas de 9 a 28 km. Sin embargo, en Iquitos <strong>pierden estadísticamente contra árboles locales</strong>.',
+      tag: 'EL SUPERCÓMPUTO TROPIEZA',
+      title: 'Por qué los supercomputadores fallan en el trópico',
+      lead: 'Los supercomputadores de Reino Unido y EE. UU. usan mallas de 9 a 28 km y pierden en Iquitos contra árboles locales.',
       blocks: [
-        { label: '🌡️ ECMWF IFS (~9 km): RMSE 2.458 °C (p=0.027)', text: 'Sobreestima la convección vespertina y suaviza la temperatura de la canopia amazónica al no modelar el microclima insular de Punchana.' },
-        { label: '🌐 NOAA GFS (~28 km): RMSE 2.583 °C (p=0.0085)', text: 'Una celda de 28x28 km promedia río, selva virgen y casco urbano. Su error duplica el residuo inercial de la estación.' }
+        { label: '🌡️ ECMWF (~9 km): ±2.5 °C', text: 'Sobreestima la convección de la tarde y suaviza el microclima de Punchana. Diferencia real. <span data-expert>2.458 °C · p = 0.027</span>' },
+        { label: '🌐 NOAA GFS (~28 km): ±2.6 °C', text: 'Una celda de 28x28 km mezcla río, selva y ciudad; su error duplica el de la estación. Diferencia real. <span data-expert>2.583 °C · p = 0.0085</span>' }
       ],
-      math: 'ECMWF p=0.027 · NOAA GFS p=0.0085 ──▶ Rechazo Estadístico',
+      math: 'ECMWF y NOAA GFS pierden: diferencia real <span data-expert>p = 0.027 · p = 0.0085</span>',
       hint: 'Física Global Pierde',
-      quote: 'El supercómputo es admirable, pero la memoria inercial local le gana sin downscaling.',
+      quote: 'El supercómputo es admirable, pero lo local le gana.',
       filter: 'nwp'
     },
     deep: {
       accent: '#ffc05c',
-      tag: 'ETAPA 3 DE 4 · EL FRACASO DEL DEEP LEARNING',
-      title: 'LSTM: 17 segundos de GPU para quedar en el noveno puesto',
-      lead: 'Muchas organizaciones compran servidores con GPUs creyendo que las redes recurrentes profundas (LSTM) superarán a los algoritmos clásicos. En 2,557 días de datos univariados, <strong>la red recurrente fue derrotada por ARIMA</strong>.',
+      tag: 'LA RED NEURONAL PIERDE',
+      title: 'La red neuronal tardó 17 segundos y quedó novena',
+      lead: 'Muchos compran GPUs creyendo que las redes profundas ganan. Con 2,557 días de datos, la red fue derrotada por ARIMA.',
       blocks: [
-        { label: '🐢 Costo Computacional Desperdiciado', text: 'LSTM tardó 17.03 segundos en GPU (68 veces más lento que ExtraTrees) y obtuvo RMSE 2.053 °C (p=0.033, estadísticamente inferior).' },
-        { label: '📉 El Olvido Gradual y la Falta de Datos', text: 'Con N=2,467 días, los miles de pesos sinápticos de la red no tienen suficiente señal para generalizar mejor que 100 árboles aleatorizados.' }
+        { label: '🐢 Costo desperdiciado', text: 'La LSTM tardó 17.03 s en GPU (68 veces más que ExtraTrees) y erró más: 2.053 °C (p=0.033).' },
+        { label: '📉 Pocos datos para tanta red', text: 'Con N=2,467 días, los miles de pesos de la red no bastan para superar a 100 árboles aleatorios.' }
       ],
       math: 'LSTM: RMSE 2.053 °C (17.03s GPU) vs ARIMA: 1.964 °C (0.01s CPU)',
       hint: 'Sobreparametrización Inútil',
-      quote: 'Entrenar LSTMs climáticos en GPUs es más lento, caro y estadísticamente peor.',
+      quote: 'Entrenar redes en GPU: más lento, más caro y peor.',
       filter: 'all'
     },
     parsimony: {
       accent: '#38efff',
-      tag: 'ETAPA 4 DE 4 · LA REGLA DE PARSIMONIA OPERACIONAL',
-      title: 'La regla de oro: quédate siempre con el modelo más simple',
-      lead: 'Si dos modelos tienen un p-valor mayor a 0.05 en el test Diebold-Mariano, son <strong>estadísticamente indistinguibles</strong>. La decisión gerencial debe basarse únicamente en <strong>costo, latencia y mantenibilidad</strong>.',
+      tag: 'LA REGLA DE ORO',
+      title: 'Regla de oro: elige siempre el modelo más simple',
+      lead: 'Si dos modelos empatan <span data-expert>(p-valor mayor a 0.05)</span>, decide por costo, rapidez y facilidad de mantenimiento.',
       blocks: [
-        { label: '🥇 El Ganador Operacional: ExtraTrees', text: '100 árboles extremadamente aleatorizados en diferencias Δy. 0.25 segundos en un solo hilo de CPU, 0 dependencias pesadas.' },
-        { label: '➡️ Pase a Diapositiva 16 (Pronóstico a 7 Días)', text: '¿Qué pasa cuando proyectamos este modelo no a 1 día sino a toda la semana operacional? Veamos cómo se abre el cono.' }
+        { label: '🥇 El ganador: ExtraTrees', text: '100 árboles muy aleatorios sobre diferencias Δy: un cuarto de segundo <span data-expert>(0.25 s)</span> en un solo hilo de CPU, sin dependencias pesadas.' },
+        { label: '➡️ Siguiente: pronóstico a 7 días', text: '¿Y si proyectamos no a 1 día sino a toda la semana? Veamos cómo se abre el cono.' }
       ],
-      math: 'ExtraTrees CPU 0.25s ──▶ Producción Inmediata a Costo Cero',
-      hint: 'Pase a Diapo 16 →',
-      quote: 'La ciencia madura elige el modelo que resuelve con menor fricción técnica.',
+      math: 'ExtraTrees en un cuarto de segundo <span data-expert>0.25 s</span> ──▶ Producción inmediata a costo cero',
+      hint: 'Siguiente: el pronóstico a 7 días',
+      quote: 'La ciencia madura elige el modelo con menos fricción.',
       filter: 'leaders'
     }
   };

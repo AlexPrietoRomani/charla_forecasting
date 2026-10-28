@@ -1,0 +1,27 @@
+[
+ {
+  "t": 0.5,
+  "dur": 4.0,
+  "text": "Tres leyes de la planta limitan al algoritmo"
+ },
+ {
+  "t": 6.3,
+  "dur": 7.2,
+  "text": "Ley 1: la cosecha responde seis a ocho meses después"
+ },
+ {
+  "t": 14.3,
+  "dur": 6.4,
+  "text": "Ley 2: con calor extremo, la planta se cierra"
+ },
+ {
+  "t": 21.6,
+  "dur": 5.0,
+  "text": "Ley 3: con 24 campañas, sobran variables"
+ },
+ {
+  "t": 27.2,
+  "dur": 2.6,
+  "text": "El modelo debe aprender botánica"
+ }
+]

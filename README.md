@@ -5,7 +5,7 @@ Charla estilo `Data_Wizard`: deck interactivo single-file `presentacion.html` (C
 ## Estructura
 ```text
 charla_forecasting/
-├── presentacion.html   # deck final interactivo (23 slides, Chart.js + datos reales)
+├── presentacion.html   # deck final interactivo (30 diapositivas, prototipos interactivos + datos reales)
 ├── front/              # código frontend de las diapositivas (estilos, slides, notas, branding)
 ├── back/               # motor backend de compilación y datos (build_deck.py, test_loader.py)
 ├── data/               # datos separados por casos de estudio
@@ -22,6 +22,7 @@ charla_forecasting/
 │   ├── caso_2/         # Satélite, clima ERA5, MIDAGRI y modelos Café Jaén
 │   ├── pagina/         # generador de imágenes del deck, auditoría de layout y utilidades
 │   └── build_deck.py   # proxy de compilación hacia back/build_deck.py
+├── video/              # 9 videos de entrada (MP4 + scene.html) y pipeline `video/_pipeline/`
 ├── notebooks/          # demos Jupyter (01_clima_senamhi, 02_cafe_ndvi)
 ├── articles/           # papers descargados (PDF+MD, NO se versionan — ver .gitignore)
 ├── models/             # pesos .pt/.pkl/etc (NO se versionan)
@@ -35,3 +36,12 @@ charla_forecasting/
 - [x] Demos mínimas y notebooks (`notebooks/01_clima_senamhi.ipynb`, `notebooks/02_cafe_ndvi.ipynb`)
 - [x] Datasets procesados y exportados (<100KB en `data/`)
 - [x] Deck interactivo single-file `presentacion.html` (16 slides, Chart.js, modo claro/oscuro, soporte offline)
+- [x] Fase 12 (claridad para público no estadístico): glosario emergente, cifras llanas, titular hero, rutas corta/experta, apertura y cierre en 3 frases, 9 videos con tipografía ≥ 22 px y subtítulos. Cierre técnico en `docs/reference/fases/fase_12_claridad_no_estadistica_deck_videos.md` (sección 4). Pendiente: prueba con 3 personas (T12.4.2).
+
+## Uso del deck
+
+- **Abrir:** doble clic en `presentacion.html` (o `index.html`). Funciona por `file://`, sin servidor; la carpeta `video/` debe quedar **al lado** del HTML porque los videos de entrada se leen desde ahí.
+- **Atajos:** `←`/`→` navegan (`→` también salta un video de entrada), `N` abre las notas del ponente, `D` activa el modo experto (ruta completa de etapas; por defecto se muestra la ruta corta de ≤ 3 etapas) y `M` alterna el modo oscuro.
+- **Recompilar el deck:** `python back/build_deck.py` (regenera `presentacion.html` e `index.html`).
+- **Regenerar un video:** `python video/_pipeline/render.py <carpeta>` (p. ej. `video/seccion_1/diapo_5/video_anatomia_senal`); ver `video/_pipeline/README.md`.
+- **Validar:** `python scripts/audit_f12_claridad.py --all` y `--bundle`, `python -m pytest back scripts video/_pipeline -q`.

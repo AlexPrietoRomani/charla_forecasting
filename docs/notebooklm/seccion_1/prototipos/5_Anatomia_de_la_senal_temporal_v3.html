@@ -926,8 +926,8 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">Sección 1 · Descomposición Ontológica, Método STL y Entropía · Base antes de Modelar</p>
-        <h1>ANATOMÍA DE LA SEÑAL: <span class="accent">¿Qué es una Serie Temporal?</span> <span class="sub">· Física Causal vs. Ruido</span></h1>
+        <p class="eyebrow">Sección 1 · Cómo está hecha una serie de datos</p>
+        <h1>ANATOMÍA DE LA SEÑAL: <span class="accent">¿Qué es una serie temporal?</span></h1>
       </div>
     </div>
 
@@ -946,7 +946,7 @@ input[type="range"] {
   <!-- BARRA DE PROCESO EN BUCLE: 1. Anatomía y Metáfora del Río ─▶ 2. Método STL (COES/RTE) ─▶ 3. Señal vs Ruido ─▶ 4. Overfitting y Pase a Era 1 -->
   <nav class="flowbar" aria-label="Secuencia explicativa en 4 etapas">
     <div class="process-track" role="tablist">
-      <button class="proc-node" role="tab" type="button" data-step="anatomy" aria-selected="true">
+      <button class="proc-node" role="tab" type="button" data-step="anatomy" aria-selected="true" data-route="corta">
         <span class="proc-num">1</span>
         <div class="proc-text">
           <span class="proc-year">Las 4 Capas y el Río</span>
@@ -957,7 +957,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="stl" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="stl" aria-selected="false" data-route="experta">
         <span class="proc-num">2</span>
         <div class="proc-text">
           <span class="proc-year">Método STL en Vivo</span>
@@ -968,7 +968,7 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="signal" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="signal" aria-selected="false" data-route="corta">
         <span class="proc-num">3</span>
         <div class="proc-text">
           <span class="proc-year">Señal Causal vs. Ruido</span>
@@ -979,11 +979,11 @@ input[type="range"] {
 
       <span class="proc-arrow" aria-hidden="true">─▶</span>
 
-      <button class="proc-node" role="tab" type="button" data-step="overfit" aria-selected="false">
+      <button class="proc-node" role="tab" type="button" data-step="overfit" aria-selected="false" data-route="corta">
         <span class="proc-num">4</span>
         <div class="proc-text">
-          <span class="proc-year">Overfitting ─▶ Era 1</span>
-          <span class="proc-sub">Trampa del ruido y pase a 1838</span>
+          <span class="proc-year">Overfitting ─▶ Fórmulas simples</span>
+          <span class="proc-sub">Trampa del ruido; lo simple gana</span>
         </div>
         <div class="proc-progress" id="prog-overfit"></div>
       </button>
@@ -1004,13 +1004,11 @@ input[type="range"] {
     <aside class="left-column" id="leftCard" aria-live="polite">
       <div class="narr-header">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · METÁFORA FÍSICO-BIOLÓGICA</span>
+          <span class="stage-tag" id="stageTag">LAS CUATRO FUERZAS</span>
           <span style="font:600 9.5px/1 var(--mono);color:#8fa3bd">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. La Metáfora del Río: 4 Fuerzas Superpuestas</h2>
-        <p class="narr-lead" id="narrLead">
-          Antes de entrenar cualquier IA, debemos desglosar la señal. Imagina una serie temporal como el <b>flujo de un río o un cultivo agrícola</b>:
-        </p>
+        <h2 class="narr-title" id="narrTitle">Todo dato en el tiempo mezcla cuatro fuerzas</h2>
+        <p class="narr-lead" id="narrLead">Una serie temporal es como un río: tendencia, estaciones, ciclos y azar sumados en una sola línea.</p>
       </div>
 
       <!-- LISTA DE CAPAS CON BOTÓN DE OJO PARA PRENDER/APAGAR EN VIVO -->
@@ -1078,14 +1076,12 @@ input[type="range"] {
       </div>
 
       <div class="info-block" id="contextBox" hidden>
-        <div class="info-block-label" id="contextLabel">⚡ REGLA OPERATIVA DE DESCOMPOSICIÓN</div>
-        <p class="info-block-text" id="contextText">
-          Aislar <b>T(t) + S(t)</b> antes de modelar evita que un algoritmo confunda turbulencia aleatoria (<b>εₜ</b>) con leyes físicas.
-        </p>
+        <div class="info-block-label" id="contextLabel">⚡ Primero, separar las piezas</div>
+        <p class="info-block-text" id="contextText">Separar tendencia y estación evita confundir el azar del día con leyes reales.</p>
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Aísla tendencia y estacionalidad; jamás entrenes sobre el ruido.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Separa lo que se repite de lo que es azar.</span>
       </div>
     </aside>
 
@@ -1167,7 +1163,7 @@ input[type="range"] {
 
   <!-- FOOTER -->
   <footer class="footnote">
-    <span><strong>Puente a la Diapositiva 6 (Era 1):</strong> Una vez aislada la señal causal (Tₜ + Sₜ) del ruido (εₜ), en 1838 nació la Era 1 (Verhulst, Holt-Winters, ARIMA) para modelar esa ley física con parsimonia.</span>
+    <span><strong>Siguiente: la parsimonia lineal.</strong> Una vez aislada la señal causal (Tₜ + Sₜ) del ruido (εₜ), en 1838 nació la Era 1 (Verhulst, Holt-Winters, ARIMA) para modelar esa ley física con parsimonia.</span>
     <span>Referencias: Cleveland et al. (1990) STL · Operaciones COES (Perú) &amp; RTE (Francia)</span>
   </footer>
 
@@ -1213,43 +1209,43 @@ input[type="range"] {
   const ACT_CONTENT = {
     anatomy: {
       accent: 'var(--yt)',
-      tag: 'ACTO 1 DE 4 · METÁFORA FÍSICO-BIOLÓGICA',
-      title: '1. La Metáfora del Río: 4 Fuerzas Superpuestas',
-      lead: 'Una serie temporal es la superposición de <b>4 fuerzas aditivas y estocásticas</b>:',
-      ctxLabel: '⚡ REGLA OPERATIVA DE DESCOMPOSICIÓN',
-      ctxText: 'Aislar <b>T(t) + S(t)</b> evita que el modelo confunda turbulencia aleatoria (<b>εₜ</b>) con leyes físicas deterministas.',
-      quote: 'Aísla tendencia y estacionalidad; jamás entrenes sobre el ruido.',
+      tag: 'LAS CUATRO FUERZAS',
+      title: 'Todo dato en el tiempo mezcla cuatro fuerzas',
+      lead: 'Una serie temporal es como un río: tendencia, estaciones, ciclos y azar sumados en una sola línea.',
+      ctxLabel: '⚡ Primero, separar las piezas',
+      ctxText: 'Separar tendencia y estación evita confundir el azar del día con leyes reales.',
+      quote: 'Separa lo que se repite de lo que es azar.',
       caption: 'VISTA EXPLOTADA 3D · Y(t) = T(t) + S(t) + C(t) + ε(t)'
     },
     stl: {
       accent: 'var(--season)',
-      tag: 'ACTO 2 DE 4 · DESCOMPOSICIÓN STL EN PRODUCCIÓN',
-      title: '2. El Método STL en Vivo: COES (Perú) y RTE (Francia)',
-      lead: 'En 1990, <b>Cleveland et al.</b> crearon <b>STL (Loess)</b>: el bisturí que separa componentes limpios.',
-      ctxLabel: '⚡ COES PERÚ & RTE FRANCIA (PRODUCCIÓN)',
-      ctxText: 'Separan el pico de megavatios de las 7pm (<b>Sₜ</b>) del crecimiento estructural (<b>Tₜ</b>) y alertan si <b>Rₜ > ±2.5σ</b>.',
-      quote: 'El bisturí STL separa el pico diario del crecimiento anual y vigila anomalías.',
+      tag: 'SEPARAR LAS PIEZAS',
+      title: 'Un método separa el pico diario del crecimiento anual',
+      lead: 'En 1990 nació STL, un bisturí que corta la serie en piezas limpias: tendencia, estación y sobrante.',
+      ctxLabel: '⚡ Cómo lo usan Perú y Francia',
+      ctxText: 'COES (Perú) y RTE (Francia) separan el pico de las 7 pm del crecimiento y alertan rarezas.',
+      quote: 'Separar el pico diario del crecimiento anual avisa de rarezas.',
       caption: 'MÉTODO STL (LOESS) · Yₜ = Tₜ + Sₜ + Rₜ (ALERTA ANOMALÍAS ±2.5σ)'
     },
     signal: {
       accent: 'var(--signal)',
-      tag: 'ACTO 3 DE 4 · SEÑAL CAUSAL VS. ENTROPÍA',
-      title: '3. El Filtro de Oro: Aprender la Señal, Ignorar el Ruido',
-      lead: 'Observa en las placas 3D la <b>Señal Estructural Pura (T + S + C)</b> tras apagar el ruido (<b>εₜ</b>).',
-      ctxLabel: '🎯 FILTRO DE ORO EN MACHINE LEARNING',
-      ctxText: 'El objetivo de la IA no es predecir el caos: es capturar <b>T(t) + S(t) + C(t)</b> y tratar <b>ε(t)</b> como cono de duda.',
-      quote: 'Un buen modelo captura la física y trata el ruido como incertidumbre.',
+      tag: 'SEÑAL FRENTE A RUIDO',
+      title: 'Aprender lo que se repite e ignorar el azar',
+      lead: 'Con el ruido apagado queda la señal pura: tendencia, estación y ciclos, lo único que vale la pena aprender.',
+      ctxLabel: '🎯 La meta de la IA',
+      ctxText: 'No es predecir el caos: es captar lo estable y tratar el ruido como margen de duda.',
+      quote: 'Un buen modelo aprende lo estable y admite su duda.',
       caption: 'AISLAMIENTO DE SEÑAL · ESTRUCTURA CAUSAL [T(t)+S(t)+C(t)] SIN RUIDO ε(t)'
     },
     overfit: {
       accent: 'var(--noise)',
-      tag: 'ACTO 4 DE 4 · LA TRAMPA DEL OVERFITTING Y PASE A ERA 1',
-      title: '4. La Trampa de Memorizar el Ruido y el Salto a la Era 1',
-      lead: 'Forzar a un modelo a memorizar <b>ε(t)</b> causa el colapso fuera de muestra (<b>Overfitting</b>).',
-      ctxLabel: '💥 DE LA MEMORIZACIÓN A LA ERA 1 (1838)',
-      ctxText: 'Para modelar leyes físicas con parsimonia sin memorizar ruido nacieron en <b>1838 los modelos analíticos (Verhulst, ARIMA)</b>.',
-      quote: 'Memorizar el ruido condena al fracaso; la parsimonia analítica salva vidas.',
-      caption: 'COLAPSO FUERA DE MUESTRA (OVERFITTING) ──▶ PASE A DIAPO 6: ERA 1 (1838)'
+      tag: 'LA TRAMPA DE MEMORIZAR',
+      title: 'Memorizar el azar arruina el pronóstico; mejor, fórmulas simples',
+      lead: 'Un modelo que memoriza el ruido luce perfecto con datos pasados y falla con datos nuevos.',
+      ctxLabel: '💥 Por qué nacieron las fórmulas simples',
+      ctxText: 'Desde 1838, modelos simples como Verhulst y ARIMA capturan las leyes sin memorizar ruido.',
+      quote: 'Memorizar el ruido condena; lo simple sobrevive.',
+      caption: 'COLAPSO FUERA DE MUESTRA (OVERFITTING) ──▶ SIGUIENTE: LAS FÓRMULAS SIMPLES (1838)'
     }
   };
 

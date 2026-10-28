@@ -1,0 +1,27 @@
+[
+ {
+  "t": 0.5,
+  "dur": 3.6,
+  "text": "Dos casos distintos, un mismo método"
+ },
+ {
+  "t": 5.0,
+  "dur": 4.5,
+  "text": "Uno: nunca entrenes con datos del futuro"
+ },
+ {
+  "t": 9.8,
+  "dur": 3.8,
+  "text": "Dos: el valor está en la banda, no el punto"
+ },
+ {
+  "t": 14.1,
+  "dur": 3.8,
+  "text": "Tres: primero entender la física del cultivo"
+ },
+ {
+  "t": 19.3,
+  "dur": 4.6,
+  "text": "Se necesita un método más honesto, no uno más grande"
+ }
+]
