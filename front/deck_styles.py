@@ -1349,6 +1349,10 @@ def get_deck_css(branding=None):
   .slide-lessons {{
     justify-content: center;
   }}
+  .slide-lessons > .slide-main-title {{
+    padding: clamp(24px, 4vh, 40px) clamp(24px, 4vw, 90px) 0;
+    margin-bottom: 0;
+  }}
   .lessons-stack {{
     position: relative;
     z-index: 1;
@@ -1357,15 +1361,15 @@ def get_deck_css(branding=None):
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: clamp(18px, 3.2vh, 40px);
-    padding: clamp(64px, 11vh, 110px) clamp(24px, 4vw, 90px) clamp(24px, 4vh, 48px);
+    gap: clamp(22px, 4.2vh, 52px);
+    padding: 0 clamp(24px, 4vw, 90px) clamp(24px, 4vh, 48px);
   }}
   .lesson-row {{
     display: grid;
     grid-template-columns: clamp(72px, 6vw, 112px) minmax(0, 1fr);
     align-items: center;
     gap: clamp(18px, 2vw, 36px);
-    padding: clamp(10px, 1.6vh, 20px) clamp(18px, 1.8vw, 30px);
+    padding: clamp(16px, 2.4vh, 30px) clamp(18px, 1.8vw, 30px);
     border-left: 5px solid var(--fest-cyan);
     border-radius: 0 12px 12px 0;
     background: linear-gradient(90deg, rgba(18, 200, 252, 0.10), rgba(18, 200, 252, 0) 70%);
