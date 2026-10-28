@@ -49,7 +49,16 @@ def capture_frames(video_dir: Path, frames_dir: Path, config: dict, frames_only:
         "node", str(CAPTURE_SCRIPT), "scene.html", str(frames_dir),
         str(fps), str(dur_ms), str(config["start_ms"]), str(config["time_scale"]), str(config["dpr"]),
     ]
-    subprocess.run(command, cwd=video_dir, env=env, check=True)
+    expected = round(dur_ms / 1000 * fps)
+    for attempt in (1, 2):
+        subprocess.run(command, cwd=video_dir, env=env, check=False)
+        produced = len(list(frames_dir.glob("f*.png")))
+        # En Windows la limpieza del perfil de Chrome puede fallar (EPERM/EBUSY) tras capturar todo:
+        # si están todos los frames, el exit distinto de 0 no es un error real.
+        if produced == expected:
+            return
+        print(f"captura incompleta ({produced}/{expected}), intento {attempt}/2", file=sys.stderr)
+    raise SystemExit(f"captura fallida: {produced}/{expected} frames")
 
 
 def encode(ffmpeg: str, frames_dir: Path, config: dict, out_path: Path) -> None:

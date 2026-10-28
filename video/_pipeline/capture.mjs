@@ -65,7 +65,7 @@ mkdirSync(outDir, { recursive: true });
 for (const f of readdirSync(outDir)) if (f.endsWith(".png")) unlinkSync(join(outDir, f));
 
 const profile = join(tmpdir(), `chrome-cdp-${process.pid}`);
-rmSync(profile, { recursive: true, force: true });
+try { rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch {}
 mkdirSync(profile, { recursive: true });
 
 const browserBin = resolveBrowser();
@@ -89,11 +89,16 @@ const chrome = spawn(browserBin, [
 let chromeErr = "";
 chrome.stderr.on("data", (d) => { chromeErr += d.toString(); });
 
+// En Windows Chrome retiene el perfil unos instantes (EBUSY/EPERM): un fallo de limpieza no es un error.
+function removeProfile() {
+  try { rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch {}
+}
+
 function cleanup(code) {
   try { chrome.kill("SIGTERM"); } catch {}
   setTimeout(() => {
     try { chrome.kill("SIGKILL"); } catch {}
-    rmSync(profile, { recursive: true, force: true });
+    removeProfile();
     process.exit(code);
   }, 400);
 }

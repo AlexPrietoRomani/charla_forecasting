@@ -36,3 +36,26 @@ Opciones:
 4. Corre `python -m pytest video/_pipeline -q`: valida que el `video.json` nuevo tiene las claves requeridas.
 
 Cada carpeta conserva solo sus fuentes y su MP4 vigente. El capturador y el render no se copian.
+
+## Subtítulos (beats)
+
+Los videos son mudos: cada carpeta lleva `beats.json` con 3 a 5 beats `{"t": seg, "dur": seg, "text": "..."}`
+(tiempos de la escena, máximo 10 palabras por beat, lenguaje llano, sin solapes).
+
+- `build_scene.py` inyecta los beats en `__BEATS_JSON__` y la escena dibuja la banda `<div id="subs">` como función
+  pura del tiempo (fade de 0.25 s), de modo que el MP4 lleva el subtítulo quemado y el render sigue siendo determinista.
+- `build_scene.py` también escribe `narration.vtt` con `subtitles.write_vtt(beats, start_ms, time_scale, ruta)`.
+  Los tiempos del VTT son los del MP4 final: `t_video = (t_escena - start_ms) * time_scale` (p. ej. `anatomia_senal`
+  usa el tramo [4 s, 27 s] reproducido a 1.3043x).
+- Decisión de accesibilidad: el deck se abre por `file://` y Chrome bloquea `<track src="narration.vtt">` por CORS.
+  Por eso el compilador del deck incrusta el VTT como `data:text/vtt;base64,...` en un `<track kind="subtitles"
+  srclang="es">` sin `default` y con `mode="hidden"`. Con el subtítulo quemado ya visible, el track queda disponible
+  para lectores de pantalla y para activarlo a mano sin duplicar el texto.
+
+## Windows: limpieza del perfil de Chrome
+
+`capture.mjs` borra el perfil temporal de Chrome con `rmSync(..., {maxRetries: 5, retryDelay: 200})` dentro de
+`try/catch`: un `EPERM`/`EBUSY` al limpiar ya no es un error. `render.py` acepta la salida del capturador si el
+directorio tiene todos los PNG esperados; si faltan, reintenta una vez. Renderiza como máximo 2 videos en paralelo.
+
+No hay cambios de variables de entorno ni de dependencias.
