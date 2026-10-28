@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Genera scene.html: entrada de 30 s para la Diapo 9 (Sección 1), 'VÍA 4 · Revolución Zero-Shot (TSFM)'. Datos reales de Punchana y benchmark de modelos."""
+"""Genera scene.html: entrada de 30 s para la Diapo 9 (Sección 1), 'Modelos que predicen sin entrenar (TSFM)'. Datos reales de Punchana y benchmark de modelos."""
 
 import base64
 import json
 import pathlib
+import sys
 
 import pandas as pd
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_pipeline"))
+from subtitles import load_beats, write_vtt  # noqa: E402
 
 SRC = pathlib.Path(__file__).resolve().parent
 ROOT = SRC.parents[3]
@@ -55,13 +59,17 @@ for family, fname, weight in font_files:
         "src:url(data:font/woff2;base64,%s) format('woff2');}\n" % (family, weight, b64)
     )
 
+video_cfg = json.loads((SRC / "video.json").read_text(encoding="utf-8"))
+beats = load_beats(SRC / "beats.json")
 template = (SRC / "scene_template.html").read_text(encoding="utf-8")
 html = (
     template.replace("__FONTS_CSS__", fonts_css)
     .replace("__DATA_JSON__", json.dumps(data, separators=(",", ":")))
     .replace("__DURATION_MS__", str(DURATION_MS))
+    .replace("__BEATS_JSON__", json.dumps(beats, ensure_ascii=False, separators=(",", ":")))
 )
 (SRC / "scene.html").write_text(html, encoding="utf-8")
+write_vtt(beats, video_cfg["start_ms"], video_cfg["time_scale"], SRC / "narration.vtt")
 b = data["bench"]
 print(
     f"scene.html escrito: {len(html):,} bytes · contexto {len(vals)} días ({short[0]}→{short[-1]}) · n={data['n']} · "

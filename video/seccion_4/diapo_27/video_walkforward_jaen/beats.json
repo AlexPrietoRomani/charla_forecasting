@@ -1,0 +1,27 @@
+[
+ {
+  "t": 0.5,
+  "dur": 4.0,
+  "text": "Una prueba honesta: 16 modelos, 8 cosechas a ciegas"
+ },
+ {
+  "t": 6.2,
+  "dur": 6.7,
+  "text": "Cada modelo predice un año que nunca vio"
+ },
+ {
+  "t": 13.5,
+  "dur": 6.9,
+  "text": "El mejor modelo sigue el colapso de 2020"
+ },
+ {
+  "t": 21.1,
+  "dur": 4.7,
+  "text": "El ganador no es el más complejo"
+ },
+ {
+  "t": 26.4,
+  "dur": 3.4,
+  "text": "Clima de floración con árboles supera al solo satélite"
+ }
+]

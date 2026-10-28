@@ -1,0 +1,27 @@
+[
+ {
+  "t": 0.6,
+  "dur": 4.0,
+  "text": "El truco: convertir la serie en una tabla"
+ },
+ {
+  "t": 6.3,
+  "dur": 7.0,
+  "text": "Una ventana desliza sobre los días y arma una tabla"
+ },
+ {
+  "t": 14.3,
+  "dur": 6.4,
+  "text": "El árbol corta los datos en cajas simples"
+ },
+ {
+  "t": 21.6,
+  "dur": 5.0,
+  "text": "Si el récord supera el techo, el árbol se aplana"
+ },
+ {
+  "t": 27.0,
+  "dur": 2.8,
+  "text": "Predecir el cambio, no el nivel, rompe el techo"
+ }
+]

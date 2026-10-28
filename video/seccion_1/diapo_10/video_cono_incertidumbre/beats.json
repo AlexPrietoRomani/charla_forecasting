@@ -1,0 +1,27 @@
+[
+ {
+  "t": 0.5,
+  "dur": 4.0,
+  "text": "Un pronóstico exacto es una ilusión"
+ },
+ {
+  "t": 6.3,
+  "dur": 7.0,
+  "text": "Cuanto más lejos el día, más crece el error"
+ },
+ {
+  "t": 14.2,
+  "dur": 6.5,
+  "text": "Medimos errores pasados para calibrar la banda"
+ },
+ {
+  "t": 21.6,
+  "dur": 5.0,
+  "text": "Resultado: una banda de seguridad, no un solo número"
+ },
+ {
+  "t": 27.1,
+  "dur": 2.7,
+  "text": "El valor está en la banda, no en el punto"
+ }
+]
