@@ -600,12 +600,28 @@ def render_slide_video_gate(
     video_rel_path: str,
     badge_label: str | None = None,
     gate_id: str = "cinematicVideoGate",
+    vtt_path: Path | None = None,
 ) -> str:
-    """Genera la compuerta #cinematicVideoGate (Etapa 0 dentro de la diapositiva)."""
+    """Genera la compuerta #cinematicVideoGate (Etapa 0 dentro de la diapositiva).
+
+    Si existe vtt_path, incrusta el VTT como data URI en un <track> oculto: por file:// Chrome bloquea
+    un src externo por CORS. El subtítulo quemado en el MP4 es el visible; el track sirve a accesibilidad.
+    """
     bg = SECTION_GATE_BG.get(section_num, "#040714")
     label = badge_label or f"🎬 INTRO VISUAL · DIAPO {slide_num:02d}"
+    track = ""
+    if vtt_path is not None and Path(vtt_path).is_file():
+        vtt_b64 = base64.b64encode(Path(vtt_path).read_bytes()).decode("ascii")
+        track = (
+            f'<track kind="subtitles" srclang="es" label="Español" src="data:text/vtt;base64,{vtt_b64}">'
+        )
+    hidden_script = (
+        f"<script>document.getElementById('{gate_id}Player').textTracks[0].mode='hidden';</script>"
+        if track
+        else ""
+    )
     return f"""<div id="{gate_id}" class="cinematic-video-gate" data-slide-video="true" data-slide-index="{slide_num}" style="--gate-bg: {bg};" hidden>
-  <video id="{gate_id}Player" src="{video_rel_path}" preload="auto" muted playsinline></video>
+  <video id="{gate_id}Player" src="{video_rel_path}" preload="auto" muted playsinline>{track}</video>{hidden_script}
   <div class="cinematic-hud">
     <span class="cinematic-badge">{label}</span>
     <button type="button" class="cinematic-skip-btn">Pasar al Simulador Interactivo →</button>

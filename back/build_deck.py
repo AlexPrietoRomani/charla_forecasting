@@ -145,7 +145,8 @@ def build_deck():
         video_rel = video_path.relative_to(BASE_DIR).as_posix()
         gate_id = "cinematicVideoGate" if slide_num == 5 else f"cinematicVideoGate{slide_num}"
         cinematic_gates[slide_num] = render_slide_video_gate(
-            section_num, slide_num, video_rel, gate_id=gate_id
+            section_num, slide_num, video_rel, gate_id=gate_id,
+            vtt_path=video_path.parent / "narration.vtt",
         )
 
     branding = get_branding()
