@@ -1,11 +1,12 @@
+from deck_branding import get_separator_copy
+
+
 def get_slides_part2(branding=None):
     if branding is None:
         branding = {}
     qr_svg = branding.get("qr_svg", "")
     b64_dw = branding.get("b64_dw", "")
     b64_header = branding.get("b64_header", "")
-    anatomy_c1_svg = branding.get("anatomy_c1_svg", "")
-    anatomy_c2_svg = branding.get("anatomy_c2_svg", "")
     b64_p15_html = branding.get("b64_p15_html", "")
     b64_p16_html = branding.get("b64_p16_html", "")
     b64_p17_html = branding.get("b64_p17_html", "")
@@ -18,6 +19,9 @@ def get_slides_part2(branding=None):
     b64_p26_html = branding.get("b64_p26_html", "")
     b64_p27_html = branding.get("b64_p27_html", "")
     cinematic_gates = branding.get("cinematic_gates", {})
+    sep3_title, sep3_subtitle = get_separator_copy(3)
+    sep4_title, sep4_subtitle = get_separator_copy(4)
+    sep5_title, sep5_subtitle = get_separator_copy(5)
 
     html = f"""
   <!-- ============================================================= -->
@@ -51,13 +55,12 @@ def get_slides_part2(branding=None):
   <!-- ============================================================= -->
   <!-- DIAPO 18: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO            -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="18" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
+  <section class="slide slide-archetype-section act-bg-3" data-index="18" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
     <div class="section-huge-num">03</div>
-    <h2 class="section-title display">Series temporales en el agro: del almanaque al satélite</h2>
-    <p class="section-desc">
-      Cómo la agricultura inventó el forecasting hace 10,000 años y evolucionó de la observación astronómica empírica a la teledetección multiespectral continua. La física biológica, los desfases fenológicos (τ = 6–8 meses) y los límites computacionales en sistemas vivos (p ≫ N).
-    </p>
+    <h2 class="section-title display">__SEP3_TITLE__</h2>
+    <p class="section-desc">__SEP3_SUBTITLE__</p>
   </section>
+
 
   <!-- ============================================================= -->
   <!-- DIAPO 19: CÓMO EL AGRO INVENTÓ EL FORECASTING (PROTOTIPO)     -->
@@ -109,13 +112,12 @@ def get_slides_part2(branding=None):
   <!-- ============================================================= -->
   <!-- DIAPO 24: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="24" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
+  <section class="slide slide-archetype-section act-bg-4" data-index="24" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
     <div class="section-huge-num">04</div>
-    <h2 class="section-title display">Caso 2: Predicción de rendimiento usando NDVI</h2>
-    <p class="section-desc">
-      Auditoría de 24 campañas cafetaleras en Jaén (Cajamarca), 576 compuestos satelitales MODIS NDVI y reanálisis climático ERA5. La trampa de la saturación espectral y por qué el satélite óptico fue ciego a la mayor epidemia de roya amarilla.
-    </p>
+    <h2 class="section-title display">__SEP4_TITLE__</h2>
+    <p class="section-desc">__SEP4_SUBTITLE__</p>
   </section>
+
 
   <!-- ============================================================= -->
   <!-- DIAPO 25: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (PROTOTIPO)    -->
@@ -149,95 +151,45 @@ def get_slides_part2(branding=None):
   <!-- ============================================================= -->
   <!-- DIAPO 28: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="28" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
+  <section class="slide slide-archetype-section act-bg-5" data-index="28" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
     <div class="section-huge-num">05</div>
-    <h2 class="section-title display">Conclusiones y lecciones aprendidas</h2>
-    <p class="section-desc">
-      Principios metodológicos innegociables destilados de 2,557 días de meteorología amazónica y 24 campañas cafetaleras reales. Por qué la disciplina metodológica y la física del dominio valen más que cualquier arquitectura neuronal profunda.
-    </p>
+    <h2 class="section-title display">__SEP5_TITLE__</h2>
+    <p class="section-desc">__SEP5_SUBTITLE__</p>
   </section>
+
 
   <!-- ============================================================= -->
   <!-- DIAPO 29: CONCLUSIONES (page-09.png)                         -->
+  <!-- Tres lecciones en frases grandes para público sin estadística -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="29" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
+  <section class="slide slide-lessons act-bg-5" data-index="29" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
     <h2 class="slide-main-title display">Conclusiones y lecciones aprendidas</h2>
     <button type="button" id="btnCinematicIntro29"
             onclick="window.postMessage({{type:'deck_replay_video', slide:29}}, '*')"
             title="Reproyectar la introducción cinemática"
             style="position:absolute; top:6px; right:6px; z-index:20; display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid rgba(56,239,255,0.42); border-radius:10px; background:linear-gradient(120deg, rgba(8,47,73,0.9), rgba(8,15,32,0.92)); color:#7dd3fc; font:700 12px/1 'IBM Plex Mono', monospace; letter-spacing:0.06em; cursor:pointer; white-space:nowrap;">🎬 Repetir Intro</button>
-    <div class="conclusions-3col-grid">
-      <div class="conclusion-card card-1">
-        <div class="conclusion-card-head">
-          <div class="conclusion-pill-tag mono">AXIOMA 01 · CAUSALIDAD TEMPORAL</div>
-          <div class="conclusion-card-title-row">
-            <div class="conclusion-icon-box">🎯</div>
-            <div class="conclusion-title display">Respeta la causalidad del tiempo</div>
-          </div>
-          <p class="conclusion-desc">
-            En series temporales el orden cronológico es sagrado. Entrenar mirando el futuro o usar particiones aleatorias produce métricas de laboratorio que colapsan en producción.
-          </p>
+    <div class="lessons-stack">
+      <article class="lesson-row lesson-row-1">
+        <div class="lesson-icon" aria-hidden="true">⏳</div>
+        <div class="lesson-body">
+          <h3 class="lesson-title display">1 · Respeta el orden del tiempo</h3>
+          <p class="lesson-evidence">Entrenar mirando el futuro da notas falsas. Iquitos: 2,557 días, examen ciego de 90.</p>
         </div>
-        <div class="conclusion-trap-box">
-          <strong>⚠️ La Trampa Habitual:</strong> K-Fold aleatorio y shuffle mezclan pasado y futuro, creando una ilusión de alta precisión por fuga temporal (data leakage).
+      </article>
+      <article class="lesson-row lesson-row-2">
+        <div class="lesson-icon" aria-hidden="true">📊</div>
+        <div class="lesson-body">
+          <h3 class="lesson-title display">2 · El valor está en el rango, no en el número</h3>
+          <p class="lesson-evidence">Un pronóstico honesto dice «entre 29 y 36 °C», no «32.7 °C».</p>
         </div>
-        <div class="conclusion-evidence">
-          <div class="conclusion-evidence-title">📊 Evidencia Empírica · Caso 1 Punchana</div>
-          <ul class="conclusion-evidence-list">
-            <li><strong>2,557 días SENAMHI:</strong> evaluación estricta en el futuro real con split temporal continuo sin contaminación.</li>
-            <li><strong>ExtraTrees en CPU (0.25 s):</strong> igualó a Foundation Models masivos al modelar incrementos causales (Δy<sub>t</sub>).</li>
-          </ul>
+      </article>
+      <article class="lesson-row lesson-row-3">
+        <div class="lesson-icon" aria-hidden="true">🌱</div>
+        <div class="lesson-body">
+          <h3 class="lesson-title display">3 · Primero la física, después el algoritmo</h3>
+          <p class="lesson-evidence">El satélite vio hojas verdes; la cosecha de Jaén cayó a la mitad.</p>
         </div>
-        <div class="conclusion-takeaway">💡 <strong>Regla Operativa:</strong> si el modelo vio el futuro para entrenar, su error es ficción; valida siempre con Walk-Forward expansivo.</div>
-      </div>
-
-      <div class="conclusion-card card-2">
-        <div class="conclusion-card-head">
-          <div class="conclusion-pill-tag mono">AXIOMA 02 · GESTIÓN DE RIESGO</div>
-          <div class="conclusion-card-title-row">
-            <div class="conclusion-icon-box">🧠</div>
-            <div class="conclusion-title display">El valor está en la banda, no en el punto</div>
-          </div>
-          <p class="conclusion-desc">
-            Un pronóstico puntual (ŷ<sub>t+h</sub>) es una ficción matemática que oculta el riesgo operacional. Con entropía y ruido irreductible, la única métrica honesta es el cono calibrado.
-          </p>
-        </div>
-        <div class="conclusion-trap-box">
-          <strong>⚠️ La Trampa Habitual:</strong> comprometer un escalar único ante el decisor: ante shocks extremos, el error puntual destruye la credibilidad del modelo.
-        </div>
-        <div class="conclusion-evidence">
-          <div class="conclusion-evidence-title">📊 Evidencia Empírica · Ambos Casos</div>
-          <ul class="conclusion-evidence-list">
-            <li><strong>Cono P10–P90 (Iquitos):</strong> contuvo la ola de calor histórica de 38.0 °C dentro de la banda calibrada sin sobreajustar.</li>
-            <li><strong>Split Conformal 80% (Jaén):</strong> garantizó cobertura out-of-sample en 8/8 campañas con q̂ = 6.23 qq/ha.</li>
-          </ul>
-        </div>
-        <div class="conclusion-takeaway">💡 <strong>Regla Operativa:</strong> punto sin banda es marketing; banda conformal calibrada al 80%–90% es gestión de riesgo real.</div>
-      </div>
-
-      <div class="conclusion-card card-3">
-        <div class="conclusion-card-head">
-          <div class="conclusion-pill-tag mono">AXIOMA 03 · BIOLOGÍA &amp; DOMINIO</div>
-          <div class="conclusion-card-title-row">
-            <div class="conclusion-icon-box">🚀</div>
-            <div class="conclusion-title display">Próximo paso: física antes que algoritmo</div>
-          </div>
-          <p class="conclusion-desc">
-            Entiende los mecanismos del dominio antes de elegir la arquitectura. La IA no sustituye a la fisiología ni a la física causal: la complejidad ciega fracasa ante muestras pequeñas.
-          </p>
-        </div>
-        <div class="conclusion-trap-box">
-          <strong>⚠️ La Trampa Habitual:</strong> confiar ciegamente en datos satelitales brutos: el MODIS NDVI saturó en árboles de sombra (Inga) y no vio la epidemia floral.
-        </div>
-        <div class="conclusion-evidence">
-          <div class="conclusion-evidence-title">📊 Evidencia Empírica · Caso 2 Jaén</div>
-          <ul class="conclusion-evidence-list">
-            <li><strong>24 campañas cafetaleras:</strong> el déficit hídrico en floración (r = 0.7564) domina ampliamente sobre el NDVI ciego (r = 0.1536).</li>
-            <li><strong>Random Forest parsimonioso (d=2):</strong> ganó el torneo con MAE 3.72 qq/ha tras el desplome de −56.0% en la roya 2014.</li>
-          </ul>
-        </div>
-        <div class="conclusion-takeaway">💡 <strong>Regla Operativa:</strong> la física del dominio manda antes que el hiperparámetro; modela el cuello de botella biológico.</div>
-      </div>
+      </article>
     </div>
     __CINEMATIC_GATE_29__
   </section>
@@ -245,7 +197,7 @@ def get_slides_part2(branding=None):
   <!-- ============================================================= -->
   <!-- DIAPO 30: CIERRE Y PREGUNTAS (page-10.png)                   -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-closing" data-index="30" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
+  <section class="slide slide-archetype-closing act-bg-5" data-index="30" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
     <div>
       <div class="cover-tag mono">
         IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span> · CHARLA MAGISTRAL
@@ -312,6 +264,12 @@ def get_slides_part2(branding=None):
 
     return (
         html.replace("__B64_P15_HTML__", b64_p15_html)
+        .replace("__SEP3_TITLE__", sep3_title)
+        .replace("__SEP3_SUBTITLE__", sep3_subtitle)
+        .replace("__SEP4_TITLE__", sep4_title)
+        .replace("__SEP4_SUBTITLE__", sep4_subtitle)
+        .replace("__SEP5_TITLE__", sep5_title)
+        .replace("__SEP5_SUBTITLE__", sep5_subtitle)
         .replace("__B64_P16_HTML__", b64_p16_html)
         .replace("__B64_P17_HTML__", b64_p17_html)
         .replace("__B64_P19_HTML__", b64_p19_html)

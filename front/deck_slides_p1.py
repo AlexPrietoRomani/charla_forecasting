@@ -1,3 +1,22 @@
+from deck_branding import AGENDA, AGENDA_TOTAL_MINUTES, get_separator_copy
+
+
+def render_agenda_rows():
+    """Devuelve las filas HTML de la agenda construidas desde AGENDA."""
+    rows = []
+    for index, item in enumerate(AGENDA, start=1):
+        rows.append(
+            f'<div class="agenda-row item-{index}">'
+            f'<div class="agenda-num">{item["number"]}</div>'
+            f'<div class="agenda-icon">{item["icon"]}</div>'
+            f'<div class="agenda-text"><div class="agenda-question">{item["question"]}</div>'
+            f'<div class="agenda-takeaway">{item["takeaway"]}</div></div>'
+            f'<div class="agenda-minutes">{item["minutes"]} min</div>'
+            "</div>"
+        )
+    return "\n".join(rows)
+
+
 def get_slides_part1(branding=None):
     if branding is None:
         branding = {}
@@ -14,6 +33,8 @@ def get_slides_part1(branding=None):
     b64_p13_html = branding.get("b64_p13_html", "")
     b64_p14_html = branding.get("b64_p14_html", "")
     cinematic_gates = branding.get("cinematic_gates", {})
+    qr_svg = branding.get("qr_svg", "")
+    sep1_title, sep1_subtitle = get_separator_copy(1)
 
     slides = """
   <!-- ========================================== -->
@@ -42,101 +63,78 @@ def get_slides_part1(branding=None):
   <!-- ========================================== -->
   <section class="slide" data-index="2" data-act="Apertura · Ponente" data-time="1.5 min">
     <h2 class="slide-main-title display">Sobre el ponente</h2>
-    <div class="speaker-layout">
-      <div class="speaker-avatar-wrap">
-        <div class="speaker-avatar">
-          <img src="data:image/jpeg;base64,__PROFILE_IMG__" alt="Alex Prieto Romani">
-        </div>
+    <div class="speaker-hero">
+      <div class="speaker-avatar">
+        <img src="data:image/jpeg;base64,__PROFILE_IMG__" alt="Alex Prieto Romani">
       </div>
-      <div class="speaker-info">
+      <div class="speaker-hero-text">
         <div class="speaker-name display">Alex Prieto Romani</div>
         <div class="speaker-role mono">Agriculture Data Science · Hortifrut SA</div>
-        <div style="font-size:16px; font-weight:700; color:#FFFFFF; margin-bottom:12px; font-family:'Space Grotesk',sans-serif;">Mg Sc Big Data &amp; Data Science – Ing Agrónomo</div>
-        
-        <ul class="speaker-bullets">
-          <li class="speaker-bullet-item">
-            <span class="speaker-bullet-dot"></span>
-            <div>Experiencia en el sector agroindustrial desde breeding, calidad de fruta, proyecciones agrícolas, agricultura de presición y diseños estadisticos para ensayos agronómicos.</div>
-          </li>
-          <li class="speaker-bullet-item">
-            <span class="speaker-bullet-dot"></span>
-            <div>Proyectos en Computer vision, ML y DL en el sector agroindustrial.</div>
-          </li>
-        </ul>
+      </div>
+    </div>
 
-        <div class="speaker-socials">
-          <a href="https://linkedin.com/in/alex-prieto-romani" target="_blank" class="speaker-social-link">
-            <span>🔗</span> linkedin.com/in/alex-prieto-romani
-          </a>
-          <a href="mailto:alexprieto1997@gmail.com" class="speaker-social-link">
-            <span>✉️</span> alexprieto1997@gmail.com
-          </a>
-          <a href="https://github.com/AlexPrietoRomani" target="_blank" class="speaker-social-link">
-            <span>🐙</span> github.com/AlexPrietoRomani
-          </a>
+    <div class="speaker-body">
+      <div class="speaker-cards">
+        <div class="speaker-card">
+          <div class="speaker-card-icon">🌱</div>
+          <div class="speaker-card-title">Ingeniero agrónomo + científico de datos</div>
+          <div class="speaker-card-sub">Breeding, calidad de fruta y ensayos agronómicos</div>
+        </div>
+        <div class="speaker-card">
+          <div class="speaker-card-icon">🌡️</div>
+          <div class="speaker-card-title">Predice clima y cosechas con datos reales</div>
+          <div class="speaker-card-sub">Casos con SENAMHI en Iquitos y café en Jaén</div>
+        </div>
+        <div class="speaker-card">
+          <div class="speaker-card-icon">🎓</div>
+          <div class="speaker-card-title">Hortifrut · maestría en Big Data</div>
+          <div class="speaker-card-sub">Mg Sc Big Data &amp; Data Science</div>
         </div>
       </div>
     </div>
+
+    <div class="speaker-footer">
+      <div class="speaker-socials">
+        <a href="https://linkedin.com/in/alex-prieto-romani" target="_blank" class="speaker-social-link">
+          <span>🔗</span> linkedin.com/in/alex-prieto-romani
+        </a>
+        <a href="mailto:alexprieto1997@gmail.com" class="speaker-social-link">
+          <span>✉️</span> alexprieto1997@gmail.com
+        </a>
+        <a href="https://github.com/AlexPrietoRomani" target="_blank" class="speaker-social-link">
+          <span>🐙</span> github.com/AlexPrietoRomani
+        </a>
+      </div>
+      <div class="speaker-qr">
+        <div class="speaker-qr-box" aria-label="QR a alexprietoromani.github.io">__SPEAKER_QR__</div>
+        <span>Escanea para ver<br>mi web</span>
+      </div>
+    </div>
   </section>
+
+
 
   <!-- ========================================== -->
   <!-- DIAPO 03: AGENDA (page-03.png)             -->
   <!-- ========================================== -->
   <section class="slide" data-index="3" data-act="Apertura · Agenda" data-time="1.0 min">
     <h2 class="slide-main-title display">Agenda</h2>
-    <div class="agenda-grid-5">
-      <div class="agenda-card item-1">
-        <div class="agenda-num">01</div>
-        <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Historia de los modelos</div>
-          <div class="agenda-card-desc">De la descomposición canónica y ARIMA a PatchTST y Foundation Models.</div>
-        </div>
-      </div>
-
-      <div class="agenda-card item-2">
-        <div class="agenda-num">02</div>
-        <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Caso 1: Clima en Iquitos</div>
-          <div class="agenda-card-desc">2,557 días en SENAMHI Punchana, la trampa de los árboles y el cono a 7 días.</div>
-        </div>
-      </div>
-
-      <div class="agenda-card item-3">
-        <div class="agenda-num">03</div>
-        <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Series temporales en el agro</div>
-          <div class="agenda-card-desc">Física biológica, retrasos fenológicos de meses y series de ultrabaja frecuencia.</div>
-        </div>
-      </div>
-
-      <div class="agenda-card item-4">
-        <div class="agenda-num">04</div>
-        <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Caso 2: Predicción de rendimiento con NDVI</div>
-          <div class="agenda-card-desc">24 campañas de café en Jaén: la ceguera de la roya (-56%), saturación de copas y fusión fenológica.</div>
-        </div>
-      </div>
-
-      <div class="agenda-card item-5">
-        <div class="agenda-num">05</div>
-        <div class="agenda-text-wrap">
-          <div class="agenda-card-title display">Conclusiones &amp; Lecciones</div>
-          <div class="agenda-card-desc">Causalidad temporal sin trampas, valor en las bandas P10–P90 y física antes que hiperparámetros.</div>
-        </div>
-      </div>
+    <div class="agenda-list">
+__AGENDA_ROWS__
     </div>
+    <div class="agenda-total mono">Duración total · __AGENDA_TOTAL__ min</div>
   </section>
+
 
   <!-- ============================================================= -->
   <!-- DIAPO 04: SECCIÓN 01: HISTORIA Y FUNDAMENTOS (page-04.png)    -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section" data-index="4" data-act="Acto 1 · Historia y Fundamentos" data-time="1.0 min">
+  <section class="slide slide-archetype-section act-bg-1" data-index="4" data-act="Acto 1 · Historia y Fundamentos" data-time="1.0 min">
     <div class="section-huge-num">01</div>
-    <h2 class="section-title display">Historia de los modelos de series temporales</h2>
-    <p class="section-desc">
-      De las ecuaciones cerradas de Verhulst y Box-Jenkins al Machine Learning tabular, Transformers y Foundation Models Zero-Shot: qué cambia en cada era y qué límites físicos permanecen inmutables.
-    </p>
+    <h2 class="section-title display">__SEP1_TITLE__</h2>
+    <p class="section-desc">__SEP1_SUBTITLE__</p>
   </section>
+
 
   <!-- ============================================================= -->
   <!-- DIAPO 05: ANATOMÍA ONTOLÓGICA 3D (SIMULADOR INTERACTIVO TOTAL) -->
@@ -234,6 +232,11 @@ def get_slides_part1(branding=None):
 """
     return (
         slides.replace("__HEADER_LOGO__", b64_header)
+        .replace("__SPEAKER_QR__", qr_svg)
+        .replace("__AGENDA_ROWS__", render_agenda_rows())
+        .replace("__AGENDA_TOTAL__", str(AGENDA_TOTAL_MINUTES))
+        .replace("__SEP1_TITLE__", sep1_title)
+        .replace("__SEP1_SUBTITLE__", sep1_subtitle)
         .replace("__PROFILE_IMG__", b64_profile)
         .replace("__B64_SIM_HTML__", b64_sim_html)
         .replace("__B64_ERA1_HTML__", b64_era1_html)
