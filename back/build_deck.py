@@ -1,7 +1,8 @@
+import json
 import os
 import sys
-import json
 from pathlib import Path
+
 import pandas as pd
 
 # Resolver directorios base y front
@@ -12,14 +13,15 @@ if str(FRONT_DIR) not in sys.path:
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from deck_styles import get_deck_css
+from deck_branding import get_branding
+from deck_notes import get_speaker_notes
 from deck_slides_p1 import get_slides_part1
 from deck_slides_p2 import get_slides_part2
-from deck_notes import get_speaker_notes
-from deck_branding import get_branding
+from deck_styles import get_deck_css
+
 
 def clean_nans(obj):
-    if isinstance(obj, float) and (pd.isna(obj) or obj != obj):
+    if isinstance(obj, float) and pd.isna(obj):
         return None
     elif isinstance(obj, dict):
         return {k: clean_nans(v) for k, v in obj.items()}
@@ -173,8 +175,6 @@ def build_deck():
     branding["b64_p27_html"] = b64_p27_html
     branding["cinematic_gates"] = cinematic_gates
     b64_header_logo = branding["b64_header"]
-    b64_dw_logo = branding["b64_dw"]
-    qr_svg = branding["qr_svg"]
 
     css_content = get_deck_css(branding=branding)
 

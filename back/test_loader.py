@@ -1,9 +1,8 @@
 
-import os
 import json
-import pandas as pd
-
 from pathlib import Path
+
+import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,7 +21,7 @@ def build_deck():
     senamhi_sub = senamhi_diario_df.tail(180).to_dict(orient='records')
 
     def clean_nans(obj):
-        if isinstance(obj, float) and (pd.isna(obj) or obj != obj):
+        if isinstance(obj, float) and pd.isna(obj):
             return None
         elif isinstance(obj, dict):
             return {k: clean_nans(v) for k, v in obj.items()}
