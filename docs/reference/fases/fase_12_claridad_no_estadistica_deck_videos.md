@@ -290,7 +290,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
 
 ---
 
-### [/] SF12.3 — Videos Legibles a 5 m, Subtitulados y Pipeline Reproducible
+### [X] SF12.3 — Videos Legibles a 5 m, Subtitulados y Pipeline Reproducible
 
 - **Objetivo:** Que los 9 videos se lean desde el fondo del aula, cuenten su mensaje aunque no haya audio, y se regeneren con un solo comando en Windows o Linux desde un pipeline único.
 - **Entregable:** `video/_pipeline/{capture.mjs,render.py,README.md}`, 9 `scene_template.html` con escala tipográfica de video, subtítulos quemados + `narration.vtt` por video, 9 MP4 re-renderizados, legacy MP4 fuera del repo.
@@ -328,7 +328,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
 
 > ⟳ Ajustado en SF12.3 — T12.3.1 dejó dos residuos que absorbe T12.3.2: (a) `capture.mjs` termina con `EPERM/EBUSY` en Windows al borrar el perfil de Chrome tras capturar 900/900 frames (render.py pierde los frames): envolver `rmSync` en try/catch con `maxRetries` y tolerar ese exit si el conteo de frames es correcto; (b) los gráficos de `agro_origen`, `puente_tabular`, `zero_shot_tsfm` y `cono_incertidumbre` ocupan < 50 % de su panel y las cabeceras aún dicen `VÍA 2/4`.
 
-#### [ ] T12.3.2 — Subtítulos por Beat Quemados en la Escena y Pista `narration.vtt`
+#### [X] T12.3.2 — Subtítulos por Beat Quemados en la Escena y Pista `narration.vtt`
 - **Objetivo de la Tarea:** Cada video muestra 1 frase ≤ 10 palabras por beat (banda inferior, 30 px, fondo semitransparente) generada desde `beats.json` en `build_scene.py`, y exporta `narration.vtt` con los mismos tiempos para `<track kind="subtitles">` en el deck; opcionalmente `narration.mp3` (grabación del ponente) muxeado por `render.py`.
 - **Entregable:** `beats.json` + banda `#subs` en los 9 templates, `narration.vtt` por video, `<track>` en los 9 `<video>` de `front/deck_slides_p*.py`.
 

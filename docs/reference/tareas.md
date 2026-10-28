@@ -390,9 +390,9 @@
   - [X] T12.2.2 Ruta corta (≤ 3 etapas, ≤ 66 pantallas) y ruta experta con tecla `D` (`data-route`).
   - [X] T12.2.3 Apertura y secciones profesionales: 5 fondos por acto, Diapo 2 sin vacíos, agenda con pregunta + minutos (Diapos 1–4, 18, 24, 28, 30).
   - [X] T12.2.4 Retiro de botones *"Pase a Diapo"* (`strip_internal_nav`) y cierre en 3 frases (Diapo 29).
-- [/] **SF12.3 Videos Legibles a 5 m, Subtitulados y Pipeline Reproducible**
+- [X] **SF12.3 Videos Legibles a 5 m, Subtitulados y Pipeline Reproducible**
   - [X] T12.3.1 Escala tipográfica de video (≥ 22 / 30 / 64 px) y gráfico ≥ 60 % del lienzo en los 9 `scene_template.html`; re-render.
-  - [ ] T12.3.2 Subtítulos por beat (`beats.json` → banda en escena + `narration.vtt`) y `<track>` en los 9 `<video>` del deck.
+  - [X] T12.3.2 Subtítulos por beat (`beats.json` → banda en escena + `narration.vtt`) y `<track>` en los 9 `<video>` del deck.
   - [X] T12.3.3 Pipeline único y portable `video/_pipeline/{capture.mjs,render.py}` (Playwright Chromium + ffmpeg), 0 `render.sh`, MP4 legacy fuera del repo.
 - [/] **SF12.4 Validación con Audiencia No Estadística, Compilación y Cierre**
   - [X] T12.4.1 Validador `scripts/audit_f12_claridad.py` (`--inventario --glosario --titulares --jerarquia --cifras --video --all`).
