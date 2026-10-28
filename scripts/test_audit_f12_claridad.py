@@ -346,3 +346,34 @@ def test_bundle_pasa_si_todos_tienen_gl_term(tmp_path: Path) -> None:
         _iframe('<span class="gl-term">lag</span>') * 2,
     )
     assert all(_ok_o_fallo(check_bundle(tmp_path, presentacion)))
+
+
+def test_jerarquia_cuenta_marcas_corta_en_cualquier_elemento(
+    tmp_path: Path, prototipo: Path
+) -> None:
+    """Verifica que data-route=corta cuenta en proc-step, no solo en .stage."""
+    pasos = "".join(
+        f'<div class="proc-step" data-route="corta">{i}</div>' for i in range(4)
+    )
+    _escribir(prototipo, f"<html><body>{pasos}</body></html>")
+    assert False in _ok_o_fallo(check_jerarquia(tmp_path, [prototipo]))
+
+
+def test_jerarquia_pasa_con_tres_marcas_corta(tmp_path: Path, prototipo: Path) -> None:
+    """Verifica que exactamente tres marcas data-route=corta pasan el límite."""
+    pasos = "".join(
+        f'<div class="proc-step" data-route="corta">{i}</div>' for i in range(3)
+    )
+    _escribir(
+        prototipo,
+        f'<html><body>{pasos}<div class="proc-node" data-route="larga">x</div></body></html>',
+    )
+    assert all(_ok_o_fallo(check_jerarquia(tmp_path, [prototipo])))
+
+
+def test_jerarquia_falla_si_proc_node_no_tiene_data_route(
+    tmp_path: Path, prototipo: Path
+) -> None:
+    """Verifica que un prototipo con .proc-node y ninguna marca data-route falla."""
+    _escribir(prototipo, '<html><body><div class="proc-node">Paso</div></body></html>')
+    assert False in _ok_o_fallo(check_jerarquia(tmp_path, [prototipo]))

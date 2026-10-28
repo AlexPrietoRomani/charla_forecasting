@@ -97,6 +97,8 @@ TOP_FRECUENCIA = 20
 RE_CIFRA = re.compile(r"(?<![\w.,])-?\d+[.,]\d{2,}(?!\d)")
 RE_TAXONOMIA = re.compile(r"\b(VÍA|Via|Era|Pilar|Etapa)\s+\d+( de \d+)?\b")
 RE_BOTON_NAVEGACION = re.compile(r"<button[^>]*>[^<]*(Pase a|Ir al|Ir a |Ver )")
+RE_RUTA_CORTA = re.compile(r'data-route\s*=\s*"corta"')
+RE_DATA_ROUTE = re.compile(r"data-route\s*=")
 RE_FONT_SIZE = re.compile(r"font-size\s*:\s*([^;}]+)")
 RE_PX = re.compile(r"^(\d+(?:\.\d+)?)px\b")
 RE_IFRAME_BASE64 = re.compile(r"data:text/html;base64,([A-Za-z0-9+/=]+)")
@@ -556,23 +558,29 @@ def check_jerarquia(
             )
         )
 
-        etapas = [e for e in doc.elementos if "stage" in e.classes]
-        cortas = sum(1 for e in etapas if e.attrs.get("data-route") == "corta")
-        if any("data-route" in e.attrs for e in doc.elementos):
-            resultados.append(
+        # Las marcas data-route pueden estar en cualquier elemento (stage, proc-node, ...).
+        cortas = len(RE_RUTA_CORTA.findall(doc.raw))
+        resultados.append(
+            (
+                cortas <= LIMITE_RUTA_CORTA,
                 (
-                    cortas <= LIMITE_RUTA_CORTA,
-                    (
-                        f"{ruta.name}: {cortas} etapas con data-route=corta "
-                        f"(límite {LIMITE_RUTA_CORTA})"
-                    ),
-                )
+                    f"{ruta.name}: {cortas} marcas data-route=corta "
+                    f"(límite {LIMITE_RUTA_CORTA})"
+                ),
             )
-        else:
+        )
+        nodos = [e for e in doc.elementos if "proc-node" in e.classes]
+        if nodos:
+            hay_marca = RE_DATA_ROUTE.search(doc.raw) is not None
             resultados.append(
                 (
-                    True,
-                    f"{ruta.name}: sin data-route, {len(etapas)} etapas (informativo)",
+                    hay_marca,
+                    f"{ruta.name}: {len(nodos)} proc-node, "
+                    + (
+                        "con data-route"
+                        if hay_marca
+                        else "sin ninguna marca data-route"
+                    ),
                 )
             )
     return resultados
