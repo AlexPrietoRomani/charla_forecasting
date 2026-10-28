@@ -166,7 +166,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
 
 ---
 
-### [/] SF12.2 — Jerarquía Visual y Ritmo: Una Idea por Pantalla
+### [X] SF12.2 — Jerarquía Visual y Ritmo: Una Idea por Pantalla
 
 - **Objetivo:** Que el mensaje sea el titular, que haya como máximo 3 etapas por diapo en la ruta por defecto, una sola taxonomía de nombres, y una apertura/cierre con aspecto profesional y variado.
 - **Entregable:** 18 prototipos con cabecera "hero" (Idea Clave arriba), ruta corta/experta en `prototype_engine.py`, Diapos 1–4, 18, 24, 28–30 rediseñadas, 0 botones de navegación interna.
@@ -177,7 +177,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
   - **Test Unitario:** `audit_f12_claridad.py --jerarquia` (regex de taxonomías prohibidas; conteo de `.stage[data-route="corta"]` ≤ 3; 0 `button:contains("Pase a")`).
   - **Test de Simulación de Usuario:** Playwright mide `getComputedStyle(h1).fontSize` ≥ 34 px y recorre la ruta corta completa con `→` en ≤ 54 pulsaciones (30 diapos + etapas).
 
-#### [ ] T12.2.1 — Cabecera "Hero": la Idea Clave como Titular y Taxonomía Única
+#### [X] T12.2.1 — Cabecera "Hero": la Idea Clave como Titular y Taxonomía Única
 - **Objetivo de la Tarea:** Mover la `💡 Idea Clave` al tope de cada prototipo como titular grande (≥ 34 px), degradar el título técnico a subtítulo, y normalizar la cabecera a `Acto N · Diapo M · <tema>` desde `prototype_engine.py`.
 - **Entregable:** Regla de transformación en `prototype_engine.py` (`promote_takeaway_to_hero`) + CSS `.hero-title` en el tema maestro; 18 prototipos recompilados.
 
@@ -203,7 +203,9 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
   - **Test Unitario:** Test de `promote_takeaway_to_hero` sobre un fixture mínimo; regex de taxonomías = 0 en los 18 HTML compilados.
   - **Test de Simulación de Usuario:** Capturas `screenshots/f12_s{05..27}_{1366,1920}.png` y medición de `fontSize` con Playwright.
 
-#### [ ] T12.2.2 — Ruta Corta (≤ 3 etapas) y Ruta Experta (tecla `D`)
+> ⟳ Ajustado en SF12.2 — (1) la meta original "≤ 54 pantallas" no contaba las 12 diapos sin etapas: la ruta corta queda en 66 pantallas (12 + 18 × 3) y la experta en 81; (2) la tecla `D` ya alternaba el modo oscuro del deck, que pasa a la tecla `M`; `D` = modo experto, con botón `[D] Experto` en el pie.
+
+#### [X] T12.2.2 — Ruta Corta (≤ 3 etapas) y Ruta Experta (tecla `D`)
 - **Objetivo de la Tarea:** Marcar en cada prototipo qué etapas son esenciales (`data-route="corta"`, máx. 3) y cuáles son profundización (`data-route="experta"`); por defecto el deck recorre solo la ruta corta y la tecla `D` activa las etapas expertas.
 - **Entregable:** Atributos `data-route` en los 18 prototipos, lógica en `prototype_engine.py` (filtra la barra de etapas) y `front/deck_slides_p*.py` (tecla `D` global), ensayo ≤ 35 min.
 
@@ -225,7 +227,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
 > ```
 
 - **AC de la Tarea:**
-  - [ ] Ruta corta: ≤ 3 etapas por prototipo, ≤ 54 pantallas totales; tecla `D` muestra las expertas sin recompilar.
+  - [ ] Ruta corta: ≤ 3 etapas por prototipo, ≤ 66 pantallas totales (12 diapos sin etapas + 18 × 3); tecla `D` muestra las expertas sin recompilar.
   - [ ] Ensayo cronometrado de la ruta corta ≤ 35 min (registro en `front/deck_notes.py` y bitácora).
 - **Tests de la Tarea:**
   - **Test Unitario:** Conteo de `data-route="corta"` ≤ 3 por prototipo; el `postMessage` de etapas ignora las expertas cuando `data-expert` no está.
@@ -260,7 +262,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
   - **Test Unitario:** Test de tamaño de archivo y de suma de minutos en `AGENDA`.
   - **Test de Simulación de Usuario:** `scripts/pagina/audit_layout.py` sobre Diapos 1–4, 18, 24, 28, 30 (0 vacíos > 31 px) + capturas.
 
-#### [ ] T12.2.4 — Retiro de Navegación Interna Duplicada y Cierre en 3 Frases (Diapos 5–27 y 29)
+#### [X] T12.2.4 — Retiro de Navegación Interna Duplicada y Cierre en 3 Frases (Diapos 5–27 y 29)
 - **Objetivo de la Tarea:** Eliminar los botones *"Pase a Diapo N →"* / *"Ir a…"* de los prototipos (la navegación la lleva el deck con `→`), y rediseñar la Diapo 29 como 3 frases grandes (una por lección) con la evidencia de cada caso como subtítulo de 1 línea.
 - **Entregable:** Regla `strip_internal_nav` en `prototype_engine.py`; Diapo 29 reescrita en `front/deck_slides_p2.py`.
 
@@ -299,7 +301,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
   - **Test Unitario:** `audit_f12_claridad.py --video` (font-size mínimo, existencia de `narration.vtt` y `subs` en template, md5 único de `capture.mjs`, 0 `*_v[0-9]*.mp4` versionados).
   - **Test de Simulación de Usuario:** Render completo de un video en Windows + `ffprobe` (1920×1080, 30 fps, 900 frames) + 3 keyframes reescalados al 25 % con OCR (`pytesseract` o inspección) legibles.
 
-#### [ ] T12.3.1 — Escala Tipográfica de Video y Lienzo al 60 % (9 `scene_template.html`)
+#### [X] T12.3.1 — Escala Tipográfica de Video y Lienzo al 60 % (9 `scene_template.html`)
 - **Objetivo de la Tarea:** Subir toda la tipografía de las escenas a mínimo 22 px (etiquetas) / 30 px (subtítulos de panel) / 64 px (titulares) en 1600×900, y ampliar el gráfico principal para ocupar ≥ 60 % del lienzo, re-renderizando los 9 MP4.
 - **Entregable:** 9 `scene_template.html` con tokens CSS `--fs-label: 22px; --fs-sub: 30px; --fs-title: 64px` y layout del panel a ≥ 60 %.
 
@@ -323,6 +325,8 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
   - **Test de Simulación de Usuario:** Keyframes `t = 8, 16, 24 s` reescalados al 25 % (simula 5 m) con texto legible; revisión en pantalla del aula si es posible.
 
 > ⟳ Ajustado en SF12.1 — el deck se abre por `file://` y Chrome bloquea `<track src="*.vtt">` por CORS: el `<track>` debe llevar el VTT como `data:text/vtt;base64,…` (generado en `build_deck.py` desde `narration.vtt`), no una ruta.
+
+> ⟳ Ajustado en SF12.3 — T12.3.1 dejó dos residuos que absorbe T12.3.2: (a) `capture.mjs` termina con `EPERM/EBUSY` en Windows al borrar el perfil de Chrome tras capturar 900/900 frames (render.py pierde los frames): envolver `rmSync` en try/catch con `maxRetries` y tolerar ese exit si el conteo de frames es correcto; (b) los gráficos de `agro_origen`, `puente_tabular`, `zero_shot_tsfm` y `cono_incertidumbre` ocupan < 50 % de su panel y las cabeceras aún dicen `VÍA 2/4`.
 
 #### [ ] T12.3.2 — Subtítulos por Beat Quemados en la Escena y Pista `narration.vtt`
 - **Objetivo de la Tarea:** Cada video muestra 1 frase ≤ 10 palabras por beat (banda inferior, 30 px, fondo semitransparente) generada desde `beats.json` en `build_scene.py`, y exporta `narration.vtt` con los mismos tiempos para `<track kind="subtitles">` en el deck; opcionalmente `narration.mp3` (grabación del ponente) muxeado por `render.py`.

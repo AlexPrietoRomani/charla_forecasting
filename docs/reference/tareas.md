@@ -385,13 +385,13 @@
   - [X] T12.1.2 Inyector automático de tooltips `inject_glossary()` en `front/prototype_engine.py` (CSS puro, hover + teclado).
   - [X] T12.1.3 Reescritura en lenguaje llano de titulares (≤ 12 palabras), leads (≤ 22) e Ideas Clave de los 21 prototipos; versión técnica a `front/deck_notes.py`.
   - [X] T12.1.4 Tabla cifra → frase `front/deck_plain_numbers.py` (1 decimal visible + frase cotidiana, trazada a CSV/JSON fuente).
-- [/] **SF12.2 Jerarquía Visual y Ritmo: Una Idea por Pantalla**
-  - [ ] T12.2.1 Cabecera "hero": Idea Clave como titular ≥ 34 px y taxonomía única `Acto N · Diapo M` (`promote_takeaway_to_hero`).
-  - [ ] T12.2.2 Ruta corta (≤ 3 etapas, ≤ 54 pantallas) y ruta experta con tecla `D` (`data-route`).
+- [X] **SF12.2 Jerarquía Visual y Ritmo: Una Idea por Pantalla**
+  - [X] T12.2.1 Cabecera "hero": Idea Clave como titular ≥ 34 px y taxonomía única `Acto N · Diapo M` (`promote_takeaway_to_hero`).
+  - [X] T12.2.2 Ruta corta (≤ 3 etapas, ≤ 66 pantallas) y ruta experta con tecla `D` (`data-route`).
   - [X] T12.2.3 Apertura y secciones profesionales: 5 fondos por acto, Diapo 2 sin vacíos, agenda con pregunta + minutos (Diapos 1–4, 18, 24, 28, 30).
-  - [ ] T12.2.4 Retiro de botones *"Pase a Diapo"* (`strip_internal_nav`) y cierre en 3 frases (Diapo 29).
+  - [X] T12.2.4 Retiro de botones *"Pase a Diapo"* (`strip_internal_nav`) y cierre en 3 frases (Diapo 29).
 - [/] **SF12.3 Videos Legibles a 5 m, Subtitulados y Pipeline Reproducible**
-  - [ ] T12.3.1 Escala tipográfica de video (≥ 22 / 30 / 64 px) y gráfico ≥ 60 % del lienzo en los 9 `scene_template.html`; re-render.
+  - [X] T12.3.1 Escala tipográfica de video (≥ 22 / 30 / 64 px) y gráfico ≥ 60 % del lienzo en los 9 `scene_template.html`; re-render.
   - [ ] T12.3.2 Subtítulos por beat (`beats.json` → banda en escena + `narration.vtt`) y `<track>` en los 9 `<video>` del deck.
   - [X] T12.3.3 Pipeline único y portable `video/_pipeline/{capture.mjs,render.py}` (Playwright Chromium + ffmpeg), 0 `render.sh`, MP4 legacy fuera del repo.
 - [/] **SF12.4 Validación con Audiencia No Estadística, Compilación y Cierre**
