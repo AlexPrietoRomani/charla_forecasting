@@ -73,3 +73,6 @@ docs/plantilla_assets/
 .opencode/
 .claude/
 .gemini/
+
+# Guia de exposicion de 40 minutos (local)
+guia_exposicion_40min.md

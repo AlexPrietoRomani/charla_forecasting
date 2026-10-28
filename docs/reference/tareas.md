@@ -1,6 +1,6 @@
 # Tablero de Tareas — Charla Forecasting & IA (v2 Real-Data)
 
-> **Estado General:** `[X] F1–F9 Completadas al 100% · [X] F10 (motor de estilos) completada · [/] F11 (videos por diapositiva) en progreso`  
+> **Estado General:** `[X] F1–F11 Completadas al 100% (Motor de estilos, 21 prototipos homologados, 9 videos offline generados e integrados)`  
 > **Convenciones:** `[ ]` pendiente · `[/]` en progreso · `[X]` completado y verificado.  
 > **Documento Rector:** [`docs/plan/plan_maestro.md`](../plan/plan_maestro.md)  
 > **Detalle por Fases:** [`docs/task/fases/`](fases/)
@@ -293,6 +293,16 @@
 - [X] **SF10.5 Compilación del Deck Maestro y Auditoría Automatizada Multi-Resolución (`1920×1080` y `1366×768`)**
   - [X] **T10.5.1 Crear y Ejecutar `scripts/audit_f10_layout_typography.py` y Capturar las 36 Vistas en Chromium (`1920×1080` y `1366×768`)**
     - [X] A10.5.1.1 Implementar `scripts/audit_f10_layout_typography.py`, compilar `presentacion.html` e `index.html` y generar las 36 capturas `screenshots/f10_s{5..17,19..23}_{1366,1920}.png` verificando 0 huecos, 0 solapes y tipografía de diapositiva real.
+- [X] **SF10.6 Homologación Interactiva, Tipografía de Auditorio y Corrección de Cifras en la Sección 4 (Caso 2: Café de Jaén — Diapositivas 25, 26 y 27)**
+  - [X] **T10.6.1 Diapo 25 (`docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html`): Prototipo Full-Bleed Interactivo de las 24 Campañas (2001–2024) y las 4 Variables Agrometeorológicas**
+    - [X] A10.6.1.1 Crear `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html` con matriz `.slide-grid` (`34% / 66%`), `.narrative-card`, `.flowbar` interactivo de 3 pasos, `.executive-takeaway` (`💡 Idea Clave`) y Canvas de alta densidad con datos reales de `data/caso_2/cafe_jaen_campanias.csv` (corrigiendo `"2013"` → `"2014 (10.0 qq/ha, -56.0%)"` y `"4.51"` → `"3.72 qq/ha"`), e integrarlo en `front/deck_slides_p2.py` vía `load_prototype_slide()`.
+  - [X] **T10.6.2 Diapos 26 y 27 (`26_Trampa_Satelite_NDVI_vs_Clima.html` y `27_Validacion_WalkForward_Benchmark_Jaen.html`): Prototipos Full-Bleed de la Paradoja del NDVI y del Torneo Walk-Forward de 15 Modelos (`M01–M15`) + Gates de Video (`cinematicVideoGate26` y `cinematicVideoGate27`)**
+    - [X] A10.6.2.1 Crear `26_Trampa_Satelite_NDVI_vs_Clima.html` (`NDVI r = 0.1536, p = 0.600` vs. `Déficit Hídrico r = 0.7564, p = 0.002`) y `27_Validacion_WalkForward_Benchmark_Jaen.html` (`data/caso_2/benchmark_cafe.csv` y `cafe_jaen_resultados.csv`, corrigiendo `2020 = 35.38 qq/ha`), e integrarlos en `front/deck_slides_p2.py` y `back/build_deck.py` con `cinematicVideoGate26` y `cinematicVideoGate27`.
+- [X] **SF10.7 Rediseño Ejecutivo de la Sección 5 (Diapositivas 29 y 30) y Auditoría Multi-Resolución Extendida (`1920×1080` y `1366×768`)**
+  - [X] **T10.7.1 Diapos 29 y 30 (`front/deck_slides_p2.py` + `front/deck_styles.py`): Eliminación del 55% de Vacío en las 3 Tarjetas de Conclusiones, Corrección de `(ŷ_{t+h})` y Reemplazo del Placeholder `"Tu QR (opcional)"`**
+    - [X] A10.7.1.1 Reestructurar las 3 `.conclusion-card` de la Diapo 29 con `justify-content: space-between` (Título + Evidencia Empírica Caso 1/Caso 2 + píldora `💡 Regla Operativa`), corregir el bug `&#x0177;<sub>t+h</sub>` y reemplazar `"Tu QR (opcional)"` en la Diapo 30 por un SVG QR institucional real más resumen de recursos del repositorio.
+  - [X] **T10.7.2 Extensión de `scripts/audit_f10_layout_typography.py` a las Secciones 4 y 5 (Diapos 25, 26, 27, 29 y 30) y Capturas `1920×1080` + `1366×768`**
+    - [X] A10.7.2.1 Ampliar `scripts/audit_f10_layout_typography.py` para auditar las Diapos 25, 26, 27, 29 y 30 y generar las 10 capturas nuevas `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png` con 0 huecos vacíos, 0 solapes y 0 placeholders.
 
 ---
 
@@ -301,32 +311,34 @@
 
 | Sección | Diapo | Slug | Rol | Duración | Prioridad | Estado |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: |
-| **Sección 1** *(Acto 1)* | **Diapo 05** | `video_anatomia_senal` | `entrada` *(Diapo 4 → 5)* | `30 s` *(900 f)* | **Alta** *(Piloto #1)* | `completado` *(MP4 listo; pend. integración)* |
-| **Sección 3** *(Acto 3)* | **Diapo 19** | `video_agro_origen` | `entrada` *(Diapo 18 → 19)* | `30 s` *(900 f)* | **Alta** *(Piloto #2 · SF11.3)* | `completado` *(MP4 listo; SF11.3 validado; pend. integración)* |
-| **Sección 1** *(Acto 1)* | **Diapo 07** | `video_puente_tabular` | `entrada` *(Diapo 6 → 7)* | `30 s` *(900 f)* | **Alta** | `completado` *(MP4 listo; pend. integración)* |
-| **Sección 3** *(Acto 3)* | **Diapo 21** | `video_fisica_biologica` | `entrada` *(Diapo 20 → 21)* | `30 s` *(900 f)* | **Alta** | `pendiente` |
-| **Sección 1** *(Acto 1)* | **Diapo 09** | `video_zero_shot_tsfm` | `entrada` *(Diapo 8 → 9)* | `30 s` *(900 f)* | **Media** | `pendiente` |
-| **Sección 1** *(Acto 1)* | **Diapo 10** | `video_cono_incertidumbre` | `entrada` *(Diapo 9 → 10)* | `30 s` *(900 f)* | **Media** | `pendiente` |
-| **Sección 5** *(Acto 5)* | **Diapo 29** | `video_sintesis_cierre` | `entrada` *(Diapo 28 → 29)* | `25 s` *(750 f)* | **Baja** *(Opcional)* | `pendiente` |
+| **Sección 1** *(Acto 1)* | **Diapo 05** | `video_anatomia_senal` | `entrada` *(Diapo 4 → 5)* | `30 s` *(900 f)* | **Alta** *(Piloto #1)* | `completado` *(MP4 listo; integrado)* |
+| **Sección 3** *(Acto 3)* | **Diapo 19** | `video_agro_origen` | `entrada` *(Diapo 18 → 19)* | `30 s` *(900 f)* | **Alta** *(Piloto #2 · SF11.3)* | `completado` *(MP4 listo; integrado)* |
+| **Sección 1** *(Acto 1)* | **Diapo 07** | `video_puente_tabular` | `entrada` *(Diapo 6 → 7)* | `30 s` *(900 f)* | **Alta** | `completado` *(MP4 listo; integrado)* |
+| **Sección 3** *(Acto 3)* | **Diapo 21** | `video_fisica_biologica` | `entrada` *(Diapo 20 → 21)* | `30 s` *(900 f)* | **Alta** | `completado` *(MP4 listo; integrado)* |
+| **Sección 1** *(Acto 1)* | **Diapo 09** | `video_zero_shot_tsfm` | `entrada` *(Diapo 8 → 9)* | `30 s` *(900 f)* | **Media** | `completado` *(MP4 listo; integrado)* |
+| **Sección 1** *(Acto 1)* | **Diapo 10** | `video_cono_incertidumbre` | `entrada` *(Diapo 9 → 10)* | `30 s` *(900 f)* | **Media** | `completado` *(MP4 listo; integrado)* |
+| **Sección 5** *(Acto 5)* | **Diapo 29** | `video_sintesis_cierre` | `entrada` *(Diapo 28 → 29)* | `25 s` *(750 f)* | **Baja** *(Opcional)* | `completado` *(MP4 listo; integrado)* |
+| **Sección 4** *(Acto 4)* | **Diapo 26** | `video_trampa_ndvi` | `entrada` *(Diapo 25 → 26)* | `30 s` *(900 f)* | **Alta** *(SF11.5)* | `completado` *(MP4 listo; integrado)* |
+| **Sección 4** *(Acto 4)* | **Diapo 27** | `video_walkforward_jaen` | `entrada` *(Diapo 26 → 27)* | `30 s` *(900 f)* | **Media** *(SF11.5)* | `completado` *(MP4 listo; integrado)* |
 
-- [/] **SF11.1 Pipeline Base Offline (Escena → Captura → Encode)**
+- [x] **SF11.1 Pipeline Base Offline (Escena → Captura → Encode)**
   - [X] **T11.1.1 Escena Determinista con Datos Reales y Fuentes Embebidas**
     - [X] A11.1.1.1 Crear `scene_template.html` con `window.__setTime(ms)` (animación como función pura del tiempo, sin azar ni reloj) y `build_scene.py` que inyecta la descomposición real $Y = T + S + C + \varepsilon$ y las fuentes woff2 en Base64.
   - [X] **T11.1.2 Capturador CDP sin Dependencias (`capture.mjs`)**
     - [X] A11.1.2.1 Capturar frames vía CDP (`Emulation.setDeviceMetricsOverride` 1600×900) con parámetros `fps`, `durationMs`, `startMs` y `timeScale` para recortar/estirar el tramo sin re-editar la escena.
   - [X] **T11.1.3 Script de Render por Video (`render.sh`)**
     - [X] A11.1.3.1 Encadenar `build_scene.py` → `capture.mjs` → `ffmpeg` (H.264 CRF 18, `yuv420p`, `+faststart`) en un solo comando reproducible.
-- [/] **SF11.2 Piloto Diapo 5: `video_anatomia_senal`**
+- [x] **SF11.2 Piloto Diapo 5: `video_anatomia_senal`**
   - [X] **T11.2.1 Render de la Entrada Vigente (30 s · Tramo [4–27 s] ×1.30 · 1920×1080)**
     - [X] A11.2.1.1 Generar `anatomia_senal.mp4` (1920×1080 @ 30 fps, 900 frames): tramo `[4 s, 27 s]` de la escena cinemática estirado ×1.3043, fade-in de 0.35 s desde `#040714` y cierre con las 4 capas y la ecuación encendidas; conservar `anatomia_senal_v3_34s.mp4`, `anatomia_senal_v2_30s.mp4` y `anatomia_senal_v1_completo.mp4` para comparación.
   - [X] **T11.2.2 Estructura Autocontenida `video/seccion_1/diapo_5/video_anatomia_senal/`**
     - [X] A11.2.2.1 Mover escena, capturador, fuentes y MP4 fuera de `docs/` a la estructura `video/seccion_{N}/diapo_{M}/video_{nombre}/`.
-  - [ ] **T11.2.3 Decisión de Integración en la Diapo 5 (Entrada desde la Diapo 4)**
-    - [ ] A11.2.3.1 Evaluar la reproducción de la entrada al avanzar de la Diapo 4 a la 5 y verificar el handoff sin costura con el fondo real de la diapositiva (integración a cargo de la fase de rediseño de la diapo).
+  - [X] **T11.2.3 Decisión de Integración en la Diapo 5 (Entrada desde la Diapo 4)**
+    - [X] A11.2.3.1 Evaluar la reproducción de la entrada al avanzar de la Diapo 4 a la 5 y verificar el handoff sin costura con el fondo real de la diapositiva (integración a cargo de la fase de rediseño de la diapo) — validado: los 7 videos (Diapos 05, 07, 09, 10, 19, 21 y 29) entran al avanzar con reproducción automática, botón de saltar y botón «🎬 Intro» para repetir la entrada, sobre el fondo real de cada diapositiva.
 - [x] **SF11.3 Replicación del Proceso (Segundo Video en Otra Sección)**
   - [x] **T11.3.1 Validar el Pipeline en un Segundo Video**
     - [x] A11.3.1.1 Reutilizar `capture.mjs` + `render.sh` en otra diapositiva para confirmar la replicabilidad de la fase (prioridad sugerida: `video_agro_origen` en Sección 3, Diapo 19 — Ficha 9.2) — validado: `agro_origen.mp4` (30 s · 900 f · 1920×1080 @ 30 fps, H.264 `yuv420p` `+faststart`) generado desde `video/seccion_3/diapo_19/video_agro_origen/`.
-- [ ] **SF11.4 Producción de Videos del Inventario (Secciones 1, 3 y 5 — Fichas de Video Listas para Producir)**
+- [x] **SF11.4 Producción de Videos del Inventario (Secciones 1, 3 y 5 — Fichas de Video Listas para Producir)**
   - [x] **T11.4.1 Sección 3 · Diapo 19 (`video_agro_origen` — Prioridad Alta · Candidato #1 para SF11.3): `"Cómo el agro inventó el forecasting antes que la IA · De las cabañuelas a la malla neuronal"`**
     - [x] A11.4.1.1 Crear `video/seccion_3/diapo_19/video_agro_origen/{build_scene.py,scene_template.html}` con `window.__setTime(ms)`, datos reales de `data/caso_2/cafe_jaen_campanias.csv` (`N = 24 campañas`, `2001–2024`, `τ = 6 a 8 meses`), los 5 hitos (`1950 → 2026`) y la dualidad `"Almanaque (Bioindicadores) ⟷ Gemelo Digital (Sensores + IA)"` sobre fondo `#040812`.
     - [x] A11.4.1.2 Configurar `capture.mjs` + `render.sh` y generar `agro_origen.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`) con fade-in de `0.35 s` desde `#040812` y cierre con composición completa encendida.
@@ -335,20 +347,30 @@
     - [x] A11.4.2.1 Crear `video/seccion_1/diapo_7/video_puente_tabular/{build_scene.py,scene_template.html}` animando la ventana deslizante sobre `data/caso_1/senamhi_diario.csv` hacia la matriz `"Vector Xₜ = [ yₜ₋₁, yₜ₋₇, Media₇, Promoₜ, Climaₜ ] ──▶ yₜ₊ₕ"` y el techo de extrapolación de `data/caso_1/experimento_extrapolacion.csv` (`tope_entrenamiento = 34.0 °C`, `"Meseta Plana"` vs. diferencias $\Delta y_t$) sobre fondo `#040714`.
     - [x] A11.4.2.2 Configurar `capture.mjs` + `render.sh` y renderizar `puente_tabular.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
     - [x] A11.4.2.3 Validar con `ffprobe` y keyframes que las flechas `yₜ₋₁, yₜ₋₇` hacia la tabla y el muro de `34.0 °C` se leen sin colisiones.
-  - [ ] **T11.4.3 Sección 3 · Diapo 21 (`video_fisica_biologica` — Prioridad Alta): `"Física biológica · Las 3 leyes que obligan a la IA a aprender botánica"`**
-    - [ ] A11.4.3.1 Crear `video/seccion_3/diapo_21/video_fisica_biologica/{build_scene.py,scene_template.html}` con datos de `data/caso_2/cafe_jaen_hipotesis.json` y `cafe_jaen_campanias.csv` mostrando: (1) engranaje `τ = 6–8 meses`, (2) umbral `"VPD = eₛ(T) − eₐ > 1.8 kPa ó T > 32°C ──▶ Cierre Estomático y Aborto Floral"` + ceguera del `NDVI ~0.74` (`+1.4%`) ante el colapso de `-56.0%` (`10.0 qq/ha` en 2014), y (3) `"500 Variables Crudas sobre N=24 = Overfit"` vs. señal hídrica en floración (`r = 0.7564`) sobre `#040812`.
-    - [ ] A11.4.3.2 Configurar `capture.mjs` + `render.sh` y renderizar `fisica_biologica.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040812`).
-    - [ ] A11.4.3.3 Auditar keyframes confirmando placa opaca para `Lag τ = 6–8m` y contraste nítido entre NDVI plano y caída de cosecha.
-  - [ ] **T11.4.4 Sección 1 · Diapo 09 (`video_zero_shot_tsfm` — Prioridad Media): `"VÍA 4: Revolución Zero-Shot y Foundation Models · TimesFM, Chronos, Moirai, Lag-Llama y TimeGPT"`**
-    - [ ] A11.4.4.1 Crear `video/seccion_1/diapo_9/video_zero_shot_tsfm/{build_scene.py,scene_template.html}` con datos de `data/caso_1/benchmark_punchana.csv` animando el preentrenamiento `"27B–100B pts"`, la comparación `"Chronos = 4,096 Tokens (Cross-Entropy) │ TimesFM = Parches Continuos (MSE)"` y la inferencia Zero-Shot en Punchana (`TimesFM RMSE 1.883 °C`, `Chronos RMSE 1.903 °C` vs. `ExtraTrees 1.880 °C`) sobre `#040714`.
-    - [ ] A11.4.4.2 Configurar `capture.mjs` + `render.sh` y renderizar `zero_shot_tsfm.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
-    - [ ] A11.4.4.3 Auditar keyframes verificando legibilidad de tokens vs. parches y exactitud de métricas de `benchmark_punchana.csv`.
-  - [ ] **T11.4.5 Sección 1 · Diapo 10 (`video_cono_incertidumbre` — Prioridad Media): `"DIAPOSITIVA 10: La Ilusión de la Certeza y el Cono de Incertidumbre · Lyapunov ─▶ 5 Pasos SCP ─▶ ERCOT ─▶ Pase a Diapo 11"`**
-    - [ ] A11.4.5.1 Crear `video/seccion_1/diapo_10/video_cono_incertidumbre/{build_scene.py,scene_template.html}` con datos reales de `data/caso_1/senamhi_forecast_7d.csv` (`2025-12-25` a `2025-12-31`, friaje `27.2 °C`, banda `ci_lower_p10` `29.55 °C` a `ci_upper_p90` `37.42 °C`) animando la divergencia `"σ(h) ∝ σ₁ · √h"` y la construcción conformal `"Sᵢ = |f̂(xᵢ) − yᵢ| ──▶ q̂ = cuantil₁₋α(S_Cal) ──▶ I(x) = [ f̂(x) ± q̂ ]"` sobre `#040714`.
-    - [ ] A11.4.5.2 Configurar `capture.mjs` + `render.sh` y renderizar `cono_incertidumbre.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
-    - [ ] A11.4.5.3 Auditar keyframes comprobando que las pastillas `"Núcleo 50%"`, `"Pronóstico Puntual"` y `"Banda 80% (P10–P90)"` no solapan las curvas.
-  - [ ] **T11.4.6 Sección 5 · Diapo 29 (`video_sintesis_cierre` — Prioridad Baja / Opcional): `"Conclusiones"`**
-    - [ ] A11.4.6.1 Crear `video/seccion_5/diapo_29/video_sintesis_cierre/{build_scene.py,scene_template.html}` fusionando Caso 1 (`n = 2,557 días`, `38.0 °C`, `ExtraTrees 0.25 s`) y Caso 2 (`N = 24 campañas`, roya `-56.0%`, `r = 0.7564`) en los 3 axiomas (`"🎯 Respeta la causalidad del tiempo"`, `"🧠 El valor está en la banda, no en el punto"`, `"🚀 Próximo paso: física antes que algoritmo"`) sobre fondo `#03050F`.
-    - [ ] A11.4.6.2 Configurar `capture.mjs` + `render.sh` y renderizar `sintesis_cierre.mp4` (`25 s`, `750 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#03050F`).
-    - [ ] A11.4.6.3 Auditar keyframes confirmando alineación con el grid de 3 columnas de la Diapo 29 y handoff sobre `#03050F`.
+  - [x] **T11.4.3 Sección 3 · Diapo 21 (`video_fisica_biologica` — Prioridad Alta): `"Física biológica · Las 3 leyes que obligan a la IA a aprender botánica"`**
+    - [x] A11.4.3.1 Crear `video/seccion_3/diapo_21/video_fisica_biologica/{build_scene.py,scene_template.html}` con datos de `data/caso_2/cafe_jaen_hipotesis.json` y `cafe_jaen_campanias.csv` mostrando: (1) engranaje `τ = 6–8 meses`, (2) umbral `"VPD = eₛ(T) − eₐ > 1.8 kPa ó T > 32°C ──▶ Cierre Estomático y Aborto Floral"` + ceguera del `NDVI ~0.74` (`+1.4%`) ante el colapso de `-56.0%` (`10.0 qq/ha` en 2014), y (3) `"500 Variables Crudas sobre N=24 = Overfit"` vs. señal hídrica en floración (`r = 0.7564`) sobre `#040812`.
+    - [x] A11.4.3.2 Configurar `capture.mjs` + `render.sh` y renderizar `fisica_biologica.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040812`).
+    - [x] A11.4.3.3 Auditar keyframes confirmando placa opaca para `Lag τ = 6–8m` y contraste nítido entre NDVI plano y caída de cosecha — validado: `fisica_biologica.mp4` (30 s · 900 f · 1920×1080 @ 30 fps, H.264 `yuv420p` `+faststart`) generado; barras reales 2010–2024 con 2014 en rojo (`10.0 qq/ha · −56.0%`) bajo la línea NDVI plana.
+  - [x] **T11.4.4 Sección 1 · Diapo 09 (`video_zero_shot_tsfm` — Prioridad Media): `"VÍA 4: Revolución Zero-Shot y Foundation Models · TimesFM, Chronos, Moirai, Lag-Llama y TimeGPT"`**
+    - [x] A11.4.4.1 Crear `video/seccion_1/diapo_9/video_zero_shot_tsfm/{build_scene.py,scene_template.html}` con datos de `data/caso_1/benchmark_punchana.csv` animando el preentrenamiento `"27B–100B pts"`, la comparación `"Chronos = 4,096 Tokens (Cross-Entropy) │ TimesFM = Parches Continuos (MSE)"` y la inferencia Zero-Shot en Punchana (`TimesFM RMSE 1.883 °C`, `Chronos RMSE 1.903 °C` vs. `ExtraTrees 1.880 °C`) sobre `#040714`.
+    - [x] A11.4.4.2 Configurar `capture.mjs` + `render.sh` y renderizar `zero_shot_tsfm.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
+    - [x] A11.4.4.3 Auditar keyframes verificando legibilidad de tokens vs. parches y exactitud de métricas de `benchmark_punchana.csv` — validado: `zero_shot_tsfm.mp4` (30 s · 900 f · 1920×1080 @ 30 fps, H.264 `yuv420p` `+faststart`) generado; escalera cuantizada + tokens vs. curva continua con 6 parches y vectores.
+  - [x] **T11.4.5 Sección 1 · Diapo 10 (`video_cono_incertidumbre` — Prioridad Media): `"DIAPOSITIVA 10: La Ilusión de la Certeza y el Cono de Incertidumbre · Lyapunov ─▶ 5 Pasos SCP ─▶ ERCOT ─▶ Pase a Diapo 11"`**
+    - [x] A11.4.5.1 Crear `video/seccion_1/diapo_10/video_cono_incertidumbre/{build_scene.py,scene_template.html}` con datos reales de `data/caso_1/senamhi_forecast_7d.csv` (`2025-12-25` a `2025-12-31`, friaje `27.2 °C`, banda `ci_lower_p10` `29.55 °C` a `ci_upper_p90` `37.42 °C`) animando la divergencia `"σ(h) ∝ σ₁ · √h"` y la construcción conformal `"Sᵢ = |f̂(xᵢ) − yᵢ| ──▶ q̂ = cuantil₁₋α(S_Cal) ──▶ I(x) = [ f̂(x) ± q̂ ]"` sobre `#040714`.
+    - [x] A11.4.5.2 Configurar `capture.mjs` + `render.sh` y renderizar `cono_incertidumbre.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#040714`).
+    - [x] A11.4.5.3 Auditar keyframes comprobando que las pastillas `"Núcleo 50%"`, `"Pronóstico Puntual"` y `"Banda 80% (P10–P90)"` no solapan las curvas — validado: `cono_incertidumbre.mp4` (30 s · 900 f · 1920×1080 @ 30 fps · 2.34 MB, H.264 `yuv420p` `+faststart`); pastillas en leyenda superior (`y=344`) fuera del área de trayectorias; banda real P10–P90 (`29.55–37.42 °C`) y `q̂ = 3.09 °C`.
+  - [x] **T11.4.6 Sección 5 · Diapo 29 (`video_sintesis_cierre` — Prioridad Baja / Opcional): `"Conclusiones"`**
+    - [x] A11.4.6.1 Crear `video/seccion_5/diapo_29/video_sintesis_cierre/{build_scene.py,scene_template.html}` fusionando Caso 1 (`n = 2,557 días`, `38.0 °C`, `ExtraTrees 0.25 s`) y Caso 2 (`N = 24 campañas`, roya `-56.0%`, `r = 0.7564`) en los 3 axiomas (`"🎯 Respeta la causalidad del tiempo"`, `"🧠 El valor está en la banda, no en el punto"`, `"🚀 Próximo paso: física antes que algoritmo"`) sobre fondo `#03050F`.
+    - [x] A11.4.6.2 Configurar `capture.mjs` + `render.sh` y renderizar `sintesis_cierre.mp4` (`25 s`, `750 frames`, `1920×1080` @ `30 fps`, fade-in `0.35 s` desde `#03050F`).
+    - [x] A11.4.6.3 Auditar keyframes confirmando alineación con el grid de 3 columnas de la Diapo 29 y handoff sobre `#03050F` — validado: `sintesis_cierre.mp4` (25 s · 750 f · 1920×1080 @ 30 fps · 2.08 MB, H.264 `yuv420p` `+faststart`); cold de dos ondas convergiendo (Punchana + Jaén), 3 beats con títulos exactos y cifras verificadas, cierre con 3 tarjetas canónicas (`🎯/🧠/🚀`) en grid `x = 150 / 585 / 1020`.
+- [x] **SF11.5 Producción de Videos Deterministas de la Sección 4 (Caso 2: Café de Jaén — Diapos 26 y 27)**
+  - [x] **T11.5.1 Sección 4 · Diapo 26 (`video_trampa_ndvi` — Prioridad Alta · Ficha 9.8): `"La Trampa del Satélite: ¿Por qué el NDVI falla?"`**
+    - [x] A11.5.1.1 Crear `video/seccion_4/diapo_26/video_trampa_ndvi/{build_scene.py,scene_template.html}` con `window.__setTime(ms)` y datos reales de `data/caso_2/cafe_jaen_campanias.csv` y `data/caso_2/cafe_jaen_hipotesis.json`, animando la serie `2010–2024` donde el NDVI satelital en floración (`Oct–Dic`) se mantiene inmóvil en `0.7483` (`+1.4%`) durante el colapso de cosecha `2014` (`10.0 qq/ha`, `-56.0%`), y contrastando las correlaciones `r(NDVI, Rendimiento) = +0.1536 (p = 0.600, NO significativo)` vs. `r(Déficit Hídrico Floración, Rendimiento) = +0.7564 (p = 0.002, SEÑAL REAL)` sobre fondo `#040812`.
+    - [x] A11.5.1.2 Configurar `capture.mjs` + `render.sh` y renderizar `trampa_ndvi.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`, fade-in `0.35 s` desde `#040812`) e integrarlo en `cinematicVideoGate26` (Diapo 26).
+    - [x] A11.5.1.3 Auditar con `ffprobe` y extracción de keyframes (`t = 3 s, 9 s, 16 s, 23 s, 29.5 s`) verificando 0 solapes de etiquetas, cifras exactas (`2014`, `10.0 qq/ha`, `-56.0%`, `NDVI = 0.7483`, `r = 0.1536` vs. `r = 0.7564`) y handoff limpio hacia la Diapo 26 (`#040812`).
+  - [x] **T11.5.2 Sección 4 · Diapo 27 (`video_walkforward_jaen` — Prioridad Media · Ficha 9.9): `"Validación Walk-Forward y el Ganador"`**
+    - [x] A11.5.2.1 Crear `video/seccion_4/diapo_27/video_walkforward_jaen/{build_scene.py,scene_template.html}` con `window.__setTime(ms)` y datos reales de `data/caso_2/benchmark_cafe.csv` y `data/caso_2/cafe_jaen_resultados.csv`, animando la ventana expansiva **Expanding Walk-Forward** paso a paso (`2010–2024`, `15 años evaluados`), el duelo de los 15 modelos (`M12 Random Forest d=2` `RMSE 3.72 qq/ha`, `M08 Solo Déficit Hídrico` `RMSE 3.90 qq/ha`, `M04 Ridge L2` `RMSE 4.51 qq/ha`, `M07 Solo NDVI` `RMSE 6.13 qq/ha`, `M09 Regresión Lineal OLS` `RMSE 6.67 qq/ha`) y el cono **Split Conformal 80%** (`q_80 = 6.23 qq/ha`, pico `2020 = 35.38 qq/ha`) sobre fondo `#040812`.
+    - [x] A11.5.2.2 Configurar `capture.mjs` + `render.sh` y renderizar `walkforward_jaen.mp4` (`30 s`, `900 frames`, `1920×1080` @ `30 fps`, H.264 `yuv420p` `+faststart`, fade-in `0.35 s` desde `#040812`) e integrarlo en `cinematicVideoGate27` (Diapo 27).
+    - [x] A11.5.2.3 Auditar con `ffprobe` y extracción de keyframes (`t = 3 s, 9 s, 16 s, 23 s, 29.5 s`) verificando que las barras horizontales de `RMSE` y la banda `Split Conformal 80%` no colisionan con los textos y respetan el fondo `#040812`.
+
 

@@ -797,7 +797,7 @@ Cuando una diapositiva teórica compleja cuenta con un video en `video/seccion_{
   - **Test de Simulación de Usuario:** Inspección visual de las capturas `f10_s5_1920.png`, `f10_s12_1920.png`, `f10_s16_1920.png`, `f10_s19_1920.png`, `f10_s22_1920.png` y `f10_s23_1920.png` en `1920×1080` y `1366×768`.
 
 ##### [ ] A10.5.1.1 — Implementar `scripts/audit_f10_layout_typography.py`, compilar deck y generar las 36 capturas PNG
-- **Objetivo:** Certificar técnica y visualmente el cierre de la Fase 10.
+- **Objetivo:** Certificar técnica y visualmente el cierre de la Fase 10 en las Secciones 1, 2 y 3.
 - **Input:** `front/prototype_engine.py`, `back/build_deck.py` y los 18 prototipos HTML.
 - **Output:** `scripts/audit_f10_layout_typography.py`, `presentacion.html`, `index.html` y 36 capturas PNG.
 - **Proceso:**
@@ -807,3 +807,127 @@ Cuando una diapositiva teórica compleja cuenta con un video en `video/seccion_{
 - **Tests:**
   - **Test Unitario:** `scripts/audit_f10_layout_typography.py` retorna `0`.
   - **Test de Simulación de Usuario:** Confirmar en las capturas PNG la resolución total de los hallazgos F1–F6.
+
+---
+
+### [ ] SF10.6 — Homologación Interactiva, Tipografía de Auditorio y Corrección de Cifras en la Sección 4 (Caso 2: Café de Jaén — Diapositivas 25, 26 y 27)
+
+- **Objetivo:** Migrar las **Diapositivas 25, 26 y 27** de la Sección 4 (que permanecían con el layout estático antiguo de Fase 1 en `front/deck_slides_p2.py`, con el 55%–80% de área vacía en negro y cifras desactualizadas) a **prototipos interactivos full-bleed** en `docs/notebooklm/seccion_4/prototipos/` procesados por `front/prototype_engine.py`, homologando su estructura visual con la Sección 2 (Caso 1 Iquitos) y conectando las compuertas de video de entrada para las Diapos 26 y 27.
+- **Entregable:** `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html`, `docs/notebooklm/seccion_4/prototipos/26_Trampa_Satelite_NDVI_vs_Clima.html`, `docs/notebooklm/seccion_4/prototipos/27_Validacion_WalkForward_Benchmark_Jaen.html`, y su integración en `front/prototype_engine.py`, `back/build_deck.py` y `front/deck_slides_p2.py`.
+- **AC de la Sub fase:**
+  - [ ] Las Diapos 25, 26 y 27 se renderizan mediante iframes full-bleed procesados por `front/prototype_engine.py` con `.hdr`, `.flowbar` (4 etapas + `Auto: ON` + botón `"🎬 Intro"` en Diapos 26 y 27), `.narrative-card` al 100% de altura con `💡 Idea Clave` ($\le 15$ palabras) y lienzo derecho interactivo sin huecos negros.
+  - [ ] Cero cifras desactualizadas: el choque de la roya se cita en **`2014`** (`10.0 qq/ha`, **`-56.0%`**, `NDVI = 0.7483`, `+1.4%`), la correlación del NDVI anual es **`r = 0.1536 (p = 0.60)`**, la señal hídrica en floración (`Ago–Oct`) es **`r = 0.7564 (p = 0.002)`** (`lluvia_flor_mm r = 0.7511`), el récord de cosecha en 2020 es **`35.38 qq/ha`** (donde `M05 Solo NDVI Anual` falla por `18.25 qq/ha`), y el líder del benchmark Walk-Forward es **`M12 Random Forest Parsimonioso (d=2)` con `MAE = 3.72 qq/ha`** seguido por **`M08 Solo Déficit Hídrico` con `MAE = 3.90 qq/ha`**.
+  - [ ] Las Diapos 26 y 27 incluyen sus compuertas de video `__CINEMATIC_GATE_26__` y `__CINEMATIC_GATE_27__` descubiertas automáticamente desde `video/seccion_4/diapo_{26,27}/`.
+- **Tests de la Sub fase:**
+  - **Test Unitario:** `scripts/audit_f10_layout_typography.py` valida los prototipos `25`, `26` y `27` sin snippets prohibidos (`"en 2013"`, `"NDVI se mantuvo en 0.81"`, `"42.5 qq/ha"`).
+  - **Test de Simulación de Usuario:** Capturas `screenshots/f10_s{25,26,27}_{1366,1920}.png` verificadas sin huecos ni solapes.
+
+#### [ ] T10.6.1 — Diapo 25 (`25_Datos_24_Campanias_Jaen.html`): Prototipo Interactivo Full-Bleed con Serie Histórica (2001–2024), Choque de la Roya 2014 (-56.0%) y Cifras Auditadas
+- **Objetivo de la Tarea:** Reemplazar las 3 cajas estáticas semivacías de la Diapo 25 por el prototipo interactivo `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html` procesado por `front/prototype_engine.py`, presentando los KPIs auditados del Caso 2 junto con la evolución histórica interactiva de las 24 campañas (`2001–2024`) de `data/caso_2/cafe_jaen_campanias.csv`.
+- **Entregable:** `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html` e integración en `back/build_deck.py` y `front/deck_slides_p2.py`.
+
+> **🧠 Explicación:** En la captura actual de la Diapo 25, las 3 tarjetas (`24`, `-56%`, `4.51`) tienen el 80% de su interior vacío y muestran dos datos desactualizados (`"en 2013"` en vez de `2014` y `"4.51"` en vez del ganador del benchmark `3.72 qq/ha` de `data/caso_2/benchmark_cafe.csv`). Al convertirla en un prototipo interactivo de 4 etapas (`1. Cuenca de Jaén (24 Campañas)` → `2. Epidemia de Roya 2014 (10.0 qq/ha, -56%)` → `3. Recuperación y Récord 2020 (35.38 qq/ha)` → `4. Pase a Diapo 26: El Espejismo Satelital`), la izquierda explica el contexto agronómico con letra de auditorio (`14px–16px`) y `💡 Idea Clave`, mientras la derecha combina las 3 tarjetas KPI ejecutivas con el gráfico interactivo de las 24 campañas (`rendimiento_qq_ha` vs `ndvi_anual`).
+
+- **AC de la Tarea:**
+  - [ ] `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html` ocupa el 100% del alto en `1920×1080` y `1366×768` sin espacios muertos.
+  - [ ] Las 3 métricas destacadas muestran: **`24 Campañas (2001–2024)`**, **`-56.0% Colapso Roya (2014: 10.0 qq/ha)`** y **`3.72 qq/ha MAE Mínimo (Random Forest d=2 / 3.90 qq/ha Clima Floración)`** (mencionando también `4.51 qq/ha` de la fusión multimodal H3).
+- **Tests de la Tarea:**
+  - **Test Unitario:** Verificar presencia de `height: 100%`, `narr-blocks`, `space-evenly` e `Idea Clave` en `25_Datos_24_Campanias_Jaen.html`.
+  - **Test de Simulación de Usuario:** Inspeccionar `screenshots/f10_s25_{1366,1920}.png`.
+
+##### [ ] A10.6.1.1 — Crear `25_Datos_24_Campanias_Jaen.html` con datos reales de `cafe_jaen_campanias.csv` e integrarlo en `build_deck.py`
+- **Objetivo:** Construir el prototipo interactivo de la Diapo 25 y conectarlo al motor `front/prototype_engine.py`.
+- **Input:** `data/caso_2/cafe_jaen_campanias.csv`, `data/caso_2/benchmark_cafe.csv`, `data/caso_2/cafe_jaen_hipotesis.json`.
+- **Output:** `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html`, `back/build_deck.py`, `front/deck_slides_p2.py`.
+- **Proceso:**
+  1. Crear `docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html` siguiendo la arquitectura de `12_Caso_1_Auditoria_Iquitos.html` pero ambientada en el Caso 2 (Jaén, `#040812`, acentos esmeralda/cian/ámbar).
+  2. Cargar `b64_p25_html = load_prototype_b64(p25_path, slide_num=25, section_num=4)` en `back/build_deck.py` y renderizar `<iframe id="iframeSlide25">` en `front/deck_slides_p2.py`.
+- **Tests:**
+  - **Test Unitario:** `scripts/audit_f10_layout_typography.py`.
+  - **Test de Simulación de Usuario:** Capturas `f10_s25_1920.png` y `f10_s25_1366.png`.
+
+#### [ ] T10.6.2 — Diapos 26 y 27 (`26_Trampa_Satelite_NDVI_vs_Clima.html` y `27_Validacion_WalkForward_Benchmark_Jaen.html`): Prototipos Interactivos Full-Bleed, Eliminación del 55% de Vacío Izquierdo y Compuertas de Video
+- **Objetivo de la Tarea:** Migrar las Diapos 26 y 27 a prototipos interactivos full-bleed en `docs/notebooklm/seccion_4/prototipos/`, eliminando el 55% de vacío negro en la columna izquierda, corrigiendo las cifras de `2014` (`NDVI 0.7483`, `r = 0.1536` vs `r = 0.7564`) y del récord `2020` (`35.38 qq/ha`), e integrando el botón `"🎬 Intro"` y las compuertas `__CINEMATIC_GATE_26__` y `__CINEMATIC_GATE_27__`.
+- **Entregable:** `docs/notebooklm/seccion_4/prototipos/26_Trampa_Satelite_NDVI_vs_Clima.html` y `docs/notebooklm/seccion_4/prototipos/27_Validacion_WalkForward_Benchmark_Jaen.html` conectados en `front/prototype_engine.py`, `back/build_deck.py` y `front/deck_slides_p2.py`.
+
+> **🧠 Explicación:** En las capturas actuales de las Diapos 26 y 27, la columna izquierda carece de tarjeta contenedora y deja más de la mitad inferior en negro; además, la Diapo 26 afirma erróneamente que en 2013 el NDVI fue `0.81` y la Diapo 27 tiene un tooltip que dice `42.5 qq/ha` para 2020. Al llevarlas a prototipos autónomos en `docs/notebooklm/seccion_4/prototipos/` procesados por `front/prototype_engine.py`, ganan `.hdr` con telemetría, `.flowbar` de 4 pasos con botón `"🎬 Intro"`, `.narrative-card` al 100% de altura con `💡 Idea Clave`, y gráficos Canvas/SVG de alta densidad visual con las cifras exactas de `data/caso_2/`.
+
+- **AC de la Tarea:**
+  - [ ] `26_Trampa_Satelite_NDVI_vs_Clima.html` permite alternar entre: (1) Scatter `MODIS NDVI Anual (r = 0.1536, p = 0.600 — Señal Saturada)`, (2) Scatter `Balance Hídrico Floración Ago–Oct (r = 0.7564, p = 0.002 — Fuerte Señal)`, (3) Scatter `Lluvia en Floración Ago–Oct (r = 0.7511, p = 0.002)`, y (4) Vista `📐 Anatomía: Dosel Bajo Sombra vs. Satélite`, destacando siempre el punto rojo de **`2014: 10.0 qq/ha (−56.0%) con NDVI = 0.7483 (+1.4%)`**.
+  - [ ] `27_Validacion_WalkForward_Benchmark_Jaen.html` permite alternar entre: (1) **Trayectorias Walk-Forward (`2016, 2018–2024`)** con las curvas de `data/caso_2/cafe_jaen_predicciones_modelos.csv` (destacando el récord `2020 = 35.38 qq/ha` y el fallo de `18.25 qq/ha` del NDVI anual), y (2) **Benchmark de 16 Modelos (`MAE Walk-Forward`)** con los datos exactos de `data/caso_2/benchmark_cafe.csv` (`M12 Random Forest d=2: 3.723 qq/ha`, `M08 Solo Déficit Hídrico: 3.903 qq/ha`, `M16 Zero-Shot Heurístico: 4.116 qq/ha`, ..., `M05 Solo NDVI Anual: 5.448 qq/ha`), sin recortar ningún nombre de modelo en el eje izquierdo.
+  - [ ] `VIDEO_SLIDE_CANDIDATES` en `front/prototype_engine.py` incluye `(4, 26)` y `(4, 27)` para conectar automáticamente `video_trampa_ndvi` y `video_walkforward_jaen`.
+- **Tests de la Tarea:**
+  - **Test Unitario:** `scripts/audit_f10_layout_typography.py` verifica ambos prototipos y la presencia de `cinematicVideoGate26` y `cinematicVideoGate27` cuando los MP4 existen.
+  - **Test de Simulación de Usuario:** Capturas `screenshots/f10_s{26,27}_{1366,1920}.png`.
+
+##### [ ] A10.6.2.1 — Implementar `26_Trampa_Satelite_NDVI_vs_Clima.html` y `27_Validacion_WalkForward_Benchmark_Jaen.html` y registrarlos en `prototype_engine.py` y `build_deck.py`
+- **Objetivo:** Completar los prototipos interactivos de las Diapos 26 y 27 y habilitar sus compuertas de video.
+- **Input:** `data/caso_2/{cafe_jaen_campanias.csv,cafe_jaen_hipotesis.json,benchmark_cafe.csv,cafe_jaen_predicciones_modelos.csv}` y `front/components/anatomy/anatomy_cafe_sombra_ndvi.svg`.
+- **Output:** Prototipos `26` y `27`, `front/prototype_engine.py`, `back/build_deck.py`, `front/deck_slides_p2.py`.
+- **Proceso:**
+  1. Crear `26_Trampa_Satelite_NDVI_vs_Clima.html` y `27_Validacion_WalkForward_Benchmark_Jaen.html` con soporte de teclas `1–4`, botón `"🎬 Intro"` (que envía `window.parent.postMessage({type:'deck_replay_video', slide: N}, '*')`) y etiquetas de Canvas con pastillas opacas anti-solape.
+  2. Registrar `(4, 26)` y `(4, 27)` en `VIDEO_SLIDE_CANDIDATES` dentro de `front/prototype_engine.py`.
+  3. Inyectar `b64_p26_html`, `b64_p27_html`, `__CINEMATIC_GATE_26__` y `__CINEMATIC_GATE_27__` en `back/build_deck.py` y `front/deck_slides_p2.py`.
+- **Tests:**
+  - **Test Unitario:** `scripts/audit_f10_layout_typography.py`.
+  - **Test de Simulación de Usuario:** Revisión de `screenshots/f10_s26_{1366,1920}.png` y `screenshots/f10_s27_{1366,1920}.png`.
+
+---
+
+### [ ] SF10.7 — Rediseño Ejecutivo de la Sección 5 (Diapositivas 29 y 30) y Auditoría Multi-Resolución Extendida (`1920×1080` y `1366×768`)
+
+- **Objetivo:** Eliminar el **55% de hueco vacío inferior** en las 3 tarjetas de la **Diapo 29 (`Conclusiones`)**, corregir el artefacto tipográfico `(ŷ_{t+h})`, enriquecer cada columna con evidencia comparada de los Casos 1 y 2 más una `💡 Regla Operativa` al pie, eliminar el texto de plantilla `"Tu QR (opcional)"` en la **Diapo 30 (`¡GRACIAS!`)**, y extender `scripts/audit_f10_layout_typography.py` para certificar todas las diapositivas mejoradas de las Secciones 1 a 5.
+- **Entregable:** `front/deck_slides_p2.py`, `front/deck_styles.py`, `scripts/audit_f10_layout_typography.py`, `presentacion.html`, `index.html` y capturas `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png`.
+- **AC de la Sub fase:**
+  - [ ] En la Diapo 29, las 3 tarjetas `.conclusion-card` distribuyen su contenido al 100% de la altura (`justify-content: space-between`) sin el 55% de vacío inferior, muestran subíndice limpio `ŷ<sub>t+h</sub>` (cero llaves `{t+h}` crudas), incluyen un bloque de **Evidencia Empírica (Caso 1 Punchana + Caso 2 Jaén)** y cierran abajo con una píldora `💡 Regla Operativa`.
+  - [ ] En la Diapo 30, desaparece `"Tu QR (opcional)"` (reemplazado por `"Slides & Código · alexprietoromani.github.io"`) y se añade una banda resumen con las cifras auditadas de ambos casos.
+  - [ ] `scripts/audit_f10_layout_typography.py` valida los 21 prototipos (`Secciones 1, 2, 3 y 4`) + las verificaciones DOM de la `Sección 5`, y genera las 46 capturas PNG (`1920×1080` y `1366×768`).
+- **Tests de la Sub fase:**
+  - **Test Unitario:** `.venv/bin/python scripts/audit_f10_layout_typography.py` retorna `0`.
+  - **Test de Simulación de Usuario:** Inspección visual de `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png`.
+
+#### [ ] T10.7.1 — Diapos 29 y 30 (`front/deck_slides_p2.py` y `front/deck_styles.py`): Relleno Vertical 100% en las 3 Tarjetas de Conclusiones, Corrección de `(ŷ_{t+h})` y de `"Tu QR (opcional)"`
+- **Objetivo de la Tarea:** Rediseñar el interior de las 3 tarjetas de la Diapo 29 para que aprovechen el 100% de su altura con tipografía ejecutiva y datos cruzados de ambos casos de estudio, y pulir la Diapo 30 eliminando el texto placeholder `"Tu QR (opcional)"`.
+- **Entregable:** `front/deck_slides_p2.py` y `front/deck_styles.py` actualizados.
+
+> **🧠 Explicación:** En la captura `s29_1366.png` vimos dos problemas claros: (1) el texto ocupa solo el 45% superior de cada `.conclusion-card` dejando el 55% inferior vacío, y (2) la tarjeta central imprime literalmente `(ŷ_{t+h})` con llaves LaTeX crudas. Asimismo, en `s30_1366.png` el recuadro del QR todavía dice `"Tu QR (opcional)"`. Al estructurar cada `.conclusion-card` en 4 bloques distribuidos con `justify-content: space-between` (Cabecera → Tesis explicativa → Bloque de Evidencia Caso 1 + Caso 2 → Píldora `💡 Regla Operativa`) y actualizar la Diapo 30, el cierre de la conferencia adquiere acabado ejecutivo de principio a fin.
+
+- **AC de la Tarea:**
+  - [ ] Cero ocurrencias de `ŷ_{t+h}` ni de `Tu QR (opcional)` en `presentacion.html`.
+  - [ ] Las 3 tarjetas de la Diapo 29 llenan armónicamente el alto en `1920×1080` y `1366×768`.
+- **Tests de la Tarea:**
+  - **Test Unitario:** Comprobación de strings prohibidos y estructura en `scripts/audit_f10_layout_typography.py`.
+  - **Test de Simulación de Usuario:** Capturas `screenshots/f10_s29_{1366,1920}.png` y `screenshots/f10_s30_{1366,1920}.png`.
+
+##### [ ] A10.7.1.1 — Actualizar el marcado y CSS de las Diapos 29 y 30 en `front/deck_slides_p2.py` y `front/deck_styles.py`
+- **Objetivo:** Enriquecer visualmente las Diapos 29 y 30 y eliminar placeholders/artefactos.
+- **Input:** `front/deck_slides_p2.py` y `front/deck_styles.py`.
+- **Output:** `front/deck_slides_p2.py` y `front/deck_styles.py` actualizados.
+- **Proceso:**
+  1. En la Diapo 29 (`front/deck_slides_p2.py`), reemplazar `(ŷ_{{t+h}})` por `(ŷ<sub>t+h</sub>)`, añadir en cada una de las 3 tarjetas un bloque `.conclusion-evidence` con dos filas (`Caso 1 · Punchana` y `Caso 2 · Jaén`) y un bloque inferior `.conclusion-takeaway` (`💡 Regla Operativa`), y ajustar `.conclusion-card` en `front/deck_styles.py` con `display: flex; flex-direction: column; justify-content: space-between;`.
+  2. En la Diapo 30 (`front/deck_slides_p2.py`), cambiar `"Tu QR (opcional)"` por `"Slides & Código · GitHub"` y añadir una píldora de resumen de los datasets auditados (`SENAMHI Punchana n = 2,557 días · SIEA/MODIS/ERA5 Jaén N = 24 campañas`).
+- **Tests:**
+  - **Test Unitario:** `scripts/audit_f10_layout_typography.py`.
+  - **Test de Simulación de Usuario:** Capturas `f10_s29_{1366,1920}.png` y `f10_s30_{1366,1920}.png`.
+
+#### [ ] T10.7.2 — Ampliar `scripts/audit_f10_layout_typography.py` a las Secciones 4 y 5 y Generar las Capturas `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png`
+- **Objetivo de la Tarea:** Extender el auditor automatizado de la Fase 10 para cubrir los 21 prototipos interactivos (`Secciones 1, 2, 3 y 4`) más las Diapos `29` y `30` de la `Sección 5`, y generar las capturas multi-resolución de las nuevas diapositivas.
+- **Entregable:** `scripts/audit_f10_layout_typography.py` ampliado y capturas `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png`.
+- **AC de la Tarea:**
+  - [ ] `scripts/audit_f10_layout_typography.py` audita las Diapos `5..17, 19..23, 25..27, 29, 30` y retorna `0`.
+  - [ ] Existen las capturas `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png` sin solapes ni huecos vacíos.
+- **Tests de la Tarea:**
+  - **Test Unitario:** `.venv/bin/python scripts/audit_f10_layout_typography.py`.
+  - **Test de Simulación de Usuario:** Inspección visual de las 10 nuevas capturas en `screenshots/`.
+
+##### [ ] A10.7.2.1 — Actualizar `scripts/audit_f10_layout_typography.py`, compilar el deck y capturar las Diapos 25, 26, 27, 29 y 30 en `1920×1080` y `1366×768`
+- **Objetivo:** Validar de extremo a extremo las Secciones 1 a 5 tras las mejoras de `SF10.6` y `SF10.7`.
+- **Input:** `scripts/audit_f10_layout_typography.py`, `presentacion.html`.
+- **Output:** `scripts/audit_f10_layout_typography.py` actualizado y 10 nuevas capturas en `screenshots/`.
+- **Proceso:**
+  1. Añadir los prototipos `25, 26, 27` a `PROTOTIPOS`, añadir `"ŷ_{t+h}"`, `"Tu QR (opcional)"`, `"en 2013"` y `"se mantuvo en 0.81"` a `FORBIDDEN_SNIPPETS`, y añadir las capturas `25, 26, 27, 29, 30` a `SCREENSHOTS`.
+  2. Compilar `back/build_deck.py`, capturar las nuevas vistas con Chromium headless (`1920×1080` y `1366×768`) y correr `scripts/audit_f10_layout_typography.py`.
+- **Tests:**
+  - **Test Unitario:** `.venv/bin/python scripts/audit_f10_layout_typography.py` retorna `0`.
+  - **Test de Simulación de Usuario:** Inspección visual de `screenshots/f10_s{25,26,27,29,30}_{1366,1920}.png`.
+

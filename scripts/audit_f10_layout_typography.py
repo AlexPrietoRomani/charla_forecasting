@@ -2,8 +2,8 @@
 """Auditoría automatizada de la Fase 10 (F10):
 Certifica layout al 100% de altura, tipografía homologada (sin texto enano), eliminación
 del teleprompter `.speaker-box` y la inyección del motor `front/prototype_engine.py`
-en los 18 prototipos de las Secciones 1, 2 y 3, el bundle `presentacion.html` y las
-36 capturas multi-resolución.
+en los 21 prototipos de las Secciones 1, 2, 3 y 4, el bundle `presentacion.html` y las
+46 capturas multi-resolución.
 """
 import re
 import sys
@@ -51,6 +51,12 @@ PROTOTIPOS = [
      ["narr-blocks", "space-evenly", "takeaway-badge", "takeaway-text", "Idea Clave"]),
     (23, "docs/notebooklm/seccion_3/prototipos/23_precisi_n_actual_y_las_tres_trampas.html",
      ["narr-blocks", "space-evenly", "takeaway-badge", "takeaway-text", "Idea Clave"]),
+    (25, "docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html",
+     ["narr-blocks", "space-evenly", "executive-takeaway", "Idea Clave"]),
+    (26, "docs/notebooklm/seccion_4/prototipos/26_Trampa_Satelite_NDVI_vs_Clima.html",
+     ["narr-blocks", "space-evenly", "executive-takeaway", "Idea Clave"]),
+    (27, "docs/notebooklm/seccion_4/prototipos/27_Validacion_WalkForward_Benchmark_Jaen.html",
+     ["narr-blocks", "space-evenly", "executive-takeaway", "Idea Clave"]),
 ]
 
 FORBIDDEN_SNIPPETS = [
@@ -60,6 +66,11 @@ FORBIDDEN_SNIPPETS = [
     'class="speaker-head"',
     'class="speaker-quote"',
     "Axioma Gerencial",
+    "en 2013",
+    "se mantuvo en 0.81",
+    "42.5 qq/ha",
+    "ŷ_{t+h}",
+    "Tu QR (opcional)",
 ]
 
 FONT_MINIMUMS = {
@@ -76,11 +87,11 @@ FONT_MINIMUMS_PER_SLIDE = {
     11: {"via-title": 18.0},
 }
 
-VIDEO_SLIDE_CANDIDATES = [(1, 5), (1, 7), (1, 9), (1, 10), (3, 19), (3, 21)]
+VIDEO_SLIDE_CANDIDATES = [(1, 5), (1, 7), (1, 9), (1, 10), (3, 19), (3, 21), (4, 26), (4, 27), (5, 29)]
 
 SCREENSHOTS = [
     BASE_DIR / f"screenshots/f10_s{slide}_{width}.png"
-    for slide in [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23]
+    for slide in [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 25, 26, 27, 29, 30]
     for width in [1366, 1920]
 ]
 
@@ -143,7 +154,8 @@ def audit_prototype(slide: int, rel_path: str, required: list) -> list:
                 f"[Diapo {slide}] Tipografía encogida en '.{class_name}': máx {maximum}px < {minimum}px."
             )
 
-    normalized = normalize_prototype_html(content, slide, 1 if slide <= 17 else 3)
+    section = 4 if slide >= 25 else (3 if slide >= 19 else 1)
+    normalized = normalize_prototype_html(content, slide, section)
     for marker in ["deck-engine-override-css", "deck-engine-runtime-js"]:
         if marker not in normalized:
             errors.append(f"[Diapo {slide}] El motor no inyectó '{marker}' en el HTML procesado.")
@@ -172,14 +184,21 @@ def audit_build() -> list:
     content = path.read_text(encoding="utf-8")
 
     calls = len(re.findall(r"load_prototype_b64\(", content))
-    if calls < 18:
-        errors.append(f"[Build] load_prototype_b64 llamado {calls} veces (<18).")
+    if calls < 21:
+        errors.append(f"[Build] load_prototype_b64 llamado {calls} veces (<21).")
     if "render_slide_video_gate" not in content:
         errors.append("[Build] Falta render_slide_video_gate (gates de video).")
 
     for _, rel_path, _ in PROTOTIPOS:
         if rel_path not in content:
             errors.append(f"[Build] El prototipo '{rel_path}' no está embebido en build_deck.py.")
+
+    styles_path = BASE_DIR / "front/deck_styles.py"
+    styles = styles_path.read_text(encoding="utf-8") if styles_path.exists() else ""
+    for snippet in ["justify-content: space-between", "conclusion-evidence", "conclusion-takeaway",
+                    "closing-badges", "closing-qr-box svg"]:
+        if snippet not in styles:
+            errors.append(f"[Build] deck_styles.py no contiene: '{snippet}'.")
     return errors
 
 
@@ -208,9 +227,13 @@ def audit_bundle() -> list:
             f"[Bundle] Gates de video insuficientes: {gates} (<{len(videos)} videos presentes)."
         )
 
-    for snippet in ["GUÍA DE EXPOSICIÓN", "class=\"speaker-box\""]:
+    for snippet in ["GUÍA DE EXPOSICIÓN", "class=\"speaker-box\""] + FORBIDDEN_SNIPPETS:
         if snippet in content:
             errors.append(f"[Bundle] Contiene snippet prohibido: '{snippet}'.")
+
+    for snippet in ["conclusion-evidence", "conclusion-takeaway", "ŷ<sub>t+h</sub>", "closing-badges"]:
+        if snippet not in content:
+            errors.append(f"[Bundle] Falta marcador S5 requerido: '{snippet}'.")
 
     return errors
 
@@ -245,7 +268,7 @@ def main():
         ("Motor prototype_engine.py", audit_engine()),
         ("Build build_deck.py", audit_build()),
         ("Bundle presentacion.html", audit_bundle()),
-        ("Capturas 36 PNG", audit_screenshots()),
+        ("Capturas 46 PNG", audit_screenshots()),
     ]:
         if errors:
             for e in errors:
@@ -259,7 +282,7 @@ def main():
         print(f"FAILED: Se encontraron {len(total_errors)} violaciones.")
         sys.exit(1)
     else:
-        print("SUCCESS: Los 18 prototipos, el motor, el bundle y las 36 capturas cumplen la Fase 10.")
+        print("SUCCESS: Los 21 prototipos, el motor, el bundle y las 46 capturas cumplen la Fase 10.")
         sys.exit(0)
 
 
