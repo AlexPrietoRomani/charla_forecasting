@@ -844,6 +844,7 @@ input[type="range"] {
   h1 { font-size: 15px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -859,8 +860,8 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">Continuación de Descomposición (Yₜ = Tₜ + Sₜ + Rₜ) · Saga Evolutiva (Era 1 de 4)</p>
-        <h1>VÍA 1: <span class="era">Modelos Analíticos y Suavizado</span> <span class="sub">· Verhulst, Holt-Winters y ARIMA</span></h1>
+        <p class="eyebrow">De la descomposición a las primeras fórmulas de pronóstico</p>
+        <h1>Fórmulas clásicas: <span class="era">simples y rapidísimas</span></h1>
       </div>
     </div>
 
@@ -939,28 +940,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · EL ORIGEN (1838)</span>
+          <span class="stage-tag" id="stageTag">EL ORIGEN (1838)</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1838: ¿De dónde comenzó todo? El límite biológico de Verhulst</h2>
-        <p class="narr-lead" id="narrLead">
-          Tras descomponer una serie en tendencia y ciclo, el primer reto histórico fue entender que <b>ningún fenómeno físico o biológico crece hasta el infinito</b>: el entorno impone una frontera.
-        </p>
+        <h2 class="narr-title" id="narrTitle">En 1838 se descubrió que nada crece sin límite</h2>
+        <p class="narr-lead" id="narrLead">Ningún proceso real crece al infinito: el entorno pone un techo, y la curva en S lo dibuja.</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🌱 ¿POR QUÉ NACIÓ EN 1838?</div>
-          <p class="info-block-text" id="block1Text">
-            Las proyecciones polinomiales ingenuas asumían que una población o epidemia se multiplicaba sin fin. <b>Verhulst</b> introdujo la resistencia del medio: una curva en <b>S (sigmoidea)</b> que acelera hasta el punto de inflexión (<b>t₀</b>) y se frena al chocar con la capacidad máxima (<b>L</b>).
-          </p>
+          <div class="info-block-label" id="block1Label">🌱 Una curva con techo</div>
+          <p class="info-block-text" id="block1Text">Reemplaza el crecimiento sin fin por una curva en S que frena al llegar al techo L.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">🏥 IMPACTO EN PRODUCCIÓN (INS/MINSA LORETO)</div>
-          <p class="info-block-text" id="block2Text">
-            Durante el brote de <b>Dengue en Loreto</b>, los modelos no acotados predecían infinitos infectados. La curva de Verhulst proyectó con exactitud el <b>techo biológico de camas hospitalarias (L)</b> y el pico de velocidad máxima (<b>kL/4</b>), evitando sobredimensionar recursos.
-          </p>
+          <div class="info-block-label" id="block2Label">🏥 Caso: dengue en Loreto</div>
+          <p class="info-block-text" id="block2Text">Predijo el techo de camas hospitalarias y evitó sobredimensionar recursos.</p>
         </div>
 
         <div class="math-strip">
@@ -970,7 +965,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway" id="speakerBox">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Todo sistema físico tiene un techo L; ningún proceso real crece al infinito.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Todo crece hasta un techo; nada sube al infinito.</span>
       </div>
     </aside>
 
@@ -983,7 +978,7 @@ input[type="range"] {
         </div>
         <div class="stage-kpis" id="stageKpis">
           <span class="kpi-chip" id="kpi1">Techo L: <strong>100 camas</strong></span>
-          <span class="kpi-chip" id="kpi2">Tasa k: <strong>0.55</strong></span>
+          <span class="kpi-chip" id="kpi2">Tasa k: <strong data-expert>0.55</strong></span>
           <span class="kpi-chip" id="kpi3">Pico kL/4: <strong>13.8 /sem</strong></span>
         </div>
       </div>
@@ -1015,12 +1010,12 @@ input[type="range"] {
           <div class="ctrl-item" id="ctrlKWrap">
             <label for="sliderK">🌱 Tasa (k):</label>
             <input id="sliderK" type="range" min="25" max="90" step="5" value="55" style="accent-color:var(--ockham)">
-            <output id="outK">0.55</output>
+            <output id="outK"><span data-expert>0.55</span></output>
           </div>
           <div class="ctrl-item" id="ctrlPhiWrap" hidden>
             <label for="sliderPhi">🔉 Memoria (φ):</label>
             <input id="sliderPhi" type="range" min="20" max="92" step="4" value="80" style="accent-color:var(--phi)">
-            <output id="outPhi">0.80</output>
+            <output id="outPhi"><span data-expert>0.80</span></output>
           </div>
           <div class="ctrl-item" id="ctrlShockWrap" hidden>
             <label for="sliderShock">🦟 Shock Exógeno:</label>
@@ -1070,16 +1065,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     verhulst: {
       accent: 'var(--ockham)',
-      tag: 'ETAPA 1 DE 4 · 1838 (EL ORIGEN)',
-      title: '1838: ¿De dónde comenzó todo? El límite biológico de Verhulst',
-      lead: 'Ningún proceso físico o biológico crece hacia el infinito: el entorno impone una frontera.',
-      b1Label: '🌱 FRONTERA BIOLÓGICA (VERHULST)',
-      b1Text: 'Reemplaza la explosión infinita por una <b>curva en S</b> que frena al chocar con el <b>techo físico L</b>.',
-      b2Label: '🏥 CASO DENGUE LORETO (INS/MINSA)',
-      b2Text: 'Proyectó con rigor el <b>techo de camas hospitalarias (L)</b>, evitando sobredimensionar recursos.',
+      tag: 'EL ORIGEN (1838)',
+      title: 'En 1838 se descubrió que nada crece sin límite',
+      lead: 'Ningún proceso real crece al infinito: el entorno pone un techo, y la curva en S lo dibuja.',
+      b1Label: '🌱 Una curva con techo',
+      b1Text: 'Reemplaza el crecimiento sin fin por una curva en S que frena al llegar al techo L.',
+      b2Label: '🏥 Caso: dengue en Loreto',
+      b2Text: 'Predijo el techo de camas hospitalarias y evitó sobredimensionar recursos.',
       formula: 'yₜ = L / [ 1 + e⁻ᵏ⁽ᵗ⁻ᵗ⁰⁾ ]',
       hint: 'Velocidad pico en t₀: dy/dt = kL / 4',
-      quote: 'Todo sistema físico tiene un techo L; ningún proceso real crece al infinito.',
+      quote: 'Todo crece hasta un techo; nada sube al infinito.',
       icon: '🪴',
       canvasTitle: '1838 · Curva Logística Acotada (S) vs. Explosión Polinomial Ingenua',
       ovLeft: '🪴 Crecimiento Biológico Acotado (Verhulst)',
@@ -1089,16 +1084,16 @@ input[type="range"] {
     },
     arima: {
       accent: 'var(--phi)',
-      tag: 'ETAPA 2 DE 4 · 1970 (LA EVOLUCIÓN SECUENCIAL)',
-      title: '1970: ¿Por qué seguimos a ARIMA y Holt-Winters?',
-      lead: 'La industria requería pronosticar semana a semana integrando ciclos repetitivos y ruido estocástico.',
-      b1Label: '🔉 MEMORIA DECRECIENTE SECUENCIAL',
-      b1Text: '<b>Box & Jenkins (1970)</b> modelaron la predicción como una <b>receta secuencial de memoria decreciente</b>.',
-      b2Label: '⚙️ LA MECÁNICA DEL ECO (p,d,q & α,β,γ)',
-      b2Text: 'El futuro es un <b>eco geométrico</b>: ayer pesa <b>φ</b>, anteayer <b>φ²</b>, junto con <b>nivel (α), tendencia (β) y estacionalidad (γ)</b>.',
+      tag: 'LA EVOLUCIÓN (1970)',
+      title: 'En 1970 el pronóstico pasó a ser un eco del pasado',
+      lead: 'Para pronosticar cada semana con ciclos repetidos y azar, Box y Jenkins crearon una receta de memoria que se desvanece.',
+      b1Label: '🔉 Memoria que se apaga',
+      b1Text: 'ARIMA y Holt-Winters pronostican con una receta: ayer pesa mucho, anteayer menos, y así sucesivamente.',
+      b2Label: '⚙️ La mecánica del eco',
+      b2Text: 'El futuro repite el pasado reciente, ajustando nivel, tendencia y estación.',
       formula: '(1 − ΣφᵢBⁱ)(1 − B)ᵈ Yₜ = c + (1 + ΣθⱼBʲ)εₜ',
       hint: 'Holt-Winters: α (nivel) · β (tendencia) · γ (estación)',
-      quote: 'Con ARIMA y Holt-Winters el pronóstico es un eco ponderado del pasado.',
+      quote: 'El pronóstico clásico es un eco del pasado.',
       icon: '🔉',
       canvasTitle: '1970 · Memoria Geométrica (φᵏ) y Suavizado Estacional Paso a Paso',
       ovLeft: '🔉 Pasado Reciente: Eco Exponencial (φᵏ)',
@@ -1108,18 +1103,18 @@ input[type="range"] {
     },
     bridge: {
       accent: 'var(--lab)',
-      tag: 'ETAPA 3 DE 4 · EL PUENTE DE LA ERA 1',
-      title: 'El Puente Analítico: La Navaja de Ockham en Producción',
-      lead: 'Tanto Verhulst como ARIMA comparten el mismo superpoder industrial: <b>máxima parsimonia matemática</b>.',
-      b1Label: '⚖️ LA VÍA 1: PARSIMONIA PURA',
-      b1Text: 'Apenas <b>3 a 5 parámetros físicos</b>: operan con <b>N &lt; 500 datos</b> e infieren en <b>CPU en microsegundos (&lt; 2 µs)</b>.',
-      b2Label: '🏪 REINO DE APLICACIÓN',
-      b2Text: 'Imbatible en series estables: <b>epidemiología acotada (INS)</b>, micro-retail y sensores edge sin GPU.',
+      tag: 'EL PUENTE',
+      title: 'Pocos parámetros bastan: la navaja de Ockham en acción',
+      lead: 'Verhulst y ARIMA comparten un superpoder: explicar mucho con muy pocos números, en una computadora común.',
+      b1Label: '⚖️ Simplicidad total',
+      b1Text: 'Solo 3 a 5 parámetros, menos de 500 datos y respuesta en microsegundos con CPU común.',
+      b2Label: '🏪 Dónde brilla',
+      b2Text: 'Series estables: brotes de enfermedades, tiendas pequeñas y sensores sin GPU.',
       formula: '3 a 5 Parámetros Interpretables ──▶ Inferencia CPU < 2 µs',
       hint: 'Condición: N < 500 · Estacionalidad clara · $0 GPU',
-      quote: '3 a 5 parámetros en CPU bastan para predecir en microsegundos.',
+      quote: 'Con 3 a 5 parámetros ya se predice en microsegundos.',
       icon: '⚖️',
-      canvasTitle: 'Síntesis de la Vía 1: Del Destino Acotado (1838) al Camino Estocástico (1970)',
+      canvasTitle: 'Síntesis de las fórmulas clásicas: Del Destino Acotado (1838) al Camino Estocástico (1970)',
       ovLeft: '✅ Fortaleza: Interpretabilidad + CPU (µs)',
       ovRight: '📌 Regla de uso: N < 500 y serie estable',
       legend: '<span class="leg-item"><i class="leg-line" style="--c:#ffc05c"></i> 1838: Techo Físico (L, k, t₀)</span><span class="leg-item"><i class="leg-line" style="--c:#38efff"></i> 1970: Eco Estacional (p,d,q / α,β,γ)</span><span class="leg-item"><i class="leg-line" style="--c:#6ef0b4"></i> Zona Óptima Vía 1 (N &lt; 500)</span>',
@@ -1127,16 +1122,16 @@ input[type="range"] {
     },
     era2: {
       accent: 'var(--rupture)',
-      tag: 'ETAPA 4 DE 4 · EL QUIEBRE Y PASE A ERA 2',
-      title: '¿Por qué se quiebra la Era 1? El pase al Puente Tabular (Era 2)',
-      lead: 'La parsimonia lineal quiebra ante <b>variables exógenas cruzadas</b> (clima extremo, precios, promociones).',
-      b1Label: '💥 QUIEBRE POR NO-LINEALIDAD',
-      b1Text: 'Ante <b>shocks multivariados</b> en Loreto o miles de SKUs, la ecuación rígida extrapola a ciegas hacia el vacío.',
-      b2Label: '🚀 SALTO A LA ERA 2 (PUENTE TABULAR)',
-      b2Text: 'Convertimos la serie 1D en una <b>Matriz Supervisada de Lags</b> para alimentar árboles <b>LightGBM / XGBoost</b>.',
+      tag: 'EL QUIEBRE',
+      title: 'Ante shocks, la fórmula simple falla y se pasa a tablas',
+      lead: 'La fórmula lineal se rompe cuando entran variables cruzadas: clima extremo, precios o promociones.',
+      b1Label: '💥 Cuando la fórmula se rompe',
+      b1Text: 'Ante shocks varios a la vez, la ecuación rígida proyecta a ciegas hacia el vacío.',
+      b2Label: '🚀 Siguiente paso: la tabla',
+      b2Text: 'Convertimos la serie en una tabla con valores pasados para alimentar árboles de decisión.',
       formula: 'Serie Yₜ ──▶ Matriz [ Yₜ₋₁, Yₜ₋₂, Climaₜ, Promoₜ ] ──▶ LightGBM',
       hint: 'Siguiente Diapo · Era 2: El Puente Tabular (Walmart M5)',
-      quote: 'Ante shocks no lineales, la fórmula lineal quiebra: requerimos matrices de Lags.',
+      quote: 'Cuando todo cambia a la vez, hace falta una tabla.',
       icon: '🚀',
       canvasTitle: 'Quiebre por No-Linealidad y Transformación hacia la Era 2 (Matriz de Lags + GBDT)',
       ovLeft: '💥 Fallo Era 1: Extrapolación lineal ciega ante shocks',

@@ -462,6 +462,7 @@ canvas { display: block; width: 100%; height: 100%; }
   .narrative-card { gap: 4px; padding: 6px 8px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -478,7 +479,7 @@ canvas { display: block; width: 100%; height: 100%; }
       </div>
       <div>
         <p class="eyebrow">ACTO 4 · CASO 2 · VALIDACIÓN WALK-FORWARD</p>
-        <h1><span class="num">27</span> Validación Walk-Forward y benchmark en Jaén <span class="sub">· 16 modelos</span></h1>
+        <h1><span class="num">27</span> Validación honesta: 16 modelos en Jaén</h1>
       </div>
     </div>
 
@@ -488,10 +489,10 @@ canvas { display: block; width: 100%; height: 100%; }
         <span>2016 · 2018–2024</span>
       </div>
       <div class="via-pills">
-        <span class="via-pill">🥇 <strong>M12 RF (d=2): 3.723 qq/ha</strong></span>
-        <span class="via-pill">🥈 <strong>M08 Déficit: 3.903 qq/ha</strong></span>
-        <span class="via-pill">🛰️ <strong>M05 NDVI: 5.448 qq/ha</strong> (error 2020: 18.25)</span>
-        <span class="via-pill">🏆 <strong>Pico 2020: 35.38 qq/ha</strong></span>
+        <span class="via-pill">🥇 <strong>M12 RF (d=2): ±3.7 qq/ha</strong> <span data-expert>MAE 3.723</span></span>
+        <span class="via-pill">🥈 <strong>M08 Déficit: ±3.9 qq/ha</strong> <span data-expert>MAE 3.903</span></span>
+        <span class="via-pill">🛰️ <strong>M05 NDVI: ±5.4 qq/ha</strong> (falló 2020 por unos 18) <span data-expert>MAE 5.448 · error 18.25</span></span>
+        <span class="via-pill">🏆 <strong>Pico 2020: 35.4 qq/ha</strong> <span data-expert>35.38</span></span>
       </div>
     </div>
   </header>
@@ -523,7 +524,7 @@ canvas { display: block; width: 100%; height: 100%; }
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">Cono Split Conformal 80%</span>
-          <span class="proc-sub">Incertidumbre calibrada (q = 8.29 qq/ha)</span>
+          <span class="proc-sub">Incertidumbre calibrada (±8.3 qq/ha) <span data-expert>q = 8.29</span></span>
         </span>
       </button>
     </div>
@@ -540,25 +541,23 @@ canvas { display: block; width: 100%; height: 100%; }
     <!-- COLUMNA IZQUIERDA -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 3 · VENTANA EXPANSIVA</span>
+        <span class="stage-tag" id="stageTag">VENTANA EXPANSIVA</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">Ventana expansiva: entrenar solo con el pasado, evaluar en el futuro</h2>
+      <h2 class="narr-title" id="narrTitle">Entrenar solo con el pasado y evaluar en el futuro</h2>
 
-      <p class="narr-lead" id="narrLead">
-        Cada campaña de test se predice entrenando <strong>únicamente con las cosechas anteriores</strong> (Train ≤ t−1). El protocolo evalúa <strong>8 campañas ciegas: 2016, 2018–2024</strong>, sin una sola fuga temporal.
-      </p>
+      <p class="narr-lead" id="narrLead">Cada campaña de prueba se predice usando únicamente cosechas anteriores. Son 8 campañas ciegas (2016, 2018–2024) sin fugas del futuro.</p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
           <div class="info-block-label">📏 El protocolo honesto</div>
-          <div class="info-block-text">La ventana de entrenamiento se expande año a año. Ninguna cosecha futura contamina el modelo: es la única validación admisible en series temporales pequeñas (N = 24).</div>
+          <div class="info-block-text">La ventana de entrenamiento crece cada año; ninguna cosecha futura contamina el modelo.</div>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label">🧪 8 test ciegos reales</div>
-          <div class="info-block-text">El periodo 2018–2024 incluye el colapso de recuperación post-roya y el récord histórico de 35.38 qq/ha: el test más duro posible para cualquier predictor.</div>
+          <div class="info-block-label">🧪 8 pruebas ciegas reales</div>
+          <div class="info-block-text">2018–2024 incluye el colapso post-roya y el récord de 35.4 qq/ha <span data-expert>35.38</span>: la prueba más dura para cualquier modelo.</div>
         </div>
       </div>
 
@@ -568,7 +567,7 @@ canvas { display: block; width: 100%; height: 100%; }
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Si el modelo miró el futuro para entrenar, su error es una ficción.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Si el modelo vio el futuro, su error es ficción.</span>
       </div>
     </article>
 
@@ -581,8 +580,8 @@ canvas { display: block; width: 100%; height: 100%; }
         </div>
 
         <div class="stage-kpis">
-          <span class="kpi-chip emerald" id="kpiM12">🥇 M12 RF d=2 · MAE 3.723</span>
-          <span class="kpi-chip red" id="kpiM05">🛰️ M05 NDVI · error 2020: 18.25</span>
+          <span class="kpi-chip emerald" id="kpiM12">🥇 M12 RF d=2 · error ±3.7 <span data-expert>MAE 3.723</span></span>
+          <span class="kpi-chip red" id="kpiM05">🛰️ M05 NDVI · error 2020: unos 18 <span data-expert>18.25</span></span>
         </div>
       </header>
 
@@ -627,44 +626,44 @@ canvas { display: block; width: 100%; height: 100%; }
   const STAGE_DATA = {
     ventana: {
       accent: '#b48eff',
-      tag: 'ETAPA 1 DE 3 · VENTANA EXPANSIVA',
-      title: 'Ventana expansiva: entrenar solo con el pasado, evaluar en el futuro',
-      lead: 'Cada campaña de test se predice entrenando <strong>únicamente con las cosechas anteriores</strong> (Train ≤ t−1). El protocolo evalúa <strong>8 campañas ciegas: 2016, 2018–2024</strong>, sin una sola fuga temporal.',
+      tag: 'VENTANA EXPANSIVA',
+      title: 'Entrenar solo con el pasado y evaluar en el futuro',
+      lead: 'Cada campaña de prueba se predice usando únicamente cosechas anteriores. Son 8 campañas ciegas (2016, 2018–2024) sin fugas del futuro.',
       blocks: [
-        { label: '📏 El protocolo honesto', text: 'La ventana de entrenamiento se expande año a año. Ninguna cosecha futura contamina el modelo: es la única validación admisible en series temporales pequeñas (N = 24).' },
-        { label: '🧪 8 test ciegos reales', text: 'El periodo 2018–2024 incluye el colapso de recuperación post-roya y el récord histórico de 35.38 qq/ha: el test más duro posible para cualquier predictor.' }
+        { label: '📏 El protocolo honesto', text: 'La ventana de entrenamiento crece cada año; ninguna cosecha futura contamina el modelo.' },
+        { label: '🧪 8 pruebas ciegas reales', text: '2018–2024 incluye el colapso post-roya y el récord de 35.4 qq/ha <span data-expert>35.38</span>: la prueba más dura para cualquier modelo.' }
       ],
       math: 'Train(t−1) ──▶ Test(t) · 8 ventanas: 2016, 2018–2024',
       hint: 'Sin Fuga Temporal',
-      quote: 'Si el modelo miró el futuro para entrenar, su error es una ficción.',
+      quote: 'Si el modelo vio el futuro, su error es ficción.',
       viewMode: 'trajectory'
     },
     torneo: {
       accent: '#2ee6a6',
-      tag: 'ETAPA 2 DE 3 · TORNEO DE 16 MODELOS',
-      title: 'El torneo de 16 modelos: gana la parsimonia fenológica',
-      lead: 'Sobre 8 test ciegos, <strong>M12 Random Forest (d=2) logra MAE = 3.723 qq/ha</strong> y <strong>M08 Solo Déficit Hídrico 3.903</strong>. El satélite óptico anual (<strong>M05: 5.448</strong>) es un 31.7% peor y colapsa en el récord de 2020.',
+      tag: 'EL TORNEO DE 16 MODELOS',
+      title: 'Torneo de 16 modelos: gana la simplicidad con física',
+      lead: 'Random Forest (d=2) se equivoca en promedio 3.7 qq/ha; solo déficit hídrico, 3.9. El NDVI anual (5.4) es 31.7% peor. <span data-expert>MAE = 3.723 · 3.903 · 5.448</span>',
       blocks: [
-        { label: '🥇 Árboles parsimoniosos + física', text: 'M12 con profundidad 2 (45.16 ms en CPU) y M08 con una única variable hídrica de floración baten a todos los modelos complejos: menos es más.' },
-        { label: '🛰️ El colapso del satélite anual', text: 'M05 Solo NDVI Anual predijo 17.13 qq/ha para 2020 cuando la cosecha real fue 35.38: un error absoluto de 18.25 qq/ha en el año más importante.' }
+        { label: '🥇 Árboles simples más física', text: 'M12 (profundidad 2, 45 ms en CPU) y M08 (solo agua) baten a los modelos complejos.' },
+        { label: '🛰️ El satélite anual se hunde', text: 'Solo NDVI predijo 17.1 qq/ha en 2020; la real fue 35.4: error de unos 18 qq/ha. <span data-expert>17.13 · 35.38 · 18.25</span>' }
       ],
-      math: 'MAE: M12 = 3.723 < M08 = 3.903 < M16 = 4.116 ≪ M05 = 5.448',
+      math: 'Error: M12 3.7 < M08 3.9 < M16 4.1 ≪ M05 5.4 qq/ha <span data-expert>3.723 · 3.903 · 4.116 · 5.448</span>',
       hint: 'Parsimonia Fenológica',
-      quote: 'La profundidad de dos y una variable hídrica vencieron a quince rivales.',
+      quote: 'Dos de profundidad y una variable de agua vencieron a quince rivales.',
       viewMode: 'benchmark'
     },
     cono: {
       accent: '#38efff',
-      tag: 'ETAPA 3 DE 3 · CONO SPLIT CONFORMAL',
-      title: 'El cono Split Conformal 80%: la duda se mide, no se supone',
-      lead: 'Con n = 8 test, el cuantil conformal de los residuos absolutos de la fusión multimodal es <strong>q = 8.29 qq/ha</strong>. El cono <strong>[ŷ − q, ŷ + q]</strong> cubre 8 de 8 cosechas observadas: incertidumbre calibrada sin supuestos gaussianos.',
+      tag: 'EL CONO DE DUDA CALIBRADO',
+      title: 'El cono mide la duda en lugar de suponerla',
+      lead: 'Con 8 pruebas, el margen de error es ±8.3 qq/ha <span data-expert>q = 8.29</span>. El cono [ŷ − q, ŷ + q] cubre las 8 cosechas observadas.',
       blocks: [
-        { label: '🧮 La fórmula honesta', text: 'q = cuantil_{(⌈(n+1)(1−α)⌉/n)}(|residuos|), con α = 0.20 y n = 8 → el cuantil conformal empírico es el máximo residual: 8.29 qq/ha.' },
-        { label: '🎯 Cobertura garantizada', text: 'El cono absorbe el colapso de 2016–2017 y el récord de 2020 sin romperse: cobertura empírica 8/8 ≥ 80% prometida en muestra finita.' }
+        { label: '🧮 La fórmula honesta', text: 'Con 8 pruebas, el margen es el mayor error observado: 8.3 qq/ha. <span data-expert>α = 0.20 · 8.29</span>' },
+        { label: '🎯 Cobertura garantizada', text: 'El cono absorbe el colapso de 2016–2017 y el récord de 2020: cobertura 8/8, sobre el 80% prometido.' }
       ],
-      math: 'I(x) = [ ŷ ± q ] · q = 8.29 qq/ha (SCP 80%, n = 8) ──▶ Cobertura 8/8',
+      math: 'Predicción ± 8.3 qq/ha (cobertura 80%, 8 pruebas) ──▶ acertó 8 de 8 <span data-expert>q = 8.29</span>',
       hint: 'Cobertura en Muestra Finita',
-      quote: 'Punto sin banda es marketing; banda calibrada es ciencia.',
+      quote: 'Un punto sin banda es marketing; una banda calibrada es ciencia.',
       viewMode: 'conformal'
     }
   };
@@ -772,7 +771,7 @@ canvas { display: block; width: 100%; height: 100%; }
       titleEl.textContent = 'Benchmark de 16 Modelos · MAE Walk-Forward (qq/ha)';
       iconEl.textContent = '🏁';
     } else {
-      titleEl.textContent = 'Cono Split Conformal 80% sobre la Fusión Multimodal (q = 8.29 qq/ha)';
+      titleEl.textContent = 'Cono Split Conformal 80% sobre la Fusión Multimodal (±8.3 qq/ha)';
       iconEl.textContent = '🔮';
     }
     hoverIndex = -1;
@@ -872,9 +871,9 @@ canvas { display: block; width: 100%; height: 100%; }
 
     const series = [
       { name: 'Observado (SIEA)', data: OBS, color: '#ffffff', width: 3.2, dash: [] },
-      { name: 'M12 RF · 3.72', data: M12, color: '#2ee6a6', width: 2.4, dash: [] },
-      { name: 'M08 Déficit · 3.90', data: M08, color: '#38efff', width: 2.2, dash: [6, 3] },
-      { name: 'M05 NDVI · 5.45', data: M05, color: '#ff5277', width: 2.2, dash: [5, 4] }
+      { name: 'M12 RF · ±3.7', data: M12, color: '#2ee6a6', width: 2.4, dash: [] },
+      { name: 'M08 Déficit · ±3.9', data: M08, color: '#38efff', width: 2.2, dash: [6, 3] },
+      { name: 'M05 NDVI · ±5.4', data: M05, color: '#ff5277', width: 2.2, dash: [5, 4] }
     ];
 
     series.forEach(s => {
@@ -933,7 +932,7 @@ canvas { display: block; width: 100%; height: 100%; }
     ctx.fillStyle = '#ffc05c';
     ctx.font = '700 10.5px JetBrains Mono';
     ctx.textAlign = 'center';
-    ctx.fillText('🏆 2020 RÉCORD: 35.38 qq/ha', xr, yr - 29);
+    ctx.fillText('🏆 2020 RÉCORD: 35.4 qq/ha', xr, yr - 29);
 
     // Anotación M05 en 2020
     const y05 = mapY(17.13);
@@ -946,7 +945,7 @@ canvas { display: block; width: 100%; height: 100%; }
     ctx.stroke();
     ctx.fillStyle = '#ff5277';
     ctx.font = '700 10.5px JetBrains Mono';
-    ctx.fillText('🛰️ M05: 17.13 · error 18.25', xr, y05 + 25);
+    ctx.fillText('🛰️ M05: 17.1 · error 18', xr, y05 + 25);
 
     hitAreas = YEARS.map((yr, i) => ({ x: mapX(i) - 14, y: padT, w: 28, h: plotH, label: `${yr}`, val: `Observado ${OBS[i].toFixed(2)} · M12 ${M12[i].toFixed(2)} · M08 ${M08[i].toFixed(2)} · M05 ${M05[i].toFixed(2)}` }));
   }
@@ -1107,7 +1106,7 @@ canvas { display: block; width: 100%; height: 100%; }
     ctx.fillStyle = '#38efff';
     ctx.font = '700 13px JetBrains Mono';
     ctx.textAlign = 'left';
-    ctx.fillText(`q = 8.29 qq/ha · α = 0.20 · n = 8`, padL + 18, padT + 24);
+    ctx.fillText(`±8.3 qq/ha · 8 pruebas`, padL + 18, padT + 24);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '600 10.5px JetBrains Mono';
     ctx.fillText('Split Conformal 80% · cobertura empírica 8/8', padL + 18, padT + 42);

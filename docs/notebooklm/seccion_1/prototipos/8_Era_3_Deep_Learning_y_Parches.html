@@ -860,8 +860,8 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">Continuación de Era 2 (Fallo de Meseta Plana) · Saga Evolutiva (Era 3 de 4)</p>
-        <h1>VÍA 3: <span class="era">Deep Learning y Parches</span> <span class="sub">· De LSTM y TFT a la Revolución PatchTST</span></h1>
+        <p class="eyebrow">Cuando los árboles se quedan cortos</p>
+        <h1>Redes neuronales: <span class="era">leer el tiempo en parches</span></h1>
       </div>
     </div>
 
@@ -940,28 +940,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ETAPA 1 DE 4 · EL FLUJO CONTINUO</span>
+          <span class="stage-tag" id="stageTag">MEMORIA FLUIDA</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. De Tablas Rígidas a Memoria Fluida: RNN, LSTM y TFT</h2>
-        <p class="narr-lead" id="narrLead">
-          En la Era 2 vimos que los árboles cortan el tiempo en cajas cerradas y chocan contra una <b>meseta plana</b>. El <b>Deep Learning</b> nació para leer el tiempo como una <b>película continua</b> sin crear tablas de <i>lags</i> a mano.
-        </p>
+        <h2 class="narr-title" id="narrTitle">Las redes neuronales leen el tiempo como una película</h2>
+        <p class="narr-lead" id="narrLead">El aprendizaje profundo nació para leer secuencias continuas, sin armar tablas de rezagos a mano.</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🧠 LA CINTA DE MEMORIA (LSTM, N-BEATS Y TFT)</div>
-          <p class="info-block-text" id="block1Text">
-            En lugar de mirar celdas sueltas de Excel, una red <b>LSTM</b> tiene una cinta transportadora interna con <b>3 compuertas</b>: decide qué ruido viejo borrar (<b>olvido fₜ</b>), qué dato nuevo guardar (<b>entrada iₜ</b>) y qué proyectar hoy (<b>salida oₜ</b>).
-          </p>
+          <div class="info-block-label" id="block1Label">🧠 Una cinta de memoria</div>
+          <p class="info-block-text" id="block1Text">Una red LSTM usa 3 compuertas: olvidar el ruido, dejar entrar datos nuevos y decidir qué sale.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">🎛️ SUPERPODER: EXTRAPOLAR PENDIENTES Y COVARIABLES</div>
-          <p class="info-block-text" id="block2Text">
-            Arquitecturas como <b>TFT (Temporal Fusion Transformer)</b> integran datos fijos y clima futuro aprendiendo la <b>velocidad y curvatura real de la serie</b>, superando el techo plano de los árboles.
-          </p>
+          <div class="info-block-label" id="block2Label">🎛️ Aprende pendientes</div>
+          <p class="info-block-text" id="block2Text">Aprende la velocidad y curvatura reales de la serie, superando la meseta plana de los árboles.</p>
         </div>
 
         <div class="math-strip">
@@ -971,7 +965,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway" id="speakerBox">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Las redes neuronales leen secuencias fluidas aprendiendo velocidad y curvatura temporal.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Las redes aprenden la velocidad y curva del tiempo.</span>
       </div>
     </aside>
 
@@ -1071,16 +1065,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     lstm: {
       accent: 'var(--phi)',
-      tag: 'ETAPA 1 DE 4 · LA MEMORIA FLUIDA (LSTM / TFT)',
-      title: '1. De Tablas Rígidas a Memoria Fluida: RNN, LSTM y TFT',
-      lead: 'El Deep Learning nació para leer el tiempo como una película continua sin tablas manuales de lags.',
-      b1Label: '🧠 CINTA LATENTE Y COMPUERTAS',
-      b1Text: 'Una <b>LSTM</b> usa 3 compuertas: <b>olvido (fₜ)</b> para descartar ruido, <b>entrada (iₜ)</b> y <b>salida (oₜ)</b>.',
-      b2Label: '🎛️ EXTRAPOLACIÓN DE PENDIENTE',
-      b2Text: 'Aprende la <b>velocidad y curvatura real</b> de la serie temporal, superando el techo plano de los árboles.',
+      tag: 'MEMORIA FLUIDA',
+      title: 'Las redes neuronales leen el tiempo como una película',
+      lead: 'El aprendizaje profundo nació para leer secuencias continuas, sin armar tablas de rezagos a mano.',
+      b1Label: '🧠 Una cinta de memoria',
+      b1Text: 'Una red LSTM usa 3 compuertas: olvidar el ruido, dejar entrar datos nuevos y decidir qué sale.',
+      b2Label: '🎛️ Aprende pendientes',
+      b2Text: 'Aprende la velocidad y curvatura reales de la serie, superando la meseta plana de los árboles.',
       formula: 'Estado Latente hₜ = f( hₜ₋₁, xₜ ) · Compuertas [ fₜ, iₜ, oₜ ]',
       hint: 'Sin ingeniería manual de lags · Flujo continuo',
-      quote: 'Las redes neuronales leen secuencias fluidas aprendiendo velocidad y curvatura temporal.',
+      quote: 'Las redes aprenden la velocidad y curva del tiempo.',
       icon: '🧠',
       canvasTitle: 'Memoria Secuencial Continua (LSTM / TFT) vs. Meseta Plana Tabular',
       ovLeft: '🧠 Cinta de Memoria Latente (Cₜ)',
@@ -1090,16 +1084,16 @@ input[type="range"] {
     },
     bottleneck: {
       accent: 'var(--rupture)',
-      tag: 'ETAPA 2 DE 4 · EL DOBLE CUELLO DE BOTELLA',
-      title: '2. ¿Por qué colapsaron las RNN y los primeros Transformers?',
-      lead: 'Al escalar secuencias largas aparecieron dos barreras: lentitud secuencial y explosión cuadrática.',
-      b1Label: '⏳ EMBUDO SECUENCIAL (LSTM)',
-      b1Text: 'Calcula punto a punto en fila india: <b>imposible paralelizar en GPU</b> y sufre desvanecimiento de gradiente.',
-      b2Label: '💥 EXPLOSIÓN CUADRÁTICA O(L²)',
-      b2Text: 'Un punto escalar "42.3" carece de semántica. Comparar 512 puntos punto a punto exige <b>262,144 cruces O(L²)</b>.',
+      tag: 'DOBLE CUELLO DE BOTELLA',
+      title: 'Las primeras redes se atascaron con series largas',
+      lead: 'Al crecer las secuencias aparecieron dos barreras: el cálculo en fila india y un costo que explota.',
+      b1Label: '⏳ Embudo en fila india',
+      b1Text: 'Calcula punto por punto, uno tras otro: no se puede paralelizar en GPU y olvida lo lejano.',
+      b2Label: '💥 Costo que explota',
+      b2Text: 'Comparar 512 puntos entre sí exige 262,144 cruces; un número suelto como 42.3 no dice nada.',
       formula: 'LSTM = Fila India Secuencial + Olvido  │  Transformer = Costo Cuadrático O(L²)',
       hint: 'Para L = 512 puntos ──▶ 262,144 conexiones punto a punto',
-      quote: 'Comparar cada punto escalar suelto contra todos dispara el cómputo a O(L²).',
+      quote: 'Comparar todos los puntos con todos dispara el costo.',
       icon: '💥',
       canvasTitle: 'El Doble Cuello de Botella: Embudo Secuencial (LSTM) vs. Explosión Cuadrática O(L²)',
       ovLeft: '⏳ Embudo Secuencial (LSTM)',
@@ -1109,16 +1103,16 @@ input[type="range"] {
     },
     patchtst: {
       accent: 'var(--purple)',
-      tag: 'ETAPA 3 DE 4 · LA REVOLUCIÓN DEL PARCHE (ICLR 2023)',
-      title: '3. PatchTST: Empaquetar Números en “Palabras del Tiempo”',
-      lead: 'PatchTST (ICLR 2023) agrupó puntos continuos en parches, creando palabras del tiempo.',
-      b1Label: '🧱 PARCHES: SEMÁNTICA LOCAL',
-      b1Text: 'Agrupar <b>P=16 pasos continuos</b> aporta forma y pendiente. Cada canal viaja de forma independiente.',
-      b2Label: '⚡ REDUCCIÓN DRÁSTICA O((L/P)²)',
-      b2Text: 'De 512 puntos a 32 parches: la atención cae de <b>262,144 a 1,024 operaciones (256x ahorro)</b>.',
+      tag: 'LA REVOLUCIÓN DEL PARCHE',
+      title: 'Agrupar números en parches crea palabras del tiempo',
+      lead: 'En 2023, PatchTST agrupó puntos continuos en parches, como si cada trozo fuera una palabra.',
+      b1Label: '🧱 Parches con sentido',
+      b1Text: 'Agrupar 16 pasos seguidos aporta forma y pendiente; cada canal viaja por separado.',
+      b2Label: '⚡ Mucho menos cálculo',
+      b2Text: 'De 512 puntos a 32 parches: de 262,144 a 1,024 operaciones, 256 veces menos.',
       formula: 'Secuencia L ──▶ L/P Parches ──▶ Costo cae de O(L²) a O((L/P)²)',
       hint: 'Con P = 16: 256 veces menos memoria en el mapa de atención',
-      quote: 'Agrupar 16 pasos continuos en parches reduce el costo de atención hasta 256 veces.',
+      quote: 'Agrupar 16 pasos en un parche ahorra hasta 256 veces.',
       icon: '🧱',
       canvasTitle: 'Arquitectura PatchTST: Segmentación en Parches (P) + Autoatención Paralela O((L/P)²)',
       ovLeft: '🧱 Empaquetado en Parches (P=16)',
@@ -1128,16 +1122,16 @@ input[type="range"] {
     },
     era4: {
       accent: 'var(--lab)',
-      tag: 'ETAPA 4 DE 4 · IMPACTO INDUSTRIAL Y PASE A ERA 4',
-      title: '4. Parques Renovables (CAISO / Enel) y el Salto a la Era 4',
-      lead: 'PatchTST demostró éxito en renovables masivas y sentó las bases de los Modelos Fundacionales.',
-      b1Label: '🌬️ DESPLIEGUE EN CAISO Y ENEL',
-      b1Text: 'Pronostica cientos de parques eólicos y solares en paralelo a largo plazo sin error acumulativo recursivo.',
-      b2Label: '🚀 SALTO A FOUNDATION MODELS',
-      b2Text: 'Con parches como tokens, entrenamos modelos gigantescos con billones de datos para inferencia <b>Zero-Shot</b>.',
+      tag: 'RENOVABLES A ESCALA',
+      title: 'Parques eólicos y solares abrieron paso a modelos gigantes',
+      lead: 'PatchTST funcionó en cientos de parques renovables y preparó el camino a los modelos que ya vienen entrenados.',
+      b1Label: '🌬️ En California e Italia',
+      b1Text: 'Pronostica cientos de parques eólicos y solares a la vez, sin acumular error paso a paso.',
+      b2Label: '🚀 Modelos ya entrenados',
+      b2Text: 'Con parches como piezas, se entrenan modelos gigantes que pronostican sin reentrenar (Zero-Shot).',
       formula: 'Parches (Era 3) + 27 Mil Millones de Datos (LOTSA) ──▶ Era 4: Zero-Shot',
       hint: 'Siguiente Diapo · Era 4: TimesFM, Chronos, Moirai y Lag-Llama',
-      quote: 'Al tokenizar series en parches nacen los modelos fundacionales preentrenados Zero-Shot.',
+      quote: 'Con parches nacieron los modelos que pronostican sin reentrenar.',
       icon: '🚀',
       canvasTitle: 'Pronóstico Eólico/Solar Multi-Parque (CAISO / Enel) y Puente a la Era 4 (Zero-Shot)',
       ovLeft: '🌬️ Red Eléctrica CAISO / Enel',

@@ -472,6 +472,7 @@ canvas { display: block; width: 100%; height: 100%; }
   .narrative-card { gap: 4px; padding: 6px 8px; }
   .topbar { padding-bottom: 4px; }
 }
+[data-expert]{font-size:.72em;font-weight:400;opacity:.62;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -488,7 +489,7 @@ canvas { display: block; width: 100%; height: 100%; }
       </div>
       <div>
         <p class="eyebrow">ACTO 4 · CASO 2 · LA TRAMPA DEL NDVI</p>
-        <h1><span class="num">26</span> La trampa del satélite: NDVI vs estrés hídrico <span class="sub">· Jaén 2001–2024</span></h1>
+        <h1><span class="num">26</span> La trampa del satélite: NDVI vs estrés hídrico</h1>
       </div>
     </div>
 
@@ -498,9 +499,9 @@ canvas { display: block; width: 100%; height: 100%; }
         <span>MODIS 250 m · ERA5</span>
       </div>
       <div class="via-pills">
-        <span class="via-pill">🛰️ <strong>NDVI anual r = 0.1536</strong> (p = 0.600)</span>
-        <span class="via-pill">💧 <strong>Déficit floración r = 0.7564</strong> (p = 0.002)</span>
-        <span class="via-pill">🌧️ <strong>Lluvia floración r = 0.7511</strong></span>
+        <span class="via-pill">🛰️ <strong>NDVI anual: casi ninguna relación</strong> <span data-expert>r = 0.1536 · p = 0.600</span></span>
+        <span class="via-pill">💧 <strong>Déficit de agua: relación fuerte</strong> <span data-expert>r = 0.7564 · p = 0.002</span></span>
+        <span class="via-pill">🌧️ <strong>Lluvia floración: relación fuerte</strong> <span data-expert>r = 0.7511</span></span>
         <span class="via-pill">🔥 <strong>2014: 10.0 qq/ha (−56.0%)</strong></span>
       </div>
     </div>
@@ -513,7 +514,7 @@ canvas { display: block; width: 100%; height: 100%; }
         <span class="proc-num">1</span>
         <span class="proc-text">
           <span class="proc-year">El Espejismo del Dosel (NDVI)</span>
-          <span class="proc-sub">r = 0.1536 (p = 0.600) · CV = 2.32%</span>
+          <span class="proc-sub">casi ninguna relación <span data-expert>r = 0.1536 (p = 0.600) · CV = 2.32%</span></span>
         </span>
       </button>
 
@@ -523,7 +524,7 @@ canvas { display: block; width: 100%; height: 100%; }
         <span class="proc-num">2</span>
         <span class="proc-text">
           <span class="proc-year">Estrés Fisiológico Oculto (Floración)</span>
-          <span class="proc-sub">Déficit r = 0.7564 · Lluvia r = 0.7511</span>
+          <span class="proc-sub">Déficit y lluvia: relación fuerte <span data-expert>r = 0.7564 · 0.7511</span></span>
         </span>
       </button>
 
@@ -533,7 +534,7 @@ canvas { display: block; width: 100%; height: 100%; }
         <span class="proc-num">3</span>
         <span class="proc-text">
           <span class="proc-year">El Filtro de Correlación Física</span>
-          <span class="proc-sub">0.7564 vs 0.1536 · La física manda</span>
+          <span class="proc-sub">Fuerte vs casi nula · La física manda <span data-expert>0.7564 vs 0.1536</span></span>
         </span>
       </button>
     </div>
@@ -550,35 +551,33 @@ canvas { display: block; width: 100%; height: 100%; }
     <!-- COLUMNA IZQUIERDA -->
     <article class="narrative-card" id="narrCard">
       <div class="stage-pill-row">
-        <span class="stage-tag" id="stageTag">ETAPA 1 DE 3 · EL ESPEJISMO DEL DOSEL</span>
+        <span class="stage-tag" id="stageTag">EL ESPEJISMO DEL DOSEL</span>
         <span class="stage-shortcut">Teclas 1 · 2 · 3</span>
       </div>
 
-      <h2 class="narr-title" id="narrTitle">El espejismo del dosel: NDVI plano mientras la cosecha se derrumba</h2>
+      <h2 class="narr-title" id="narrTitle">El satélite ve verde mientras la cosecha se derrumba</h2>
 
-      <p class="narr-lead" id="narrLead">
-        Bajo sombra con <em>Inga spp.</em>, el dosel mantiene un NDVI casi constante (<strong>~0.74 · CV = 2.32%</strong>). La correlación con el rendimiento real es <strong>r = +0.1536 (p = 0.600)</strong>: estadísticamente indistinguible del ruido.
-      </p>
+      <p class="narr-lead" id="narrLead">Bajo sombra el NDVI casi no cambia <span data-expert>(~0.74)</span>; su relación con la cosecha es casi nula, puro azar. <span data-expert>r = +0.1536 · p = 0.600</span></p>
 
       <div class="narr-blocks" id="narrBlocks">
         <div class="info-block">
           <div class="info-block-label">🛰️ Un falso positivo perfecto</div>
-          <div class="info-block-text">En 2014 el rendimiento colapsó a <strong>10.0 qq/ha (−56.0%)</strong> mientras el NDVI marcó <strong>0.7483 (+1.4% sobre su media)</strong>. El satélite veía hojas sanas de sombra, no frutos enfermos.</div>
+          <div class="info-block-text">2014: cosecha en 10 qq/ha (−56%), el NDVI apenas subió (+1.4%): veía hojas sanas, no frutos enfermos. <span data-expert>10.0 qq/ha · −56.0% · NDVI 0.7483</span></div>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label">📉 Pendiente nula</div>
-          <div class="info-block-text">Una regresión NDVI → rendimiento es prácticamente horizontal: el índice óptico anual no distingue una cosecha récord de una epidemia.</div>
+          <div class="info-block-label">📉 Pendiente casi nula</div>
+          <div class="info-block-text">El NDVI da una línea casi horizontal: el índice anual no distingue un récord de una epidemia.</div>
         </div>
       </div>
 
       <div class="math-strip" id="mathStrip">
-        <span>r(NDVI anual, Rendimiento) = +0.1536 (p = 0.600) ──▶ Ruido</span>
+        <span>NDVI anual vs cosecha: casi ninguna relación ──▶ ruido <span data-expert>r = +0.1536 · p = 0.600</span></span>
         <span class="hint">Señal Saturada</span>
       </div>
 
       <div class="executive-takeaway">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">El verde del dosel no es el fruto: el satélite puede ser ciego.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Verde no es fruto: el satélite puede ser ciego.</span>
       </div>
     </article>
 
@@ -587,12 +586,12 @@ canvas { display: block; width: 100%; height: 100%; }
       <header class="stage-header">
         <div class="stage-title-wrap">
           <span class="stage-icon" id="stageIcon">🛰️</span>
-          <h3 class="stage-title" id="stageVisualTitle">MODIS NDVI Anual vs Rendimiento (r = 0.1536, p = 0.600 — Señal Saturada)</h3>
+          <h3 class="stage-title" id="stageVisualTitle">MODIS NDVI Anual vs Rendimiento (casi ninguna relación — señal saturada) <span data-expert>r = 0.1536, p = 0.600</span></h3>
         </div>
 
         <div class="stage-kpis">
-          <span class="kpi-chip cyan" id="kpiN">MODIS NDVI Anual · r = +0.1536</span>
-          <span class="kpi-chip emerald" id="kpiD">Déficit Floración · r = +0.7564</span>
+          <span class="kpi-chip cyan" id="kpiN">MODIS NDVI Anual · casi nula <span data-expert>r = +0.1536</span></span>
+          <span class="kpi-chip emerald" id="kpiD">Déficit Floración · fuerte <span data-expert>r = +0.7564</span></span>
         </div>
       </header>
 
@@ -885,7 +884,7 @@ canvas { display: block; width: 100%; height: 100%; }
   </g>
   <g class="iso-face-text" data-tone="hi">
     <text x="521.5966252430835" y="285.48763587142747" font-size="10.5" font-weight="700" text-anchor="middle" letter-spacing="0.06em">DOSEL DE SOMBRA (PACAE)</text>
-    <text x="521.5966252430835" y="297.48763587142747" font-size="8.5" fill="var(--anatomy-green)" text-anchor="middle">SATURACIÓN EN COPA (NDVI ~0.80)</text>
+    <text x="521.5966252430835" y="297.48763587142747" font-size="8.5" fill="var(--anatomy-green)" text-anchor="middle">SATURACIÓN EN COPA (NDVI ~0.8)</text>
   </g>
   <g class="iso-face-text" data-tone="hi">
     <text x="326.63065501178613" y="392.5436492558366" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="0.08em">CAFETOS EN SOTOBOSQUE (COSECHA REAL)</text>
@@ -897,9 +896,9 @@ canvas { display: block; width: 100%; height: 100%; }
       <footer class="controls-bar">
         <div class="ctrl-group">
           <span style="font-size:10px; font-weight:700; color:var(--muted); font-family:var(--mono);">VARIABLE:</span>
-          <button class="ctrl-btn active" id="btnScatterNdvi">🛰️ NDVI Anual (r=0.154)</button>
-          <button class="ctrl-btn" id="btnScatterDef">💧 Déficit Floración (r=0.756)</button>
-          <button class="ctrl-btn" id="btnScatterLluvia">🌧️ Lluvia Floración (r=0.751)</button>
+          <button class="ctrl-btn active" id="btnScatterNdvi">🛰️ NDVI Anual (casi nula)</button>
+          <button class="ctrl-btn" id="btnScatterDef">💧 Déficit Floración (fuerte)</button>
+          <button class="ctrl-btn" id="btnScatterLluvia">🌧️ Lluvia Floración (fuerte)</button>
           <button class="ctrl-btn" id="btnAnatomy">📐 Anatomía: Dosel vs Satélite</button>
         </div>
 
@@ -931,44 +930,44 @@ canvas { display: block; width: 100%; height: 100%; }
   const STAGE_DATA = {
     ndvi: {
       accent: '#38efff',
-      tag: 'ETAPA 1 DE 3 · EL ESPEJISMO DEL DOSEL',
-      title: 'El espejismo del dosel: NDVI plano mientras la cosecha se derrumba',
-      lead: 'Bajo sombra con <em>Inga spp.</em>, el dosel mantiene un NDVI casi constante (<strong>~0.74 · CV = 2.32%</strong>). La correlación con el rendimiento real es <strong>r = +0.1536 (p = 0.600)</strong>: estadísticamente indistinguible del ruido.',
+      tag: 'EL ESPEJISMO DEL DOSEL',
+      title: 'El satélite ve verde mientras la cosecha se derrumba',
+      lead: 'Bajo sombra el NDVI casi no cambia <span data-expert>(~0.74)</span>; su relación con la cosecha es casi nula, puro azar. <span data-expert>r = +0.1536 · p = 0.600</span>',
       blocks: [
-        { label: '🛰️ Un falso positivo perfecto', text: 'En 2014 el rendimiento colapsó a <strong>10.0 qq/ha (−56.0%)</strong> mientras el NDVI marcó <strong>0.7483 (+1.4% sobre su media)</strong>. El satélite veía hojas sanas de sombra, no frutos enfermos.' },
-        { label: '📉 Pendiente nula', text: 'Una regresión NDVI → rendimiento es prácticamente horizontal: el índice óptico anual no distingue una cosecha récord de una epidemia.' }
+        { label: '🛰️ Un falso positivo perfecto', text: '2014: cosecha en 10 qq/ha (−56%), el NDVI apenas subió (+1.4%): veía hojas sanas, no frutos enfermos. <span data-expert>10.0 qq/ha · −56.0% · NDVI 0.7483</span>' },
+        { label: '📉 Pendiente casi nula', text: 'El NDVI da una línea casi horizontal: el índice anual no distingue un récord de una epidemia.' }
       ],
-      math: 'r(NDVI anual, Rendimiento) = +0.1536 (p = 0.600) ──▶ Ruido',
+      math: 'NDVI anual vs cosecha: casi ninguna relación ──▶ ruido <span data-expert>r = +0.1536 · p = 0.600</span>',
       hint: 'Señal Saturada',
-      quote: 'El verde del dosel no es el fruto: el satélite puede ser ciego.',
+      quote: 'Verde no es fruto: el satélite puede ser ciego.',
       viewMode: 'ndvi'
     },
     fisio: {
       accent: '#2ee6a6',
-      tag: 'ETAPA 2 DE 3 · ESTRÉS FISIOLÓGICO OCULTO',
-      title: 'La verdadera señal: el agua de la floración ordena la cosecha',
-      lead: 'El balance hídrico de floración (Ago–Oct) muestra <strong>r = +0.7564 (p = 0.002)</strong> con el rendimiento y la lluvia <strong>r = +0.7511</strong>. La Tmax de floración juega en contra: <strong>r = −0.5606</strong>.',
+      tag: 'LA SEÑAL REAL: EL AGUA',
+      title: 'La verdadera señal es el agua de la floración',
+      lead: 'El agua de la floración (ago–oct) se relaciona fuertemente con la cosecha; el calor influye en contra (relación moderada). <span data-expert>r = +0.7564 · p = 0.002 · calor r = −0.5606</span>',
       blocks: [
-        { label: '💧 Déficit hídrico (P − PET)', text: 'De −250 mm en 2014 a +462 mm en 2020: la variable ordena el colapso y el récord en una sola recta ascendente.' },
-        { label: '🌧️ Lluvia de floración', text: '404 mm en 2018 → 782 mm en 2020. La señal pluvial de Ago–Oct precede a la cosecha con el retardo fenológico τ = 6–8 meses.' }
+        { label: '💧 Déficit hídrico', text: 'De −250 mm en 2014 a +462 mm en 2020: ordena el colapso y el récord.' },
+        { label: '🌧️ Lluvia de floración', text: '404 mm en 2018 → 782 mm en 2020 (relación fuerte <span data-expert>r = +0.7511</span>): la lluvia de ago–oct anticipa la cosecha.' }
       ],
-      math: 'r(Déficit Hídrico Floración) = +0.7564 · r(Lluvia Floración) = +0.7511',
+      math: 'Déficit hídrico y lluvia de floración: relación fuerte con la cosecha <span data-expert>r = +0.7564 · +0.7511</span>',
       hint: 'Señal Fisiológica',
-      quote: 'El agua de agosto–octubre es el mejor pronóstico de la cosecha de marzo.',
+      quote: 'El agua de agosto–octubre predice la cosecha de marzo.',
       viewMode: 'deficit'
     },
     filtro: {
       accent: '#ffc05c',
-      tag: 'ETAPA 3 DE 3 · EL FILTRO DE CORRELACIÓN FÍSICA',
-      title: 'El filtro de correlación física: 0.7564 contra 0.1536',
-      lead: 'Antes de añadir arquitectura, aplica el filtro: solo entran variables con mecanismo físico plausible. La física de floración (<strong>r = 0.7564</strong>) frente al espejismo óptico (<strong>r = 0.1536</strong>) es la lección del Caso 2.',
+      tag: 'EL FILTRO FÍSICO',
+      title: 'Primero el filtro físico: el agua gana al satélite',
+      lead: 'Antes de añadir complejidad, solo entran variables con mecanismo físico plausible. Floración: relación fuerte; espejismo óptico: casi ninguna. <span data-expert>r = 0.7564 vs r = 0.1536</span>',
       blocks: [
-        { label: '🧮 El criterio del mecanismo', text: 'Toda variable candidata debe tener una vía causal biológica hacia el fruto. El NDVI → hoja no llega al fruto bajo sombra; el agua → flor → fruto sí.' },
-        { label: '➡️ Pase a la Diapo 27', text: 'Con las variables correctas, validamos 16 modelos con ventana expansiva Walk-Forward: la parsimonia fenológica gana.' }
+        { label: '🧮 El criterio del mecanismo', text: 'Cada variable necesita vía causal al fruto: el NDVI llega a la hoja; el agua, al fruto.' },
+        { label: '➡️ Siguiente: diapositiva 27', text: 'Con las variables correctas, validamos 16 modelos año a año: gana la parsimonia fenológica.' }
       ],
-      math: 'Filtro: r > 0.5 + mecanismo físico ──▶ Déficit 0.7564 ✓ · NDVI 0.1536 ✗',
+      math: 'Filtro: relación fuerte + mecanismo físico ──▶ Déficit ✓ · NDVI ✗ <span data-expert>0.7564 vs 0.1536; criterio r > 0.5</span>',
       hint: 'Pase a Diapo 27 →',
-      quote: 'Si la variable no tiene mecanismo físico, ninguna arquitectura la salva.',
+      quote: 'Sin mecanismo físico, ninguna arquitectura salva a la variable.',
       viewMode: 'lluvia'
     }
   };
@@ -992,9 +991,9 @@ canvas { display: block; width: 100%; height: 100%; }
   ];
 
   const VARS = {
-    ndvi:    { key: 'ndvi',    label: 'MODIS NDVI Anual (r = 0.1536, p = 0.600 — Señal Saturada)', short: 'NDVI', r: '+0.1536', p: '0.600', color: '#38efff', xLabel: 'MODIS NDVI Anual', minX: 0.69, maxX: 0.78, unit: '' },
-    deficit: { key: 'def',     label: 'Balance Hídrico Floración Ago–Oct (r = 0.7564, p = 0.002 — Fuerte Señal)', short: 'Déficit', r: '+0.7564', p: '0.002', color: '#2ee6a6', xLabel: 'Déficit Hídrico Floración Ago–Oct (P − PET, mm)', minX: -300, maxX: 500, unit: ' mm' },
-    lluvia:  { key: 'lluvia',  label: 'Lluvia en Floración Ago–Oct (r = 0.7511, p = 0.002)', short: 'Lluvia', r: '+0.7511', p: '0.002', color: '#b48eff', xLabel: 'Lluvia Floración Ago–Oct (mm)', minX: 60, maxX: 820, unit: ' mm' }
+    ndvi:    { key: 'ndvi',    label: 'MODIS NDVI Anual (casi ninguna relación — Señal Saturada)', expert: 'r = 0.1536, p = 0.600', short: 'NDVI', r: '+0.1536', p: '0.600', color: '#38efff', xLabel: 'MODIS NDVI Anual', minX: 0.69, maxX: 0.78, unit: '' },
+    deficit: { key: 'def',     label: 'Balance Hídrico Floración Ago–Oct (relación fuerte)', expert: 'r = 0.7564, p = 0.002', short: 'Déficit', r: '+0.7564', p: '0.002', color: '#2ee6a6', xLabel: 'Déficit Hídrico Floración Ago–Oct (P − PET, mm)', minX: -300, maxX: 500, unit: ' mm' },
+    lluvia:  { key: 'lluvia',  label: 'Lluvia en Floración Ago–Oct (relación fuerte)', expert: 'r = 0.7511, p = 0.002', short: 'Lluvia', r: '+0.7511', p: '0.002', color: '#b48eff', xLabel: 'Lluvia Floración Ago–Oct (mm)', minX: 60, maxX: 820, unit: ' mm' }
   };
 
   let currentStep = 'ndvi';
@@ -1074,7 +1073,7 @@ canvas { display: block; width: 100%; height: 100%; }
     } else {
       anatomyWrap.classList.remove('visible');
       const v = VARS[mode];
-      titleEl.textContent = v.label;
+      titleEl.innerHTML = v.label + ' <span data-expert>' + v.expert + '</span>';
       iconEl.textContent = (mode === 'ndvi') ? '🛰️' : (mode === 'deficit' ? '💧' : '🌧️');
     }
     hoverIndex = -1;
@@ -1220,7 +1219,7 @@ canvas { display: block; width: 100%; height: 100%; }
 
     // Pastillas anti-solape para 2014 y 2020
     const anno = [
-      { c: CAMP.find(p => p.y === 2014), text: '🔥 2014: 10.0 qq/ha (−56.0%)' + (viewMode === 'ndvi' ? ' · NDVI 0.7483 (+1.4%)' : ''), color: '#ff5277' },
+      { c: CAMP.find(p => p.y === 2014), text: '🔥 2014: 10 qq/ha (−56%)' + (viewMode === 'ndvi' ? ' · NDVI casi igual (+1.4%)' : ''), color: '#ff5277' },
       { c: CAMP.find(p => p.y === 2020), text: '🏆 2020: 35.38 qq/ha (récord)', color: '#ffc05c' }
     ];
     anno.forEach(a => {

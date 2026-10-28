@@ -858,8 +858,8 @@ input[type="range"] {
         </svg>
       </div>
       <div>
-        <p class="eyebrow">Continuación de Era 1 (Fallo ante No-Linealidad) · Saga Evolutiva (Era 2 de 4)</p>
-        <h1>VÍA 2: <span class="era">El Puente Tabular</span> <span class="sub">· El Truco de los Lags y Árboles (LightGBM, XGBoost)</span></h1>
+        <p class="eyebrow">Cuando la fórmula simple no alcanza</p>
+        <h1>De series a tablas: <span class="era">el puente tabular</span></h1>
       </div>
     </div>
 
@@ -938,28 +938,22 @@ input[type="range"] {
     <aside class="narrative-card" id="narrativeCard" aria-live="polite">
       <div class="narr-top">
         <div class="narr-badges">
-          <span class="stage-tag" id="stageTag">ACTO 1 DE 4 · EL ORIGEN DE LA ERA 2</span>
+          <span class="stage-tag" id="stageTag">EL TRUCO DE LOS REZAGOS</span>
           <span class="stage-year-pill" id="stageKeyHint">Teclas 1 · 2 · 3 · 4</span>
         </div>
-        <h2 class="narr-title" id="narrTitle">1. El “Truco de los Lags”: ¿Cómo convertir el tiempo en una tabla?</h2>
-        <p class="narr-lead" id="narrLead">
-          En la Era 1 vimos que una fórmula rígida colapsa cuando entran lluvias, precios o promociones. Para usar <b>Machine Learning</b>, primero hubo que enseñarle a leer el tiempo como si fuera una <b>hoja de Excel</b>.
-        </p>
+        <h2 class="narr-title" id="narrTitle">Convertir el tiempo en una tabla de Excel</h2>
+        <p class="narr-lead" id="narrLead">Para usar aprendizaje automático, primero hubo que enseñarle a leer el pasado como columnas de una tabla.</p>
       </div>
 
       <div class="narr-blocks">
         <div class="info-block">
-          <div class="info-block-label" id="block1Label">🪟 LA ANALOGÍA DE LA VENTANA DESLIZANTE</div>
-          <p class="info-block-text" id="block1Text">
-            Un algoritmo de árboles no tiene reloj ni entiende qué es una secuencia. El <b>“truco de los lags”</b> consiste en deslizar una ventana por el pasado y copiar en columnas <b>cuánto vendimos ayer (yₜ₋₁), hace 7 días (yₜ₋₇) y el promedio móvil</b>, para predecir mañana (<b>yₜ₊ₕ</b>).
-          </p>
+          <div class="info-block-label" id="block1Label">🪟 Una ventana deslizante</div>
+          <p class="info-block-text" id="block1Text">Se desliza por el pasado y copia en columnas ayer, hace 7 días y promedios móviles.</p>
         </div>
 
         <div class="info-block">
-          <div class="info-block-label" id="block2Label">🧩 EL GRAN BENEFICIO: SUMAR CUALQUIER VARIABLE</div>
-          <p class="info-block-text" id="block2Text">
-            Una vez que el tiempo es una tabla supervisada, podemos añadir al lado <b>columnas de clima, descuentos, feriados o categorías</b>. El modelo ignora el orden temporal y aprende reglas directas de esa matriz estática.
-          </p>
+          <div class="info-block-label" id="block2Label">🧩 Sumar cualquier variable</div>
+          <p class="info-block-text" id="block2Text">Permite añadir clima, promociones o feriados. El árbol aprende reglas fijas, no secuencias.</p>
         </div>
 
         <div class="math-strip">
@@ -969,7 +963,7 @@ input[type="range"] {
       </div>
 
       <div class="executive-takeaway" id="speakerBox">
-        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Deslizar ventanas convierte series 1D en matrices supervisadas para árboles GBDT.</span>
+        <strong>💡 Idea Clave:</strong> <span id="speakerQuote">Deslizar ventanas convierte una serie en una tabla.</span>
       </div>
     </aside>
 
@@ -1069,16 +1063,16 @@ input[type="range"] {
   const STAGE_CONTENT = {
     lags: {
       accent: 'var(--phi)',
-      tag: 'ETAPA 1 DE 4 · EL TRUCO DE LOS LAGS',
-      title: '1. El “Truco de los Lags”: ¿Cómo convertir el tiempo en una tabla?',
-      lead: 'Para usar Machine Learning, primero hubo que enseñar a leer el tiempo como una tabla de Excel.',
-      b1Label: '🪟 VENTANA DESLIZANTE DE LAGS',
-      b1Text: 'Desliza una ventana por el pasado copiando en columnas <b>ayer (yₜ₋₁), hace 7 días (yₜ₋₇) y medias móviles</b>.',
-      b2Label: '🧩 MATRIZ SUPERVISADA Y EXÓGENAS',
-      b2Text: 'Permite sumar <b>clima, promociones o feriados</b>. El árbol ignora la secuencia y aprende reglas estáticas.',
+      tag: 'EL TRUCO DE LOS REZAGOS',
+      title: 'Convertir el tiempo en una tabla de Excel',
+      lead: 'Para usar aprendizaje automático, primero hubo que enseñarle a leer el pasado como columnas de una tabla.',
+      b1Label: '🪟 Una ventana deslizante',
+      b1Text: 'Se desliza por el pasado y copia en columnas ayer, hace 7 días y promedios móviles.',
+      b2Label: '🧩 Sumar cualquier variable',
+      b2Text: 'Permite añadir clima, promociones o feriados. El árbol aprende reglas fijas, no secuencias.',
       formula: 'Vector Xₜ = [ yₜ₋₁, yₜ₋₇, Media₇, Promoₜ, Climaₜ ] ──▶ yₜ₊ₕ',
       hint: 'De secuencia 1D a matriz supervisada 2D',
-      quote: 'Deslizar ventanas convierte series 1D en matrices supervisadas para árboles GBDT.',
+      quote: 'Deslizar ventanas convierte una serie en una tabla.',
       icon: '🪟',
       canvasTitle: 'Ventana Deslizante en Vivo: De Serie Temporal a Matriz Supervisada',
       ovLeft: '🪟 Ventana Deslizante (Lags)',
@@ -1088,16 +1082,16 @@ input[type="range"] {
     },
     m5: {
       accent: 'var(--lab)',
-      tag: 'ETAPA 2 DE 4 · SUPERPODER EN RETAIL MASIVO',
-      title: '2. ¿Por qué LightGBM y XGBoost dominaron Walmart M5?',
-      lead: 'Al transformar series en matrices, los árboles GBDT (LightGBM, XGBoost) dominaron el retail masivo.',
-      b1Label: '🛒 CRUCE NO LINEAL SIN GPU',
-      b1Text: 'Descubren interacciones complejas entre <b>miles de productos, precios y clima</b> en milisegundos en CPU.',
-      b2Label: '✅ DOMINIO OPERATIVO',
-      b2Text: 'Imbatible con <b>1,000 a 100,000 datos</b> y variables exógenas, si el futuro no rompe récords históricos.',
+      tag: 'SUPERPODER EN RETAIL',
+      title: 'Árboles de decisión dominaron las ventas de Walmart',
+      lead: 'Con la serie convertida en tabla, LightGBM y XGBoost (árboles de decisión) ganaron en tiendas masivas.',
+      b1Label: '🛒 Cruces sin GPU',
+      b1Text: 'Descubren relaciones entre miles de productos, precios y clima en milisegundos, con CPU común.',
+      b2Label: '✅ Dónde funcionan',
+      b2Text: 'Imbatibles con 1,000 a 100,000 datos y variables extra, si el futuro no rompe récords.',
       formula: 'LightGBM( Lags + Rolling_Mean + Precio + Promo ) ──▶ 30,490 SKUs',
       hint: 'Ganador indiscutible en Retail Masivo (Makridakis et al., 2022)',
-      quote: 'LightGBM arrasó en Walmart cruzando 30 mil productos sin usar GPUs.',
+      quote: 'LightGBM ganó en Walmart cruzando 30 mil productos sin GPU.',
       icon: '🛒',
       canvasTitle: 'Walmart M5: Árboles (LightGBM) Capturando Picos por Promociones y Clima',
       ovLeft: '🛒 Walmart M5: 30,490 SKUs + Covariables',
@@ -1107,16 +1101,16 @@ input[type="range"] {
     },
     trap: {
       accent: 'var(--ockham)',
-      tag: 'ETAPA 3 DE 4 · EL PUNTO CIEGO MATEMÁTICO',
-      title: '3. “La Trampa de los Árboles”: ¿Por qué jamás pueden extrapolar?',
-      lead: 'El talón de Aquiles de los árboles: particionan el espacio en cajas ortogonales fijas.',
-      b1Label: '📦 PARTICIÓN ORTOGONAL EN CAJAS',
-      b1Text: 'Un árbol no aprende una pendiente física; solo <b>promedia los puntos dentro de su última caja</b>.',
-      b2Label: '🧱 EL COLAPSO: MESETA PLANA',
-      b2Text: 'Si ocurre un evento fuera del rango histórico, el árbol repite su último promedio: <b>meseta plana y=cte</b>.',
+      tag: 'EL PUNTO CIEGO',
+      title: 'Los árboles no pueden pronosticar lo que nunca vieron',
+      lead: 'El talón de Aquiles: los árboles dividen los datos en cajas fijas y repiten promedios.',
+      b1Label: '📦 Cajas fijas',
+      b1Text: 'Un árbol no aprende pendientes; solo promedia los puntos dentro de su última caja.',
+      b2Label: '🧱 Resultado: línea plana',
+      b2Text: 'Ante un evento fuera del rango histórico, repite su último promedio: una meseta plana.',
       formula: 'Si X_nuevo > X_máx_histórico ──▶ Árbol devuelve constante (Meseta Plana)',
       hint: 'Incapacidad matemática de extrapolación fuera del rango',
-      quote: 'Los árboles particionan en cajas ortogonales: jamás pueden extrapolar fuera del rango.',
+      quote: 'Un árbol no puede salirse del rango que ya vio.',
       icon: '📦',
       canvasTitle: 'Anatomía de la Falla: Escalones del Árbol vs. Frontera del Historial [X_min, X_max]',
       ovLeft: '📦 Rango Histórico de Entrenamiento',
@@ -1126,16 +1120,16 @@ input[type="range"] {
     },
     ercot: {
       accent: 'var(--rupture)',
-      tag: 'ETAPA 4 DE 4 · COLAPSO EN TEXAS Y PASE A ERA 3',
-      title: '4. El Apagón de Texas (ERCOT 2021) y el Salto a la Era 3',
-      lead: 'En 2021, la tormenta Uri en Texas provocó un colapso de +20 GW que forzó el salto a Deep Learning.',
-      b1Label: '❄️ CASO ERCOT TEXAS (-18 °C)',
-      b1Text: 'A -18 °C, los árboles proyectaron <b>meseta de 65 GW</b> ante una demanda real de <b>85 GW (+20 GW error)</b>.',
-      b2Label: '🚀 SALTO A LA ERA 3 (PARCHES)',
-      b2Text: 'Para capturar la dinámica continua sin escalones planos, <b>PatchTST y Deep Learning</b> leen parches continuos.',
+      tag: 'EL APAGÓN DE TEXAS',
+      title: 'Texas 2021: el frío extremo rompió el pronóstico',
+      lead: 'En 2021 la tormenta Uri causó un error de +20 GW y obligó a buscar modelos más flexibles.',
+      b1Label: '❄️ Caso Texas (-18 °C)',
+      b1Text: 'A -18 °C proyectaron 65 GW; la demanda real fue 85 GW (+20 GW de error).',
+      b2Label: '🚀 Siguiente paso: parches',
+      b2Text: 'Las redes neuronales leen la serie en trozos continuos llamados parches, sin escalones planos.',
       formula: 'Fallo Meseta Plana (-20 GW) ──▶ Salto a Era 3: Parches Continuos (PatchTST)',
       hint: 'Siguiente Diapo · Era 3: Deep Learning Secuencial y de Parches',
-      quote: 'En Texas 2021 la meseta plana generó un déficit de 20 GW.',
+      quote: 'Texas 2021: la meseta plana dejó 20 GW sin cubrir.',
       icon: '❄️',
       canvasTitle: 'Crisis ERCOT Texas 2021 (+20 GW de Error) y Transición a la Era 3 (Parches)',
       ovLeft: '❄️ Crisis ERCOT Texas 2021 (+20 GW)',
