@@ -397,4 +397,4 @@
 - [/] **SF12.4 Validación con Audiencia No Estadística, Compilación y Cierre**
   - [X] T12.4.1 Validador `scripts/audit_f12_claridad.py` (`--inventario --glosario --titulares --jerarquia --cifras --video --all`).
   - [ ] T12.4.2 Prueba de comprensión con 3 personas no estadísticas (≥ 4/5) y ensayo cronometrado de la ruta corta (≤ 35 min).
-  - [ ] T12.4.3 Compilación final, auditoría multi-resolución (`f10` + `f12`), capturas `screenshots/f12_*` y bitácora.
+  - [X] T12.4.3 Compilación final, auditoría multi-resolución (`f10` + `f12`), capturas `screenshots/f12_*` y bitácora.

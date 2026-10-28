@@ -445,7 +445,7 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
   - **Test Unitario:** Hoja de resultados (`docs/reference/fases/...md` §3) con 3 filas completas y puntajes.
   - **Test de Simulación de Usuario:** La propia sesión presencial cronometrada (drawer `[N]` con temporizador).
 
-#### [ ] T12.4.3 — Compilación Final, Auditoría Multi-Resolución y Bitácora
+#### [X] T12.4.3 — Compilación Final, Auditoría Multi-Resolución y Bitácora
 - **Objetivo de la Tarea:** Recompilar `presentacion.html` e `index.html`, correr `audit_f10_layout_typography.py` + `audit_f12_claridad.py --all`, generar capturas `screenshots/f12_*` y registrar la Fase en la bitácora y en los espejos (`plan_maestro.md`, `tareas.md`, `README.md`).
 - **Entregable:** Bundles recompilados, 60 capturas (30 diapos × 2 resoluciones), entrada en `docs/logs/log.md`, estado `[X]` en espejos.
 
@@ -474,3 +474,45 @@ Público objetivo real: **personas sin formación estadística** (Iquitos Data F
 | P3 (pendiente) | | | | | | /5 | |
 
 **Duración del ensayo (ruta corta):** pendiente · **Meta:** ≤ 35 min.
+
+---
+
+## 4. Cierre técnico (T12.4.3)
+
+Ejecutado el 28-10-2026 sobre `presentacion.html` recompilado con `python back/build_deck.py` (9.26 MB). Los checkboxes no se tocan aquí.
+
+### 4.1 Validadores
+
+| Validador | Resultado |
+|---|---|
+| `python scripts/audit_f12_claridad.py --all` | 0 fallo(s) |
+| `python scripts/audit_f12_claridad.py --bundle` | 0 fallo(s) (`.gl-term` presentes en el bundle de las diapos 5–27) |
+| `python scripts/audit_f10_layout_typography.py` | 21/21 prototipos, motor y build "Conforme"; 2 avisos heredados (ver 4.4) |
+| `python -m pytest back scripts video/_pipeline -q` | 84 passed |
+| `python -m ruff check front back scripts/audit_f12_claridad.py video/_pipeline` | All checks passed (se corrigieron 8 avisos triviales: imports sin uso, variables sin uso en `back/build_deck.py` y comparación `obj != obj` redundante) |
+
+### 4.2 Auditoría multi-resolución (Playwright, msedge headless)
+
+- 30 diapositivas × {1920×1080, 1366×768} = 60 capturas `screenshots/f12_final_<nn>_<1920|1366>.png`, con los gates de video ocultos.
+- 0 errores de consola en las 60 vistas; `#slideFrame.scrollHeight <= clientHeight + 2` en los 21 iframes de ambas resoluciones (1010/1010 y 698/698 px); 0 elementos desbordando horizontalmente; `.hero-title` computado a 44 px (1920) y 32.2 px (1366).
+- Recorrido con teclado a 1366×768 desde la diapo 1: **38 pulsaciones de `→`** hasta la diapo 30 (29 avances de diapositiva + 9 pulsaciones que saltan el gate de video de las diapos 5, 7, 9, 10, 19, 21, 26, 27 y 29). Ningún gate quedó bloqueado.
+
+### 4.3 Residuos cerrados
+
+- Video diapo 5: la línea de estadísticas ("n = 2,557 días · media 31.79 °C · récord 38.0 °C") ya está dentro del panel superior izquierdo y la banda de subtítulos no la tapa (verificado en un fotograma del MP4 vigente; no hizo falta re-renderizar).
+- Prototipo 21: se subió la fila del engranaje (`midY` 0.52 → 0.46 del alto útil) y se bajó el pie "N=24: 1 cosecha/año" (−13 → −8 px). A 1366 y 1920 ya no se cruza con "Ago–Oct (Flor)".
+
+### 4.4 Hallazgos abiertos
+
+- `audit_f10_layout_typography.py`: faltan 46 capturas `f10_*` y exige el marcador `ŷ<sub>t+h</sub>`, que vivía en el cierre anterior (frase "un pronóstico puntual (ŷ<sub>t+h</sub>) es una ficción matemática…"). F12 reemplazó ese cierre por 3 frases sin notación (diapo 29), así que el marcador ya no aplica; no se restauró. Pendiente decidir si se retira el marcador del validador.
+- Solapes o cortes a 1366×768 dentro de los canvas de los prototipos (no son errores de scroll): diapo 6 etiqueta "PRONÓSTICO SECUENCIAL" cortada a la derecha; diapo 7 cuadro "Regla aprendida" tapa la etiqueta "Promo + Fin de Semana"; diapo 8 tarjeta "Independencia de canales" cortada; diapo 9 títulos del panel TimesFM y "Decoder-Only" recortados; diapo 10 tarjetas ERCOT con texto superpuesto; diapo 22 texto del panel de ventana cortado y rueda con etiquetas diminutas; diapo 23 cuadros de remedios con líneas superpuestas.
+  - Estado: **Corregido** (verificado a 1366×768 y 1920×1080; capturas `screenshots/f12_fix1366_<nn>_<w>_e<k>.png`). Todos son textos dibujados en `<canvas>`, que ahora se ajustan al ancho disponible (`measureText`, versión corta del rótulo, salto de línea) en vez de usar posiciones fijas.
+  - Diapo 6: **Corregido**. El rótulo parte en dos líneas cuando no cabe.
+  - Diapo 7: **Corregido**. La etiqueta "Promo + Fin de Semana" se desplaza a la derecha del recuadro de la regla.
+  - Diapo 8: **Corregido**. Títulos y viñetas de las tarjetas se ajustan al ancho; la etiqueta de Self-Attention usa fondo sólido y versión corta si no cabe.
+  - Diapo 9: **Corregido**. Títulos, subtítulos y barra "Decoder-Only" caen a su versión corta si no caben.
+  - Diapo 10: **Corregido**. En cada tarjeta ERCOT el nombre se acorta para no pisar "Cobertura MCR"; los textos de ambos paneles se ajustan.
+  - Diapo 22: **Corregido**. En pantalla baja el panel derecho gana altura (sin cabecera repetida) y el texto sube de 9.5 a 11 px o más; la rueda ocupa toda la altura, con meses a 12–13 px y rótulos de ventana en columna aparte.
+  - Diapo 23: **Corregido**. En pantalla baja la tarjeta activa se expande y las otras muestran título y remedio; el banner pasa a una línea.
+- Vacío > 30 % del alto en columnas de tarjetas de las diapos 13–17 y en el panel derecho de la diapo 17 a 1920×1080 (diseño de dos columnas con poco contenido).
+- T12.4.2 (prueba con 3 personas) sigue pendiente.
