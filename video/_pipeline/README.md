@@ -59,3 +59,17 @@ Los videos son mudos: cada carpeta lleva `beats.json` con 3 a 5 beats `{"t": seg
 directorio tiene todos los PNG esperados; si faltan, reintenta una vez. Renderiza como máximo 2 videos en paralelo.
 
 No hay cambios de variables de entorno ni de dependencias.
+
+## Video narrado (`video/historia_completa/`)
+
+Video de ~4 min con voz: historia de las series temporales (Parte 1) y origen del pronóstico en el agro (Parte 2).
+
+1. Edita el texto en `guion.json` (`say` = lo que se dice, `show` = titular en pantalla).
+2. Genera la voz con Chatterbox (modelo local, licencia MIT) en un entorno aparte, porque fija `torch==2.6.0`:
+   `uv venv video/historia_completa/_voz/.venv --python 3.11` y luego
+   `uv pip install --python video/historia_completa/_voz/.venv/Scripts/python.exe chatterbox-tts faster-whisper "setuptools<81"`
+   (en GPU NVIDIA, reinstala `torch==2.6.0 torchaudio==2.6.0` desde `https://download.pytorch.org/whl/cu124`).
+3. Desde `video/historia_completa/`: `_voz/.venv/Scripts/python.exe generar_voz.py`. Escribe `narracion.wav` y
+   `timeline.json`; cada frase se transcribe con Whisper y se regenera si el modelo inventó palabras.
+4. Actualiza `dur_ms` de `video.json` con `timeline.json → dur_s`, corre `python video/_pipeline/render.py video/historia_completa`
+   y une audio y video: `ffmpeg -i historia_series_temporales_mudo.mp4 -i narracion.wav -c:v copy -c:a aac -b:a 160k historia_series_temporales.mp4`.
