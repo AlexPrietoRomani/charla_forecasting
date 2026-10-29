@@ -1,0 +1,67 @@
+[
+ {
+  "id": "s01_apertura",
+  "show": "Predecir el futuro con el pasado",
+  "say": "¿Qué va a pasar mañana? Desde siempre hemos querido saberlo. Una serie temporal es justo eso: datos anotados día tras día, como la temperatura de Iquitos... ¡que usamos para mirar hacia adelante!"
+ },
+ {
+  "id": "s02_anatomia",
+  "show": "Tendencia · Estaciones · Ciclos · Ruido",
+  "say": "Toda serie esconde cuatro capas. La tendencia: ¿hacia dónde va todo? Las estaciones, que vuelven cada año. Los ciclos largos, como El Niño. Y el ruido... eso que nadie, absolutamente nadie, puede predecir."
+ },
+ {
+  "id": "s03_era1",
+  "show": "Era 1 · 1838 → 1970 · Fórmulas simples",
+  "say": "Todo empezó con fórmulas simples. En mil ochocientos treinta y ocho, Verhulst descubrió algo enorme: ¡nada crece para siempre! En mil novecientos setenta, Box y Jenkins nos enseñaron a predecir como un eco del pasado. Pocas reglas, respuestas rapidísimas. Pero tenían una trampa: suponían que mañana sería igual que ayer."
+ },
+ {
+  "id": "s04_era2",
+  "show": "Era 2 · 2010s · La serie se vuelve tabla",
+  "say": "Luego, en los años dos mil diez, apareció un truco brillante: ¡convertir la serie en una tabla! Así, los árboles de decisión aprendieron a pronosticar treinta mil productos de Walmart. Pero ojo: un árbol no puede imaginar lo que nunca vio. Y en el invierno de Texas de dos mil veintiuno... ese techo dejó a millones de personas sin luz."
+ },
+ {
+  "id": "s05_era3",
+  "show": "Era 3 · Redes neuronales · Tramos como palabras",
+  "say": "Entonces llegaron las redes neuronales, que leen el tiempo como si fuera una película. Y en dos mil veintitrés, una idea sencillísima lo cambió todo: ¡leer la serie por tramos, como si fueran palabras!"
+ },
+ {
+  "id": "s06_era4",
+  "show": "Era 4 · Modelos fundacionales · Sin entrenar",
+  "say": "Y hoy... vivimos la cuarta era. Modelos que aprendieron de miles de millones de datos de todo el mundo, ¡y predicen series que jamás habían visto! Además, no te dan un solo número: te dan una banda de seguridad. Porque un pronóstico exacto... es una ilusión."
+ },
+ {
+  "id": "s07_puente",
+  "show": "¿Quién pronosticó primero?",
+  "say": "Pero, ¿saben quién hizo el primer pronóstico? No fue un ingeniero. Tampoco un banquero. ¡Fue un agricultor!"
+ },
+ {
+  "id": "s08_origen",
+  "show": "Hace 10 000 años · El cielo como calendario",
+  "say": "Hace diez mil años, sembrar a tiempo era cuestión de vida o muerte. Por eso los primeros agricultores miraban la luna, las estrellas, las plantas y los animales... ¡para anticipar las lluvias y las heladas!"
+ },
+ {
+  "id": "s09_almanaque",
+  "show": "Almanaques y cabañuelas · 1 dato por año",
+  "say": "Ese saber se volvió almanaques y cabañuelas: reglas que pasaban de abuelos a nietos. ¿Y cuántos datos tenían? ¡Apenas uno por año!"
+ },
+ {
+  "id": "s10_hitos",
+  "show": "1950 → 2026 · Cinco hitos",
+  "say": "Desde mil novecientos cincuenta, cinco grandes saltos afinaron esa mirada. Las estaciones experimentales midieron cada semana. La agrometeorología, cada día. Los satélites, cada cinco a doce días. ¡Y hoy, la agricultura de precisión mide en tiempo real!"
+ },
+ {
+  "id": "s11_satelite",
+  "show": "De 1 dato al año a 1 dato al día por píxel",
+  "say": "¡Imagínense el salto! De un dato al año por todo el valle, a un dato diario por cada cuadrito de diez metros. Hoy medimos el calor que la planta va guardando, como una alcancía... y hasta la luz que reflejan sus hojas, ¡desde el espacio!"
+ },
+ {
+  "id": "s12_hoy",
+  "show": "Café de Jaén · La planta recuerda 6 a 8 meses",
+  "say": "Pero ojo: la planta tiene sus propias leyes. En el café de Jaén, el clima de la floración decide la cosecha... ¡seis a ocho meses después! Y aunque el clima nos regala miles de datos, el cafetal nos da una sola cosecha al año. ¿El resultado? Apenas veinticuatro campañas."
+ },
+ {
+  "id": "s13_cierre",
+  "show": "Misma pregunta, mejores herramientas",
+  "say": "La tecnología cambió por completo. Pero la pregunta... sigue siendo la misma de hace diez mil años: ¿qué viene? ¿Y qué tan seguros podemos estar?"
+ }
+]

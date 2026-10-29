@@ -1,0 +1,393 @@
+WEBVTT
+
+1
+00:00:01.000 --> 00:00:02.835
+¿Qué va a pasar mañana?
+
+2
+00:00:02.885 --> 00:00:05.785
+Desde siempre hemos querido saberlo.
+
+3
+00:00:05.835 --> 00:00:08.407
+Una serie temporal es justo eso:
+
+4
+00:00:08.457 --> 00:00:10.702
+datos anotados día tras día,
+
+5
+00:00:10.752 --> 00:00:13.406
+como la temperatura de Iquitos...
+
+6
+00:00:13.456 --> 00:00:16.520
+¡que usamos para mirar hacia adelante!
+
+7
+00:00:17.270 --> 00:00:20.576
+Toda serie esconde cuatro capas.
+
+8
+00:00:20.626 --> 00:00:21.939
+La tendencia:
+
+9
+00:00:21.989 --> 00:00:24.141
+¿hacia dónde va todo?
+
+10
+00:00:24.192 --> 00:00:25.715
+Las estaciones,
+
+11
+00:00:25.765 --> 00:00:27.917
+que vuelven cada año.
+
+12
+00:00:27.967 --> 00:00:29.805
+Los ciclos largos,
+
+13
+00:00:29.855 --> 00:00:31.168
+como El Niño.
+
+14
+00:00:31.218 --> 00:00:32.531
+Y el ruido...
+
+15
+00:00:32.581 --> 00:00:33.999
+eso que nadie,
+
+16
+00:00:34.049 --> 00:00:36.096
+absolutamente nadie,
+
+17
+00:00:36.147 --> 00:00:37.670
+puede predecir.
+
+18
+00:00:38.420 --> 00:00:40.621
+Todo empezó con fórmulas simples.
+
+19
+00:00:40.671 --> 00:00:42.940
+En mil ochocientos treinta y ocho,
+
+20
+00:00:42.990 --> 00:00:45.054
+Verhulst descubrió algo enorme:
+
+21
+00:00:45.104 --> 00:00:46.759
+¡nada crece para siempre!
+
+22
+00:00:46.809 --> 00:00:48.601
+En mil novecientos setenta,
+
+23
+00:00:48.651 --> 00:00:52.830
+Box y Jenkins nos enseñaron a predecir como un eco del pasado.
+
+24
+00:00:52.879 --> 00:00:53.716
+Pocas reglas,
+
+25
+00:00:53.766 --> 00:00:55.285
+respuestas rapidísimas.
+
+26
+00:00:55.335 --> 00:00:56.854
+Pero tenían una trampa:
+
+27
+00:00:56.904 --> 00:00:59.650
+suponían que mañana sería igual que ayer.
+
+28
+00:01:00.400 --> 00:01:00.757
+Luego,
+
+29
+00:01:00.807 --> 00:01:02.453
+en los años dos mil diez,
+
+30
+00:01:02.504 --> 00:01:04.354
+apareció un truco brillante:
+
+31
+00:01:04.404 --> 00:01:06.593
+¡convertir la serie en una tabla!
+
+32
+00:01:06.643 --> 00:01:06.864
+Así,
+
+33
+00:01:06.914 --> 00:01:12.496
+los árboles de decisión aprendieron a pronosticar treinta mil productos de Walmart.
+
+34
+00:01:12.547 --> 00:01:13.108
+Pero ojo:
+
+35
+00:01:13.158 --> 00:01:16.094
+un árbol no puede imaginar lo que nunca vio.
+
+36
+00:01:16.143 --> 00:01:19.418
+Y en el invierno de Texas de dos mil veintiuno...
+
+37
+00:01:19.468 --> 00:01:22.540
+ese techo dejó a millones de personas sin luz.
+
+38
+00:01:23.290 --> 00:01:25.791
+Entonces llegaron las redes neuronales,
+
+39
+00:01:25.841 --> 00:01:28.800
+que leen el tiempo como si fuera una película.
+
+40
+00:01:28.850 --> 00:01:30.370
+Y en dos mil veintitrés,
+
+41
+00:01:30.419 --> 00:01:32.789
+una idea sencillísima lo cambió todo:
+
+42
+00:01:32.840 --> 00:01:34.491
+¡leer la serie por tramos,
+
+43
+00:01:34.540 --> 00:01:36.060
+como si fueran palabras!
+
+44
+00:01:36.810 --> 00:01:37.463
+Y hoy...
+
+45
+00:01:37.513 --> 00:01:39.396
+vivimos la cuarta era.
+
+46
+00:01:39.446 --> 00:01:43.262
+Modelos que aprendieron de miles de millones
+
+47
+00:01:43.312 --> 00:01:45.547
+de datos de todo el mundo,
+
+48
+00:01:45.597 --> 00:01:49.238
+¡y predicen series que jamás habían visto!
+
+49
+00:01:49.288 --> 00:01:49.853
+Además,
+
+50
+00:01:49.903 --> 00:01:52.050
+no te dan un solo número:
+
+51
+00:01:52.100 --> 00:01:54.686
+te dan una banda de seguridad.
+
+52
+00:01:54.736 --> 00:01:57.322
+Porque un pronóstico exacto...
+
+53
+00:01:57.372 --> 00:01:58.640
+es una ilusión.
+
+54
+00:01:59.390 --> 00:02:00.050
+Pero,
+
+55
+00:02:00.100 --> 00:02:05.586
+¿saben quién hizo el primer pronóstico?
+
+56
+00:02:05.635 --> 00:02:08.424
+No fue un ingeniero.
+
+57
+00:02:08.474 --> 00:02:11.263
+Tampoco un banquero.
+
+58
+00:02:11.313 --> 00:02:13.960
+¡Fue un agricultor!
+
+59
+00:02:14.710 --> 00:02:16.115
+Hace diez mil años,
+
+60
+00:02:16.165 --> 00:02:19.714
+sembrar a tiempo era cuestión de vida o muerte.
+
+61
+00:02:19.763 --> 00:02:23.541
+Por eso los primeros agricultores miraban la luna,
+
+62
+00:02:23.592 --> 00:02:24.614
+las estrellas,
+
+63
+00:02:24.664 --> 00:02:26.834
+las plantas y los animales...
+
+64
+00:02:26.884 --> 00:02:30.050
+¡para anticipar las lluvias y las heladas!
+
+65
+00:02:30.800 --> 00:02:34.228
+Ese saber se volvió almanaques y cabañuelas:
+
+66
+00:02:34.278 --> 00:02:37.311
+reglas que pasaban de abuelos a nietos.
+
+67
+00:02:37.362 --> 00:02:39.209
+¿Y cuántos datos tenían?
+
+68
+00:02:39.259 --> 00:02:40.790
+¡Apenas uno por año!
+
+69
+00:02:41.540 --> 00:02:44.390
+Desde mil novecientos cincuenta,
+
+70
+00:02:44.440 --> 00:02:48.105
+cinco grandes saltos afinaron esa mirada.
+
+71
+00:02:48.155 --> 00:02:52.726
+Las estaciones experimentales midieron cada semana.
+
+72
+00:02:52.776 --> 00:02:54.538
+La agrometeorología,
+
+73
+00:02:54.588 --> 00:02:55.354
+cada día.
+
+74
+00:02:55.404 --> 00:02:56.623
+Los satélites,
+
+75
+00:02:56.672 --> 00:02:58.706
+cada cinco a doce días.
+
+76
+00:02:58.756 --> 00:02:59.340
+¡Y hoy,
+
+77
+00:02:59.391 --> 00:03:03.690
+la agricultura de precisión mide en tiempo real!
+
+78
+00:03:04.440 --> 00:03:06.085
+¡Imagínense el salto!
+
+79
+00:03:06.135 --> 00:03:08.991
+De un dato al año por todo el valle,
+
+80
+00:03:09.042 --> 00:03:13.029
+a un dato diario por cada cuadrito de diez metros.
+
+81
+00:03:13.079 --> 00:03:16.904
+Hoy medimos el calor que la planta va guardando,
+
+82
+00:03:16.954 --> 00:03:18.519
+como una alcancía...
+
+83
+00:03:18.569 --> 00:03:21.587
+y hasta la luz que reflejan sus hojas,
+
+84
+00:03:21.637 --> 00:03:23.040
+¡desde el espacio!
+
+85
+00:03:23.790 --> 00:03:24.393
+Pero ojo:
+
+86
+00:03:24.443 --> 00:03:26.861
+la planta tiene sus propias leyes.
+
+87
+00:03:26.911 --> 00:03:28.240
+En el café de Jaén,
+
+88
+00:03:28.290 --> 00:03:31.506
+el clima de la floración decide la cosecha...
+
+89
+00:03:31.557 --> 00:03:33.467
+¡seis a ocho meses después!
+
+90
+00:03:33.516 --> 00:03:36.660
+Y aunque el clima nos regala miles de datos,
+
+91
+00:03:36.710 --> 00:03:39.709
+el cafetal nos da una sola cosecha al año.
+
+92
+00:03:39.759 --> 00:03:40.725
+¿El resultado?
+
+93
+00:03:40.775 --> 00:03:42.830
+Apenas veinticuatro campañas.
+
+94
+00:03:43.580 --> 00:03:47.149
+La tecnología cambió por completo.
+
+95
+00:03:47.199 --> 00:03:49.172
+Pero la pregunta...
+
+96
+00:03:49.222 --> 00:03:53.856
+sigue siendo la misma de hace diez mil años:
+
+97
+00:03:53.906 --> 00:03:55.027
+¿qué viene?
+
+98
+00:03:55.077 --> 00:03:58.540
+¿Y qué tan seguros podemos estar?

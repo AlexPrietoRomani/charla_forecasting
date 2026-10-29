@@ -79,3 +79,8 @@ guia_exposicion_40min.md
 
 # --- Versiones MP4 retiradas del repo en F12 (conservar solo el vigente) ---
 video/**/*_v[0-9]*.mp4
+
+# Modelos de voz Piper (TTS) y previsualizaciones del video narrado
+video/historia_completa/_voz/
+video/historia_completa/_preview/
+video/historia_completa/*_mudo.mp4
