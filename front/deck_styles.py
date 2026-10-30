@@ -193,40 +193,59 @@ def get_deck_css(branding=None):
   .cover-tag span {{
     color: var(--fest-cyan);
   }}
+  .cover-main {{ display: flex; flex-direction: column; align-items: flex-start; }}
   .cover-title {{
-    font-size: clamp(38px, 3.8vw, 54px);
+    font-size: clamp(40px, min(4.6vw, 8.2vh), 88px);
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
     color: var(--text-main);
-    max-width: 820px;
-    margin-bottom: clamp(16px, 2vh, 24px);
+    max-width: 62%;
+    margin-bottom: clamp(14px, 2vh, 26px);
   }}
   .cover-subtitle {{
-    font-size: clamp(17px, 1.4vw, 21px);
-    color: #94A3B8;
-    max-width: 720px;
+    font-size: clamp(18px, 1.35vw, 28px);
+    color: #CBD5E1;
+    max-width: 52%;
     line-height: 1.4;
-    margin-bottom: clamp(28px, 3.5vh, 44px);
+    margin-bottom: clamp(16px, 2.4vh, 30px);
+  }}
+  .cover-pills {{
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, 0.8vw, 14px);
+    max-width: 88%;
+    margin-bottom: clamp(18px, 2.8vh, 34px);
+  }}
+  .cover-pill {{
+    padding: 0.4em 1em;
+    border-radius: 999px;
+    font-size: clamp(14px, 1vw, 20px);
+    font-weight: 600;
+    color: var(--fest-cyan);
+    background: rgba(18, 200, 252, 0.12);
+    border: 1.5px solid rgba(18, 200, 252, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }}
   .cover-speaker-card {{
-    background: rgba(11, 22, 56, 0.75);
+    background: rgba(11, 22, 56, 0.78);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1.5px solid var(--fest-cyan);
+    border-left: 6px solid var(--fest-cyan);
     border-radius: 16px;
-    padding: 18px 28px;
+    padding: clamp(12px, 1.6vh, 20px) clamp(20px, 2vw, 36px);
     width: fit-content;
-    min-width: 380px;
-    max-width: 480px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(18, 200, 252, 0.18);
   }}
   .cover-speaker-name {{
-    font-size: 21px;
+    font-size: clamp(24px, 2vw, 38px);
     font-weight: 700;
     color: var(--text-main);
   }}
   .cover-speaker-role {{
-    font-size: 15px;
+    font-size: clamp(15px, 1.1vw, 21px);
     color: var(--fest-cyan);
     margin-top: 5px;
     font-family: var(--font-mono);
@@ -236,128 +255,210 @@ def get_deck_css(branding=None):
   /* ======================================================== */
   /* ARQUETIPO 2: SOBRE EL PONENTE (page-02.png)             */
   /* ======================================================== */
-  .speaker-hero {{
-    display: flex;
-    align-items: center;
-    gap: clamp(24px, 3vw, 48px);
+  .sp-layout {{
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 31% 1fr;
+    gap: clamp(20px, 2.4vw, 44px);
   }}
-  .speaker-avatar {{
-    width: clamp(150px, 14vw, 200px);
-    height: clamp(150px, 14vw, 200px);
+  .sp-id {{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+    padding: clamp(14px, 1.3vw, 24px);
+    background: rgba(11, 22, 56, 0.82);
+    border: 1.5px solid rgba(18, 200, 252, 0.35);
+    border-radius: var(--card-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  }}
+  .sp-photo {{
+    width: clamp(140px, 24vh, 250px);
+    height: clamp(140px, 24vh, 250px);
+    padding: 5px;
     flex-shrink: 0;
     border-radius: 50%;
-    padding: 6px;
     border: 3px solid var(--fest-cyan);
-    box-shadow: 0 0 30px rgba(18, 200, 252, 0.35), inset 0 0 18px rgba(18, 200, 252, 0.25);
+    box-shadow: 0 0 30px rgba(18, 200, 252, 0.35);
     background: rgba(11, 22, 56, 0.9);
   }}
-  .speaker-avatar img {{
-    width: 100%;
-    height: 100%;
+  .sp-photo img {{
+    width: 100%; height: 100%;
     border-radius: 50%;
     object-fit: cover;
     display: block;
   }}
-  .speaker-hero-text {{
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }}
-  .speaker-name {{
-    font-size: clamp(30px, 3vw, 44px);
+  .sp-name {{
+    margin-top: clamp(10px, 1.4vh, 18px);
+    font-size: clamp(30px, 3vw, 58px);
     font-weight: 700;
+    line-height: 1.08;
     color: var(--text-main);
-    line-height: 1.1;
   }}
-  .speaker-role {{
-    font-size: clamp(14px, 1.1vw, 17px);
-    color: var(--fest-cyan);
+  .sp-headline {{
+    margin-top: 8px;
+    font-size: clamp(16px, 1.3vw, 25px);
     font-weight: 600;
-    font-family: "IBM Plex Mono", monospace;
+    color: var(--fest-cyan);
+    line-height: 1.25;
   }}
-  .speaker-body {{
-    flex: 1;
-    display: flex;
-    align-items: center;
-    min-height: 0;
-    padding: 24px 0;
-  }}
-  .speaker-cards {{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(16px, 1.8vw, 28px);
-    width: 100%;
-  }}
-  .speaker-card {{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 14px;
-    padding: clamp(24px, 2.8vw, 40px) clamp(18px, 2vw, 28px);
-    background: rgba(11, 22, 56, 0.82);
-    border-radius: var(--card-radius);
-    border: 1.5px solid rgba(18, 200, 252, 0.35);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
-  }}
-  .speaker-card-icon {{
-    font-size: clamp(40px, 5vh, 56px);
-    line-height: 1;
-  }}
-  .speaker-card-title {{
-    font-size: clamp(24px, 2.2vw, 32px);
-    font-weight: 700;
-    color: var(--text-main);
-    line-height: 1.2;
-  }}
-  .speaker-card-sub {{
-    font-size: 18px;
+  .sp-role {{
+    margin-top: 6px;
+    font-size: clamp(13px, 0.95vw, 18px);
     color: var(--text-sub);
-    line-height: 1.35;
   }}
-  .speaker-footer {{
-    margin-top: 24px;
+  .sp-pitch {{
+    margin-top: clamp(10px, 1.4vh, 18px);
+    padding-left: 14px;
+    border-left: 3px solid var(--fest-amber);
+    font-size: clamp(15px, 1.15vw, 22px);
+    line-height: 1.45;
+    color: var(--text-main);
+  }}
+  .sp-contact {{
+    margin-top: auto;
+    width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    gap: clamp(20px, 3vw, 48px);
-    flex-shrink: 0;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-faint);
   }}
-  .speaker-socials {{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }}
-  .speaker-social-link {{
+  .sp-socials {{ display: flex; flex-direction: column; gap: 8px; min-width: 0; }}
+  .sp-link {{
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
+    gap: 8px;
+    font-size: clamp(11px, 0.8vw, 15px);
     color: var(--fest-cyan);
     text-decoration: none;
     font-family: "IBM Plex Mono", monospace;
-    transition: opacity 0.15s;
+    white-space: nowrap;
   }}
-  .speaker-social-link:hover {{
-    opacity: 0.8;
+  .sp-link svg {{ width: 1.3em; height: 1.3em; fill: currentColor; flex-shrink: 0; }}
+  .sp-qr {{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(10px, 0.7vw, 13px);
+    color: var(--text-sub);
+    flex-shrink: 0;
   }}
-  .speaker-qr {{
+  .sp-qr-box {{ background: #FFFFFF; border-radius: 10px; padding: 6px; line-height: 0; }}
+  .sp-qr-box svg {{ width: clamp(70px, 6.2vw, 118px); height: auto; }}
+  .sp-main {{
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.8vh, 22px);
+    min-height: 0;
+  }}
+  .sp-cols {{
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(12px, 1.4vw, 26px);
+  }}
+  .sp-col {{
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: clamp(14px, 1.3vw, 24px);
+    background: rgba(11, 22, 56, 0.82);
+    border: 1.5px solid rgba(18, 200, 252, 0.35);
+    border-radius: var(--card-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  }}
+  .sp-col-title {{
     display: flex;
     align-items: center;
-    gap: 16px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13.5px;
+    gap: 10px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(18px, 1.5vw, 28px);
+    font-weight: 700;
+    color: var(--fest-cyan);
+    padding-bottom: clamp(8px, 1.2vh, 14px);
+    margin-bottom: clamp(8px, 1.4vh, 16px);
+    border-bottom: 1px solid var(--line-border);
+  }}
+  .sp-col-title svg {{ width: 1.2em; height: 1.2em; fill: currentColor; flex-shrink: 0; }}
+  .sp-tl, .sp-do {{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    gap: clamp(8px, 1.4vh, 16px);
+  }}
+  .sp-tl li {{
+    position: relative;
+    padding-left: 20px;
+    border-left: 2px solid var(--line-border);
+  }}
+  .sp-tl li::before {{
+    content: "";
+    position: absolute;
+    left: -6px; top: 0.45em;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 2px solid var(--fest-cyan);
+  }}
+  .sp-tl li.sp-tl-key::before {{ background: var(--fest-cyan); box-shadow: 0 0 10px rgba(18, 200, 252, 0.7); }}
+  .sp-tl-what {{
+    font-size: clamp(16px, 1.3vw, 25px);
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.25;
+  }}
+  .sp-tl-where {{
+    margin-top: 3px;
+    font-size: clamp(13px, 1.05vw, 20px);
     color: var(--text-sub);
+    line-height: 1.3;
   }}
-  .speaker-qr-box {{
-    background: #FFFFFF;
+  .sp-do li {{ display: flex; align-items: flex-start; gap: 14px; }}
+  .sp-do-ico {{
+    flex-shrink: 0;
+    width: clamp(34px, 2.6vw, 50px);
+    height: clamp(34px, 2.6vw, 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 12px;
-    padding: 8px;
-    line-height: 0;
+    background: rgba(18, 200, 252, 0.14);
+    border: 1px solid var(--line-border);
+    color: var(--fest-cyan);
   }}
-  .speaker-qr-box svg {{
-    width: clamp(110px, 9vw, 140px);
-    height: auto;
+  .sp-do-ico svg {{ width: 60%; height: 60%; fill: currentColor; }}
+  .sp-stack {{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(5px, 0.45vw, 9px);
+    flex-shrink: 0;
+  }}
+  .sp-stack-label {{
+    font-size: clamp(11px, 0.8vw, 15px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-right: 4px;
+  }}
+  .sp-chip {{
+    padding: 0.3em 0.8em;
+    border-radius: 999px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(11px, 0.88vw, 17px);
+    font-weight: 600;
+    color: var(--text-main);
+    background: rgba(18, 200, 252, 0.12);
+    border: 1px solid var(--line-border);
   }}
 
   /* ======================================================== */
