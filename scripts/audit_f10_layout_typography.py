@@ -87,7 +87,7 @@ FONT_MINIMUMS_PER_SLIDE = {
     11: {"via-title": 18.0},
 }
 
-VIDEO_SLIDE_CANDIDATES = [(1, 5), (1, 7), (1, 9), (1, 10), (3, 19), (3, 21), (4, 26), (4, 27), (5, 29)]
+VIDEO_SLIDE_CANDIDATES = [(1, 5), (1, 7), (1, 9), (1, 10), (3, 20), (3, 22), (4, 27), (4, 28), (5, 30)]
 
 SCREENSHOTS = [
     BASE_DIR / f"screenshots/f10_s{slide}_{width}.png"

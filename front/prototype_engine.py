@@ -30,12 +30,20 @@ VIDEO_SLIDE_CANDIDATES = (
     (1, 7),
     (1, 9),
     (1, 10),
-    (3, 19),
-    (3, 21),
-    (4, 26),
+    (3, 20),
+    (3, 22),
     (4, 27),
-    (5, 29),
+    (4, 28),
+    (5, 30),
 )
+
+# Las carpetas video/seccion_N/diapo_M conservan la numeración previa al separador del Acto 2 (diapo 12)
+ACT2_SEPARATOR_SLIDE = 12
+
+
+def video_folder_slide(slide_num: int) -> int:
+    """Traduce el número de diapositiva del deck al número usado en video/seccion_N/diapo_M."""
+    return slide_num - 1 if slide_num > ACT2_SEPARATOR_SLIDE else slide_num
 
 ENGINE_OVERRIDE_CSS = """<style id="deck-engine-override-css">
 /* === MOTOR DE NORMALIZACIÓN VISUAL Y TIPOGRÁFICA DE DIAPOSITIVAS (F10) === */
@@ -581,10 +589,12 @@ ENGINE_DECK_GATE_JS = """<script id="deck-cinematic-gate-js">
 def discover_slide_video(root_dir: Path | str, section_num: int, slide_num: int) -> Path | None:
     """Busca el MP4 canónico en video/seccion_{N}/diapo_{M}/video_*/<nombre>.mp4.
 
+    slide_num es el número de diapositiva del deck; M se obtiene con video_folder_slide().
+
     Prioriza el render principal e ignora respaldos versionados (_v1, _v2, _v3).
     """
     root = Path(root_dir)
-    diapo_dir = root / "video" / f"seccion_{section_num}" / f"diapo_{slide_num}"
+    diapo_dir = root / "video" / f"seccion_{section_num}" / f"diapo_{video_folder_slide(slide_num)}"
     if not diapo_dir.exists():
         return None
     candidates = sorted(

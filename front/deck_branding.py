@@ -28,6 +28,7 @@ AGENDA_TOTAL_MINUTES = 35
 # Subtítulos de los separadores de acto (solo actos con separador en el deck)
 SEPARATOR_SUBTITLES = {
     1: "Repasamos cómo se pasó de fórmulas simples a modelos que aprenden solos, y qué límites no cambian.",
+    2: "Siete años de temperatura real de SENAMHI para poner a prueba 14 modelos.",
     3: "Desde el almanaque de los agricultores hasta los satélites que miden el cultivo cada pocos días.",
     4: "Revisamos 24 campañas de café en Jaén y por qué el satélite no vio la epidemia de roya.",
     5: "Las reglas prácticas para no engañarte con un pronóstico: método, física del problema y prudencia.",

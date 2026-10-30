@@ -25,37 +25,37 @@ def get_slides_part2(branding=None):
 
     html = f"""
   <!-- ============================================================= -->
-  <!-- DIAPO 15: BENCHMARK RIGUROSO EN PUNCHANA (page-06.png)        -->
+  <!-- DIAPO 16: BENCHMARK RIGUROSO EN PUNCHANA (page-06.png)        -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="15" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="16" data-act="Acto 2 · Benchmark Iquitos" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P15_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide15"></iframe>
+      <iframe src="data:text/html;base64,__B64_P15_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide16"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 16: PRONÓSTICO 7 DÍAS EN VIVO (page-06.png)            -->
+  <!-- DIAPO 17: PRONÓSTICO 7 DÍAS EN VIVO (page-06.png)            -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="16" data-act="Acto 2 · Pronóstico 7 Días" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="17" data-act="Acto 2 · Pronóstico 7 Días" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P16_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide16"></iframe>
+      <iframe src="data:text/html;base64,__B64_P16_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide17"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 17: DEMO / CÓDIGO (page-08.png)                         -->
+  <!-- DIAPO 18: DEMO / CÓDIGO (page-08.png)                         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="17" data-act="Acto 2 · Código del Modelo" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="18" data-act="Acto 2 · Código del Modelo" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P17_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide17"></iframe>
+      <iframe src="data:text/html;base64,__B64_P17_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide18"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
   <!-- ============================================================= -->
-  <!-- DIAPO 18: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO            -->
+  <!-- DIAPO 19: SECCIÓN 03: SERIES TEMPORALES EN EL AGRO            -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section act-bg-3" data-index="18" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
+  <section class="slide slide-archetype-section act-bg-3" data-index="19" data-act="Acto 3 · Series Temporales en el Agro" data-time="1.0 min">
     <div class="section-huge-num">03</div>
     <h2 class="section-title display">__SEP3_TITLE__</h2>
     <p class="section-desc">__SEP3_SUBTITLE__</p>
@@ -63,56 +63,56 @@ def get_slides_part2(branding=None):
 
 
   <!-- ============================================================= -->
-  <!-- DIAPO 19: CÓMO EL AGRO INVENTÓ EL FORECASTING (PROTOTIPO)     -->
+  <!-- DIAPO 20: CÓMO EL AGRO INVENTÓ EL FORECASTING (PROTOTIPO)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="19" data-act="Acto 3 · Historia del Agro-Forecasting" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="20" data-act="Acto 3 · Historia del Agro-Forecasting" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P19_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide19"></iframe>
-      __CINEMATIC_GATE_19__
+      <iframe src="data:text/html;base64,__B64_P19_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide20"></iframe>
+      __CINEMATIC_GATE_20__
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 20: DEL ALMANAQUE AL SATÉLITE (PROTOTIPO)               -->
+  <!-- DIAPO 21: DEL ALMANAQUE AL SATÉLITE (PROTOTIPO)               -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="20" data-act="Acto 3 · Del Almanaque al Satélite" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="21" data-act="Acto 3 · Del Almanaque al Satélite" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P20_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide20"></iframe>
+      <iframe src="data:text/html;base64,__B64_P20_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide21"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 21: FÍSICA BIOLÓGICA Y EL LÍMITE ALGORÍTMICO (PROTOTIPO)-->
+  <!-- DIAPO 22: FÍSICA BIOLÓGICA Y EL LÍMITE ALGORÍTMICO (PROTOTIPO)-->
   <!-- ============================================================= -->
-  <section class="slide" data-index="21" data-act="Acto 3 · Biofísica &amp; Límites" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="22" data-act="Acto 3 · Biofísica &amp; Límites" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P21_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide21"></iframe>
-      __CINEMATIC_GATE_21__
+      <iframe src="data:text/html;base64,__B64_P21_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide22"></iframe>
+      __CINEMATIC_GATE_22__
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 22: RELOJ FENOLÓGICO DEL CAFÉ (PROTOTIPO)               -->
+  <!-- DIAPO 23: RELOJ FENOLÓGICO DEL CAFÉ (PROTOTIPO)               -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="22" data-act="Acto 3 · Reloj Fenológico del Café" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="23" data-act="Acto 3 · Reloj Fenológico del Café" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(46, 230, 166, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P22_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide22"></iframe>
+      <iframe src="data:text/html;base64,__B64_P22_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide23"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 23: PRECISIÓN ACTUAL Y LAS TRES TRAMPAS (PROTOTIPO)     -->
+  <!-- DIAPO 24: PRECISIÓN ACTUAL Y LAS TRES TRAMPAS (PROTOTIPO)     -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="23" data-act="Acto 3 · Las Tres Trampas" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="24" data-act="Acto 3 · Las Tres Trampas" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(255, 107, 107, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P23_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide23"></iframe>
+      <iframe src="data:text/html;base64,__B64_P23_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide24"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 24: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
+  <!-- DIAPO 25: SECCIÓN 04: CASO 2: RENDIMIENTO Y NDVI (page-04.png) -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section act-bg-4" data-index="24" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
+  <section class="slide slide-archetype-section act-bg-4" data-index="25" data-act="Acto 4 · Caso 2: Rendimiento &amp; NDVI" data-time="1.0 min">
     <div class="section-huge-num">04</div>
     <h2 class="section-title display">__SEP4_TITLE__</h2>
     <p class="section-desc">__SEP4_SUBTITLE__</p>
@@ -120,38 +120,38 @@ def get_slides_part2(branding=None):
 
 
   <!-- ============================================================= -->
-  <!-- DIAPO 25: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (PROTOTIPO)    -->
+  <!-- DIAPO 26: DATOS QUE IMPORTAN: 24 CAMPAÑAS JAÉN (PROTOTIPO)    -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="25" data-act="Acto 4 · Datos Jaén" data-time="1.5 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="26" data-act="Acto 4 · Datos Jaén" data-time="1.5 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(46, 230, 166, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P25_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide25"></iframe>
+      <iframe src="data:text/html;base64,__B64_P25_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide26"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 26: LA TRAMPA DEL SATÉLITE NDVI (PROTOTIPO)             -->
+  <!-- DIAPO 27: LA TRAMPA DEL SATÉLITE NDVI (PROTOTIPO)             -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="26" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="27" data-act="Acto 4 · Trampa del NDVI" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(56, 239, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P26_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide26"></iframe>
-      __CINEMATIC_GATE_26__
-    </div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- DIAPO 27: VALIDACIÓN WALK-FORWARD Y FUSIÓN (PROTOTIPO)       -->
-  <!-- ============================================================= -->
-  <section class="slide" data-index="27" data-act="Acto 4 · Validación Jaén" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
-    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P27_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide27"></iframe>
+      <iframe src="data:text/html;base64,__B64_P26_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide27"></iframe>
       __CINEMATIC_GATE_27__
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 28: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
+  <!-- DIAPO 28: VALIDACIÓN WALK-FORWARD Y FUSIÓN (PROTOTIPO)       -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-section act-bg-5" data-index="28" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
+  <section class="slide" data-index="28" data-act="Acto 4 · Validación Jaén" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+    <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(180, 142, 255, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
+      <iframe src="data:text/html;base64,__B64_P27_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide28"></iframe>
+      __CINEMATIC_GATE_28__
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 29: SECCIÓN 05: CONCLUSIONES (page-04.png)              -->
+  <!-- ============================================================= -->
+  <section class="slide slide-archetype-section act-bg-5" data-index="29" data-act="Acto 5 · Conclusiones y Cierre" data-time="1.0 min">
     <div class="section-huge-num">05</div>
     <h2 class="section-title display">__SEP5_TITLE__</h2>
     <p class="section-desc">__SEP5_SUBTITLE__</p>
@@ -159,13 +159,13 @@ def get_slides_part2(branding=None):
 
 
   <!-- ============================================================= -->
-  <!-- DIAPO 29: CONCLUSIONES (page-09.png)                         -->
+  <!-- DIAPO 30: CONCLUSIONES (page-09.png)                         -->
   <!-- Tres lecciones en frases grandes para público sin estadística -->
   <!-- ============================================================= -->
-  <section class="slide slide-lessons act-bg-5" data-index="29" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
+  <section class="slide slide-lessons act-bg-5" data-index="30" data-act="Acto 5 · Conclusiones" data-time="2.0 min">
     <h2 class="slide-main-title display">Conclusiones y lecciones aprendidas</h2>
-    <button type="button" id="btnCinematicIntro29"
-            onclick="window.postMessage({{type:'deck_replay_video', slide:29}}, '*')"
+    <button type="button" id="btnCinematicIntro30"
+            onclick="window.postMessage({{type:'deck_replay_video', slide:30}}, '*')"
             title="Reproyectar la introducción cinemática"
             style="position:absolute; top:6px; right:6px; z-index:20; display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid rgba(56,239,255,0.42); border-radius:10px; background:linear-gradient(120deg, rgba(8,47,73,0.9), rgba(8,15,32,0.92)); color:#7dd3fc; font:700 12px/1 'IBM Plex Mono', monospace; letter-spacing:0.06em; cursor:pointer; white-space:nowrap;">🎬 Repetir Intro</button>
     <div class="lessons-stack">
@@ -191,13 +191,13 @@ def get_slides_part2(branding=None):
         </div>
       </article>
     </div>
-    __CINEMATIC_GATE_29__
+    __CINEMATIC_GATE_30__
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 30: CIERRE Y PREGUNTAS (page-10.png)                   -->
+  <!-- DIAPO 31: CIERRE Y PREGUNTAS (page-10.png)                   -->
   <!-- ============================================================= -->
-  <section class="slide slide-archetype-closing act-bg-5" data-index="30" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
+  <section class="slide slide-archetype-closing act-bg-5" data-index="31" data-act="Acto 5 · Preguntas &amp; QR" data-time="1.5 min">
     <div>
       <div class="cover-tag mono">
         IQUITOS <span style="color:#12C8FC;">DATA FEST 2026</span> · CHARLA MAGISTRAL
@@ -280,9 +280,9 @@ def get_slides_part2(branding=None):
         .replace("__B64_P25_HTML__", b64_p25_html)
         .replace("__B64_P26_HTML__", b64_p26_html)
         .replace("__B64_P27_HTML__", b64_p27_html)
-        .replace("__CINEMATIC_GATE_19__", cinematic_gates.get(19, ""))
-        .replace("__CINEMATIC_GATE_21__", cinematic_gates.get(21, ""))
-        .replace("__CINEMATIC_GATE_26__", cinematic_gates.get(26, ""))
+        .replace("__CINEMATIC_GATE_20__", cinematic_gates.get(20, ""))
+        .replace("__CINEMATIC_GATE_22__", cinematic_gates.get(22, ""))
         .replace("__CINEMATIC_GATE_27__", cinematic_gates.get(27, ""))
-        .replace("__CINEMATIC_GATE_29__", cinematic_gates.get(29, ""))
+        .replace("__CINEMATIC_GATE_28__", cinematic_gates.get(28, ""))
+        .replace("__CINEMATIC_GATE_30__", cinematic_gates.get(30, ""))
     )

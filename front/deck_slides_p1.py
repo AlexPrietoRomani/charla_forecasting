@@ -35,6 +35,7 @@ def get_slides_part1(branding=None):
     cinematic_gates = branding.get("cinematic_gates", {})
     qr_svg = branding.get("qr_svg", "")
     sep1_title, sep1_subtitle = get_separator_copy(1)
+    sep2_title, sep2_subtitle = get_separator_copy(2)
 
     slides = """
   <!-- ========================================== -->
@@ -204,29 +205,38 @@ __AGENDA_ROWS__
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 12: SECCIÓN 02: CASO 1: IQUITOS SENAMHI (PROTOTIPO)     -->
+  <!-- DIAPO 12: SECCIÓN 02: CASO 1: CLIMA EN IQUITOS (SEPARADOR)    -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="12" data-act="Acto 2 · Caso 1: Clima SENAMHI" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide slide-archetype-section act-bg-2" data-index="12" data-act="Acto 2 · Caso 1: Clima en Iquitos" data-time="1.0 min">
+    <div class="section-huge-num">02</div>
+    <h2 class="section-title display">__SEP2_TITLE__</h2>
+    <p class="section-desc">__SEP2_SUBTITLE__</p>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DIAPO 13: SECCIÓN 02: CASO 1: IQUITOS SENAMHI (PROTOTIPO)     -->
+  <!-- ============================================================= -->
+  <section class="slide" data-index="13" data-act="Acto 2 · Caso 1: Clima SENAMHI" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P12_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide12"></iframe>
+      <iframe src="data:text/html;base64,__B64_P12_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide13"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 13: DATOS QUE IMPORTAN: SENAMHI (page-07.png)           -->
+  <!-- DIAPO 14: DATOS QUE IMPORTAN: SENAMHI (page-07.png)           -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="13" data-act="Acto 2 · Datos SENAMHI" data-time="1.5 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="14" data-act="Acto 2 · Datos SENAMHI" data-time="1.5 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P13_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide13"></iframe>
+      <iframe src="data:text/html;base64,__B64_P13_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide14"></iframe>
     </div>
   </section>
 
   <!-- ============================================================= -->
-  <!-- DIAPO 14: LA TRAMPA DE LA NO LINEALIDAD (page-06.png)         -->
+  <!-- DIAPO 15: LA TRAMPA DE LA NO LINEALIDAD (page-06.png)         -->
   <!-- ============================================================= -->
-  <section class="slide" data-index="14" data-act="Acto 2 · Extrapolación de Árboles" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
+  <section class="slide" data-index="15" data-act="Acto 2 · Extrapolación de Árboles" data-time="2.0 min" style="inset: 6px 12px; padding: 0; display: flex; flex-direction: column;">
     <div style="width: 100%; height: 100%; flex: 1; min-height: 0; border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(18, 200, 252, 0.35); background: #030712; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85);">
-      <iframe src="data:text/html;base64,__B64_P14_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide14"></iframe>
+      <iframe src="data:text/html;base64,__B64_P14_HTML__" style="width: 100%; height: 100%; border: none; display: block;" allow="fullscreen" id="iframeSlide15"></iframe>
     </div>
   </section>
 """
@@ -235,6 +245,8 @@ __AGENDA_ROWS__
         .replace("__SPEAKER_QR__", qr_svg)
         .replace("__AGENDA_ROWS__", render_agenda_rows())
         .replace("__AGENDA_TOTAL__", str(AGENDA_TOTAL_MINUTES))
+        .replace("__SEP2_TITLE__", sep2_title)
+        .replace("__SEP2_SUBTITLE__", sep2_subtitle)
         .replace("__SEP1_TITLE__", sep1_title)
         .replace("__SEP1_SUBTITLE__", sep1_subtitle)
         .replace("__PROFILE_IMG__", b64_profile)

@@ -93,50 +93,50 @@ def build_deck():
     p11_path = BASE_DIR / "docs/notebooklm/seccion_1/prototipos/11_Arquitectura_de_Decision_y_Cierre_Ejecutivo.html"
     b64_decision_html = load_prototype_b64(p11_path, slide_num=11, section_num=1) if p11_path.exists() else ""
 
-    # Prototipos Sección 3 (Diapositivas 19 a 23)
+    # Prototipos Sección 3 (Diapositivas 20 a 24)
     p19_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/19_c_mo_el_agro_invent_el_forecasting.html"
-    b64_p19_html = load_prototype_b64(p19_path, slide_num=19, section_num=3) if p19_path.exists() else ""
+    b64_p19_html = load_prototype_b64(p19_path, slide_num=20, section_num=3) if p19_path.exists() else ""
 
     p20_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/20_del_almanaque_al_sat_lite.html"
-    b64_p20_html = load_prototype_b64(p20_path, slide_num=20, section_num=3) if p20_path.exists() else ""
+    b64_p20_html = load_prototype_b64(p20_path, slide_num=21, section_num=3) if p20_path.exists() else ""
 
     p21_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/21_f_sica_biol_gica_y_el_l_mite_algor_tmico.html"
-    b64_p21_html = load_prototype_b64(p21_path, slide_num=21, section_num=3) if p21_path.exists() else ""
+    b64_p21_html = load_prototype_b64(p21_path, slide_num=22, section_num=3) if p21_path.exists() else ""
 
     p22_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/22_reloj_fenol_gico_del_caf.html"
-    b64_p22_html = load_prototype_b64(p22_path, slide_num=22, section_num=3) if p22_path.exists() else ""
+    b64_p22_html = load_prototype_b64(p22_path, slide_num=23, section_num=3) if p22_path.exists() else ""
 
     p23_path = BASE_DIR / "docs/notebooklm/seccion_3/prototipos/23_precisi_n_actual_y_las_tres_trampas.html"
-    b64_p23_html = load_prototype_b64(p23_path, slide_num=23, section_num=3) if p23_path.exists() else ""
+    b64_p23_html = load_prototype_b64(p23_path, slide_num=24, section_num=3) if p23_path.exists() else ""
 
-    # Prototipos Sección 2 (Diapositivas 12 a 17)
+    # Prototipos Sección 2 (Diapositivas 13 a 18)
     p12_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/12_Caso_1_Auditoria_Iquitos.html"
-    b64_p12_html = load_prototype_b64(p12_path, slide_num=12, section_num=2) if p12_path.exists() else ""
+    b64_p12_html = load_prototype_b64(p12_path, slide_num=13, section_num=2) if p12_path.exists() else ""
 
     p13_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/13_Datos_SENAMHI_Punchana.html"
-    b64_p13_html = load_prototype_b64(p13_path, slide_num=13, section_num=2) if p13_path.exists() else ""
+    b64_p13_html = load_prototype_b64(p13_path, slide_num=14, section_num=2) if p13_path.exists() else ""
 
     p14_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/14_Trampa_Arboles_Meseta_vs_Diferencias.html"
-    b64_p14_html = load_prototype_b64(p14_path, slide_num=14, section_num=2) if p14_path.exists() else ""
+    b64_p14_html = load_prototype_b64(p14_path, slide_num=15, section_num=2) if p14_path.exists() else ""
 
     p15_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/15_Benchmark_14_Modelos_Tierra_vs_Supercomputo.html"
-    b64_p15_html = load_prototype_b64(p15_path, slide_num=15, section_num=2) if p15_path.exists() else ""
+    b64_p15_html = load_prototype_b64(p15_path, slide_num=16, section_num=2) if p15_path.exists() else ""
 
     p16_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/16_Pronostico_7_Dias_Cono_P10_P90.html"
-    b64_p16_html = load_prototype_b64(p16_path, slide_num=16, section_num=2) if p16_path.exists() else ""
+    b64_p16_html = load_prototype_b64(p16_path, slide_num=17, section_num=2) if p16_path.exists() else ""
 
     p17_path = BASE_DIR / "docs/notebooklm/seccion_2/prototipos/17_Pipeline_Codigo_Diferencias_ExtraTrees.html"
-    b64_p17_html = load_prototype_b64(p17_path, slide_num=17, section_num=2) if p17_path.exists() else ""
+    b64_p17_html = load_prototype_b64(p17_path, slide_num=18, section_num=2) if p17_path.exists() else ""
 
-    # Prototipos Sección 4 (Diapositivas 25 a 27)
+    # Prototipos Sección 4 (Diapositivas 26 a 28)
     p25_path = BASE_DIR / "docs/notebooklm/seccion_4/prototipos/25_Datos_24_Campanias_Jaen.html"
-    b64_p25_html = load_prototype_b64(p25_path, slide_num=25, section_num=4) if p25_path.exists() else ""
+    b64_p25_html = load_prototype_b64(p25_path, slide_num=26, section_num=4) if p25_path.exists() else ""
 
     p26_path = BASE_DIR / "docs/notebooklm/seccion_4/prototipos/26_Trampa_Satelite_NDVI_vs_Clima.html"
-    b64_p26_html = load_prototype_b64(p26_path, slide_num=26, section_num=4) if p26_path.exists() else ""
+    b64_p26_html = load_prototype_b64(p26_path, slide_num=27, section_num=4) if p26_path.exists() else ""
 
     p27_path = BASE_DIR / "docs/notebooklm/seccion_4/prototipos/27_Validacion_WalkForward_Benchmark_Jaen.html"
-    b64_p27_html = load_prototype_b64(p27_path, slide_num=27, section_num=4) if p27_path.exists() else ""
+    b64_p27_html = load_prototype_b64(p27_path, slide_num=28, section_num=4) if p27_path.exists() else ""
 
     # Entradas cinemáticas de video (video/seccion_{N}/diapo_{M}/video_*/) descubiertas automáticamente
     cinematic_gates = {}
@@ -243,7 +243,7 @@ def build_deck():
       </span>
     </div>
     <div style="width:1px; height:18px; background:rgba(18, 200, 252, 0.25); margin:0 4px;"></div>
-    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 30</div>
+    <div style="font-weight:700; font-size:13px; color:#12C8FC;" class="mono" id="slideIndicator">01 / 31</div>
     <div style="font-size:12px; color:var(--text-faint);" class="mono" id="actIndicator">Apertura · Portada</div>
   </div>
 
@@ -286,7 +286,7 @@ def build_deck():
 <!-- SCRIPTS DE NAVEGACIÓN Y VISUALES -->
 <script>
   let currentSlide = 1;
-  const totalSlides = 30;
+  const totalSlides = 31;
 
   const notesBySlide = {notes_json};
 
@@ -642,8 +642,8 @@ def build_deck():
         renderAlphaBars(0.35);
       }}
 
-      // Slide 14: Experimento Extrapolación (Antes diapo 10)
-      if (idx === 14 && !charts["extrap"]) {{
+      // Slide 15: Experimento Extrapolación (Antes diapo 10)
+      if (idx === 15 && !charts["extrap"]) {{
         const canvas = document.getElementById("chartExtrap") || document.getElementById("chartExtrapolacion");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -699,8 +699,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 14: Discrepancia NOAA vs ECMWF (Antes diapo 10)
-      if (idx === 14 && !charts["noaaEcmwf"]) {{
+      // Slide 15: Discrepancia NOAA vs ECMWF (Antes diapo 10)
+      if (idx === 15 && !charts["noaaEcmwf"]) {{
         const canvas = document.getElementById("chartNoaaEcmwf");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -736,8 +736,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 16: Serie histórica reciente SENAMHI (Antes diapo 12)
-      if (idx === 16 && !charts["senamhiReciente"]) {{
+      // Slide 17: Serie histórica reciente SENAMHI (Antes diapo 12)
+      if (idx === 17 && !charts["senamhiReciente"]) {{
         const canvas = document.getElementById("chartSenamhiReciente");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -778,8 +778,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 15: Benchmark Punchana (Antes diapo 11)
-      if (idx === 15 && !charts["benchmark"]) {{
+      // Slide 16: Benchmark Punchana (Antes diapo 11)
+      if (idx === 16 && !charts["benchmark"]) {{
         const canvas = document.getElementById("chartBenchmark");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -830,8 +830,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 16: Demo Pronóstico 7 Días con Bandas (Antes diapo 12)
-      if (idx === 16 && !charts["demo7d"]) {{
+      // Slide 17: Demo Pronóstico 7 Días con Bandas (Antes diapo 12)
+      if (idx === 17 && !charts["demo7d"]) {{
         const canvas = document.getElementById("chartDemo7d");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -949,8 +949,8 @@ def build_deck():
         }}
       }}
 
-      // Slide 19: Jaén Histórico (Antes diapo 15)
-      if (idx === 19 && !charts["jaenHist"]) {{
+      // Slide 20: Jaén Histórico (Antes diapo 15)
+      if (idx === 20 && !charts["jaenHist"]) {{
         const canvas = document.getElementById("chartJaenHistorico");
         if (canvas) {{
           const ctx = canvas.getContext("2d");
@@ -1129,7 +1129,7 @@ def build_deck():
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print(f"Deck interactivo de 30 diapositivas generado con éxito en: {output_path} e {index_path} ({len(html_content)} bytes)")
+    print(f"Deck interactivo de 31 diapositivas generado con éxito en: {output_path} e {index_path} ({len(html_content)} bytes)")
 
 if __name__ == "__main__":
     build_deck()

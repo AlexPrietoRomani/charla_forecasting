@@ -5,7 +5,7 @@ Charla estilo `Data_Wizard`: deck interactivo single-file `presentacion.html` (C
 ## Estructura
 ```text
 charla_forecasting/
-├── presentacion.html   # deck final interactivo (30 diapositivas, prototipos interactivos + datos reales)
+├── presentacion.html   # deck final interactivo (31 diapositivas, prototipos interactivos + datos reales)
 ├── front/              # código frontend de las diapositivas (estilos, slides, notas, branding)
 ├── back/               # motor backend de compilación y datos (build_deck.py, test_loader.py)
 ├── data/               # datos separados por casos de estudio
@@ -44,4 +44,5 @@ charla_forecasting/
 - **Atajos:** `←`/`→` navegan (`→` también salta un video de entrada), `N` abre las notas del ponente, `D` activa el modo experto (ruta completa de etapas; por defecto se muestra la ruta corta de ≤ 3 etapas) y `M` alterna el modo oscuro.
 - **Recompilar el deck:** `python back/build_deck.py` (regenera `presentacion.html` e `index.html`).
 - **Regenerar un video:** `python video/_pipeline/render.py <carpeta>` (p. ej. `video/seccion_1/diapo_5/video_anatomia_senal`); ver `video/_pipeline/README.md`.
+- **Numeración de videos:** las carpetas `video/seccion_N/diapo_M` conservan la numeración previa al separador del Acto 2 (diapo 12); el motor traduce con `video_folder_slide()` (p. ej. `diapo_19` se muestra en la diapositiva 20 del deck).
 - **Validar:** `python scripts/audit_f12_claridad.py --all` y `--bundle`, `python -m pytest back scripts video/_pipeline -q`.
