@@ -58,12 +58,12 @@ def audit_prototype(path: Path) -> list:
         if "lane-meters" not in content:
             errors.append(f"[{path.name}] Falta bloque visual comparativo 'lane-meters'.")
 
-    # 5. Validar Diapo 20 si aplica: debe contener .step-kpi-strip o .step-kpi-cell
+    # 5. Validar Diapo 21 si aplica: debe contener .step-kpi-strip o .step-kpi-cell
     if "20_del_almanaque" in path.name:
         if "step-kpi" not in content:
             errors.append(f"[{path.name}] Falta grid 'step-kpi-strip' de detalle sin recorte.")
 
-    # 6. Validar Diapo 23 si aplica: fire-test no debe usar position absolute sobre texto
+    # 6. Validar Diapo 24 si aplica: fire-test no debe usar position absolute sobre texto
     if "23_precisi_n_actual" in path.name:
         if "grid-template-columns" not in content and "fire-test-btn" in content:
             errors.append(f"[{path.name}] Botón de Prueba de Fuego debe usar grid para no pisar texto.")

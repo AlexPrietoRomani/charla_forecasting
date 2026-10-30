@@ -12,7 +12,7 @@ async def main():
         await page.goto(url, wait_until='networkidle')
         await page.wait_for_timeout(1000)
 
-        slides_to_capture = [4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 23]
+        slides_to_capture = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 24]
         for s in slides_to_capture:
             await page.evaluate(f'updateSlide({s - 1})')
             await page.wait_for_timeout(800)

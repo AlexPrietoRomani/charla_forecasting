@@ -7,10 +7,10 @@ Este directorio contiene todo el código visual, estilístico y estructural de l
    * Hojas de estilo CSS completas.
    * Paleta semántica, variables CSS (`--bg-primary`, `--accent-coral`, etc.), soporte de tema claro/oscuro y layout split-screen 40/60 sin márgenes muertos ("Zero-White-Space").
 2. **`deck_slides_p1.py`**:
-   * Diapositivas 1 a 12 (Parte 1).
+   * Diapositivas 1 a 14 (Parte 1).
    * Comprende la portada oficial, la pregunta conductora, teoría de series temporales, las 4 familias de modelos y la física de satélites/NDVI.
 3. **`deck_slides_p2.py`**:
-   * Diapositivas 13 a 23 (Parte 2).
+   * Diapositivas 15 a 31 (Parte 2).
    * Comprende los casos de estudio aplicados (Caso 1 SENAMHI Iquitos y Caso 2 Café Jaén), demos interactivas en vivo con Chart.js, árbol de decisión y cierre con perfil del ponente.
 4. **`deck_notes.py`**:
    * Speaker notes drawer (activado con la tecla `N`).

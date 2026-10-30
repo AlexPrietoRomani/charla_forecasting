@@ -51,4 +51,4 @@ python scripts/audit_f12_claridad.py --bundle   # glosario presente en presentac
 PYTHONIOENCODING=utf-8 python scripts/audit_f10_layout_typography.py
 ```
 
-`audit_f10_layout_typography.py` conserva dos avisos heredados que no son de F12: faltan las 46 capturas `f10_*` y el marcador S5 `ŷ<sub>t+h</sub>` (texto del cierre anterior, reemplazado en F12 por el cierre en 3 frases de la diapo 29).
+`audit_f10_layout_typography.py` conserva dos avisos heredados que no son de F12: faltan las 46 capturas `f10_*` y el marcador S5 `ŷ<sub>t+h</sub>` (texto del cierre anterior, reemplazado en F12 por el cierre en 3 frases de la diapo 30).
