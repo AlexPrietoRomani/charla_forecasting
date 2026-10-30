@@ -49,13 +49,21 @@ def get_slides_part1(branding=None):
       <div class="cover-tag mono">
         IQUITOS <span>DATA FEST 2026</span>
       </div>
-      <h1 class="cover-title display">¿Puede la IA predecir el futuro? Casos forecasting</h1>
-      <p class="cover-subtitle">Lecciones desde el mundo real con datos meteorológicos de SENAMHI y series agrícolas de Jaén</p>
     </div>
 
-    <div class="cover-speaker-card">
-      <div class="cover-speaker-name">Alex Prieto Romani</div>
-      <div class="cover-speaker-role">Agriculture Data Science · Hortifrut SA</div>
+    <div class="cover-main">
+      <h1 class="cover-title display">¿Puede la IA predecir el futuro? Casos forecasting</h1>
+      <p class="cover-subtitle">Lecciones desde el mundo real con datos meteorológicos de SENAMHI y series agrícolas de Jaén</p>
+      <div class="cover-pills">
+        <span class="cover-pill">GEO Data Science</span>
+        <span class="cover-pill">Agricultural Data Science</span>
+        <span class="cover-pill">Machine Learning Engineering</span>
+        <span class="cover-pill">Forecasting</span>
+      </div>
+      <div class="cover-speaker-card">
+        <div class="cover-speaker-name display">Alex Prieto Romani</div>
+        <div class="cover-speaker-role">Agriculture Data Science · Hortifrut S.A.</div>
+      </div>
     </div>
   </section>
 
@@ -64,51 +72,93 @@ def get_slides_part1(branding=None):
   <!-- ========================================== -->
   <section class="slide" data-index="2" data-act="Apertura · Ponente" data-time="1.5 min">
     <h2 class="slide-main-title display">Sobre el ponente</h2>
-    <div class="speaker-hero">
-      <div class="speaker-avatar">
-        <img src="data:image/jpeg;base64,__PROFILE_IMG__" alt="Alex Prieto Romani">
-      </div>
-      <div class="speaker-hero-text">
-        <div class="speaker-name display">Alex Prieto Romani</div>
-        <div class="speaker-role mono">Agriculture Data Science · Hortifrut SA</div>
-      </div>
-    </div>
+    <div class="sp-layout">
+      <aside class="sp-id">
+        <div class="sp-photo"><img src="data:image/jpeg;base64,__PROFILE_IMG__" alt="Alex Prieto Romani"></div>
+        <div class="sp-name display">Alex Prieto Romani</div>
+        <div class="sp-headline">Ingeniero Agrónomo · Agriculture Data Scientist</div>
+        <div class="sp-role mono">Agriculture Data Science · Hortifrut S.A.</div>
+        <p class="sp-pitch">Uno la biología del cultivo con machine learning para predecir clima y cosechas con datos reales.</p>
+        <div class="sp-contact">
+          <div class="sp-socials">
+            <a href="https://linkedin.com/in/alex-prieto-romani" target="_blank" class="sp-link">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4v16H4zM6 2a2 2 0 110 4 2 2 0 010-4zM10 9h3.6v2c.6-1.2 2-2.3 4-2.3 3.4 0 4.4 2.2 4.4 5.3V20h-4v-5.4c0-1.4-.3-2.6-1.9-2.6S14 13.2 14 14.6V20h-4z"/></svg>
+              linkedin.com/in/alex-prieto-romani
+            </a>
+            <a href="mailto:alexprieto1997@gmail.com" class="sp-link">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm1.5 2.3V8l7.5 5 7.5-5v-.7L12 12.2z"/></svg>
+              alexprieto1997@gmail.com
+            </a>
+            <a href="https://github.com/AlexPrietoRomani" target="_blank" class="sp-link">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 00-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 015 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A10 10 0 0012 2z"/></svg>
+              github.com/AlexPrietoRomani
+            </a>
+          </div>
+          <div class="sp-qr">
+            <div class="sp-qr-box" aria-label="QR a alexprietoromani.github.io">__SPEAKER_QR__</div>
+            <span>Escanea para<br>ver mi web</span>
+          </div>
+        </div>
+      </aside>
 
-    <div class="speaker-body">
-      <div class="speaker-cards">
-        <div class="speaker-card">
-          <div class="speaker-card-icon">🌱</div>
-          <div class="speaker-card-title">Ingeniero agrónomo + científico de datos</div>
-          <div class="speaker-card-sub">Breeding, calidad de fruta y ensayos agronómicos</div>
+      <div class="sp-main">
+        <div class="sp-cols">
+          <div class="sp-col">
+            <div class="sp-col-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L1 9l11 6 9-4.9V17h2V9zM5 13.2V17c0 1.7 3.1 3 7 3s7-1.3 7-3v-3.8l-7 3.800z"/></svg>Formación</div>
+            <ul class="sp-tl">
+              <li class="sp-tl-key">
+                <div class="sp-tl-what">Maestría en Big Data y Data Science</div>
+                <div class="sp-tl-where">Universidad Internacional de Valencia (VIU), España · 2024–2025</div>
+              </li>
+              <li class="sp-tl-key">
+                <div class="sp-tl-what">Especialización en Machine Learning Engineering</div>
+                <div class="sp-tl-where">DMC Perú · 2024 · MLOps y despliegue de modelos</div>
+              </li>
+              <li>
+                <div class="sp-tl-what">Ingeniero Agrónomo</div>
+                <div class="sp-tl-where">Universidad Nacional Agraria La Molina (UNALM) · 2015–2020</div>
+              </li>
+            </ul>
+          </div>
+          <div class="sp-col">
+            <div class="sp-col-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4h4a2 2 0 012 2v1h4a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2h4V6a2 2 0 012-2zm0 2v1h4V6z"/></svg>Trayectoria</div>
+            <ul class="sp-tl">
+              <li class="sp-tl-key">
+                <div class="sp-tl-what">Agriculture Data Science</div>
+                <div class="sp-tl-where">Hortifrut S.A. · 2025–hoy</div>
+              </li>
+              <li>
+                <div class="sp-tl-what">Data Science I+D</div>
+                <div class="sp-tl-where">Camposol S.A. · 2024–2025</div>
+              </li>
+              <li>
+                <div class="sp-tl-what">Investigador de Mejoramiento Genético</div>
+                <div class="sp-tl-where">Camposol S.A. · 2023–2024</div>
+              </li>
+            </ul>
+          </div>
+          <div class="sp-col">
+            <div class="sp-col-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.600L21 11l-6.6 2.400L12 20l-2.4-6.600L3 11l6.6-2.400z"/></svg>Qué hago</div>
+            <ul class="sp-do">
+              <li>
+                <span class="sp-do-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg></span>
+                <div><div class="sp-tl-what">Agricultura de precisión</div><div class="sp-tl-where">Satélite, NDVI y clima</div></div>
+              </li>
+              <li>
+                <span class="sp-do-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18v2H3zM5 11h3v8H5zM10.5 5h3v14h-3zM16 8h3v11h-3z"/></svg></span>
+                <div><div class="sp-tl-what">Modelos predictivos y visión artificial</div><div class="sp-tl-where">Rendimiento, enfermedades, conteo de fruta</div></div>
+              </li>
+              <li>
+                <span class="sp-do-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 012 2v10a2 2 0 01-2 2h-7l-5 4v-4H4a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg></span>
+                <div><div class="sp-tl-what">IA generativa y LLMs</div><div class="sp-tl-where">Asistentes RAG y reportes automáticos</div></div>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="speaker-card">
-          <div class="speaker-card-icon">🌡️</div>
-          <div class="speaker-card-title">Predice clima y cosechas con datos reales</div>
-          <div class="speaker-card-sub">Casos con SENAMHI en Iquitos y café en Jaén</div>
+        <div class="sp-stack">
+          <span class="sp-stack-label mono">Stack</span>
+          <span class="sp-chip">Python</span><span class="sp-chip">R</span><span class="sp-chip">SQL</span><span class="sp-chip">Rust</span><span class="sp-chip">PyTorch</span><span class="sp-chip">Scikit-learn</span><span class="sp-chip">MLflow</span><span class="sp-chip">Docker</span><span class="sp-chip">Google Earth Engine</span><span class="sp-chip">GCP</span>
         </div>
-        <div class="speaker-card">
-          <div class="speaker-card-icon">🎓</div>
-          <div class="speaker-card-title">Hortifrut · maestría en Big Data</div>
-          <div class="speaker-card-sub">Mg Sc Big Data &amp; Data Science</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="speaker-footer">
-      <div class="speaker-socials">
-        <a href="https://linkedin.com/in/alex-prieto-romani" target="_blank" class="speaker-social-link">
-          <span>🔗</span> linkedin.com/in/alex-prieto-romani
-        </a>
-        <a href="mailto:alexprieto1997@gmail.com" class="speaker-social-link">
-          <span>✉️</span> alexprieto1997@gmail.com
-        </a>
-        <a href="https://github.com/AlexPrietoRomani" target="_blank" class="speaker-social-link">
-          <span>🐙</span> github.com/AlexPrietoRomani
-        </a>
-      </div>
-      <div class="speaker-qr">
-        <div class="speaker-qr-box" aria-label="QR a alexprietoromani.github.io">__SPEAKER_QR__</div>
-        <span>Escanea para ver<br>mi web</span>
       </div>
     </div>
   </section>
